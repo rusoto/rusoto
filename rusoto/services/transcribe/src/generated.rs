@@ -67,6 +67,13 @@ pub struct CreateVocabularyResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteTranscriptionJobRequest {
+    /// <p>The name of the transcription job to be deleted.</p>
+    #[serde(rename = "TranscriptionJobName")]
+    pub transcription_job_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteVocabularyRequest {
     /// <p>The name of the vocabulary to delete. </p>
     #[serde(rename = "VocabularyName")]
@@ -139,7 +146,7 @@ pub struct ListTranscriptionJobsRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>When specified, returns only transcription jobs with the specified status.</p>
+    /// <p>When specified, returns only transcription jobs with the specified status. Jobs are ordered by creation date, with the newest jobs returned first. If you don’t specify a status, Amazon Transcribe returns all transcription jobs ordered by creation date. </p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -202,7 +209,7 @@ pub struct ListVocabulariesResponse {
 /// <p>Describes the input media file in a transcription request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Media {
-    /// <p>The S3 location of the input media file. The URI must be in the same region as the API endpoint that you are calling. The general form is:</p> <p> <code> https://&lt;aws-region&gt;.amazonaws.com/&lt;bucket-name&gt;/&lt;keyprefix&gt;/&lt;objectkey&gt; </code> </p> <p>For example:</p> <p> <code>https://s3-us-east-1.amazonaws.com/examplebucket/example.mp4</code> </p> <p> <code>https://s3-us-east-1.amazonaws.com/examplebucket/mediadocs/example.mp4</code> </p> <p>For more information about S3 object names, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#object-keys">Object Keys</a> in the <i>Amazon S3 Developer Guide</i>.</p>
+    /// <p>The S3 location of the input media file. The URI must be in the same region as the API endpoint that you are calling. The general form is:</p> <p> <code> https://s3-&lt;aws-region&gt;.amazonaws.com/&lt;bucket-name&gt;/&lt;keyprefix&gt;/&lt;objectkey&gt; </code> </p> <p>For example:</p> <p> <code>https://s3-us-east-1.amazonaws.com/examplebucket/example.mp4</code> </p> <p> <code>https://s3-us-east-1.amazonaws.com/examplebucket/mediadocs/example.mp4</code> </p> <p>For more information about S3 object names, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/UsingMetadata.html#object-keys">Object Keys</a> in the <i>Amazon S3 Developer Guide</i>.</p>
     #[serde(rename = "MediaFileUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_file_uri: Option<String>,
@@ -252,7 +259,7 @@ pub struct StartTranscriptionJobRequest {
     #[serde(rename = "Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub settings: Option<Settings>,
-    /// <p>The name of the job. You can't use the strings "." or ".." in the job name. The name must be unique within an AWS account.</p>
+    /// <p>The name of the job. Note that you can't use the strings "." or ".." by themselves as the job name. The name must also be unique within an AWS account.</p>
     #[serde(rename = "TranscriptionJobName")]
     pub transcription_job_name: String,
 }
@@ -276,7 +283,7 @@ pub struct Transcript {
     pub transcript_file_uri: Option<String>,
 }
 
-/// <p>Describes an asynchronous transcription job that was created with the <code>StartTranscriptionJob</code> operation.</p>
+/// <p>Describes an asynchronous transcription job that was created with the <code>StartTranscriptionJob</code> operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct TranscriptionJob {
@@ -326,7 +333,7 @@ pub struct TranscriptionJob {
     pub transcription_job_status: Option<String>,
 }
 
-/// <p>Provides a summary of information about a transcription job.</p>
+/// <p>Provides a summary of information about a transcription job. .</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct TranscriptionJobSummary {
@@ -394,7 +401,7 @@ pub struct UpdateVocabularyResponse {
     pub vocabulary_state: Option<String>,
 }
 
-/// <p>Provides information about a custom vocabulary.</p>
+/// <p>Provides information about a custom vocabulary. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct VocabularyInfo {
@@ -419,7 +426,7 @@ pub struct VocabularyInfo {
 /// Errors returned by CreateVocabulary
 #[derive(Debug, PartialEq)]
 pub enum CreateVocabularyError {
-    /// <p>Your request didn't pass one or more validation tests. For example, a name already exists when creating a resource or a name may not exist when getting a transcription job or custom vocabulary. See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
     /// <p>When you are using the <code>StartTranscriptionJob</code> operation, the <code>JobName</code> field is a duplicate of a previously entered job name. Resend your request with a different name.</p> <p>When you are using the <code>UpdateVocabulary</code> operation, there are two jobs running at the same time. Resend the second request later.</p>
     Conflict(String),
@@ -514,10 +521,104 @@ impl Error for CreateVocabularyError {
         }
     }
 }
+/// Errors returned by DeleteTranscriptionJob
+#[derive(Debug, PartialEq)]
+pub enum DeleteTranscriptionJobError {
+    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
+    BadRequest(String),
+    /// <p>There was an internal error. Check the error message and try your request again.</p>
+    InternalFailure(String),
+    /// <p>Either you have sent too many requests or your input file is too long. Wait before you resend your request, or use a smaller file and resend the request.</p>
+    LimitExceeded(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DeleteTranscriptionJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteTranscriptionJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "BadRequestException" => {
+                    return DeleteTranscriptionJobError::BadRequest(String::from(error_message));
+                }
+                "InternalFailureException" => {
+                    return DeleteTranscriptionJobError::InternalFailure(String::from(error_message));
+                }
+                "LimitExceededException" => {
+                    return DeleteTranscriptionJobError::LimitExceeded(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return DeleteTranscriptionJobError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DeleteTranscriptionJobError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteTranscriptionJobError {
+    fn from(err: serde_json::error::Error) -> DeleteTranscriptionJobError {
+        DeleteTranscriptionJobError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteTranscriptionJobError {
+    fn from(err: CredentialsError) -> DeleteTranscriptionJobError {
+        DeleteTranscriptionJobError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteTranscriptionJobError {
+    fn from(err: HttpDispatchError) -> DeleteTranscriptionJobError {
+        DeleteTranscriptionJobError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteTranscriptionJobError {
+    fn from(err: io::Error) -> DeleteTranscriptionJobError {
+        DeleteTranscriptionJobError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteTranscriptionJobError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteTranscriptionJobError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteTranscriptionJobError::BadRequest(ref cause) => cause,
+            DeleteTranscriptionJobError::InternalFailure(ref cause) => cause,
+            DeleteTranscriptionJobError::LimitExceeded(ref cause) => cause,
+            DeleteTranscriptionJobError::Validation(ref cause) => cause,
+            DeleteTranscriptionJobError::Credentials(ref err) => err.description(),
+            DeleteTranscriptionJobError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteTranscriptionJobError::ParseError(ref cause) => cause,
+            DeleteTranscriptionJobError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by DeleteVocabulary
 #[derive(Debug, PartialEq)]
 pub enum DeleteVocabularyError {
-    /// <p>Your request didn't pass one or more validation tests. For example, a name already exists when creating a resource or a name may not exist when getting a transcription job or custom vocabulary. See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -615,7 +716,7 @@ impl Error for DeleteVocabularyError {
 /// Errors returned by GetTranscriptionJob
 #[derive(Debug, PartialEq)]
 pub enum GetTranscriptionJobError {
-    /// <p>Your request didn't pass one or more validation tests. For example, a name already exists when creating a resource or a name may not exist when getting a transcription job or custom vocabulary. See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -715,7 +816,7 @@ impl Error for GetTranscriptionJobError {
 /// Errors returned by GetVocabulary
 #[derive(Debug, PartialEq)]
 pub enum GetVocabularyError {
-    /// <p>Your request didn't pass one or more validation tests. For example, a name already exists when creating a resource or a name may not exist when getting a transcription job or custom vocabulary. See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -813,7 +914,7 @@ impl Error for GetVocabularyError {
 /// Errors returned by ListTranscriptionJobs
 #[derive(Debug, PartialEq)]
 pub enum ListTranscriptionJobsError {
-    /// <p>Your request didn't pass one or more validation tests. For example, a name already exists when creating a resource or a name may not exist when getting a transcription job or custom vocabulary. See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -907,7 +1008,7 @@ impl Error for ListTranscriptionJobsError {
 /// Errors returned by ListVocabularies
 #[derive(Debug, PartialEq)]
 pub enum ListVocabulariesError {
-    /// <p>Your request didn't pass one or more validation tests. For example, a name already exists when creating a resource or a name may not exist when getting a transcription job or custom vocabulary. See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
     /// <p>There was an internal error. Check the error message and try your request again.</p>
     InternalFailure(String),
@@ -999,7 +1100,7 @@ impl Error for ListVocabulariesError {
 /// Errors returned by StartTranscriptionJob
 #[derive(Debug, PartialEq)]
 pub enum StartTranscriptionJobError {
-    /// <p>Your request didn't pass one or more validation tests. For example, a name already exists when creating a resource or a name may not exist when getting a transcription job or custom vocabulary. See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
     /// <p>When you are using the <code>StartTranscriptionJob</code> operation, the <code>JobName</code> field is a duplicate of a previously entered job name. Resend your request with a different name.</p> <p>When you are using the <code>UpdateVocabulary</code> operation, there are two jobs running at the same time. Resend the second request later.</p>
     Conflict(String),
@@ -1099,7 +1200,7 @@ impl Error for StartTranscriptionJobError {
 /// Errors returned by UpdateVocabulary
 #[derive(Debug, PartialEq)]
 pub enum UpdateVocabularyError {
-    /// <p>Your request didn't pass one or more validation tests. For example, a name already exists when creating a resource or a name may not exist when getting a transcription job or custom vocabulary. See the exception <code>Message</code> field for more information.</p>
+    /// <p>Your request didn't pass one or more validation tests. For example, if the transcription you're trying to delete doesn't exist or if it is in a non-terminal state (for example, it's "in progress"). See the exception <code>Message</code> field for more information.</p>
     BadRequest(String),
     /// <p>When you are using the <code>StartTranscriptionJob</code> operation, the <code>JobName</code> field is a duplicate of a previously entered job name. Resend your request with a different name.</p> <p>When you are using the <code>UpdateVocabulary</code> operation, there are two jobs running at the same time. Resend the second request later.</p>
     Conflict(String),
@@ -1202,11 +1303,17 @@ impl Error for UpdateVocabularyError {
 }
 /// Trait representing the capabilities of the Amazon Transcribe Service API. Amazon Transcribe Service clients implement this trait.
 pub trait Transcribe {
-    /// <p>Creates a new custom vocabulary that you can use to change the way Amazon Transcribe handles transcription of an audio file.</p>
+    /// <p>Creates a new custom vocabulary that you can use to change the way Amazon Transcribe handles transcription of an audio file. </p>
     fn create_vocabulary(
         &self,
         input: CreateVocabularyRequest,
     ) -> RusotoFuture<CreateVocabularyResponse, CreateVocabularyError>;
+
+    /// <p>Deletes a previously submitted transcription job along with any other generated results such as the transcription, models, and so on.</p>
+    fn delete_transcription_job(
+        &self,
+        input: DeleteTranscriptionJobRequest,
+    ) -> RusotoFuture<(), DeleteTranscriptionJobError>;
 
     /// <p>Deletes a vocabulary from Amazon Transcribe. </p>
     fn delete_vocabulary(
@@ -1220,7 +1327,7 @@ pub trait Transcribe {
         input: GetTranscriptionJobRequest,
     ) -> RusotoFuture<GetTranscriptionJobResponse, GetTranscriptionJobError>;
 
-    /// <p>Gets information about a vocabulary.</p>
+    /// <p>Gets information about a vocabulary. </p>
     fn get_vocabulary(
         &self,
         input: GetVocabularyRequest,
@@ -1238,13 +1345,13 @@ pub trait Transcribe {
         input: ListVocabulariesRequest,
     ) -> RusotoFuture<ListVocabulariesResponse, ListVocabulariesError>;
 
-    /// <p>Starts an asynchronous job to transcribe speech to text.</p>
+    /// <p>Starts an asynchronous job to transcribe speech to text. </p>
     fn start_transcription_job(
         &self,
         input: StartTranscriptionJobRequest,
     ) -> RusotoFuture<StartTranscriptionJobResponse, StartTranscriptionJobError>;
 
-    /// <p>Updates an existing vocabulary with new values. The <code>UpdateVocabulary</code> operation overwrites all of the existing information with the values that you provide in the request.</p>
+    /// <p>Updates an existing vocabulary with new values. The <code>UpdateVocabulary</code> operation overwrites all of the existing information with the values that you provide in the request. </p>
     fn update_vocabulary(
         &self,
         input: UpdateVocabularyRequest,
@@ -1287,7 +1394,7 @@ impl TranscribeClient {
 }
 
 impl Transcribe for TranscribeClient {
-    /// <p>Creates a new custom vocabulary that you can use to change the way Amazon Transcribe handles transcription of an audio file.</p>
+    /// <p>Creates a new custom vocabulary that you can use to change the way Amazon Transcribe handles transcription of an audio file. </p>
     fn create_vocabulary(
         &self,
         input: CreateVocabularyRequest,
@@ -1319,6 +1426,31 @@ impl Transcribe for TranscribeClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(CreateVocabularyError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Deletes a previously submitted transcription job along with any other generated results such as the transcription, models, and so on.</p>
+    fn delete_transcription_job(
+        &self,
+        input: DeleteTranscriptionJobRequest,
+    ) -> RusotoFuture<(), DeleteTranscriptionJobError> {
+        let mut request = SignedRequest::new("POST", "transcribe", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Transcribe.DeleteTranscriptionJob");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(future::ok(::std::mem::drop(response)))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteTranscriptionJobError::from_response(response))
+                    }),
                 )
             }
         })
@@ -1386,7 +1518,7 @@ impl Transcribe for TranscribeClient {
         })
     }
 
-    /// <p>Gets information about a vocabulary.</p>
+    /// <p>Gets information about a vocabulary. </p>
     fn get_vocabulary(
         &self,
         input: GetVocabularyRequest,
@@ -1496,7 +1628,7 @@ impl Transcribe for TranscribeClient {
         })
     }
 
-    /// <p>Starts an asynchronous job to transcribe speech to text.</p>
+    /// <p>Starts an asynchronous job to transcribe speech to text. </p>
     fn start_transcription_job(
         &self,
         input: StartTranscriptionJobRequest,
@@ -1532,7 +1664,7 @@ impl Transcribe for TranscribeClient {
         })
     }
 
-    /// <p>Updates an existing vocabulary with new values. The <code>UpdateVocabulary</code> operation overwrites all of the existing information with the values that you provide in the request.</p>
+    /// <p>Updates an existing vocabulary with new values. The <code>UpdateVocabulary</code> operation overwrites all of the existing information with the values that you provide in the request. </p>
     fn update_vocabulary(
         &self,
         input: UpdateVocabularyRequest,

@@ -28,41 +28,90 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
-/// <p>Represents the output of the <code>CreateBudget</code> operation. The content consists of the detailed metadata and data file information, and the current status of the <code>budget</code>.</p> <p>The ARN pattern for a budget is: <code>arn:aws:budgetservice::AccountId:budget/budgetName</code> </p>
+/// <p>Represents the output of the <code>CreateBudget</code> operation. The content consists of the detailed metadata and data file information, and the current status of the <code>budget</code> object.</p> <p>This is the ARN pattern for a budget: </p> <p> <code>arn:aws:budgetservice::AccountId:budget/budgetName</code> </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Budget {
-    /// <p>The total amount of cost, usage, or RI utilization that you want to track with your budget.</p> <p> <code>BudgetLimit</code> is required for cost or usage budgets, but optional for RI utilization budgets. RI utilization budgets default to the only valid value for RI utilization budgets, which is <code>100</code>.</p>
+    /// <p>The total amount of cost, usage, RI utilization, or RI coverage that you want to track with your budget.</p> <p> <code>BudgetLimit</code> is required for cost or usage budgets, but optional for RI utilization or coverage budgets. RI utilization or coverage budgets default to <code>100</code>, which is the only valid value for RI utilization or coverage budgets.</p>
     #[serde(rename = "BudgetLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub budget_limit: Option<Spend>,
-    /// <p>The name of a budget. Unique within accounts. <code>:</code> and <code>&bsol;</code> characters are not allowed in the <code>BudgetName</code>.</p>
+    /// <p>The name of a budget. The name must be unique within accounts. The <code>:</code> and <code>&bsol;</code> characters aren't allowed in <code>BudgetName</code>.</p>
     #[serde(rename = "BudgetName")]
     pub budget_name: String,
-    /// <p>Whether this budget tracks monetary costs, usage, or RI utilization.</p>
+    /// <p>Whether this budget tracks monetary costs, usage, RI utilization, or RI coverage.</p>
     #[serde(rename = "BudgetType")]
     pub budget_type: String,
-    /// <p>The actual and forecasted cost or usage being tracked by a budget.</p>
+    /// <p>The actual and forecasted cost or usage that the budget tracks.</p>
     #[serde(rename = "CalculatedSpend")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub calculated_spend: Option<CalculatedSpend>,
-    /// <p>The cost filters applied to a budget, such as service or region.</p>
+    /// <p><p>The cost filters, such as service or region, that are applied to a budget.</p> <p>AWS Budgets supports the following services as a filter for RI budgets:</p> <ul> <li> <p>Amazon Elastic Compute Cloud - Compute</p> </li> <li> <p>Amazon Redshift</p> </li> <li> <p>Amazon Relational Database Service</p> </li> <li> <p>Amazon ElastiCache</p> </li> <li> <p>Amazon Elasticsearch Service</p> </li> </ul></p>
     #[serde(rename = "CostFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cost_filters: Option<::std::collections::HashMap<String, Vec<String>>>,
-    /// <p>The types of costs included in this budget.</p>
+    /// <p>The types of costs that are included in this <code>COST</code> budget.</p> <p> <code>USAGE</code>, <code>RI_UTILIZATION</code>, and <code>RI_COVERAGE</code> budgets do not have <code>CostTypes</code>.</p>
     #[serde(rename = "CostTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cost_types: Option<CostTypes>,
-    /// <p>The period of time covered by a budget. Has a start date and an end date. The start date must come before the end date. There are no restrictions on the end date. </p> <p>If you created your budget and didn't specify a start date, AWS defaults to the start of your chosen time period (i.e. DAILY, MONTHLY, QUARTERLY, ANNUALLY). For example, if you created your budget on January 24th 2018, chose <code>DAILY</code>, and didn't set a start date, AWS set your start date to <code>01/24/18 00:00 UTC</code>. If you chose <code>MONTHLY</code>, AWS set your start date to <code>01/01/18 00:00 UTC</code>. If you didn't specify an end date, AWS set your end date to <code>06/15/87 00:00 UTC</code>. The defaults are the same for the AWS Billing and Cost Management console and the API. </p> <p>You can change either date with the <code>UpdateBudget</code> operation.</p> <p>After the end date, AWS deletes the budget and all associated notifications and subscribers.</p>
+    /// <p>The last time that you updated this budget.</p>
+    #[serde(rename = "LastUpdatedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_time: Option<f64>,
+    /// <p>The period of time that is covered by a budget. The period has a start date and an end date. The start date must come before the end date. The end date must come before <code>06/15/87 00:00 UTC</code>. </p> <p>If you create your budget and don't specify a start date, AWS defaults to the start of your chosen time period (DAILY, MONTHLY, QUARTERLY, or ANNUALLY). For example, if you created your budget on January 24, 2018, chose <code>DAILY</code>, and didn't set a start date, AWS set your start date to <code>01/24/18 00:00 UTC</code>. If you chose <code>MONTHLY</code>, AWS set your start date to <code>01/01/18 00:00 UTC</code>. If you didn't specify an end date, AWS set your end date to <code>06/15/87 00:00 UTC</code>. The defaults are the same for the AWS Billing and Cost Management console and the API. </p> <p>You can change either date with the <code>UpdateBudget</code> operation.</p> <p>After the end date, AWS deletes the budget and all associated notifications and subscribers.</p>
     #[serde(rename = "TimePeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub time_period: Option<TimePeriod>,
-    /// <p>The length of time until a budget resets the actual and forecasted spend.</p>
+    /// <p>The length of time until a budget resets the actual and forecasted spend. <code>DAILY</code> is available only for <code>RI_UTILIZATION</code> and <code>RI_COVERAGE</code> budgets.</p>
     #[serde(rename = "TimeUnit")]
     pub time_unit: String,
 }
 
-/// <p>The spend objects associated with this budget. The <code>actualSpend</code> tracks how much you've used, cost, usage, or RI units, and the <code>forecastedSpend</code> tracks how much you are predicted to spend if your current usage remains steady.</p> <p>For example, if it is the 20th of the month and you have spent <code>50</code> dollars on Amazon EC2, your <code>actualSpend</code> is <code>50 USD</code>, and your <code>forecastedSpend</code> is <code>75 USD</code>.</p>
+/// <p>A history of the state of a budget at the end of the budget's specified time period.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct BudgetPerformanceHistory {
+    #[serde(rename = "BudgetName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub budget_name: Option<String>,
+    #[serde(rename = "BudgetType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub budget_type: Option<String>,
+    /// <p>A list of amounts of cost or usage that you created budgets for, compared to your actual costs or usage.</p>
+    #[serde(rename = "BudgetedAndActualAmountsList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub budgeted_and_actual_amounts_list: Option<Vec<BudgetedAndActualAmounts>>,
+    /// <p>The history of the cost filters for a budget during the specified time period.</p>
+    #[serde(rename = "CostFilters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cost_filters: Option<::std::collections::HashMap<String, Vec<String>>>,
+    /// <p>The history of the cost types for a budget during the specified time period.</p>
+    #[serde(rename = "CostTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cost_types: Option<CostTypes>,
+    #[serde(rename = "TimeUnit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub time_unit: Option<String>,
+}
+
+/// <p>The amount of cost or usage that you created the budget for, compared to your actual costs or usage.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct BudgetedAndActualAmounts {
+    /// <p>Your actual costs or usage for a budget period.</p>
+    #[serde(rename = "ActualAmount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub actual_amount: Option<Spend>,
+    /// <p>The amount of cost or usage that you created the budget for.</p>
+    #[serde(rename = "BudgetedAmount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub budgeted_amount: Option<Spend>,
+    /// <p>The time period covered by this budget comparison.</p>
+    #[serde(rename = "TimePeriod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub time_period: Option<TimePeriod>,
+}
+
+/// <p>The spend objects that are associated with this budget. The <code>actualSpend</code> tracks how much you've used, cost, usage, or RI units, and the <code>forecastedSpend</code> tracks how much you are predicted to spend if your current usage remains steady.</p> <p>For example, if it is the 20th of the month and you have spent <code>50</code> dollars on Amazon EC2, your <code>actualSpend</code> is <code>50 USD</code>, and your <code>forecastedSpend</code> is <code>75 USD</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CalculatedSpend {
     /// <p>The amount of cost, usage, or RI units that you have used.</p>
@@ -74,7 +123,7 @@ pub struct CalculatedSpend {
     pub forecasted_spend: Option<Spend>,
 }
 
-/// <p>The types of cost included in a budget, such as tax and subscriptions.</p>
+/// <p>The types of cost that are included in a <code>COST</code> budget, such as tax and subscriptions.</p> <p> <code>USAGE</code>, <code>RI_UTILIZATION</code>, and <code>RI_COVERAGE</code> budgets do not have <code>CostTypes</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CostTypes {
     /// <p>Specifies whether a budget includes credits.</p> <p>The default value is <code>true</code>.</p>
@@ -117,7 +166,7 @@ pub struct CostTypes {
     #[serde(rename = "UseAmortized")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub use_amortized: Option<bool>,
-    /// <p>Specifies whether a budget uses blended rate.</p> <p>The default value is <code>false</code>.</p>
+    /// <p>Specifies whether a budget uses a blended rate.</p> <p>The default value is <code>false</code>.</p>
     #[serde(rename = "UseBlended")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub use_blended: Option<bool>,
@@ -132,7 +181,7 @@ pub struct CreateBudgetRequest {
     /// <p>The budget object that you want to create.</p>
     #[serde(rename = "Budget")]
     pub budget: Budget,
-    /// <p>A notification that you want to associate with a budget. A budget can have up to five notifications, and each notification can have one SNS subscriber and up to ten email subscribers. If you include notifications and subscribers in your <code>CreateBudget</code> call, AWS creates the notifications and subscribers for you.</p>
+    /// <p>A notification that you want to associate with a budget. A budget can have up to five notifications, and each notification can have one SNS subscriber and up to 10 email subscribers. If you include notifications and subscribers in your <code>CreateBudget</code> call, AWS creates the notifications and subscribers for you.</p>
     #[serde(rename = "NotificationsWithSubscribers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notifications_with_subscribers: Option<Vec<NotificationWithSubscribers>>,
@@ -149,13 +198,13 @@ pub struct CreateNotificationRequest {
     /// <p>The <code>accountId</code> that is associated with the budget that you want to create a notification for.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
-    /// <p>The name of the budget that you want AWS to notified you about. Budget names must be unique within an account.</p>
+    /// <p>The name of the budget that you want AWS to notify you about. Budget names must be unique within an account.</p>
     #[serde(rename = "BudgetName")]
     pub budget_name: String,
     /// <p>The notification that you want to create.</p>
     #[serde(rename = "Notification")]
     pub notification: Notification,
-    /// <p>A list of subscribers that you want to associate with the notification. Each notification can have one SNS subscriber and up to ten email subscribers.</p>
+    /// <p>A list of subscribers that you want to associate with the notification. Each notification can have one SNS subscriber and up to 10 email subscribers.</p>
     #[serde(rename = "Subscribers")]
     pub subscribers: Vec<Subscriber>,
 }
@@ -168,7 +217,7 @@ pub struct CreateNotificationResponse {}
 /// <p> Request of CreateSubscriber </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateSubscriberRequest {
-    /// <p>The <code>accountId</code> associated with the budget that you want to create a subscriber for.</p>
+    /// <p>The <code>accountId</code> that is associated with the budget that you want to create a subscriber for.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
     /// <p>The name of the budget that you want to subscribe to. Budget names must be unique within an account.</p>
@@ -244,6 +293,36 @@ pub struct DeleteSubscriberRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeleteSubscriberResponse {}
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeBudgetPerformanceHistoryRequest {
+    #[serde(rename = "AccountId")]
+    pub account_id: String,
+    #[serde(rename = "BudgetName")]
+    pub budget_name: String,
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Retrieves how often the budget went into an <code>ALARM</code> state for the specified time period.</p>
+    #[serde(rename = "TimePeriod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub time_period: Option<TimePeriod>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeBudgetPerformanceHistoryResponse {
+    /// <p>The history of how often the budget has gone into an <code>ALARM</code> state.</p> <p>For <code>DAILY</code> budgets, the history saves the state of the budget for the last 60 days. For <code>MONTHLY</code> budgets, the history saves the state of the budget for the current month plus the last 12 months. For <code>QUARTERLY</code> budgets, the history saves the state of the budget for the last four quarters.</p>
+    #[serde(rename = "BudgetPerformanceHistory")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub budget_performance_history: Option<BudgetPerformanceHistory>,
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
 /// <p> Request of DescribeBudget </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeBudgetRequest {
@@ -271,11 +350,11 @@ pub struct DescribeBudgetsRequest {
     /// <p>The <code>accountId</code> that is associated with the budgets that you want descriptions of.</p>
     #[serde(rename = "AccountId")]
     pub account_id: String,
-    /// <p>Optional integer. Specifies the maximum number of results to return in response.</p>
+    /// <p>An optional integer that represents how many entries a paginated response contains. The maximum is 100.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The pagination token that indicates the next set of results to retrieve.</p>
+    /// <p>The pagination token that you include in your request to indicate the next set of results that you want to retrieve.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -289,7 +368,7 @@ pub struct DescribeBudgetsResponse {
     #[serde(rename = "Budgets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub budgets: Option<Vec<Budget>>,
-    /// <p>The pagination token that indicates the next set of results that you can retrieve.</p>
+    /// <p>The pagination token in the service response that indicates the next set of results that you can retrieve.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -304,11 +383,11 @@ pub struct DescribeNotificationsForBudgetRequest {
     /// <p>The name of the budget whose notifications you want descriptions of.</p>
     #[serde(rename = "BudgetName")]
     pub budget_name: String,
-    /// <p>Optional integer. Specifies the maximum number of results to return in response.</p>
+    /// <p>An optional integer that represents how many entries a paginated response contains. The maximum is 100.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The pagination token that indicates the next set of results to retrieve.</p>
+    /// <p>The pagination token that you include in your request to indicate the next set of results that you want to retrieve.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -318,11 +397,11 @@ pub struct DescribeNotificationsForBudgetRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeNotificationsForBudgetResponse {
-    /// <p>The pagination token that indicates the next set of results that you can retrieve.</p>
+    /// <p>The pagination token in the service response that indicates the next set of results that you can retrieve.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>A list of notifications associated with a budget.</p>
+    /// <p>A list of notifications that are associated with a budget.</p>
     #[serde(rename = "Notifications")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notifications: Option<Vec<Notification>>,
@@ -337,11 +416,11 @@ pub struct DescribeSubscribersForNotificationRequest {
     /// <p>The name of the budget whose subscribers you want descriptions of.</p>
     #[serde(rename = "BudgetName")]
     pub budget_name: String,
-    /// <p>Optional integer. Specifies the maximum number of results to return in response.</p>
+    /// <p>An optional integer that represents how many entries a paginated response contains. The maximum is 100.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The pagination token that indicates the next set of results to retrieve.</p>
+    /// <p>The pagination token that you include in your request to indicate the next set of results that you want to retrieve.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -354,38 +433,42 @@ pub struct DescribeSubscribersForNotificationRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeSubscribersForNotificationResponse {
-    /// <p>The pagination token that indicates the next set of results that you can retrieve.</p>
+    /// <p>The pagination token in the service response that indicates the next set of results that you can retrieve.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>A list of subscribers associated with a notification.</p>
+    /// <p>A list of subscribers that are associated with a notification.</p>
     #[serde(rename = "Subscribers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subscribers: Option<Vec<Subscriber>>,
 }
 
-/// <p><p>A notification associated with a budget. A budget can have up to five notifications. </p> <p>Each notification must have at least one subscriber. A notification can have one SNS subscriber and up to ten email subscribers, for a total of 11 subscribers.</p> <p>For example, if you have a budget for 200 dollars and you want to be notified when you go over 160 dollars, create a notification with the following parameters:</p> <ul> <li> <p>A notificationType of <code>ACTUAL</code> </p> </li> <li> <p>A comparisonOperator of <code>GREATER_THAN</code> </p> </li> <li> <p>A notification threshold of <code>80</code> </p> </li> </ul></p>
+/// <p><p>A notification that is associated with a budget. A budget can have up to five notifications. </p> <p>Each notification must have at least one subscriber. A notification can have one SNS subscriber and up to 10 email subscribers, for a total of 11 subscribers.</p> <p>For example, if you have a budget for 200 dollars and you want to be notified when you go over 160 dollars, create a notification with the following parameters:</p> <ul> <li> <p>A notificationType of <code>ACTUAL</code> </p> </li> <li> <p>A <code>thresholdType</code> of <code>PERCENTAGE</code> </p> </li> <li> <p>A <code>comparisonOperator</code> of <code>GREATER_THAN</code> </p> </li> <li> <p>A notification <code>threshold</code> of <code>80</code> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Notification {
-    /// <p>The comparison used for this notification.</p>
+    /// <p>The comparison that is used for this notification.</p>
     #[serde(rename = "ComparisonOperator")]
     pub comparison_operator: String,
-    /// <p>Whether the notification is for how much you have spent (<code>ACTUAL</code>) or for how much you are forecasted to spend (<code>FORECASTED</code>).</p>
+    /// <p>Whether this notification is in alarm. If a budget notification is in the <code>ALARM</code> state, you have passed the set threshold for the budget.</p>
+    #[serde(rename = "NotificationState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notification_state: Option<String>,
+    /// <p>Whether the notification is for how much you have spent (<code>ACTUAL</code>) or for how much you're forecasted to spend (<code>FORECASTED</code>).</p>
     #[serde(rename = "NotificationType")]
     pub notification_type: String,
-    /// <p>The threshold associated with a notification. Thresholds are always a percentage.</p>
+    /// <p>The threshold that is associated with a notification. Thresholds are always a percentage.</p>
     #[serde(rename = "Threshold")]
     pub threshold: f64,
-    /// <p>The type of threshold for a notification. For <code>ACTUAL</code> thresholds, AWS notifies you when you go over the threshold, and for <code>FORECASTED</code> thresholds AWS notifies you when you are forecasted to go over the threshold.</p>
+    /// <p>The type of threshold for a notification. For <code>ABSOLUTE_VALUE</code> thresholds, AWS notifies you when you go over or are forecasted to go over your total cost threshold. For <code>PERCENTAGE</code> thresholds, AWS notifies you when you go over or are forecasted to go over a certain percentage of your forecasted spend. For example, if you have a budget for 200 dollars and you have a <code>PERCENTAGE</code> threshold of 80%, AWS notifies you when you go over 160 dollars.</p>
     #[serde(rename = "ThresholdType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub threshold_type: Option<String>,
 }
 
-/// <p>A notification with subscribers. A notification can have one SNS subscriber and up to ten email subscribers, for a total of 11 subscribers.</p>
+/// <p>A notification with subscribers. A notification can have one SNS subscriber and up to 10 email subscribers, for a total of 11 subscribers.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct NotificationWithSubscribers {
-    /// <p>The notification associated with a budget.</p>
+    /// <p>The notification that is associated with a budget.</p>
     #[serde(rename = "Notification")]
     pub notification: Notification,
     /// <p>A list of subscribers who are subscribed to this notification.</p>
@@ -393,18 +476,18 @@ pub struct NotificationWithSubscribers {
     pub subscribers: Vec<Subscriber>,
 }
 
-/// <p><p>The amount of cost or usage being measured for a budget.</p> <p>For example, a <code>Spend</code> for <code>3 GB</code> of S3 usage would have the following parameters:</p> <ul> <li> <p>An <code>Amount</code> of <code>3</code> </p> </li> <li> <p>A <code>unit</code> of <code>GB</code> </p> </li> </ul></p>
+/// <p><p>The amount of cost or usage that is measured for a budget.</p> <p>For example, a <code>Spend</code> for <code>3 GB</code> of S3 usage would have the following parameters:</p> <ul> <li> <p>An <code>Amount</code> of <code>3</code> </p> </li> <li> <p>A <code>unit</code> of <code>GB</code> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Spend {
-    /// <p>The cost or usage amount associated with a budget forecast, actual spend, or budget threshold.</p>
+    /// <p>The cost or usage amount that is associated with a budget forecast, actual spend, or budget threshold.</p>
     #[serde(rename = "Amount")]
     pub amount: String,
-    /// <p>The unit of measurement used for the budget forecast, actual spend, or budget threshold, such as dollars or GB.</p>
+    /// <p>The unit of measurement that is used for the budget forecast, actual spend, or budget threshold, such as dollars or GB.</p>
     #[serde(rename = "Unit")]
     pub unit: String,
 }
 
-/// <p><p>The subscriber to a budget notification. The subscriber consists of a subscription type and either an Amazon Simple Notification Service topic or an email address.</p> <p>For example, an email subscriber would have the following parameters:</p> <ul> <li> <p>A <code>subscriptionType</code> of <code>EMAIL</code> </p> </li> <li> <p>An <code>address</code> of <code>example@example.com</code> </p> </li> </ul></p>
+/// <p><p>The subscriber to a budget notification. The subscriber consists of a subscription type and either an Amazon SNS topic or an email address.</p> <p>For example, an email subscriber would have the following parameters:</p> <ul> <li> <p>A <code>subscriptionType</code> of <code>EMAIL</code> </p> </li> <li> <p>An <code>address</code> of <code>example@example.com</code> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Subscriber {
     /// <p>The address that AWS sends budget notifications to, either an SNS topic or an email.</p>
@@ -415,14 +498,14 @@ pub struct Subscriber {
     pub subscription_type: String,
 }
 
-/// <p>The period of time covered by a budget. Has a start date and an end date. The start date must come before the end date. There are no restrictions on the end date. </p>
+/// <p>The period of time that is covered by a budget. The period has a start date and an end date. The start date must come before the end date. There are no restrictions on the end date. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TimePeriod {
     /// <p>The end date for a budget. If you didn't specify an end date, AWS set your end date to <code>06/15/87 00:00 UTC</code>. The defaults are the same for the AWS Billing and Cost Management console and the API.</p> <p>After the end date, AWS deletes the budget and all associated notifications and subscribers. You can change your end date with the <code>UpdateBudget</code> operation.</p>
     #[serde(rename = "End")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end: Option<f64>,
-    /// <p>The start date for a budget. If you created your budget and didn't specify a start date, AWS defaults to the start of your chosen time period (i.e. DAILY, MONTHLY, QUARTERLY, ANNUALLY). For example, if you created your budget on January 24th 2018, chose <code>DAILY</code>, and didn't set a start date, AWS set your start date to <code>01/24/18 00:00 UTC</code>. If you chose <code>MONTHLY</code>, AWS set your start date to <code>01/01/18 00:00 UTC</code>. The defaults are the same for the AWS Billing and Cost Management console and the API.</p> <p>You can change your start date with the <code>UpdateBudget</code> operation.</p>
+    /// <p>The start date for a budget. If you created your budget and didn't specify a start date, AWS defaults to the start of your chosen time period (DAILY, MONTHLY, QUARTERLY, or ANNUALLY). For example, if you created your budget on January 24, 2018, chose <code>DAILY</code>, and didn't set a start date, AWS set your start date to <code>01/24/18 00:00 UTC</code>. If you chose <code>MONTHLY</code>, AWS set your start date to <code>01/01/18 00:00 UTC</code>. The defaults are the same for the AWS Billing and Cost Management console and the API.</p> <p>You can change your start date with the <code>UpdateBudget</code> operation.</p>
     #[serde(rename = "Start")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start: Option<f64>,
@@ -456,7 +539,7 @@ pub struct UpdateNotificationRequest {
     /// <p>The updated notification to be associated with a budget.</p>
     #[serde(rename = "NewNotification")]
     pub new_notification: Notification,
-    /// <p>The previous notification associated with a budget.</p>
+    /// <p>The previous notification that is associated with a budget.</p>
     #[serde(rename = "OldNotification")]
     pub old_notification: Notification,
 }
@@ -475,13 +558,13 @@ pub struct UpdateSubscriberRequest {
     /// <p>The name of the budget whose subscriber you want to update.</p>
     #[serde(rename = "BudgetName")]
     pub budget_name: String,
-    /// <p>The updated subscriber associated with a budget notification.</p>
+    /// <p>The updated subscriber that is associated with a budget notification.</p>
     #[serde(rename = "NewSubscriber")]
     pub new_subscriber: Subscriber,
     /// <p>The notification whose subscriber you want to update.</p>
     #[serde(rename = "Notification")]
     pub notification: Notification,
-    /// <p>The previous subscriber associated with a budget notification.</p>
+    /// <p>The previous subscriber that is associated with a budget notification.</p>
     #[serde(rename = "OldSubscriber")]
     pub old_subscriber: Subscriber,
 }
@@ -1171,6 +1254,124 @@ impl Error for DescribeBudgetError {
         }
     }
 }
+/// Errors returned by DescribeBudgetPerformanceHistory
+#[derive(Debug, PartialEq)]
+pub enum DescribeBudgetPerformanceHistoryError {
+    /// <p>The pagination token expired.</p>
+    ExpiredNextToken(String),
+    /// <p>An error on the server occurred during the processing of your request. Try again later.</p>
+    InternalError(String),
+    /// <p>The pagination token is invalid.</p>
+    InvalidNextToken(String),
+    /// <p>An error on the client occurred. Typically, the cause is an invalid input value.</p>
+    InvalidParameter(String),
+    /// <p>We can’t locate the resource that you specified.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DescribeBudgetPerformanceHistoryError {
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeBudgetPerformanceHistoryError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ExpiredNextTokenException" => {
+                    return DescribeBudgetPerformanceHistoryError::ExpiredNextToken(String::from(
+                        error_message,
+                    ));
+                }
+                "InternalErrorException" => {
+                    return DescribeBudgetPerformanceHistoryError::InternalError(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidNextTokenException" => {
+                    return DescribeBudgetPerformanceHistoryError::InvalidNextToken(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidParameterException" => {
+                    return DescribeBudgetPerformanceHistoryError::InvalidParameter(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return DescribeBudgetPerformanceHistoryError::NotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return DescribeBudgetPerformanceHistoryError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return DescribeBudgetPerformanceHistoryError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeBudgetPerformanceHistoryError {
+    fn from(err: serde_json::error::Error) -> DescribeBudgetPerformanceHistoryError {
+        DescribeBudgetPerformanceHistoryError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeBudgetPerformanceHistoryError {
+    fn from(err: CredentialsError) -> DescribeBudgetPerformanceHistoryError {
+        DescribeBudgetPerformanceHistoryError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeBudgetPerformanceHistoryError {
+    fn from(err: HttpDispatchError) -> DescribeBudgetPerformanceHistoryError {
+        DescribeBudgetPerformanceHistoryError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeBudgetPerformanceHistoryError {
+    fn from(err: io::Error) -> DescribeBudgetPerformanceHistoryError {
+        DescribeBudgetPerformanceHistoryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeBudgetPerformanceHistoryError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeBudgetPerformanceHistoryError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeBudgetPerformanceHistoryError::ExpiredNextToken(ref cause) => cause,
+            DescribeBudgetPerformanceHistoryError::InternalError(ref cause) => cause,
+            DescribeBudgetPerformanceHistoryError::InvalidNextToken(ref cause) => cause,
+            DescribeBudgetPerformanceHistoryError::InvalidParameter(ref cause) => cause,
+            DescribeBudgetPerformanceHistoryError::NotFound(ref cause) => cause,
+            DescribeBudgetPerformanceHistoryError::Validation(ref cause) => cause,
+            DescribeBudgetPerformanceHistoryError::Credentials(ref err) => err.description(),
+            DescribeBudgetPerformanceHistoryError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeBudgetPerformanceHistoryError::ParseError(ref cause) => cause,
+            DescribeBudgetPerformanceHistoryError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by DescribeBudgets
 #[derive(Debug, PartialEq)]
 pub enum DescribeBudgetsError {
@@ -1821,19 +2022,19 @@ pub trait Budgets {
         input: CreateSubscriberRequest,
     ) -> RusotoFuture<CreateSubscriberResponse, CreateSubscriberError>;
 
-    /// <p>Deletes a budget. You can delete your budget at any time.</p> <p> <b>Deleting a budget also deletes the notifications and subscribers associated with that budget.</b> </p>
+    /// <p><p>Deletes a budget. You can delete your budget at any time.</p> <important> <p>Deleting a budget also deletes the notifications and subscribers that are associated with that budget.</p> </important></p>
     fn delete_budget(
         &self,
         input: DeleteBudgetRequest,
     ) -> RusotoFuture<DeleteBudgetResponse, DeleteBudgetError>;
 
-    /// <p>Deletes a notification.</p> <p> <b>Deleting a notification also deletes the subscribers associated with the notification.</b> </p>
+    /// <p><p>Deletes a notification.</p> <important> <p>Deleting a notification also deletes the subscribers that are associated with the notification.</p> </important></p>
     fn delete_notification(
         &self,
         input: DeleteNotificationRequest,
     ) -> RusotoFuture<DeleteNotificationResponse, DeleteNotificationError>;
 
-    /// <p>Deletes a subscriber.</p> <p> <b>Deleting the last subscriber to a notification also deletes the notification.</b> </p>
+    /// <p><p>Deletes a subscriber.</p> <important> <p>Deleting the last subscriber to a notification also deletes the notification.</p> </important></p>
     fn delete_subscriber(
         &self,
         input: DeleteSubscriberRequest,
@@ -1845,19 +2046,25 @@ pub trait Budgets {
         input: DescribeBudgetRequest,
     ) -> RusotoFuture<DescribeBudgetResponse, DescribeBudgetError>;
 
-    /// <p>Lists the budgets associated with an account.</p>
+    /// <p>Describes the history for <code>DAILY</code>, <code>MONTHLY</code>, and <code>QUARTERLY</code> budgets. Budget history isn't available for <code>ANNUAL</code> budgets.</p>
+    fn describe_budget_performance_history(
+        &self,
+        input: DescribeBudgetPerformanceHistoryRequest,
+    ) -> RusotoFuture<DescribeBudgetPerformanceHistoryResponse, DescribeBudgetPerformanceHistoryError>;
+
+    /// <p>Lists the budgets that are associated with an account.</p>
     fn describe_budgets(
         &self,
         input: DescribeBudgetsRequest,
     ) -> RusotoFuture<DescribeBudgetsResponse, DescribeBudgetsError>;
 
-    /// <p>Lists the notifications associated with a budget.</p>
+    /// <p>Lists the notifications that are associated with a budget.</p>
     fn describe_notifications_for_budget(
         &self,
         input: DescribeNotificationsForBudgetRequest,
     ) -> RusotoFuture<DescribeNotificationsForBudgetResponse, DescribeNotificationsForBudgetError>;
 
-    /// <p>Lists the subscribers associated with a notification.</p>
+    /// <p>Lists the subscribers that are associated with a notification.</p>
     fn describe_subscribers_for_notification(
         &self,
         input: DescribeSubscribersForNotificationRequest,
@@ -1866,7 +2073,7 @@ pub trait Budgets {
         DescribeSubscribersForNotificationError,
     >;
 
-    /// <p>Updates a budget. You can change every part of a budget except for the <code>budgetName</code> and the <code>calculatedSpend</code>. When a budget is modified, the <code>calculatedSpend</code> drops to zero until AWS has new usage data to use for forecasting.</p>
+    /// <p>Updates a budget. You can change every part of a budget except for the <code>budgetName</code> and the <code>calculatedSpend</code>. When you modify a budget, the <code>calculatedSpend</code> drops to zero until AWS has new usage data to use for forecasting.</p>
     fn update_budget(
         &self,
         input: UpdateBudgetRequest,
@@ -2032,7 +2239,7 @@ impl Budgets for BudgetsClient {
         })
     }
 
-    /// <p>Deletes a budget. You can delete your budget at any time.</p> <p> <b>Deleting a budget also deletes the notifications and subscribers associated with that budget.</b> </p>
+    /// <p><p>Deletes a budget. You can delete your budget at any time.</p> <important> <p>Deleting a budget also deletes the notifications and subscribers that are associated with that budget.</p> </important></p>
     fn delete_budget(
         &self,
         input: DeleteBudgetRequest,
@@ -2069,7 +2276,7 @@ impl Budgets for BudgetsClient {
         })
     }
 
-    /// <p>Deletes a notification.</p> <p> <b>Deleting a notification also deletes the subscribers associated with the notification.</b> </p>
+    /// <p><p>Deletes a notification.</p> <important> <p>Deleting a notification also deletes the subscribers that are associated with the notification.</p> </important></p>
     fn delete_notification(
         &self,
         input: DeleteNotificationRequest,
@@ -2106,7 +2313,7 @@ impl Budgets for BudgetsClient {
         })
     }
 
-    /// <p>Deletes a subscriber.</p> <p> <b>Deleting the last subscriber to a notification also deletes the notification.</b> </p>
+    /// <p><p>Deletes a subscriber.</p> <important> <p>Deleting the last subscriber to a notification also deletes the notification.</p> </important></p>
     fn delete_subscriber(
         &self,
         input: DeleteSubscriberRequest,
@@ -2180,7 +2387,47 @@ impl Budgets for BudgetsClient {
         })
     }
 
-    /// <p>Lists the budgets associated with an account.</p>
+    /// <p>Describes the history for <code>DAILY</code>, <code>MONTHLY</code>, and <code>QUARTERLY</code> budgets. Budget history isn't available for <code>ANNUAL</code> budgets.</p>
+    fn describe_budget_performance_history(
+        &self,
+        input: DescribeBudgetPerformanceHistoryRequest,
+    ) -> RusotoFuture<DescribeBudgetPerformanceHistoryResponse, DescribeBudgetPerformanceHistoryError>
+    {
+        let mut request = SignedRequest::new("POST", "budgets", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSBudgetServiceGateway.DescribeBudgetPerformanceHistory",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeBudgetPerformanceHistoryResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeBudgetPerformanceHistoryError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Lists the budgets that are associated with an account.</p>
     fn describe_budgets(
         &self,
         input: DescribeBudgetsRequest,
@@ -2217,7 +2464,7 @@ impl Budgets for BudgetsClient {
         })
     }
 
-    /// <p>Lists the notifications associated with a budget.</p>
+    /// <p>Lists the notifications that are associated with a budget.</p>
     fn describe_notifications_for_budget(
         &self,
         input: DescribeNotificationsForBudgetRequest,
@@ -2255,7 +2502,7 @@ impl Budgets for BudgetsClient {
         })
     }
 
-    /// <p>Lists the subscribers associated with a notification.</p>
+    /// <p>Lists the subscribers that are associated with a notification.</p>
     fn describe_subscribers_for_notification(
         &self,
         input: DescribeSubscribersForNotificationRequest,
@@ -2297,7 +2544,7 @@ impl Budgets for BudgetsClient {
         })
     }
 
-    /// <p>Updates a budget. You can change every part of a budget except for the <code>budgetName</code> and the <code>calculatedSpend</code>. When a budget is modified, the <code>calculatedSpend</code> drops to zero until AWS has new usage data to use for forecasting.</p>
+    /// <p>Updates a budget. You can change every part of a budget except for the <code>budgetName</code> and the <code>calculatedSpend</code>. When you modify a budget, the <code>calculatedSpend</code> drops to zero until AWS has new usage data to use for forecasting.</p>
     fn update_budget(
         &self,
         input: UpdateBudgetRequest,

@@ -35,7 +35,7 @@ pub struct AacSettings {
     #[serde(rename = "AudioDescriptionBroadcasterMix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audio_description_broadcaster_mix: Option<String>,
-    /// <p>Average bitrate in bits/second. Defaults and valid values depend on rate control mode and profile.</p>
+    /// <p>Average bitrate in bits/second. The set of valid values for this setting is: 6000, 8000, 10000, 12000, 14000, 16000, 20000, 24000, 28000, 32000, 40000, 48000, 56000, 64000, 80000, 96000, 112000, 128000, 160000, 192000, 224000, 256000, 288000, 320000, 384000, 448000, 512000, 576000, 640000, 768000, 896000, 1024000. The value you set is also constrained by the values you choose for Profile (codecProfile), Bitrate control mode (codingMode), and Sample rate (sampleRate). Default values depend on Bitrate control mode and Profile.</p>
     #[serde(rename = "Bitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bitrate: Option<i64>,
@@ -43,7 +43,8 @@ pub struct AacSettings {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub codec_profile: Option<String>,
     #[serde(rename = "CodingMode")]
-    pub coding_mode: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub coding_mode: Option<String>,
     #[serde(rename = "RateControlMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rate_control_mode: Option<String>,
@@ -52,7 +53,8 @@ pub struct AacSettings {
     pub raw_format: Option<String>,
     /// <p>Sample rate in Hz. Valid values depend on rate control mode and profile.</p>
     #[serde(rename = "SampleRate")]
-    pub sample_rate: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sample_rate: Option<i64>,
     #[serde(rename = "Specification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub specification: Option<String>,
@@ -93,6 +95,14 @@ pub struct Ac3Settings {
     pub sample_rate: Option<i64>,
 }
 
+/// <p>Acceleration settings for job execution.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AccelerationSettings {
+    /// <p>Acceleration configuration for the job.</p>
+    #[serde(rename = "Mode")]
+    pub mode: String,
+}
+
 /// <p>Required when you set (Codec) under (AudioDescriptions)&gt;(CodecSettings) to the value AIFF.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AiffSettings {
@@ -119,6 +129,17 @@ pub struct AncillarySourceSettings {
     pub source_ancillary_channel_number: Option<i64>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct AssociateCertificateRequest {
+    /// <p>The ARN of the ACM certificate that you want to associate with your MediaConvert resource.</p>
+    #[serde(rename = "Arn")]
+    pub arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AssociateCertificateResponse {}
+
 /// <p>Audio codec settings (CodecSettings) under (AudioDescriptions) contains the group of settings related to audio encoding. The settings in this group vary depending on the value you choose for Audio codec (Codec). For each codec enum you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * AAC, AacSettings * MP2, Mp2Settings * WAV, WavSettings * AIFF, AiffSettings * AC3, Ac3Settings * EAC3, Eac3Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AudioCodecSettings {
@@ -132,7 +153,8 @@ pub struct AudioCodecSettings {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aiff_settings: Option<AiffSettings>,
     #[serde(rename = "Codec")]
-    pub codec: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub codec: Option<String>,
     #[serde(rename = "Eac3Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub eac_3_settings: Option<Eac3Settings>,
@@ -162,7 +184,8 @@ pub struct AudioDescription {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audio_type_control: Option<String>,
     #[serde(rename = "CodecSettings")]
-    pub codec_settings: AudioCodecSettings,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub codec_settings: Option<AudioCodecSettings>,
     /// <p>Specify the language for this audio output track, using the ISO 639-2 or ISO 639-3 three-letter language code. The language specified will be used when &#39;Follow Input Language Code&#39; is not selected or when &#39;Follow Input Language Code&#39; is selected but there is no ISO 639 language code specified by the input.</p>
     #[serde(rename = "CustomLanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -257,7 +280,8 @@ pub struct AudioSelector {
 pub struct AudioSelectorGroup {
     /// <p>Name of an Audio Selector within the same input to include in the group.  Audio selector names are standardized, based on their order within the input (e.g., &quot;Audio Selector 1&quot;). The audio selector name parameter can be repeated to add any number of audio selectors to the group.</p>
     #[serde(rename = "AudioSelectorNames")]
-    pub audio_selector_names: Vec<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub audio_selector_names: Option<Vec<String>>,
 }
 
 /// <p>Settings for Avail Blanking</p>
@@ -273,7 +297,8 @@ pub struct AvailBlanking {
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BurninDestinationSettings {
     #[serde(rename = "Alignment")]
-    pub alignment: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alignment: Option<String>,
     #[serde(rename = "BackgroundColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub background_color: Option<String>,
@@ -287,21 +312,28 @@ pub struct BurninDestinationSettings {
     /// <p>Specifies the opacity of the burned-in captions. 255 is opaque; 0 is transparent.
     /// All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "FontOpacity")]
-    pub font_opacity: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub font_opacity: Option<i64>,
     /// <p>Font resolution in DPI (dots per inch); default is 96 dpi.
     /// All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "FontResolution")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub font_resolution: Option<i64>,
+    /// <p>Provide the font script, using an ISO 15924 script code, if the LanguageCode is not sufficient for determining the script type. Where LanguageCode or CustomLanguageCode is sufficient, use &quot;AUTOMATIC&quot; or leave unset. This is used to help determine the appropriate font for rendering burn-in captions.</p>
+    #[serde(rename = "FontScript")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub font_script: Option<String>,
     /// <p>A positive integer indicates the exact font size in points. Set to 0 for automatic font size selection. All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "FontSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub font_size: Option<i64>,
     #[serde(rename = "OutlineColor")]
-    pub outline_color: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub outline_color: Option<String>,
     /// <p>Specifies font outline size in pixels. This option is not valid for source captions that are either 608/embedded or teletext. These source settings are already pre-defined by the caption stream. All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "OutlineSize")]
-    pub outline_size: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub outline_size: Option<i64>,
     #[serde(rename = "ShadowColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub shadow_color: Option<String>,
@@ -346,14 +378,16 @@ pub struct CancelJobResponse {}
 pub struct CaptionDescription {
     /// <p>Specifies which &quot;Caption Selector&quot;:#inputs-caption_selector to use from each input when generating captions. The name should be of the format &quot;Caption Selector <N>&quot;, which denotes that the Nth Caption Selector will be used from each input.</p>
     #[serde(rename = "CaptionSelectorName")]
-    pub caption_selector_name: String,
-    /// <p>Indicates the language of the caption output track, using the ISO 639-2 or ISO 639-3 three-letter language code</p>
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub caption_selector_name: Option<String>,
+    /// <p>Indicates the language of the caption output track, using the ISO 639-2 or ISO 639-3 three-letter language code. For most captions output formats, the encoder puts this language information in the output captions metadata. If your output captions format is DVB-Sub or Burn in, the encoder uses this language information to choose the font language for rendering the captions text.</p>
     #[serde(rename = "CustomLanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_language_code: Option<String>,
     #[serde(rename = "DestinationSettings")]
-    pub destination_settings: CaptionDestinationSettings,
-    /// <p>Indicates the language of the caption output track.</p>
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_settings: Option<CaptionDestinationSettings>,
+    /// <p>Specify the language of this captions output track. For most captions output formats, the encoder puts this language information in the output captions metadata. If your output captions format is DVB-Sub or Burn in, the encoder uses this language information to choose the font language for rendering the captions text.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub language_code: Option<String>,
@@ -366,13 +400,14 @@ pub struct CaptionDescription {
 /// <p>Caption Description for preset</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CaptionDescriptionPreset {
-    /// <p>Indicates the language of the caption output track, using the ISO 639-2 or ISO 639-3 three-letter language code</p>
+    /// <p>Indicates the language of the caption output track, using the ISO 639-2 or ISO 639-3 three-letter language code. For most captions output formats, the encoder puts this language information in the output captions metadata. If your output captions format is DVB-Sub or Burn in, the encoder uses this language information to choose the font language for rendering the captions text.</p>
     #[serde(rename = "CustomLanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_language_code: Option<String>,
     #[serde(rename = "DestinationSettings")]
-    pub destination_settings: CaptionDestinationSettings,
-    /// <p>Indicates the language of the caption output track.</p>
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_settings: Option<CaptionDestinationSettings>,
+    /// <p>Specify the language of this captions output track. For most captions output formats, the encoder puts this language information in the output captions metadata. If your output captions format is DVB-Sub or Burn in, the encoder uses this language information to choose the font language for rendering the captions text.</p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub language_code: Option<String>,
@@ -389,10 +424,14 @@ pub struct CaptionDestinationSettings {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub burnin_destination_settings: Option<BurninDestinationSettings>,
     #[serde(rename = "DestinationType")]
-    pub destination_type: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_type: Option<String>,
     #[serde(rename = "DvbSubDestinationSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dvb_sub_destination_settings: Option<DvbSubDestinationSettings>,
+    #[serde(rename = "EmbeddedDestinationSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub embedded_destination_settings: Option<EmbeddedDestinationSettings>,
     #[serde(rename = "SccDestinationSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scc_destination_settings: Option<SccDestinationSettings>,
@@ -416,7 +455,8 @@ pub struct CaptionSelector {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub language_code: Option<String>,
     #[serde(rename = "SourceSettings")]
-    pub source_settings: CaptionSourceSettings,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_settings: Option<CaptionSourceSettings>,
 }
 
 /// <p>Source settings (SourceSettings) contains the group of settings for captions in the input.</p>
@@ -435,10 +475,14 @@ pub struct CaptionSourceSettings {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_source_settings: Option<FileSourceSettings>,
     #[serde(rename = "SourceType")]
-    pub source_type: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_type: Option<String>,
     #[serde(rename = "TeletextSourceSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub teletext_source_settings: Option<TeletextSourceSettings>,
+    #[serde(rename = "TrackSourceSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub track_source_settings: Option<TrackSourceSettings>,
 }
 
 /// <p>Channel mapping (ChannelMapping) contains the group of fields that hold the remixing value for each channel. Units are in dB. Acceptable values are within the range from -60 (mute) through 6. A setting of 0 passes the input channel unchanged to the output channel (no attenuation or amplification).</p>
@@ -446,7 +490,8 @@ pub struct CaptionSourceSettings {
 pub struct ChannelMapping {
     /// <p>List of output channels</p>
     #[serde(rename = "OutputChannels")]
-    pub output_channels: Vec<OutputChannelMapping>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_channels: Option<Vec<OutputChannelMapping>>,
 }
 
 /// <p>Settings for CMAF encryption</p>
@@ -466,7 +511,8 @@ pub struct CmafEncryptionSettings {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub static_key_provider: Option<StaticKeyProvider>,
     #[serde(rename = "Type")]
-    pub type_: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
 }
 
 /// <p>Required when you set (Type) under (OutputGroups)&gt;(OutputGroupSettings) to CMAF<em>GROUP</em>SETTINGS. Each output in a CMAF Output Group may only contain a single video, audio, or caption output.</p>
@@ -492,7 +538,8 @@ pub struct CmafGroupSettings {
     pub encryption: Option<CmafEncryptionSettings>,
     /// <p>Length of fragments to generate (in seconds). Fragment length must be compatible with GOP size and Framerate. Note that fragments will end on the next keyframe after this number of seconds, so actual fragment length may be longer. When Emit Single File is checked, the fragmentation is internal to a single output file and it does not cause the creation of many output files as in other output types.</p>
     #[serde(rename = "FragmentLength")]
-    pub fragment_length: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fragment_length: Option<i64>,
     #[serde(rename = "ManifestCompression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub manifest_compression: Option<String>,
@@ -503,12 +550,17 @@ pub struct CmafGroupSettings {
     #[serde(rename = "MinBufferTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub min_buffer_time: Option<i64>,
+    /// <p>Keep this setting at the default value of 0, unless you are troubleshooting a problem with how devices play back the end of your video asset. If you know that player devices are hanging on the final segment of your video because the length of your final segment is too short, use this setting to specify a minimum final segment length, in seconds. Choose a value that is greater than or equal to 1 and less than your segment length. When you specify a value for this setting, the encoder will combine any final segment that is shorter than the length that you specify with the previous segment. For example, your segment length is 3 seconds and your final segment is .5 seconds without a minimum final segment length; when you set the minimum final segment length to 1, your final segment is 3.5 seconds.</p>
+    #[serde(rename = "MinFinalSegmentLength")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub min_final_segment_length: Option<f64>,
     #[serde(rename = "SegmentControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub segment_control: Option<String>,
     /// <p>Use this setting to specify the length, in seconds, of each individual CMAF segment. This value applies to the whole package; that is, to every output in the output group. Note that segments end on the first keyframe after this number of seconds, so the actual segment length might be slightly longer. If you set Segment control (CmafSegmentControl) to single file, the service puts the content of each output in a single file that has metadata that marks these segments. If you set it to segmented files, the service creates multiple files for each output, each with the content of one segment.</p>
     #[serde(rename = "SegmentLength")]
-    pub segment_length: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub segment_length: Option<i64>,
     #[serde(rename = "StreamInfResolution")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream_inf_resolution: Option<String>,
@@ -534,6 +586,7 @@ pub struct ColorCorrector {
     #[serde(rename = "Contrast")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub contrast: Option<i64>,
+    /// <p>Use the HDR master display (Hdr10Metadata) settings to correct HDR metadata or to provide missing metadata. Note that these settings are not color correction.</p>
     #[serde(rename = "Hdr10Metadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hdr_10_metadata: Option<Hdr10Metadata>,
@@ -551,7 +604,8 @@ pub struct ColorCorrector {
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ContainerSettings {
     #[serde(rename = "Container")]
-    pub container: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container: Option<String>,
     #[serde(rename = "F4vSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub f_4v_settings: Option<F4vSettings>,
@@ -571,6 +625,13 @@ pub struct ContainerSettings {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateJobRequest {
+    /// <p>This is a beta feature. If you are interested in using this feature, please contact AWS customer support.</p>
+    #[serde(rename = "AccelerationSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub acceleration_settings: Option<AccelerationSettings>,
+    #[serde(rename = "BillingTagsSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billing_tags_source: Option<String>,
     /// <p>Idempotency token for CreateJob operation.</p>
     #[serde(rename = "ClientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -604,6 +665,10 @@ pub struct CreateJobResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateJobTemplateRequest {
+    /// <p>This is a beta feature. If you are interested in using this feature please contact AWS customer support.</p>
+    #[serde(rename = "AccelerationSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub acceleration_settings: Option<AccelerationSettings>,
     /// <p>Optional. A category for the job template you are creating</p>
     #[serde(rename = "Category")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -666,13 +731,21 @@ pub struct CreatePresetResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateQueueRequest {
-    /// <p>Optional. A description of the queue you are creating.</p>
+    /// <p>Optional. A description of the queue that you are creating.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The name of the queue you are creating.</p>
+    /// <p>The name of the queue that you are creating.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>Specifies whether the pricing plan for the queue is on-demand or reserved. For on-demand, you pay per minute, billed in increments of .01 minute. For reserved, you pay for the transcoding capacity of the entire queue, regardless of how much or how little you use it. Reserved pricing requires a 12-month commitment. When you use the API to create a queue, the default is on-demand.</p>
+    #[serde(rename = "PricingPlan")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pricing_plan: Option<String>,
+    /// <p>Details about the pricing plan for your reserved queue. Required for reserved queues and not applicable to on-demand queues.</p>
+    #[serde(rename = "ReservationPlanSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reservation_plan_settings: Option<ReservationPlanSettings>,
     /// <p>The tags that you want to add to the resource. You can tag resources with a key-value pair or with only a key.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -691,7 +764,8 @@ pub struct CreateQueueResponse {
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DashIsoEncryptionSettings {
     #[serde(rename = "SpekeKeyProvider")]
-    pub speke_key_provider: SpekeKeyProvider,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub speke_key_provider: Option<SpekeKeyProvider>,
 }
 
 /// <p>Required when you set (Type) under (OutputGroups)&gt;(OutputGroupSettings) to DASH<em>ISO</em>GROUP_SETTINGS.</p>
@@ -711,7 +785,8 @@ pub struct DashIsoGroupSettings {
     pub encryption: Option<DashIsoEncryptionSettings>,
     /// <p>Length of fragments to generate (in seconds). Fragment length must be compatible with GOP size and Framerate. Note that fragments will end on the next keyframe after this number of seconds, so actual fragment length may be longer. When Emit Single File is checked, the fragmentation is internal to a single output file and it does not cause the creation of many output files as in other output types.</p>
     #[serde(rename = "FragmentLength")]
-    pub fragment_length: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fragment_length: Option<i64>,
     #[serde(rename = "HbbtvCompliance")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hbbtv_compliance: Option<String>,
@@ -724,7 +799,12 @@ pub struct DashIsoGroupSettings {
     pub segment_control: Option<String>,
     /// <p>Length of mpd segments to create (in seconds). Note that segments will end on the next keyframe after this number of seconds, so actual segment length may be longer. When Emit Single File is checked, the segmentation is internal to a single output file and it does not cause the creation of many output files as in other output types.</p>
     #[serde(rename = "SegmentLength")]
-    pub segment_length: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub segment_length: Option<i64>,
+    /// <p>When you enable Precise segment duration in manifests (writeSegmentTimelineInRepresentation), your DASH manifest shows precise segment durations. The segment duration information appears inside the SegmentTimeline element, inside SegmentTemplate at the Representation level. When this feature isn&#39;t enabled, the segment durations in your DASH manifest are approximate. The segment duration information appears in the duration attribute of the SegmentTemplate element.</p>
+    #[serde(rename = "WriteSegmentTimelineInRepresentation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub write_segment_timeline_in_representation: Option<String>,
 }
 
 /// <p>Settings for deinterlacer</p>
@@ -765,7 +845,7 @@ pub struct DeletePresetResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteQueueRequest {
-    /// <p>The name of the queue to be deleted.</p>
+    /// <p>The name of the queue that you want to delete.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
@@ -781,6 +861,9 @@ pub struct DescribeEndpointsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
+    #[serde(rename = "Mode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mode: Option<String>,
     /// <p>Use this string, provided with the response to a previous request, to request the next batch of endpoints.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -800,18 +883,32 @@ pub struct DescribeEndpointsResponse {
     pub next_token: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DisassociateCertificateRequest {
+    /// <p>The ARN of the ACM certificate that you want to disassociate from your MediaConvert resource.</p>
+    #[serde(rename = "Arn")]
+    pub arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DisassociateCertificateResponse {}
+
 /// <p>Inserts DVB Network Information Table (NIT) at the specified table repetition interval.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DvbNitSettings {
     /// <p>The numeric value placed in the Network Information Table (NIT).</p>
     #[serde(rename = "NetworkId")]
-    pub network_id: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_id: Option<i64>,
     /// <p>The network name text placed in the network<em>name</em>descriptor inside the Network Information Table. Maximum length is 256 characters.</p>
     #[serde(rename = "NetworkName")]
-    pub network_name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_name: Option<String>,
     /// <p>The number of milliseconds between instances of this table in the output transport stream.</p>
     #[serde(rename = "NitInterval")]
-    pub nit_interval: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub nit_interval: Option<i64>,
 }
 
 /// <p>Inserts DVB Service Description Table (NIT) at the specified table repetition interval.</p>
@@ -838,7 +935,8 @@ pub struct DvbSdtSettings {
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DvbSubDestinationSettings {
     #[serde(rename = "Alignment")]
-    pub alignment: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub alignment: Option<String>,
     #[serde(rename = "BackgroundColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub background_color: Option<String>,
@@ -852,21 +950,28 @@ pub struct DvbSubDestinationSettings {
     /// <p>Specifies the opacity of the burned-in captions. 255 is opaque; 0 is transparent.
     /// All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "FontOpacity")]
-    pub font_opacity: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub font_opacity: Option<i64>,
     /// <p>Font resolution in DPI (dots per inch); default is 96 dpi.
     /// All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "FontResolution")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub font_resolution: Option<i64>,
+    /// <p>Provide the font script, using an ISO 15924 script code, if the LanguageCode is not sufficient for determining the script type. Where LanguageCode or CustomLanguageCode is sufficient, use &quot;AUTOMATIC&quot; or leave unset. This is used to help determine the appropriate font for rendering DVB-Sub captions.</p>
+    #[serde(rename = "FontScript")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub font_script: Option<String>,
     /// <p>A positive integer indicates the exact font size in points. Set to 0 for automatic font size selection. All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "FontSize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub font_size: Option<i64>,
     #[serde(rename = "OutlineColor")]
-    pub outline_color: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub outline_color: Option<String>,
     /// <p>Specifies font outline size in pixels. This option is not valid for source captions that are either 608/embedded or teletext. These source settings are already pre-defined by the caption stream. All burn-in and DVB-Sub font settings must match.</p>
     #[serde(rename = "OutlineSize")]
-    pub outline_size: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub outline_size: Option<i64>,
     #[serde(rename = "ShadowColor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub shadow_color: Option<String>,
@@ -909,7 +1014,8 @@ pub struct DvbSubSourceSettings {
 pub struct DvbTdtSettings {
     /// <p>The number of milliseconds between instances of this table in the output transport stream.</p>
     #[serde(rename = "TdtInterval")]
-    pub tdt_interval: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tdt_interval: Option<i64>,
 }
 
 /// <p>Required when you set (Codec) under (AudioDescriptions)&gt;(CodecSettings) to the value EAC3.</p>
@@ -991,6 +1097,15 @@ pub struct Eac3Settings {
     pub surround_mode: Option<String>,
 }
 
+/// <p>Settings specific to embedded/ancillary caption outputs, including 608/708 Channel destination number.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EmbeddedDestinationSettings {
+    /// <p>Ignore this setting unless your input captions are SCC format and your output container is MXF. With this combination of input captions format and output container, you can optionally use this setting to replace the input channel number with the track number that you specify. If you don&#39;t specify an output track number, the system uses the input channel number for the output channel number. This setting applies to each output individually. Channels must be unique and may only be combined in the following combinations: (1+3, 2+4, 1+4, 2+3).</p>
+    #[serde(rename = "Destination608ChannelNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_608_channel_number: Option<i64>,
+}
+
 /// <p>Settings for embedded captions Source</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EmbeddedSourceSettings {
@@ -1007,7 +1122,7 @@ pub struct EmbeddedSourceSettings {
     pub source_608_track_number: Option<i64>,
 }
 
-/// <p>Describes account specific API endpoint</p>
+/// <p>Describes an account-specific API endpoint.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Endpoint {
@@ -1047,7 +1162,8 @@ pub struct FileSourceSettings {
     pub convert_608_to_708: Option<String>,
     /// <p>External caption file used for loading captions. Accepted file extensions are &#39;scc&#39;, &#39;ttml&#39;, &#39;dfxp&#39;, &#39;stl&#39;, &#39;srt&#39;, and &#39;smi&#39;.</p>
     #[serde(rename = "SourceFile")]
-    pub source_file: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_file: Option<String>,
     /// <p>Specifies a time delta in seconds to offset the captions from the source file.</p>
     #[serde(rename = "TimeDelta")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1122,7 +1238,7 @@ pub struct GetPresetResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetQueueRequest {
-    /// <p>The name of the queue.</p>
+    /// <p>The name of the queue that you want information about.</p>
     #[serde(rename = "Name")]
     pub name: String,
 }
@@ -1133,6 +1249,19 @@ pub struct GetQueueResponse {
     #[serde(rename = "Queue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub queue: Option<Queue>,
+}
+
+/// <p>Settings for quality-defined variable bitrate encoding with the H.264 codec. Required when you set Rate control mode to QVBR. Not valid when you set Rate control mode to a value other than QVBR, or when you don&#39;t define Rate control mode.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct H264QvbrSettings {
+    /// <p>Use this setting only when Rate control mode is QVBR and Quality tuning level is Multi-pass HQ. For Max average bitrate values suited to the complexity of your input video, the service limits the average bitrate of the video part of this output to the value you choose. That is, the total size of the video element is less than or equal to the value you set multiplied by the number of seconds of encoded output.</p>
+    #[serde(rename = "MaxAverageBitrate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_average_bitrate: Option<i64>,
+    /// <p>Required when you use QVBR rate control mode. That is, when you specify qvbrSettings within h264Settings. Specify the target quality level for this output, from 1 to 10. Use higher numbers for greater quality. Level 10 results in nearly lossless compression. The quality level for most broadcast-quality transcodes is between 6 and 9.</p>
+    #[serde(rename = "QvbrQualityLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub qvbr_quality_level: Option<i64>,
 }
 
 /// <p>Required when you set (Codec) under (VideoDescription)&gt;(CodecSettings) to the value H_264.</p>
@@ -1151,6 +1280,10 @@ pub struct H264Settings {
     #[serde(rename = "CodecProfile")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub codec_profile: Option<String>,
+    /// <p>Choose Adaptive to improve subjective video quality for high-motion content. This will cause the service to use fewer B-frames (which infer information based on other frames) for high-motion portions of the video and more B-frames for low-motion portions. The maximum number of B-frames is limited by the value you provide for the setting B frames between reference frames (numberBFramesBetweenReferenceFrames).</p>
+    #[serde(rename = "DynamicSubGop")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dynamic_sub_gop: Option<String>,
     #[serde(rename = "EntropyEncoding")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entropy_encoding: Option<String>,
@@ -1166,11 +1299,11 @@ pub struct H264Settings {
     #[serde(rename = "FramerateConversionAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_conversion_algorithm: Option<String>,
-    /// <p>When you use the API for transcode jobs that use framerate conversion, specify the framerate as a fraction. For example,  24000 / 1001 = 23.976 fps. Use FramerateDenominator to specify the denominator of this fraction. In this example, use 1001 for the value of FramerateDenominator. When you use the console for transcode jobs that use framerate conversion, provide the value as a decimal number for Framerate. In this example, specify 23.976.</p>
+    /// <p>When you use the API for transcode jobs that use frame rate conversion, specify the frame rate as a fraction. For example,  24000 / 1001 = 23.976 fps. Use FramerateDenominator to specify the denominator of this fraction. In this example, use 1001 for the value of FramerateDenominator. When you use the console for transcode jobs that use frame rate conversion, provide the value as a decimal number for Framerate. In this example, specify 23.976.</p>
     #[serde(rename = "FramerateDenominator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_denominator: Option<i64>,
-    /// <p>Framerate numerator - framerate is a fraction, e.g. 24000 / 1001 = 23.976 fps.</p>
+    /// <p>Frame rate numerator - frame rate is a fraction, e.g. 24000 / 1001 = 23.976 fps.</p>
     #[serde(rename = "FramerateNumerator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_numerator: Option<i64>,
@@ -1199,7 +1332,7 @@ pub struct H264Settings {
     #[serde(rename = "InterlaceMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub interlace_mode: Option<String>,
-    /// <p>Maximum bitrate in bits/second. For example, enter five megabits per second as 5000000.</p>
+    /// <p>Maximum bitrate in bits/second. For example, enter five megabits per second as 5000000. Required when Rate control mode is QVBR.</p>
     #[serde(rename = "MaxBitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_bitrate: Option<i64>,
@@ -1229,6 +1362,10 @@ pub struct H264Settings {
     #[serde(rename = "QualityTuningLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quality_tuning_level: Option<String>,
+    /// <p>Settings for quality-defined variable bitrate encoding with the H.264 codec. Required when you set Rate control mode to QVBR. Not valid when you set Rate control mode to a value other than QVBR, or when you don&#39;t define Rate control mode.</p>
+    #[serde(rename = "QvbrSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub qvbr_settings: Option<H264QvbrSettings>,
     #[serde(rename = "RateControlMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rate_control_mode: Option<String>,
@@ -1266,6 +1403,19 @@ pub struct H264Settings {
     pub unregistered_sei_timecode: Option<String>,
 }
 
+/// <p>Settings for quality-defined variable bitrate encoding with the H.265 codec. Required when you set Rate control mode to QVBR. Not valid when you set Rate control mode to a value other than QVBR, or when you don&#39;t define Rate control mode.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct H265QvbrSettings {
+    /// <p>Use this setting only when Rate control mode is QVBR and Quality tuning level is Multi-pass HQ. For Max average bitrate values suited to the complexity of your input video, the service limits the average bitrate of the video part of this output to the value you choose. That is, the total size of the video element is less than or equal to the value you set multiplied by the number of seconds of encoded output.</p>
+    #[serde(rename = "MaxAverageBitrate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_average_bitrate: Option<i64>,
+    /// <p>Required when you use QVBR rate control mode. That is, when you specify qvbrSettings within h265Settings. Specify the target quality level for this output, from 1 to 10. Use higher numbers for greater quality. Level 10 results in nearly lossless compression. The quality level for most broadcast-quality transcodes is between 6 and 9.</p>
+    #[serde(rename = "QvbrQualityLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub qvbr_quality_level: Option<i64>,
+}
+
 /// <p>Settings for H265 codec</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct H265Settings {
@@ -1285,6 +1435,10 @@ pub struct H265Settings {
     #[serde(rename = "CodecProfile")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub codec_profile: Option<String>,
+    /// <p>Choose Adaptive to improve subjective video quality for high-motion content. This will cause the service to use fewer B-frames (which infer information based on other frames) for high-motion portions of the video and more B-frames for low-motion portions. The maximum number of B-frames is limited by the value you provide for the setting B frames between reference frames (numberBFramesBetweenReferenceFrames).</p>
+    #[serde(rename = "DynamicSubGop")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dynamic_sub_gop: Option<String>,
     #[serde(rename = "FlickerAdaptiveQuantization")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub flicker_adaptive_quantization: Option<String>,
@@ -1294,11 +1448,11 @@ pub struct H265Settings {
     #[serde(rename = "FramerateConversionAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_conversion_algorithm: Option<String>,
-    /// <p>Framerate denominator.</p>
+    /// <p>Frame rate denominator.</p>
     #[serde(rename = "FramerateDenominator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_denominator: Option<i64>,
-    /// <p>Framerate numerator - framerate is a fraction, e.g. 24000 / 1001 = 23.976 fps.</p>
+    /// <p>Frame rate numerator - frame rate is a fraction, e.g. 24000 / 1001 = 23.976 fps.</p>
     #[serde(rename = "FramerateNumerator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_numerator: Option<i64>,
@@ -1327,7 +1481,7 @@ pub struct H265Settings {
     #[serde(rename = "InterlaceMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub interlace_mode: Option<String>,
-    /// <p>Maximum bitrate in bits/second.</p>
+    /// <p>Maximum bitrate in bits/second. For example, enter five megabits per second as 5000000. Required when Rate control mode is QVBR.</p>
     #[serde(rename = "MaxBitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_bitrate: Option<i64>,
@@ -1357,6 +1511,10 @@ pub struct H265Settings {
     #[serde(rename = "QualityTuningLevel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub quality_tuning_level: Option<String>,
+    /// <p>Settings for quality-defined variable bitrate encoding with the H.265 codec. Required when you set Rate control mode to QVBR. Not valid when you set Rate control mode to a value other than QVBR, or when you don&#39;t define Rate control mode.</p>
+    #[serde(rename = "QvbrSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub qvbr_settings: Option<H265QvbrSettings>,
     #[serde(rename = "RateControlMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rate_control_mode: Option<String>,
@@ -1396,7 +1554,7 @@ pub struct H265Settings {
     pub write_mp_4_packaging_type: Option<String>,
 }
 
-/// <p>Use the HDR master display (Hdr10Metadata) settings to correct HDR metadata or to provide missing metadata. These values vary depending on the input video and must be provided by a color grader. Range is 0 to 50,000, each increment represents 0.00002 in CIE1931 color coordinate. Note that these settings are not color correction. Note that if you are creating HDR outputs inside of an HLS CMAF package, to comply with the Apple specification, you must use the HVC1 for H.265 setting.</p>
+/// <p>Use the &quot;HDR master display information&quot; (Hdr10Metadata) settings to correct HDR metadata or to provide missing metadata. These values vary depending on the input video and must be provided by a color grader. Range is 0 to 50,000; each increment represents 0.00002 in CIE1931 color coordinate. Note that these settings are not color correction. Note that if you are creating HDR outputs inside of an HLS CMAF package, to comply with the Apple specification, you must use the following settings. Set &quot;MP4 packaging type&quot; (writeMp4PackagingType) to HVC1 (HVC1). Set &quot;Profile&quot; (H265Settings &gt; codecProfile) to Main10/High (MAIN10<em>HIGH). Set &quot;Level&quot; (H265Settings &gt; codecLevel) to 5 (LEVEL</em>5).</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Hdr10Metadata {
     /// <p>HDR Master Display Information must be provided by a color grader, using color grading tools. Range is 0 to 50,000, each increment represents 0.00002 in CIE1931 color coordinate. Note that this setting is not for color correction.</p>
@@ -1417,10 +1575,12 @@ pub struct Hdr10Metadata {
     pub green_primary_y: Option<i64>,
     /// <p>Maximum light level among all samples in the coded video sequence, in units of candelas per square meter.</p>
     #[serde(rename = "MaxContentLightLevel")]
-    pub max_content_light_level: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_content_light_level: Option<i64>,
     /// <p>Maximum average light level of any frame in the coded video sequence, in units of candelas per square meter.</p>
     #[serde(rename = "MaxFrameAverageLightLevel")]
-    pub max_frame_average_light_level: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_frame_average_light_level: Option<i64>,
     /// <p>Nominal maximum mastering display luminance in units of of 0.0001 candelas per square meter.</p>
     #[serde(rename = "MaxLuminance")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1487,7 +1647,8 @@ pub struct HlsEncryptionSettings {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub static_key_provider: Option<StaticKeyProvider>,
     #[serde(rename = "Type")]
-    pub type_: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
 }
 
 /// <p>Required when you set (Type) under (OutputGroups)&gt;(OutputGroupSettings) to HLS<em>GROUP</em>SETTINGS.</p>
@@ -1531,9 +1692,14 @@ pub struct HlsGroupSettings {
     #[serde(rename = "ManifestDurationFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub manifest_duration_format: Option<String>,
+    /// <p>Keep this setting at the default value of 0, unless you are troubleshooting a problem with how devices play back the end of your video asset. If you know that player devices are hanging on the final segment of your video because the length of your final segment is too short, use this setting to specify a minimum final segment length, in seconds. Choose a value that is greater than or equal to 1 and less than your segment length. When you specify a value for this setting, the encoder will combine any final segment that is shorter than the length that you specify with the previous segment. For example, your segment length is 3 seconds and your final segment is .5 seconds without a minimum final segment length; when you set the minimum final segment length to 1, your final segment is 3.5 seconds.</p>
+    #[serde(rename = "MinFinalSegmentLength")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub min_final_segment_length: Option<f64>,
     /// <p>When set, Minimum Segment Size is enforced by looking ahead and back within the specified range for a nearby avail and extending the segment size if needed.</p>
     #[serde(rename = "MinSegmentLength")]
-    pub min_segment_length: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub min_segment_length: Option<i64>,
     #[serde(rename = "OutputSelection")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output_selection: Option<String>,
@@ -1549,7 +1715,8 @@ pub struct HlsGroupSettings {
     pub segment_control: Option<String>,
     /// <p>Length of MPEG-2 Transport Stream segments to create (in seconds). Note that segments will end on the next keyframe after this number of seconds, so actual segment length may be longer.</p>
     #[serde(rename = "SegmentLength")]
-    pub segment_length: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub segment_length: Option<i64>,
     /// <p>Number of segments to write to a subdirectory before starting a new one. directoryStructure must be SINGLE_DIRECTORY for this setting to have an effect.</p>
     #[serde(rename = "SegmentsPerSubdirectory")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1598,18 +1765,21 @@ pub struct HlsSettings {
 pub struct Id3Insertion {
     /// <p>Use ID3 tag (Id3) to provide a tag value in base64-encode format.</p>
     #[serde(rename = "Id3")]
-    pub id_3: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id_3: Option<String>,
     /// <p>Provide a Timecode (TimeCode) in HH:MM:SS:FF or HH:MM:SS;FF format.</p>
     #[serde(rename = "Timecode")]
-    pub timecode: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timecode: Option<String>,
 }
 
-/// <p>Enable the Image inserter (ImageInserter) feature to include a graphic overlay on your video. Enable or disable this feature for each output individually. This setting is disabled by default.</p>
+/// <p>Enable the image inserter feature to include a graphic overlay on your video. Enable or disable this feature for each input or output individually. This setting is disabled by default.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ImageInserter {
-    /// <p>Image to insert. Must be 32 bit windows BMP, PNG, or TGA file. Must not be  larger than the output frames.</p>
+    /// <p>Specify the images that you want to overlay on your video. The images must be PNG or TGA files.</p>
     #[serde(rename = "InsertableImages")]
-    pub insertable_images: Vec<InsertableImage>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub insertable_images: Option<Vec<InsertableImage>>,
 }
 
 /// <p>Specifies media input</p>
@@ -1630,12 +1800,17 @@ pub struct Input {
     #[serde(rename = "DeblockFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deblock_filter: Option<String>,
+    /// <p>Settings for decrypting any input files that are encrypted.</p>
+    #[serde(rename = "DecryptionSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub decryption_settings: Option<InputDecryptionSettings>,
     #[serde(rename = "DenoiseFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub denoise_filter: Option<String>,
-    /// <p>Use Input (fileInput) to define the source file used in the transcode job. There can be multiple inputs in a job. These inputs are concantenated, in the order they are specified in the job, to create the output.</p>
+    /// <p>Specify the source file for your transcoding job. You can use multiple inputs in a single job. The service concatenates these inputs, in the order that you specify them in the job, to create the outputs. If your input format is IMF, specify your input by providing the path to your CPL. For example, &quot;s3://bucket/vf/cpl.xml&quot;. If the CPL is in an incomplete IMP, make sure to use <em>Supplemental IMPs</em> (SupplementalImps) to specify any supplemental IMPs that contain assets referenced by the CPL.</p>
     #[serde(rename = "FileInput")]
-    pub file_input: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_input: Option<String>,
     #[serde(rename = "FilterEnable")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_enable: Option<String>,
@@ -1643,6 +1818,10 @@ pub struct Input {
     #[serde(rename = "FilterStrength")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_strength: Option<i64>,
+    /// <p>Enable the image inserter feature to include a graphic overlay on your video. Enable or disable this feature for each input individually. This setting is disabled by default.</p>
+    #[serde(rename = "ImageInserter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_inserter: Option<ImageInserter>,
     /// <p>(InputClippings) contains sets of start and end times that together specify a portion of the input to be used in the outputs. If you provide only a start time, the clip will be the entire input from that point to the end. If you provide only an end time, it will be the entire input up to that point. When you specify more than one input clip, the transcoding service creates the job outputs by stringing the clips together in the order you specify them.</p>
     #[serde(rename = "InputClippings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1654,6 +1833,10 @@ pub struct Input {
     #[serde(rename = "PsiControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub psi_control: Option<String>,
+    /// <p>Provide a list of any necessary supplemental IMPs. You need supplemental IMPs if the CPL that you&#39;re using for your input is in an incomplete IMP. Specify either the supplemental IMP directories with a trailing slash or the ASSETMAP.xml files. For example [&quot;s3://bucket/ov/&quot;, &quot;s3://bucket/vf2/ASSETMAP.xml&quot;]. You don&#39;t need to specify the IMP that contains your input CPL, because the service automatically detects it.</p>
+    #[serde(rename = "SupplementalImps")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub supplemental_imps: Option<Vec<String>>,
     #[serde(rename = "TimecodeSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timecode_source: Option<String>,
@@ -1673,6 +1856,26 @@ pub struct InputClipping {
     #[serde(rename = "StartTimecode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_timecode: Option<String>,
+}
+
+/// <p>Specify the decryption settings used to decrypt encrypted input</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct InputDecryptionSettings {
+    #[serde(rename = "DecryptionMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub decryption_mode: Option<String>,
+    /// <p>Decryption key either 128 or 192 or 256 bits encrypted with KMS</p>
+    #[serde(rename = "EncryptedDecryptionKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encrypted_decryption_key: Option<String>,
+    /// <p>Initialization Vector 96 bits (CTR/GCM mode only) or 128 bits.</p>
+    #[serde(rename = "InitializationVector")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub initialization_vector: Option<String>,
+    /// <p>The AWS region in which decryption key was encrypted with KMS</p>
+    #[serde(rename = "KmsKeyRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_region: Option<String>,
 }
 
 /// <p>Specified video input in a template.</p>
@@ -1703,6 +1906,10 @@ pub struct InputTemplate {
     #[serde(rename = "FilterStrength")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_strength: Option<i64>,
+    /// <p>Enable the image inserter feature to include a graphic overlay on your video. Enable or disable this feature for each input individually. This setting is disabled by default.</p>
+    #[serde(rename = "ImageInserter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_inserter: Option<ImageInserter>,
     /// <p>(InputClippings) contains sets of start and end times that together specify a portion of the input to be used in the outputs. If you provide only a start time, the clip will be the entire input from that point to the end. If you provide only an end time, it will be the entire input up to that point. When you specify more than one input clip, the transcoding service creates the job outputs by stringing the clips together in the order you specify them.</p>
     #[serde(rename = "InputClippings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1722,45 +1929,50 @@ pub struct InputTemplate {
     pub video_selector: Option<VideoSelector>,
 }
 
-/// <p>Settings for Insertable Image</p>
+/// <p>Settings that specify how your still graphic overlay appears.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InsertableImage {
-    /// <p>Use Duration (Duration) to set the time, in milliseconds, for the image to remain on the output video.</p>
+    /// <p>Specify the time, in milliseconds, for the image to remain on the output video. This duration includes fade-in time but not fade-out time.</p>
     #[serde(rename = "Duration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub duration: Option<i64>,
-    /// <p>Use Fade in (FadeIut) to set the length, in milliseconds, of the inserted image fade in. If you don&#39;t specify a value for Fade in, the image will appear abruptly at the Start time.</p>
+    /// <p>Specify the length of time, in milliseconds, between the Start time that you specify for the image insertion and the time that the image appears at full opacity. Full opacity is the level that you specify for the opacity setting. If you don&#39;t specify a value for Fade-in, the image will appear abruptly at the overlay start time.</p>
     #[serde(rename = "FadeIn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fade_in: Option<i64>,
-    /// <p>Use Fade out (FadeOut) to set the length, in milliseconds, of the inserted image fade out. If you don&#39;t specify a value for Fade out, the image will disappear abruptly at the end of the inserted image duration.</p>
+    /// <p>Specify the length of time, in milliseconds, between the end of the time that you have specified for the image overlay Duration and when the overlaid image has faded to total transparency. If you don&#39;t specify a value for Fade-out, the image will disappear abruptly at the end of the inserted image duration.</p>
     #[serde(rename = "FadeOut")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub fade_out: Option<i64>,
-    /// <p>Specify the Height (Height) of the inserted image. Use a value that is less than or equal to the video resolution height. Leave this setting blank to use the native height of the image.</p>
+    /// <p>Specify the height of the inserted image in pixels. If you specify a value that&#39;s larger than the video resolution height, the service will crop your overlaid image to fit. To use the native height of the image, keep this setting blank.</p>
     #[serde(rename = "Height")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub height: Option<i64>,
-    /// <p>Use Image location (imageInserterInput) to specify the Amazon S3 location of the image to be inserted into the output. Use a 32 bit BMP, PNG, or TGA file that fits inside the video frame.</p>
+    /// <p>Specify the Amazon S3 location of the image that you want to overlay on the video. Use a PNG or TGA file.</p>
     #[serde(rename = "ImageInserterInput")]
-    pub image_inserter_input: String,
-    /// <p>Use Left (ImageX) to set the distance, in pixels, between the inserted image and the left edge of the frame. Required for BMP, PNG and TGA input.</p>
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_inserter_input: Option<String>,
+    /// <p>Specify the distance, in pixels, between the inserted image and the left edge of the video frame. Required for any image overlay that you specify.</p>
     #[serde(rename = "ImageX")]
-    pub image_x: i64,
-    /// <p>Use Top (ImageY) to set the distance, in pixels, between the inserted image and the top edge of the video frame. Required for BMP, PNG and TGA input.</p>
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_x: Option<i64>,
+    /// <p>Specify the distance, in pixels, between the overlaid image and the top edge of the video frame. Required for any image overlay that you specify.</p>
     #[serde(rename = "ImageY")]
-    pub image_y: i64,
-    /// <p>Use Layer (Layer) to specify how overlapping inserted images appear. Images with higher values of layer appear on top of images with lower values of layer.</p>
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_y: Option<i64>,
+    /// <p>Specify how overlapping inserted images appear. Images with higher values for Layer appear on top of images with lower values for Layer.</p>
     #[serde(rename = "Layer")]
-    pub layer: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub layer: Option<i64>,
     /// <p>Use Opacity (Opacity) to specify how much of the underlying video shows through the inserted image. 0 is transparent and 100 is fully opaque. Default is 50.</p>
     #[serde(rename = "Opacity")]
-    pub opacity: i64,
-    /// <p>Use Start time (StartTime) to specify the video timecode when the image is inserted in the output. This must be in timecode (HH:MM:SS:FF or HH:MM:SS;FF) format.</p>
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub opacity: Option<i64>,
+    /// <p>Specify the timecode of the frame that you want the overlay to first appear on. This must be in timecode (HH:MM:SS:FF or HH:MM:SS;FF) format. Remember to take into account your timecode source settings.</p>
     #[serde(rename = "StartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<String>,
-    /// <p>Specify the Width (Width) of the inserted image. Use a value that is less than or equal to the video resolution width. Leave this setting blank to use the native width of the image.</p>
+    /// <p>Specify the width of the inserted image in pixels. If you specify a value that&#39;s larger than the video resolution width, the service will crop your overlaid image to fit. To use the native width of the image, keep this setting blank.</p>
     #[serde(rename = "Width")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub width: Option<i64>,
@@ -1770,10 +1982,17 @@ pub struct InsertableImage {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Job {
+    /// <p>Acceleration settings for job execution.</p>
+    #[serde(rename = "AccelerationSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub acceleration_settings: Option<AccelerationSettings>,
     /// <p>An identifier for this resource that is unique within all of AWS.</p>
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    #[serde(rename = "BillingTagsSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billing_tags_source: Option<String>,
     /// <p>The time, in Unix epoch format in seconds, when the job got created.</p>
     #[serde(rename = "CreatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1832,13 +2051,19 @@ pub struct JobSettings {
     pub avail_blanking: Option<AvailBlanking>,
     /// <p>Use Inputs (inputs) to define source file used in the transcode job. There can be multiple inputs add in a job. These inputs will be concantenated together to create the output.</p>
     #[serde(rename = "Inputs")]
-    pub inputs: Vec<Input>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub inputs: Option<Vec<Input>>,
+    /// <p>Overlay motion graphics on top of your video. The motion graphics that you specify here appear on all outputs in all output groups.</p>
+    #[serde(rename = "MotionImageInserter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub motion_image_inserter: Option<MotionImageInserter>,
     #[serde(rename = "NielsenConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub nielsen_configuration: Option<NielsenConfiguration>,
     /// <p>(OutputGroups) contains one group of settings for each set of outputs that share a common package type. All unpackaged files (MPEG-4, MPEG-2 TS, Quicktime, MXF, and no container) are grouped in a single output group as well. Required in (OutputGroups) is a group of settings that apply to the whole group. This required object depends on the value you set for (Type) under (OutputGroups)&gt;(OutputGroupSettings). Type, settings object pairs are as follows. * FILE<em>GROUP</em>SETTINGS, FileGroupSettings * HLS<em>GROUP</em>SETTINGS, HlsGroupSettings * DASH<em>ISO</em>GROUP<em>SETTINGS, DashIsoGroupSettings * MS</em>SMOOTH<em>GROUP</em>SETTINGS, MsSmoothGroupSettings * CMAF<em>GROUP</em>SETTINGS, CmafGroupSettings</p>
     #[serde(rename = "OutputGroups")]
-    pub output_groups: Vec<OutputGroup>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_groups: Option<Vec<OutputGroup>>,
     /// <p>Contains settings used to acquire and adjust timecode information from inputs.</p>
     #[serde(rename = "TimecodeConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1852,6 +2077,10 @@ pub struct JobSettings {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct JobTemplate {
+    /// <p>Acceleration settings for job execution.</p>
+    #[serde(rename = "AccelerationSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub acceleration_settings: Option<AccelerationSettings>,
     /// <p>An identifier for this resource that is unique within all of AWS.</p>
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1902,12 +2131,17 @@ pub struct JobTemplateSettings {
     #[serde(rename = "Inputs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inputs: Option<Vec<InputTemplate>>,
+    /// <p>Overlay motion graphics on top of your video. The motion graphics that you specify here appear on all outputs in all output groups.</p>
+    #[serde(rename = "MotionImageInserter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub motion_image_inserter: Option<MotionImageInserter>,
     #[serde(rename = "NielsenConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub nielsen_configuration: Option<NielsenConfiguration>,
     /// <p>(OutputGroups) contains one group of settings for each set of outputs that share a common package type. All unpackaged files (MPEG-4, MPEG-2 TS, Quicktime, MXF, and no container) are grouped in a single output group as well. Required in (OutputGroups) is a group of settings that apply to the whole group. This required object depends on the value you set for (Type) under (OutputGroups)&gt;(OutputGroupSettings). Type, settings object pairs are as follows. * FILE<em>GROUP</em>SETTINGS, FileGroupSettings * HLS<em>GROUP</em>SETTINGS, HlsGroupSettings * DASH<em>ISO</em>GROUP<em>SETTINGS, DashIsoGroupSettings * MS</em>SMOOTH<em>GROUP</em>SETTINGS, MsSmoothGroupSettings * CMAF<em>GROUP</em>SETTINGS, CmafGroupSettings</p>
     #[serde(rename = "OutputGroups")]
-    pub output_groups: Vec<OutputGroup>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_groups: Option<Vec<OutputGroup>>,
     /// <p>Contains settings used to acquire and adjust timecode information from inputs.</p>
     #[serde(rename = "TimecodeConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2047,7 +2281,7 @@ pub struct ListQueuesResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>List of queues</p>
+    /// <p>List of queues.</p>
     #[serde(rename = "Queues")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub queues: Option<Vec<Queue>>,
@@ -2115,6 +2349,9 @@ pub struct M2tsSettings {
     #[serde(rename = "EsRateInPes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub es_rate_in_pes: Option<String>,
+    #[serde(rename = "ForceTsVideoEbpOrder")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub force_ts_video_ebp_order: Option<String>,
     /// <p>The length in seconds of each fragment. Only used with EBP markers.</p>
     #[serde(rename = "FragmentTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2260,6 +2497,61 @@ pub struct M3u8Settings {
     pub video_pid: Option<i64>,
 }
 
+/// <p>Overlay motion graphics on top of your video at the time that you specify.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MotionImageInserter {
+    /// <p>If your motion graphic asset is a .mov file, keep this setting unspecified. If your motion graphic asset is a series of .png files, specify the frame rate of the overlay in frames per second, as a fraction. For example, specify 24 fps as 24/1. Make sure that the number of images in your series matches the frame rate and your intended overlay duration. For example, if you want a 30-second overlay at 30 fps, you should have 900 .png images. This overlay frame rate doesn&#39;t need to match the frame rate of the underlying video.</p>
+    #[serde(rename = "Framerate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate: Option<MotionImageInsertionFramerate>,
+    /// <p>Specify the .mov file or series of .png files that you want to overlay on your video. For .png files, provide the file name of the first file in the series. Make sure that the names of the .png files end with sequential numbers that specify the order that they are played in. For example, overlay<em>000.png, overlay</em>001.png, overlay<em>002.png, and so on. The sequence must start at zero, and each image file name must have the same number of digits. Pad your initial file names with enough zeros to complete the sequence. For example, if the first image is overlay</em>0.png, there can be only 10 images in the sequence, with the last image being overlay<em>9.png. But if the first image is overlay</em>00.png, there can be 100 images in the sequence.</p>
+    #[serde(rename = "Input")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input: Option<String>,
+    /// <p>Choose the type of motion graphic asset that you are providing for your overlay. You can choose either a .mov file or a series of .png files.</p>
+    #[serde(rename = "InsertionMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub insertion_mode: Option<String>,
+    /// <p>Use Offset to specify the placement of your motion graphic overlay on the video frame. Specify in pixels, from the upper-left corner of the frame. If you don&#39;t specify an offset, the service scales your overlay to the full size of the frame. Otherwise, the service inserts the overlay at its native resolution and scales the size up or down with any video scaling.</p>
+    #[serde(rename = "Offset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub offset: Option<MotionImageInsertionOffset>,
+    /// <p>Specify whether your motion graphic overlay repeats on a loop or plays only once.</p>
+    #[serde(rename = "Playback")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub playback: Option<String>,
+    /// <p>Specify when the motion overlay begins. Use timecode format (HH:MM:SS:FF or HH:MM:SS;FF). Make sure that the timecode you provide here takes into account how you have set up your timecode configuration under both job settings and input settings. The simplest way to do that is to set both to start at 0. If you need to set up your job to follow timecodes embedded in your source that don&#39;t start at zero, make sure that you specify a start time that is after the first embedded timecode. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/setting-up-timecode.html Find job-wide and input timecode configuration settings in your JSON job settings specification at settings&gt;timecodeConfig&gt;source and settings&gt;inputs&gt;timecodeSource.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<String>,
+}
+
+/// <p>For motion overlays that don&#39;t have a built-in frame rate, specify the frame rate of the overlay in frames per second, as a fraction. For example, specify 24 fps as 24/1. The overlay frame rate doesn&#39;t need to match the frame rate of the underlying video.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MotionImageInsertionFramerate {
+    /// <p>The bottom of the fraction that expresses your overlay frame rate. For example, if your frame rate is 24 fps, set this value to 1.</p>
+    #[serde(rename = "FramerateDenominator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate_denominator: Option<i64>,
+    /// <p>The top of the fraction that expresses your overlay frame rate. For example, if your frame rate is 24 fps, set this value to 24.</p>
+    #[serde(rename = "FramerateNumerator")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub framerate_numerator: Option<i64>,
+}
+
+/// <p>Specify the offset between the upper-left corner of the video frame and the top left corner of the overlay.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MotionImageInsertionOffset {
+    /// <p>Set the distance, in pixels, between the overlay and the left edge of the video frame.</p>
+    #[serde(rename = "ImageX")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_x: Option<i64>,
+    /// <p>Set the distance, in pixels, between the overlay and the top edge of the video frame.</p>
+    #[serde(rename = "ImageY")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_y: Option<i64>,
+}
+
 /// <p>Settings for MOV Container.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MovSettings {
@@ -2331,17 +2623,21 @@ pub struct Mpeg2Settings {
     #[serde(rename = "CodecProfile")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub codec_profile: Option<String>,
+    /// <p>Choose Adaptive to improve subjective video quality for high-motion content. This will cause the service to use fewer B-frames (which infer information based on other frames) for high-motion portions of the video and more B-frames for low-motion portions. The maximum number of B-frames is limited by the value you provide for the setting B frames between reference frames (numberBFramesBetweenReferenceFrames).</p>
+    #[serde(rename = "DynamicSubGop")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dynamic_sub_gop: Option<String>,
     #[serde(rename = "FramerateControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_control: Option<String>,
     #[serde(rename = "FramerateConversionAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_conversion_algorithm: Option<String>,
-    /// <p>Framerate denominator.</p>
+    /// <p>Frame rate denominator.</p>
     #[serde(rename = "FramerateDenominator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_denominator: Option<i64>,
-    /// <p>Framerate numerator - framerate is a fraction, e.g. 24000 / 1001 = 23.976 fps.</p>
+    /// <p>Frame rate numerator - frame rate is a fraction, e.g. 24000 / 1001 = 23.976 fps.</p>
     #[serde(rename = "FramerateNumerator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_numerator: Option<i64>,
@@ -2427,7 +2723,8 @@ pub struct Mpeg2Settings {
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MsSmoothEncryptionSettings {
     #[serde(rename = "SpekeKeyProvider")]
-    pub speke_key_provider: SpekeKeyProvider,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub speke_key_provider: Option<SpekeKeyProvider>,
 }
 
 /// <p>Required when you set (Type) under (OutputGroups)&gt;(OutputGroupSettings) to MS<em>SMOOTH</em>GROUP_SETTINGS.</p>
@@ -2443,9 +2740,10 @@ pub struct MsSmoothGroupSettings {
     #[serde(rename = "Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption: Option<MsSmoothEncryptionSettings>,
-    /// <p>Use Fragment length (FragmentLength) to specify the mp4 fragment sizes in seconds. Fragment length must be compatible with GOP size and framerate.</p>
+    /// <p>Use Fragment length (FragmentLength) to specify the mp4 fragment sizes in seconds. Fragment length must be compatible with GOP size and frame rate.</p>
     #[serde(rename = "FragmentLength")]
-    pub fragment_length: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fragment_length: Option<i64>,
     #[serde(rename = "ManifestEncoding")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub manifest_encoding: Option<String>,
@@ -2468,7 +2766,8 @@ pub struct NielsenConfiguration {
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct NoiseReducer {
     #[serde(rename = "Filter")]
-    pub filter: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<String>,
     #[serde(rename = "FilterSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_settings: Option<NoiseReducerFilterSettings>,
@@ -2543,7 +2842,8 @@ pub struct Output {
 pub struct OutputChannelMapping {
     /// <p>List of input channels</p>
     #[serde(rename = "InputChannels")]
-    pub input_channels: Vec<i64>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_channels: Option<Vec<i64>>,
 }
 
 /// <p>Details regarding output</p>
@@ -2571,10 +2871,12 @@ pub struct OutputGroup {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
     #[serde(rename = "OutputGroupSettings")]
-    pub output_group_settings: OutputGroupSettings,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_group_settings: Option<OutputGroupSettings>,
     /// <p>This object holds groups of encoding settings, one group of settings per output.</p>
     #[serde(rename = "Outputs")]
-    pub outputs: Vec<Output>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub outputs: Option<Vec<Output>>,
 }
 
 /// <p>Contains details about the output groups specified in the job settings.</p>
@@ -2606,7 +2908,8 @@ pub struct OutputGroupSettings {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ms_smooth_group_settings: Option<MsSmoothGroupSettings>,
     #[serde(rename = "Type")]
-    pub type_: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
 }
 
 /// <p>Specific settings for this type of output.</p>
@@ -2684,11 +2987,11 @@ pub struct ProresSettings {
     #[serde(rename = "FramerateConversionAlgorithm")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_conversion_algorithm: Option<String>,
-    /// <p>Framerate denominator.</p>
+    /// <p>Frame rate denominator.</p>
     #[serde(rename = "FramerateDenominator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_denominator: Option<i64>,
-    /// <p>When you use the API for transcode jobs that use framerate conversion, specify the framerate as a fraction. For example,  24000 / 1001 = 23.976 fps. Use FramerateNumerator to specify the numerator of this fraction. In this example, use 24000 for the value of FramerateNumerator.</p>
+    /// <p>When you use the API for transcode jobs that use frame rate conversion, specify the frame rate as a fraction. For example,  24000 / 1001 = 23.976 fps. Use FramerateNumerator to specify the numerator of this fraction. In this example, use 24000 for the value of FramerateNumerator.</p>
     #[serde(rename = "FramerateNumerator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub framerate_numerator: Option<i64>,
@@ -2714,7 +3017,7 @@ pub struct ProresSettings {
     pub telecine: Option<String>,
 }
 
-/// <p>MediaConvert jobs are submitted to a queue. Unless specified otherwise jobs are submitted to a built-in default queue. User can create additional queues to separate the jobs of different categories or priority.</p>
+/// <p>You can use queues to manage the resources that are available to your AWS account for running multiple transcoding jobs at the same time. If you don&#39;t specify a queue, the service sends all jobs through the default queue. For more information, see https://docs.aws.amazon.com/mediaconvert/latest/ug/working-with-queues.html.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Queue {
@@ -2722,33 +3025,42 @@ pub struct Queue {
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
-    /// <p>The timestamp in epoch seconds for queue creation.</p>
+    /// <p>The timestamp in epoch seconds for when you created the queue.</p>
     #[serde(rename = "CreatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<f64>,
-    /// <p>An optional description you create for each queue.</p>
+    /// <p>An optional description that you create for each queue.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The timestamp in epoch seconds when the queue was last updated.</p>
+    /// <p>The timestamp in epoch seconds for when you most recently updated the queue.</p>
     #[serde(rename = "LastUpdated")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated: Option<f64>,
-    /// <p>A name you create for each queue. Each name must be unique within your account.</p>
+    /// <p>A name that you create for each queue. Each name must be unique within your account.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>Estimated number of jobs in PROGRESSING status.</p>
+    /// <p>Specifies whether the pricing plan for the queue is on-demand or reserved. For on-demand, you pay per minute, billed in increments of .01 minute. For reserved, you pay for the transcoding capacity of the entire queue, regardless of how much or how little you use it. Reserved pricing requires a 12-month commitment.</p>
+    #[serde(rename = "PricingPlan")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pricing_plan: Option<String>,
+    /// <p>The estimated number of jobs with a PROGRESSING status.</p>
     #[serde(rename = "ProgressingJobsCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub progressing_jobs_count: Option<i64>,
+    /// <p>Details about the pricing plan for your reserved queue. Required for reserved queues and not applicable to on-demand queues.</p>
+    #[serde(rename = "ReservationPlan")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reservation_plan: Option<ReservationPlan>,
+    /// <p>Queues can be ACTIVE or PAUSED. If you pause a queue, the service won&#39;t begin processing jobs in that queue. Jobs that are running when you pause the queue continue to run until they finish or result in an error.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
-    /// <p>Estimated number of jobs in SUBMITTED status.</p>
+    /// <p>The estimated number of jobs with a SUBMITTED status.</p>
     #[serde(rename = "SubmittedJobsCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub submitted_jobs_count: Option<i64>,
-    /// <p>A queue can be of two types: system or custom. System or built-in queues can&#39;t be modified or deleted by the user.</p>
+    /// <p>Specifies whether this on-demand queue is system or custom. System queues are built in. You can&#39;t modify or delete system queues. You can create and modify custom queues.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -2757,31 +3069,82 @@ pub struct Queue {
 /// <p>Use Rectangle to identify a specific area of the video frame.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Rectangle {
-    /// <p>Height of rectangle in pixels.</p>
+    /// <p>Height of rectangle in pixels. Specify only even numbers.</p>
     #[serde(rename = "Height")]
-    pub height: i64,
-    /// <p>Width of rectangle in pixels.</p>
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub height: Option<i64>,
+    /// <p>Width of rectangle in pixels. Specify only even numbers.</p>
     #[serde(rename = "Width")]
-    pub width: i64,
-    /// <p>The distance, in pixels, between the rectangle and the left edge of the video frame.</p>
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub width: Option<i64>,
+    /// <p>The distance, in pixels, between the rectangle and the left edge of the video frame. Specify only even numbers.</p>
     #[serde(rename = "X")]
-    pub x: i64,
-    /// <p>The distance, in pixels, between the rectangle and the top edge of the video frame.</p>
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub x: Option<i64>,
+    /// <p>The distance, in pixels, between the rectangle and the top edge of the video frame. Specify only even numbers.</p>
     #[serde(rename = "Y")]
-    pub y: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub y: Option<i64>,
 }
 
 /// <p>Use Manual audio remixing (RemixSettings) to adjust audio levels for each audio channel in each output of your job. With audio remixing, you can output more or fewer audio channels than your input audio source provides.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RemixSettings {
     #[serde(rename = "ChannelMapping")]
-    pub channel_mapping: ChannelMapping,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel_mapping: Option<ChannelMapping>,
     /// <p>Specify the number of audio channels from your input that you want to use in your output. With remixing, you might combine or split the data in these channels, so the number of channels in your final output might be different.</p>
     #[serde(rename = "ChannelsIn")]
-    pub channels_in: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channels_in: Option<i64>,
     /// <p>Specify the number of channels in this output after remixing. Valid values: 1, 2, 4, 6, 8</p>
     #[serde(rename = "ChannelsOut")]
-    pub channels_out: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channels_out: Option<i64>,
+}
+
+/// <p>Details about the pricing plan for your reserved queue. Required for reserved queues and not applicable to on-demand queues.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ReservationPlan {
+    /// <p>The length of the term of your reserved queue pricing plan commitment.</p>
+    #[serde(rename = "Commitment")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub commitment: Option<String>,
+    /// <p>The timestamp in epoch seconds for when the current pricing plan term for this reserved queue expires.</p>
+    #[serde(rename = "ExpiresAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expires_at: Option<f64>,
+    /// <p>The timestamp in epoch seconds for when you set up the current pricing plan for this reserved queue.</p>
+    #[serde(rename = "PurchasedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub purchased_at: Option<f64>,
+    /// <p>Specifies whether the term of your reserved queue pricing plan is automatically extended (AUTO_RENEW) or expires (EXPIRE) at the end of the term.</p>
+    #[serde(rename = "RenewalType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub renewal_type: Option<String>,
+    /// <p>Specifies the number of reserved transcode slots (RTS) for this queue. The number of RTS determines how many jobs the queue can process in parallel; each RTS can process one job at a time. When you increase this number, you extend your existing commitment with a new 12-month commitment for a larger number of RTS. The new commitment begins when you purchase the additional capacity. You can&#39;t decrease the number of RTS in your reserved queue.</p>
+    #[serde(rename = "ReservedSlots")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reserved_slots: Option<i64>,
+    /// <p>Specifies whether the pricing plan for your reserved queue is ACTIVE or EXPIRED.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>Details about the pricing plan for your reserved queue. Required for reserved queues and not applicable to on-demand queues.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ReservationPlanSettings {
+    /// <p>The length of the term of your reserved queue pricing plan commitment.</p>
+    #[serde(rename = "Commitment")]
+    pub commitment: String,
+    /// <p>Specifies whether the term of your reserved queue pricing plan is automatically extended (AUTO_RENEW) or expires (EXPIRE) at the end of the term. When your term is auto renewed, you extend your commitment by 12 months from the auto renew date. You can cancel this commitment.</p>
+    #[serde(rename = "RenewalType")]
+    pub renewal_type: String,
+    /// <p>Specifies the number of reserved transcode slots (RTS) for this queue. The number of RTS determines how many jobs the queue can process in parallel; each RTS can process one job at a time. You can&#39;t decrease the number of RTS in your reserved queue. You can increase the number of RTS by extending your existing commitment with a new 12-month commitment for the larger number. The new commitment begins when you purchase the additional capacity. You can&#39;t cancel your commitment or revert to your original commitment after you increase the capacity.</p>
+    #[serde(rename = "ReservedSlots")]
+    pub reserved_slots: i64,
 }
 
 /// <p>The Amazon Resource Name (ARN) and tags for an AWS Elemental MediaConvert resource.</p>
@@ -2809,18 +3172,25 @@ pub struct SccDestinationSettings {
 /// <p>Settings for use with a SPEKE key provider</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SpekeKeyProvider {
+    /// <p>Optional AWS Certificate Manager ARN for a certificate to send to the keyprovider. The certificate holds a key used by the keyprovider to encrypt the keys in its response.</p>
+    #[serde(rename = "CertificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_arn: Option<String>,
     /// <p>The SPEKE-compliant server uses Resource ID (ResourceId) to identify content.</p>
     #[serde(rename = "ResourceId")]
-    pub resource_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_id: Option<String>,
     /// <p>Relates to SPEKE implementation. DRM system identifiers. DASH output groups support a max of two system ids. Other group types support one system id.</p>
     #[serde(rename = "SystemIds")]
-    pub system_ids: Vec<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub system_ids: Option<Vec<String>>,
     /// <p>Use URL (Url) to specify the SPEKE-compliant server that will provide keys for content.</p>
     #[serde(rename = "Url")]
-    pub url: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
 }
 
-/// <p>Settings for use with a SPEKE key provider.</p>
+/// <p>Use these settings to set up encryption with a static key provider.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StaticKeyProvider {
     /// <p>Relates to DRM implementation. Sets the value of the KEYFORMAT attribute. Must be &#39;identity&#39; or a reverse DNS string. May be omitted to indicate an implicit value of &#39;identity&#39;.</p>
@@ -2833,10 +3203,12 @@ pub struct StaticKeyProvider {
     pub key_format_versions: Option<String>,
     /// <p>Relates to DRM implementation. Use a 32-character hexidecimal string to specify Key Value (StaticKeyValue).</p>
     #[serde(rename = "StaticKeyValue")]
-    pub static_key_value: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub static_key_value: Option<String>,
     /// <p>Relates to DRM implementation. The location of the license server used for protecting content.</p>
     #[serde(rename = "Url")]
-    pub url: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2890,7 +3262,7 @@ pub struct TimecodeBurnin {
 /// <p>These settings control how the service handles timecodes throughout the job. These settings don&#39;t affect input clipping.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TimecodeConfig {
-    /// <p>If you use an editing platform that relies on an anchor timecode, use Anchor Timecode (Anchor) to specify a timecode that will match the input video frame to the output video frame. Use 24-hour format with frame number, (HH:MM:SS:FF) or (HH:MM:SS;FF). This setting ignores framerate conversion. System behavior for Anchor Timecode varies depending on your setting for Source (TimecodeSource). * If Source (TimecodeSource) is set to Specified Start (SPECIFIEDSTART), the first input frame is the specified value in Start Timecode (Start). Anchor Timecode (Anchor) and Start Timecode (Start) are used calculate output timecode. * If Source (TimecodeSource) is set to Start at 0 (ZEROBASED)  the  first frame is 00:00:00:00. * If Source (TimecodeSource) is set to Embedded (EMBEDDED), the  first frame is the timecode value on the first input frame of the input.</p>
+    /// <p>If you use an editing platform that relies on an anchor timecode, use Anchor Timecode (Anchor) to specify a timecode that will match the input video frame to the output video frame. Use 24-hour format with frame number, (HH:MM:SS:FF) or (HH:MM:SS;FF). This setting ignores frame rate conversion. System behavior for Anchor Timecode varies depending on your setting for Source (TimecodeSource). * If Source (TimecodeSource) is set to Specified Start (SPECIFIEDSTART), the first input frame is the specified value in Start Timecode (Start). Anchor Timecode (Anchor) and Start Timecode (Start) are used calculate output timecode. * If Source (TimecodeSource) is set to Start at 0 (ZEROBASED)  the  first frame is 00:00:00:00. * If Source (TimecodeSource) is set to Embedded (EMBEDDED), the  first frame is the timecode value on the first input frame of the input.</p>
     #[serde(rename = "Anchor")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub anchor: Option<String>,
@@ -2912,7 +3284,8 @@ pub struct TimecodeConfig {
 pub struct TimedMetadataInsertion {
     /// <p>Id3Insertions contains the array of Id3Insertion instances.</p>
     #[serde(rename = "Id3Insertions")]
-    pub id_3_insertions: Vec<Id3Insertion>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id_3_insertions: Option<Vec<Id3Insertion>>,
 }
 
 /// <p>Information about when jobs are submitted, started, and finished is specified in Unix epoch format in seconds.</p>
@@ -2933,6 +3306,15 @@ pub struct Timing {
     pub submit_time: Option<f64>,
 }
 
+/// <p>Settings specific to caption sources that are specfied by track number. Sources include IMSC in IMF.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TrackSourceSettings {
+    /// <p>Use this setting to select a single captions track from a source. Track numbers correspond to the order in the captions source file. For IMF sources, track numbering is based on the order that the captions appear in the CPL. For example, use 1 to select the captions asset that is listed first in the CPL. To include more than one captions track in your job outputs, create multiple input captions selectors. Specify one track per selector.</p>
+    #[serde(rename = "TrackNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub track_number: Option<i64>,
+}
+
 /// <p>Settings specific to TTML caption outputs, including Pass style information (TtmlStylePassthrough).</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TtmlDestinationSettings {
@@ -2945,8 +3327,7 @@ pub struct TtmlDestinationSettings {
 pub struct UntagResourceRequest {
     /// <p>The Amazon Resource Name (ARN) of the resource that you want to remove tags from. To get the ARN, send a GET request with the resource name.</p>
     #[serde(rename = "Arn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub arn: Option<String>,
+    pub arn: String,
     /// <p>The keys of the tags that you want to remove from the resource.</p>
     #[serde(rename = "TagKeys")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2959,6 +3340,10 @@ pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateJobTemplateRequest {
+    /// <p>This is a beta feature. If you are interested in using this feature, please contact AWS customer support.</p>
+    #[serde(rename = "AccelerationSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub acceleration_settings: Option<AccelerationSettings>,
     /// <p>The new category for the job template, if you are changing it.</p>
     #[serde(rename = "Category")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3019,9 +3404,14 @@ pub struct UpdateQueueRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The name of the queue you are modifying.</p>
+    /// <p>The name of the queue that you are modifying.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>The new details of your pricing plan for your reserved queue. When you set up a new pricing plan to replace an expired one, you enter into another 12-month commitment. When you add capacity to your queue by increasing the number of RTS, you extend the term of your commitment to 12 months from when you add capacity. After you make these commitments, you can&#39;t cancel them.</p>
+    #[serde(rename = "ReservationPlanSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reservation_plan_settings: Option<ReservationPlanSettings>,
+    /// <p>Pause or activate a queue by changing its status between ACTIVE and PAUSED. If you pause a queue, jobs in that queue won&#39;t begin. Jobs that are running when you pause the queue continue to run until they finish or result in an error.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -3038,8 +3428,10 @@ pub struct UpdateQueueResponse {
 /// <p>Video codec settings, (CodecSettings) under (VideoDescription), contains the group of settings related to video encoding. The settings in this group vary depending on the value you choose for Video codec (Codec). For each codec enum you choose, define the corresponding settings object. The following lists the codec enum, settings object pairs. * H<em>264, H264Settings * H</em>265, H265Settings * MPEG2, Mpeg2Settings * PRORES, ProresSettings * FRAME_CAPTURE, FrameCaptureSettings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VideoCodecSettings {
+    /// <p>Specifies the video codec. This must be equal to one of the enum values defined by the object  VideoCodec.</p>
     #[serde(rename = "Codec")]
-    pub codec: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub codec: Option<String>,
     #[serde(rename = "FrameCaptureSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub frame_capture_settings: Option<FrameCaptureSettings>,
@@ -3067,11 +3459,12 @@ pub struct VideoDescription {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub anti_alias: Option<String>,
     #[serde(rename = "CodecSettings")]
-    pub codec_settings: VideoCodecSettings,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub codec_settings: Option<VideoCodecSettings>,
     #[serde(rename = "ColorMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub color_metadata: Option<String>,
-    /// <p>Applies only if your input aspect ratio is different from your output aspect ratio. Use Input cropping rectangle (Crop) to specify the  video area the service will include in the output. This will crop the input source, causing video pixels to be removed on encode. Do not use this setting if you have enabled Stretch to output (stretchToOutput) in your output settings.</p>
+    /// <p>Applies only if your input aspect ratio is different from your output aspect ratio. Use Input cropping rectangle (Crop) to specify the  video area the service will include in the output. This will crop the input source, causing video pixels to be removed on encode. If you crop your input frame size to smaller than your output frame size, make sure to specify the behavior you want in your output setting &quot;Scaling behavior&quot;.</p>
     #[serde(rename = "Crop")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub crop: Option<Rectangle>,
@@ -3194,18 +3587,146 @@ pub struct WavSettings {
     pub sample_rate: Option<i64>,
 }
 
+/// Errors returned by AssociateCertificate
+#[derive(Debug, PartialEq)]
+pub enum AssociateCertificateError {
+    /// <p>The service can&#39;t process your request because of a problem in the request. Please check your request form and syntax.</p>
+    BadRequest(String),
+    /// <p>The service couldn&#39;t complete your request because there is a conflict with the current state of the resource.</p>
+    Conflict(String),
+    /// <p>You don&#39;t have permissions for this action with the credentials you sent.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected condition and can&#39;t fulfill your request.</p>
+    InternalServerError(String),
+    /// <p>The resource you requested doesn&#39;t exist.</p>
+    NotFound(String),
+    /// <p>Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.</p>
+    TooManyRequests(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl AssociateCertificateError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> AssociateCertificateError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "BadRequestException" => {
+                    return AssociateCertificateError::BadRequest(String::from(error_message));
+                }
+                "ConflictException" => {
+                    return AssociateCertificateError::Conflict(String::from(error_message));
+                }
+                "ForbiddenException" => {
+                    return AssociateCertificateError::Forbidden(String::from(error_message));
+                }
+                "InternalServerErrorException" => {
+                    return AssociateCertificateError::InternalServerError(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return AssociateCertificateError::NotFound(String::from(error_message));
+                }
+                "TooManyRequestsException" => {
+                    return AssociateCertificateError::TooManyRequests(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return AssociateCertificateError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return AssociateCertificateError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for AssociateCertificateError {
+    fn from(err: serde_json::error::Error) -> AssociateCertificateError {
+        AssociateCertificateError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AssociateCertificateError {
+    fn from(err: CredentialsError) -> AssociateCertificateError {
+        AssociateCertificateError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AssociateCertificateError {
+    fn from(err: HttpDispatchError) -> AssociateCertificateError {
+        AssociateCertificateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AssociateCertificateError {
+    fn from(err: io::Error) -> AssociateCertificateError {
+        AssociateCertificateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AssociateCertificateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AssociateCertificateError {
+    fn description(&self) -> &str {
+        match *self {
+            AssociateCertificateError::BadRequest(ref cause) => cause,
+            AssociateCertificateError::Conflict(ref cause) => cause,
+            AssociateCertificateError::Forbidden(ref cause) => cause,
+            AssociateCertificateError::InternalServerError(ref cause) => cause,
+            AssociateCertificateError::NotFound(ref cause) => cause,
+            AssociateCertificateError::TooManyRequests(ref cause) => cause,
+            AssociateCertificateError::Validation(ref cause) => cause,
+            AssociateCertificateError::Credentials(ref err) => err.description(),
+            AssociateCertificateError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            AssociateCertificateError::ParseError(ref cause) => cause,
+            AssociateCertificateError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by CancelJob
 #[derive(Debug, PartialEq)]
 pub enum CancelJobError {
     /// <p>The service can&#39;t process your request because of a problem in the request. Please check your request form and syntax.</p>
     BadRequest(String),
-    /// <p>The service could not complete your request because there is a conflict with the current state of the resource.</p>
+    /// <p>The service couldn&#39;t complete your request because there is a conflict with the current state of the resource.</p>
     Conflict(String),
     /// <p>You don&#39;t have permissions for this action with the credentials you sent.</p>
     Forbidden(String),
-    /// <p>The service encountered an unexpected condition and cannot fulfill your request.</p>
+    /// <p>The service encountered an unexpected condition and can&#39;t fulfill your request.</p>
     InternalServerError(String),
-    /// <p>The resource you requested does not exist.</p>
+    /// <p>The resource you requested doesn&#39;t exist.</p>
     NotFound(String),
     /// <p>Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.</p>
     TooManyRequests(String),
@@ -3319,13 +3840,13 @@ impl Error for CancelJobError {
 pub enum CreateJobError {
     /// <p>The service can&#39;t process your request because of a problem in the request. Please check your request form and syntax.</p>
     BadRequest(String),
-    /// <p>The service could not complete your request because there is a conflict with the current state of the resource.</p>
+    /// <p>The service couldn&#39;t complete your request because there is a conflict with the current state of the resource.</p>
     Conflict(String),
     /// <p>You don&#39;t have permissions for this action with the credentials you sent.</p>
     Forbidden(String),
-    /// <p>The service encountered an unexpected condition and cannot fulfill your request.</p>
+    /// <p>The service encountered an unexpected condition and can&#39;t fulfill your request.</p>
     InternalServerError(String),
-    /// <p>The resource you requested does not exist.</p>
+    /// <p>The resource you requested doesn&#39;t exist.</p>
     NotFound(String),
     /// <p>Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.</p>
     TooManyRequests(String),
@@ -3439,13 +3960,13 @@ impl Error for CreateJobError {
 pub enum CreateJobTemplateError {
     /// <p>The service can&#39;t process your request because of a problem in the request. Please check your request form and syntax.</p>
     BadRequest(String),
-    /// <p>The service could not complete your request because there is a conflict with the current state of the resource.</p>
+    /// <p>The service couldn&#39;t complete your request because there is a conflict with the current state of the resource.</p>
     Conflict(String),
     /// <p>You don&#39;t have permissions for this action with the credentials you sent.</p>
     Forbidden(String),
-    /// <p>The service encountered an unexpected condition and cannot fulfill your request.</p>
+    /// <p>The service encountered an unexpected condition and can&#39;t fulfill your request.</p>
     InternalServerError(String),
-    /// <p>The resource you requested does not exist.</p>
+    /// <p>The resource you requested doesn&#39;t exist.</p>
     NotFound(String),
     /// <p>Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.</p>
     TooManyRequests(String),
@@ -3565,13 +4086,13 @@ impl Error for CreateJobTemplateError {
 pub enum CreatePresetError {
     /// <p>The service can&#39;t process your request because of a problem in the request. Please check your request form and syntax.</p>
     BadRequest(String),
-    /// <p>The service could not complete your request because there is a conflict with the current state of the resource.</p>
+    /// <p>The service couldn&#39;t complete your request because there is a conflict with the current state of the resource.</p>
     Conflict(String),
     /// <p>You don&#39;t have permissions for this action with the credentials you sent.</p>
     Forbidden(String),
-    /// <p>The service encountered an unexpected condition and cannot fulfill your request.</p>
+    /// <p>The service encountered an unexpected condition and can&#39;t fulfill your request.</p>
     InternalServerError(String),
-    /// <p>The resource you requested does not exist.</p>
+    /// <p>The resource you requested doesn&#39;t exist.</p>
     NotFound(String),
     /// <p>Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.</p>
     TooManyRequests(String),
@@ -3689,13 +4210,13 @@ impl Error for CreatePresetError {
 pub enum CreateQueueError {
     /// <p>The service can&#39;t process your request because of a problem in the request. Please check your request form and syntax.</p>
     BadRequest(String),
-    /// <p>The service could not complete your request because there is a conflict with the current state of the resource.</p>
+    /// <p>The service couldn&#39;t complete your request because there is a conflict with the current state of the resource.</p>
     Conflict(String),
     /// <p>You don&#39;t have permissions for this action with the credentials you sent.</p>
     Forbidden(String),
-    /// <p>The service encountered an unexpected condition and cannot fulfill your request.</p>
+    /// <p>The service encountered an unexpected condition and can&#39;t fulfill your request.</p>
     InternalServerError(String),
-    /// <p>The resource you requested does not exist.</p>
+    /// <p>The resource you requested doesn&#39;t exist.</p>
     NotFound(String),
     /// <p>Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.</p>
     TooManyRequests(String),
@@ -3813,13 +4334,13 @@ impl Error for CreateQueueError {
 pub enum DeleteJobTemplateError {
     /// <p>The service can&#39;t process your request because of a problem in the request. Please check your request form and syntax.</p>
     BadRequest(String),
-    /// <p>The service could not complete your request because there is a conflict with the current state of the resource.</p>
+    /// <p>The service couldn&#39;t complete your request because there is a conflict with the current state of the resource.</p>
     Conflict(String),
     /// <p>You don&#39;t have permissions for this action with the credentials you sent.</p>
     Forbidden(String),
-    /// <p>The service encountered an unexpected condition and cannot fulfill your request.</p>
+    /// <p>The service encountered an unexpected condition and can&#39;t fulfill your request.</p>
     InternalServerError(String),
-    /// <p>The resource you requested does not exist.</p>
+    /// <p>The resource you requested doesn&#39;t exist.</p>
     NotFound(String),
     /// <p>Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.</p>
     TooManyRequests(String),
@@ -3939,13 +4460,13 @@ impl Error for DeleteJobTemplateError {
 pub enum DeletePresetError {
     /// <p>The service can&#39;t process your request because of a problem in the request. Please check your request form and syntax.</p>
     BadRequest(String),
-    /// <p>The service could not complete your request because there is a conflict with the current state of the resource.</p>
+    /// <p>The service couldn&#39;t complete your request because there is a conflict with the current state of the resource.</p>
     Conflict(String),
     /// <p>You don&#39;t have permissions for this action with the credentials you sent.</p>
     Forbidden(String),
-    /// <p>The service encountered an unexpected condition and cannot fulfill your request.</p>
+    /// <p>The service encountered an unexpected condition and can&#39;t fulfill your request.</p>
     InternalServerError(String),
-    /// <p>The resource you requested does not exist.</p>
+    /// <p>The resource you requested doesn&#39;t exist.</p>
     NotFound(String),
     /// <p>Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.</p>
     TooManyRequests(String),
@@ -4063,13 +4584,13 @@ impl Error for DeletePresetError {
 pub enum DeleteQueueError {
     /// <p>The service can&#39;t process your request because of a problem in the request. Please check your request form and syntax.</p>
     BadRequest(String),
-    /// <p>The service could not complete your request because there is a conflict with the current state of the resource.</p>
+    /// <p>The service couldn&#39;t complete your request because there is a conflict with the current state of the resource.</p>
     Conflict(String),
     /// <p>You don&#39;t have permissions for this action with the credentials you sent.</p>
     Forbidden(String),
-    /// <p>The service encountered an unexpected condition and cannot fulfill your request.</p>
+    /// <p>The service encountered an unexpected condition and can&#39;t fulfill your request.</p>
     InternalServerError(String),
-    /// <p>The resource you requested does not exist.</p>
+    /// <p>The resource you requested doesn&#39;t exist.</p>
     NotFound(String),
     /// <p>Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.</p>
     TooManyRequests(String),
@@ -4187,13 +4708,13 @@ impl Error for DeleteQueueError {
 pub enum DescribeEndpointsError {
     /// <p>The service can&#39;t process your request because of a problem in the request. Please check your request form and syntax.</p>
     BadRequest(String),
-    /// <p>The service could not complete your request because there is a conflict with the current state of the resource.</p>
+    /// <p>The service couldn&#39;t complete your request because there is a conflict with the current state of the resource.</p>
     Conflict(String),
     /// <p>You don&#39;t have permissions for this action with the credentials you sent.</p>
     Forbidden(String),
-    /// <p>The service encountered an unexpected condition and cannot fulfill your request.</p>
+    /// <p>The service encountered an unexpected condition and can&#39;t fulfill your request.</p>
     InternalServerError(String),
-    /// <p>The resource you requested does not exist.</p>
+    /// <p>The resource you requested doesn&#39;t exist.</p>
     NotFound(String),
     /// <p>Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.</p>
     TooManyRequests(String),
@@ -4308,18 +4829,148 @@ impl Error for DescribeEndpointsError {
         }
     }
 }
+/// Errors returned by DisassociateCertificate
+#[derive(Debug, PartialEq)]
+pub enum DisassociateCertificateError {
+    /// <p>The service can&#39;t process your request because of a problem in the request. Please check your request form and syntax.</p>
+    BadRequest(String),
+    /// <p>The service couldn&#39;t complete your request because there is a conflict with the current state of the resource.</p>
+    Conflict(String),
+    /// <p>You don&#39;t have permissions for this action with the credentials you sent.</p>
+    Forbidden(String),
+    /// <p>The service encountered an unexpected condition and can&#39;t fulfill your request.</p>
+    InternalServerError(String),
+    /// <p>The resource you requested doesn&#39;t exist.</p>
+    NotFound(String),
+    /// <p>Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.</p>
+    TooManyRequests(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DisassociateCertificateError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> DisassociateCertificateError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "BadRequestException" => {
+                    return DisassociateCertificateError::BadRequest(String::from(error_message));
+                }
+                "ConflictException" => {
+                    return DisassociateCertificateError::Conflict(String::from(error_message));
+                }
+                "ForbiddenException" => {
+                    return DisassociateCertificateError::Forbidden(String::from(error_message));
+                }
+                "InternalServerErrorException" => {
+                    return DisassociateCertificateError::InternalServerError(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return DisassociateCertificateError::NotFound(String::from(error_message));
+                }
+                "TooManyRequestsException" => {
+                    return DisassociateCertificateError::TooManyRequests(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return DisassociateCertificateError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DisassociateCertificateError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DisassociateCertificateError {
+    fn from(err: serde_json::error::Error) -> DisassociateCertificateError {
+        DisassociateCertificateError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DisassociateCertificateError {
+    fn from(err: CredentialsError) -> DisassociateCertificateError {
+        DisassociateCertificateError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DisassociateCertificateError {
+    fn from(err: HttpDispatchError) -> DisassociateCertificateError {
+        DisassociateCertificateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DisassociateCertificateError {
+    fn from(err: io::Error) -> DisassociateCertificateError {
+        DisassociateCertificateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DisassociateCertificateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DisassociateCertificateError {
+    fn description(&self) -> &str {
+        match *self {
+            DisassociateCertificateError::BadRequest(ref cause) => cause,
+            DisassociateCertificateError::Conflict(ref cause) => cause,
+            DisassociateCertificateError::Forbidden(ref cause) => cause,
+            DisassociateCertificateError::InternalServerError(ref cause) => cause,
+            DisassociateCertificateError::NotFound(ref cause) => cause,
+            DisassociateCertificateError::TooManyRequests(ref cause) => cause,
+            DisassociateCertificateError::Validation(ref cause) => cause,
+            DisassociateCertificateError::Credentials(ref err) => err.description(),
+            DisassociateCertificateError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DisassociateCertificateError::ParseError(ref cause) => cause,
+            DisassociateCertificateError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by GetJob
 #[derive(Debug, PartialEq)]
 pub enum GetJobError {
     /// <p>The service can&#39;t process your request because of a problem in the request. Please check your request form and syntax.</p>
     BadRequest(String),
-    /// <p>The service could not complete your request because there is a conflict with the current state of the resource.</p>
+    /// <p>The service couldn&#39;t complete your request because there is a conflict with the current state of the resource.</p>
     Conflict(String),
     /// <p>You don&#39;t have permissions for this action with the credentials you sent.</p>
     Forbidden(String),
-    /// <p>The service encountered an unexpected condition and cannot fulfill your request.</p>
+    /// <p>The service encountered an unexpected condition and can&#39;t fulfill your request.</p>
     InternalServerError(String),
-    /// <p>The resource you requested does not exist.</p>
+    /// <p>The resource you requested doesn&#39;t exist.</p>
     NotFound(String),
     /// <p>Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.</p>
     TooManyRequests(String),
@@ -4429,13 +5080,13 @@ impl Error for GetJobError {
 pub enum GetJobTemplateError {
     /// <p>The service can&#39;t process your request because of a problem in the request. Please check your request form and syntax.</p>
     BadRequest(String),
-    /// <p>The service could not complete your request because there is a conflict with the current state of the resource.</p>
+    /// <p>The service couldn&#39;t complete your request because there is a conflict with the current state of the resource.</p>
     Conflict(String),
     /// <p>You don&#39;t have permissions for this action with the credentials you sent.</p>
     Forbidden(String),
-    /// <p>The service encountered an unexpected condition and cannot fulfill your request.</p>
+    /// <p>The service encountered an unexpected condition and can&#39;t fulfill your request.</p>
     InternalServerError(String),
-    /// <p>The resource you requested does not exist.</p>
+    /// <p>The resource you requested doesn&#39;t exist.</p>
     NotFound(String),
     /// <p>Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.</p>
     TooManyRequests(String),
@@ -4553,13 +5204,13 @@ impl Error for GetJobTemplateError {
 pub enum GetPresetError {
     /// <p>The service can&#39;t process your request because of a problem in the request. Please check your request form and syntax.</p>
     BadRequest(String),
-    /// <p>The service could not complete your request because there is a conflict with the current state of the resource.</p>
+    /// <p>The service couldn&#39;t complete your request because there is a conflict with the current state of the resource.</p>
     Conflict(String),
     /// <p>You don&#39;t have permissions for this action with the credentials you sent.</p>
     Forbidden(String),
-    /// <p>The service encountered an unexpected condition and cannot fulfill your request.</p>
+    /// <p>The service encountered an unexpected condition and can&#39;t fulfill your request.</p>
     InternalServerError(String),
-    /// <p>The resource you requested does not exist.</p>
+    /// <p>The resource you requested doesn&#39;t exist.</p>
     NotFound(String),
     /// <p>Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.</p>
     TooManyRequests(String),
@@ -4673,13 +5324,13 @@ impl Error for GetPresetError {
 pub enum GetQueueError {
     /// <p>The service can&#39;t process your request because of a problem in the request. Please check your request form and syntax.</p>
     BadRequest(String),
-    /// <p>The service could not complete your request because there is a conflict with the current state of the resource.</p>
+    /// <p>The service couldn&#39;t complete your request because there is a conflict with the current state of the resource.</p>
     Conflict(String),
     /// <p>You don&#39;t have permissions for this action with the credentials you sent.</p>
     Forbidden(String),
-    /// <p>The service encountered an unexpected condition and cannot fulfill your request.</p>
+    /// <p>The service encountered an unexpected condition and can&#39;t fulfill your request.</p>
     InternalServerError(String),
-    /// <p>The resource you requested does not exist.</p>
+    /// <p>The resource you requested doesn&#39;t exist.</p>
     NotFound(String),
     /// <p>Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.</p>
     TooManyRequests(String),
@@ -4793,13 +5444,13 @@ impl Error for GetQueueError {
 pub enum ListJobTemplatesError {
     /// <p>The service can&#39;t process your request because of a problem in the request. Please check your request form and syntax.</p>
     BadRequest(String),
-    /// <p>The service could not complete your request because there is a conflict with the current state of the resource.</p>
+    /// <p>The service couldn&#39;t complete your request because there is a conflict with the current state of the resource.</p>
     Conflict(String),
     /// <p>You don&#39;t have permissions for this action with the credentials you sent.</p>
     Forbidden(String),
-    /// <p>The service encountered an unexpected condition and cannot fulfill your request.</p>
+    /// <p>The service encountered an unexpected condition and can&#39;t fulfill your request.</p>
     InternalServerError(String),
-    /// <p>The resource you requested does not exist.</p>
+    /// <p>The resource you requested doesn&#39;t exist.</p>
     NotFound(String),
     /// <p>Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.</p>
     TooManyRequests(String),
@@ -4917,13 +5568,13 @@ impl Error for ListJobTemplatesError {
 pub enum ListJobsError {
     /// <p>The service can&#39;t process your request because of a problem in the request. Please check your request form and syntax.</p>
     BadRequest(String),
-    /// <p>The service could not complete your request because there is a conflict with the current state of the resource.</p>
+    /// <p>The service couldn&#39;t complete your request because there is a conflict with the current state of the resource.</p>
     Conflict(String),
     /// <p>You don&#39;t have permissions for this action with the credentials you sent.</p>
     Forbidden(String),
-    /// <p>The service encountered an unexpected condition and cannot fulfill your request.</p>
+    /// <p>The service encountered an unexpected condition and can&#39;t fulfill your request.</p>
     InternalServerError(String),
-    /// <p>The resource you requested does not exist.</p>
+    /// <p>The resource you requested doesn&#39;t exist.</p>
     NotFound(String),
     /// <p>Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.</p>
     TooManyRequests(String),
@@ -5037,13 +5688,13 @@ impl Error for ListJobsError {
 pub enum ListPresetsError {
     /// <p>The service can&#39;t process your request because of a problem in the request. Please check your request form and syntax.</p>
     BadRequest(String),
-    /// <p>The service could not complete your request because there is a conflict with the current state of the resource.</p>
+    /// <p>The service couldn&#39;t complete your request because there is a conflict with the current state of the resource.</p>
     Conflict(String),
     /// <p>You don&#39;t have permissions for this action with the credentials you sent.</p>
     Forbidden(String),
-    /// <p>The service encountered an unexpected condition and cannot fulfill your request.</p>
+    /// <p>The service encountered an unexpected condition and can&#39;t fulfill your request.</p>
     InternalServerError(String),
-    /// <p>The resource you requested does not exist.</p>
+    /// <p>The resource you requested doesn&#39;t exist.</p>
     NotFound(String),
     /// <p>Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.</p>
     TooManyRequests(String),
@@ -5161,13 +5812,13 @@ impl Error for ListPresetsError {
 pub enum ListQueuesError {
     /// <p>The service can&#39;t process your request because of a problem in the request. Please check your request form and syntax.</p>
     BadRequest(String),
-    /// <p>The service could not complete your request because there is a conflict with the current state of the resource.</p>
+    /// <p>The service couldn&#39;t complete your request because there is a conflict with the current state of the resource.</p>
     Conflict(String),
     /// <p>You don&#39;t have permissions for this action with the credentials you sent.</p>
     Forbidden(String),
-    /// <p>The service encountered an unexpected condition and cannot fulfill your request.</p>
+    /// <p>The service encountered an unexpected condition and can&#39;t fulfill your request.</p>
     InternalServerError(String),
-    /// <p>The resource you requested does not exist.</p>
+    /// <p>The resource you requested doesn&#39;t exist.</p>
     NotFound(String),
     /// <p>Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.</p>
     TooManyRequests(String),
@@ -5285,13 +5936,13 @@ impl Error for ListQueuesError {
 pub enum ListTagsForResourceError {
     /// <p>The service can&#39;t process your request because of a problem in the request. Please check your request form and syntax.</p>
     BadRequest(String),
-    /// <p>The service could not complete your request because there is a conflict with the current state of the resource.</p>
+    /// <p>The service couldn&#39;t complete your request because there is a conflict with the current state of the resource.</p>
     Conflict(String),
     /// <p>You don&#39;t have permissions for this action with the credentials you sent.</p>
     Forbidden(String),
-    /// <p>The service encountered an unexpected condition and cannot fulfill your request.</p>
+    /// <p>The service encountered an unexpected condition and can&#39;t fulfill your request.</p>
     InternalServerError(String),
-    /// <p>The resource you requested does not exist.</p>
+    /// <p>The resource you requested doesn&#39;t exist.</p>
     NotFound(String),
     /// <p>Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.</p>
     TooManyRequests(String),
@@ -5413,13 +6064,13 @@ impl Error for ListTagsForResourceError {
 pub enum TagResourceError {
     /// <p>The service can&#39;t process your request because of a problem in the request. Please check your request form and syntax.</p>
     BadRequest(String),
-    /// <p>The service could not complete your request because there is a conflict with the current state of the resource.</p>
+    /// <p>The service couldn&#39;t complete your request because there is a conflict with the current state of the resource.</p>
     Conflict(String),
     /// <p>You don&#39;t have permissions for this action with the credentials you sent.</p>
     Forbidden(String),
-    /// <p>The service encountered an unexpected condition and cannot fulfill your request.</p>
+    /// <p>The service encountered an unexpected condition and can&#39;t fulfill your request.</p>
     InternalServerError(String),
-    /// <p>The resource you requested does not exist.</p>
+    /// <p>The resource you requested doesn&#39;t exist.</p>
     NotFound(String),
     /// <p>Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.</p>
     TooManyRequests(String),
@@ -5537,13 +6188,13 @@ impl Error for TagResourceError {
 pub enum UntagResourceError {
     /// <p>The service can&#39;t process your request because of a problem in the request. Please check your request form and syntax.</p>
     BadRequest(String),
-    /// <p>The service could not complete your request because there is a conflict with the current state of the resource.</p>
+    /// <p>The service couldn&#39;t complete your request because there is a conflict with the current state of the resource.</p>
     Conflict(String),
     /// <p>You don&#39;t have permissions for this action with the credentials you sent.</p>
     Forbidden(String),
-    /// <p>The service encountered an unexpected condition and cannot fulfill your request.</p>
+    /// <p>The service encountered an unexpected condition and can&#39;t fulfill your request.</p>
     InternalServerError(String),
-    /// <p>The resource you requested does not exist.</p>
+    /// <p>The resource you requested doesn&#39;t exist.</p>
     NotFound(String),
     /// <p>Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.</p>
     TooManyRequests(String),
@@ -5661,13 +6312,13 @@ impl Error for UntagResourceError {
 pub enum UpdateJobTemplateError {
     /// <p>The service can&#39;t process your request because of a problem in the request. Please check your request form and syntax.</p>
     BadRequest(String),
-    /// <p>The service could not complete your request because there is a conflict with the current state of the resource.</p>
+    /// <p>The service couldn&#39;t complete your request because there is a conflict with the current state of the resource.</p>
     Conflict(String),
     /// <p>You don&#39;t have permissions for this action with the credentials you sent.</p>
     Forbidden(String),
-    /// <p>The service encountered an unexpected condition and cannot fulfill your request.</p>
+    /// <p>The service encountered an unexpected condition and can&#39;t fulfill your request.</p>
     InternalServerError(String),
-    /// <p>The resource you requested does not exist.</p>
+    /// <p>The resource you requested doesn&#39;t exist.</p>
     NotFound(String),
     /// <p>Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.</p>
     TooManyRequests(String),
@@ -5787,13 +6438,13 @@ impl Error for UpdateJobTemplateError {
 pub enum UpdatePresetError {
     /// <p>The service can&#39;t process your request because of a problem in the request. Please check your request form and syntax.</p>
     BadRequest(String),
-    /// <p>The service could not complete your request because there is a conflict with the current state of the resource.</p>
+    /// <p>The service couldn&#39;t complete your request because there is a conflict with the current state of the resource.</p>
     Conflict(String),
     /// <p>You don&#39;t have permissions for this action with the credentials you sent.</p>
     Forbidden(String),
-    /// <p>The service encountered an unexpected condition and cannot fulfill your request.</p>
+    /// <p>The service encountered an unexpected condition and can&#39;t fulfill your request.</p>
     InternalServerError(String),
-    /// <p>The resource you requested does not exist.</p>
+    /// <p>The resource you requested doesn&#39;t exist.</p>
     NotFound(String),
     /// <p>Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.</p>
     TooManyRequests(String),
@@ -5911,13 +6562,13 @@ impl Error for UpdatePresetError {
 pub enum UpdateQueueError {
     /// <p>The service can&#39;t process your request because of a problem in the request. Please check your request form and syntax.</p>
     BadRequest(String),
-    /// <p>The service could not complete your request because there is a conflict with the current state of the resource.</p>
+    /// <p>The service couldn&#39;t complete your request because there is a conflict with the current state of the resource.</p>
     Conflict(String),
     /// <p>You don&#39;t have permissions for this action with the credentials you sent.</p>
     Forbidden(String),
-    /// <p>The service encountered an unexpected condition and cannot fulfill your request.</p>
+    /// <p>The service encountered an unexpected condition and can&#39;t fulfill your request.</p>
     InternalServerError(String),
-    /// <p>The resource you requested does not exist.</p>
+    /// <p>The resource you requested doesn&#39;t exist.</p>
     NotFound(String),
     /// <p>Too many requests have been sent in too short of a time. The service limits the rate at which it will accept requests.</p>
     TooManyRequests(String),
@@ -6032,6 +6683,12 @@ impl Error for UpdateQueueError {
 }
 /// Trait representing the capabilities of the MediaConvert API. MediaConvert clients implement this trait.
 pub trait MediaConvert {
+    /// <p>Associates an AWS Certificate Manager (ACM) Amazon Resource Name (ARN) with AWS Elemental MediaConvert.</p>
+    fn associate_certificate(
+        &self,
+        input: AssociateCertificateRequest,
+    ) -> RusotoFuture<AssociateCertificateResponse, AssociateCertificateError>;
+
     /// <p>Permanently remove a job from a queue. Once you have canceled a job, you can&#39;t start it again. You can&#39;t delete a running job.</p>
     fn cancel_job(
         &self,
@@ -6056,7 +6713,7 @@ pub trait MediaConvert {
         input: CreatePresetRequest,
     ) -> RusotoFuture<CreatePresetResponse, CreatePresetError>;
 
-    /// <p>Create a new transcoding queue. For information about job templates see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
+    /// <p>Create a new transcoding queue. For information about queues, see Working With Queues in the User Guide at https://docs.aws.amazon.com/mediaconvert/latest/ug/working-with-queues.html</p>
     fn create_queue(
         &self,
         input: CreateQueueRequest,
@@ -6085,6 +6742,12 @@ pub trait MediaConvert {
         &self,
         input: DescribeEndpointsRequest,
     ) -> RusotoFuture<DescribeEndpointsResponse, DescribeEndpointsError>;
+
+    /// <p>Removes an association between the Amazon Resource Name (ARN) of an AWS Certificate Manager (ACM) certificate and an AWS Elemental MediaConvert resource.</p>
+    fn disassociate_certificate(
+        &self,
+        input: DisassociateCertificateRequest,
+    ) -> RusotoFuture<DisassociateCertificateResponse, DisassociateCertificateError>;
 
     /// <p>Retrieve the JSON for a specific completed transcoding job.</p>
     fn get_job(&self, input: GetJobRequest) -> RusotoFuture<GetJobResponse, GetJobError>;
@@ -6131,13 +6794,13 @@ pub trait MediaConvert {
         input: ListTagsForResourceRequest,
     ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
 
-    /// <p>Tag a MediaConvert queue, preset, or job template. For information about these resource types, see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
+    /// <p>Add tags to a MediaConvert queue, preset, or job template. For information about tagging, see the User Guide at https://docs.aws.amazon.com/mediaconvert/latest/ug/tagging-resources.html</p>
     fn tag_resource(
         &self,
         input: TagResourceRequest,
     ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
 
-    /// <p>Untag a MediaConvert queue, preset, or job template. For information about these resource types, see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
+    /// <p>Remove tags from a MediaConvert queue, preset, or job template. For information about tagging, see the User Guide at https://docs.aws.amazon.com/mediaconvert/latest/ug/tagging-resources.html</p>
     fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -6198,6 +6861,45 @@ impl MediaConvertClient {
 }
 
 impl MediaConvert for MediaConvertClient {
+    /// <p>Associates an AWS Certificate Manager (ACM) Amazon Resource Name (ARN) with AWS Elemental MediaConvert.</p>
+    fn associate_certificate(
+        &self,
+        input: AssociateCertificateRequest,
+    ) -> RusotoFuture<AssociateCertificateResponse, AssociateCertificateError> {
+        let request_uri = "/2017-08-29/certificates";
+
+        let mut request = SignedRequest::new("POST", "mediaconvert", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 201 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<AssociateCertificateResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(AssociateCertificateError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>Permanently remove a job from a queue. Once you have canceled a job, you can&#39;t start it again. You can&#39;t delete a running job.</p>
     fn cancel_job(
         &self,
@@ -6352,7 +7054,7 @@ impl MediaConvert for MediaConvertClient {
         })
     }
 
-    /// <p>Create a new transcoding queue. For information about job templates see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
+    /// <p>Create a new transcoding queue. For information about queues, see Working With Queues in the User Guide at https://docs.aws.amazon.com/mediaconvert/latest/ug/working-with-queues.html</p>
     fn create_queue(
         &self,
         input: CreateQueueRequest,
@@ -6536,6 +7238,43 @@ impl MediaConvert for MediaConvertClient {
                         .from_err()
                         .and_then(|response| Err(DescribeEndpointsError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p>Removes an association between the Amazon Resource Name (ARN) of an AWS Certificate Manager (ACM) certificate and an AWS Elemental MediaConvert resource.</p>
+    fn disassociate_certificate(
+        &self,
+        input: DisassociateCertificateRequest,
+    ) -> RusotoFuture<DisassociateCertificateResponse, DisassociateCertificateError> {
+        let request_uri = "/2017-08-29/certificates/{arn}";
+
+        let mut request = SignedRequest::new("DELETE", "mediaconvert", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 202 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DisassociateCertificateResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DisassociateCertificateError::from_response(response))
+                }))
             }
         })
     }
@@ -6924,7 +7663,7 @@ impl MediaConvert for MediaConvertClient {
         })
     }
 
-    /// <p>Tag a MediaConvert queue, preset, or job template. For information about these resource types, see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
+    /// <p>Add tags to a MediaConvert queue, preset, or job template. For information about tagging, see the User Guide at https://docs.aws.amazon.com/mediaconvert/latest/ug/tagging-resources.html</p>
     fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -6963,14 +7702,14 @@ impl MediaConvert for MediaConvertClient {
         })
     }
 
-    /// <p>Untag a MediaConvert queue, preset, or job template. For information about these resource types, see the User Guide at http://docs.aws.amazon.com/mediaconvert/latest/ug/what-is.html</p>
+    /// <p>Remove tags from a MediaConvert queue, preset, or job template. For information about tagging, see the User Guide at https://docs.aws.amazon.com/mediaconvert/latest/ug/tagging-resources.html</p>
     fn untag_resource(
         &self,
         input: UntagResourceRequest,
     ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
-        let request_uri = "/2017-08-29/tags";
+        let request_uri = format!("/2017-08-29/tags/{arn}", arn = input.arn);
 
-        let mut request = SignedRequest::new("DELETE", "mediaconvert", &self.region, &request_uri);
+        let mut request = SignedRequest::new("PUT", "mediaconvert", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let encoded = Some(serde_json::to_vec(&input).unwrap());

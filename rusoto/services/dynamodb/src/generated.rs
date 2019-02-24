@@ -59,7 +59,7 @@ pub struct AttributeValue {
     #[serde(rename = "BS")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bs: Option<Vec<Vec<u8>>>,
-    /// <p>An attribute of type List. For example:</p> <p> <code>"L": ["Cookies", "Coffee", 3.14159]</code> </p>
+    /// <p>An attribute of type List. For example:</p> <p> <code>"L": [ {"S": "Cookies"} , {"S": "Coffee"}, {"N", "3.14159"}]</code> </p>
     #[serde(rename = "L")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub l: Option<Vec<AttributeValue>>,
@@ -250,6 +250,10 @@ pub struct BackupDetails {
     /// <p>Time at which the backup was created. This is the request time of the backup. </p>
     #[serde(rename = "BackupCreationDateTime")]
     pub backup_creation_date_time: f64,
+    /// <p>Time at which the automatic on-demand backup created by DynamoDB will expire. This <code>SYSTEM</code> on-demand backup expires automatically 35 days after its creation.</p>
+    #[serde(rename = "BackupExpiryDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_expiry_date_time: Option<f64>,
     /// <p>Name of the requested backup.</p>
     #[serde(rename = "BackupName")]
     pub backup_name: String,
@@ -260,6 +264,9 @@ pub struct BackupDetails {
     /// <p>Backup can be in one of the following states: CREATING, ACTIVE, DELETED. </p>
     #[serde(rename = "BackupStatus")]
     pub backup_status: String,
+    /// <p><p>BackupType:</p> <ul> <li> <p> <code>USER</code> - You create and manage these using the on-demand backup feature.</p> </li> <li> <p> <code>SYSTEM</code> - If you delete a table with point-in-time recovery enabled, a <code>SYSTEM</code> backup is automatically created and is retained for 35 days (at no additional cost). System backups allow you to restore the deleted table to the state it was in just before the point of deletion. </p> </li> <li> <p> <code>AWS_BACKUP</code> - On-demand backup created by you from AWS Backup service.</p> </li> </ul></p>
+    #[serde(rename = "BackupType")]
+    pub backup_type: String,
 }
 
 /// <p>Contains details for the backup.</p>
@@ -274,6 +281,10 @@ pub struct BackupSummary {
     #[serde(rename = "BackupCreationDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backup_creation_date_time: Option<f64>,
+    /// <p>Time at which the automatic on-demand backup created by DynamoDB will expire. This <code>SYSTEM</code> on-demand backup expires automatically 35 days after its creation.</p>
+    #[serde(rename = "BackupExpiryDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_expiry_date_time: Option<f64>,
     /// <p>Name of the specified backup.</p>
     #[serde(rename = "BackupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -286,6 +297,10 @@ pub struct BackupSummary {
     #[serde(rename = "BackupStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backup_status: Option<String>,
+    /// <p><p>BackupType:</p> <ul> <li> <p> <code>USER</code> - You create and manage these using the on-demand backup feature.</p> </li> <li> <p> <code>SYSTEM</code> - If you delete a table with point-in-time recovery enabled, a <code>SYSTEM</code> backup is automatically created and is retained for 35 days (at no additional cost). System backups allow you to restore the deleted table to the state it was in just before the point of deletion. </p> </li> <li> <p> <code>AWS_BACKUP</code> - On-demand backup created by you from AWS Backup service.</p> </li> </ul></p>
+    #[serde(rename = "BackupType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_type: Option<String>,
     /// <p>ARN associated with the table.</p>
     #[serde(rename = "TableArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -368,6 +383,31 @@ pub struct BatchWriteItemOutput {
     pub unprocessed_items: Option<::std::collections::HashMap<String, Vec<WriteRequest>>>,
 }
 
+/// <p>Contains the details for the read/write capacity mode.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct BillingModeSummary {
+    /// <p><p>Controls how you are charged for read and write throughput and how you manage capacity. This setting can be changed later.</p> <ul> <li> <p> <code>PROVISIONED</code> - Sets the read/write capacity mode to <code>PROVISIONED</code>. We recommend using <code>PROVISIONED</code> for predictable workloads.</p> </li> <li> <p> <code>PAY<em>PER</em>REQUEST</code> - Sets the read/write capacity mode to <code>PAY<em>PER</em>REQUEST</code>. We recommend using <code>PAY<em>PER</em>REQUEST</code> for unpredictable workloads. </p> </li> </ul></p>
+    #[serde(rename = "BillingMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billing_mode: Option<String>,
+    /// <p>Represents the time when <code>PAY_PER_REQUEST</code> was last set as the read/write capacity mode.</p>
+    #[serde(rename = "LastUpdateToPayPerRequestDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_update_to_pay_per_request_date_time: Option<f64>,
+}
+
+/// <p>An ordered list of errors for each item in the request which caused the transaction to get cancelled. The values of the list are ordered according to the ordering of the <code>TransactWriteItems</code> request parameter. If no error occurred for the associated item an error with a Null code and Null message will be present. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CancellationReason {
+    /// <p>Status code for the result of the cancelled transaction.</p>
+    pub code: Option<String>,
+    /// <p>Item in the request which caused the transaction to get cancelled.</p>
+    pub item: Option<::std::collections::HashMap<String, AttributeValue>>,
+    /// <p>Cancellation reason message description.</p>
+    pub message: Option<String>,
+}
+
 /// <p>Represents the amount of provisioned throughput capacity consumed on a table or an index.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -376,6 +416,14 @@ pub struct Capacity {
     #[serde(rename = "CapacityUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub capacity_units: Option<f64>,
+    /// <p>The total number of read capacity units consumed on a table or an index.</p>
+    #[serde(rename = "ReadCapacityUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub read_capacity_units: Option<f64>,
+    /// <p>The total number of write capacity units consumed on a table or an index.</p>
+    #[serde(rename = "WriteCapacityUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub write_capacity_units: Option<f64>,
 }
 
 /// <p><p>Represents the selection criteria for a <code>Query</code> or <code>Scan</code> operation:</p> <ul> <li> <p>For a <code>Query</code> operation, <code>Condition</code> is used for specifying the <code>KeyConditions</code> to use when querying a table or an index. For <code>KeyConditions</code>, only the following comparison operators are supported:</p> <p> <code>EQ | LE | LT | GE | GT | BEGINS_WITH | BETWEEN</code> </p> <p> <code>Condition</code> is also used in a <code>QueryFilter</code>, which evaluates the query results and returns only the desired values.</p> </li> <li> <p>For a <code>Scan</code> operation, <code>Condition</code> is used in a <code>ScanFilter</code>, which evaluates the scan results and returns only the desired values.</p> </li> </ul></p>
@@ -388,6 +436,32 @@ pub struct Condition {
     /// <p>A comparator for evaluating attributes. For example, equals, greater than, less than, etc.</p> <p>The following comparison operators are available:</p> <p> <code>EQ | NE | LE | LT | GE | GT | NOT_NULL | NULL | CONTAINS | NOT_CONTAINS | BEGINS_WITH | IN | BETWEEN</code> </p> <p>The following are descriptions of each comparison operator.</p> <ul> <li> <p> <code>EQ</code> : Equal. <code>EQ</code> is supported for all data types, including lists and maps.</p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> element of type String, Number, Binary, String Set, Number Set, or Binary Set. If an item contains an <code>AttributeValue</code> element of a different type than the one provided in the request, the value does not match. For example, <code>{"S":"6"}</code> does not equal <code>{"N":"6"}</code>. Also, <code>{"N":"6"}</code> does not equal <code>{"NS":["6", "2", "1"]}</code>.</p> <p/> </li> <li> <p> <code>NE</code> : Not equal. <code>NE</code> is supported for all data types, including lists and maps.</p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> of type String, Number, Binary, String Set, Number Set, or Binary Set. If an item contains an <code>AttributeValue</code> of a different type than the one provided in the request, the value does not match. For example, <code>{"S":"6"}</code> does not equal <code>{"N":"6"}</code>. Also, <code>{"N":"6"}</code> does not equal <code>{"NS":["6", "2", "1"]}</code>.</p> <p/> </li> <li> <p> <code>LE</code> : Less than or equal. </p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> element of type String, Number, or Binary (not a set type). If an item contains an <code>AttributeValue</code> element of a different type than the one provided in the request, the value does not match. For example, <code>{"S":"6"}</code> does not equal <code>{"N":"6"}</code>. Also, <code>{"N":"6"}</code> does not compare to <code>{"NS":["6", "2", "1"]}</code>.</p> <p/> </li> <li> <p> <code>LT</code> : Less than. </p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> of type String, Number, or Binary (not a set type). If an item contains an <code>AttributeValue</code> element of a different type than the one provided in the request, the value does not match. For example, <code>{"S":"6"}</code> does not equal <code>{"N":"6"}</code>. Also, <code>{"N":"6"}</code> does not compare to <code>{"NS":["6", "2", "1"]}</code>.</p> <p/> </li> <li> <p> <code>GE</code> : Greater than or equal. </p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> element of type String, Number, or Binary (not a set type). If an item contains an <code>AttributeValue</code> element of a different type than the one provided in the request, the value does not match. For example, <code>{"S":"6"}</code> does not equal <code>{"N":"6"}</code>. Also, <code>{"N":"6"}</code> does not compare to <code>{"NS":["6", "2", "1"]}</code>.</p> <p/> </li> <li> <p> <code>GT</code> : Greater than. </p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> element of type String, Number, or Binary (not a set type). If an item contains an <code>AttributeValue</code> element of a different type than the one provided in the request, the value does not match. For example, <code>{"S":"6"}</code> does not equal <code>{"N":"6"}</code>. Also, <code>{"N":"6"}</code> does not compare to <code>{"NS":["6", "2", "1"]}</code>.</p> <p/> </li> <li> <p> <code>NOT_NULL</code> : The attribute exists. <code>NOT_NULL</code> is supported for all data types, including lists and maps.</p> <note> <p>This operator tests for the existence of an attribute, not its data type. If the data type of attribute "<code>a</code>" is null, and you evaluate it using <code>NOT_NULL</code>, the result is a Boolean <code>true</code>. This result is because the attribute "<code>a</code>" exists; its data type is not relevant to the <code>NOT_NULL</code> comparison operator.</p> </note> </li> <li> <p> <code>NULL</code> : The attribute does not exist. <code>NULL</code> is supported for all data types, including lists and maps.</p> <note> <p>This operator tests for the nonexistence of an attribute, not its data type. If the data type of attribute "<code>a</code>" is null, and you evaluate it using <code>NULL</code>, the result is a Boolean <code>false</code>. This is because the attribute "<code>a</code>" exists; its data type is not relevant to the <code>NULL</code> comparison operator.</p> </note> </li> <li> <p> <code>CONTAINS</code> : Checks for a subsequence, or value in a set.</p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> element of type String, Number, or Binary (not a set type). If the target attribute of the comparison is of type String, then the operator checks for a substring match. If the target attribute of the comparison is of type Binary, then the operator looks for a subsequence of the target that matches the input. If the target attribute of the comparison is a set ("<code>SS</code>", "<code>NS</code>", or "<code>BS</code>"), then the operator evaluates to true if it finds an exact match with any member of the set.</p> <p>CONTAINS is supported for lists: When evaluating "<code>a CONTAINS b</code>", "<code>a</code>" can be a list; however, "<code>b</code>" cannot be a set, a map, or a list.</p> </li> <li> <p> <code>NOT_CONTAINS</code> : Checks for absence of a subsequence, or absence of a value in a set.</p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> element of type String, Number, or Binary (not a set type). If the target attribute of the comparison is a String, then the operator checks for the absence of a substring match. If the target attribute of the comparison is Binary, then the operator checks for the absence of a subsequence of the target that matches the input. If the target attribute of the comparison is a set ("<code>SS</code>", "<code>NS</code>", or "<code>BS</code>"), then the operator evaluates to true if it <i>does not</i> find an exact match with any member of the set.</p> <p>NOT_CONTAINS is supported for lists: When evaluating "<code>a NOT CONTAINS b</code>", "<code>a</code>" can be a list; however, "<code>b</code>" cannot be a set, a map, or a list.</p> </li> <li> <p> <code>BEGINS_WITH</code> : Checks for a prefix. </p> <p> <code>AttributeValueList</code> can contain only one <code>AttributeValue</code> of type String or Binary (not a Number or a set type). The target attribute of the comparison must be of type String or Binary (not a Number or a set type).</p> <p/> </li> <li> <p> <code>IN</code> : Checks for matching elements in a list.</p> <p> <code>AttributeValueList</code> can contain one or more <code>AttributeValue</code> elements of type String, Number, or Binary. These attributes are compared against an existing attribute of an item. If any elements of the input are equal to the item attribute, the expression evaluates to true.</p> </li> <li> <p> <code>BETWEEN</code> : Greater than or equal to the first value, and less than or equal to the second value. </p> <p> <code>AttributeValueList</code> must contain two <code>AttributeValue</code> elements of the same type, either String, Number, or Binary (not a set type). A target attribute matches if the target value is greater than, or equal to, the first element and less than, or equal to, the second element. If an item contains an <code>AttributeValue</code> element of a different type than the one provided in the request, the value does not match. For example, <code>{"S":"6"}</code> does not compare to <code>{"N":"6"}</code>. Also, <code>{"N":"6"}</code> does not compare to <code>{"NS":["6", "2", "1"]}</code> </p> </li> </ul> <p>For usage examples of <code>AttributeValueList</code> and <code>ComparisonOperator</code>, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/LegacyConditionalParameters.html">Legacy Conditional Parameters</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ComparisonOperator")]
     pub comparison_operator: String,
+}
+
+/// <p>Represents a request to perform a check that an item exists or to check the condition of specific attributes of the item..</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ConditionCheck {
+    /// <p>A condition that must be satisfied in order for a conditional update to succeed.</p>
+    #[serde(rename = "ConditionExpression")]
+    pub condition_expression: String,
+    /// <p>One or more substitution tokens for attribute names in an expression.</p>
+    #[serde(rename = "ExpressionAttributeNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expression_attribute_names: Option<::std::collections::HashMap<String, String>>,
+    /// <p>One or more values that can be substituted in an expression.</p>
+    #[serde(rename = "ExpressionAttributeValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expression_attribute_values: Option<::std::collections::HashMap<String, AttributeValue>>,
+    /// <p>The primary key of the item to be checked. Each element consists of an attribute name and a value for that attribute.</p>
+    #[serde(rename = "Key")]
+    pub key: ::std::collections::HashMap<String, AttributeValue>,
+    /// <p>Use <code>ReturnValuesOnConditionCheckFailure</code> to get the item attributes if the <code>ConditionCheck</code> condition fails. For <code>ReturnValuesOnConditionCheckFailure</code>, the valid values are: NONE and ALL_OLD.</p>
+    #[serde(rename = "ReturnValuesOnConditionCheckFailure")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub return_values_on_condition_check_failure: Option<String>,
+    /// <p>Name of the table for the check item request.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
 }
 
 /// <p>The capacity units consumed by an operation. The data returned includes the total provisioned throughput consumed, along with statistics for the table and any indexes involved in the operation. <code>ConsumedCapacity</code> is only returned if the request asked for it. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ProvisionedThroughputIntro.html">Provisioned Throughput</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
@@ -406,6 +480,10 @@ pub struct ConsumedCapacity {
     #[serde(rename = "LocalSecondaryIndexes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub local_secondary_indexes: Option<::std::collections::HashMap<String, Capacity>>,
+    /// <p>The total number of read capacity units consumed by the operation.</p>
+    #[serde(rename = "ReadCapacityUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub read_capacity_units: Option<f64>,
     /// <p>The amount of throughput consumed on the table affected by the operation.</p>
     #[serde(rename = "Table")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -414,13 +492,17 @@ pub struct ConsumedCapacity {
     #[serde(rename = "TableName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_name: Option<String>,
+    /// <p>The total number of write capacity units consumed by the operation.</p>
+    #[serde(rename = "WriteCapacityUnits")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub write_capacity_units: Option<f64>,
 }
 
 /// <p>Represents the continuous backups and point in time recovery settings on the table.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ContinuousBackupsDescription {
-    /// <p> <code>ContinuousBackupsStatus</code> can be one of the following states : ENABLED, DISABLED</p>
+    /// <p> <code>ContinuousBackupsStatus</code> can be one of the following states: ENABLED, DISABLED</p>
     #[serde(rename = "ContinuousBackupsStatus")]
     pub continuous_backups_status: String,
     /// <p>The description of the point in time recovery settings applied to the table.</p>
@@ -462,7 +544,8 @@ pub struct CreateGlobalSecondaryIndexAction {
     pub projection: Projection,
     /// <p>Represents the provisioned throughput settings for the specified global secondary index.</p> <p>For current minimum and maximum provisioned throughput values, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Limits</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ProvisionedThroughput")]
-    pub provisioned_throughput: ProvisionedThroughput,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_throughput: Option<ProvisionedThroughput>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -498,20 +581,25 @@ pub struct CreateTableInput {
     /// <p>An array of attributes that describe the key schema for the table and indexes.</p>
     #[serde(rename = "AttributeDefinitions")]
     pub attribute_definitions: Vec<AttributeDefinition>,
-    /// <p><p>One or more global secondary indexes (the maximum is five) to be created on the table. Each global secondary index in the array includes the following:</p> <ul> <li> <p> <code>IndexName</code> - The name of the global secondary index. Must be unique only for this table.</p> <p/> </li> <li> <p> <code>KeySchema</code> - Specifies the key schema for the global secondary index.</p> </li> <li> <p> <code>Projection</code> - Specifies attributes that are copied (projected) from the table into the index. These are in addition to the primary key attributes and index key attributes, which are automatically projected. Each attribute specification is composed of:</p> <ul> <li> <p> <code>ProjectionType</code> - One of the following:</p> <ul> <li> <p> <code>KEYS_ONLY</code> - Only the index and primary keys are projected into the index.</p> </li> <li> <p> <code>INCLUDE</code> - Only the specified table attributes are projected into the index. The list of projected attributes are in <code>NonKeyAttributes</code>.</p> </li> <li> <p> <code>ALL</code> - All of the table attributes are projected into the index.</p> </li> </ul> </li> <li> <p> <code>NonKeyAttributes</code> - A list of one or more non-key attribute names that are projected into the secondary index. The total count of attributes provided in <code>NonKeyAttributes</code>, summed across all of the secondary indexes, must not exceed 20. If you project the same attribute into two different indexes, this counts as two distinct attributes when determining the total.</p> </li> </ul> </li> <li> <p> <code>ProvisionedThroughput</code> - The provisioned throughput settings for the global secondary index, consisting of read and write capacity units.</p> </li> </ul></p>
+    /// <p><p>Controls how you are charged for read and write throughput and how you manage capacity. This setting can be changed later.</p> <ul> <li> <p> <code>PROVISIONED</code> - Sets the billing mode to <code>PROVISIONED</code>. We recommend using <code>PROVISIONED</code> for predictable workloads.</p> </li> <li> <p> <code>PAY<em>PER</em>REQUEST</code> - Sets the billing mode to <code>PAY<em>PER</em>REQUEST</code>. We recommend using <code>PAY<em>PER</em>REQUEST</code> for unpredictable workloads. </p> </li> </ul></p>
+    #[serde(rename = "BillingMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billing_mode: Option<String>,
+    /// <p><p>One or more global secondary indexes (the maximum is 20) to be created on the table. Each global secondary index in the array includes the following:</p> <ul> <li> <p> <code>IndexName</code> - The name of the global secondary index. Must be unique only for this table.</p> <p/> </li> <li> <p> <code>KeySchema</code> - Specifies the key schema for the global secondary index.</p> </li> <li> <p> <code>Projection</code> - Specifies attributes that are copied (projected) from the table into the index. These are in addition to the primary key attributes and index key attributes, which are automatically projected. Each attribute specification is composed of:</p> <ul> <li> <p> <code>ProjectionType</code> - One of the following:</p> <ul> <li> <p> <code>KEYS_ONLY</code> - Only the index and primary keys are projected into the index.</p> </li> <li> <p> <code>INCLUDE</code> - Only the specified table attributes are projected into the index. The list of projected attributes are in <code>NonKeyAttributes</code>.</p> </li> <li> <p> <code>ALL</code> - All of the table attributes are projected into the index.</p> </li> </ul> </li> <li> <p> <code>NonKeyAttributes</code> - A list of one or more non-key attribute names that are projected into the secondary index. The total count of attributes provided in <code>NonKeyAttributes</code>, summed across all of the secondary indexes, must not exceed 100. If you project the same attribute into two different indexes, this counts as two distinct attributes when determining the total.</p> </li> </ul> </li> <li> <p> <code>ProvisionedThroughput</code> - The provisioned throughput settings for the global secondary index, consisting of read and write capacity units.</p> </li> </ul></p>
     #[serde(rename = "GlobalSecondaryIndexes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub global_secondary_indexes: Option<Vec<GlobalSecondaryIndex>>,
     /// <p>Specifies the attributes that make up the primary key for a table or an index. The attributes in <code>KeySchema</code> must also be defined in the <code>AttributeDefinitions</code> array. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DataModel.html">Data Model</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p> <p>Each <code>KeySchemaElement</code> in the array is composed of:</p> <ul> <li> <p> <code>AttributeName</code> - The name of this key attribute.</p> </li> <li> <p> <code>KeyType</code> - The role that the key attribute will assume:</p> <ul> <li> <p> <code>HASH</code> - partition key</p> </li> <li> <p> <code>RANGE</code> - sort key</p> </li> </ul> </li> </ul> <note> <p>The partition key of an item is also known as its <i>hash attribute</i>. The term "hash attribute" derives from DynamoDB' usage of an internal hash function to evenly distribute data items across partitions, based on their partition key values.</p> <p>The sort key of an item is also known as its <i>range attribute</i>. The term "range attribute" derives from the way DynamoDB stores items with the same partition key physically close together, in sorted order by the sort key value.</p> </note> <p>For a simple primary key (partition key), you must provide exactly one element with a <code>KeyType</code> of <code>HASH</code>.</p> <p>For a composite primary key (partition key and sort key), you must provide exactly two elements, in this order: The first element must have a <code>KeyType</code> of <code>HASH</code>, and the second element must have a <code>KeyType</code> of <code>RANGE</code>.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.html#WorkingWithTables.primary.key">Specifying the Primary Key</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "KeySchema")]
     pub key_schema: Vec<KeySchemaElement>,
-    /// <p><p>One or more local secondary indexes (the maximum is five) to be created on the table. Each index is scoped to a given partition key value. There is a 10 GB size limit per partition key value; otherwise, the size of a local secondary index is unconstrained.</p> <p>Each local secondary index in the array includes the following:</p> <ul> <li> <p> <code>IndexName</code> - The name of the local secondary index. Must be unique only for this table.</p> <p/> </li> <li> <p> <code>KeySchema</code> - Specifies the key schema for the local secondary index. The key schema must begin with the same partition key as the table.</p> </li> <li> <p> <code>Projection</code> - Specifies attributes that are copied (projected) from the table into the index. These are in addition to the primary key attributes and index key attributes, which are automatically projected. Each attribute specification is composed of:</p> <ul> <li> <p> <code>ProjectionType</code> - One of the following:</p> <ul> <li> <p> <code>KEYS_ONLY</code> - Only the index and primary keys are projected into the index.</p> </li> <li> <p> <code>INCLUDE</code> - Only the specified table attributes are projected into the index. The list of projected attributes are in <code>NonKeyAttributes</code>.</p> </li> <li> <p> <code>ALL</code> - All of the table attributes are projected into the index.</p> </li> </ul> </li> <li> <p> <code>NonKeyAttributes</code> - A list of one or more non-key attribute names that are projected into the secondary index. The total count of attributes provided in <code>NonKeyAttributes</code>, summed across all of the secondary indexes, must not exceed 20. If you project the same attribute into two different indexes, this counts as two distinct attributes when determining the total.</p> </li> </ul> </li> </ul></p>
+    /// <p><p>One or more local secondary indexes (the maximum is 5) to be created on the table. Each index is scoped to a given partition key value. There is a 10 GB size limit per partition key value; otherwise, the size of a local secondary index is unconstrained.</p> <p>Each local secondary index in the array includes the following:</p> <ul> <li> <p> <code>IndexName</code> - The name of the local secondary index. Must be unique only for this table.</p> <p/> </li> <li> <p> <code>KeySchema</code> - Specifies the key schema for the local secondary index. The key schema must begin with the same partition key as the table.</p> </li> <li> <p> <code>Projection</code> - Specifies attributes that are copied (projected) from the table into the index. These are in addition to the primary key attributes and index key attributes, which are automatically projected. Each attribute specification is composed of:</p> <ul> <li> <p> <code>ProjectionType</code> - One of the following:</p> <ul> <li> <p> <code>KEYS_ONLY</code> - Only the index and primary keys are projected into the index.</p> </li> <li> <p> <code>INCLUDE</code> - Only the specified table attributes are projected into the index. The list of projected attributes are in <code>NonKeyAttributes</code>.</p> </li> <li> <p> <code>ALL</code> - All of the table attributes are projected into the index.</p> </li> </ul> </li> <li> <p> <code>NonKeyAttributes</code> - A list of one or more non-key attribute names that are projected into the secondary index. The total count of attributes provided in <code>NonKeyAttributes</code>, summed across all of the secondary indexes, must not exceed 100. If you project the same attribute into two different indexes, this counts as two distinct attributes when determining the total.</p> </li> </ul> </li> </ul></p>
     #[serde(rename = "LocalSecondaryIndexes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub local_secondary_indexes: Option<Vec<LocalSecondaryIndex>>,
-    /// <p>Represents the provisioned throughput settings for a specified table or index. The settings can be modified using the <code>UpdateTable</code> operation.</p> <p>For current minimum and maximum provisioned throughput values, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Limits</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
+    /// <p>Represents the provisioned throughput settings for a specified table or index. The settings can be modified using the <code>UpdateTable</code> operation.</p> <p> If you set BillingMode as <code>PROVISIONED</code>, you must specify this property. If you set BillingMode as <code>PAY_PER_REQUEST</code>, you cannot specify this property. </p> <p>For current minimum and maximum provisioned throughput values, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Limits</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ProvisionedThroughput")]
-    pub provisioned_throughput: ProvisionedThroughput,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_throughput: Option<ProvisionedThroughput>,
     /// <p>Represents the settings used to enable server-side encryption.</p>
     #[serde(rename = "SSESpecification")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -533,6 +621,33 @@ pub struct CreateTableOutput {
     #[serde(rename = "TableDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_description: Option<TableDescription>,
+}
+
+/// <p>Represents a request to perform a <code>DeleteItem</code> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct Delete {
+    /// <p>A condition that must be satisfied in order for a conditional delete to succeed.</p>
+    #[serde(rename = "ConditionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub condition_expression: Option<String>,
+    /// <p>One or more substitution tokens for attribute names in an expression.</p>
+    #[serde(rename = "ExpressionAttributeNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expression_attribute_names: Option<::std::collections::HashMap<String, String>>,
+    /// <p>One or more values that can be substituted in an expression.</p>
+    #[serde(rename = "ExpressionAttributeValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expression_attribute_values: Option<::std::collections::HashMap<String, AttributeValue>>,
+    /// <p>The primary key of the item to be deleted. Each element consists of an attribute name and a value for that attribute.</p>
+    #[serde(rename = "Key")]
+    pub key: ::std::collections::HashMap<String, AttributeValue>,
+    /// <p>Use <code>ReturnValuesOnConditionCheckFailure</code> to get the item attributes if the <code>Delete</code> condition fails. For <code>ReturnValuesOnConditionCheckFailure</code>, the valid values are: NONE and ALL_OLD.</p>
+    #[serde(rename = "ReturnValuesOnConditionCheckFailure")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub return_values_on_condition_check_failure: Option<String>,
+    /// <p>Name of the table in which the item to be deleted resides.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -686,6 +801,17 @@ pub struct DescribeContinuousBackupsOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeEndpointsRequest {}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeEndpointsResponse {
+    /// <p>List of endpoints.</p>
+    #[serde(rename = "Endpoints")]
+    pub endpoints: Vec<Endpoint>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeGlobalTableInput {
     /// <p>The name of the global table.</p>
     #[serde(rename = "GlobalTableName")]
@@ -781,6 +907,18 @@ pub struct DescribeTimeToLiveOutput {
     pub time_to_live_description: Option<TimeToLiveDescription>,
 }
 
+/// <p>An endpoint information details.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct Endpoint {
+    /// <p>IP address of the endpoint.</p>
+    #[serde(rename = "Address")]
+    pub address: String,
+    /// <p>Endpoint cache time to live (TTL) value.</p>
+    #[serde(rename = "CachePeriodInMinutes")]
+    pub cache_period_in_minutes: i64,
+}
+
 /// <p>Represents a condition to be compared with an attribute value. This condition can be used with <code>DeleteItem</code>, <code>PutItem</code> or <code>UpdateItem</code> operations; if the comparison evaluates to true, the operation succeeds; if not, the operation fails. You can use <code>ExpectedAttributeValue</code> in one of two different ways:</p> <ul> <li> <p>Use <code>AttributeValueList</code> to specify one or more values to compare against an attribute. Use <code>ComparisonOperator</code> to specify how you want to perform the comparison. If the comparison evaluates to true, then the conditional operation succeeds.</p> </li> <li> <p>Use <code>Value</code> to specify a value that DynamoDB will compare against an attribute. If the values match, then <code>ExpectedAttributeValue</code> evaluates to true and the conditional operation succeeds. Optionally, you can also set <code>Exists</code> to false, indicating that you <i>do not</i> expect to find the attribute value in the table. In this case, the conditional operation succeeds only if the comparison evaluates to false.</p> </li> </ul> <p> <code>Value</code> and <code>Exists</code> are incompatible with <code>AttributeValueList</code> and <code>ComparisonOperator</code>. Note that if you use both sets of parameters at once, DynamoDB will return a <code>ValidationException</code> exception.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ExpectedAttributeValue {
@@ -792,7 +930,7 @@ pub struct ExpectedAttributeValue {
     #[serde(rename = "ComparisonOperator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub comparison_operator: Option<String>,
-    /// <p><p>Causes DynamoDB to evaluate the value before attempting a conditional operation:</p> <ul> <li> <p>If <code>Exists</code> is <code>true</code>, DynamoDB will check to see if that attribute value already exists in the table. If it is found, then the operation succeeds. If it is not found, the operation fails with a <code>ConditionalCheckFailedException</code>.</p> </li> <li> <p>If <code>Exists</code> is <code>false</code>, DynamoDB assumes that the attribute value does not exist in the table. If in fact the value does not exist, then the assumption is valid and the operation succeeds. If the value is found, despite the assumption that it does not exist, the operation fails with a <code>ConditionalCheckFailedException</code>.</p> </li> </ul> <p>The default setting for <code>Exists</code> is <code>true</code>. If you supply a <code>Value</code> all by itself, DynamoDB assumes the attribute exists: You don&#39;t have to set <code>Exists</code> to <code>true</code>, because it is implied.</p> <p>DynamoDB returns a <code>ValidationException</code> if:</p> <ul> <li> <p> <code>Exists</code> is <code>true</code> but there is no <code>Value</code> to check. (You expect a value to exist, but don&#39;t specify what that value is.)</p> </li> <li> <p> <code>Exists</code> is <code>false</code> but you also provide a <code>Value</code>. (You cannot expect an attribute to have a value, while also expecting it not to exist.)</p> </li> </ul></p>
+    /// <p><p>Causes DynamoDB to evaluate the value before attempting a conditional operation:</p> <ul> <li> <p>If <code>Exists</code> is <code>true</code>, DynamoDB will check to see if that attribute value already exists in the table. If it is found, then the operation succeeds. If it is not found, the operation fails with a <code>ConditionCheckFailedException</code>.</p> </li> <li> <p>If <code>Exists</code> is <code>false</code>, DynamoDB assumes that the attribute value does not exist in the table. If in fact the value does not exist, then the assumption is valid and the operation succeeds. If the value is found, despite the assumption that it does not exist, the operation fails with a <code>ConditionCheckFailedException</code>.</p> </li> </ul> <p>The default setting for <code>Exists</code> is <code>true</code>. If you supply a <code>Value</code> all by itself, DynamoDB assumes the attribute exists: You don&#39;t have to set <code>Exists</code> to <code>true</code>, because it is implied.</p> <p>DynamoDB returns a <code>ValidationException</code> if:</p> <ul> <li> <p> <code>Exists</code> is <code>true</code> but there is no <code>Value</code> to check. (You expect a value to exist, but don&#39;t specify what that value is.)</p> </li> <li> <p> <code>Exists</code> is <code>false</code> but you also provide a <code>Value</code>. (You cannot expect an attribute to have a value, while also expecting it not to exist.)</p> </li> </ul></p>
     #[serde(rename = "Exists")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub exists: Option<bool>,
@@ -800,6 +938,25 @@ pub struct ExpectedAttributeValue {
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<AttributeValue>,
+}
+
+/// <p>Specifies an item and related attribute values to retrieve in a <code>TransactGetItem</code> object.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct Get {
+    /// <p>One or more substitution tokens for attribute names in the ProjectionExpression parameter.</p>
+    #[serde(rename = "ExpressionAttributeNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expression_attribute_names: Option<::std::collections::HashMap<String, String>>,
+    /// <p>A map of attribute names to <code>AttributeValue</code> objects that specifies the primary key of the item to retrieve.</p>
+    #[serde(rename = "Key")]
+    pub key: ::std::collections::HashMap<String, AttributeValue>,
+    /// <p>A string that identifies one or more attributes of the specified item to retrieve from the table. The attributes in the expression must be separated by commas. If no attribute names are specified, then all attributes of the specified item are returned. If any of the requested attributes are not found, they do not appear in the result.</p>
+    #[serde(rename = "ProjectionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub projection_expression: Option<String>,
+    /// <p>The name of the table from which to retrieve the specified item.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
 }
 
 /// <p>Represents the input of a <code>GetItem</code> operation.</p>
@@ -860,7 +1017,8 @@ pub struct GlobalSecondaryIndex {
     pub projection: Projection,
     /// <p>Represents the provisioned throughput settings for the specified global secondary index.</p> <p>For current minimum and maximum provisioned throughput values, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Limits</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     #[serde(rename = "ProvisionedThroughput")]
-    pub provisioned_throughput: ProvisionedThroughput,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioned_throughput: Option<ProvisionedThroughput>,
 }
 
 /// <p>Represents the properties of a global secondary index.</p>
@@ -1014,6 +1172,16 @@ pub struct ItemCollectionMetrics {
     pub size_estimate_range_gb: Option<Vec<f64>>,
 }
 
+/// <p>Details for the requested item.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ItemResponse {
+    /// <p>Map of attribute data consisting of the data type and attribute value.</p>
+    #[serde(rename = "Item")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub item: Option<::std::collections::HashMap<String, AttributeValue>>,
+}
+
 /// <p>Represents <i>a single element</i> of a key schema. A key schema specifies the attributes that make up the primary key of a table, or the key attributes of an index.</p> <p>A <code>KeySchemaElement</code> represents exactly one attribute of the primary key. For example, a simple primary key would be represented by one <code>KeySchemaElement</code> (for the partition key). A composite primary key would require one <code>KeySchemaElement</code> for the partition key, and another <code>KeySchemaElement</code> for the sort key.</p> <p>A <code>KeySchemaElement</code> must be a scalar, top-level attribute (not a nested attribute). The data type must be one of String, Number, or Binary. The attribute cannot be nested within a List or a Map.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct KeySchemaElement {
@@ -1051,6 +1219,10 @@ pub struct KeysAndAttributes {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListBackupsInput {
+    /// <p><p>The backups from the table specified by <code>BackupType</code> are listed.</p> <p>Where <code>BackupType</code> can be:</p> <ul> <li> <p> <code>USER</code> - On-demand backup created by you.</p> </li> <li> <p> <code>SYSTEM</code> - On-demand backup automatically created by DynamoDB.</p> </li> <li> <p> <code>ALL</code> - All types of on-demand backups (USER and SYSTEM).</p> </li> </ul></p>
+    #[serde(rename = "BackupType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_type: Option<String>,
     /// <p> <code>LastEvaluatedBackupArn</code> is the ARN of the backup last evaluated when the current page of results was returned, inclusive of the current page of results. This value may be specified as the <code>ExclusiveStartBackupArn</code> of a new <code>ListBackups</code> operation in order to fetch the next page of results. </p>
     #[serde(rename = "ExclusiveStartBackupArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1059,7 +1231,7 @@ pub struct ListBackupsInput {
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    /// <p>The backups from the table specified by TableName are listed. </p>
+    /// <p>The backups from the table specified by <code>TableName</code> are listed. </p>
     #[serde(rename = "TableName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_name: Option<String>,
@@ -1270,10 +1442,10 @@ pub struct Projection {
 /// <p>Represents the provisioned throughput settings for a specified table or index. The settings can be modified using the <code>UpdateTable</code> operation.</p> <p>For current minimum and maximum provisioned throughput values, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Limits.html">Limits</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ProvisionedThroughput {
-    /// <p>The maximum number of strongly consistent reads consumed per second before DynamoDB returns a <code>ThrottlingException</code>. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.html#ProvisionedThroughput">Specifying Read and Write Requirements</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
+    /// <p>The maximum number of strongly consistent reads consumed per second before DynamoDB returns a <code>ThrottlingException</code>. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.html#ProvisionedThroughput">Specifying Read and Write Requirements</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p> <p>If read/write capacity mode is <code>PAY_PER_REQUEST</code> the value is set to 0.</p>
     #[serde(rename = "ReadCapacityUnits")]
     pub read_capacity_units: i64,
-    /// <p>The maximum number of writes consumed per second before DynamoDB returns a <code>ThrottlingException</code>. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.html#ProvisionedThroughput">Specifying Read and Write Requirements</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
+    /// <p>The maximum number of writes consumed per second before DynamoDB returns a <code>ThrottlingException</code>. For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/WorkingWithTables.html#ProvisionedThroughput">Specifying Read and Write Requirements</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p> <p>If read/write capacity mode is <code>PAY_PER_REQUEST</code> the value is set to 0.</p>
     #[serde(rename = "WriteCapacityUnits")]
     pub write_capacity_units: i64,
 }
@@ -1302,6 +1474,33 @@ pub struct ProvisionedThroughputDescription {
     #[serde(rename = "WriteCapacityUnits")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub write_capacity_units: Option<i64>,
+}
+
+/// <p>Represents a request to perform a <code>PutItem</code> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct Put {
+    /// <p>A condition that must be satisfied in order for a conditional update to succeed.</p>
+    #[serde(rename = "ConditionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub condition_expression: Option<String>,
+    /// <p>One or more substitution tokens for attribute names in an expression.</p>
+    #[serde(rename = "ExpressionAttributeNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expression_attribute_names: Option<::std::collections::HashMap<String, String>>,
+    /// <p>One or more values that can be substituted in an expression.</p>
+    #[serde(rename = "ExpressionAttributeValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expression_attribute_values: Option<::std::collections::HashMap<String, AttributeValue>>,
+    /// <p>A map of attribute name to attribute values, representing the primary key of the item to be written by <code>PutItem</code>. All of the table's primary key attributes must be specified, and their data types must match those of the table's key schema. If any attributes are present in the item that are part of an index key schema for the table, their types must match the index key schema. </p>
+    #[serde(rename = "Item")]
+    pub item: ::std::collections::HashMap<String, AttributeValue>,
+    /// <p>Use <code>ReturnValuesOnConditionCheckFailure</code> to get the item attributes if the <code>Put</code> condition fails. For <code>ReturnValuesOnConditionCheckFailure</code>, the valid values are: NONE and ALL_OLD.</p>
+    #[serde(rename = "ReturnValuesOnConditionCheckFailure")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub return_values_on_condition_check_failure: Option<String>,
+    /// <p>Name of the table in which to write the item.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
 }
 
 /// <p>Represents the input of a <code>PutItem</code> operation.</p>
@@ -1540,6 +1739,10 @@ pub struct ReplicaSettingsDescription {
     /// <p>The region name of the replica.</p>
     #[serde(rename = "RegionName")]
     pub region_name: String,
+    /// <p>The read/write capacity mode of the replica.</p>
+    #[serde(rename = "ReplicaBillingModeSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub replica_billing_mode_summary: Option<BillingModeSummary>,
     /// <p>Replica global secondary index settings for the global table.</p>
     #[serde(rename = "ReplicaGlobalSecondaryIndexSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1678,11 +1881,11 @@ pub struct SSEDescription {
     #[serde(rename = "KMSMasterKeyArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_master_key_arn: Option<String>,
-    /// <p><p>Server-side encryption type:</p> <ul> <li> <p> <code>AES256</code> - Server-side encryption which uses the AES256 algorithm.</p> </li> <li> <p> <code>KMS</code> - Server-side encryption which uses AWS Key Management Service.</p> </li> </ul></p>
+    /// <p><p>Server-side encryption type:</p> <ul> <li> <p> <code>AES256</code> - Server-side encryption which uses the AES256 algorithm (not applicable).</p> </li> <li> <p> <code>KMS</code> - Server-side encryption which uses AWS Key Management Service. Key is stored in your account and is managed by AWS KMS (KMS charges apply).</p> </li> </ul></p>
     #[serde(rename = "SSEType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sse_type: Option<String>,
-    /// <p><p>The current state of server-side encryption:</p> <ul> <li> <p> <code>ENABLING</code> - Server-side encryption is being enabled.</p> </li> <li> <p> <code>ENABLED</code> - Server-side encryption is enabled.</p> </li> <li> <p> <code>DISABLING</code> - Server-side encryption is being disabled.</p> </li> <li> <p> <code>DISABLED</code> - Server-side encryption is disabled.</p> </li> </ul></p>
+    /// <p><p>The current state of server-side encryption:</p> <ul> <li> <p> <code>ENABLING</code> - Server-side encryption is being enabled.</p> </li> <li> <p> <code>ENABLED</code> - Server-side encryption is enabled.</p> </li> <li> <p> <code>DISABLING</code> - Server-side encryption is being disabled.</p> </li> <li> <p> <code>DISABLED</code> - Server-side encryption is disabled.</p> </li> <li> <p> <code>UPDATING</code> - Server-side encryption is being updated.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1691,9 +1894,18 @@ pub struct SSEDescription {
 /// <p>Represents the settings used to enable server-side encryption.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SSESpecification {
-    /// <p>Indicates whether server-side encryption is enabled (true) or disabled (false) on the table.</p>
+    /// <p>Indicates whether server-side encryption is enabled (true) or disabled (false) on the table. If enabled (true), server-side encryption type is set to <code>KMS</code>. If disabled (false) or not specified, server-side encryption is set to AWS owned CMK.</p>
     #[serde(rename = "Enabled")]
-    pub enabled: bool,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enabled: Option<bool>,
+    /// <p>The KMS Master Key (CMK) which should be used for the KMS encryption. To specify a CMK, use its key ID, Amazon Resource Name (ARN), alias name, or alias ARN. Note that you should only provide this parameter if the key is different from the default DynamoDB KMS Master Key alias/aws/dynamodb.</p>
+    #[serde(rename = "KMSMasterKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_master_key_id: Option<String>,
+    /// <p><p>Server-side encryption type:</p> <ul> <li> <p> <code>AES256</code> - Server-side encryption which uses the AES256 algorithm (not applicable).</p> </li> <li> <p> <code>KMS</code> - Server-side encryption which uses AWS Key Management Service. Key is stored in your account and is managed by AWS KMS (KMS charges apply).</p> </li> </ul></p>
+    #[serde(rename = "SSEType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sse_type: Option<String>,
 }
 
 /// <p>Represents the input of a <code>Scan</code> operation.</p>
@@ -1793,6 +2005,10 @@ pub struct ScanOutput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct SourceTableDetails {
+    /// <p><p>Controls how you are charged for read and write throughput and how you manage capacity. This setting can be changed later.</p> <ul> <li> <p> <code>PROVISIONED</code> - Sets the read/write capacity mode to <code>PROVISIONED</code>. We recommend using <code>PROVISIONED</code> for predictable workloads.</p> </li> <li> <p> <code>PAY<em>PER</em>REQUEST</code> - Sets the read/write capacity mode to <code>PAY<em>PER</em>REQUEST</code>. We recommend using <code>PAY<em>PER</em>REQUEST</code> for unpredictable workloads. </p> </li> </ul></p>
+    #[serde(rename = "BillingMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billing_mode: Option<String>,
     /// <p>Number of items in the table. Please note this is an approximate value. </p>
     #[serde(rename = "ItemCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1869,6 +2085,10 @@ pub struct TableDescription {
     #[serde(rename = "AttributeDefinitions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attribute_definitions: Option<Vec<AttributeDefinition>>,
+    /// <p>Contains the details for the read/write capacity mode.</p>
+    #[serde(rename = "BillingModeSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billing_mode_summary: Option<BillingModeSummary>,
     /// <p>The date and time when the table was created, in <a href="http://www.epochconverter.com/">UNIX epoch time</a> format.</p>
     #[serde(rename = "CreationDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1981,6 +2201,91 @@ pub struct TimeToLiveSpecification {
     pub enabled: bool,
 }
 
+/// <p>Specifies an item to be retrieved as part of the transaction.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TransactGetItem {
+    /// <p>Contains the primary key that identifies the item to get, together with the name of the table that contains the item, and optionally the specific attributes of the item to retrieve.</p>
+    #[serde(rename = "Get")]
+    pub get: Get,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TransactGetItemsInput {
+    /// <p>A value of <code>TOTAL</code> causes consumed capacity information to be returned, and a value of <code>NONE</code> prevents that information from being returned. No other value is valid.</p>
+    #[serde(rename = "ReturnConsumedCapacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub return_consumed_capacity: Option<String>,
+    /// <p>An ordered array of up to 10 <code>TransactGetItem</code> objects, each of which contains a <code>Get</code> structure.</p>
+    #[serde(rename = "TransactItems")]
+    pub transact_items: Vec<TransactGetItem>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TransactGetItemsOutput {
+    /// <p>If the <i>ReturnConsumedCapacity</i> value was <code>TOTAL</code>, this is an array of <code>ConsumedCapacity</code> objects, one for each table addressed by <code>TransactGetItem</code> objects in the <i>TransactItems</i> parameter. These <code>ConsumedCapacity</code> objects report the read-capacity units consumed by the <code>TransactGetItems</code> call in that table.</p>
+    #[serde(rename = "ConsumedCapacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub consumed_capacity: Option<Vec<ConsumedCapacity>>,
+    /// <p>An ordered array of up to 10 <code>ItemResponse</code> objects, each of which corresponds to the <code>TransactGetItem</code> object in the same position in the <i>TransactItems</i> array. Each <code>ItemResponse</code> object contains a Map of the name-value pairs that are the projected attributes of the requested item.</p> <p>If a requested item could not be retrieved, the corresponding <code>ItemResponse</code> object is Null, or if the requested item has no projected attributes, the corresponding <code>ItemResponse</code> object is an empty Map. </p>
+    #[serde(rename = "Responses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub responses: Option<Vec<ItemResponse>>,
+}
+
+/// <p>A list of requests that can perform update, put, delete, or check operations on multiple items in one or more tables atomically.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TransactWriteItem {
+    /// <p>A request to perform a check item operation.</p>
+    #[serde(rename = "ConditionCheck")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub condition_check: Option<ConditionCheck>,
+    /// <p>A request to perform a <code>DeleteItem</code> operation.</p>
+    #[serde(rename = "Delete")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delete: Option<Delete>,
+    /// <p>A request to perform a <code>PutItem</code> operation.</p>
+    #[serde(rename = "Put")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub put: Option<Put>,
+    /// <p>A request to perform an <code>UpdateItem</code> operation.</p>
+    #[serde(rename = "Update")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update: Option<Update>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TransactWriteItemsInput {
+    /// <p>Providing a <code>ClientRequestToken</code> makes the call to <code>TransactWriteItems</code> idempotent, meaning that multiple identical calls have the same effect as one single call.</p> <p>Although multiple identical calls using the same client request token produce the same result on the server (no side effects), the responses to the calls may not be the same. If the <code>ReturnConsumedCapacity&gt;</code> parameter is set, then the initial <code>TransactWriteItems</code> call returns the amount of write capacity units consumed in making the changes, and subsequent <code>TransactWriteItems</code> calls with the same client token return the amount of read capacity units consumed in reading the item.</p> <p>A client request token is valid for 10 minutes after the first request that uses it completes. After 10 minutes, any request with the same client token is treated as a new request. Do not resubmit the same request with the same client token for more than 10 minutes or the result may not be idempotent.</p> <p>If you submit a request with the same client token but a change in other parameters within the 10 minute idempotency window, DynamoDB returns an <code>IdempotentParameterMismatch</code> exception.</p>
+    #[serde(rename = "ClientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    #[serde(rename = "ReturnConsumedCapacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub return_consumed_capacity: Option<String>,
+    /// <p>Determines whether item collection metrics are returned. If set to <code>SIZE</code>, the response includes statistics about item collections (if any), that were modified during the operation and are returned in the response. If set to <code>NONE</code> (the default), no statistics are returned. </p>
+    #[serde(rename = "ReturnItemCollectionMetrics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub return_item_collection_metrics: Option<String>,
+    /// <p>An ordered array of up to 10 <code>TransactWriteItem</code> objects, each of which contains a <code>ConditionCheck</code>, <code>Put</code>, <code>Update</code>, or <code>Delete</code> object. These can operate on items in different tables, but the tables must reside in the same AWS account and region, and no two of them can operate on the same item. </p>
+    #[serde(rename = "TransactItems")]
+    pub transact_items: Vec<TransactWriteItem>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TransactWriteItemsOutput {
+    /// <p>The capacity units consumed by the entire <code>TransactWriteItems</code> operation. The values of the list are ordered according to the ordering of the <code>TransactItems</code> request parameter. </p>
+    #[serde(rename = "ConsumedCapacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub consumed_capacity: Option<Vec<ConsumedCapacity>>,
+    /// <p>A list of tables that were processed by <code>TransactWriteItems</code> and, for each table, information about any item collections that were affected by individual <code>UpdateItem</code>, <code>PutItem</code> or <code>DeleteItem</code> operations. </p>
+    #[serde(rename = "ItemCollectionMetrics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub item_collection_metrics:
+        Option<::std::collections::HashMap<String, Vec<ItemCollectionMetrics>>>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UntagResourceInput {
     /// <p>The Amazon DyanamoDB resource the tags will be removed from. This value is an Amazon Resource Name (ARN).</p>
@@ -1989,6 +2294,36 @@ pub struct UntagResourceInput {
     /// <p>A list of tag keys. Existing tags of the resource whose keys are members of this list will be removed from the Amazon DynamoDB resource.</p>
     #[serde(rename = "TagKeys")]
     pub tag_keys: Vec<String>,
+}
+
+/// <p>Represents a request to perform an <code>UpdateItem</code> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct Update {
+    /// <p>A condition that must be satisfied in order for a conditional update to succeed.</p>
+    #[serde(rename = "ConditionExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub condition_expression: Option<String>,
+    /// <p>One or more substitution tokens for attribute names in an expression.</p>
+    #[serde(rename = "ExpressionAttributeNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expression_attribute_names: Option<::std::collections::HashMap<String, String>>,
+    /// <p>One or more values that can be substituted in an expression.</p>
+    #[serde(rename = "ExpressionAttributeValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expression_attribute_values: Option<::std::collections::HashMap<String, AttributeValue>>,
+    /// <p>The primary key of the item to be updated. Each element consists of an attribute name and a value for that attribute.</p>
+    #[serde(rename = "Key")]
+    pub key: ::std::collections::HashMap<String, AttributeValue>,
+    /// <p>Use <code>ReturnValuesOnConditionCheckFailure</code> to get the item attributes if the <code>Update</code> condition fails. For <code>ReturnValuesOnConditionCheckFailure</code>, the valid values are: NONE, ALL_OLD, UPDATED_OLD, ALL_NEW, UPDATED_NEW.</p>
+    #[serde(rename = "ReturnValuesOnConditionCheckFailure")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub return_values_on_condition_check_failure: Option<String>,
+    /// <p>Name of the table for the <code>UpdateItem</code> request.</p>
+    #[serde(rename = "TableName")]
+    pub table_name: String,
+    /// <p>An expression that defines one or more attributes to be updated, the action to be performed on them, and new value(s) for them.</p>
+    #[serde(rename = "UpdateExpression")]
+    pub update_expression: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2042,6 +2377,10 @@ pub struct UpdateGlobalTableOutput {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateGlobalTableSettingsInput {
+    /// <p>The billing mode of the global table. If <code>GlobalTableBillingMode</code> is not specified, the global table defaults to <code>PROVISIONED</code> capacity billing mode.</p>
+    #[serde(rename = "GlobalTableBillingMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub global_table_billing_mode: Option<String>,
     /// <p>Represents the settings of a global secondary index for a global table that will be modified.</p>
     #[serde(rename = "GlobalTableGlobalSecondaryIndexSettingsUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2153,6 +2492,10 @@ pub struct UpdateTableInput {
     #[serde(rename = "AttributeDefinitions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attribute_definitions: Option<Vec<AttributeDefinition>>,
+    /// <p><p>Controls how you are charged for read and write throughput and how you manage capacity. When switching from pay-per-request to provisioned capacity, initial provisioned capacity values must be set. The initial provisioned capacity values are estimated based on the consumed read and write capacity of your table and global secondary indexes over the past 30 minutes.</p> <ul> <li> <p> <code>PROVISIONED</code> - Sets the billing mode to <code>PROVISIONED</code>. We recommend using <code>PROVISIONED</code> for predictable workloads.</p> </li> <li> <p> <code>PAY<em>PER</em>REQUEST</code> - Sets the billing mode to <code>PAY<em>PER</em>REQUEST</code>. We recommend using <code>PAY<em>PER</em>REQUEST</code> for unpredictable workloads. </p> </li> </ul></p>
+    #[serde(rename = "BillingMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billing_mode: Option<String>,
     /// <p>An array of one or more global secondary indexes for the table. For each index in the array, you can request one action:</p> <ul> <li> <p> <code>Create</code> - add a new global secondary index to the table.</p> </li> <li> <p> <code>Update</code> - modify the provisioned throughput settings of an existing global secondary index.</p> </li> <li> <p> <code>Delete</code> - remove a global secondary index from the table.</p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/GSI.OnlineOps.html">Managing Global Secondary Indexes</a> in the <i>Amazon DynamoDB Developer Guide</i>. </p>
     #[serde(rename = "GlobalSecondaryIndexUpdates")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2161,6 +2504,10 @@ pub struct UpdateTableInput {
     #[serde(rename = "ProvisionedThroughput")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_throughput: Option<ProvisionedThroughput>,
+    /// <p>The new server-side encryption settings for the specified table.</p>
+    #[serde(rename = "SSESpecification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sse_specification: Option<SSESpecification>,
     /// <p><p>Represents the DynamoDB Streams configuration for the table.</p> <note> <p>You will receive a <code>ResourceInUseException</code> if you attempt to enable a stream on a table that already has a stream, or if you attempt to disable a stream on a table which does not have a stream.</p> </note></p>
     #[serde(rename = "StreamSpecification")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2220,6 +2567,8 @@ pub enum BatchGetItemError {
     InternalServerError(String),
     /// <p>Your request rate is too high. The AWS SDKs for DynamoDB automatically retry requests that receive this exception. Your request is eventually successful, unless your retry queue is too large to finish. Reduce the frequency of requests and use exponential backoff. For more information, go to <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff">Error Retries and Exponential Backoff</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     ProvisionedThroughputExceeded(String),
+    /// <p>Throughput exceeds the current throughput limit for your account. Please contact AWS Support at <a href="http://docs.aws.amazon.com/https:/aws.amazon.com/support">AWS Support</a> to request a limit increase.</p>
+    RequestLimitExceeded(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
@@ -2254,6 +2603,9 @@ impl BatchGetItemError {
                     return BatchGetItemError::ProvisionedThroughputExceeded(String::from(
                         error_message,
                     ));
+                }
+                "RequestLimitExceeded" => {
+                    return BatchGetItemError::RequestLimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return BatchGetItemError::ResourceNotFound(String::from(error_message));
@@ -2298,6 +2650,7 @@ impl Error for BatchGetItemError {
         match *self {
             BatchGetItemError::InternalServerError(ref cause) => cause,
             BatchGetItemError::ProvisionedThroughputExceeded(ref cause) => cause,
+            BatchGetItemError::RequestLimitExceeded(ref cause) => cause,
             BatchGetItemError::ResourceNotFound(ref cause) => cause,
             BatchGetItemError::Validation(ref cause) => cause,
             BatchGetItemError::Credentials(ref err) => err.description(),
@@ -2316,6 +2669,8 @@ pub enum BatchWriteItemError {
     ItemCollectionSizeLimitExceeded(String),
     /// <p>Your request rate is too high. The AWS SDKs for DynamoDB automatically retry requests that receive this exception. Your request is eventually successful, unless your retry queue is too large to finish. Reduce the frequency of requests and use exponential backoff. For more information, go to <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff">Error Retries and Exponential Backoff</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     ProvisionedThroughputExceeded(String),
+    /// <p>Throughput exceeds the current throughput limit for your account. Please contact AWS Support at <a href="http://docs.aws.amazon.com/https:/aws.amazon.com/support">AWS Support</a> to request a limit increase.</p>
+    RequestLimitExceeded(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
@@ -2355,6 +2710,9 @@ impl BatchWriteItemError {
                     return BatchWriteItemError::ProvisionedThroughputExceeded(String::from(
                         error_message,
                     ));
+                }
+                "RequestLimitExceeded" => {
+                    return BatchWriteItemError::RequestLimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return BatchWriteItemError::ResourceNotFound(String::from(error_message));
@@ -2400,6 +2758,7 @@ impl Error for BatchWriteItemError {
             BatchWriteItemError::InternalServerError(ref cause) => cause,
             BatchWriteItemError::ItemCollectionSizeLimitExceeded(ref cause) => cause,
             BatchWriteItemError::ProvisionedThroughputExceeded(ref cause) => cause,
+            BatchWriteItemError::RequestLimitExceeded(ref cause) => cause,
             BatchWriteItemError::ResourceNotFound(ref cause) => cause,
             BatchWriteItemError::Validation(ref cause) => cause,
             BatchWriteItemError::Credentials(ref err) => err.description(),
@@ -2412,7 +2771,7 @@ impl Error for BatchWriteItemError {
 /// Errors returned by CreateBackup
 #[derive(Debug, PartialEq)]
 pub enum CreateBackupError {
-    /// <p>There is another ongoing conflicting backup control plane operation on the table. The backups is either being created, deleted or restored to a table.</p>
+    /// <p>There is another ongoing conflicting backup control plane operation on the table. The backup is either being created, deleted or restored to a table.</p>
     BackupInUse(String),
     /// <p>Backups have not yet been enabled for this table.</p>
     ContinuousBackupsUnavailable(String),
@@ -2718,7 +3077,7 @@ impl Error for CreateTableError {
 /// Errors returned by DeleteBackup
 #[derive(Debug, PartialEq)]
 pub enum DeleteBackupError {
-    /// <p>There is another ongoing conflicting backup control plane operation on the table. The backups is either being created, deleted or restored to a table.</p>
+    /// <p>There is another ongoing conflicting backup control plane operation on the table. The backup is either being created, deleted or restored to a table.</p>
     BackupInUse(String),
     /// <p>Backup not found for the given BackupARN. </p>
     BackupNotFound(String),
@@ -2824,8 +3183,12 @@ pub enum DeleteItemError {
     ItemCollectionSizeLimitExceeded(String),
     /// <p>Your request rate is too high. The AWS SDKs for DynamoDB automatically retry requests that receive this exception. Your request is eventually successful, unless your retry queue is too large to finish. Reduce the frequency of requests and use exponential backoff. For more information, go to <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff">Error Retries and Exponential Backoff</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     ProvisionedThroughputExceeded(String),
+    /// <p>Throughput exceeds the current throughput limit for your account. Please contact AWS Support at <a href="http://docs.aws.amazon.com/https:/aws.amazon.com/support">AWS Support</a> to request a limit increase.</p>
+    RequestLimitExceeded(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
+    /// <p>Operation was rejected because there is an ongoing transaction for the item.</p>
+    TransactionConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2867,8 +3230,14 @@ impl DeleteItemError {
                         error_message,
                     ));
                 }
+                "RequestLimitExceeded" => {
+                    return DeleteItemError::RequestLimitExceeded(String::from(error_message));
+                }
                 "ResourceNotFoundException" => {
                     return DeleteItemError::ResourceNotFound(String::from(error_message));
+                }
+                "TransactionConflictException" => {
+                    return DeleteItemError::TransactionConflict(String::from(error_message));
                 }
                 "ValidationException" => {
                     return DeleteItemError::Validation(error_message.to_string());
@@ -2912,7 +3281,9 @@ impl Error for DeleteItemError {
             DeleteItemError::InternalServerError(ref cause) => cause,
             DeleteItemError::ItemCollectionSizeLimitExceeded(ref cause) => cause,
             DeleteItemError::ProvisionedThroughputExceeded(ref cause) => cause,
+            DeleteItemError::RequestLimitExceeded(ref cause) => cause,
             DeleteItemError::ResourceNotFound(ref cause) => cause,
+            DeleteItemError::TransactionConflict(ref cause) => cause,
             DeleteItemError::Validation(ref cause) => cause,
             DeleteItemError::Credentials(ref err) => err.description(),
             DeleteItemError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -3194,6 +3565,82 @@ impl Error for DescribeContinuousBackupsError {
             }
             DescribeContinuousBackupsError::ParseError(ref cause) => cause,
             DescribeContinuousBackupsError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DescribeEndpoints
+#[derive(Debug, PartialEq)]
+pub enum DescribeEndpointsError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DescribeEndpointsError {
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeEndpointsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ValidationException" => {
+                    return DescribeEndpointsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DescribeEndpointsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeEndpointsError {
+    fn from(err: serde_json::error::Error) -> DescribeEndpointsError {
+        DescribeEndpointsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeEndpointsError {
+    fn from(err: CredentialsError) -> DescribeEndpointsError {
+        DescribeEndpointsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeEndpointsError {
+    fn from(err: HttpDispatchError) -> DescribeEndpointsError {
+        DescribeEndpointsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeEndpointsError {
+    fn from(err: io::Error) -> DescribeEndpointsError {
+        DescribeEndpointsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeEndpointsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeEndpointsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeEndpointsError::Validation(ref cause) => cause,
+            DescribeEndpointsError::Credentials(ref err) => err.description(),
+            DescribeEndpointsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeEndpointsError::ParseError(ref cause) => cause,
+            DescribeEndpointsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3642,6 +4089,8 @@ pub enum GetItemError {
     InternalServerError(String),
     /// <p>Your request rate is too high. The AWS SDKs for DynamoDB automatically retry requests that receive this exception. Your request is eventually successful, unless your retry queue is too large to finish. Reduce the frequency of requests and use exponential backoff. For more information, go to <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff">Error Retries and Exponential Backoff</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     ProvisionedThroughputExceeded(String),
+    /// <p>Throughput exceeds the current throughput limit for your account. Please contact AWS Support at <a href="http://docs.aws.amazon.com/https:/aws.amazon.com/support">AWS Support</a> to request a limit increase.</p>
+    RequestLimitExceeded(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
@@ -3674,6 +4123,9 @@ impl GetItemError {
                 }
                 "ProvisionedThroughputExceededException" => {
                     return GetItemError::ProvisionedThroughputExceeded(String::from(error_message));
+                }
+                "RequestLimitExceeded" => {
+                    return GetItemError::RequestLimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return GetItemError::ResourceNotFound(String::from(error_message));
@@ -3716,6 +4168,7 @@ impl Error for GetItemError {
         match *self {
             GetItemError::InternalServerError(ref cause) => cause,
             GetItemError::ProvisionedThroughputExceeded(ref cause) => cause,
+            GetItemError::RequestLimitExceeded(ref cause) => cause,
             GetItemError::ResourceNotFound(ref cause) => cause,
             GetItemError::Validation(ref cause) => cause,
             GetItemError::Credentials(ref err) => err.description(),
@@ -4064,8 +4517,12 @@ pub enum PutItemError {
     ItemCollectionSizeLimitExceeded(String),
     /// <p>Your request rate is too high. The AWS SDKs for DynamoDB automatically retry requests that receive this exception. Your request is eventually successful, unless your retry queue is too large to finish. Reduce the frequency of requests and use exponential backoff. For more information, go to <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff">Error Retries and Exponential Backoff</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     ProvisionedThroughputExceeded(String),
+    /// <p>Throughput exceeds the current throughput limit for your account. Please contact AWS Support at <a href="http://docs.aws.amazon.com/https:/aws.amazon.com/support">AWS Support</a> to request a limit increase.</p>
+    RequestLimitExceeded(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
+    /// <p>Operation was rejected because there is an ongoing transaction for the item.</p>
+    TransactionConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -4105,8 +4562,14 @@ impl PutItemError {
                 "ProvisionedThroughputExceededException" => {
                     return PutItemError::ProvisionedThroughputExceeded(String::from(error_message));
                 }
+                "RequestLimitExceeded" => {
+                    return PutItemError::RequestLimitExceeded(String::from(error_message));
+                }
                 "ResourceNotFoundException" => {
                     return PutItemError::ResourceNotFound(String::from(error_message));
+                }
+                "TransactionConflictException" => {
+                    return PutItemError::TransactionConflict(String::from(error_message));
                 }
                 "ValidationException" => return PutItemError::Validation(error_message.to_string()),
                 _ => {}
@@ -4148,7 +4611,9 @@ impl Error for PutItemError {
             PutItemError::InternalServerError(ref cause) => cause,
             PutItemError::ItemCollectionSizeLimitExceeded(ref cause) => cause,
             PutItemError::ProvisionedThroughputExceeded(ref cause) => cause,
+            PutItemError::RequestLimitExceeded(ref cause) => cause,
             PutItemError::ResourceNotFound(ref cause) => cause,
+            PutItemError::TransactionConflict(ref cause) => cause,
             PutItemError::Validation(ref cause) => cause,
             PutItemError::Credentials(ref err) => err.description(),
             PutItemError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -4164,6 +4629,8 @@ pub enum QueryError {
     InternalServerError(String),
     /// <p>Your request rate is too high. The AWS SDKs for DynamoDB automatically retry requests that receive this exception. Your request is eventually successful, unless your retry queue is too large to finish. Reduce the frequency of requests and use exponential backoff. For more information, go to <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff">Error Retries and Exponential Backoff</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     ProvisionedThroughputExceeded(String),
+    /// <p>Throughput exceeds the current throughput limit for your account. Please contact AWS Support at <a href="http://docs.aws.amazon.com/https:/aws.amazon.com/support">AWS Support</a> to request a limit increase.</p>
+    RequestLimitExceeded(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
@@ -4196,6 +4663,9 @@ impl QueryError {
                 }
                 "ProvisionedThroughputExceededException" => {
                     return QueryError::ProvisionedThroughputExceeded(String::from(error_message));
+                }
+                "RequestLimitExceeded" => {
+                    return QueryError::RequestLimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return QueryError::ResourceNotFound(String::from(error_message));
@@ -4238,6 +4708,7 @@ impl Error for QueryError {
         match *self {
             QueryError::InternalServerError(ref cause) => cause,
             QueryError::ProvisionedThroughputExceeded(ref cause) => cause,
+            QueryError::RequestLimitExceeded(ref cause) => cause,
             QueryError::ResourceNotFound(ref cause) => cause,
             QueryError::Validation(ref cause) => cause,
             QueryError::Credentials(ref err) => err.description(),
@@ -4250,7 +4721,7 @@ impl Error for QueryError {
 /// Errors returned by RestoreTableFromBackup
 #[derive(Debug, PartialEq)]
 pub enum RestoreTableFromBackupError {
-    /// <p>There is another ongoing conflicting backup control plane operation on the table. The backups is either being created, deleted or restored to a table.</p>
+    /// <p>There is another ongoing conflicting backup control plane operation on the table. The backup is either being created, deleted or restored to a table.</p>
     BackupInUse(String),
     /// <p>Backup not found for the given BackupARN. </p>
     BackupNotFound(String),
@@ -4500,6 +4971,8 @@ pub enum ScanError {
     InternalServerError(String),
     /// <p>Your request rate is too high. The AWS SDKs for DynamoDB automatically retry requests that receive this exception. Your request is eventually successful, unless your retry queue is too large to finish. Reduce the frequency of requests and use exponential backoff. For more information, go to <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff">Error Retries and Exponential Backoff</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     ProvisionedThroughputExceeded(String),
+    /// <p>Throughput exceeds the current throughput limit for your account. Please contact AWS Support at <a href="http://docs.aws.amazon.com/https:/aws.amazon.com/support">AWS Support</a> to request a limit increase.</p>
+    RequestLimitExceeded(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
@@ -4532,6 +5005,9 @@ impl ScanError {
                 }
                 "ProvisionedThroughputExceededException" => {
                     return ScanError::ProvisionedThroughputExceeded(String::from(error_message));
+                }
+                "RequestLimitExceeded" => {
+                    return ScanError::RequestLimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return ScanError::ResourceNotFound(String::from(error_message));
@@ -4574,6 +5050,7 @@ impl Error for ScanError {
         match *self {
             ScanError::InternalServerError(ref cause) => cause,
             ScanError::ProvisionedThroughputExceeded(ref cause) => cause,
+            ScanError::RequestLimitExceeded(ref cause) => cause,
             ScanError::ResourceNotFound(ref cause) => cause,
             ScanError::Validation(ref cause) => cause,
             ScanError::Credentials(ref err) => err.description(),
@@ -4678,6 +5155,224 @@ impl Error for TagResourceError {
             TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             TagResourceError::ParseError(ref cause) => cause,
             TagResourceError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by TransactGetItems
+#[derive(Debug, PartialEq)]
+pub enum TransactGetItemsError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>Your request rate is too high. The AWS SDKs for DynamoDB automatically retry requests that receive this exception. Your request is eventually successful, unless your retry queue is too large to finish. Reduce the frequency of requests and use exponential backoff. For more information, go to <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff">Error Retries and Exponential Backoff</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
+    ProvisionedThroughputExceeded(String),
+    /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
+    ResourceNotFound(String),
+    /// <p><p>The entire transaction request was rejected.</p> <p>DynamoDB rejects a <code>TransactWriteItems</code> request under the following circumstances:</p> <ul> <li> <p>A condition in one of the condition expressions is not met.</p> </li> <li> <p>A table in the <code>TransactWriteItems</code> request is in a different account or region.</p> </li> <li> <p>More than one action in the <code>TransactWriteItems</code> operation targets the same item.</p> </li> <li> <p>There is insufficient provisioned capacity for the transaction to be completed.</p> </li> <li> <p>An item size becomes too large (larger than 400 KB), or a local secondary index (LSI) becomes too large, or a similar validation error occurs because of changes made by the transaction.</p> </li> <li> <p>There is a user error, such as an invalid data format.</p> </li> </ul> <p>DynamoDB rejects a <code>TransactGetItems</code> request under the following circumstances:</p> <ul> <li> <p>There is an ongoing <code>TransactGetItems</code> operation that conflicts with a concurrent <code>PutItem</code>, <code>UpdateItem</code>, <code>DeleteItem</code> or <code>TransactWriteItems</code> request. In this case the <code>TransactGetItems</code> operation fails with a <code>TransactionCanceledException</code>.</p> </li> <li> <p>A table in the <code>TransactGetItems</code> request is in a different account or region.</p> </li> <li> <p>There is insufficient provisioned capacity for the transaction to be completed.</p> </li> <li> <p>There is a user error, such as an invalid data format.</p> </li> </ul></p>
+    TransactionCanceled(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl TransactGetItemsError {
+    pub fn from_response(res: BufferedHttpResponse) -> TransactGetItemsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalServerError" => {
+                    return TransactGetItemsError::InternalServerError(String::from(error_message));
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return TransactGetItemsError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceNotFoundException" => {
+                    return TransactGetItemsError::ResourceNotFound(String::from(error_message));
+                }
+                "TransactionCanceledException" => {
+                    return TransactGetItemsError::TransactionCanceled(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return TransactGetItemsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return TransactGetItemsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for TransactGetItemsError {
+    fn from(err: serde_json::error::Error) -> TransactGetItemsError {
+        TransactGetItemsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for TransactGetItemsError {
+    fn from(err: CredentialsError) -> TransactGetItemsError {
+        TransactGetItemsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for TransactGetItemsError {
+    fn from(err: HttpDispatchError) -> TransactGetItemsError {
+        TransactGetItemsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for TransactGetItemsError {
+    fn from(err: io::Error) -> TransactGetItemsError {
+        TransactGetItemsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for TransactGetItemsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TransactGetItemsError {
+    fn description(&self) -> &str {
+        match *self {
+            TransactGetItemsError::InternalServerError(ref cause) => cause,
+            TransactGetItemsError::ProvisionedThroughputExceeded(ref cause) => cause,
+            TransactGetItemsError::ResourceNotFound(ref cause) => cause,
+            TransactGetItemsError::TransactionCanceled(ref cause) => cause,
+            TransactGetItemsError::Validation(ref cause) => cause,
+            TransactGetItemsError::Credentials(ref err) => err.description(),
+            TransactGetItemsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            TransactGetItemsError::ParseError(ref cause) => cause,
+            TransactGetItemsError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by TransactWriteItems
+#[derive(Debug, PartialEq)]
+pub enum TransactWriteItemsError {
+    /// <p>DynamoDB rejected the request because you retried a request with a different payload but with an idempotent token that was already used.</p>
+    IdempotentParameterMismatch(String),
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>Your request rate is too high. The AWS SDKs for DynamoDB automatically retry requests that receive this exception. Your request is eventually successful, unless your retry queue is too large to finish. Reduce the frequency of requests and use exponential backoff. For more information, go to <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff">Error Retries and Exponential Backoff</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
+    ProvisionedThroughputExceeded(String),
+    /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
+    ResourceNotFound(String),
+    /// <p><p>The entire transaction request was rejected.</p> <p>DynamoDB rejects a <code>TransactWriteItems</code> request under the following circumstances:</p> <ul> <li> <p>A condition in one of the condition expressions is not met.</p> </li> <li> <p>A table in the <code>TransactWriteItems</code> request is in a different account or region.</p> </li> <li> <p>More than one action in the <code>TransactWriteItems</code> operation targets the same item.</p> </li> <li> <p>There is insufficient provisioned capacity for the transaction to be completed.</p> </li> <li> <p>An item size becomes too large (larger than 400 KB), or a local secondary index (LSI) becomes too large, or a similar validation error occurs because of changes made by the transaction.</p> </li> <li> <p>There is a user error, such as an invalid data format.</p> </li> </ul> <p>DynamoDB rejects a <code>TransactGetItems</code> request under the following circumstances:</p> <ul> <li> <p>There is an ongoing <code>TransactGetItems</code> operation that conflicts with a concurrent <code>PutItem</code>, <code>UpdateItem</code>, <code>DeleteItem</code> or <code>TransactWriteItems</code> request. In this case the <code>TransactGetItems</code> operation fails with a <code>TransactionCanceledException</code>.</p> </li> <li> <p>A table in the <code>TransactGetItems</code> request is in a different account or region.</p> </li> <li> <p>There is insufficient provisioned capacity for the transaction to be completed.</p> </li> <li> <p>There is a user error, such as an invalid data format.</p> </li> </ul></p>
+    TransactionCanceled(String),
+    /// <p>The transaction with the given request token is already in progress.</p>
+    TransactionInProgress(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl TransactWriteItemsError {
+    pub fn from_response(res: BufferedHttpResponse) -> TransactWriteItemsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "IdempotentParameterMismatchException" => {
+                    return TransactWriteItemsError::IdempotentParameterMismatch(String::from(
+                        error_message,
+                    ));
+                }
+                "InternalServerError" => {
+                    return TransactWriteItemsError::InternalServerError(String::from(error_message));
+                }
+                "ProvisionedThroughputExceededException" => {
+                    return TransactWriteItemsError::ProvisionedThroughputExceeded(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceNotFoundException" => {
+                    return TransactWriteItemsError::ResourceNotFound(String::from(error_message));
+                }
+                "TransactionCanceledException" => {
+                    return TransactWriteItemsError::TransactionCanceled(String::from(error_message));
+                }
+                "TransactionInProgressException" => {
+                    return TransactWriteItemsError::TransactionInProgress(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return TransactWriteItemsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return TransactWriteItemsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for TransactWriteItemsError {
+    fn from(err: serde_json::error::Error) -> TransactWriteItemsError {
+        TransactWriteItemsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for TransactWriteItemsError {
+    fn from(err: CredentialsError) -> TransactWriteItemsError {
+        TransactWriteItemsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for TransactWriteItemsError {
+    fn from(err: HttpDispatchError) -> TransactWriteItemsError {
+        TransactWriteItemsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for TransactWriteItemsError {
+    fn from(err: io::Error) -> TransactWriteItemsError {
+        TransactWriteItemsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for TransactWriteItemsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TransactWriteItemsError {
+    fn description(&self) -> &str {
+        match *self {
+            TransactWriteItemsError::IdempotentParameterMismatch(ref cause) => cause,
+            TransactWriteItemsError::InternalServerError(ref cause) => cause,
+            TransactWriteItemsError::ProvisionedThroughputExceeded(ref cause) => cause,
+            TransactWriteItemsError::ResourceNotFound(ref cause) => cause,
+            TransactWriteItemsError::TransactionCanceled(ref cause) => cause,
+            TransactWriteItemsError::TransactionInProgress(ref cause) => cause,
+            TransactWriteItemsError::Validation(ref cause) => cause,
+            TransactWriteItemsError::Credentials(ref err) => err.description(),
+            TransactWriteItemsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            TransactWriteItemsError::ParseError(ref cause) => cause,
+            TransactWriteItemsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5118,8 +5813,12 @@ pub enum UpdateItemError {
     ItemCollectionSizeLimitExceeded(String),
     /// <p>Your request rate is too high. The AWS SDKs for DynamoDB automatically retry requests that receive this exception. Your request is eventually successful, unless your retry queue is too large to finish. Reduce the frequency of requests and use exponential backoff. For more information, go to <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Programming.Errors.html#Programming.Errors.RetryAndBackoff">Error Retries and Exponential Backoff</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     ProvisionedThroughputExceeded(String),
+    /// <p>Throughput exceeds the current throughput limit for your account. Please contact AWS Support at <a href="http://docs.aws.amazon.com/https:/aws.amazon.com/support">AWS Support</a> to request a limit increase.</p>
+    RequestLimitExceeded(String),
     /// <p>The operation tried to access a nonexistent table or index. The resource might not be specified correctly, or its status might not be <code>ACTIVE</code>.</p>
     ResourceNotFound(String),
+    /// <p>Operation was rejected because there is an ongoing transaction for the item.</p>
+    TransactionConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -5161,8 +5860,14 @@ impl UpdateItemError {
                         error_message,
                     ));
                 }
+                "RequestLimitExceeded" => {
+                    return UpdateItemError::RequestLimitExceeded(String::from(error_message));
+                }
                 "ResourceNotFoundException" => {
                     return UpdateItemError::ResourceNotFound(String::from(error_message));
+                }
+                "TransactionConflictException" => {
+                    return UpdateItemError::TransactionConflict(String::from(error_message));
                 }
                 "ValidationException" => {
                     return UpdateItemError::Validation(error_message.to_string());
@@ -5206,7 +5911,9 @@ impl Error for UpdateItemError {
             UpdateItemError::InternalServerError(ref cause) => cause,
             UpdateItemError::ItemCollectionSizeLimitExceeded(ref cause) => cause,
             UpdateItemError::ProvisionedThroughputExceeded(ref cause) => cause,
+            UpdateItemError::RequestLimitExceeded(ref cause) => cause,
             UpdateItemError::ResourceNotFound(ref cause) => cause,
+            UpdateItemError::TransactionConflict(ref cause) => cause,
             UpdateItemError::Validation(ref cause) => cause,
             UpdateItemError::Credentials(ref err) => err.description(),
             UpdateItemError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -5473,6 +6180,10 @@ pub trait DynamoDb {
         input: DescribeContinuousBackupsInput,
     ) -> RusotoFuture<DescribeContinuousBackupsOutput, DescribeContinuousBackupsError>;
 
+    /// <p>Returns the regional endpoint information.</p>
+    fn describe_endpoints(&self)
+        -> RusotoFuture<DescribeEndpointsResponse, DescribeEndpointsError>;
+
     /// <p>Returns information about the specified global table.</p>
     fn describe_global_table(
         &self,
@@ -5550,6 +6261,18 @@ pub trait DynamoDb {
 
     /// <p>Associate a set of tags with an Amazon DynamoDB resource. You can then activate these user-defined tags so that they appear on the Billing and Cost Management console for cost allocation tracking. You can call TagResource up to 5 times per second, per account. </p> <p>For an overview on tagging DynamoDB resources, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Tagging.html">Tagging for DynamoDB</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     fn tag_resource(&self, input: TagResourceInput) -> RusotoFuture<(), TagResourceError>;
+
+    /// <p><p> <code>TransactGetItems</code> is a synchronous operation that atomically retrieves multiple items from one or more tables (but not from indexes) in a single account and region. A <code>TransactGetItems</code> call can contain up to 10 <code>TransactGetItem</code> objects, each of which contains a <code>Get</code> structure that specifies an item to retrieve from a table in the account and region. A call to <code>TransactGetItems</code> cannot retrieve items from tables in more than one AWS account or region.</p> <p>DynamoDB rejects the entire <code>TransactGetItems</code> request if any of the following is true:</p> <ul> <li> <p>A conflicting operation is in the process of updating an item to be read.</p> </li> <li> <p>There is insufficient provisioned capacity for the transaction to be completed.</p> </li> <li> <p>There is a user error, such as an invalid data format.</p> </li> </ul></p>
+    fn transact_get_items(
+        &self,
+        input: TransactGetItemsInput,
+    ) -> RusotoFuture<TransactGetItemsOutput, TransactGetItemsError>;
+
+    /// <p><p> <code>TransactWriteItems</code> is a synchronous write operation that groups up to 10 action requests. These actions can target items in different tables, but not in different AWS accounts or regions, and no two actions can target the same item. For example, you cannot both <code>ConditionCheck</code> and <code>Update</code> the same item.</p> <p>The actions are completed atomically so that either all of them succeed, or all of them fail. They are defined by the following objects:</p> <ul> <li> <p> <code>Put</code>  &#x97;   Initiates a <code>PutItem</code> operation to write a new item. This structure specifies the primary key of the item to be written, the name of the table to write it in, an optional condition expression that must be satisfied for the write to succeed, a list of the item&#39;s attributes, and a field indicating whether or not to retrieve the item&#39;s attributes if the condition is not met.</p> </li> <li> <p> <code>Update</code>  &#x97;   Initiates an <code>UpdateItem</code> operation to update an existing item. This structure specifies the primary key of the item to be updated, the name of the table where it resides, an optional condition expression that must be satisfied for the update to succeed, an expression that defines one or more attributes to be updated, and a field indicating whether or not to retrieve the item&#39;s attributes if the condition is not met.</p> </li> <li> <p> <code>Delete</code>  &#x97;   Initiates a <code>DeleteItem</code> operation to delete an existing item. This structure specifies the primary key of the item to be deleted, the name of the table where it resides, an optional condition expression that must be satisfied for the deletion to succeed, and a field indicating whether or not to retrieve the item&#39;s attributes if the condition is not met.</p> </li> <li> <p> <code>ConditionCheck</code>  &#x97;   Applies a condition to an item that is not being modified by the transaction. This structure specifies the primary key of the item to be checked, the name of the table where it resides, a condition expression that must be satisfied for the transaction to succeed, and a field indicating whether or not to retrieve the item&#39;s attributes if the condition is not met.</p> </li> </ul> <p>DynamoDB rejects the entire <code>TransactWriteItems</code> request if any of the following is true:</p> <ul> <li> <p>A condition in one of the condition expressions is not met.</p> </li> <li> <p>A conflicting operation is in the process of updating the same item.</p> </li> <li> <p>There is insufficient provisioned capacity for the transaction to be completed.</p> </li> <li> <p>An item size becomes too large (bigger than 400 KB), a Local Secondary Index (LSI) becomes too large, or a similar validation error occurs because of changes made by the transaction.</p> </li> <li> <p>There is a user error, such as an invalid data format.</p> </li> </ul></p>
+    fn transact_write_items(
+        &self,
+        input: TransactWriteItemsInput,
+    ) -> RusotoFuture<TransactWriteItemsOutput, TransactWriteItemsError>;
 
     /// <p>Removes the association of tags from an Amazon DynamoDB resource. You can call UntagResource up to 5 times per second, per account. </p> <p>For an overview on tagging DynamoDB resources, see <a href="http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Tagging.html">Tagging for DynamoDB</a> in the <i>Amazon DynamoDB Developer Guide</i>.</p>
     fn untag_resource(&self, input: UntagResourceInput) -> RusotoFuture<(), UntagResourceError>;
@@ -5993,6 +6716,41 @@ impl DynamoDb for DynamoDbClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeContinuousBackupsError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p>Returns the regional endpoint information.</p>
+    fn describe_endpoints(
+        &self,
+    ) -> RusotoFuture<DescribeEndpointsResponse, DescribeEndpointsError> {
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        request.add_header("x-amz-target", "DynamoDB_20120810.DescribeEndpoints");
+        request.set_payload(Some(b"{}".to_vec()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeEndpointsResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeEndpointsError::from_response(response))),
+                )
             }
         })
     }
@@ -6552,6 +7310,80 @@ impl DynamoDb for DynamoDbClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(TagResourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p><p> <code>TransactGetItems</code> is a synchronous operation that atomically retrieves multiple items from one or more tables (but not from indexes) in a single account and region. A <code>TransactGetItems</code> call can contain up to 10 <code>TransactGetItem</code> objects, each of which contains a <code>Get</code> structure that specifies an item to retrieve from a table in the account and region. A call to <code>TransactGetItems</code> cannot retrieve items from tables in more than one AWS account or region.</p> <p>DynamoDB rejects the entire <code>TransactGetItems</code> request if any of the following is true:</p> <ul> <li> <p>A conflicting operation is in the process of updating an item to be read.</p> </li> <li> <p>There is insufficient provisioned capacity for the transaction to be completed.</p> </li> <li> <p>There is a user error, such as an invalid data format.</p> </li> </ul></p>
+    fn transact_get_items(
+        &self,
+        input: TransactGetItemsInput,
+    ) -> RusotoFuture<TransactGetItemsOutput, TransactGetItemsError> {
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        request.add_header("x-amz-target", "DynamoDB_20120810.TransactGetItems");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<TransactGetItemsOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TransactGetItemsError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p><p> <code>TransactWriteItems</code> is a synchronous write operation that groups up to 10 action requests. These actions can target items in different tables, but not in different AWS accounts or regions, and no two actions can target the same item. For example, you cannot both <code>ConditionCheck</code> and <code>Update</code> the same item.</p> <p>The actions are completed atomically so that either all of them succeed, or all of them fail. They are defined by the following objects:</p> <ul> <li> <p> <code>Put</code>  &#x97;   Initiates a <code>PutItem</code> operation to write a new item. This structure specifies the primary key of the item to be written, the name of the table to write it in, an optional condition expression that must be satisfied for the write to succeed, a list of the item&#39;s attributes, and a field indicating whether or not to retrieve the item&#39;s attributes if the condition is not met.</p> </li> <li> <p> <code>Update</code>  &#x97;   Initiates an <code>UpdateItem</code> operation to update an existing item. This structure specifies the primary key of the item to be updated, the name of the table where it resides, an optional condition expression that must be satisfied for the update to succeed, an expression that defines one or more attributes to be updated, and a field indicating whether or not to retrieve the item&#39;s attributes if the condition is not met.</p> </li> <li> <p> <code>Delete</code>  &#x97;   Initiates a <code>DeleteItem</code> operation to delete an existing item. This structure specifies the primary key of the item to be deleted, the name of the table where it resides, an optional condition expression that must be satisfied for the deletion to succeed, and a field indicating whether or not to retrieve the item&#39;s attributes if the condition is not met.</p> </li> <li> <p> <code>ConditionCheck</code>  &#x97;   Applies a condition to an item that is not being modified by the transaction. This structure specifies the primary key of the item to be checked, the name of the table where it resides, a condition expression that must be satisfied for the transaction to succeed, and a field indicating whether or not to retrieve the item&#39;s attributes if the condition is not met.</p> </li> </ul> <p>DynamoDB rejects the entire <code>TransactWriteItems</code> request if any of the following is true:</p> <ul> <li> <p>A condition in one of the condition expressions is not met.</p> </li> <li> <p>A conflicting operation is in the process of updating the same item.</p> </li> <li> <p>There is insufficient provisioned capacity for the transaction to be completed.</p> </li> <li> <p>An item size becomes too large (bigger than 400 KB), a Local Secondary Index (LSI) becomes too large, or a similar validation error occurs because of changes made by the transaction.</p> </li> <li> <p>There is a user error, such as an invalid data format.</p> </li> </ul></p>
+    fn transact_write_items(
+        &self,
+        input: TransactWriteItemsInput,
+    ) -> RusotoFuture<TransactWriteItemsOutput, TransactWriteItemsError> {
+        let mut request = SignedRequest::new("POST", "dynamodb", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        request.add_header("x-amz-target", "DynamoDB_20120810.TransactWriteItems");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<TransactWriteItemsOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TransactWriteItemsError::from_response(response))),
                 )
             }
         })

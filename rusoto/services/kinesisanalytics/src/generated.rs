@@ -93,7 +93,7 @@ pub struct AddApplicationOutputRequest {
     /// <p>Version of the application to which you want to add the output configuration. You can use the <a>DescribeApplication</a> operation to get the current application version. If the version specified is not the current version, the <code>ConcurrentModificationException</code> is returned. </p>
     #[serde(rename = "CurrentApplicationVersionId")]
     pub current_application_version_id: i64,
-    /// <p>An array of objects, each describing one output configuration. In the output configuration, you specify the name of an in-application stream, a destination (that is, an Amazon Kinesis stream, an Amazon Kinesis Firehose delivery stream, or an Amazon Lambda function), and record the formation to use when writing to the destination.</p>
+    /// <p>An array of objects, each describing one output configuration. In the output configuration, you specify the name of an in-application stream, a destination (that is, an Amazon Kinesis stream, an Amazon Kinesis Firehose delivery stream, or an AWS Lambda function), and record the formation to use when writing to the destination.</p>
     #[serde(rename = "Output")]
     pub output: Output,
 }
@@ -212,7 +212,7 @@ pub struct ApplicationUpdate {
     pub reference_data_source_updates: Option<Vec<ReferenceDataSourceUpdate>>,
 }
 
-/// <p>Provides additional mapping information when the record format uses delimiters, such as CSV. For example, the following sample records use CSV format, where the records use the <i>'\n'</i> as the row delimiter and a comma (",") as the column delimiter: </p> <p> <code>"name1", "address1" </code> </p> <p> <code>"name2, "address2"</code> </p>
+/// <p>Provides additional mapping information when the record format uses delimiters, such as CSV. For example, the following sample records use CSV format, where the records use the <i>'\n'</i> as the row delimiter and a comma (",") as the column delimiter: </p> <p> <code>"name1", "address1"</code> </p> <p> <code>"name2", "address2"</code> </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CSVMappingParameters {
     /// <p>Column delimiter. For example, in a CSV format, a comma (",") is the typical column delimiter.</p>
@@ -288,7 +288,7 @@ pub struct CreateApplicationRequest {
     #[serde(rename = "Inputs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inputs: Option<Vec<Input>>,
-    /// <p>You can configure application output to write data from any of the in-application streams to up to three destinations.</p> <p>These destinations can be Amazon Kinesis streams, Amazon Kinesis Firehose delivery streams, Amazon Lambda destinations, or any combination of the three.</p> <p>In the configuration, you specify the in-application stream name, the destination stream or Lambda function Amazon Resource Name (ARN), and the format to use when writing data. You must also provide an IAM role that Amazon Kinesis Analytics can assume to write to the destination stream or Lambda function on your behalf.</p> <p>In the output configuration, you also provide the output stream or Lambda function ARN. For stream destinations, you provide the format of data in the stream (for example, JSON, CSV). You also must provide an IAM role that Amazon Kinesis Analytics can assume to write to the stream or Lambda function on your behalf.</p>
+    /// <p>You can configure application output to write data from any of the in-application streams to up to three destinations.</p> <p>These destinations can be Amazon Kinesis streams, Amazon Kinesis Firehose delivery streams, AWS Lambda destinations, or any combination of the three.</p> <p>In the configuration, you specify the in-application stream name, the destination stream or Lambda function Amazon Resource Name (ARN), and the format to use when writing data. You must also provide an IAM role that Amazon Kinesis Analytics can assume to write to the destination stream or Lambda function on your behalf.</p> <p>In the output configuration, you also provide the output stream or Lambda function ARN. For stream destinations, you provide the format of data in the stream (for example, JSON, CSV). You also must provide an IAM role that Amazon Kinesis Analytics can assume to write to the stream or Lambda function on your behalf.</p>
     #[serde(rename = "Outputs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub outputs: Option<Vec<Output>>,
@@ -411,8 +411,7 @@ pub struct DescribeApplicationResponse {
 pub struct DestinationSchema {
     /// <p>Specifies the format of the records on the output stream.</p>
     #[serde(rename = "RecordFormatType")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub record_format_type: Option<String>,
+    pub record_format_type: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -433,7 +432,7 @@ pub struct DiscoverInputSchemaRequest {
     #[serde(rename = "RoleARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
-    /// <p>Specify this parameter to discover a schema from data in an S3 object.</p>
+    /// <p>Specify this parameter to discover a schema from data in an Amazon S3 object.</p>
     #[serde(rename = "S3Configuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_configuration: Option<S3Configuration>,
@@ -695,7 +694,7 @@ pub struct KinesisFirehoseInput {
     /// <p>ARN of the input delivery stream.</p>
     #[serde(rename = "ResourceARN")]
     pub resource_arn: String,
-    /// <p>ARN of the IAM role that Amazon Kinesis Analytics can assume to access the stream on your behalf. You need to make sure the role has necessary permissions to access the stream.</p>
+    /// <p>ARN of the IAM role that Amazon Kinesis Analytics can assume to access the stream on your behalf. You need to make sure that the role has the necessary permissions to access the stream.</p>
     #[serde(rename = "RoleARN")]
     pub role_arn: String,
 }
@@ -721,7 +720,7 @@ pub struct KinesisFirehoseInputUpdate {
     #[serde(rename = "ResourceARNUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_arn_update: Option<String>,
-    /// <p>ARN of the IAM role that Amazon Kinesis Analytics can assume to access the stream on your behalf. You need to grant necessary permissions to this role.</p>
+    /// <p>ARN of the IAM role that Amazon Kinesis Analytics can assume to access the stream on your behalf. You need to grant the necessary permissions to this role.</p>
     #[serde(rename = "RoleARNUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn_update: Option<String>,
@@ -759,7 +758,7 @@ pub struct KinesisFirehoseOutputUpdate {
     #[serde(rename = "ResourceARNUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_arn_update: Option<String>,
-    /// <p>ARN of the IAM role that Amazon Kinesis Analytics can assume to access the stream on your behalf. You need to grant necessary permissions to this role.</p>
+    /// <p>ARN of the IAM role that Amazon Kinesis Analytics can assume to access the stream on your behalf. You need to grant the necessary permissions to this role.</p>
     #[serde(rename = "RoleARNUpdate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn_update: Option<String>,
@@ -1079,7 +1078,7 @@ pub struct ReferenceDataSourceUpdate {
     pub table_name_update: Option<String>,
 }
 
-/// <p>Provides a description of an Amazon S3 data source, including the Amazon Resource Name (ARN) of the S3 bucket, the ARN of the IAM role that is used to access the bucket, and the name of the S3 object that contains the data.</p>
+/// <p>Provides a description of an Amazon S3 data source, including the Amazon Resource Name (ARN) of the S3 bucket, the ARN of the IAM role that is used to access the bucket, and the name of the Amazon S3 object that contains the data.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct S3Configuration {
     /// <p>ARN of the S3 bucket that contains the data.</p>
@@ -1211,6 +1210,8 @@ pub enum AddApplicationCloudWatchLoggingOptionError {
     ResourceInUse(String),
     /// <p>Specified application can't be found.</p>
     ResourceNotFound(String),
+
+    UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1253,6 +1254,11 @@ impl AddApplicationCloudWatchLoggingOptionError {
                 }
                 "ResourceNotFoundException" => {
                     return AddApplicationCloudWatchLoggingOptionError::ResourceNotFound(
+                        String::from(error_message),
+                    );
+                }
+                "UnsupportedOperationException" => {
+                    return AddApplicationCloudWatchLoggingOptionError::UnsupportedOperation(
                         String::from(error_message),
                     );
                 }
@@ -1300,6 +1306,7 @@ impl Error for AddApplicationCloudWatchLoggingOptionError {
             AddApplicationCloudWatchLoggingOptionError::InvalidArgument(ref cause) => cause,
             AddApplicationCloudWatchLoggingOptionError::ResourceInUse(ref cause) => cause,
             AddApplicationCloudWatchLoggingOptionError::ResourceNotFound(ref cause) => cause,
+            AddApplicationCloudWatchLoggingOptionError::UnsupportedOperation(ref cause) => cause,
             AddApplicationCloudWatchLoggingOptionError::Validation(ref cause) => cause,
             AddApplicationCloudWatchLoggingOptionError::Credentials(ref err) => err.description(),
             AddApplicationCloudWatchLoggingOptionError::HttpDispatch(ref dispatch_error) => {
@@ -1323,6 +1330,8 @@ pub enum AddApplicationInputError {
     ResourceInUse(String),
     /// <p>Specified application can't be found.</p>
     ResourceNotFound(String),
+
+    UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1364,6 +1373,11 @@ impl AddApplicationInputError {
                 }
                 "ResourceNotFoundException" => {
                     return AddApplicationInputError::ResourceNotFound(String::from(error_message));
+                }
+                "UnsupportedOperationException" => {
+                    return AddApplicationInputError::UnsupportedOperation(String::from(
+                        error_message,
+                    ));
                 }
                 "ValidationException" => {
                     return AddApplicationInputError::Validation(error_message.to_string());
@@ -1408,6 +1422,7 @@ impl Error for AddApplicationInputError {
             AddApplicationInputError::InvalidArgument(ref cause) => cause,
             AddApplicationInputError::ResourceInUse(ref cause) => cause,
             AddApplicationInputError::ResourceNotFound(ref cause) => cause,
+            AddApplicationInputError::UnsupportedOperation(ref cause) => cause,
             AddApplicationInputError::Validation(ref cause) => cause,
             AddApplicationInputError::Credentials(ref err) => err.description(),
             AddApplicationInputError::HttpDispatch(ref dispatch_error) => {
@@ -1429,6 +1444,8 @@ pub enum AddApplicationInputProcessingConfigurationError {
     ResourceInUse(String),
     /// <p>Specified application can't be found.</p>
     ResourceNotFound(String),
+
+    UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1473,6 +1490,11 @@ impl AddApplicationInputProcessingConfigurationError {
                 }
                 "ResourceNotFoundException" => {
                     return AddApplicationInputProcessingConfigurationError::ResourceNotFound(
+                        String::from(error_message),
+                    );
+                }
+                "UnsupportedOperationException" => {
+                    return AddApplicationInputProcessingConfigurationError::UnsupportedOperation(
                         String::from(error_message),
                     );
                 }
@@ -1522,6 +1544,9 @@ impl Error for AddApplicationInputProcessingConfigurationError {
             AddApplicationInputProcessingConfigurationError::InvalidArgument(ref cause) => cause,
             AddApplicationInputProcessingConfigurationError::ResourceInUse(ref cause) => cause,
             AddApplicationInputProcessingConfigurationError::ResourceNotFound(ref cause) => cause,
+            AddApplicationInputProcessingConfigurationError::UnsupportedOperation(ref cause) => {
+                cause
+            }
             AddApplicationInputProcessingConfigurationError::Validation(ref cause) => cause,
             AddApplicationInputProcessingConfigurationError::Credentials(ref err) => {
                 err.description()
@@ -1545,6 +1570,8 @@ pub enum AddApplicationOutputError {
     ResourceInUse(String),
     /// <p>Specified application can't be found.</p>
     ResourceNotFound(String),
+
+    UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1583,6 +1610,11 @@ impl AddApplicationOutputError {
                 }
                 "ResourceNotFoundException" => {
                     return AddApplicationOutputError::ResourceNotFound(String::from(error_message));
+                }
+                "UnsupportedOperationException" => {
+                    return AddApplicationOutputError::UnsupportedOperation(String::from(
+                        error_message,
+                    ));
                 }
                 "ValidationException" => {
                     return AddApplicationOutputError::Validation(error_message.to_string());
@@ -1626,6 +1658,7 @@ impl Error for AddApplicationOutputError {
             AddApplicationOutputError::InvalidArgument(ref cause) => cause,
             AddApplicationOutputError::ResourceInUse(ref cause) => cause,
             AddApplicationOutputError::ResourceNotFound(ref cause) => cause,
+            AddApplicationOutputError::UnsupportedOperation(ref cause) => cause,
             AddApplicationOutputError::Validation(ref cause) => cause,
             AddApplicationOutputError::Credentials(ref err) => err.description(),
             AddApplicationOutputError::HttpDispatch(ref dispatch_error) => {
@@ -1647,6 +1680,8 @@ pub enum AddApplicationReferenceDataSourceError {
     ResourceInUse(String),
     /// <p>Specified application can't be found.</p>
     ResourceNotFound(String),
+
+    UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1692,6 +1727,11 @@ impl AddApplicationReferenceDataSourceError {
                         error_message,
                     ));
                 }
+                "UnsupportedOperationException" => {
+                    return AddApplicationReferenceDataSourceError::UnsupportedOperation(
+                        String::from(error_message),
+                    );
+                }
                 "ValidationException" => {
                     return AddApplicationReferenceDataSourceError::Validation(
                         error_message.to_string(),
@@ -1736,6 +1776,7 @@ impl Error for AddApplicationReferenceDataSourceError {
             AddApplicationReferenceDataSourceError::InvalidArgument(ref cause) => cause,
             AddApplicationReferenceDataSourceError::ResourceInUse(ref cause) => cause,
             AddApplicationReferenceDataSourceError::ResourceNotFound(ref cause) => cause,
+            AddApplicationReferenceDataSourceError::UnsupportedOperation(ref cause) => cause,
             AddApplicationReferenceDataSourceError::Validation(ref cause) => cause,
             AddApplicationReferenceDataSourceError::Credentials(ref err) => err.description(),
             AddApplicationReferenceDataSourceError::HttpDispatch(ref dispatch_error) => {
@@ -1855,6 +1896,8 @@ pub enum DeleteApplicationError {
     ResourceInUse(String),
     /// <p>Specified application can't be found.</p>
     ResourceNotFound(String),
+
+    UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1890,6 +1933,9 @@ impl DeleteApplicationError {
                 }
                 "ResourceNotFoundException" => {
                     return DeleteApplicationError::ResourceNotFound(String::from(error_message));
+                }
+                "UnsupportedOperationException" => {
+                    return DeleteApplicationError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
                     return DeleteApplicationError::Validation(error_message.to_string());
@@ -1932,6 +1978,7 @@ impl Error for DeleteApplicationError {
             DeleteApplicationError::ConcurrentModification(ref cause) => cause,
             DeleteApplicationError::ResourceInUse(ref cause) => cause,
             DeleteApplicationError::ResourceNotFound(ref cause) => cause,
+            DeleteApplicationError::UnsupportedOperation(ref cause) => cause,
             DeleteApplicationError::Validation(ref cause) => cause,
             DeleteApplicationError::Credentials(ref err) => err.description(),
             DeleteApplicationError::HttpDispatch(ref dispatch_error) => {
@@ -1953,6 +2000,8 @@ pub enum DeleteApplicationCloudWatchLoggingOptionError {
     ResourceInUse(String),
     /// <p>Specified application can't be found.</p>
     ResourceNotFound(String),
+
+    UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1997,6 +2046,11 @@ impl DeleteApplicationCloudWatchLoggingOptionError {
                 }
                 "ResourceNotFoundException" => {
                     return DeleteApplicationCloudWatchLoggingOptionError::ResourceNotFound(
+                        String::from(error_message),
+                    );
+                }
+                "UnsupportedOperationException" => {
+                    return DeleteApplicationCloudWatchLoggingOptionError::UnsupportedOperation(
                         String::from(error_message),
                     );
                 }
@@ -2046,6 +2100,7 @@ impl Error for DeleteApplicationCloudWatchLoggingOptionError {
             DeleteApplicationCloudWatchLoggingOptionError::InvalidArgument(ref cause) => cause,
             DeleteApplicationCloudWatchLoggingOptionError::ResourceInUse(ref cause) => cause,
             DeleteApplicationCloudWatchLoggingOptionError::ResourceNotFound(ref cause) => cause,
+            DeleteApplicationCloudWatchLoggingOptionError::UnsupportedOperation(ref cause) => cause,
             DeleteApplicationCloudWatchLoggingOptionError::Validation(ref cause) => cause,
             DeleteApplicationCloudWatchLoggingOptionError::Credentials(ref err) => {
                 err.description()
@@ -2069,6 +2124,8 @@ pub enum DeleteApplicationInputProcessingConfigurationError {
     ResourceInUse(String),
     /// <p>Specified application can't be found.</p>
     ResourceNotFound(String),
+
+    UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2100,6 +2157,7 @@ impl DeleteApplicationInputProcessingConfigurationError {
 "InvalidArgumentException" => return DeleteApplicationInputProcessingConfigurationError::InvalidArgument(String::from(error_message)),
 "ResourceInUseException" => return DeleteApplicationInputProcessingConfigurationError::ResourceInUse(String::from(error_message)),
 "ResourceNotFoundException" => return DeleteApplicationInputProcessingConfigurationError::ResourceNotFound(String::from(error_message)),
+"UnsupportedOperationException" => return DeleteApplicationInputProcessingConfigurationError::UnsupportedOperation(String::from(error_message)),
 "ValidationException" => return DeleteApplicationInputProcessingConfigurationError::Validation(error_message.to_string()),
 _ => {}
                             }
@@ -2148,6 +2206,9 @@ impl Error for DeleteApplicationInputProcessingConfigurationError {
             DeleteApplicationInputProcessingConfigurationError::ResourceNotFound(ref cause) => {
                 cause
             }
+            DeleteApplicationInputProcessingConfigurationError::UnsupportedOperation(ref cause) => {
+                cause
+            }
             DeleteApplicationInputProcessingConfigurationError::Validation(ref cause) => cause,
             DeleteApplicationInputProcessingConfigurationError::Credentials(ref err) => {
                 err.description()
@@ -2171,6 +2232,8 @@ pub enum DeleteApplicationOutputError {
     ResourceInUse(String),
     /// <p>Specified application can't be found.</p>
     ResourceNotFound(String),
+
+    UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2211,6 +2274,11 @@ impl DeleteApplicationOutputError {
                 }
                 "ResourceNotFoundException" => {
                     return DeleteApplicationOutputError::ResourceNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "UnsupportedOperationException" => {
+                    return DeleteApplicationOutputError::UnsupportedOperation(String::from(
                         error_message,
                     ));
                 }
@@ -2256,6 +2324,7 @@ impl Error for DeleteApplicationOutputError {
             DeleteApplicationOutputError::InvalidArgument(ref cause) => cause,
             DeleteApplicationOutputError::ResourceInUse(ref cause) => cause,
             DeleteApplicationOutputError::ResourceNotFound(ref cause) => cause,
+            DeleteApplicationOutputError::UnsupportedOperation(ref cause) => cause,
             DeleteApplicationOutputError::Validation(ref cause) => cause,
             DeleteApplicationOutputError::Credentials(ref err) => err.description(),
             DeleteApplicationOutputError::HttpDispatch(ref dispatch_error) => {
@@ -2277,6 +2346,8 @@ pub enum DeleteApplicationReferenceDataSourceError {
     ResourceInUse(String),
     /// <p>Specified application can't be found.</p>
     ResourceNotFound(String),
+
+    UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2319,6 +2390,11 @@ impl DeleteApplicationReferenceDataSourceError {
                 }
                 "ResourceNotFoundException" => {
                     return DeleteApplicationReferenceDataSourceError::ResourceNotFound(
+                        String::from(error_message),
+                    );
+                }
+                "UnsupportedOperationException" => {
+                    return DeleteApplicationReferenceDataSourceError::UnsupportedOperation(
                         String::from(error_message),
                     );
                 }
@@ -2366,6 +2442,7 @@ impl Error for DeleteApplicationReferenceDataSourceError {
             DeleteApplicationReferenceDataSourceError::InvalidArgument(ref cause) => cause,
             DeleteApplicationReferenceDataSourceError::ResourceInUse(ref cause) => cause,
             DeleteApplicationReferenceDataSourceError::ResourceNotFound(ref cause) => cause,
+            DeleteApplicationReferenceDataSourceError::UnsupportedOperation(ref cause) => cause,
             DeleteApplicationReferenceDataSourceError::Validation(ref cause) => cause,
             DeleteApplicationReferenceDataSourceError::Credentials(ref err) => err.description(),
             DeleteApplicationReferenceDataSourceError::HttpDispatch(ref dispatch_error) => {
@@ -2381,6 +2458,8 @@ impl Error for DeleteApplicationReferenceDataSourceError {
 pub enum DescribeApplicationError {
     /// <p>Specified application can't be found.</p>
     ResourceNotFound(String),
+
+    UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2408,6 +2487,11 @@ impl DescribeApplicationError {
             match *error_type {
                 "ResourceNotFoundException" => {
                     return DescribeApplicationError::ResourceNotFound(String::from(error_message));
+                }
+                "UnsupportedOperationException" => {
+                    return DescribeApplicationError::UnsupportedOperation(String::from(
+                        error_message,
+                    ));
                 }
                 "ValidationException" => {
                     return DescribeApplicationError::Validation(error_message.to_string());
@@ -2448,6 +2532,7 @@ impl Error for DescribeApplicationError {
     fn description(&self) -> &str {
         match *self {
             DescribeApplicationError::ResourceNotFound(ref cause) => cause,
+            DescribeApplicationError::UnsupportedOperation(ref cause) => cause,
             DescribeApplicationError::Validation(ref cause) => cause,
             DescribeApplicationError::Credentials(ref err) => err.description(),
             DescribeApplicationError::HttpDispatch(ref dispatch_error) => {
@@ -2465,9 +2550,9 @@ pub enum DiscoverInputSchemaError {
     InvalidArgument(String),
     /// <p>Discovery failed to get a record from the streaming source because of the Amazon Kinesis Streams ProvisionedThroughputExceededException. For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/APIReference/API_GetRecords.html">GetRecords</a> in the Amazon Kinesis Streams API Reference.</p>
     ResourceProvisionedThroughputExceeded(String),
-    /// <p>The service is unavailable, back off and retry the operation. </p>
+    /// <p>The service is unavailable. Back off and retry the operation. </p>
     ServiceUnavailable(String),
-    /// <p>Data format is not valid, Amazon Kinesis Analytics is not able to detect schema for the given streaming source.</p>
+    /// <p>Data format is not valid. Amazon Kinesis Analytics is not able to detect schema for the given streaming source.</p>
     UnableToDetectSchema(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2647,6 +2732,8 @@ pub enum StartApplicationError {
     ResourceInUse(String),
     /// <p>Specified application can't be found.</p>
     ResourceNotFound(String),
+
+    UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2685,6 +2772,9 @@ impl StartApplicationError {
                 }
                 "ResourceNotFoundException" => {
                     return StartApplicationError::ResourceNotFound(String::from(error_message));
+                }
+                "UnsupportedOperationException" => {
+                    return StartApplicationError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
                     return StartApplicationError::Validation(error_message.to_string());
@@ -2728,6 +2818,7 @@ impl Error for StartApplicationError {
             StartApplicationError::InvalidArgument(ref cause) => cause,
             StartApplicationError::ResourceInUse(ref cause) => cause,
             StartApplicationError::ResourceNotFound(ref cause) => cause,
+            StartApplicationError::UnsupportedOperation(ref cause) => cause,
             StartApplicationError::Validation(ref cause) => cause,
             StartApplicationError::Credentials(ref err) => err.description(),
             StartApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -2743,6 +2834,8 @@ pub enum StopApplicationError {
     ResourceInUse(String),
     /// <p>Specified application can't be found.</p>
     ResourceNotFound(String),
+
+    UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2773,6 +2866,9 @@ impl StopApplicationError {
                 }
                 "ResourceNotFoundException" => {
                     return StopApplicationError::ResourceNotFound(String::from(error_message));
+                }
+                "UnsupportedOperationException" => {
+                    return StopApplicationError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
                     return StopApplicationError::Validation(error_message.to_string());
@@ -2814,6 +2910,7 @@ impl Error for StopApplicationError {
         match *self {
             StopApplicationError::ResourceInUse(ref cause) => cause,
             StopApplicationError::ResourceNotFound(ref cause) => cause,
+            StopApplicationError::UnsupportedOperation(ref cause) => cause,
             StopApplicationError::Validation(ref cause) => cause,
             StopApplicationError::Credentials(ref err) => err.description(),
             StopApplicationError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -2835,6 +2932,8 @@ pub enum UpdateApplicationError {
     ResourceInUse(String),
     /// <p>Specified application can't be found.</p>
     ResourceNotFound(String),
+
+    UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2876,6 +2975,9 @@ impl UpdateApplicationError {
                 }
                 "ResourceNotFoundException" => {
                     return UpdateApplicationError::ResourceNotFound(String::from(error_message));
+                }
+                "UnsupportedOperationException" => {
+                    return UpdateApplicationError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
                     return UpdateApplicationError::Validation(error_message.to_string());
@@ -2920,6 +3022,7 @@ impl Error for UpdateApplicationError {
             UpdateApplicationError::InvalidArgument(ref cause) => cause,
             UpdateApplicationError::ResourceInUse(ref cause) => cause,
             UpdateApplicationError::ResourceNotFound(ref cause) => cause,
+            UpdateApplicationError::UnsupportedOperation(ref cause) => cause,
             UpdateApplicationError::Validation(ref cause) => cause,
             UpdateApplicationError::Credentials(ref err) => err.description(),
             UpdateApplicationError::HttpDispatch(ref dispatch_error) => {
@@ -2956,7 +3059,7 @@ pub trait KinesisAnalytics {
         AddApplicationInputProcessingConfigurationError,
     >;
 
-    /// <p>Adds an external destination to your Amazon Kinesis Analytics application.</p> <p>If you want Amazon Kinesis Analytics to deliver data from an in-application stream within your application to an external destination (such as an Amazon Kinesis stream, an Amazon Kinesis Firehose delivery stream, or an Amazon Lambda function), you add the relevant configuration to your application using this operation. You can configure one or more outputs for your application. Each output configuration maps an in-application stream and an external destination.</p> <p> You can use one of the output configurations to deliver data from your in-application error stream to an external destination so that you can analyze the errors. For conceptual information, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-output.html">Understanding Application Output (Destination)</a>. </p> <p> Note that any configuration update, including adding a streaming source using this operation, results in a new version of the application. You can use the <a>DescribeApplication</a> operation to find the current application version.</p> <p>For the limits on the number of application inputs and outputs you can configure, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/limits.html">Limits</a>.</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:AddApplicationOutput</code> action.</p>
+    /// <p>Adds an external destination to your Amazon Kinesis Analytics application.</p> <p>If you want Amazon Kinesis Analytics to deliver data from an in-application stream within your application to an external destination (such as an Amazon Kinesis stream, an Amazon Kinesis Firehose delivery stream, or an AWS Lambda function), you add the relevant configuration to your application using this operation. You can configure one or more outputs for your application. Each output configuration maps an in-application stream and an external destination.</p> <p> You can use one of the output configurations to deliver data from your in-application error stream to an external destination so that you can analyze the errors. For more information, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-output.html">Understanding Application Output (Destination)</a>. </p> <p> Any configuration update, including adding a streaming source using this operation, results in a new version of the application. You can use the <a>DescribeApplication</a> operation to find the current application version.</p> <p>For the limits on the number of application inputs and outputs you can configure, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/limits.html">Limits</a>.</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:AddApplicationOutput</code> action.</p>
     fn add_application_output(
         &self,
         input: AddApplicationOutputRequest,
@@ -3210,7 +3313,7 @@ impl KinesisAnalytics for KinesisAnalyticsClient {
         })
     }
 
-    /// <p>Adds an external destination to your Amazon Kinesis Analytics application.</p> <p>If you want Amazon Kinesis Analytics to deliver data from an in-application stream within your application to an external destination (such as an Amazon Kinesis stream, an Amazon Kinesis Firehose delivery stream, or an Amazon Lambda function), you add the relevant configuration to your application using this operation. You can configure one or more outputs for your application. Each output configuration maps an in-application stream and an external destination.</p> <p> You can use one of the output configurations to deliver data from your in-application error stream to an external destination so that you can analyze the errors. For conceptual information, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-output.html">Understanding Application Output (Destination)</a>. </p> <p> Note that any configuration update, including adding a streaming source using this operation, results in a new version of the application. You can use the <a>DescribeApplication</a> operation to find the current application version.</p> <p>For the limits on the number of application inputs and outputs you can configure, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/limits.html">Limits</a>.</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:AddApplicationOutput</code> action.</p>
+    /// <p>Adds an external destination to your Amazon Kinesis Analytics application.</p> <p>If you want Amazon Kinesis Analytics to deliver data from an in-application stream within your application to an external destination (such as an Amazon Kinesis stream, an Amazon Kinesis Firehose delivery stream, or an AWS Lambda function), you add the relevant configuration to your application using this operation. You can configure one or more outputs for your application. Each output configuration maps an in-application stream and an external destination.</p> <p> You can use one of the output configurations to deliver data from your in-application error stream to an external destination so that you can analyze the errors. For more information, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/how-it-works-output.html">Understanding Application Output (Destination)</a>. </p> <p> Any configuration update, including adding a streaming source using this operation, results in a new version of the application. You can use the <a>DescribeApplication</a> operation to find the current application version.</p> <p>For the limits on the number of application inputs and outputs you can configure, see <a href="http://docs.aws.amazon.com/kinesisanalytics/latest/dev/limits.html">Limits</a>.</p> <p>This operation requires permissions to perform the <code>kinesisanalytics:AddApplicationOutput</code> action.</p>
     fn add_application_output(
         &self,
         input: AddApplicationOutputRequest,

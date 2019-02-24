@@ -241,6 +241,73 @@ pub struct CreateBranchInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateCommitInput {
+    /// <p>The name of the author who created the commit. This information will be used as both the author and committer for the commit.</p>
+    #[serde(rename = "authorName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub author_name: Option<String>,
+    /// <p>The name of the branch where you will create the commit.</p>
+    #[serde(rename = "branchName")]
+    pub branch_name: String,
+    /// <p>The commit message you want to include as part of creating the commit. Commit messages are limited to 256 KB. If no message is specified, a default message will be used.</p>
+    #[serde(rename = "commitMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub commit_message: Option<String>,
+    /// <p>The files to delete in this commit. These files will still exist in prior commits.</p>
+    #[serde(rename = "deleteFiles")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delete_files: Option<Vec<DeleteFileEntry>>,
+    /// <p>The email address of the person who created the commit.</p>
+    #[serde(rename = "email")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub email: Option<String>,
+    /// <p>If the commit contains deletions, whether to keep a folder or folder structure if the changes leave the folders empty. If this is specified as true, a .gitkeep file will be created for empty folders.</p>
+    #[serde(rename = "keepEmptyFolders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub keep_empty_folders: Option<bool>,
+    /// <p>The ID of the commit that is the parent of the commit you will create. If this is an empty repository, this is not required.</p>
+    #[serde(rename = "parentCommitId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent_commit_id: Option<String>,
+    /// <p>The files to add or update in this commit.</p>
+    #[serde(rename = "putFiles")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub put_files: Option<Vec<PutFileEntry>>,
+    /// <p>The name of the repository where you will create the commit.</p>
+    #[serde(rename = "repositoryName")]
+    pub repository_name: String,
+    /// <p>The file modes to update for files in this commit.</p>
+    #[serde(rename = "setFileModes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub set_file_modes: Option<Vec<SetFileModeEntry>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateCommitOutput {
+    /// <p>The full commit ID of the commit that contains your committed file changes.</p>
+    #[serde(rename = "commitId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub commit_id: Option<String>,
+    /// <p>The files added as part of the committed file changes.</p>
+    #[serde(rename = "filesAdded")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub files_added: Option<Vec<FileMetadata>>,
+    /// <p>The files deleted as part of the committed file changes.</p>
+    #[serde(rename = "filesDeleted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub files_deleted: Option<Vec<FileMetadata>>,
+    /// <p>The files updated as part of the commited file changes.</p>
+    #[serde(rename = "filesUpdated")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub files_updated: Option<Vec<FileMetadata>>,
+    /// <p>The full SHA-1 pointer of the tree information for the commit that contains the commited file changes.</p>
+    #[serde(rename = "treeId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tree_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreatePullRequestInput {
     /// <p><p>A unique, client-generated idempotency token that when provided in a request, ensures the request cannot be repeated with a changed parameter. If a request is received with the same parameters and a token is included, the request will return information about the initial request that used that token.</p> <note> <p>The AWS SDKs prepopulate client request tokens. If using an AWS SDK, you do not have to generate an idempotency token, as this will be done for you.</p> </note></p>
     #[serde(rename = "clientRequestToken")]
@@ -325,6 +392,63 @@ pub struct DeleteCommentContentOutput {
     pub comment: Option<Comment>,
 }
 
+/// <p>A file that will be deleted as part of a commit.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteFileEntry {
+    /// <p>The full path of the file that will be deleted, including the name of the file.</p>
+    #[serde(rename = "filePath")]
+    pub file_path: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteFileInput {
+    /// <p>The name of the branch where the commit will be made deleting the file.</p>
+    #[serde(rename = "branchName")]
+    pub branch_name: String,
+    /// <p>The commit message you want to include as part of deleting the file. Commit messages are limited to 256 KB. If no message is specified, a default message will be used.</p>
+    #[serde(rename = "commitMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub commit_message: Option<String>,
+    /// <p>The email address for the commit that deletes the file. If no email address is specified, the email address will be left blank.</p>
+    #[serde(rename = "email")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub email: Option<String>,
+    /// <p>The fully-qualified path to the file that will be deleted, including the full name and extension of that file. For example, /examples/file.md is a fully qualified path to a file named file.md in a folder named examples.</p>
+    #[serde(rename = "filePath")]
+    pub file_path: String,
+    /// <p>Specifies whether to delete the folder or directory that contains the file you want to delete if that file is the only object in the folder or directory. By default, empty folders will be deleted. This includes empty folders that are part of the directory structure. For example, if the path to a file is dir1/dir2/dir3/dir4, and dir2 and dir3 are empty, deleting the last file in dir4 will also delete the empty folders dir4, dir3, and dir2.</p>
+    #[serde(rename = "keepEmptyFolders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub keep_empty_folders: Option<bool>,
+    /// <p>The name of the author of the commit that deletes the file. If no name is specified, the user's ARN will be used as the author name and committer name.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The ID of the commit that is the tip of the branch where you want to create the commit that will delete the file. This must be the HEAD commit for the branch. The commit that deletes the file will be created from this commit ID.</p>
+    #[serde(rename = "parentCommitId")]
+    pub parent_commit_id: String,
+    /// <p>The name of the repository that contains the file to delete.</p>
+    #[serde(rename = "repositoryName")]
+    pub repository_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteFileOutput {
+    /// <p>The blob ID removed from the tree as part of deleting the file.</p>
+    #[serde(rename = "blobId")]
+    pub blob_id: String,
+    /// <p>The full commit ID of the commit that contains the change that deletes the file.</p>
+    #[serde(rename = "commitId")]
+    pub commit_id: String,
+    /// <p>The fully-qualified path to the file that will be deleted, including the full name and extension of that file.</p>
+    #[serde(rename = "filePath")]
+    pub file_path: String,
+    /// <p>The full SHA-1 pointer of the tree information for the commit that contains the delete file change.</p>
+    #[serde(rename = "treeId")]
+    pub tree_id: String,
+}
+
 /// <p>Represents the input of a delete repository operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteRepositoryInput {
@@ -394,6 +518,64 @@ pub struct Difference {
     #[serde(rename = "changeType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub change_type: Option<String>,
+}
+
+/// <p>Returns information about a file in a repository.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct File {
+    /// <p>The fully-qualified path to the file in the repository.</p>
+    #[serde(rename = "absolutePath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub absolute_path: Option<String>,
+    /// <p>The blob ID that contains the file information.</p>
+    #[serde(rename = "blobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub blob_id: Option<String>,
+    /// <p>The extrapolated file mode permissions for the file. Valid values include EXECUTABLE and NORMAL.</p>
+    #[serde(rename = "fileMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_mode: Option<String>,
+    /// <p>The relative path of the file from the folder where the query originated.</p>
+    #[serde(rename = "relativePath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub relative_path: Option<String>,
+}
+
+/// <p>A file that will be added, updated, or deleted as part of a commit.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct FileMetadata {
+    /// <p>The full path to the file that will be added or updated, including the name of the file.</p>
+    #[serde(rename = "absolutePath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub absolute_path: Option<String>,
+    /// <p>The blob ID that contains the file information.</p>
+    #[serde(rename = "blobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub blob_id: Option<String>,
+    /// <p>The extrapolated file mode permissions for the file. Valid values include EXECUTABLE and NORMAL.</p>
+    #[serde(rename = "fileMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_mode: Option<String>,
+}
+
+/// <p>Returns information about a folder in a repository.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct Folder {
+    /// <p>The fully-qualified path of the folder in the repository.</p>
+    #[serde(rename = "absolutePath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub absolute_path: Option<String>,
+    /// <p>The relative path of the specified folder from the folder where the query originated.</p>
+    #[serde(rename = "relativePath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub relative_path: Option<String>,
+    /// <p>The full SHA-1 pointer of the tree information for the commit that contains the folder.</p>
+    #[serde(rename = "treeId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tree_id: Option<String>,
 }
 
 /// <p>Represents the input of a get blob operation.</p>
@@ -596,6 +778,93 @@ pub struct GetDifferencesOutput {
     #[serde(rename = "differences")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub differences: Option<Vec<Difference>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetFileInput {
+    /// <p>The fully-quaified reference that identifies the commit that contains the file. For example, you could specify a full commit ID, a tag, a branch name, or a reference such as refs/heads/master. If none is provided, then the head commit will be used.</p>
+    #[serde(rename = "commitSpecifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub commit_specifier: Option<String>,
+    /// <p>The fully-qualified path to the file, including the full name and extension of the file. For example, /examples/file.md is the fully-qualified path to a file named file.md in a folder named examples.</p>
+    #[serde(rename = "filePath")]
+    pub file_path: String,
+    /// <p>The name of the repository that contains the file.</p>
+    #[serde(rename = "repositoryName")]
+    pub repository_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetFileOutput {
+    /// <p>The blob ID of the object that represents the file content.</p>
+    #[serde(rename = "blobId")]
+    pub blob_id: String,
+    /// <p>The full commit ID of the commit that contains the content returned by GetFile.</p>
+    #[serde(rename = "commitId")]
+    pub commit_id: String,
+    /// <p>The base-64 encoded binary data object that represents the content of the file.</p>
+    #[serde(rename = "fileContent")]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
+    pub file_content: Vec<u8>,
+    /// <p><p>The extrapolated file mode permissions of the blob. Valid values include strings such as EXECUTABLE and not numeric values.</p> <note> <p>The file mode permissions returned by this API are not the standard file mode permission values, such as 100644, but rather extrapolated values. See below for a full list of supported return values.</p> </note></p>
+    #[serde(rename = "fileMode")]
+    pub file_mode: String,
+    /// <p>The fully qualified path to the specified file. This returns the name and extension of the file.</p>
+    #[serde(rename = "filePath")]
+    pub file_path: String,
+    /// <p>The size of the contents of the file, in bytes.</p>
+    #[serde(rename = "fileSize")]
+    pub file_size: i64,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetFolderInput {
+    /// <p>A fully-qualified reference used to identify a commit that contains the version of the folder's content to return. A fully-qualified reference can be a commit ID, branch name, tag, or reference such as HEAD. If no specifier is provided, the folder content will be returned as it exists in the HEAD commit.</p>
+    #[serde(rename = "commitSpecifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub commit_specifier: Option<String>,
+    /// <p>The fully-qualified path to the folder whose contents will be returned, including the folder name. For example, /examples is a fully-qualified path to a folder named examples that was created off of the root directory (/) of a repository. </p>
+    #[serde(rename = "folderPath")]
+    pub folder_path: String,
+    /// <p>The name of the repository.</p>
+    #[serde(rename = "repositoryName")]
+    pub repository_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetFolderOutput {
+    /// <p>The full commit ID used as a reference for which version of the folder content is returned.</p>
+    #[serde(rename = "commitId")]
+    pub commit_id: String,
+    /// <p>The list of files that exist in the specified folder, if any.</p>
+    #[serde(rename = "files")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub files: Option<Vec<File>>,
+    /// <p>The fully-qualified path of the folder whose contents are returned.</p>
+    #[serde(rename = "folderPath")]
+    pub folder_path: String,
+    /// <p>The list of folders that exist beneath the specified folder, if any.</p>
+    #[serde(rename = "subFolders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sub_folders: Option<Vec<Folder>>,
+    /// <p>The list of submodules that exist in the specified folder, if any.</p>
+    #[serde(rename = "subModules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sub_modules: Option<Vec<SubModule>>,
+    /// <p>The list of symbolic links to other files and folders that exist in the specified folder, if any.</p>
+    #[serde(rename = "symbolicLinks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub symbolic_links: Option<Vec<SymbolicLink>>,
+    /// <p>The full SHA-1 pointer of the tree information for the commit that contains the folder.</p>
+    #[serde(rename = "treeId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tree_id: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1016,6 +1285,28 @@ pub struct PullRequest {
     pub title: Option<String>,
 }
 
+/// <p>Metadata about the pull request that is used when comparing the pull request source with its destination.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PullRequestCreatedEventMetadata {
+    /// <p>The commit ID of the tip of the branch specified as the destination branch when the pull request was created.</p>
+    #[serde(rename = "destinationCommitId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_commit_id: Option<String>,
+    /// <p>The commit ID of the most recent commit that the source branch and the destination branch have in common.</p>
+    #[serde(rename = "mergeBase")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub merge_base: Option<String>,
+    /// <p>The name of the repository where the pull request was created.</p>
+    #[serde(rename = "repositoryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub repository_name: Option<String>,
+    /// <p>The commit ID on the source branch used when the pull request was created.</p>
+    #[serde(rename = "sourceCommitId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_commit_id: Option<String>,
+}
+
 /// <p>Returns information about a pull request event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -1028,6 +1319,10 @@ pub struct PullRequestEvent {
     #[serde(rename = "eventDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_date: Option<f64>,
+    /// <p>Information about the source and destination branches for the pull request.</p>
+    #[serde(rename = "pullRequestCreatedEventMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pull_request_created_event_metadata: Option<PullRequestCreatedEventMetadata>,
     /// <p>The type of the pull request event, for example a status change event (PULL_REQUEST_STATUS_CHANGED) or update event (PULL_REQUEST_SOURCE_REFERENCE_UPDATED).</p>
     #[serde(rename = "pullRequestEventType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1082,6 +1377,10 @@ pub struct PullRequestSourceReferenceUpdatedEventMetadata {
     #[serde(rename = "beforeCommitId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub before_commit_id: Option<String>,
+    /// <p>The commit ID of the most recent commit that the source branch and the destination branch have in common.</p>
+    #[serde(rename = "mergeBase")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub merge_base: Option<String>,
     /// <p>The name of the repository where the pull request was updated.</p>
     #[serde(rename = "repositoryName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1110,6 +1409,10 @@ pub struct PullRequestTarget {
     #[serde(rename = "destinationReference")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_reference: Option<String>,
+    /// <p>The commit ID of the most recent commit that the source branch and the destination branch have in common.</p>
+    #[serde(rename = "mergeBase")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub merge_base: Option<String>,
     /// <p>Returns metadata about the state of the merge, including whether the merge has been made.</p>
     #[serde(rename = "mergeMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1128,9 +1431,34 @@ pub struct PullRequestTarget {
     pub source_reference: Option<String>,
 }
 
+/// <p>Information about a file that will be added or updated as part of a commit.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct PutFileEntry {
+    /// <p>The content of the file, if a source file is not specified.</p>
+    #[serde(rename = "fileContent")]
+    #[serde(
+        deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
+        serialize_with = "::rusoto_core::serialization::SerdeBlob::serialize_blob",
+        default
+    )]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_content: Option<Vec<u8>>,
+    /// <p>The extrapolated file mode permissions for the file. Valid values include EXECUTABLE and NORMAL.</p>
+    #[serde(rename = "fileMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_mode: Option<String>,
+    /// <p>The full path to the file in the repository, including the name of the file.</p>
+    #[serde(rename = "filePath")]
+    pub file_path: String,
+    /// <p>The name and full path of the file that contains the changes you want to make as part of the commit, if you are not providing the file content directly.</p>
+    #[serde(rename = "sourceFile")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_file: Option<SourceFileSpecifier>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutFileInput {
-    /// <p>The name of the branch where you want to add or update the file.</p>
+    /// <p>The name of the branch where you want to add or update the file. If this is an empty repository, this branch will be created.</p>
     #[serde(rename = "branchName")]
     pub branch_name: String,
     /// <p>A message about why this file was added or updated. While optional, adding a message is strongly encouraged in order to provide a more useful commit history for your repository.</p>
@@ -1160,7 +1488,7 @@ pub struct PutFileInput {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The full commit ID of the head commit in the branch where you want to add or update the file. If the commit ID does not match the ID of the head commit at the time of the operation, an error will occur, and the file will not be added or updated.</p>
+    /// <p>The full commit ID of the head commit in the branch where you want to add or update the file. If this is an empty repository, no commit ID is required. If this is not an empty repository, a commit ID is required. </p> <p>The commit ID must match the ID of the head commit at the time of the operation, or an error will occur, and the file will not be added or updated.</p>
     #[serde(rename = "parentCommitId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parent_commit_id: Option<String>,
@@ -1178,7 +1506,7 @@ pub struct PutFileOutput {
     /// <p>The full SHA of the commit that contains this file change.</p>
     #[serde(rename = "commitId")]
     pub commit_id: String,
-    /// <p>Tree information for the commit that contains this file change.</p>
+    /// <p>The full SHA-1 pointer of the tree information for the commit that contains this file change.</p>
     #[serde(rename = "treeId")]
     pub tree_id: String,
 }
@@ -1298,6 +1626,69 @@ pub struct RepositoryTriggerExecutionFailure {
     #[serde(rename = "trigger")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trigger: Option<String>,
+}
+
+/// <p>Information about the file mode changes.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct SetFileModeEntry {
+    /// <p>The file mode for the file.</p>
+    #[serde(rename = "fileMode")]
+    pub file_mode: String,
+    /// <p>The full path to the file, including the name of the file.</p>
+    #[serde(rename = "filePath")]
+    pub file_path: String,
+}
+
+/// <p>Information about a source file that is part of changes made in a commit.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct SourceFileSpecifier {
+    /// <p>The full path to the file, including the name of the file.</p>
+    #[serde(rename = "filePath")]
+    pub file_path: String,
+    /// <p>Whether to remove the source file from the parent commit.</p>
+    #[serde(rename = "isMove")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_move: Option<bool>,
+}
+
+/// <p>Returns information about a submodule reference in a repository folder.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SubModule {
+    /// <p>The fully qualified path to the folder that contains the reference to the submodule.</p>
+    #[serde(rename = "absolutePath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub absolute_path: Option<String>,
+    /// <p>The commit ID that contains the reference to the submodule.</p>
+    #[serde(rename = "commitId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub commit_id: Option<String>,
+    /// <p>The relative path of the submodule from the folder where the query originated.</p>
+    #[serde(rename = "relativePath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub relative_path: Option<String>,
+}
+
+/// <p>Returns information about a symbolic link in a repository folder.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SymbolicLink {
+    /// <p>The fully-qualified path to the folder that contains the symbolic link.</p>
+    #[serde(rename = "absolutePath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub absolute_path: Option<String>,
+    /// <p>The blob ID that contains the information about the symbolic link.</p>
+    #[serde(rename = "blobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub blob_id: Option<String>,
+    /// <p>The file mode permissions of the blob that cotains information about the symbolic link.</p>
+    #[serde(rename = "fileMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_mode: Option<String>,
+    /// <p>The relative path of the symbolic link from the folder where the query originated.</p>
+    #[serde(rename = "relativePath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub relative_path: Option<String>,
 }
 
 /// <p>Returns information about a target for a pull request.</p>
@@ -1762,6 +2153,328 @@ impl Error for CreateBranchError {
             CreateBranchError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             CreateBranchError::ParseError(ref cause) => cause,
             CreateBranchError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by CreateCommit
+#[derive(Debug, PartialEq)]
+pub enum CreateCommitError {
+    /// <p>The specified branch does not exist.</p>
+    BranchDoesNotExist(String),
+    /// <p>The specified branch name is not valid because it is a tag name. Type the name of a current branch in the repository. For a list of valid branch names, use <a>ListBranches</a>.</p>
+    BranchNameIsTagName(String),
+    /// <p>A branch name is required but was not specified.</p>
+    BranchNameRequired(String),
+    /// <p>The commit message is too long. Provide a shorter string. </p>
+    CommitMessageLengthExceeded(String),
+    /// <p>A file cannot be added to the repository because the specified path name has the same name as a file that already exists in this repository. Either provide a different name for the file, or specify a different path for the file.</p>
+    DirectoryNameConflictsWithFileName(String),
+    /// <p>An encryption integrity check failed.</p>
+    EncryptionIntegrityChecksFailed(String),
+    /// <p>An encryption key could not be accessed.</p>
+    EncryptionKeyAccessDenied(String),
+    /// <p>The encryption key is disabled.</p>
+    EncryptionKeyDisabled(String),
+    /// <p>No encryption key was found.</p>
+    EncryptionKeyNotFound(String),
+    /// <p>The encryption key is not available.</p>
+    EncryptionKeyUnavailable(String),
+    /// <p>The commit cannot be created because both a source file and file content have been specified for the same file. You cannot provide both. Either specify a source file, or provide the file content directly.</p>
+    FileContentAndSourceFileSpecified(String),
+    /// <p>The file cannot be added because it is too large. The maximum file size that can be added using PutFile is 6 MB, and the combined file content change size is 7 MB. Consider making these changes using a Git client.</p>
+    FileContentSizeLimitExceeded(String),
+    /// <p>The specified file does not exist. Verify that you have provided the correct name of the file, including its full path and extension.</p>
+    FileDoesNotExist(String),
+    /// <p>The commit cannot be created because no files have been specified as added, updated, or changed (PutFile or DeleteFile) for the commit.</p>
+    FileEntryRequired(String),
+    /// <p>The commit cannot be created because a file mode is required to update mode permissions for an existing file, but no file mode has been specified.</p>
+    FileModeRequired(String),
+    /// <p>A file cannot be added to the repository because the specified file name has the same name as a directory in this repository. Either provide another name for the file, or add the file in a directory that does not match the file name.</p>
+    FileNameConflictsWithDirectoryName(String),
+    /// <p>The commit cannot be created because a specified file path points to a submodule. Verify that the destination files have valid file paths that do not point to a submodule.</p>
+    FilePathConflictsWithSubmodulePath(String),
+    /// <p>The commit cannot be created because at least one of the overall changes in the commit result in a folder contents exceeding the limit of 6 MB. Either reduce the number and size of your changes, or split the changes across multiple folders.</p>
+    FolderContentSizeLimitExceeded(String),
+    /// <p>The specified reference name is not valid.</p>
+    InvalidBranchName(String),
+    /// <p>The specified deletion parameter is not valid.</p>
+    InvalidDeletionParameter(String),
+    /// <p>The specified email address either contains one or more characters that are not allowed, or it exceeds the maximum number of characters allowed for an email address.</p>
+    InvalidEmail(String),
+    /// <p>The specified file mode permission is not valid. For a list of valid file mode permissions, see <a>PutFile</a>. </p>
+    InvalidFileMode(String),
+    /// <p>The parent commit ID is not valid. The commit ID cannot be empty, and must match the head commit ID for the branch of the repository where you want to add or update a file.</p>
+    InvalidParentCommitId(String),
+    /// <p>The specified path is not valid.</p>
+    InvalidPath(String),
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
+    InvalidRepositoryName(String),
+    /// <p>The number of specified files to change as part of this commit exceeds the maximum number of files that can be changed in a single commit. Consider using a Git client for these changes.</p>
+    MaximumFileEntriesExceeded(String),
+    /// <p>The user name is not valid because it has exceeded the character limit for file names. File names, including the path to the file, cannot exceed the character limit. </p>
+    NameLengthExceeded(String),
+    /// <p>The commit cannot be created because no changes will be made to the repository as a result of this commit. A commit must contain at least one change.</p>
+    NoChange(String),
+    /// <p>The parent commit ID is not valid because it does not exist. The specified parent commit ID does not exist in the specified branch of the repository.</p>
+    ParentCommitDoesNotExist(String),
+    /// <p>The file could not be added because the provided parent commit ID is not the current tip of the specified branch. To view the full commit ID of the current head of the branch, use <a>GetBranch</a>.</p>
+    ParentCommitIdOutdated(String),
+    /// <p>A parent commit ID is required. To view the full commit ID of a branch in a repository, use <a>GetBranch</a> or a Git command (for example, git pull or git log).</p>
+    ParentCommitIdRequired(String),
+    /// <p>The folderPath for a location cannot be null.</p>
+    PathRequired(String),
+    /// <p>The commit cannot be created because one or more files specified in the commit reference both a file and a folder.</p>
+    PutFileEntryConflict(String),
+    /// <p>The specified repository does not exist.</p>
+    RepositoryDoesNotExist(String),
+    /// <p>A repository name is required but was not specified.</p>
+    RepositoryNameRequired(String),
+    /// <p>The commit cannot be created because one of the changes specifies copying or moving a .gitkeep file.</p>
+    RestrictedSourceFile(String),
+    /// <p>The commit cannot be created because one or more changes in this commit duplicate actions in the same file path. For example, you cannot make the same delete request to the same file in the same file path twice, or make a delete request and a move request to the same file as part of the same commit.</p>
+    SamePathRequest(String),
+    /// <p>The commit cannot be created because no source files or file content have been specified for the commit.</p>
+    SourceFileOrContentRequired(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl CreateCommitError {
+    pub fn from_response(res: BufferedHttpResponse) -> CreateCommitError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "BranchDoesNotExistException" => {
+                    return CreateCommitError::BranchDoesNotExist(String::from(error_message));
+                }
+                "BranchNameIsTagNameException" => {
+                    return CreateCommitError::BranchNameIsTagName(String::from(error_message));
+                }
+                "BranchNameRequiredException" => {
+                    return CreateCommitError::BranchNameRequired(String::from(error_message));
+                }
+                "CommitMessageLengthExceededException" => {
+                    return CreateCommitError::CommitMessageLengthExceeded(String::from(
+                        error_message,
+                    ));
+                }
+                "DirectoryNameConflictsWithFileNameException" => {
+                    return CreateCommitError::DirectoryNameConflictsWithFileName(String::from(
+                        error_message,
+                    ));
+                }
+                "EncryptionIntegrityChecksFailedException" => {
+                    return CreateCommitError::EncryptionIntegrityChecksFailed(String::from(
+                        error_message,
+                    ));
+                }
+                "EncryptionKeyAccessDeniedException" => {
+                    return CreateCommitError::EncryptionKeyAccessDenied(String::from(error_message));
+                }
+                "EncryptionKeyDisabledException" => {
+                    return CreateCommitError::EncryptionKeyDisabled(String::from(error_message));
+                }
+                "EncryptionKeyNotFoundException" => {
+                    return CreateCommitError::EncryptionKeyNotFound(String::from(error_message));
+                }
+                "EncryptionKeyUnavailableException" => {
+                    return CreateCommitError::EncryptionKeyUnavailable(String::from(error_message));
+                }
+                "FileContentAndSourceFileSpecifiedException" => {
+                    return CreateCommitError::FileContentAndSourceFileSpecified(String::from(
+                        error_message,
+                    ));
+                }
+                "FileContentSizeLimitExceededException" => {
+                    return CreateCommitError::FileContentSizeLimitExceeded(String::from(
+                        error_message,
+                    ));
+                }
+                "FileDoesNotExistException" => {
+                    return CreateCommitError::FileDoesNotExist(String::from(error_message));
+                }
+                "FileEntryRequiredException" => {
+                    return CreateCommitError::FileEntryRequired(String::from(error_message));
+                }
+                "FileModeRequiredException" => {
+                    return CreateCommitError::FileModeRequired(String::from(error_message));
+                }
+                "FileNameConflictsWithDirectoryNameException" => {
+                    return CreateCommitError::FileNameConflictsWithDirectoryName(String::from(
+                        error_message,
+                    ));
+                }
+                "FilePathConflictsWithSubmodulePathException" => {
+                    return CreateCommitError::FilePathConflictsWithSubmodulePath(String::from(
+                        error_message,
+                    ));
+                }
+                "FolderContentSizeLimitExceededException" => {
+                    return CreateCommitError::FolderContentSizeLimitExceeded(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidBranchNameException" => {
+                    return CreateCommitError::InvalidBranchName(String::from(error_message));
+                }
+                "InvalidDeletionParameterException" => {
+                    return CreateCommitError::InvalidDeletionParameter(String::from(error_message));
+                }
+                "InvalidEmailException" => {
+                    return CreateCommitError::InvalidEmail(String::from(error_message));
+                }
+                "InvalidFileModeException" => {
+                    return CreateCommitError::InvalidFileMode(String::from(error_message));
+                }
+                "InvalidParentCommitIdException" => {
+                    return CreateCommitError::InvalidParentCommitId(String::from(error_message));
+                }
+                "InvalidPathException" => {
+                    return CreateCommitError::InvalidPath(String::from(error_message));
+                }
+                "InvalidRepositoryNameException" => {
+                    return CreateCommitError::InvalidRepositoryName(String::from(error_message));
+                }
+                "MaximumFileEntriesExceededException" => {
+                    return CreateCommitError::MaximumFileEntriesExceeded(String::from(
+                        error_message,
+                    ));
+                }
+                "NameLengthExceededException" => {
+                    return CreateCommitError::NameLengthExceeded(String::from(error_message));
+                }
+                "NoChangeException" => {
+                    return CreateCommitError::NoChange(String::from(error_message));
+                }
+                "ParentCommitDoesNotExistException" => {
+                    return CreateCommitError::ParentCommitDoesNotExist(String::from(error_message));
+                }
+                "ParentCommitIdOutdatedException" => {
+                    return CreateCommitError::ParentCommitIdOutdated(String::from(error_message));
+                }
+                "ParentCommitIdRequiredException" => {
+                    return CreateCommitError::ParentCommitIdRequired(String::from(error_message));
+                }
+                "PathRequiredException" => {
+                    return CreateCommitError::PathRequired(String::from(error_message));
+                }
+                "PutFileEntryConflictException" => {
+                    return CreateCommitError::PutFileEntryConflict(String::from(error_message));
+                }
+                "RepositoryDoesNotExistException" => {
+                    return CreateCommitError::RepositoryDoesNotExist(String::from(error_message));
+                }
+                "RepositoryNameRequiredException" => {
+                    return CreateCommitError::RepositoryNameRequired(String::from(error_message));
+                }
+                "RestrictedSourceFileException" => {
+                    return CreateCommitError::RestrictedSourceFile(String::from(error_message));
+                }
+                "SamePathRequestException" => {
+                    return CreateCommitError::SamePathRequest(String::from(error_message));
+                }
+                "SourceFileOrContentRequiredException" => {
+                    return CreateCommitError::SourceFileOrContentRequired(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return CreateCommitError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return CreateCommitError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for CreateCommitError {
+    fn from(err: serde_json::error::Error) -> CreateCommitError {
+        CreateCommitError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateCommitError {
+    fn from(err: CredentialsError) -> CreateCommitError {
+        CreateCommitError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateCommitError {
+    fn from(err: HttpDispatchError) -> CreateCommitError {
+        CreateCommitError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateCommitError {
+    fn from(err: io::Error) -> CreateCommitError {
+        CreateCommitError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateCommitError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateCommitError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateCommitError::BranchDoesNotExist(ref cause) => cause,
+            CreateCommitError::BranchNameIsTagName(ref cause) => cause,
+            CreateCommitError::BranchNameRequired(ref cause) => cause,
+            CreateCommitError::CommitMessageLengthExceeded(ref cause) => cause,
+            CreateCommitError::DirectoryNameConflictsWithFileName(ref cause) => cause,
+            CreateCommitError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+            CreateCommitError::EncryptionKeyAccessDenied(ref cause) => cause,
+            CreateCommitError::EncryptionKeyDisabled(ref cause) => cause,
+            CreateCommitError::EncryptionKeyNotFound(ref cause) => cause,
+            CreateCommitError::EncryptionKeyUnavailable(ref cause) => cause,
+            CreateCommitError::FileContentAndSourceFileSpecified(ref cause) => cause,
+            CreateCommitError::FileContentSizeLimitExceeded(ref cause) => cause,
+            CreateCommitError::FileDoesNotExist(ref cause) => cause,
+            CreateCommitError::FileEntryRequired(ref cause) => cause,
+            CreateCommitError::FileModeRequired(ref cause) => cause,
+            CreateCommitError::FileNameConflictsWithDirectoryName(ref cause) => cause,
+            CreateCommitError::FilePathConflictsWithSubmodulePath(ref cause) => cause,
+            CreateCommitError::FolderContentSizeLimitExceeded(ref cause) => cause,
+            CreateCommitError::InvalidBranchName(ref cause) => cause,
+            CreateCommitError::InvalidDeletionParameter(ref cause) => cause,
+            CreateCommitError::InvalidEmail(ref cause) => cause,
+            CreateCommitError::InvalidFileMode(ref cause) => cause,
+            CreateCommitError::InvalidParentCommitId(ref cause) => cause,
+            CreateCommitError::InvalidPath(ref cause) => cause,
+            CreateCommitError::InvalidRepositoryName(ref cause) => cause,
+            CreateCommitError::MaximumFileEntriesExceeded(ref cause) => cause,
+            CreateCommitError::NameLengthExceeded(ref cause) => cause,
+            CreateCommitError::NoChange(ref cause) => cause,
+            CreateCommitError::ParentCommitDoesNotExist(ref cause) => cause,
+            CreateCommitError::ParentCommitIdOutdated(ref cause) => cause,
+            CreateCommitError::ParentCommitIdRequired(ref cause) => cause,
+            CreateCommitError::PathRequired(ref cause) => cause,
+            CreateCommitError::PutFileEntryConflict(ref cause) => cause,
+            CreateCommitError::RepositoryDoesNotExist(ref cause) => cause,
+            CreateCommitError::RepositoryNameRequired(ref cause) => cause,
+            CreateCommitError::RestrictedSourceFile(ref cause) => cause,
+            CreateCommitError::SamePathRequest(ref cause) => cause,
+            CreateCommitError::SourceFileOrContentRequired(ref cause) => cause,
+            CreateCommitError::Validation(ref cause) => cause,
+            CreateCommitError::Credentials(ref err) => err.description(),
+            CreateCommitError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CreateCommitError::ParseError(ref cause) => cause,
+            CreateCommitError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2414,6 +3127,214 @@ impl Error for DeleteCommentContentError {
             }
             DeleteCommentContentError::ParseError(ref cause) => cause,
             DeleteCommentContentError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DeleteFile
+#[derive(Debug, PartialEq)]
+pub enum DeleteFileError {
+    /// <p>The specified branch does not exist.</p>
+    BranchDoesNotExist(String),
+    /// <p>The specified branch name is not valid because it is a tag name. Type the name of a current branch in the repository. For a list of valid branch names, use <a>ListBranches</a>.</p>
+    BranchNameIsTagName(String),
+    /// <p>A branch name is required but was not specified.</p>
+    BranchNameRequired(String),
+    /// <p>The commit message is too long. Provide a shorter string. </p>
+    CommitMessageLengthExceeded(String),
+    /// <p>An encryption integrity check failed.</p>
+    EncryptionIntegrityChecksFailed(String),
+    /// <p>An encryption key could not be accessed.</p>
+    EncryptionKeyAccessDenied(String),
+    /// <p>The encryption key is disabled.</p>
+    EncryptionKeyDisabled(String),
+    /// <p>No encryption key was found.</p>
+    EncryptionKeyNotFound(String),
+    /// <p>The encryption key is not available.</p>
+    EncryptionKeyUnavailable(String),
+    /// <p>The specified file does not exist. Verify that you have provided the correct name of the file, including its full path and extension.</p>
+    FileDoesNotExist(String),
+    /// <p>The specified reference name is not valid.</p>
+    InvalidBranchName(String),
+    /// <p>The specified email address either contains one or more characters that are not allowed, or it exceeds the maximum number of characters allowed for an email address.</p>
+    InvalidEmail(String),
+    /// <p>The parent commit ID is not valid. The commit ID cannot be empty, and must match the head commit ID for the branch of the repository where you want to add or update a file.</p>
+    InvalidParentCommitId(String),
+    /// <p>The specified path is not valid.</p>
+    InvalidPath(String),
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
+    InvalidRepositoryName(String),
+    /// <p>The user name is not valid because it has exceeded the character limit for file names. File names, including the path to the file, cannot exceed the character limit. </p>
+    NameLengthExceeded(String),
+    /// <p>The parent commit ID is not valid because it does not exist. The specified parent commit ID does not exist in the specified branch of the repository.</p>
+    ParentCommitDoesNotExist(String),
+    /// <p>The file could not be added because the provided parent commit ID is not the current tip of the specified branch. To view the full commit ID of the current head of the branch, use <a>GetBranch</a>.</p>
+    ParentCommitIdOutdated(String),
+    /// <p>A parent commit ID is required. To view the full commit ID of a branch in a repository, use <a>GetBranch</a> or a Git command (for example, git pull or git log).</p>
+    ParentCommitIdRequired(String),
+    /// <p>The folderPath for a location cannot be null.</p>
+    PathRequired(String),
+    /// <p>The specified repository does not exist.</p>
+    RepositoryDoesNotExist(String),
+    /// <p>A repository name is required but was not specified.</p>
+    RepositoryNameRequired(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DeleteFileError {
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteFileError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "BranchDoesNotExistException" => {
+                    return DeleteFileError::BranchDoesNotExist(String::from(error_message));
+                }
+                "BranchNameIsTagNameException" => {
+                    return DeleteFileError::BranchNameIsTagName(String::from(error_message));
+                }
+                "BranchNameRequiredException" => {
+                    return DeleteFileError::BranchNameRequired(String::from(error_message));
+                }
+                "CommitMessageLengthExceededException" => {
+                    return DeleteFileError::CommitMessageLengthExceeded(String::from(error_message));
+                }
+                "EncryptionIntegrityChecksFailedException" => {
+                    return DeleteFileError::EncryptionIntegrityChecksFailed(String::from(
+                        error_message,
+                    ));
+                }
+                "EncryptionKeyAccessDeniedException" => {
+                    return DeleteFileError::EncryptionKeyAccessDenied(String::from(error_message));
+                }
+                "EncryptionKeyDisabledException" => {
+                    return DeleteFileError::EncryptionKeyDisabled(String::from(error_message));
+                }
+                "EncryptionKeyNotFoundException" => {
+                    return DeleteFileError::EncryptionKeyNotFound(String::from(error_message));
+                }
+                "EncryptionKeyUnavailableException" => {
+                    return DeleteFileError::EncryptionKeyUnavailable(String::from(error_message));
+                }
+                "FileDoesNotExistException" => {
+                    return DeleteFileError::FileDoesNotExist(String::from(error_message));
+                }
+                "InvalidBranchNameException" => {
+                    return DeleteFileError::InvalidBranchName(String::from(error_message));
+                }
+                "InvalidEmailException" => {
+                    return DeleteFileError::InvalidEmail(String::from(error_message));
+                }
+                "InvalidParentCommitIdException" => {
+                    return DeleteFileError::InvalidParentCommitId(String::from(error_message));
+                }
+                "InvalidPathException" => {
+                    return DeleteFileError::InvalidPath(String::from(error_message));
+                }
+                "InvalidRepositoryNameException" => {
+                    return DeleteFileError::InvalidRepositoryName(String::from(error_message));
+                }
+                "NameLengthExceededException" => {
+                    return DeleteFileError::NameLengthExceeded(String::from(error_message));
+                }
+                "ParentCommitDoesNotExistException" => {
+                    return DeleteFileError::ParentCommitDoesNotExist(String::from(error_message));
+                }
+                "ParentCommitIdOutdatedException" => {
+                    return DeleteFileError::ParentCommitIdOutdated(String::from(error_message));
+                }
+                "ParentCommitIdRequiredException" => {
+                    return DeleteFileError::ParentCommitIdRequired(String::from(error_message));
+                }
+                "PathRequiredException" => {
+                    return DeleteFileError::PathRequired(String::from(error_message));
+                }
+                "RepositoryDoesNotExistException" => {
+                    return DeleteFileError::RepositoryDoesNotExist(String::from(error_message));
+                }
+                "RepositoryNameRequiredException" => {
+                    return DeleteFileError::RepositoryNameRequired(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return DeleteFileError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DeleteFileError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteFileError {
+    fn from(err: serde_json::error::Error) -> DeleteFileError {
+        DeleteFileError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteFileError {
+    fn from(err: CredentialsError) -> DeleteFileError {
+        DeleteFileError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteFileError {
+    fn from(err: HttpDispatchError) -> DeleteFileError {
+        DeleteFileError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteFileError {
+    fn from(err: io::Error) -> DeleteFileError {
+        DeleteFileError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteFileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteFileError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteFileError::BranchDoesNotExist(ref cause) => cause,
+            DeleteFileError::BranchNameIsTagName(ref cause) => cause,
+            DeleteFileError::BranchNameRequired(ref cause) => cause,
+            DeleteFileError::CommitMessageLengthExceeded(ref cause) => cause,
+            DeleteFileError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+            DeleteFileError::EncryptionKeyAccessDenied(ref cause) => cause,
+            DeleteFileError::EncryptionKeyDisabled(ref cause) => cause,
+            DeleteFileError::EncryptionKeyNotFound(ref cause) => cause,
+            DeleteFileError::EncryptionKeyUnavailable(ref cause) => cause,
+            DeleteFileError::FileDoesNotExist(ref cause) => cause,
+            DeleteFileError::InvalidBranchName(ref cause) => cause,
+            DeleteFileError::InvalidEmail(ref cause) => cause,
+            DeleteFileError::InvalidParentCommitId(ref cause) => cause,
+            DeleteFileError::InvalidPath(ref cause) => cause,
+            DeleteFileError::InvalidRepositoryName(ref cause) => cause,
+            DeleteFileError::NameLengthExceeded(ref cause) => cause,
+            DeleteFileError::ParentCommitDoesNotExist(ref cause) => cause,
+            DeleteFileError::ParentCommitIdOutdated(ref cause) => cause,
+            DeleteFileError::ParentCommitIdRequired(ref cause) => cause,
+            DeleteFileError::PathRequired(ref cause) => cause,
+            DeleteFileError::RepositoryDoesNotExist(ref cause) => cause,
+            DeleteFileError::RepositoryNameRequired(ref cause) => cause,
+            DeleteFileError::Validation(ref cause) => cause,
+            DeleteFileError::Credentials(ref err) => err.description(),
+            DeleteFileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteFileError::ParseError(ref cause) => cause,
+            DeleteFileError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3322,7 +4243,7 @@ pub enum GetCommentsForPullRequestError {
     RepositoryDoesNotExist(String),
     /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
-    /// <p>The repository does not contain any pull requests with that pull request ID. Check to make sure you have provided the correct repository name for the pull request.</p>
+    /// <p>The repository does not contain any pull requests with that pull request ID. Use GetPullRequest to verify the correct repository name for the pull request ID.</p>
     RepositoryNotAssociatedWithPullRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3818,6 +4739,318 @@ impl Error for GetDifferencesError {
             GetDifferencesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             GetDifferencesError::ParseError(ref cause) => cause,
             GetDifferencesError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetFile
+#[derive(Debug, PartialEq)]
+pub enum GetFileError {
+    /// <p>The specified commit does not exist or no commit was specified, and the specified repository has no default branch.</p>
+    CommitDoesNotExist(String),
+    /// <p>An encryption integrity check failed.</p>
+    EncryptionIntegrityChecksFailed(String),
+    /// <p>An encryption key could not be accessed.</p>
+    EncryptionKeyAccessDenied(String),
+    /// <p>The encryption key is disabled.</p>
+    EncryptionKeyDisabled(String),
+    /// <p>No encryption key was found.</p>
+    EncryptionKeyNotFound(String),
+    /// <p>The encryption key is not available.</p>
+    EncryptionKeyUnavailable(String),
+    /// <p>The specified file does not exist. Verify that you have provided the correct name of the file, including its full path and extension.</p>
+    FileDoesNotExist(String),
+    /// <p>The specified file exceeds the file size limit for AWS CodeCommit. For more information about limits in AWS CodeCommit, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/limits.html">AWS CodeCommit User Guide</a>.</p>
+    FileTooLarge(String),
+    /// <p>The specified commit is not valid.</p>
+    InvalidCommit(String),
+    /// <p>The specified path is not valid.</p>
+    InvalidPath(String),
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
+    InvalidRepositoryName(String),
+    /// <p>The folderPath for a location cannot be null.</p>
+    PathRequired(String),
+    /// <p>The specified repository does not exist.</p>
+    RepositoryDoesNotExist(String),
+    /// <p>A repository name is required but was not specified.</p>
+    RepositoryNameRequired(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetFileError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetFileError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "CommitDoesNotExistException" => {
+                    return GetFileError::CommitDoesNotExist(String::from(error_message));
+                }
+                "EncryptionIntegrityChecksFailedException" => {
+                    return GetFileError::EncryptionIntegrityChecksFailed(String::from(
+                        error_message,
+                    ));
+                }
+                "EncryptionKeyAccessDeniedException" => {
+                    return GetFileError::EncryptionKeyAccessDenied(String::from(error_message));
+                }
+                "EncryptionKeyDisabledException" => {
+                    return GetFileError::EncryptionKeyDisabled(String::from(error_message));
+                }
+                "EncryptionKeyNotFoundException" => {
+                    return GetFileError::EncryptionKeyNotFound(String::from(error_message));
+                }
+                "EncryptionKeyUnavailableException" => {
+                    return GetFileError::EncryptionKeyUnavailable(String::from(error_message));
+                }
+                "FileDoesNotExistException" => {
+                    return GetFileError::FileDoesNotExist(String::from(error_message));
+                }
+                "FileTooLargeException" => {
+                    return GetFileError::FileTooLarge(String::from(error_message));
+                }
+                "InvalidCommitException" => {
+                    return GetFileError::InvalidCommit(String::from(error_message));
+                }
+                "InvalidPathException" => {
+                    return GetFileError::InvalidPath(String::from(error_message));
+                }
+                "InvalidRepositoryNameException" => {
+                    return GetFileError::InvalidRepositoryName(String::from(error_message));
+                }
+                "PathRequiredException" => {
+                    return GetFileError::PathRequired(String::from(error_message));
+                }
+                "RepositoryDoesNotExistException" => {
+                    return GetFileError::RepositoryDoesNotExist(String::from(error_message));
+                }
+                "RepositoryNameRequiredException" => {
+                    return GetFileError::RepositoryNameRequired(String::from(error_message));
+                }
+                "ValidationException" => return GetFileError::Validation(error_message.to_string()),
+                _ => {}
+            }
+        }
+        return GetFileError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetFileError {
+    fn from(err: serde_json::error::Error) -> GetFileError {
+        GetFileError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetFileError {
+    fn from(err: CredentialsError) -> GetFileError {
+        GetFileError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetFileError {
+    fn from(err: HttpDispatchError) -> GetFileError {
+        GetFileError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetFileError {
+    fn from(err: io::Error) -> GetFileError {
+        GetFileError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetFileError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetFileError {
+    fn description(&self) -> &str {
+        match *self {
+            GetFileError::CommitDoesNotExist(ref cause) => cause,
+            GetFileError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+            GetFileError::EncryptionKeyAccessDenied(ref cause) => cause,
+            GetFileError::EncryptionKeyDisabled(ref cause) => cause,
+            GetFileError::EncryptionKeyNotFound(ref cause) => cause,
+            GetFileError::EncryptionKeyUnavailable(ref cause) => cause,
+            GetFileError::FileDoesNotExist(ref cause) => cause,
+            GetFileError::FileTooLarge(ref cause) => cause,
+            GetFileError::InvalidCommit(ref cause) => cause,
+            GetFileError::InvalidPath(ref cause) => cause,
+            GetFileError::InvalidRepositoryName(ref cause) => cause,
+            GetFileError::PathRequired(ref cause) => cause,
+            GetFileError::RepositoryDoesNotExist(ref cause) => cause,
+            GetFileError::RepositoryNameRequired(ref cause) => cause,
+            GetFileError::Validation(ref cause) => cause,
+            GetFileError::Credentials(ref err) => err.description(),
+            GetFileError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetFileError::ParseError(ref cause) => cause,
+            GetFileError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetFolder
+#[derive(Debug, PartialEq)]
+pub enum GetFolderError {
+    /// <p>The specified commit does not exist or no commit was specified, and the specified repository has no default branch.</p>
+    CommitDoesNotExist(String),
+    /// <p>An encryption integrity check failed.</p>
+    EncryptionIntegrityChecksFailed(String),
+    /// <p>An encryption key could not be accessed.</p>
+    EncryptionKeyAccessDenied(String),
+    /// <p>The encryption key is disabled.</p>
+    EncryptionKeyDisabled(String),
+    /// <p>No encryption key was found.</p>
+    EncryptionKeyNotFound(String),
+    /// <p>The encryption key is not available.</p>
+    EncryptionKeyUnavailable(String),
+    /// <p>The specified folder does not exist. Either the folder name is not correct, or you did not provide the full path to the folder.</p>
+    FolderDoesNotExist(String),
+    /// <p>The specified commit is not valid.</p>
+    InvalidCommit(String),
+    /// <p>The specified path is not valid.</p>
+    InvalidPath(String),
+    /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
+    InvalidRepositoryName(String),
+    /// <p>The folderPath for a location cannot be null.</p>
+    PathRequired(String),
+    /// <p>The specified repository does not exist.</p>
+    RepositoryDoesNotExist(String),
+    /// <p>A repository name is required but was not specified.</p>
+    RepositoryNameRequired(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetFolderError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetFolderError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "CommitDoesNotExistException" => {
+                    return GetFolderError::CommitDoesNotExist(String::from(error_message));
+                }
+                "EncryptionIntegrityChecksFailedException" => {
+                    return GetFolderError::EncryptionIntegrityChecksFailed(String::from(
+                        error_message,
+                    ));
+                }
+                "EncryptionKeyAccessDeniedException" => {
+                    return GetFolderError::EncryptionKeyAccessDenied(String::from(error_message));
+                }
+                "EncryptionKeyDisabledException" => {
+                    return GetFolderError::EncryptionKeyDisabled(String::from(error_message));
+                }
+                "EncryptionKeyNotFoundException" => {
+                    return GetFolderError::EncryptionKeyNotFound(String::from(error_message));
+                }
+                "EncryptionKeyUnavailableException" => {
+                    return GetFolderError::EncryptionKeyUnavailable(String::from(error_message));
+                }
+                "FolderDoesNotExistException" => {
+                    return GetFolderError::FolderDoesNotExist(String::from(error_message));
+                }
+                "InvalidCommitException" => {
+                    return GetFolderError::InvalidCommit(String::from(error_message));
+                }
+                "InvalidPathException" => {
+                    return GetFolderError::InvalidPath(String::from(error_message));
+                }
+                "InvalidRepositoryNameException" => {
+                    return GetFolderError::InvalidRepositoryName(String::from(error_message));
+                }
+                "PathRequiredException" => {
+                    return GetFolderError::PathRequired(String::from(error_message));
+                }
+                "RepositoryDoesNotExistException" => {
+                    return GetFolderError::RepositoryDoesNotExist(String::from(error_message));
+                }
+                "RepositoryNameRequiredException" => {
+                    return GetFolderError::RepositoryNameRequired(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return GetFolderError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetFolderError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetFolderError {
+    fn from(err: serde_json::error::Error) -> GetFolderError {
+        GetFolderError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetFolderError {
+    fn from(err: CredentialsError) -> GetFolderError {
+        GetFolderError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetFolderError {
+    fn from(err: HttpDispatchError) -> GetFolderError {
+        GetFolderError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetFolderError {
+    fn from(err: io::Error) -> GetFolderError {
+        GetFolderError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetFolderError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetFolderError {
+    fn description(&self) -> &str {
+        match *self {
+            GetFolderError::CommitDoesNotExist(ref cause) => cause,
+            GetFolderError::EncryptionIntegrityChecksFailed(ref cause) => cause,
+            GetFolderError::EncryptionKeyAccessDenied(ref cause) => cause,
+            GetFolderError::EncryptionKeyDisabled(ref cause) => cause,
+            GetFolderError::EncryptionKeyNotFound(ref cause) => cause,
+            GetFolderError::EncryptionKeyUnavailable(ref cause) => cause,
+            GetFolderError::FolderDoesNotExist(ref cause) => cause,
+            GetFolderError::InvalidCommit(ref cause) => cause,
+            GetFolderError::InvalidPath(ref cause) => cause,
+            GetFolderError::InvalidRepositoryName(ref cause) => cause,
+            GetFolderError::PathRequired(ref cause) => cause,
+            GetFolderError::RepositoryDoesNotExist(ref cause) => cause,
+            GetFolderError::RepositoryNameRequired(ref cause) => cause,
+            GetFolderError::Validation(ref cause) => cause,
+            GetFolderError::Credentials(ref err) => err.description(),
+            GetFolderError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetFolderError::ParseError(ref cause) => cause,
+            GetFolderError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5046,7 +6279,7 @@ pub enum PostCommentForComparedCommitError {
     InvalidRepositoryName(String),
     /// <p>The specified path does not exist.</p>
     PathDoesNotExist(String),
-    /// <p>The filePath for a location cannot be empty or null.</p>
+    /// <p>The folderPath for a location cannot be null.</p>
     PathRequired(String),
     /// <p>The specified repository does not exist.</p>
     RepositoryDoesNotExist(String),
@@ -5310,7 +6543,7 @@ pub enum PostCommentForPullRequestError {
     InvalidRepositoryName(String),
     /// <p>The specified path does not exist.</p>
     PathDoesNotExist(String),
-    /// <p>The filePath for a location cannot be empty or null.</p>
+    /// <p>The folderPath for a location cannot be null.</p>
     PathRequired(String),
     /// <p>The pull request ID could not be found. Make sure that you have specified the correct repository name and pull request ID, and then try again.</p>
     PullRequestDoesNotExist(String),
@@ -5320,7 +6553,7 @@ pub enum PostCommentForPullRequestError {
     RepositoryDoesNotExist(String),
     /// <p>A repository name is required but was not specified.</p>
     RepositoryNameRequired(String),
-    /// <p>The repository does not contain any pull requests with that pull request ID. Check to make sure you have provided the correct repository name for the pull request.</p>
+    /// <p>The repository does not contain any pull requests with that pull request ID. Use GetPullRequest to verify the correct repository name for the pull request ID.</p>
     RepositoryNotAssociatedWithPullRequest(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5714,12 +6947,18 @@ pub enum PutFileError {
     EncryptionKeyUnavailable(String),
     /// <p>The file cannot be added because it is empty. Empty files cannot be added to the repository with this API.</p>
     FileContentRequired(String),
-    /// <p>The file cannot be added because it is too large. The maximum file size that can be added using PutFile is 6 MB. For files larger than 6 MB but smaller than 2 GB, add them using a Git client.</p>
+    /// <p>The file cannot be added because it is too large. The maximum file size that can be added using PutFile is 6 MB, and the combined file content change size is 7 MB. Consider making these changes using a Git client.</p>
     FileContentSizeLimitExceeded(String),
     /// <p>A file cannot be added to the repository because the specified file name has the same name as a directory in this repository. Either provide another name for the file, or add the file in a directory that does not match the file name.</p>
     FileNameConflictsWithDirectoryName(String),
+    /// <p>The commit cannot be created because a specified file path points to a submodule. Verify that the destination files have valid file paths that do not point to a submodule.</p>
+    FilePathConflictsWithSubmodulePath(String),
+    /// <p>The commit cannot be created because at least one of the overall changes in the commit result in a folder contents exceeding the limit of 6 MB. Either reduce the number and size of your changes, or split the changes across multiple folders.</p>
+    FolderContentSizeLimitExceeded(String),
     /// <p>The specified reference name is not valid.</p>
     InvalidBranchName(String),
+    /// <p>The specified deletion parameter is not valid.</p>
+    InvalidDeletionParameter(String),
     /// <p>The specified email address either contains one or more characters that are not allowed, or it exceeds the maximum number of characters allowed for an email address.</p>
     InvalidEmail(String),
     /// <p>The specified file mode permission is not valid. For a list of valid file mode permissions, see <a>PutFile</a>. </p>
@@ -5730,15 +6969,15 @@ pub enum PutFileError {
     InvalidPath(String),
     /// <p><p>At least one specified repository name is not valid.</p> <note> <p>This exception only occurs when a specified repository name is not valid. Other exceptions occur when a required repository parameter is missing, or when a specified repository does not exist.</p> </note></p>
     InvalidRepositoryName(String),
-    /// <p>The file name is not valid because it has exceeded the character limit for file names. File names, including the path to the file, cannot exceed the character limit. </p>
+    /// <p>The user name is not valid because it has exceeded the character limit for file names. File names, including the path to the file, cannot exceed the character limit. </p>
     NameLengthExceeded(String),
-    /// <p>The parent commit ID is not valid. The specified parent commit ID does not exist in the specified branch of the repository.</p>
+    /// <p>The parent commit ID is not valid because it does not exist. The specified parent commit ID does not exist in the specified branch of the repository.</p>
     ParentCommitDoesNotExist(String),
     /// <p>The file could not be added because the provided parent commit ID is not the current tip of the specified branch. To view the full commit ID of the current head of the branch, use <a>GetBranch</a>.</p>
     ParentCommitIdOutdated(String),
     /// <p>A parent commit ID is required. To view the full commit ID of a branch in a repository, use <a>GetBranch</a> or a Git command (for example, git pull or git log).</p>
     ParentCommitIdRequired(String),
-    /// <p>The filePath for a location cannot be empty or null.</p>
+    /// <p>The folderPath for a location cannot be null.</p>
     PathRequired(String),
     /// <p>The specified repository does not exist.</p>
     RepositoryDoesNotExist(String),
@@ -5816,8 +7055,19 @@ impl PutFileError {
                         error_message,
                     ));
                 }
+                "FilePathConflictsWithSubmodulePathException" => {
+                    return PutFileError::FilePathConflictsWithSubmodulePath(String::from(
+                        error_message,
+                    ));
+                }
+                "FolderContentSizeLimitExceededException" => {
+                    return PutFileError::FolderContentSizeLimitExceeded(String::from(error_message));
+                }
                 "InvalidBranchNameException" => {
                     return PutFileError::InvalidBranchName(String::from(error_message));
+                }
+                "InvalidDeletionParameterException" => {
+                    return PutFileError::InvalidDeletionParameter(String::from(error_message));
                 }
                 "InvalidEmailException" => {
                     return PutFileError::InvalidEmail(String::from(error_message));
@@ -5907,7 +7157,10 @@ impl Error for PutFileError {
             PutFileError::FileContentRequired(ref cause) => cause,
             PutFileError::FileContentSizeLimitExceeded(ref cause) => cause,
             PutFileError::FileNameConflictsWithDirectoryName(ref cause) => cause,
+            PutFileError::FilePathConflictsWithSubmodulePath(ref cause) => cause,
+            PutFileError::FolderContentSizeLimitExceeded(ref cause) => cause,
             PutFileError::InvalidBranchName(ref cause) => cause,
+            PutFileError::InvalidDeletionParameter(ref cause) => cause,
             PutFileError::InvalidEmail(ref cause) => cause,
             PutFileError::InvalidFileMode(ref cause) => cause,
             PutFileError::InvalidParentCommitId(ref cause) => cause,
@@ -7366,6 +8619,12 @@ pub trait CodeCommit {
     /// <p><p>Creates a new branch in a repository and points the branch to a commit.</p> <note> <p>Calling the create branch operation does not set a repository&#39;s default branch. To do this, call the update default branch operation.</p> </note></p>
     fn create_branch(&self, input: CreateBranchInput) -> RusotoFuture<(), CreateBranchError>;
 
+    /// <p>Creates a commit for a repository on the tip of a specified branch.</p>
+    fn create_commit(
+        &self,
+        input: CreateCommitInput,
+    ) -> RusotoFuture<CreateCommitOutput, CreateCommitError>;
+
     /// <p>Creates a pull request in the specified repository.</p>
     fn create_pull_request(
         &self,
@@ -7389,6 +8648,12 @@ pub trait CodeCommit {
         &self,
         input: DeleteCommentContentInput,
     ) -> RusotoFuture<DeleteCommentContentOutput, DeleteCommentContentError>;
+
+    /// <p>Deletes a specified file from a specified branch. A commit is created on the branch that contains the revision. The file will still exist in the commits prior to the commit that contains the deletion.</p>
+    fn delete_file(
+        &self,
+        input: DeleteFileInput,
+    ) -> RusotoFuture<DeleteFileOutput, DeleteFileError>;
 
     /// <p><p>Deletes a repository. If a specified repository was already deleted, a null repository ID will be returned.</p> <important> <p>Deleting a repository also deletes all associated objects and metadata. After a repository is deleted, all future push calls to the deleted repository will fail.</p> </important></p>
     fn delete_repository(
@@ -7434,6 +8699,12 @@ pub trait CodeCommit {
         &self,
         input: GetDifferencesInput,
     ) -> RusotoFuture<GetDifferencesOutput, GetDifferencesError>;
+
+    /// <p>Returns the base-64 encoded contents of a specified file and its metadata.</p>
+    fn get_file(&self, input: GetFileInput) -> RusotoFuture<GetFileOutput, GetFileError>;
+
+    /// <p>Returns the contents of a specified folder in a repository.</p>
+    fn get_folder(&self, input: GetFolderInput) -> RusotoFuture<GetFolderOutput, GetFolderError>;
 
     /// <p>Returns information about merge conflicts between the before and after commit IDs for a pull request in a repository.</p>
     fn get_merge_conflicts(
@@ -7501,7 +8772,7 @@ pub trait CodeCommit {
         input: PostCommentReplyInput,
     ) -> RusotoFuture<PostCommentReplyOutput, PostCommentReplyError>;
 
-    /// <p>Adds or updates a file in an AWS CodeCommit repository.</p>
+    /// <p>Adds or updates a file in a branch in an AWS CodeCommit repository, and generates a commit for the addition in the specified branch.</p>
     fn put_file(&self, input: PutFileInput) -> RusotoFuture<PutFileOutput, PutFileError>;
 
     /// <p>Replaces all triggers for a repository. This can be used to create or delete triggers.</p>
@@ -7654,6 +8925,43 @@ impl CodeCommit for CodeCommitClient {
         })
     }
 
+    /// <p>Creates a commit for a repository on the tip of a specified branch.</p>
+    fn create_commit(
+        &self,
+        input: CreateCommitInput,
+    ) -> RusotoFuture<CreateCommitOutput, CreateCommitError> {
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeCommit_20150413.CreateCommit");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<CreateCommitOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateCommitError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Creates a pull request in the specified repository.</p>
     fn create_pull_request(
         &self,
@@ -7796,6 +9104,43 @@ impl CodeCommit for CodeCommitClient {
                     response.buffer().from_err().and_then(|response| {
                         Err(DeleteCommentContentError::from_response(response))
                     }),
+                )
+            }
+        })
+    }
+
+    /// <p>Deletes a specified file from a specified branch. A commit is created on the branch that contains the revision. The file will still exist in the commits prior to the commit that contains the deletion.</p>
+    fn delete_file(
+        &self,
+        input: DeleteFileInput,
+    ) -> RusotoFuture<DeleteFileOutput, DeleteFileError> {
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeCommit_20150413.DeleteFile");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DeleteFileOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteFileError::from_response(response))),
                 )
             }
         })
@@ -8120,6 +9465,74 @@ impl CodeCommit for CodeCommitClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(GetDifferencesError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Returns the base-64 encoded contents of a specified file and its metadata.</p>
+    fn get_file(&self, input: GetFileInput) -> RusotoFuture<GetFileOutput, GetFileError> {
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeCommit_20150413.GetFile");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetFileOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetFileError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Returns the contents of a specified folder in a repository.</p>
+    fn get_folder(&self, input: GetFolderInput) -> RusotoFuture<GetFolderOutput, GetFolderError> {
+        let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeCommit_20150413.GetFolder");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetFolderOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetFolderError::from_response(response))),
                 )
             }
         })
@@ -8531,7 +9944,7 @@ impl CodeCommit for CodeCommitClient {
         })
     }
 
-    /// <p>Adds or updates a file in an AWS CodeCommit repository.</p>
+    /// <p>Adds or updates a file in a branch in an AWS CodeCommit repository, and generates a commit for the addition in the specified branch.</p>
     fn put_file(&self, input: PutFileInput) -> RusotoFuture<PutFileOutput, PutFileError> {
         let mut request = SignedRequest::new("POST", "codecommit", &self.region, "/");
 

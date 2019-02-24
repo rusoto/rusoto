@@ -28,6 +28,22 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
+/// <p>This structure specifies the VPC subnets and security groups for the task, and whether a public IP address is to be used. This structure is relevant only for ECS tasks that use the <code>awsvpc</code> network mode.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsVpcConfiguration {
+    /// <p>Specifies whether the task's elastic network interface receives a public IP address. You can specify <code>ENABLED</code> only when <code>LaunchType</code> in <code>EcsParameters</code> is set to <code>FARGATE</code>.</p>
+    #[serde(rename = "AssignPublicIp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub assign_public_ip: Option<String>,
+    /// <p>Specifies the security groups associated with the task. These security groups must all be in the same VPC. You can specify as many as five security groups. If you do not specify a security group, the default security group for the VPC is used.</p>
+    #[serde(rename = "SecurityGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_groups: Option<Vec<String>>,
+    /// <p>Specifies the subnets associated with the task. These subnets must all be in the same VPC. You can specify as many as 16 subnets.</p>
+    #[serde(rename = "Subnets")]
+    pub subnets: Vec<String>,
+}
+
 /// <p>The array properties for the submitted job, such as the size of the array. The array size can be between 2 and 10,000. If you specify array properties for a job, it becomes an array job. This parameter is used only if the target is an AWS Batch job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BatchArrayProperties {
@@ -50,7 +66,7 @@ pub struct BatchParameters {
     /// <p>The name to use for this execution of the job, if the target is an AWS Batch job.</p>
     #[serde(rename = "JobName")]
     pub job_name: String,
-    /// <p>The retry strategy to use for failed jobs, if the target is an AWS Batch job. The retry strategy is the number of times to retry the failed job execution. Valid values are 1 to 10. When you specify a retry strategy here, it overrides the retry strategy defined in the job definition.</p>
+    /// <p>The retry strategy to use for failed jobs, if the target is an AWS Batch job. The retry strategy is the number of times to retry the failed job execution. Valid values are 1–10. When you specify a retry strategy here, it overrides the retry strategy defined in the job definition.</p>
     #[serde(rename = "RetryStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retry_strategy: Option<BatchRetryStrategy>,
@@ -59,14 +75,32 @@ pub struct BatchParameters {
 /// <p>The retry strategy to use for failed jobs, if the target is an AWS Batch job. If you specify a retry strategy here, it overrides the retry strategy defined in the job definition.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BatchRetryStrategy {
-    /// <p>The number of times to attempt to retry, if the job fails. Valid values are 1 to 10.</p>
+    /// <p>The number of times to attempt to retry, if the job fails. Valid values are 1–10.</p>
     #[serde(rename = "Attempts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attempts: Option<i64>,
 }
 
+/// <p>A JSON string which you can use to limit the event bus permissions you are granting to only accounts that fulfill the condition. Currently, the only supported condition is membership in a certain AWS organization. The string must contain <code>Type</code>, <code>Key</code>, and <code>Value</code> fields. The <code>Value</code> field specifies the ID of the AWS organization. Following is an example value for <code>Condition</code>:</p> <p> <code>'{"Type" : "StringEquals", "Key": "aws:PrincipalOrgID", "Value": "o-1234567890"}'</code> </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct Condition {
+    /// <p>Specifies the key for the condition. Currently the only supported key is <code>aws:PrincipalOrgID</code>.</p>
+    #[serde(rename = "Key")]
+    pub key: String,
+    /// <p>Specifies the type of condition. Currently the only supported value is <code>StringEquals</code>.</p>
+    #[serde(rename = "Type")]
+    pub type_: String,
+    /// <p>Specifies the value for the key. Currently, this must be the ID of the organization.</p>
+    #[serde(rename = "Value")]
+    pub value: String,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteRuleRequest {
+    /// <p>If this is a managed rule, created by an AWS service on your behalf, you must specify <code>Force</code> as <code>True</code> to delete the rule. This parameter is ignored for rules that are not managed rules. You can check whether a rule is a managed rule by using <code>DescribeRule</code> or <code>ListRules</code> and checking the <code>ManagedBy</code> field of the response.</p>
+    #[serde(rename = "Force")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub force: Option<bool>,
     /// <p>The name of the rule.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -114,6 +148,10 @@ pub struct DescribeRuleResponse {
     #[serde(rename = "EventPattern")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_pattern: Option<String>,
+    /// <p>If this is a managed rule, created by an AWS service on your behalf, this field displays the principal name of the AWS service that created the rule.</p>
+    #[serde(rename = "ManagedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub managed_by: Option<String>,
     /// <p>The name of the rule.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -139,14 +177,30 @@ pub struct DisableRuleRequest {
     pub name: String,
 }
 
-/// <p>The custom parameters to be used when the target is an Amazon ECS cluster.</p>
+/// <p>The custom parameters to be used when the target is an Amazon ECS task.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EcsParameters {
-    /// <p>The number of tasks to create based on the <code>TaskDefinition</code>. The default is one.</p>
+    /// <p>Specifies an ECS task group for the task. The maximum length is 255 characters.</p>
+    #[serde(rename = "Group")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group: Option<String>,
+    /// <p>Specifies the launch type on which your task is running. The launch type that you specify here must match one of the launch type (compatibilities) of the target task. The <code>FARGATE</code> value is supported only in the Regions where AWS Fargate with Amazon ECS is supported. For more information, see <a href="http://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS-Fargate.html">AWS Fargate on Amazon ECS</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
+    #[serde(rename = "LaunchType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub launch_type: Option<String>,
+    /// <p>Use this structure if the ECS task uses the <code>awsvpc</code> network mode. This structure specifies the VPC subnets and security groups associated with the task, and whether a public IP address is to be used. This structure is required if <code>LaunchType</code> is <code>FARGATE</code> because the <code>awsvpc</code> mode is required for Fargate tasks.</p> <p>If you specify <code>NetworkConfiguration</code> when the target ECS task does not use the <code>awsvpc</code> network mode, the task fails.</p>
+    #[serde(rename = "NetworkConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_configuration: Option<NetworkConfiguration>,
+    /// <p>Specifies the platform version for the task. Specify only the numeric portion of the platform version, such as <code>1.1.0</code>.</p> <p>This structure is used only if <code>LaunchType</code> is <code>FARGATE</code>. For more information about valid platform versions, see <a href="http://docs.aws.amazon.com/AmazonECS/latest/developerguide/platform_versions.html">AWS Fargate Platform Versions</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
+    #[serde(rename = "PlatformVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub platform_version: Option<String>,
+    /// <p>The number of tasks to create based on <code>TaskDefinition</code>. The default is 1.</p>
     #[serde(rename = "TaskCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_count: Option<i64>,
-    /// <p>The ARN of the task definition to use if the event target is an Amazon ECS cluster. </p>
+    /// <p>The ARN of the task definition to use if the event target is an Amazon ECS task. </p>
     #[serde(rename = "TaskDefinitionArn")]
     pub task_definition_arn: String,
 }
@@ -161,16 +215,16 @@ pub struct EnableRuleRequest {
 /// <p>Contains the parameters needed for you to provide custom input to a target based on one or more pieces of data extracted from the event.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InputTransformer {
-    /// <p>Map of JSON paths to be extracted from the event. These are key-value pairs, where each value is a JSON path. You must use JSON dot notation, not bracket notation.</p>
+    /// <p>Map of JSON paths to be extracted from the event. You can then insert these in the template in <code>InputTemplate</code> to produce the output you want to be sent to the target.</p> <p> <code>InputPathsMap</code> is an array key-value pairs, where each value is a valid JSON path. You can have as many as 10 key-value pairs. You must use JSON dot notation, not bracket notation.</p> <p>The keys cannot start with "AWS." </p>
     #[serde(rename = "InputPathsMap")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_paths_map: Option<::std::collections::HashMap<String, String>>,
-    /// <p>Input template where you can use the values of the keys from <code>InputPathsMap</code> to customize the data sent to the target.</p>
+    /// <p>Input template where you specify placeholders that will be filled with the values of the keys from <code>InputPathsMap</code> to customize the data sent to the target. Enclose each <code>InputPathsMaps</code> value in brackets: &lt;<i>value</i>&gt; The InputTemplate must be valid JSON.</p> <p>If <code>InputTemplate</code> is a JSON object (surrounded by curly braces), the following restrictions apply:</p> <ul> <li> <p>The placeholder cannot be used as an object key.</p> </li> <li> <p>Object values cannot include quote marks.</p> </li> </ul> <p>The following example shows the syntax for using <code>InputPathsMap</code> and <code>InputTemplate</code>.</p> <p> <code> "InputTransformer":</code> </p> <p> <code>{</code> </p> <p> <code>"InputPathsMap": {"instance": "$.detail.instance","status": "$.detail.status"},</code> </p> <p> <code>"InputTemplate": "&lt;instance&gt; is in state &lt;status&gt;"</code> </p> <p> <code>}</code> </p> <p>To have the <code>InputTemplate</code> include quote marks within a JSON string, escape each quote marks with a slash, as in the following example:</p> <p> <code> "InputTransformer":</code> </p> <p> <code>{</code> </p> <p> <code>"InputPathsMap": {"instance": "$.detail.instance","status": "$.detail.status"},</code> </p> <p> <code>"InputTemplate": "&lt;instance&gt; is in state \"&lt;status&gt;\""</code> </p> <p> <code>}</code> </p>
     #[serde(rename = "InputTemplate")]
     pub input_template: String,
 }
 
-/// <p>This object enables you to specify a JSON path to extract from the event and use as the partition key for the Amazon Kinesis stream, so that you can control the shard to which the event goes. If you do not include this parameter, the default is to use the <code>eventId</code> as the partition key.</p>
+/// <p>This object enables you to specify a JSON path to extract from the event and use as the partition key for the Amazon Kinesis data stream, so that you can control the shard to which the event goes. If you do not include this parameter, the default is to use the <code>eventId</code> as the partition key.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct KinesisParameters {
     /// <p>The JSON path to be extracted from the event and used as the partition key. For more information, see <a href="http://docs.aws.amazon.com/streams/latest/dev/key-concepts.html#partition-key">Amazon Kinesis Streams Key Concepts</a> in the <i>Amazon Kinesis Streams Developer Guide</i>.</p>
@@ -263,6 +317,15 @@ pub struct ListTargetsByRuleResponse {
     pub targets: Option<Vec<Target>>,
 }
 
+/// <p>This structure specifies the network configuration for an ECS task.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct NetworkConfiguration {
+    /// <p>Use this structure to specify the VPC subnets and security groups for the task, and whether a public IP address is to be used. This structure is relevant only for ECS tasks that use the <code>awsvpc</code> network mode.</p>
+    #[serde(rename = "awsvpcConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub awsvpc_configuration: Option<AwsVpcConfiguration>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutEventsRequest {
     /// <p>The entry that defines an event in your system. You can specify several parameters for the entry such as the source and type of the event, resources associated with the event, and so on.</p>
@@ -285,11 +348,11 @@ pub struct PutEventsRequestEntry {
     #[serde(rename = "Resources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resources: Option<Vec<String>>,
-    /// <p>The source of the event.</p>
+    /// <p>The source of the event. This field is required.</p>
     #[serde(rename = "Source")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<String>,
-    /// <p>The timestamp of the event, per <a href="https://www.rfc-editor.org/rfc/rfc3339.txt">RFC3339</a>. If no timestamp is provided, the timestamp of the <a>PutEvents</a> call is used.</p>
+    /// <p>The time stamp of the event, per <a href="https://www.rfc-editor.org/rfc/rfc3339.txt">RFC3339</a>. If no time stamp is provided, the time stamp of the <a>PutEvents</a> call is used.</p>
     #[serde(rename = "Time")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub time: Option<f64>,
@@ -331,7 +394,11 @@ pub struct PutPermissionRequest {
     /// <p>The action that you are enabling the other account to perform. Currently, this must be <code>events:PutEvents</code>.</p>
     #[serde(rename = "Action")]
     pub action: String,
-    /// <p>The 12-digit AWS account ID that you are permitting to put events to your default event bus. Specify "*" to permit any account to put events to your default event bus.</p> <p>If you specify "*", avoid creating rules that may match undesirable events. To create more secure rules, make sure that the event pattern for each rule contains an <code>account</code> field with a specific account ID from which to receive events. Rules with an account field do not match any events sent from other accounts.</p>
+    /// <p>This parameter enables you to limit the permission to accounts that fulfill a certain condition, such as being a member of a certain AWS organization. For more information about AWS Organizations, see <a href="http://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html">What Is AWS Organizations</a> in the <i>AWS Organizations User Guide</i>.</p> <p>If you specify <code>Condition</code> with an AWS organization ID, and specify "*" as the value for <code>Principal</code>, you grant permission to all the accounts in the named organization.</p> <p>The <code>Condition</code> is a JSON string which must contain <code>Type</code>, <code>Key</code>, and <code>Value</code> fields.</p>
+    #[serde(rename = "Condition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub condition: Option<Condition>,
+    /// <p>The 12-digit AWS account ID that you are permitting to put events to your default event bus. Specify "*" to permit any account to put events to your default event bus.</p> <p>If you specify "*" without specifying <code>Condition</code>, avoid creating rules that may match undesirable events. To create more secure rules, make sure that the event pattern for each rule contains an <code>account</code> field with a specific account ID from which to receive events. Rules with an account field do not match any events sent from other accounts.</p>
     #[serde(rename = "Principal")]
     pub principal: String,
     /// <p>An identifier string for the external account that you are granting permissions to. If you later want to revoke the permission for this external account, specify this <code>StatementId</code> when you run <a>RemovePermission</a>.</p>
@@ -425,6 +492,10 @@ pub struct RemovePermissionRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RemoveTargetsRequest {
+    /// <p>If this is a managed rule, created by an AWS service on your behalf, you must specify <code>Force</code> as <code>True</code> to remove targets. This parameter is ignored for rules that are not managed rules. You can check whether a rule is a managed rule by using <code>DescribeRule</code> or <code>ListRules</code> and checking the <code>ManagedBy</code> field of the response.</p>
+    #[serde(rename = "Force")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub force: Option<bool>,
     /// <p>The IDs of the targets to remove from the rule.</p>
     #[serde(rename = "Ids")]
     pub ids: Vec<String>,
@@ -480,6 +551,10 @@ pub struct Rule {
     #[serde(rename = "EventPattern")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_pattern: Option<String>,
+    /// <p>If the rule was created on behalf of your account by an AWS service, this field displays the principal name of the service that created the rule.</p>
+    #[serde(rename = "ManagedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub managed_by: Option<String>,
     /// <p>The name of the rule.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -526,13 +601,13 @@ pub struct SqsParameters {
     pub message_group_id: Option<String>,
 }
 
-/// <p>Targets are the resources to be invoked when a rule is triggered. Target types include EC2 instances, AWS Lambda functions, Amazon Kinesis streams, Amazon ECS tasks, AWS Step Functions state machines, Run Command, and built-in targets.</p>
+/// <p>Targets are the resources to be invoked when a rule is triggered. For a complete list of services and resources that can be set as a target, see <a>PutTargets</a>.</p> <p>If you are setting the event bus of another account as the target, and that account granted permission to your account through an organization instead of directly by the account ID, then you must specify a <code>RoleArn</code> with proper permissions in the <code>Target</code> structure. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/CloudWatchEvents-CrossAccountEventDelivery.html">Sending and Receiving Events Between AWS Accounts</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Target {
     /// <p>The Amazon Resource Name (ARN) of the target.</p>
     #[serde(rename = "Arn")]
     pub arn: String,
-    /// <p>Contains the job definition, job name, and other parameters if the event target is an AWS Batch job. For more information about AWS Batch, see <a href="http://docs.aws.amazon.com/batch/latest/userguide/jobs.html">Jobs</a> in the <i>AWS Batch User Guide</i>.</p>
+    /// <p>If the event target is an AWS Batch job, this contains the job definition, job name, and other parameters. For more information, see <a href="http://docs.aws.amazon.com/batch/latest/userguide/jobs.html">Jobs</a> in the <i>AWS Batch User Guide</i>.</p>
     #[serde(rename = "BatchParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub batch_parameters: Option<BatchParameters>,
@@ -555,7 +630,7 @@ pub struct Target {
     #[serde(rename = "InputTransformer")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_transformer: Option<InputTransformer>,
-    /// <p>The custom parameter you can use to control shard assignment, when the target is an Amazon Kinesis stream. If you do not include this parameter, the default is to use the <code>eventId</code> as the partition key.</p>
+    /// <p>The custom parameter you can use to control the shard assignment, when the target is a Kinesis data stream. If you do not include this parameter, the default is to use the <code>eventId</code> as the partition key.</p>
     #[serde(rename = "KinesisParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kinesis_parameters: Option<KinesisParameters>,
@@ -567,7 +642,7 @@ pub struct Target {
     #[serde(rename = "RunCommandParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub run_command_parameters: Option<RunCommandParameters>,
-    /// <p>Contains the message group ID to use when the target is a FIFO queue.</p>
+    /// <p>Contains the message group ID to use when the target is a FIFO queue.</p> <p>If you specify an SQS FIFO queue as a target, the queue must have content-based deduplication enabled.</p>
     #[serde(rename = "SqsParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sqs_parameters: Option<SqsParameters>,
@@ -599,6 +674,8 @@ pub enum DeleteRuleError {
     ConcurrentModification(String),
     /// <p>This exception occurs due to unexpected causes.</p>
     Internal(String),
+    /// <p>This rule was created by an AWS service on behalf of your account. It is managed by that service. If you see this error in response to <code>DeleteRule</code> or <code>RemoveTargets</code>, you can use the <code>Force</code> parameter in those calls to delete the rule or remove targets from the rule. You cannot modify these managed rules by using <code>DisableRule</code>, <code>EnableRule</code>, <code>PutTargets</code>, or <code>PutRule</code>. </p>
+    ManagedRule(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -629,6 +706,9 @@ impl DeleteRuleError {
                 }
                 "InternalException" => {
                     return DeleteRuleError::Internal(String::from(error_message));
+                }
+                "ManagedRuleException" => {
+                    return DeleteRuleError::ManagedRule(String::from(error_message));
                 }
                 "ValidationException" => {
                     return DeleteRuleError::Validation(error_message.to_string());
@@ -670,6 +750,7 @@ impl Error for DeleteRuleError {
         match *self {
             DeleteRuleError::ConcurrentModification(ref cause) => cause,
             DeleteRuleError::Internal(ref cause) => cause,
+            DeleteRuleError::ManagedRule(ref cause) => cause,
             DeleteRuleError::Validation(ref cause) => cause,
             DeleteRuleError::Credentials(ref err) => err.description(),
             DeleteRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -857,6 +938,8 @@ pub enum DisableRuleError {
     ConcurrentModification(String),
     /// <p>This exception occurs due to unexpected causes.</p>
     Internal(String),
+    /// <p>This rule was created by an AWS service on behalf of your account. It is managed by that service. If you see this error in response to <code>DeleteRule</code> or <code>RemoveTargets</code>, you can use the <code>Force</code> parameter in those calls to delete the rule or remove targets from the rule. You cannot modify these managed rules by using <code>DisableRule</code>, <code>EnableRule</code>, <code>PutTargets</code>, or <code>PutRule</code>. </p>
+    ManagedRule(String),
     /// <p>An entity that you specified does not exist.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
@@ -889,6 +972,9 @@ impl DisableRuleError {
                 }
                 "InternalException" => {
                     return DisableRuleError::Internal(String::from(error_message));
+                }
+                "ManagedRuleException" => {
+                    return DisableRuleError::ManagedRule(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return DisableRuleError::ResourceNotFound(String::from(error_message));
@@ -933,6 +1019,7 @@ impl Error for DisableRuleError {
         match *self {
             DisableRuleError::ConcurrentModification(ref cause) => cause,
             DisableRuleError::Internal(ref cause) => cause,
+            DisableRuleError::ManagedRule(ref cause) => cause,
             DisableRuleError::ResourceNotFound(ref cause) => cause,
             DisableRuleError::Validation(ref cause) => cause,
             DisableRuleError::Credentials(ref err) => err.description(),
@@ -949,6 +1036,8 @@ pub enum EnableRuleError {
     ConcurrentModification(String),
     /// <p>This exception occurs due to unexpected causes.</p>
     Internal(String),
+    /// <p>This rule was created by an AWS service on behalf of your account. It is managed by that service. If you see this error in response to <code>DeleteRule</code> or <code>RemoveTargets</code>, you can use the <code>Force</code> parameter in those calls to delete the rule or remove targets from the rule. You cannot modify these managed rules by using <code>DisableRule</code>, <code>EnableRule</code>, <code>PutTargets</code>, or <code>PutRule</code>. </p>
+    ManagedRule(String),
     /// <p>An entity that you specified does not exist.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
@@ -981,6 +1070,9 @@ impl EnableRuleError {
                 }
                 "InternalException" => {
                     return EnableRuleError::Internal(String::from(error_message));
+                }
+                "ManagedRuleException" => {
+                    return EnableRuleError::ManagedRule(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return EnableRuleError::ResourceNotFound(String::from(error_message));
@@ -1025,6 +1117,7 @@ impl Error for EnableRuleError {
         match *self {
             EnableRuleError::ConcurrentModification(ref cause) => cause,
             EnableRuleError::Internal(ref cause) => cause,
+            EnableRuleError::ManagedRule(ref cause) => cause,
             EnableRuleError::ResourceNotFound(ref cause) => cause,
             EnableRuleError::Validation(ref cause) => cause,
             EnableRuleError::Credentials(ref err) => err.description(),
@@ -1469,6 +1562,8 @@ pub enum PutRuleError {
     InvalidEventPattern(String),
     /// <p>You tried to create more rules or add more targets to a rule than is allowed.</p>
     LimitExceeded(String),
+    /// <p>This rule was created by an AWS service on behalf of your account. It is managed by that service. If you see this error in response to <code>DeleteRule</code> or <code>RemoveTargets</code>, you can use the <code>Force</code> parameter in those calls to delete the rule or remove targets from the rule. You cannot modify these managed rules by using <code>DisableRule</code>, <code>EnableRule</code>, <code>PutTargets</code>, or <code>PutRule</code>. </p>
+    ManagedRule(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1503,6 +1598,9 @@ impl PutRuleError {
                 }
                 "LimitExceededException" => {
                     return PutRuleError::LimitExceeded(String::from(error_message));
+                }
+                "ManagedRuleException" => {
+                    return PutRuleError::ManagedRule(String::from(error_message));
                 }
                 "ValidationException" => return PutRuleError::Validation(error_message.to_string()),
                 _ => {}
@@ -1544,6 +1642,7 @@ impl Error for PutRuleError {
             PutRuleError::Internal(ref cause) => cause,
             PutRuleError::InvalidEventPattern(ref cause) => cause,
             PutRuleError::LimitExceeded(ref cause) => cause,
+            PutRuleError::ManagedRule(ref cause) => cause,
             PutRuleError::Validation(ref cause) => cause,
             PutRuleError::Credentials(ref err) => err.description(),
             PutRuleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -1561,6 +1660,8 @@ pub enum PutTargetsError {
     Internal(String),
     /// <p>You tried to create more rules or add more targets to a rule than is allowed.</p>
     LimitExceeded(String),
+    /// <p>This rule was created by an AWS service on behalf of your account. It is managed by that service. If you see this error in response to <code>DeleteRule</code> or <code>RemoveTargets</code>, you can use the <code>Force</code> parameter in those calls to delete the rule or remove targets from the rule. You cannot modify these managed rules by using <code>DisableRule</code>, <code>EnableRule</code>, <code>PutTargets</code>, or <code>PutRule</code>. </p>
+    ManagedRule(String),
     /// <p>An entity that you specified does not exist.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
@@ -1596,6 +1697,9 @@ impl PutTargetsError {
                 }
                 "LimitExceededException" => {
                     return PutTargetsError::LimitExceeded(String::from(error_message));
+                }
+                "ManagedRuleException" => {
+                    return PutTargetsError::ManagedRule(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return PutTargetsError::ResourceNotFound(String::from(error_message));
@@ -1641,6 +1745,7 @@ impl Error for PutTargetsError {
             PutTargetsError::ConcurrentModification(ref cause) => cause,
             PutTargetsError::Internal(ref cause) => cause,
             PutTargetsError::LimitExceeded(ref cause) => cause,
+            PutTargetsError::ManagedRule(ref cause) => cause,
             PutTargetsError::ResourceNotFound(ref cause) => cause,
             PutTargetsError::Validation(ref cause) => cause,
             PutTargetsError::Credentials(ref err) => err.description(),
@@ -1751,6 +1856,8 @@ pub enum RemoveTargetsError {
     ConcurrentModification(String),
     /// <p>This exception occurs due to unexpected causes.</p>
     Internal(String),
+    /// <p>This rule was created by an AWS service on behalf of your account. It is managed by that service. If you see this error in response to <code>DeleteRule</code> or <code>RemoveTargets</code>, you can use the <code>Force</code> parameter in those calls to delete the rule or remove targets from the rule. You cannot modify these managed rules by using <code>DisableRule</code>, <code>EnableRule</code>, <code>PutTargets</code>, or <code>PutRule</code>. </p>
+    ManagedRule(String),
     /// <p>An entity that you specified does not exist.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
@@ -1783,6 +1890,9 @@ impl RemoveTargetsError {
                 }
                 "InternalException" => {
                     return RemoveTargetsError::Internal(String::from(error_message));
+                }
+                "ManagedRuleException" => {
+                    return RemoveTargetsError::ManagedRule(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return RemoveTargetsError::ResourceNotFound(String::from(error_message));
@@ -1827,6 +1937,7 @@ impl Error for RemoveTargetsError {
         match *self {
             RemoveTargetsError::ConcurrentModification(ref cause) => cause,
             RemoveTargetsError::Internal(ref cause) => cause,
+            RemoveTargetsError::ManagedRule(ref cause) => cause,
             RemoveTargetsError::ResourceNotFound(ref cause) => cause,
             RemoveTargetsError::Validation(ref cause) => cause,
             RemoveTargetsError::Credentials(ref err) => err.description(),
@@ -1924,22 +2035,22 @@ impl Error for TestEventPatternError {
 }
 /// Trait representing the capabilities of the Amazon CloudWatch Events API. Amazon CloudWatch Events clients implement this trait.
 pub trait CloudWatchEvents {
-    /// <p>Deletes the specified rule.</p> <p>You must remove all targets from a rule using <a>RemoveTargets</a> before you can delete the rule.</p> <p>When you delete a rule, incoming events might continue to match to the deleted rule. Please allow a short period of time for changes to take effect.</p>
+    /// <p>Deletes the specified rule.</p> <p>Before you can delete the rule, you must remove all targets, using <a>RemoveTargets</a>.</p> <p>When you delete a rule, incoming events might continue to match to the deleted rule. Allow a short period of time for changes to take effect.</p> <p>Managed rules are rules created and managed by another AWS service on your behalf. These rules are created by those other AWS services to support functionality in those services. You can delete these rules using the <code>Force</code> option, but you should do so only if you are sure the other service is not still using that rule.</p>
     fn delete_rule(&self, input: DeleteRuleRequest) -> RusotoFuture<(), DeleteRuleError>;
 
     /// <p>Displays the external AWS accounts that are permitted to write events to your account using your account's event bus, and the associated policy. To enable your account to receive events from other accounts, use <a>PutPermission</a>.</p>
     fn describe_event_bus(&self) -> RusotoFuture<DescribeEventBusResponse, DescribeEventBusError>;
 
-    /// <p>Describes the specified rule.</p>
+    /// <p>Describes the specified rule.</p> <p>DescribeRule does not list the targets of a rule. To see the targets associated with a rule, use <a>ListTargetsByRule</a>.</p>
     fn describe_rule(
         &self,
         input: DescribeRuleRequest,
     ) -> RusotoFuture<DescribeRuleResponse, DescribeRuleError>;
 
-    /// <p>Disables the specified rule. A disabled rule won't match any events, and won't self-trigger if it has a schedule expression.</p> <p>When you disable a rule, incoming events might continue to match to the disabled rule. Please allow a short period of time for changes to take effect.</p>
+    /// <p>Disables the specified rule. A disabled rule won't match any events, and won't self-trigger if it has a schedule expression.</p> <p>When you disable a rule, incoming events might continue to match to the disabled rule. Allow a short period of time for changes to take effect.</p>
     fn disable_rule(&self, input: DisableRuleRequest) -> RusotoFuture<(), DisableRuleError>;
 
-    /// <p>Enables the specified rule. If the rule does not exist, the operation fails.</p> <p>When you enable a rule, incoming events might not immediately start matching to a newly enabled rule. Please allow a short period of time for changes to take effect.</p>
+    /// <p>Enables the specified rule. If the rule does not exist, the operation fails.</p> <p>When you enable a rule, incoming events might not immediately start matching to a newly enabled rule. Allow a short period of time for changes to take effect.</p>
     fn enable_rule(&self, input: EnableRuleRequest) -> RusotoFuture<(), EnableRuleError>;
 
     /// <p>Lists the rules for the specified target. You can see which of the rules in Amazon CloudWatch Events can invoke a specific target in your account.</p>
@@ -1948,7 +2059,7 @@ pub trait CloudWatchEvents {
         input: ListRuleNamesByTargetRequest,
     ) -> RusotoFuture<ListRuleNamesByTargetResponse, ListRuleNamesByTargetError>;
 
-    /// <p>Lists your Amazon CloudWatch Events rules. You can either list all the rules or you can provide a prefix to match to the rule names.</p>
+    /// <p>Lists your Amazon CloudWatch Events rules. You can either list all the rules or you can provide a prefix to match to the rule names.</p> <p>ListRules does not list the targets of a rule. To see the targets associated with a rule, use <a>ListTargetsByRule</a>.</p>
     fn list_rules(
         &self,
         input: ListRulesRequest,
@@ -1966,13 +2077,13 @@ pub trait CloudWatchEvents {
         input: PutEventsRequest,
     ) -> RusotoFuture<PutEventsResponse, PutEventsError>;
 
-    /// <p>Running <code>PutPermission</code> permits the specified AWS account to put events to your account's default <i>event bus</i>. CloudWatch Events rules in your account are triggered by these events arriving to your default event bus. </p> <p>For another account to send events to your account, that external account must have a CloudWatch Events rule with your account's default event bus as a target.</p> <p>To enable multiple AWS accounts to put events to your default event bus, run <code>PutPermission</code> once for each of these accounts.</p> <p>The permission policy on the default event bus cannot exceed 10KB in size.</p>
+    /// <p>Running <code>PutPermission</code> permits the specified AWS account or AWS organization to put events to your account's default <i>event bus</i>. CloudWatch Events rules in your account are triggered by these events arriving to your default event bus. </p> <p>For another account to send events to your account, that external account must have a CloudWatch Events rule with your account's default event bus as a target.</p> <p>To enable multiple AWS accounts to put events to your default event bus, run <code>PutPermission</code> once for each of these accounts. Or, if all the accounts are members of the same AWS organization, you can run <code>PutPermission</code> once specifying <code>Principal</code> as "*" and specifying the AWS organization ID in <code>Condition</code>, to grant permissions to all accounts in that organization.</p> <p>If you grant permissions using an organization, then accounts in that organization must specify a <code>RoleArn</code> with proper permissions when they use <code>PutTarget</code> to add your account's event bus as a target. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/CloudWatchEvents-CrossAccountEventDelivery.html">Sending and Receiving Events Between AWS Accounts</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p> <p>The permission policy on the default event bus cannot exceed 10 KB in size.</p>
     fn put_permission(&self, input: PutPermissionRequest) -> RusotoFuture<(), PutPermissionError>;
 
-    /// <p>Creates or updates the specified rule. Rules are enabled by default, or based on value of the state. You can disable a rule using <a>DisableRule</a>.</p> <p>If you are updating an existing rule, the rule is completely replaced with what you specify in this <code>PutRule</code> command. If you omit arguments in <code>PutRule</code>, the old values for those arguments are not kept. Instead, they are replaced with null values.</p> <p>When you create or update a rule, incoming events might not immediately start matching to new or updated rules. Please allow a short period of time for changes to take effect.</p> <p>A rule must contain at least an EventPattern or ScheduleExpression. Rules with EventPatterns are triggered when a matching event is observed. Rules with ScheduleExpressions self-trigger based on the given schedule. A rule can have both an EventPattern and a ScheduleExpression, in which case the rule triggers on matching events as well as on a schedule.</p> <p>Most services in AWS treat : or / as the same character in Amazon Resource Names (ARNs). However, CloudWatch Events uses an exact match in event patterns and rules. Be sure to use the correct ARN characters when creating event patterns so that they match the ARN syntax in the event you want to match.</p>
+    /// <p>Creates or updates the specified rule. Rules are enabled by default, or based on value of the state. You can disable a rule using <a>DisableRule</a>.</p> <p>If you are updating an existing rule, the rule is replaced with what you specify in this <code>PutRule</code> command. If you omit arguments in <code>PutRule</code>, the old values for those arguments are not kept. Instead, they are replaced with null values.</p> <p>When you create or update a rule, incoming events might not immediately start matching to new or updated rules. Allow a short period of time for changes to take effect.</p> <p>A rule must contain at least an EventPattern or ScheduleExpression. Rules with EventPatterns are triggered when a matching event is observed. Rules with ScheduleExpressions self-trigger based on the given schedule. A rule can have both an EventPattern and a ScheduleExpression, in which case the rule triggers on matching events as well as on a schedule.</p> <p>Most services in AWS treat : or / as the same character in Amazon Resource Names (ARNs). However, CloudWatch Events uses an exact match in event patterns and rules. Be sure to use the correct ARN characters when creating event patterns so that they match the ARN syntax in the event you want to match.</p> <p>In CloudWatch Events, it is possible to create rules that lead to infinite loops, where a rule is fired repeatedly. For example, a rule might detect that ACLs have changed on an S3 bucket, and trigger software to change them to the desired state. If the rule is not written carefully, the subsequent change to the ACLs fires the rule again, creating an infinite loop.</p> <p>To prevent this, write the rules so that the triggered actions do not re-fire the same rule. For example, your rule could fire only if ACLs are found to be in a bad state, instead of after any change. </p> <p>An infinite loop can quickly cause higher than expected charges. We recommend that you use budgeting, which alerts you when charges exceed your specified limit. For more information, see <a href="http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/budgets-managing-costs.html">Managing Your Costs with Budgets</a>.</p>
     fn put_rule(&self, input: PutRuleRequest) -> RusotoFuture<PutRuleResponse, PutRuleError>;
 
-    /// <p>Adds the specified targets to the specified rule, or updates the targets if they are already associated with the rule.</p> <p>Targets are the resources that are invoked when a rule is triggered.</p> <p>You can configure the following as targets for CloudWatch Events:</p> <ul> <li> <p>EC2 instances</p> </li> <li> <p>AWS Lambda functions</p> </li> <li> <p>Streams in Amazon Kinesis Streams</p> </li> <li> <p>Delivery streams in Amazon Kinesis Firehose</p> </li> <li> <p>Amazon ECS tasks</p> </li> <li> <p>AWS Step Functions state machines</p> </li> <li> <p>AWS Batch jobs</p> </li> <li> <p>Pipelines in Amazon Code Pipeline</p> </li> <li> <p>Amazon Inspector assessment templates</p> </li> <li> <p>Amazon SNS topics</p> </li> <li> <p>Amazon SQS queues, including FIFO queues</p> </li> <li> <p>The default event bus of another AWS account</p> </li> </ul> <p>Note that creating rules with built-in targets is supported only in the AWS Management Console.</p> <p>For some target types, <code>PutTargets</code> provides target-specific parameters. If the target is an Amazon Kinesis stream, you can optionally specify which shard the event goes to by using the <code>KinesisParameters</code> argument. To invoke a command on multiple EC2 instances with one rule, you can use the <code>RunCommandParameters</code> field.</p> <p>To be able to make API calls against the resources that you own, Amazon CloudWatch Events needs the appropriate permissions. For AWS Lambda and Amazon SNS resources, CloudWatch Events relies on resource-based policies. For EC2 instances, Amazon Kinesis streams, and AWS Step Functions state machines, CloudWatch Events relies on IAM roles that you specify in the <code>RoleARN</code> argument in <code>PutTargets</code>. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/auth-and-access-control-cwe.html">Authentication and Access Control</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p> <p>If another AWS account is in the same region and has granted you permission (using <code>PutPermission</code>), you can send events to that account by setting that account's event bus as a target of the rules in your account. To send the matched events to the other account, specify that account's event bus as the <code>Arn</code> when you run <code>PutTargets</code>. If your account sends events to another account, your account is charged for each sent event. Each event sent to antoher account is charged as a custom event. The account receiving the event is not charged. For more information on pricing, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> <p>For more information about enabling cross-account events, see <a>PutPermission</a>.</p> <p> <b>Input</b>, <b>InputPath</b> and <b>InputTransformer</b> are mutually exclusive and optional parameters of a target. When a rule is triggered due to a matched event:</p> <ul> <li> <p>If none of the following arguments are specified for a target, then the entire event is passed to the target in JSON form (unless the target is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from the event is passed to the target).</p> </li> <li> <p>If <b>Input</b> is specified in the form of valid JSON, then the matched event is overridden with this constant.</p> </li> <li> <p>If <b>InputPath</b> is specified in the form of JSONPath (for example, <code>$.detail</code>), then only the part of the event specified in the path is passed to the target (for example, only the detail part of the event is passed).</p> </li> <li> <p>If <b>InputTransformer</b> is specified, then one or more specified JSONPaths are extracted from the event and used as values in a template that you specify as the input to the target.</p> </li> </ul> <p>When you specify <code>InputPath</code> or <code>InputTransformer</code>, you must use JSON dot notation, not bracket notation.</p> <p>When you add targets to a rule and the associated rule triggers soon after, new or updated targets might not be immediately invoked. Please allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>
+    /// <p>Adds the specified targets to the specified rule, or updates the targets if they are already associated with the rule.</p> <p>Targets are the resources that are invoked when a rule is triggered.</p> <p>You can configure the following as targets for CloudWatch Events:</p> <ul> <li> <p>EC2 instances</p> </li> <li> <p>SSM Run Command</p> </li> <li> <p>SSM Automation</p> </li> <li> <p>AWS Lambda functions</p> </li> <li> <p>Data streams in Amazon Kinesis Data Streams</p> </li> <li> <p>Data delivery streams in Amazon Kinesis Data Firehose</p> </li> <li> <p>Amazon ECS tasks</p> </li> <li> <p>AWS Step Functions state machines</p> </li> <li> <p>AWS Batch jobs</p> </li> <li> <p>AWS CodeBuild projects</p> </li> <li> <p>Pipelines in AWS CodePipeline</p> </li> <li> <p>Amazon Inspector assessment templates</p> </li> <li> <p>Amazon SNS topics</p> </li> <li> <p>Amazon SQS queues, including FIFO queues</p> </li> <li> <p>The default event bus of another AWS account</p> </li> </ul> <p>Creating rules with built-in targets is supported only in the AWS Management Console. The built-in targets are <code>EC2 CreateSnapshot API call</code>, <code>EC2 RebootInstances API call</code>, <code>EC2 StopInstances API call</code>, and <code>EC2 TerminateInstances API call</code>. </p> <p>For some target types, <code>PutTargets</code> provides target-specific parameters. If the target is a Kinesis data stream, you can optionally specify which shard the event goes to by using the <code>KinesisParameters</code> argument. To invoke a command on multiple EC2 instances with one rule, you can use the <code>RunCommandParameters</code> field.</p> <p>To be able to make API calls against the resources that you own, Amazon CloudWatch Events needs the appropriate permissions. For AWS Lambda and Amazon SNS resources, CloudWatch Events relies on resource-based policies. For EC2 instances, Kinesis data streams, and AWS Step Functions state machines, CloudWatch Events relies on IAM roles that you specify in the <code>RoleARN</code> argument in <code>PutTargets</code>. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/auth-and-access-control-cwe.html">Authentication and Access Control</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p> <p>If another AWS account is in the same region and has granted you permission (using <code>PutPermission</code>), you can send events to that account. Set that account's event bus as a target of the rules in your account. To send the matched events to the other account, specify that account's event bus as the <code>Arn</code> value when you run <code>PutTargets</code>. If your account sends events to another account, your account is charged for each sent event. Each event sent to another account is charged as a custom event. The account receiving the event is not charged. For more information, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> <p>If you are setting the event bus of another account as the target, and that account granted permission to your account through an organization instead of directly by the account ID, then you must specify a <code>RoleArn</code> with proper permissions in the <code>Target</code> structure. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/CloudWatchEvents-CrossAccountEventDelivery.html">Sending and Receiving Events Between AWS Accounts</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p> <p>For more information about enabling cross-account events, see <a>PutPermission</a>.</p> <p> <b>Input</b>, <b>InputPath</b>, and <b>InputTransformer</b> are mutually exclusive and optional parameters of a target. When a rule is triggered due to a matched event:</p> <ul> <li> <p>If none of the following arguments are specified for a target, then the entire event is passed to the target in JSON format (unless the target is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from the event is passed to the target).</p> </li> <li> <p>If <b>Input</b> is specified in the form of valid JSON, then the matched event is overridden with this constant.</p> </li> <li> <p>If <b>InputPath</b> is specified in the form of JSONPath (for example, <code>$.detail</code>), then only the part of the event specified in the path is passed to the target (for example, only the detail part of the event is passed).</p> </li> <li> <p>If <b>InputTransformer</b> is specified, then one or more specified JSONPaths are extracted from the event and used as values in a template that you specify as the input to the target.</p> </li> </ul> <p>When you specify <code>InputPath</code> or <code>InputTransformer</code>, you must use JSON dot notation, not bracket notation.</p> <p>When you add targets to a rule and the associated rule triggers soon after, new or updated targets might not be immediately invoked. Allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>
     fn put_targets(
         &self,
         input: PutTargetsRequest,
@@ -1984,7 +2095,7 @@ pub trait CloudWatchEvents {
         input: RemovePermissionRequest,
     ) -> RusotoFuture<(), RemovePermissionError>;
 
-    /// <p>Removes the specified targets from the specified rule. When the rule is triggered, those targets are no longer be invoked.</p> <p>When you remove a target, when the associated rule triggers, removed targets might continue to be invoked. Please allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>
+    /// <p>Removes the specified targets from the specified rule. When the rule is triggered, those targets are no longer be invoked.</p> <p>When you remove a target, when the associated rule triggers, removed targets might continue to be invoked. Allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>
     fn remove_targets(
         &self,
         input: RemoveTargetsRequest,
@@ -2033,7 +2144,7 @@ impl CloudWatchEventsClient {
 }
 
 impl CloudWatchEvents for CloudWatchEventsClient {
-    /// <p>Deletes the specified rule.</p> <p>You must remove all targets from a rule using <a>RemoveTargets</a> before you can delete the rule.</p> <p>When you delete a rule, incoming events might continue to match to the deleted rule. Please allow a short period of time for changes to take effect.</p>
+    /// <p>Deletes the specified rule.</p> <p>Before you can delete the rule, you must remove all targets, using <a>RemoveTargets</a>.</p> <p>When you delete a rule, incoming events might continue to match to the deleted rule. Allow a short period of time for changes to take effect.</p> <p>Managed rules are rules created and managed by another AWS service on your behalf. These rules are created by those other AWS services to support functionality in those services. You can delete these rules using the <code>Force</code> option, but you should do so only if you are sure the other service is not still using that rule.</p>
     fn delete_rule(&self, input: DeleteRuleRequest) -> RusotoFuture<(), DeleteRuleError> {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
@@ -2089,7 +2200,7 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         })
     }
 
-    /// <p>Describes the specified rule.</p>
+    /// <p>Describes the specified rule.</p> <p>DescribeRule does not list the targets of a rule. To see the targets associated with a rule, use <a>ListTargetsByRule</a>.</p>
     fn describe_rule(
         &self,
         input: DescribeRuleRequest,
@@ -2126,7 +2237,7 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         })
     }
 
-    /// <p>Disables the specified rule. A disabled rule won't match any events, and won't self-trigger if it has a schedule expression.</p> <p>When you disable a rule, incoming events might continue to match to the disabled rule. Please allow a short period of time for changes to take effect.</p>
+    /// <p>Disables the specified rule. A disabled rule won't match any events, and won't self-trigger if it has a schedule expression.</p> <p>When you disable a rule, incoming events might continue to match to the disabled rule. Allow a short period of time for changes to take effect.</p>
     fn disable_rule(&self, input: DisableRuleRequest) -> RusotoFuture<(), DisableRuleError> {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
@@ -2149,7 +2260,7 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         })
     }
 
-    /// <p>Enables the specified rule. If the rule does not exist, the operation fails.</p> <p>When you enable a rule, incoming events might not immediately start matching to a newly enabled rule. Please allow a short period of time for changes to take effect.</p>
+    /// <p>Enables the specified rule. If the rule does not exist, the operation fails.</p> <p>When you enable a rule, incoming events might not immediately start matching to a newly enabled rule. Allow a short period of time for changes to take effect.</p>
     fn enable_rule(&self, input: EnableRuleRequest) -> RusotoFuture<(), EnableRuleError> {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
@@ -2208,7 +2319,7 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         })
     }
 
-    /// <p>Lists your Amazon CloudWatch Events rules. You can either list all the rules or you can provide a prefix to match to the rule names.</p>
+    /// <p>Lists your Amazon CloudWatch Events rules. You can either list all the rules or you can provide a prefix to match to the rule names.</p> <p>ListRules does not list the targets of a rule. To see the targets associated with a rule, use <a>ListTargetsByRule</a>.</p>
     fn list_rules(
         &self,
         input: ListRulesRequest,
@@ -2319,7 +2430,7 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         })
     }
 
-    /// <p>Running <code>PutPermission</code> permits the specified AWS account to put events to your account's default <i>event bus</i>. CloudWatch Events rules in your account are triggered by these events arriving to your default event bus. </p> <p>For another account to send events to your account, that external account must have a CloudWatch Events rule with your account's default event bus as a target.</p> <p>To enable multiple AWS accounts to put events to your default event bus, run <code>PutPermission</code> once for each of these accounts.</p> <p>The permission policy on the default event bus cannot exceed 10KB in size.</p>
+    /// <p>Running <code>PutPermission</code> permits the specified AWS account or AWS organization to put events to your account's default <i>event bus</i>. CloudWatch Events rules in your account are triggered by these events arriving to your default event bus. </p> <p>For another account to send events to your account, that external account must have a CloudWatch Events rule with your account's default event bus as a target.</p> <p>To enable multiple AWS accounts to put events to your default event bus, run <code>PutPermission</code> once for each of these accounts. Or, if all the accounts are members of the same AWS organization, you can run <code>PutPermission</code> once specifying <code>Principal</code> as "*" and specifying the AWS organization ID in <code>Condition</code>, to grant permissions to all accounts in that organization.</p> <p>If you grant permissions using an organization, then accounts in that organization must specify a <code>RoleArn</code> with proper permissions when they use <code>PutTarget</code> to add your account's event bus as a target. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/CloudWatchEvents-CrossAccountEventDelivery.html">Sending and Receiving Events Between AWS Accounts</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p> <p>The permission policy on the default event bus cannot exceed 10 KB in size.</p>
     fn put_permission(&self, input: PutPermissionRequest) -> RusotoFuture<(), PutPermissionError> {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
@@ -2342,7 +2453,7 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         })
     }
 
-    /// <p>Creates or updates the specified rule. Rules are enabled by default, or based on value of the state. You can disable a rule using <a>DisableRule</a>.</p> <p>If you are updating an existing rule, the rule is completely replaced with what you specify in this <code>PutRule</code> command. If you omit arguments in <code>PutRule</code>, the old values for those arguments are not kept. Instead, they are replaced with null values.</p> <p>When you create or update a rule, incoming events might not immediately start matching to new or updated rules. Please allow a short period of time for changes to take effect.</p> <p>A rule must contain at least an EventPattern or ScheduleExpression. Rules with EventPatterns are triggered when a matching event is observed. Rules with ScheduleExpressions self-trigger based on the given schedule. A rule can have both an EventPattern and a ScheduleExpression, in which case the rule triggers on matching events as well as on a schedule.</p> <p>Most services in AWS treat : or / as the same character in Amazon Resource Names (ARNs). However, CloudWatch Events uses an exact match in event patterns and rules. Be sure to use the correct ARN characters when creating event patterns so that they match the ARN syntax in the event you want to match.</p>
+    /// <p>Creates or updates the specified rule. Rules are enabled by default, or based on value of the state. You can disable a rule using <a>DisableRule</a>.</p> <p>If you are updating an existing rule, the rule is replaced with what you specify in this <code>PutRule</code> command. If you omit arguments in <code>PutRule</code>, the old values for those arguments are not kept. Instead, they are replaced with null values.</p> <p>When you create or update a rule, incoming events might not immediately start matching to new or updated rules. Allow a short period of time for changes to take effect.</p> <p>A rule must contain at least an EventPattern or ScheduleExpression. Rules with EventPatterns are triggered when a matching event is observed. Rules with ScheduleExpressions self-trigger based on the given schedule. A rule can have both an EventPattern and a ScheduleExpression, in which case the rule triggers on matching events as well as on a schedule.</p> <p>Most services in AWS treat : or / as the same character in Amazon Resource Names (ARNs). However, CloudWatch Events uses an exact match in event patterns and rules. Be sure to use the correct ARN characters when creating event patterns so that they match the ARN syntax in the event you want to match.</p> <p>In CloudWatch Events, it is possible to create rules that lead to infinite loops, where a rule is fired repeatedly. For example, a rule might detect that ACLs have changed on an S3 bucket, and trigger software to change them to the desired state. If the rule is not written carefully, the subsequent change to the ACLs fires the rule again, creating an infinite loop.</p> <p>To prevent this, write the rules so that the triggered actions do not re-fire the same rule. For example, your rule could fire only if ACLs are found to be in a bad state, instead of after any change. </p> <p>An infinite loop can quickly cause higher than expected charges. We recommend that you use budgeting, which alerts you when charges exceed your specified limit. For more information, see <a href="http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/budgets-managing-costs.html">Managing Your Costs with Budgets</a>.</p>
     fn put_rule(&self, input: PutRuleRequest) -> RusotoFuture<PutRuleResponse, PutRuleError> {
         let mut request = SignedRequest::new("POST", "events", &self.region, "/");
 
@@ -2376,7 +2487,7 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         })
     }
 
-    /// <p>Adds the specified targets to the specified rule, or updates the targets if they are already associated with the rule.</p> <p>Targets are the resources that are invoked when a rule is triggered.</p> <p>You can configure the following as targets for CloudWatch Events:</p> <ul> <li> <p>EC2 instances</p> </li> <li> <p>AWS Lambda functions</p> </li> <li> <p>Streams in Amazon Kinesis Streams</p> </li> <li> <p>Delivery streams in Amazon Kinesis Firehose</p> </li> <li> <p>Amazon ECS tasks</p> </li> <li> <p>AWS Step Functions state machines</p> </li> <li> <p>AWS Batch jobs</p> </li> <li> <p>Pipelines in Amazon Code Pipeline</p> </li> <li> <p>Amazon Inspector assessment templates</p> </li> <li> <p>Amazon SNS topics</p> </li> <li> <p>Amazon SQS queues, including FIFO queues</p> </li> <li> <p>The default event bus of another AWS account</p> </li> </ul> <p>Note that creating rules with built-in targets is supported only in the AWS Management Console.</p> <p>For some target types, <code>PutTargets</code> provides target-specific parameters. If the target is an Amazon Kinesis stream, you can optionally specify which shard the event goes to by using the <code>KinesisParameters</code> argument. To invoke a command on multiple EC2 instances with one rule, you can use the <code>RunCommandParameters</code> field.</p> <p>To be able to make API calls against the resources that you own, Amazon CloudWatch Events needs the appropriate permissions. For AWS Lambda and Amazon SNS resources, CloudWatch Events relies on resource-based policies. For EC2 instances, Amazon Kinesis streams, and AWS Step Functions state machines, CloudWatch Events relies on IAM roles that you specify in the <code>RoleARN</code> argument in <code>PutTargets</code>. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/auth-and-access-control-cwe.html">Authentication and Access Control</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p> <p>If another AWS account is in the same region and has granted you permission (using <code>PutPermission</code>), you can send events to that account by setting that account's event bus as a target of the rules in your account. To send the matched events to the other account, specify that account's event bus as the <code>Arn</code> when you run <code>PutTargets</code>. If your account sends events to another account, your account is charged for each sent event. Each event sent to antoher account is charged as a custom event. The account receiving the event is not charged. For more information on pricing, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> <p>For more information about enabling cross-account events, see <a>PutPermission</a>.</p> <p> <b>Input</b>, <b>InputPath</b> and <b>InputTransformer</b> are mutually exclusive and optional parameters of a target. When a rule is triggered due to a matched event:</p> <ul> <li> <p>If none of the following arguments are specified for a target, then the entire event is passed to the target in JSON form (unless the target is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from the event is passed to the target).</p> </li> <li> <p>If <b>Input</b> is specified in the form of valid JSON, then the matched event is overridden with this constant.</p> </li> <li> <p>If <b>InputPath</b> is specified in the form of JSONPath (for example, <code>$.detail</code>), then only the part of the event specified in the path is passed to the target (for example, only the detail part of the event is passed).</p> </li> <li> <p>If <b>InputTransformer</b> is specified, then one or more specified JSONPaths are extracted from the event and used as values in a template that you specify as the input to the target.</p> </li> </ul> <p>When you specify <code>InputPath</code> or <code>InputTransformer</code>, you must use JSON dot notation, not bracket notation.</p> <p>When you add targets to a rule and the associated rule triggers soon after, new or updated targets might not be immediately invoked. Please allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>
+    /// <p>Adds the specified targets to the specified rule, or updates the targets if they are already associated with the rule.</p> <p>Targets are the resources that are invoked when a rule is triggered.</p> <p>You can configure the following as targets for CloudWatch Events:</p> <ul> <li> <p>EC2 instances</p> </li> <li> <p>SSM Run Command</p> </li> <li> <p>SSM Automation</p> </li> <li> <p>AWS Lambda functions</p> </li> <li> <p>Data streams in Amazon Kinesis Data Streams</p> </li> <li> <p>Data delivery streams in Amazon Kinesis Data Firehose</p> </li> <li> <p>Amazon ECS tasks</p> </li> <li> <p>AWS Step Functions state machines</p> </li> <li> <p>AWS Batch jobs</p> </li> <li> <p>AWS CodeBuild projects</p> </li> <li> <p>Pipelines in AWS CodePipeline</p> </li> <li> <p>Amazon Inspector assessment templates</p> </li> <li> <p>Amazon SNS topics</p> </li> <li> <p>Amazon SQS queues, including FIFO queues</p> </li> <li> <p>The default event bus of another AWS account</p> </li> </ul> <p>Creating rules with built-in targets is supported only in the AWS Management Console. The built-in targets are <code>EC2 CreateSnapshot API call</code>, <code>EC2 RebootInstances API call</code>, <code>EC2 StopInstances API call</code>, and <code>EC2 TerminateInstances API call</code>. </p> <p>For some target types, <code>PutTargets</code> provides target-specific parameters. If the target is a Kinesis data stream, you can optionally specify which shard the event goes to by using the <code>KinesisParameters</code> argument. To invoke a command on multiple EC2 instances with one rule, you can use the <code>RunCommandParameters</code> field.</p> <p>To be able to make API calls against the resources that you own, Amazon CloudWatch Events needs the appropriate permissions. For AWS Lambda and Amazon SNS resources, CloudWatch Events relies on resource-based policies. For EC2 instances, Kinesis data streams, and AWS Step Functions state machines, CloudWatch Events relies on IAM roles that you specify in the <code>RoleARN</code> argument in <code>PutTargets</code>. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/auth-and-access-control-cwe.html">Authentication and Access Control</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p> <p>If another AWS account is in the same region and has granted you permission (using <code>PutPermission</code>), you can send events to that account. Set that account's event bus as a target of the rules in your account. To send the matched events to the other account, specify that account's event bus as the <code>Arn</code> value when you run <code>PutTargets</code>. If your account sends events to another account, your account is charged for each sent event. Each event sent to another account is charged as a custom event. The account receiving the event is not charged. For more information, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> <p>If you are setting the event bus of another account as the target, and that account granted permission to your account through an organization instead of directly by the account ID, then you must specify a <code>RoleArn</code> with proper permissions in the <code>Target</code> structure. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/events/CloudWatchEvents-CrossAccountEventDelivery.html">Sending and Receiving Events Between AWS Accounts</a> in the <i>Amazon CloudWatch Events User Guide</i>.</p> <p>For more information about enabling cross-account events, see <a>PutPermission</a>.</p> <p> <b>Input</b>, <b>InputPath</b>, and <b>InputTransformer</b> are mutually exclusive and optional parameters of a target. When a rule is triggered due to a matched event:</p> <ul> <li> <p>If none of the following arguments are specified for a target, then the entire event is passed to the target in JSON format (unless the target is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from the event is passed to the target).</p> </li> <li> <p>If <b>Input</b> is specified in the form of valid JSON, then the matched event is overridden with this constant.</p> </li> <li> <p>If <b>InputPath</b> is specified in the form of JSONPath (for example, <code>$.detail</code>), then only the part of the event specified in the path is passed to the target (for example, only the detail part of the event is passed).</p> </li> <li> <p>If <b>InputTransformer</b> is specified, then one or more specified JSONPaths are extracted from the event and used as values in a template that you specify as the input to the target.</p> </li> </ul> <p>When you specify <code>InputPath</code> or <code>InputTransformer</code>, you must use JSON dot notation, not bracket notation.</p> <p>When you add targets to a rule and the associated rule triggers soon after, new or updated targets might not be immediately invoked. Allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>
     fn put_targets(
         &self,
         input: PutTargetsRequest,
@@ -2439,7 +2550,7 @@ impl CloudWatchEvents for CloudWatchEventsClient {
         })
     }
 
-    /// <p>Removes the specified targets from the specified rule. When the rule is triggered, those targets are no longer be invoked.</p> <p>When you remove a target, when the associated rule triggers, removed targets might continue to be invoked. Please allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>
+    /// <p>Removes the specified targets from the specified rule. When the rule is triggered, those targets are no longer be invoked.</p> <p>When you remove a target, when the associated rule triggers, removed targets might continue to be invoked. Allow a short period of time for changes to take effect.</p> <p>This action can partially fail if too many requests are made at the same time. If that happens, <code>FailedEntryCount</code> is non-zero in the response and each entry in <code>FailedEntries</code> provides the ID of the failed target and the error code.</p>
     fn remove_targets(
         &self,
         input: RemoveTargetsRequest,

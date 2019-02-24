@@ -75,6 +75,10 @@ pub struct Activity {
     #[serde(rename = "Initiator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub initiator: Option<UserMetadata>,
+    /// <p>Indicates whether an activity is indirect or direct. An indirect activity results from a direct activity performed on a parent resource. For example, sharing a parent folder (the direct activity) shares all of the subfolders and documents within the parent folder (the indirect activity).</p>
+    #[serde(rename = "IsIndirectActivity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_indirect_activity: Option<bool>,
     /// <p>The ID of the organization.</p>
     #[serde(rename = "OrganizationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -303,7 +307,7 @@ pub struct CreateLabelsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateNotificationSubscriptionRequest {
-    /// <p>The endpoint to receive the notifications. If the protocol is HTTPS, the endpoint is a URL that begins with "https://".</p>
+    /// <p>The endpoint to receive the notifications. If the protocol is HTTPS, the endpoint is a URL that begins with <code>https</code>.</p>
     #[serde(rename = "Endpoint")]
     pub endpoint: String,
     /// <p>The ID of the organization.</p>
@@ -505,6 +509,10 @@ pub struct DeleteUserRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeActivitiesRequest {
+    /// <p>Specifies which activity types to include in the response. If this field is left empty, all activity types are returned.</p>
+    #[serde(rename = "ActivityTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub activity_types: Option<String>,
     /// <p>Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API using AWS credentials.</p>
     #[serde(rename = "AuthenticationToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -513,6 +521,10 @@ pub struct DescribeActivitiesRequest {
     #[serde(rename = "EndTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
+    /// <p>Includes indirect activities. An indirect activity results from a direct activity performed on a parent resource. For example, sharing a parent folder (the direct activity) shares all of the subfolders and documents within the parent folder (the indirect activity).</p>
+    #[serde(rename = "IncludeIndirectActivities")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_indirect_activities: Option<bool>,
     /// <p>The maximum number of items to return.</p>
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -525,6 +537,10 @@ pub struct DescribeActivitiesRequest {
     #[serde(rename = "OrganizationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub organization_id: Option<String>,
+    /// <p>The document or folder ID for which to describe activity types.</p>
+    #[serde(rename = "ResourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_id: Option<String>,
     /// <p>The timestamp that determines the starting time of the activities. The response includes the activities performed after the specified timestamp.</p>
     #[serde(rename = "StartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1177,6 +1193,47 @@ pub struct GetFolderResponse {
     pub metadata: Option<FolderMetadata>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetResourcesRequest {
+    /// <p>The Amazon WorkDocs authentication token. Do not set this field when using administrative API actions, as in accessing the API operation using AWS credentials.</p>
+    #[serde(rename = "AuthenticationToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authentication_token: Option<String>,
+    /// <p>The collection type.</p>
+    #[serde(rename = "CollectionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub collection_type: Option<String>,
+    /// <p>The maximum number of resources to return.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The marker for the next set of results. This marker was received from a previous call.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+    /// <p>The user ID for the resource collection. This is a required field for accessing the API operation using IAM credentials.</p>
+    #[serde(rename = "UserId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetResourcesResponse {
+    /// <p>The documents in the specified collection.</p>
+    #[serde(rename = "Documents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub documents: Option<Vec<DocumentMetadata>>,
+    /// <p>The folders in the specified folder.</p>
+    #[serde(rename = "Folders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub folders: Option<Vec<FolderMetadata>>,
+    /// <p>The marker to use when requesting the next set of results. If there are no additional results, the string is empty.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+}
+
 /// <p>Describes the metadata of a user group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -1403,6 +1460,10 @@ pub struct SharePrincipal {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ShareResult {
+    /// <p>The ID of the invited user.</p>
+    #[serde(rename = "InviteePrincipalId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub invitee_principal_id: Option<String>,
     /// <p>The ID of the principal.</p>
     #[serde(rename = "PrincipalId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2077,6 +2138,8 @@ pub enum CreateCommentError {
     EntityNotExists(String),
     /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
+    /// <p>The requested operation is not allowed on the specified comment object.</p>
+    InvalidCommentOperation(String),
     /// <p>The specified document version is not in the INITIALIZED state.</p>
     ProhibitedState(String),
     /// <p>One or more of the dependencies is unavailable.</p>
@@ -2135,6 +2198,9 @@ impl CreateCommentError {
                 "FailedDependencyException" => {
                     return CreateCommentError::FailedDependency(String::from(error_message));
                 }
+                "InvalidCommentOperationException" => {
+                    return CreateCommentError::InvalidCommentOperation(String::from(error_message));
+                }
                 "ProhibitedStateException" => {
                     return CreateCommentError::ProhibitedState(String::from(error_message));
                 }
@@ -2190,6 +2256,7 @@ impl Error for CreateCommentError {
             CreateCommentError::DocumentLockedForComments(ref cause) => cause,
             CreateCommentError::EntityNotExists(ref cause) => cause,
             CreateCommentError::FailedDependency(ref cause) => cause,
+            CreateCommentError::InvalidCommentOperation(ref cause) => cause,
             CreateCommentError::ProhibitedState(ref cause) => cause,
             CreateCommentError::ServiceUnavailable(ref cause) => cause,
             CreateCommentError::UnauthorizedOperation(ref cause) => cause,
@@ -2345,6 +2412,8 @@ impl Error for CreateCustomMetadataError {
 /// Errors returned by CreateFolder
 #[derive(Debug, PartialEq)]
 pub enum CreateFolderError {
+    /// <p>Another operation is in progress on the resource that conflicts with the current operation.</p>
+    ConflictingOperation(String),
     /// <p>The resource already exists.</p>
     EntityAlreadyExists(String),
     /// <p>The resource does not exist.</p>
@@ -2400,6 +2469,9 @@ impl CreateFolderError {
                 .unwrap_or("");
 
             match error_type {
+                "ConflictingOperationException" => {
+                    return CreateFolderError::ConflictingOperation(String::from(error_message));
+                }
                 "EntityAlreadyExistsException" => {
                     return CreateFolderError::EntityAlreadyExists(String::from(error_message));
                 }
@@ -2464,6 +2536,7 @@ impl fmt::Display for CreateFolderError {
 impl Error for CreateFolderError {
     fn description(&self) -> &str {
         match *self {
+            CreateFolderError::ConflictingOperation(ref cause) => cause,
             CreateFolderError::EntityAlreadyExists(ref cause) => cause,
             CreateFolderError::EntityNotExists(ref cause) => cause,
             CreateFolderError::FailedDependency(ref cause) => cause,
@@ -3231,6 +3304,8 @@ impl Error for DeleteCustomMetadataError {
 pub enum DeleteDocumentError {
     /// <p>The resource hierarchy is changing.</p>
     ConcurrentModification(String),
+    /// <p>Another operation is in progress on the resource that conflicts with the current operation.</p>
+    ConflictingOperation(String),
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
     /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
@@ -3284,6 +3359,9 @@ impl DeleteDocumentError {
             match error_type {
                 "ConcurrentModificationException" => {
                     return DeleteDocumentError::ConcurrentModification(String::from(error_message));
+                }
+                "ConflictingOperationException" => {
+                    return DeleteDocumentError::ConflictingOperation(String::from(error_message));
                 }
                 "EntityNotExistsException" => {
                     return DeleteDocumentError::EntityNotExists(String::from(error_message));
@@ -3344,6 +3422,7 @@ impl Error for DeleteDocumentError {
     fn description(&self) -> &str {
         match *self {
             DeleteDocumentError::ConcurrentModification(ref cause) => cause,
+            DeleteDocumentError::ConflictingOperation(ref cause) => cause,
             DeleteDocumentError::EntityNotExists(ref cause) => cause,
             DeleteDocumentError::FailedDependency(ref cause) => cause,
             DeleteDocumentError::ProhibitedState(ref cause) => cause,
@@ -3363,6 +3442,8 @@ impl Error for DeleteDocumentError {
 pub enum DeleteFolderError {
     /// <p>The resource hierarchy is changing.</p>
     ConcurrentModification(String),
+    /// <p>Another operation is in progress on the resource that conflicts with the current operation.</p>
+    ConflictingOperation(String),
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
     /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
@@ -3416,6 +3497,9 @@ impl DeleteFolderError {
             match error_type {
                 "ConcurrentModificationException" => {
                     return DeleteFolderError::ConcurrentModification(String::from(error_message));
+                }
+                "ConflictingOperationException" => {
+                    return DeleteFolderError::ConflictingOperation(String::from(error_message));
                 }
                 "EntityNotExistsException" => {
                     return DeleteFolderError::EntityNotExists(String::from(error_message));
@@ -3476,6 +3560,7 @@ impl Error for DeleteFolderError {
     fn description(&self) -> &str {
         match *self {
             DeleteFolderError::ConcurrentModification(ref cause) => cause,
+            DeleteFolderError::ConflictingOperation(ref cause) => cause,
             DeleteFolderError::EntityNotExists(ref cause) => cause,
             DeleteFolderError::FailedDependency(ref cause) => cause,
             DeleteFolderError::ProhibitedState(ref cause) => cause,
@@ -3493,10 +3578,14 @@ impl Error for DeleteFolderError {
 /// Errors returned by DeleteFolderContents
 #[derive(Debug, PartialEq)]
 pub enum DeleteFolderContentsError {
+    /// <p>Another operation is in progress on the resource that conflicts with the current operation.</p>
+    ConflictingOperation(String),
     /// <p>The resource does not exist.</p>
     EntityNotExists(String),
     /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
+    /// <p>The specified document version is not in the INITIALIZED state.</p>
+    ProhibitedState(String),
     /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
     /// <p>The operation is not permitted.</p>
@@ -3542,11 +3631,19 @@ impl DeleteFolderContentsError {
                 .unwrap_or("");
 
             match error_type {
+                "ConflictingOperationException" => {
+                    return DeleteFolderContentsError::ConflictingOperation(String::from(
+                        error_message,
+                    ));
+                }
                 "EntityNotExistsException" => {
                     return DeleteFolderContentsError::EntityNotExists(String::from(error_message));
                 }
                 "FailedDependencyException" => {
                     return DeleteFolderContentsError::FailedDependency(String::from(error_message));
+                }
+                "ProhibitedStateException" => {
+                    return DeleteFolderContentsError::ProhibitedState(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return DeleteFolderContentsError::ServiceUnavailable(String::from(
@@ -3601,8 +3698,10 @@ impl fmt::Display for DeleteFolderContentsError {
 impl Error for DeleteFolderContentsError {
     fn description(&self) -> &str {
         match *self {
+            DeleteFolderContentsError::ConflictingOperation(ref cause) => cause,
             DeleteFolderContentsError::EntityNotExists(ref cause) => cause,
             DeleteFolderContentsError::FailedDependency(ref cause) => cause,
+            DeleteFolderContentsError::ProhibitedState(ref cause) => cause,
             DeleteFolderContentsError::ServiceUnavailable(ref cause) => cause,
             DeleteFolderContentsError::UnauthorizedOperation(ref cause) => cause,
             DeleteFolderContentsError::UnauthorizedResourceAccess(ref cause) => cause,
@@ -4985,10 +5084,14 @@ impl Error for DescribeRootFoldersError {
 /// Errors returned by DescribeUsers
 #[derive(Debug, PartialEq)]
 pub enum DescribeUsersError {
+    /// <p>The resource does not exist.</p>
+    EntityNotExists(String),
     /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
     FailedDependency(String),
     /// <p>The pagination marker or limit fields are not valid.</p>
     InvalidArgument(String),
+    /// <p>The response is too large to return. The request must include a filter to reduce the size of the response.</p>
+    RequestedEntityTooLarge(String),
     /// <p>One or more of the dependencies is unavailable.</p>
     ServiceUnavailable(String),
     /// <p>The operation is not permitted.</p>
@@ -5034,11 +5137,17 @@ impl DescribeUsersError {
                 .unwrap_or("");
 
             match error_type {
+                "EntityNotExistsException" => {
+                    return DescribeUsersError::EntityNotExists(String::from(error_message));
+                }
                 "FailedDependencyException" => {
                     return DescribeUsersError::FailedDependency(String::from(error_message));
                 }
                 "InvalidArgumentException" => {
                     return DescribeUsersError::InvalidArgument(String::from(error_message));
+                }
+                "RequestedEntityTooLargeException" => {
+                    return DescribeUsersError::RequestedEntityTooLarge(String::from(error_message));
                 }
                 "ServiceUnavailableException" => {
                     return DescribeUsersError::ServiceUnavailable(String::from(error_message));
@@ -5089,8 +5198,10 @@ impl fmt::Display for DescribeUsersError {
 impl Error for DescribeUsersError {
     fn description(&self) -> &str {
         match *self {
+            DescribeUsersError::EntityNotExists(ref cause) => cause,
             DescribeUsersError::FailedDependency(ref cause) => cause,
             DescribeUsersError::InvalidArgument(ref cause) => cause,
+            DescribeUsersError::RequestedEntityTooLarge(ref cause) => cause,
             DescribeUsersError::ServiceUnavailable(ref cause) => cause,
             DescribeUsersError::UnauthorizedOperation(ref cause) => cause,
             DescribeUsersError::UnauthorizedResourceAccess(ref cause) => cause,
@@ -5858,6 +5969,126 @@ impl Error for GetFolderPathError {
         }
     }
 }
+/// Errors returned by GetResources
+#[derive(Debug, PartialEq)]
+pub enum GetResourcesError {
+    /// <p>The AWS Directory Service cannot reach an on-premises instance. Or a dependency under the control of the organization is failing, such as a connected Active Directory.</p>
+    FailedDependency(String),
+    /// <p>The pagination marker or limit fields are not valid.</p>
+    InvalidArgument(String),
+    /// <p>One or more of the dependencies is unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The operation is not permitted.</p>
+    UnauthorizedOperation(String),
+    /// <p>The caller does not have access to perform the action on the resource.</p>
+    UnauthorizedResourceAccess(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetResourcesError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> GetResourcesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "FailedDependencyException" => {
+                    return GetResourcesError::FailedDependency(String::from(error_message));
+                }
+                "InvalidArgumentException" => {
+                    return GetResourcesError::InvalidArgument(String::from(error_message));
+                }
+                "ServiceUnavailableException" => {
+                    return GetResourcesError::ServiceUnavailable(String::from(error_message));
+                }
+                "UnauthorizedOperationException" => {
+                    return GetResourcesError::UnauthorizedOperation(String::from(error_message));
+                }
+                "UnauthorizedResourceAccessException" => {
+                    return GetResourcesError::UnauthorizedResourceAccess(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return GetResourcesError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetResourcesError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetResourcesError {
+    fn from(err: serde_json::error::Error) -> GetResourcesError {
+        GetResourcesError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetResourcesError {
+    fn from(err: CredentialsError) -> GetResourcesError {
+        GetResourcesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetResourcesError {
+    fn from(err: HttpDispatchError) -> GetResourcesError {
+        GetResourcesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetResourcesError {
+    fn from(err: io::Error) -> GetResourcesError {
+        GetResourcesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetResourcesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetResourcesError {
+    fn description(&self) -> &str {
+        match *self {
+            GetResourcesError::FailedDependency(ref cause) => cause,
+            GetResourcesError::InvalidArgument(ref cause) => cause,
+            GetResourcesError::ServiceUnavailable(ref cause) => cause,
+            GetResourcesError::UnauthorizedOperation(ref cause) => cause,
+            GetResourcesError::UnauthorizedResourceAccess(ref cause) => cause,
+            GetResourcesError::Validation(ref cause) => cause,
+            GetResourcesError::Credentials(ref err) => err.description(),
+            GetResourcesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetResourcesError::ParseError(ref cause) => cause,
+            GetResourcesError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by InitiateDocumentVersionUpload
 #[derive(Debug, PartialEq)]
 pub enum InitiateDocumentVersionUploadError {
@@ -6285,6 +6516,8 @@ impl Error for RemoveResourcePermissionError {
 pub enum UpdateDocumentError {
     /// <p>The resource hierarchy is changing.</p>
     ConcurrentModification(String),
+    /// <p>Another operation is in progress on the resource that conflicts with the current operation.</p>
+    ConflictingOperation(String),
     /// <p>The resource already exists.</p>
     EntityAlreadyExists(String),
     /// <p>The resource does not exist.</p>
@@ -6342,6 +6575,9 @@ impl UpdateDocumentError {
             match error_type {
                 "ConcurrentModificationException" => {
                     return UpdateDocumentError::ConcurrentModification(String::from(error_message));
+                }
+                "ConflictingOperationException" => {
+                    return UpdateDocumentError::ConflictingOperation(String::from(error_message));
                 }
                 "EntityAlreadyExistsException" => {
                     return UpdateDocumentError::EntityAlreadyExists(String::from(error_message));
@@ -6408,6 +6644,7 @@ impl Error for UpdateDocumentError {
     fn description(&self) -> &str {
         match *self {
             UpdateDocumentError::ConcurrentModification(ref cause) => cause,
+            UpdateDocumentError::ConflictingOperation(ref cause) => cause,
             UpdateDocumentError::EntityAlreadyExists(ref cause) => cause,
             UpdateDocumentError::EntityNotExists(ref cause) => cause,
             UpdateDocumentError::FailedDependency(ref cause) => cause,
@@ -6575,6 +6812,8 @@ impl Error for UpdateDocumentVersionError {
 pub enum UpdateFolderError {
     /// <p>The resource hierarchy is changing.</p>
     ConcurrentModification(String),
+    /// <p>Another operation is in progress on the resource that conflicts with the current operation.</p>
+    ConflictingOperation(String),
     /// <p>The resource already exists.</p>
     EntityAlreadyExists(String),
     /// <p>The resource does not exist.</p>
@@ -6632,6 +6871,9 @@ impl UpdateFolderError {
             match error_type {
                 "ConcurrentModificationException" => {
                     return UpdateFolderError::ConcurrentModification(String::from(error_message));
+                }
+                "ConflictingOperationException" => {
+                    return UpdateFolderError::ConflictingOperation(String::from(error_message));
                 }
                 "EntityAlreadyExistsException" => {
                     return UpdateFolderError::EntityAlreadyExists(String::from(error_message));
@@ -6698,6 +6940,7 @@ impl Error for UpdateFolderError {
     fn description(&self) -> &str {
         match *self {
             UpdateFolderError::ConcurrentModification(ref cause) => cause,
+            UpdateFolderError::ConflictingOperation(ref cause) => cause,
             UpdateFolderError::EntityAlreadyExists(ref cause) => cause,
             UpdateFolderError::EntityNotExists(ref cause) => cause,
             UpdateFolderError::FailedDependency(ref cause) => cause,
@@ -6894,7 +7137,7 @@ pub trait Workdocs {
         input: CreateLabelsRequest,
     ) -> RusotoFuture<CreateLabelsResponse, CreateLabelsError>;
 
-    /// <p>Configure WorkDocs to use Amazon SNS notifications.</p> <p>The endpoint receives a confirmation message, and must confirm the subscription. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SendMessageToHttp.html#SendMessageToHttp.confirm">Confirm the Subscription</a> in the <i>Amazon Simple Notification Service Developer Guide</i>.</p>
+    /// <p>Configure Amazon WorkDocs to use Amazon SNS notifications. The endpoint receives a confirmation message, and must confirm the subscription.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/workdocs/latest/developerguide/subscribe-notifications.html">Subscribe to Notifications</a> in the <i>Amazon WorkDocs Developer Guide</i>.</p>
     fn create_notification_subscription(
         &self,
         input: CreateNotificationSubscriptionRequest,
@@ -6975,7 +7218,7 @@ pub trait Workdocs {
         input: DescribeFolderContentsRequest,
     ) -> RusotoFuture<DescribeFolderContentsResponse, DescribeFolderContentsError>;
 
-    /// <p>Describes the groups specified by query.</p>
+    /// <p>Describes the groups specified by the query. Groups are defined by the underlying Active Directory.</p>
     fn describe_groups(
         &self,
         input: DescribeGroupsRequest,
@@ -6996,7 +7239,7 @@ pub trait Workdocs {
         input: DescribeResourcePermissionsRequest,
     ) -> RusotoFuture<DescribeResourcePermissionsResponse, DescribeResourcePermissionsError>;
 
-    /// <p>Describes the current user's special folders; the <code>RootFolder</code> and the <code>RecycleBin</code>. <code>RootFolder</code> is the root of user's files and folders and <code>RecycleBin</code> is the root of recycled items. This is not a valid action for SigV4 (administrative API) clients.</p>
+    /// <p>Describes the current user's special folders; the <code>RootFolder</code> and the <code>RecycleBin</code>. <code>RootFolder</code> is the root of user's files and folders and <code>RecycleBin</code> is the root of recycled items. This is not a valid action for SigV4 (administrative API) clients.</p> <p>This action requires an authentication token. To get an authentication token, register an application with Amazon WorkDocs. For more information, see <a href="https://docs.aws.amazon.com/workdocs/latest/developerguide/wd-auth-user.html">Authentication and Access Control for User Applications</a> in the <i>Amazon WorkDocs Developer Guide</i>.</p>
     fn describe_root_folders(
         &self,
         input: DescribeRootFoldersRequest,
@@ -7043,6 +7286,12 @@ pub trait Workdocs {
         &self,
         input: GetFolderPathRequest,
     ) -> RusotoFuture<GetFolderPathResponse, GetFolderPathError>;
+
+    /// <p>Retrieves a collection of resources, including folders and documents. The only <code>CollectionType</code> supported is <code>SHARED_WITH_ME</code>.</p>
+    fn get_resources(
+        &self,
+        input: GetResourcesRequest,
+    ) -> RusotoFuture<GetResourcesResponse, GetResourcesError>;
 
     /// <p>Creates a new document object and version object.</p> <p>The client specifies the parent folder ID and name of the document to upload. The ID is optionally specified when creating a new version of an existing document. This is the first step to upload a document. Next, upload the document to the URL returned from the call, and then call <a>UpdateDocumentVersion</a>.</p> <p>To cancel the document upload, call <a>AbortDocumentVersionUpload</a>.</p>
     fn initiate_document_version_upload(
@@ -7429,7 +7678,7 @@ impl Workdocs for WorkdocsClient {
         })
     }
 
-    /// <p>Configure WorkDocs to use Amazon SNS notifications.</p> <p>The endpoint receives a confirmation message, and must confirm the subscription. For more information, see <a href="http://docs.aws.amazon.com/sns/latest/dg/SendMessageToHttp.html#SendMessageToHttp.confirm">Confirm the Subscription</a> in the <i>Amazon Simple Notification Service Developer Guide</i>.</p>
+    /// <p>Configure Amazon WorkDocs to use Amazon SNS notifications. The endpoint receives a confirmation message, and must confirm the subscription.</p> <p>For more information, see <a href="https://docs.aws.amazon.com/workdocs/latest/developerguide/subscribe-notifications.html">Subscribe to Notifications</a> in the <i>Amazon WorkDocs Developer Guide</i>.</p>
     fn create_notification_subscription(
         &self,
         input: CreateNotificationSubscriptionRequest,
@@ -7862,8 +8111,14 @@ impl Workdocs for WorkdocsClient {
             request.add_header("Authentication", &authentication_token.to_string());
         }
         let mut params = Params::new();
+        if let Some(ref x) = input.activity_types {
+            params.put("activityTypes", x);
+        }
         if let Some(ref x) = input.end_time {
             params.put("endTime", x);
+        }
+        if let Some(ref x) = input.include_indirect_activities {
+            params.put("includeIndirectActivities", x);
         }
         if let Some(ref x) = input.limit {
             params.put("limit", x);
@@ -7873,6 +8128,9 @@ impl Workdocs for WorkdocsClient {
         }
         if let Some(ref x) = input.organization_id {
             params.put("organizationId", x);
+        }
+        if let Some(ref x) = input.resource_id {
+            params.put("resourceId", x);
         }
         if let Some(ref x) = input.start_time {
             params.put("startTime", x);
@@ -8079,7 +8337,7 @@ impl Workdocs for WorkdocsClient {
         })
     }
 
-    /// <p>Describes the groups specified by query.</p>
+    /// <p>Describes the groups specified by the query. Groups are defined by the underlying Active Directory.</p>
     fn describe_groups(
         &self,
         input: DescribeGroupsRequest,
@@ -8236,7 +8494,7 @@ impl Workdocs for WorkdocsClient {
         })
     }
 
-    /// <p>Describes the current user's special folders; the <code>RootFolder</code> and the <code>RecycleBin</code>. <code>RootFolder</code> is the root of user's files and folders and <code>RecycleBin</code> is the root of recycled items. This is not a valid action for SigV4 (administrative API) clients.</p>
+    /// <p>Describes the current user's special folders; the <code>RootFolder</code> and the <code>RecycleBin</code>. <code>RootFolder</code> is the root of user's files and folders and <code>RecycleBin</code> is the root of recycled items. This is not a valid action for SigV4 (administrative API) clients.</p> <p>This action requires an authentication token. To get an authentication token, register an application with Amazon WorkDocs. For more information, see <a href="https://docs.aws.amazon.com/workdocs/latest/developerguide/wd-auth-user.html">Authentication and Access Control for User Applications</a> in the <i>Amazon WorkDocs Developer Guide</i>.</p>
     fn describe_root_folders(
         &self,
         input: DescribeRootFoldersRequest,
@@ -8638,6 +8896,60 @@ impl Workdocs for WorkdocsClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(GetFolderPathError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Retrieves a collection of resources, including folders and documents. The only <code>CollectionType</code> supported is <code>SHARED_WITH_ME</code>.</p>
+    fn get_resources(
+        &self,
+        input: GetResourcesRequest,
+    ) -> RusotoFuture<GetResourcesResponse, GetResourcesError> {
+        let request_uri = "/api/v1/resources";
+
+        let mut request = SignedRequest::new("GET", "workdocs", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        if let Some(ref authentication_token) = input.authentication_token {
+            request.add_header("Authentication", &authentication_token.to_string());
+        }
+        let mut params = Params::new();
+        if let Some(ref x) = input.collection_type {
+            params.put("collectionType", x);
+        }
+        if let Some(ref x) = input.limit {
+            params.put("limit", x);
+        }
+        if let Some(ref x) = input.marker {
+            params.put("marker", x);
+        }
+        if let Some(ref x) = input.user_id {
+            params.put("userId", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GetResourcesResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetResourcesError::from_response(response))),
                 )
             }
         })

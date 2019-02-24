@@ -59,16 +59,14 @@ pub struct Container {
 pub struct CorsRule {
     /// <p>Specifies which headers are allowed in a preflight <code>OPTIONS</code> request through the <code>Access-Control-Request-Headers</code> header. Each header name that is specified in <code>Access-Control-Request-Headers</code> must have a corresponding entry in the rule. Only the headers that were requested are sent back. </p> <p>This element can contain only one wildcard character (*).</p>
     #[serde(rename = "AllowedHeaders")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub allowed_headers: Option<Vec<String>>,
-    /// <p>Identifies an HTTP method that the origin that is specified in the rule is allowed to execute.</p> <p>Each CORS rule must contain at least one <code>AllowedMethod</code> and one <code>AllowedOrigin</code> element.</p>
+    pub allowed_headers: Vec<String>,
+    /// <p>Identifies an HTTP method that the origin that is specified in the rule is allowed to execute.</p> <p>Each CORS rule must contain at least one <code>AllowedMethods</code> and one <code>AllowedOrigins</code> element.</p>
     #[serde(rename = "AllowedMethods")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_methods: Option<Vec<String>>,
-    /// <p>One or more response headers that you want users to be able to access from their applications (for example, from a JavaScript <code>XMLHttpRequest</code> object).</p> <p>Each CORS rule must have at least one <code>AllowedOrigin</code> element. The string value can include only one wildcard character (*), for example, http://*.example.com. Additionally, you can specify only one wildcard character to allow cross-origin access for all origins.</p>
+    /// <p>One or more response headers that you want users to be able to access from their applications (for example, from a JavaScript <code>XMLHttpRequest</code> object).</p> <p>Each CORS rule must have at least one <code>AllowedOrigins</code> element. The string value can include only one wildcard character (*), for example, http://*.example.com. Additionally, you can specify only one wildcard character to allow cross-origin access for all origins.</p>
     #[serde(rename = "AllowedOrigins")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub allowed_origins: Option<Vec<String>>,
+    pub allowed_origins: Vec<String>,
     /// <p>One or more headers in the response that you want users to be able to access from their applications (for example, from a JavaScript <code>XMLHttpRequest</code> object).</p> <p>This element is optional for each rule.</p>
     #[serde(rename = "ExposeHeaders")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -128,6 +126,17 @@ pub struct DeleteCorsPolicyInput {
 pub struct DeleteCorsPolicyOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteLifecyclePolicyInput {
+    /// <p>The name of the container that holds the object lifecycle policy.</p>
+    #[serde(rename = "ContainerName")]
+    pub container_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteLifecyclePolicyOutput {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeContainerInput {
     /// <p>The name of the container to query.</p>
     #[serde(rename = "ContainerName")]
@@ -169,8 +178,24 @@ pub struct GetCorsPolicyInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetCorsPolicyOutput {
+    /// <p>The CORS policy assigned to the container.</p>
     #[serde(rename = "CorsPolicy")]
     pub cors_policy: Vec<CorsRule>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetLifecyclePolicyInput {
+    /// <p>The name of the container that the object lifecycle policy is assigned to.</p>
+    #[serde(rename = "ContainerName")]
+    pub container_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetLifecyclePolicyOutput {
+    /// <p>The object lifecycle policy that is assigned to the container.</p>
+    #[serde(rename = "LifecyclePolicy")]
+    pub lifecycle_policy: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -225,10 +250,24 @@ pub struct PutCorsPolicyInput {
 #[cfg_attr(test, derive(Serialize))]
 pub struct PutCorsPolicyOutput {}
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct PutLifecyclePolicyInput {
+    /// <p>The name of the container that you want to assign the object lifecycle policy to.</p>
+    #[serde(rename = "ContainerName")]
+    pub container_name: String,
+    /// <p>The object lifecycle policy to apply to the container.</p>
+    #[serde(rename = "LifecyclePolicy")]
+    pub lifecycle_policy: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PutLifecyclePolicyOutput {}
+
 /// Errors returned by CreateContainer
 #[derive(Debug, PartialEq)]
 pub enum CreateContainerError {
-    /// <p>Resource already exists or is being updated.</p>
+    /// <p>The container that you specified in the request already exists or is being updated.</p>
     ContainerInUse(String),
     /// <p>The service is temporarily unavailable.</p>
     InternalServerError(String),
@@ -320,9 +359,9 @@ impl Error for CreateContainerError {
 /// Errors returned by DeleteContainer
 #[derive(Debug, PartialEq)]
 pub enum DeleteContainerError {
-    /// <p>Resource already exists or is being updated.</p>
+    /// <p>The container that you specified in the request already exists or is being updated.</p>
     ContainerInUse(String),
-    /// <p>Could not perform an operation on a container that does not exist.</p>
+    /// <p>The container that you specified in the request does not exist.</p>
     ContainerNotFound(String),
     /// <p>The service is temporarily unavailable.</p>
     InternalServerError(String),
@@ -412,13 +451,13 @@ impl Error for DeleteContainerError {
 /// Errors returned by DeleteContainerPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteContainerPolicyError {
-    /// <p>Resource already exists or is being updated.</p>
+    /// <p>The container that you specified in the request already exists or is being updated.</p>
     ContainerInUse(String),
-    /// <p>Could not perform an operation on a container that does not exist.</p>
+    /// <p>The container that you specified in the request does not exist.</p>
     ContainerNotFound(String),
     /// <p>The service is temporarily unavailable.</p>
     InternalServerError(String),
-    /// <p>Could not perform an operation on a policy that does not exist.</p>
+    /// <p>The policy that you specified in the request does not exist.</p>
     PolicyNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -516,11 +555,11 @@ impl Error for DeleteContainerPolicyError {
 /// Errors returned by DeleteCorsPolicy
 #[derive(Debug, PartialEq)]
 pub enum DeleteCorsPolicyError {
-    /// <p>Resource already exists or is being updated.</p>
+    /// <p>The container that you specified in the request already exists or is being updated.</p>
     ContainerInUse(String),
-    /// <p>Could not perform an operation on a container that does not exist.</p>
+    /// <p>The container that you specified in the request does not exist.</p>
     ContainerNotFound(String),
-    /// <p>Could not perform an operation on a policy that does not exist.</p>
+    /// <p>The CORS policy that you specified in the request does not exist.</p>
     CorsPolicyNotFound(String),
     /// <p>The service is temporarily unavailable.</p>
     InternalServerError(String),
@@ -611,10 +650,114 @@ impl Error for DeleteCorsPolicyError {
         }
     }
 }
+/// Errors returned by DeleteLifecyclePolicy
+#[derive(Debug, PartialEq)]
+pub enum DeleteLifecyclePolicyError {
+    /// <p>The container that you specified in the request already exists or is being updated.</p>
+    ContainerInUse(String),
+    /// <p>The container that you specified in the request does not exist.</p>
+    ContainerNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    InternalServerError(String),
+    /// <p>The policy that you specified in the request does not exist.</p>
+    PolicyNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DeleteLifecyclePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteLifecyclePolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ContainerInUseException" => {
+                    return DeleteLifecyclePolicyError::ContainerInUse(String::from(error_message));
+                }
+                "ContainerNotFoundException" => {
+                    return DeleteLifecyclePolicyError::ContainerNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "InternalServerError" => {
+                    return DeleteLifecyclePolicyError::InternalServerError(String::from(
+                        error_message,
+                    ));
+                }
+                "PolicyNotFoundException" => {
+                    return DeleteLifecyclePolicyError::PolicyNotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return DeleteLifecyclePolicyError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DeleteLifecyclePolicyError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteLifecyclePolicyError {
+    fn from(err: serde_json::error::Error) -> DeleteLifecyclePolicyError {
+        DeleteLifecyclePolicyError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteLifecyclePolicyError {
+    fn from(err: CredentialsError) -> DeleteLifecyclePolicyError {
+        DeleteLifecyclePolicyError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteLifecyclePolicyError {
+    fn from(err: HttpDispatchError) -> DeleteLifecyclePolicyError {
+        DeleteLifecyclePolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteLifecyclePolicyError {
+    fn from(err: io::Error) -> DeleteLifecyclePolicyError {
+        DeleteLifecyclePolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteLifecyclePolicyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteLifecyclePolicyError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteLifecyclePolicyError::ContainerInUse(ref cause) => cause,
+            DeleteLifecyclePolicyError::ContainerNotFound(ref cause) => cause,
+            DeleteLifecyclePolicyError::InternalServerError(ref cause) => cause,
+            DeleteLifecyclePolicyError::PolicyNotFound(ref cause) => cause,
+            DeleteLifecyclePolicyError::Validation(ref cause) => cause,
+            DeleteLifecyclePolicyError::Credentials(ref err) => err.description(),
+            DeleteLifecyclePolicyError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteLifecyclePolicyError::ParseError(ref cause) => cause,
+            DeleteLifecyclePolicyError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by DescribeContainer
 #[derive(Debug, PartialEq)]
 pub enum DescribeContainerError {
-    /// <p>Could not perform an operation on a container that does not exist.</p>
+    /// <p>The container that you specified in the request does not exist.</p>
     ContainerNotFound(String),
     /// <p>The service is temporarily unavailable.</p>
     InternalServerError(String),
@@ -702,13 +845,13 @@ impl Error for DescribeContainerError {
 /// Errors returned by GetContainerPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetContainerPolicyError {
-    /// <p>Resource already exists or is being updated.</p>
+    /// <p>The container that you specified in the request already exists or is being updated.</p>
     ContainerInUse(String),
-    /// <p>Could not perform an operation on a container that does not exist.</p>
+    /// <p>The container that you specified in the request does not exist.</p>
     ContainerNotFound(String),
     /// <p>The service is temporarily unavailable.</p>
     InternalServerError(String),
-    /// <p>Could not perform an operation on a policy that does not exist.</p>
+    /// <p>The policy that you specified in the request does not exist.</p>
     PolicyNotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -802,11 +945,11 @@ impl Error for GetContainerPolicyError {
 /// Errors returned by GetCorsPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetCorsPolicyError {
-    /// <p>Resource already exists or is being updated.</p>
+    /// <p>The container that you specified in the request already exists or is being updated.</p>
     ContainerInUse(String),
-    /// <p>Could not perform an operation on a container that does not exist.</p>
+    /// <p>The container that you specified in the request does not exist.</p>
     ContainerNotFound(String),
-    /// <p>Could not perform an operation on a policy that does not exist.</p>
+    /// <p>The CORS policy that you specified in the request does not exist.</p>
     CorsPolicyNotFound(String),
     /// <p>The service is temporarily unavailable.</p>
     InternalServerError(String),
@@ -897,6 +1040,106 @@ impl Error for GetCorsPolicyError {
         }
     }
 }
+/// Errors returned by GetLifecyclePolicy
+#[derive(Debug, PartialEq)]
+pub enum GetLifecyclePolicyError {
+    /// <p>The container that you specified in the request already exists or is being updated.</p>
+    ContainerInUse(String),
+    /// <p>The container that you specified in the request does not exist.</p>
+    ContainerNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    InternalServerError(String),
+    /// <p>The policy that you specified in the request does not exist.</p>
+    PolicyNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetLifecyclePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetLifecyclePolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ContainerInUseException" => {
+                    return GetLifecyclePolicyError::ContainerInUse(String::from(error_message));
+                }
+                "ContainerNotFoundException" => {
+                    return GetLifecyclePolicyError::ContainerNotFound(String::from(error_message));
+                }
+                "InternalServerError" => {
+                    return GetLifecyclePolicyError::InternalServerError(String::from(error_message));
+                }
+                "PolicyNotFoundException" => {
+                    return GetLifecyclePolicyError::PolicyNotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return GetLifecyclePolicyError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetLifecyclePolicyError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetLifecyclePolicyError {
+    fn from(err: serde_json::error::Error) -> GetLifecyclePolicyError {
+        GetLifecyclePolicyError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetLifecyclePolicyError {
+    fn from(err: CredentialsError) -> GetLifecyclePolicyError {
+        GetLifecyclePolicyError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetLifecyclePolicyError {
+    fn from(err: HttpDispatchError) -> GetLifecyclePolicyError {
+        GetLifecyclePolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetLifecyclePolicyError {
+    fn from(err: io::Error) -> GetLifecyclePolicyError {
+        GetLifecyclePolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetLifecyclePolicyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetLifecyclePolicyError {
+    fn description(&self) -> &str {
+        match *self {
+            GetLifecyclePolicyError::ContainerInUse(ref cause) => cause,
+            GetLifecyclePolicyError::ContainerNotFound(ref cause) => cause,
+            GetLifecyclePolicyError::InternalServerError(ref cause) => cause,
+            GetLifecyclePolicyError::PolicyNotFound(ref cause) => cause,
+            GetLifecyclePolicyError::Validation(ref cause) => cause,
+            GetLifecyclePolicyError::Credentials(ref err) => err.description(),
+            GetLifecyclePolicyError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetLifecyclePolicyError::ParseError(ref cause) => cause,
+            GetLifecyclePolicyError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by ListContainers
 #[derive(Debug, PartialEq)]
 pub enum ListContainersError {
@@ -980,9 +1223,9 @@ impl Error for ListContainersError {
 /// Errors returned by PutContainerPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutContainerPolicyError {
-    /// <p>Resource already exists or is being updated.</p>
+    /// <p>The container that you specified in the request already exists or is being updated.</p>
     ContainerInUse(String),
-    /// <p>Could not perform an operation on a container that does not exist.</p>
+    /// <p>The container that you specified in the request does not exist.</p>
     ContainerNotFound(String),
     /// <p>The service is temporarily unavailable.</p>
     InternalServerError(String),
@@ -1074,9 +1317,9 @@ impl Error for PutContainerPolicyError {
 /// Errors returned by PutCorsPolicy
 #[derive(Debug, PartialEq)]
 pub enum PutCorsPolicyError {
-    /// <p>Resource already exists or is being updated.</p>
+    /// <p>The container that you specified in the request already exists or is being updated.</p>
     ContainerInUse(String),
-    /// <p>Could not perform an operation on a container that does not exist.</p>
+    /// <p>The container that you specified in the request does not exist.</p>
     ContainerNotFound(String),
     /// <p>The service is temporarily unavailable.</p>
     InternalServerError(String),
@@ -1163,6 +1406,100 @@ impl Error for PutCorsPolicyError {
         }
     }
 }
+/// Errors returned by PutLifecyclePolicy
+#[derive(Debug, PartialEq)]
+pub enum PutLifecyclePolicyError {
+    /// <p>The container that you specified in the request already exists or is being updated.</p>
+    ContainerInUse(String),
+    /// <p>The container that you specified in the request does not exist.</p>
+    ContainerNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    InternalServerError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl PutLifecyclePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> PutLifecyclePolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ContainerInUseException" => {
+                    return PutLifecyclePolicyError::ContainerInUse(String::from(error_message));
+                }
+                "ContainerNotFoundException" => {
+                    return PutLifecyclePolicyError::ContainerNotFound(String::from(error_message));
+                }
+                "InternalServerError" => {
+                    return PutLifecyclePolicyError::InternalServerError(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return PutLifecyclePolicyError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return PutLifecyclePolicyError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for PutLifecyclePolicyError {
+    fn from(err: serde_json::error::Error) -> PutLifecyclePolicyError {
+        PutLifecyclePolicyError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for PutLifecyclePolicyError {
+    fn from(err: CredentialsError) -> PutLifecyclePolicyError {
+        PutLifecyclePolicyError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for PutLifecyclePolicyError {
+    fn from(err: HttpDispatchError) -> PutLifecyclePolicyError {
+        PutLifecyclePolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutLifecyclePolicyError {
+    fn from(err: io::Error) -> PutLifecyclePolicyError {
+        PutLifecyclePolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for PutLifecyclePolicyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutLifecyclePolicyError {
+    fn description(&self) -> &str {
+        match *self {
+            PutLifecyclePolicyError::ContainerInUse(ref cause) => cause,
+            PutLifecyclePolicyError::ContainerNotFound(ref cause) => cause,
+            PutLifecyclePolicyError::InternalServerError(ref cause) => cause,
+            PutLifecyclePolicyError::Validation(ref cause) => cause,
+            PutLifecyclePolicyError::Credentials(ref err) => err.description(),
+            PutLifecyclePolicyError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            PutLifecyclePolicyError::ParseError(ref cause) => cause,
+            PutLifecyclePolicyError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Trait representing the capabilities of the MediaStore API. MediaStore clients implement this trait.
 pub trait MediaStore {
     /// <p>Creates a storage container to hold objects. A container is similar to a bucket in the Amazon S3 service.</p>
@@ -1189,6 +1526,12 @@ pub trait MediaStore {
         input: DeleteCorsPolicyInput,
     ) -> RusotoFuture<DeleteCorsPolicyOutput, DeleteCorsPolicyError>;
 
+    /// <p>Removes an object lifecycle policy from a container.</p>
+    fn delete_lifecycle_policy(
+        &self,
+        input: DeleteLifecyclePolicyInput,
+    ) -> RusotoFuture<DeleteLifecyclePolicyOutput, DeleteLifecyclePolicyError>;
+
     /// <p>Retrieves the properties of the requested container. This request is commonly used to retrieve the endpoint of a container. An endpoint is a value assigned by the service when a new container is created. A container's endpoint does not change after it has been assigned. The <code>DescribeContainer</code> request returns a single <code>Container</code> object based on <code>ContainerName</code>. To return all <code>Container</code> objects that are associated with a specified AWS account, use <a>ListContainers</a>.</p>
     fn describe_container(
         &self,
@@ -1207,6 +1550,12 @@ pub trait MediaStore {
         input: GetCorsPolicyInput,
     ) -> RusotoFuture<GetCorsPolicyOutput, GetCorsPolicyError>;
 
+    /// <p>Retrieves the object lifecycle policy that is assigned to a container.</p>
+    fn get_lifecycle_policy(
+        &self,
+        input: GetLifecyclePolicyInput,
+    ) -> RusotoFuture<GetLifecyclePolicyOutput, GetLifecyclePolicyError>;
+
     /// <p>Lists the properties of all containers in AWS Elemental MediaStore. </p> <p>You can query to receive all the containers in one response. Or you can include the <code>MaxResults</code> parameter to receive a limited number of containers in each response. In this case, the response includes a token. To get the next set of containers, send the command again, this time with the <code>NextToken</code> parameter (with the returned token as its value). The next set of responses appears, with a token if there are still more containers to receive. </p> <p>See also <a>DescribeContainer</a>, which gets the properties of one container. </p>
     fn list_containers(
         &self,
@@ -1224,6 +1573,12 @@ pub trait MediaStore {
         &self,
         input: PutCorsPolicyInput,
     ) -> RusotoFuture<PutCorsPolicyOutput, PutCorsPolicyError>;
+
+    /// <p>Writes an object lifecycle policy to a container. If the container already has an object lifecycle policy, the service replaces the existing policy with the new policy. </p>
+    fn put_lifecycle_policy(
+        &self,
+        input: PutLifecyclePolicyInput,
+    ) -> RusotoFuture<PutLifecyclePolicyOutput, PutLifecyclePolicyError>;
 }
 /// A client for the MediaStore API.
 #[derive(Clone)]
@@ -1409,6 +1764,42 @@ impl MediaStore for MediaStoreClient {
         })
     }
 
+    /// <p>Removes an object lifecycle policy from a container.</p>
+    fn delete_lifecycle_policy(
+        &self,
+        input: DeleteLifecyclePolicyInput,
+    ) -> RusotoFuture<DeleteLifecyclePolicyOutput, DeleteLifecyclePolicyError> {
+        let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "MediaStore_20170901.DeleteLifecyclePolicy");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DeleteLifecyclePolicyOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteLifecyclePolicyError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>Retrieves the properties of the requested container. This request is commonly used to retrieve the endpoint of a container. An endpoint is a value assigned by the service when a new container is created. A container's endpoint does not change after it has been assigned. The <code>DescribeContainer</code> request returns a single <code>Container</code> object based on <code>ContainerName</code>. To return all <code>Container</code> objects that are associated with a specified AWS account, use <a>ListContainers</a>.</p>
     fn describe_container(
         &self,
@@ -1520,6 +1911,43 @@ impl MediaStore for MediaStoreClient {
         })
     }
 
+    /// <p>Retrieves the object lifecycle policy that is assigned to a container.</p>
+    fn get_lifecycle_policy(
+        &self,
+        input: GetLifecyclePolicyInput,
+    ) -> RusotoFuture<GetLifecyclePolicyOutput, GetLifecyclePolicyError> {
+        let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "MediaStore_20170901.GetLifecyclePolicy");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetLifecyclePolicyOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetLifecyclePolicyError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Lists the properties of all containers in AWS Elemental MediaStore. </p> <p>You can query to receive all the containers in one response. Or you can include the <code>MaxResults</code> parameter to receive a limited number of containers in each response. In this case, the response includes a token. To get the next set of containers, send the command again, this time with the <code>NextToken</code> parameter (with the returned token as its value). The next set of responses appears, with a token if there are still more containers to receive. </p> <p>See also <a>DescribeContainer</a>, which gets the properties of one container. </p>
     fn list_containers(
         &self,
@@ -1626,6 +2054,43 @@ impl MediaStore for MediaStoreClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(PutCorsPolicyError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Writes an object lifecycle policy to a container. If the container already has an object lifecycle policy, the service replaces the existing policy with the new policy. </p>
+    fn put_lifecycle_policy(
+        &self,
+        input: PutLifecyclePolicyInput,
+    ) -> RusotoFuture<PutLifecyclePolicyOutput, PutLifecyclePolicyError> {
+        let mut request = SignedRequest::new("POST", "mediastore", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "MediaStore_20170901.PutLifecyclePolicy");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<PutLifecyclePolicyOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutLifecyclePolicyError::from_response(response))),
                 )
             }
         })

@@ -75,9 +75,37 @@ pub struct MeterUsageRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct MeterUsageResult {
+    /// <p>Metering record id.</p>
     #[serde(rename = "MeteringRecordId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metering_record_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct RegisterUsageRequest {
+    /// <p>(Optional) To scope down the registration to a specific running software instance and guard against replay attacks.</p>
+    #[serde(rename = "Nonce")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub nonce: Option<String>,
+    /// <p>Product code is used to uniquely identify a product in AWS Marketplace. The product code should be the same as the one used during the publishing of a new product.</p>
+    #[serde(rename = "ProductCode")]
+    pub product_code: String,
+    /// <p>Public Key Version provided by AWS Marketplace</p>
+    #[serde(rename = "PublicKeyVersion")]
+    pub public_key_version: i64,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RegisterUsageResult {
+    /// <p>(Optional) Only included when public key version has expired</p>
+    #[serde(rename = "PublicKeyRotationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub public_key_rotation_timestamp: Option<f64>,
+    /// <p>JWT Token</p>
+    #[serde(rename = "Signature")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub signature: Option<String>,
 }
 
 /// <p>Contains input to the ResolveCustomer operation.</p>
@@ -140,6 +168,8 @@ pub struct UsageRecordResult {
 /// Errors returned by BatchMeterUsage
 #[derive(Debug, PartialEq)]
 pub enum BatchMeterUsageError {
+    /// <p>The API is disabled in the Region.</p>
+    DisabledApi(String),
     /// <p>An internal error has occurred. Retry your request. If the problem persists, post a message with details on the AWS forums.</p>
     InternalServiceError(String),
     /// <p>You have metered usage for a CustomerIdentifier that does not exist.</p>
@@ -148,7 +178,7 @@ pub enum BatchMeterUsageError {
     InvalidProductCode(String),
     /// <p>The usage dimension does not match one of the UsageDimensions associated with products.</p>
     InvalidUsageDimension(String),
-    /// <p>The calls to the MeterUsage API are throttled.</p>
+    /// <p>The calls to the API are throttled.</p>
     Throttling(String),
     /// <p>The timestamp value passed in the meterUsage() is out of allowed range.</p>
     TimestampOutOfBounds(String),
@@ -177,6 +207,9 @@ impl BatchMeterUsageError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "DisabledApiException" => {
+                    return BatchMeterUsageError::DisabledApi(String::from(error_message));
+                }
                 "InternalServiceErrorException" => {
                     return BatchMeterUsageError::InternalServiceError(String::from(error_message));
                 }
@@ -235,6 +268,7 @@ impl fmt::Display for BatchMeterUsageError {
 impl Error for BatchMeterUsageError {
     fn description(&self) -> &str {
         match *self {
+            BatchMeterUsageError::DisabledApi(ref cause) => cause,
             BatchMeterUsageError::InternalServiceError(ref cause) => cause,
             BatchMeterUsageError::InvalidCustomerIdentifier(ref cause) => cause,
             BatchMeterUsageError::InvalidProductCode(ref cause) => cause,
@@ -256,13 +290,13 @@ pub enum MeterUsageError {
     DuplicateRequest(String),
     /// <p>An internal error has occurred. Retry your request. If the problem persists, post a message with details on the AWS forums.</p>
     InternalServiceError(String),
-    /// <p>The endpoint being called is in a region different from your EC2 instance. The region of the Metering service endpoint and the region of the EC2 instance must match.</p>
+    /// <p>The endpoint being called is in a Region different from your EC2 instance. The Region of the Metering Service endpoint and the Region of the EC2 instance must match.</p>
     InvalidEndpointRegion(String),
     /// <p>The product code passed does not match the product code used for publishing the product.</p>
     InvalidProductCode(String),
     /// <p>The usage dimension does not match one of the UsageDimensions associated with products.</p>
     InvalidUsageDimension(String),
-    /// <p>The calls to the MeterUsage API are throttled.</p>
+    /// <p>The calls to the API are throttled.</p>
     Throttling(String),
     /// <p>The timestamp value passed in the meterUsage() is out of allowed range.</p>
     TimestampOutOfBounds(String),
@@ -365,16 +399,140 @@ impl Error for MeterUsageError {
         }
     }
 }
+/// Errors returned by RegisterUsage
+#[derive(Debug, PartialEq)]
+pub enum RegisterUsageError {
+    /// <p>Exception thrown when the customer does not have a valid subscription for the product.</p>
+    CustomerNotEntitled(String),
+    /// <p>The API is disabled in the Region.</p>
+    DisabledApi(String),
+    /// <p>An internal error has occurred. Retry your request. If the problem persists, post a message with details on the AWS forums.</p>
+    InternalServiceError(String),
+    /// <p>The product code passed does not match the product code used for publishing the product.</p>
+    InvalidProductCode(String),
+    /// <p>Public Key version is invalid.</p>
+    InvalidPublicKeyVersion(String),
+    /// <p>RegisterUsage must be called in the same AWS Region the ECS task was launched in. This prevents a container from hardcoding a Region (e.g. withRegion(“us-east-1”) when calling RegisterUsage.</p>
+    InvalidRegion(String),
+    /// <p>AWS Marketplace does not support metering usage from the underlying platform. Currently, only Amazon ECS is supported.</p>
+    PlatformNotSupported(String),
+    /// <p>The calls to the API are throttled.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl RegisterUsageError {
+    pub fn from_response(res: BufferedHttpResponse) -> RegisterUsageError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "CustomerNotEntitledException" => {
+                    return RegisterUsageError::CustomerNotEntitled(String::from(error_message));
+                }
+                "DisabledApiException" => {
+                    return RegisterUsageError::DisabledApi(String::from(error_message));
+                }
+                "InternalServiceErrorException" => {
+                    return RegisterUsageError::InternalServiceError(String::from(error_message));
+                }
+                "InvalidProductCodeException" => {
+                    return RegisterUsageError::InvalidProductCode(String::from(error_message));
+                }
+                "InvalidPublicKeyVersionException" => {
+                    return RegisterUsageError::InvalidPublicKeyVersion(String::from(error_message));
+                }
+                "InvalidRegionException" => {
+                    return RegisterUsageError::InvalidRegion(String::from(error_message));
+                }
+                "PlatformNotSupportedException" => {
+                    return RegisterUsageError::PlatformNotSupported(String::from(error_message));
+                }
+                "ThrottlingException" => {
+                    return RegisterUsageError::Throttling(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return RegisterUsageError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return RegisterUsageError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for RegisterUsageError {
+    fn from(err: serde_json::error::Error) -> RegisterUsageError {
+        RegisterUsageError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for RegisterUsageError {
+    fn from(err: CredentialsError) -> RegisterUsageError {
+        RegisterUsageError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for RegisterUsageError {
+    fn from(err: HttpDispatchError) -> RegisterUsageError {
+        RegisterUsageError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RegisterUsageError {
+    fn from(err: io::Error) -> RegisterUsageError {
+        RegisterUsageError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for RegisterUsageError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for RegisterUsageError {
+    fn description(&self) -> &str {
+        match *self {
+            RegisterUsageError::CustomerNotEntitled(ref cause) => cause,
+            RegisterUsageError::DisabledApi(ref cause) => cause,
+            RegisterUsageError::InternalServiceError(ref cause) => cause,
+            RegisterUsageError::InvalidProductCode(ref cause) => cause,
+            RegisterUsageError::InvalidPublicKeyVersion(ref cause) => cause,
+            RegisterUsageError::InvalidRegion(ref cause) => cause,
+            RegisterUsageError::PlatformNotSupported(ref cause) => cause,
+            RegisterUsageError::Throttling(ref cause) => cause,
+            RegisterUsageError::Validation(ref cause) => cause,
+            RegisterUsageError::Credentials(ref err) => err.description(),
+            RegisterUsageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            RegisterUsageError::ParseError(ref cause) => cause,
+            RegisterUsageError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by ResolveCustomer
 #[derive(Debug, PartialEq)]
 pub enum ResolveCustomerError {
+    /// <p>The API is disabled in the Region.</p>
+    DisabledApi(String),
     /// <p>The submitted registration token has expired. This can happen if the buyer's browser takes too long to redirect to your page, the buyer has resubmitted the registration token, or your application has held on to the registration token for too long. Your SaaS registration website should redeem this token as soon as it is submitted by the buyer's browser.</p>
     ExpiredToken(String),
     /// <p>An internal error has occurred. Retry your request. If the problem persists, post a message with details on the AWS forums.</p>
     InternalServiceError(String),
-
+    /// <p>Registration token is invalid.</p>
     InvalidToken(String),
-    /// <p>The calls to the MeterUsage API are throttled.</p>
+    /// <p>The calls to the API are throttled.</p>
     Throttling(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -401,6 +559,9 @@ impl ResolveCustomerError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "DisabledApiException" => {
+                    return ResolveCustomerError::DisabledApi(String::from(error_message));
+                }
                 "ExpiredTokenException" => {
                     return ResolveCustomerError::ExpiredToken(String::from(error_message));
                 }
@@ -451,6 +612,7 @@ impl fmt::Display for ResolveCustomerError {
 impl Error for ResolveCustomerError {
     fn description(&self) -> &str {
         match *self {
+            ResolveCustomerError::DisabledApi(ref cause) => cause,
             ResolveCustomerError::ExpiredToken(ref cause) => cause,
             ResolveCustomerError::InternalServiceError(ref cause) => cause,
             ResolveCustomerError::InvalidToken(ref cause) => cause,
@@ -476,6 +638,12 @@ pub trait MarketplaceMetering {
         &self,
         input: MeterUsageRequest,
     ) -> RusotoFuture<MeterUsageResult, MeterUsageError>;
+
+    /// <p><p>Paid container software products sold through AWS Marketplace must integrate with the AWS Marketplace Metering Service and call the RegisterUsage operation for software entitlement and metering. Calling RegisterUsage from containers running outside of ECS is not currently supported. Free and BYOL products for ECS aren&#39;t required to call RegisterUsage, but you may choose to do so if you would like to receive usage data in your seller reports. The sections below explain the behavior of RegisterUsage. RegisterUsage performs two primary functions: metering and entitlement.</p> <ul> <li> <p> <i>Entitlement</i>: RegisterUsage allows you to verify that the customer running your paid software is subscribed to your product on AWS Marketplace, enabling you to guard against unauthorized use. Your container image that integrates with RegisterUsage is only required to guard against unauthorized use at container startup, as such a CustomerNotSubscribedException/PlatformNotSupportedException will only be thrown on the initial call to RegisterUsage. Subsequent calls from the same Amazon ECS task instance (e.g. task-id) will not throw a CustomerNotSubscribedException, even if the customer unsubscribes while the Amazon ECS task is still running.</p> </li> <li> <p> <i>Metering</i>: RegisterUsage meters software use per ECS task, per hour, with usage prorated to the second. A minimum of 1 minute of usage applies to tasks that are short lived. For example, if a customer has a 10 node ECS cluster and creates an ECS service configured as a Daemon Set, then ECS will launch a task on all 10 cluster nodes and the customer will be charged: (10 * hourly_rate). Metering for software use is automatically handled by the AWS Marketplace Metering Control Plane -- your software is not required to perform any metering specific actions, other than call RegisterUsage once for metering of software use to commence. The AWS Marketplace Metering Control Plane will also continue to bill customers for running ECS tasks, regardless of the customers subscription state, removing the need for your software to perform entitlement checks at runtime.</p> </li> </ul></p>
+    fn register_usage(
+        &self,
+        input: RegisterUsageRequest,
+    ) -> RusotoFuture<RegisterUsageResult, RegisterUsageError>;
 
     /// <p>ResolveCustomer is called by a SaaS application during the registration process. When a buyer visits your website during the registration process, the buyer submits a registration token through their browser. The registration token is resolved through this API to obtain a CustomerIdentifier and product code.</p>
     fn resolve_customer(
@@ -589,6 +757,43 @@ impl MarketplaceMetering for MarketplaceMeteringClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(MeterUsageError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p><p>Paid container software products sold through AWS Marketplace must integrate with the AWS Marketplace Metering Service and call the RegisterUsage operation for software entitlement and metering. Calling RegisterUsage from containers running outside of ECS is not currently supported. Free and BYOL products for ECS aren&#39;t required to call RegisterUsage, but you may choose to do so if you would like to receive usage data in your seller reports. The sections below explain the behavior of RegisterUsage. RegisterUsage performs two primary functions: metering and entitlement.</p> <ul> <li> <p> <i>Entitlement</i>: RegisterUsage allows you to verify that the customer running your paid software is subscribed to your product on AWS Marketplace, enabling you to guard against unauthorized use. Your container image that integrates with RegisterUsage is only required to guard against unauthorized use at container startup, as such a CustomerNotSubscribedException/PlatformNotSupportedException will only be thrown on the initial call to RegisterUsage. Subsequent calls from the same Amazon ECS task instance (e.g. task-id) will not throw a CustomerNotSubscribedException, even if the customer unsubscribes while the Amazon ECS task is still running.</p> </li> <li> <p> <i>Metering</i>: RegisterUsage meters software use per ECS task, per hour, with usage prorated to the second. A minimum of 1 minute of usage applies to tasks that are short lived. For example, if a customer has a 10 node ECS cluster and creates an ECS service configured as a Daemon Set, then ECS will launch a task on all 10 cluster nodes and the customer will be charged: (10 * hourly_rate). Metering for software use is automatically handled by the AWS Marketplace Metering Control Plane -- your software is not required to perform any metering specific actions, other than call RegisterUsage once for metering of software use to commence. The AWS Marketplace Metering Control Plane will also continue to bill customers for running ECS tasks, regardless of the customers subscription state, removing the need for your software to perform entitlement checks at runtime.</p> </li> </ul></p>
+    fn register_usage(
+        &self,
+        input: RegisterUsageRequest,
+    ) -> RusotoFuture<RegisterUsageResult, RegisterUsageError> {
+        let mut request = SignedRequest::new("POST", "aws-marketplace", &self.region, "/");
+        request.set_endpoint_prefix("metering.marketplace".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSMPMeteringService.RegisterUsage");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<RegisterUsageResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(RegisterUsageError::from_response(response))),
                 )
             }
         })

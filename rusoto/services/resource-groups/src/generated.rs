@@ -35,13 +35,13 @@ pub struct CreateGroupInput {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The name of the group, which is the identifier of the group in other operations. A resource group name cannot be updated after it is created. A resource group name can have a maximum of 127 characters, including letters, numbers, hyphens, dots, and underscores. The name cannot start with <code>AWS</code> or <code>aws</code>; these are reserved. A resource group name must be unique within your account.</p>
+    /// <p>The name of the group, which is the identifier of the group in other operations. A resource group name cannot be updated after it is created. A resource group name can have a maximum of 128 characters, including letters, numbers, hyphens, dots, and underscores. The name cannot start with <code>AWS</code> or <code>aws</code>; these are reserved. A resource group name must be unique within your account.</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>The resource query that determines which AWS resources are members of this group.</p>
     #[serde(rename = "ResourceQuery")]
     pub resource_query: ResourceQuery,
-    /// <p>The tags to add to the group. A tag is a string-to-string map of key-value pairs. Tag keys can have a maximum character length of 127 characters, and tag values can have a maximum length of 255 characters.</p>
+    /// <p>The tags to add to the group. A tag is a string-to-string map of key-value pairs. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<::std::collections::HashMap<String, String>>,
@@ -148,6 +148,31 @@ pub struct Group {
     pub name: String,
 }
 
+/// <p>A filter name and value pair that is used to obtain more specific results from a list of groups.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GroupFilter {
+    /// <p>The name of the filter. Filter names are case-sensitive.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>One or more filter values. Allowed filter values vary by group filter name, and are case-sensitive.</p>
+    #[serde(rename = "Values")]
+    pub values: Vec<String>,
+}
+
+/// <p>The ARN and group name of a group.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GroupIdentifier {
+    /// <p>The ARN of a resource group.</p>
+    #[serde(rename = "GroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_arn: Option<String>,
+    /// <p>The name of a resource group.</p>
+    #[serde(rename = "GroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_name: Option<String>,
+}
+
 /// <p>The underlying resource query of a resource group. Resources that match query results are part of the group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -162,6 +187,10 @@ pub struct GroupQuery {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListGroupResourcesInput {
+    /// <p><p>Filters, formatted as ResourceFilter objects, that you want to apply to a ListGroupResources operation.</p> <ul> <li> <p> <code>resource-type</code> - Filter resources by their type. Specify up to five resource types in the format AWS::ServiceCode::ResourceType. For example, AWS::EC2::Instance, or AWS::S3::Bucket.</p> </li> </ul></p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<ResourceFilter>>,
     /// <p>The name of the resource group.</p>
     #[serde(rename = "GroupName")]
     pub group_name: String,
@@ -182,6 +211,10 @@ pub struct ListGroupResourcesOutput {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p>A list of <code>QueryError</code> objects. Each error is an object that contains <code>ErrorCode</code> and <code>Message</code> structures. Possible values for <code>ErrorCode</code> are <code>CLOUDFORMATION_STACK_INACTIVE</code> and <code>CLOUDFORMATION_STACK_NOT_EXISTING</code>.</p>
+    #[serde(rename = "QueryErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_errors: Option<Vec<QueryError>>,
     /// <p>The ARNs and resource types of resources that are members of the group that you specified.</p>
     #[serde(rename = "ResourceIdentifiers")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -190,6 +223,10 @@ pub struct ListGroupResourcesOutput {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListGroupsInput {
+    /// <p><p>Filters, formatted as GroupFilter objects, that you want to apply to a ListGroups operation.</p> <ul> <li> <p> <code>resource-type</code> - Filter groups by resource type. Specify up to five resource types in the format AWS::ServiceCode::ResourceType. For example, AWS::EC2::Instance, or AWS::S3::Bucket.</p> </li> </ul></p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<GroupFilter>>,
     /// <p>The maximum number of resource group results that are returned by ListGroups in paginated output. By default, this number is 50.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -203,14 +240,39 @@ pub struct ListGroupsInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ListGroupsOutput {
-    /// <p>A list of resource groups.</p>
-    #[serde(rename = "Groups")]
+    /// <p>A list of GroupIdentifier objects. Each identifier is an object that contains both the GroupName and the GroupArn.</p>
+    #[serde(rename = "GroupIdentifiers")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub groups: Option<Vec<Group>>,
+    pub group_identifiers: Option<Vec<GroupIdentifier>>,
     /// <p>The NextToken value to include in a subsequent <code>ListGroups</code> request, to get more results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+/// <p>A two-part error structure that can occur in <code>ListGroupResources</code> or <code>SearchResources</code> operations on CloudFormation stack-based queries. The error occurs if the CloudFormation stack on which the query is based either does not exist, or has a status that renders the stack inactive. A <code>QueryError</code> occurrence does not necessarily mean that AWS Resource Groups could not complete the operation, but the resulting group might have no member resources.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct QueryError {
+    /// <p>Possible values are <code>CLOUDFORMATION_STACK_INACTIVE</code> and <code>CLOUDFORMATION_STACK_NOT_EXISTING</code>.</p>
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+    /// <p>A message that explains the <code>ErrorCode</code> value. Messages might state that the specified CloudFormation stack does not exist (or no longer exists). For <code>CLOUDFORMATION_STACK_INACTIVE</code>, the message typically states that the CloudFormation stack has a status that is not (or no longer) active, such as <code>CREATE_FAILED</code>.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+}
+
+/// <p>A filter name and value pair that is used to obtain more specific results from a list of resources.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ResourceFilter {
+    /// <p>The name of the filter. Filter names are case-sensitive.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>One or more filter values. Allowed filter values vary by resource filter name, and are case-sensitive.</p>
+    #[serde(rename = "Values")]
+    pub values: Vec<String>,
 }
 
 /// <p>The ARN of a resource, and its resource type.</p>
@@ -233,7 +295,7 @@ pub struct ResourceQuery {
     /// <p>The query that defines a group or a search.</p>
     #[serde(rename = "Query")]
     pub query: String,
-    /// <p>The type of the query. The valid value in this release is <code>TAG_FILTERS_1_0</code>.</p> <p> <i> <code>TAG_FILTERS_1_0:</code> </i> A JSON syntax that lets you specify a collection of simple tag filters for resource types and tags, as supported by the AWS Tagging API GetResources operation. When more than one element is present, only resources that match all filters are part of the result. If a filter specifies more than one value for a key, a resource matches the filter if its tag value matches any of the specified values.</p>
+    /// <p>The type of the query. The valid values in this release are <code>TAG_FILTERS_1_0</code> and <code>CLOUDFORMATION_STACK_1_0</code>.</p> <p> <i> <code>TAG_FILTERS_1_0:</code> </i> A JSON syntax that lets you specify a collection of simple tag filters for resource types and tags, as supported by the AWS Tagging API <a href="https://docs.aws.amazon.com/resourcegroupstagging/latest/APIReference/API_GetResources.html">GetResources</a> operation. If you specify more than one tag key, only resources that match all tag keys, and at least one value of each specified tag key, are returned in your query. If you specify more than one value for a tag key, a resource matches the filter if it has a tag key value that matches <i>any</i> of the specified values.</p> <p>For example, consider the following sample query for resources that have two tags, <code>Stage</code> and <code>Version</code>, with two values each. (<code>[{"Key":"Stage","Values":["Test","Deploy"]},{"Key":"Version","Values":["1","2"]}]</code>) The results of this query might include the following.</p> <ul> <li> <p>An EC2 instance that has the following two tags: <code>{"Key":"Stage","Values":["Deploy"]}</code>, and <code>{"Key":"Version","Values":["2"]}</code> </p> </li> <li> <p>An S3 bucket that has the following two tags: {"Key":"Stage","Values":["Test","Deploy"]}, and {"Key":"Version","Values":["1"]}</p> </li> </ul> <p>The query would not return the following results, however. The following EC2 instance does not have all tag keys specified in the filter, so it is rejected. The RDS database has all of the tag keys, but no values that match at least one of the specified tag key values in the filter.</p> <ul> <li> <p>An EC2 instance that has only the following tag: <code>{"Key":"Stage","Values":["Deploy"]}</code>.</p> </li> <li> <p>An RDS database that has the following two tags: <code>{"Key":"Stage","Values":["Archived"]}</code>, and <code>{"Key":"Version","Values":["4"]}</code> </p> </li> </ul> <p> <i> <code>CLOUDFORMATION_STACK_1_0:</code> </i> A JSON syntax that lets you specify a CloudFormation stack ARN.</p>
     #[serde(rename = "Type")]
     pub type_: String,
 }
@@ -260,6 +322,10 @@ pub struct SearchResourcesOutput {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p>A list of <code>QueryError</code> objects. Each error is an object that contains <code>ErrorCode</code> and <code>Message</code> structures. Possible values for <code>ErrorCode</code> are <code>CLOUDFORMATION_STACK_INACTIVE</code> and <code>CLOUDFORMATION_STACK_NOT_EXISTING</code>.</p>
+    #[serde(rename = "QueryErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_errors: Option<Vec<QueryError>>,
     /// <p>The ARNs and resource types of resources that are members of the group that you specified.</p>
     #[serde(rename = "ResourceIdentifiers")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -271,7 +337,7 @@ pub struct TagInput {
     /// <p>The ARN of the resource to which to add tags.</p>
     #[serde(rename = "Arn")]
     pub arn: String,
-    /// <p>The tags to add to the specified resource. A tag is a string-to-string map of key-value pairs. Tag keys can have a maximum character length of 127 characters, and tag values can have a maximum length of 255 characters.</p>
+    /// <p>The tags to add to the specified resource. A tag is a string-to-string map of key-value pairs. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
     #[serde(rename = "Tags")]
     pub tags: ::std::collections::HashMap<String, String>,
 }
@@ -2094,12 +2160,15 @@ impl ResourceGroups for ResourceGroupsClient {
         input: ListGroupResourcesInput,
     ) -> RusotoFuture<ListGroupResourcesOutput, ListGroupResourcesError> {
         let request_uri = format!(
-            "/groups/{group_name}/resource-identifiers",
+            "/groups/{group_name}/resource-identifiers-list",
             group_name = input.group_name
         );
 
-        let mut request = SignedRequest::new("GET", "resource-groups", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "resource-groups", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
 
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {
@@ -2141,10 +2210,13 @@ impl ResourceGroups for ResourceGroupsClient {
         &self,
         input: ListGroupsInput,
     ) -> RusotoFuture<ListGroupsOutput, ListGroupsError> {
-        let request_uri = "/groups";
+        let request_uri = "/groups-list";
 
-        let mut request = SignedRequest::new("GET", "resource-groups", &self.region, &request_uri);
+        let mut request = SignedRequest::new("POST", "resource-groups", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
 
         let mut params = Params::new();
         if let Some(ref x) = input.max_results {

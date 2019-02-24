@@ -288,6 +288,10 @@ pub struct DashPackage {
     #[serde(rename = "Encryption")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption: Option<DashEncryption>,
+    /// <p>Determines the position of some tags in the Media Presentation Description (MPD).  When set to FULL, elements like SegmentTemplate and ContentProtection are included in each Representation.  When set to COMPACT, duplicate elements are combined and presented at the AdaptationSet level.</p>
+    #[serde(rename = "ManifestLayout")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub manifest_layout: Option<String>,
     /// <p>Time window (in seconds) contained in each manifest.</p>
     #[serde(rename = "ManifestWindowSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -316,6 +320,10 @@ pub struct DashPackage {
     #[serde(rename = "SegmentDurationSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub segment_duration_seconds: Option<i64>,
+    /// <p>Determines the type of SegmentTimeline included in the Media Presentation Description (MPD).  When set to NUMBER<em>WITH</em>TIMELINE, a full timeline is presented in each SegmentTemplate, with $Number$ media URLs.  When set to TIME<em>WITH</em>TIMELINE, a full timeline is presented in each SegmentTemplate, with $Time$ media URLs.</p>
+    #[serde(rename = "SegmentTemplateFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub segment_template_format: Option<String>,
     #[serde(rename = "StreamSelection")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream_selection: Option<StreamSelection>,
@@ -628,6 +636,10 @@ pub struct HlsPackage {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct IngestEndpoint {
+    /// <p>The system generated unique identifier for the IngestEndpoint</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
     /// <p>The system generated password for ingest authentication.</p>
     #[serde(rename = "Password")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -862,9 +874,45 @@ pub struct RotateChannelCredentialsResponse {
     pub id: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct RotateIngestEndpointCredentialsRequest {
+    /// <p>The ID of the channel the IngestEndpoint is on.</p>
+    #[serde(rename = "Id")]
+    pub id: String,
+    /// <p>The id of the IngestEndpoint whose credentials should be rotated</p>
+    #[serde(rename = "IngestEndpointId")]
+    pub ingest_endpoint_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RotateIngestEndpointCredentialsResponse {
+    /// <p>The Amazon Resource Name (ARN) assigned to the Channel.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>A short text description of the Channel.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    #[serde(rename = "HlsIngest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hls_ingest: Option<HlsIngest>,
+    /// <p>The ID of the Channel.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+}
+
 /// <p>A configuration for accessing an external Secure Packager and Encoder Key Exchange (SPEKE) service that will provide encryption keys.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SpekeKeyProvider {
+    /// <p>An Amazon Resource Name (ARN) of a Certificate Manager certificate
+    /// that MediaPackage will use for enforcing secure end-to-end data
+    /// transfer with the key provider service.</p>
+    #[serde(rename = "CertificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_arn: Option<String>,
     /// <p>The resource ID to include in key requests.</p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
@@ -2182,6 +2230,146 @@ impl Error for RotateChannelCredentialsError {
         }
     }
 }
+/// Errors returned by RotateIngestEndpointCredentials
+#[derive(Debug, PartialEq)]
+pub enum RotateIngestEndpointCredentialsError {
+    /// <p>The client is not authorized to access the requested resource.</p>
+    Forbidden(String),
+    /// <p>An unexpected error occurred.</p>
+    InternalServerError(String),
+    /// <p>The requested resource does not exist.</p>
+    NotFound(String),
+    /// <p>An unexpected error occurred.</p>
+    ServiceUnavailable(String),
+    /// <p>The client has exceeded their resource or throttling limits.</p>
+    TooManyRequests(String),
+    /// <p>The parameters sent in the request are not valid.</p>
+    UnprocessableEntity(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl RotateIngestEndpointCredentialsError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> RotateIngestEndpointCredentialsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "ForbiddenException" => {
+                    return RotateIngestEndpointCredentialsError::Forbidden(String::from(
+                        error_message,
+                    ));
+                }
+                "InternalServerErrorException" => {
+                    return RotateIngestEndpointCredentialsError::InternalServerError(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return RotateIngestEndpointCredentialsError::NotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "ServiceUnavailableException" => {
+                    return RotateIngestEndpointCredentialsError::ServiceUnavailable(String::from(
+                        error_message,
+                    ));
+                }
+                "TooManyRequestsException" => {
+                    return RotateIngestEndpointCredentialsError::TooManyRequests(String::from(
+                        error_message,
+                    ));
+                }
+                "UnprocessableEntityException" => {
+                    return RotateIngestEndpointCredentialsError::UnprocessableEntity(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return RotateIngestEndpointCredentialsError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return RotateIngestEndpointCredentialsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for RotateIngestEndpointCredentialsError {
+    fn from(err: serde_json::error::Error) -> RotateIngestEndpointCredentialsError {
+        RotateIngestEndpointCredentialsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for RotateIngestEndpointCredentialsError {
+    fn from(err: CredentialsError) -> RotateIngestEndpointCredentialsError {
+        RotateIngestEndpointCredentialsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for RotateIngestEndpointCredentialsError {
+    fn from(err: HttpDispatchError) -> RotateIngestEndpointCredentialsError {
+        RotateIngestEndpointCredentialsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RotateIngestEndpointCredentialsError {
+    fn from(err: io::Error) -> RotateIngestEndpointCredentialsError {
+        RotateIngestEndpointCredentialsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for RotateIngestEndpointCredentialsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for RotateIngestEndpointCredentialsError {
+    fn description(&self) -> &str {
+        match *self {
+            RotateIngestEndpointCredentialsError::Forbidden(ref cause) => cause,
+            RotateIngestEndpointCredentialsError::InternalServerError(ref cause) => cause,
+            RotateIngestEndpointCredentialsError::NotFound(ref cause) => cause,
+            RotateIngestEndpointCredentialsError::ServiceUnavailable(ref cause) => cause,
+            RotateIngestEndpointCredentialsError::TooManyRequests(ref cause) => cause,
+            RotateIngestEndpointCredentialsError::UnprocessableEntity(ref cause) => cause,
+            RotateIngestEndpointCredentialsError::Validation(ref cause) => cause,
+            RotateIngestEndpointCredentialsError::Credentials(ref err) => err.description(),
+            RotateIngestEndpointCredentialsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            RotateIngestEndpointCredentialsError::ParseError(ref cause) => cause,
+            RotateIngestEndpointCredentialsError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by UpdateChannel
 #[derive(Debug, PartialEq)]
 pub enum UpdateChannelError {
@@ -2488,11 +2676,17 @@ pub trait MediaPackage {
         input: ListOriginEndpointsRequest,
     ) -> RusotoFuture<ListOriginEndpointsResponse, ListOriginEndpointsError>;
 
-    /// <p>Changes the Channel ingest username and password.</p>
+    /// <p>Changes the Channel&#39;s first IngestEndpoint&#39;s username and password. WARNING - This API is deprecated. Please use RotateIngestEndpointCredentials instead</p>
     fn rotate_channel_credentials(
         &self,
         input: RotateChannelCredentialsRequest,
     ) -> RusotoFuture<RotateChannelCredentialsResponse, RotateChannelCredentialsError>;
+
+    /// <p>Rotate the IngestEndpoint&#39;s username and password, as specified by the IngestEndpoint&#39;s id.</p>
+    fn rotate_ingest_endpoint_credentials(
+        &self,
+        input: RotateIngestEndpointCredentialsRequest,
+    ) -> RusotoFuture<RotateIngestEndpointCredentialsResponse, RotateIngestEndpointCredentialsError>;
 
     /// <p>Updates an existing Channel.</p>
     fn update_channel(
@@ -2858,7 +3052,7 @@ impl MediaPackage for MediaPackageClient {
         })
     }
 
-    /// <p>Changes the Channel ingest username and password.</p>
+    /// <p>Changes the Channel&#39;s first IngestEndpoint&#39;s username and password. WARNING - This API is deprecated. Please use RotateIngestEndpointCredentials instead</p>
     fn rotate_channel_credentials(
         &self,
         input: RotateChannelCredentialsRequest,
@@ -2887,6 +3081,48 @@ impl MediaPackage for MediaPackageClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RotateChannelCredentialsError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Rotate the IngestEndpoint&#39;s username and password, as specified by the IngestEndpoint&#39;s id.</p>
+    fn rotate_ingest_endpoint_credentials(
+        &self,
+        input: RotateIngestEndpointCredentialsRequest,
+    ) -> RusotoFuture<RotateIngestEndpointCredentialsResponse, RotateIngestEndpointCredentialsError>
+    {
+        let request_uri = format!(
+            "/channels/{id}/ingest_endpoints/{ingest_endpoint_id}/credentials",
+            id = input.id,
+            ingest_endpoint_id = input.ingest_endpoint_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "mediapackage", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<RotateIngestEndpointCredentialsResponse>(&body)
+                            .unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(RotateIngestEndpointCredentialsError::from_response(
+                        response,
+                    ))
                 }))
             }
         })

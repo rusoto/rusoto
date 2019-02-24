@@ -65,6 +65,17 @@ pub struct AddressBookData {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ApproveSkillRequest {
+    /// <p>The unique identifier of the skill.</p>
+    #[serde(rename = "SkillId")]
+    pub skill_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ApproveSkillResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateContactWithAddressBookRequest {
     /// <p>The ARN of the address book with which to associate the contact.</p>
     #[serde(rename = "AddressBookArn")]
@@ -109,6 +120,185 @@ pub struct AssociateSkillGroupWithRoomRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct AssociateSkillGroupWithRoomResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct AssociateSkillWithSkillGroupRequest {
+    /// <p>The ARN of the skill group to associate the skill to. Required.</p>
+    #[serde(rename = "SkillGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub skill_group_arn: Option<String>,
+    /// <p>The unique identifier of the skill.</p>
+    #[serde(rename = "SkillId")]
+    pub skill_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AssociateSkillWithSkillGroupResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct AssociateSkillWithUsersRequest {
+    /// <p>The ARN of the organization.</p>
+    #[serde(rename = "OrganizationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_arn: Option<String>,
+    /// <p>The private skill ID you want to make available to enrolled users.&gt;</p>
+    #[serde(rename = "SkillId")]
+    pub skill_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AssociateSkillWithUsersResponse {}
+
+/// <p>Usage report with specified parameters.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct BusinessReport {
+    /// <p>The time of report delivery.</p>
+    #[serde(rename = "DeliveryTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delivery_time: Option<f64>,
+    /// <p>The download link where a user can download the report.</p>
+    #[serde(rename = "DownloadUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub download_url: Option<String>,
+    /// <p>The failure code.</p>
+    #[serde(rename = "FailureCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failure_code: Option<String>,
+    /// <p>The S3 location of the output reports.</p>
+    #[serde(rename = "S3Location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_location: Option<BusinessReportS3Location>,
+    /// <p>The status of the report generation execution (RUNNING, SUCCEEDED, or FAILED).</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>The content range of the report.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct BusinessReportContentRange {
+    /// <p>The interval of the content range.</p>
+    #[serde(rename = "Interval")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub interval: Option<String>,
+}
+
+/// <p>The recurrence of the reports.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct BusinessReportRecurrence {
+    /// <p>The start date.</p>
+    #[serde(rename = "StartDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_date: Option<String>,
+}
+
+/// <p>The S3 location of the output reports.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct BusinessReportS3Location {
+    /// <p>The S3 bucket name of the output reports.</p>
+    #[serde(rename = "BucketName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bucket_name: Option<String>,
+    /// <p>The path of the business report.</p>
+    #[serde(rename = "Path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path: Option<String>,
+}
+
+/// <p>The schedule of the usage report.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct BusinessReportSchedule {
+    /// <p>The content range of the reports.</p>
+    #[serde(rename = "ContentRange")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_range: Option<BusinessReportContentRange>,
+    /// <p>The format of the generated report (individual CSV files or zipped files of individual files).</p>
+    #[serde(rename = "Format")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub format: Option<String>,
+    /// <p>The details of the last business report delivery for a specified time interval.</p>
+    #[serde(rename = "LastBusinessReport")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_business_report: Option<BusinessReport>,
+    /// <p>The recurrence of the reports.</p>
+    #[serde(rename = "Recurrence")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recurrence: Option<BusinessReportRecurrence>,
+    /// <p>The S3 bucket name of the output reports.</p>
+    #[serde(rename = "S3BucketName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_bucket_name: Option<String>,
+    /// <p>The S3 key where the report is delivered.</p>
+    #[serde(rename = "S3KeyPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_key_prefix: Option<String>,
+    /// <p>The ARN of the business report schedule.</p>
+    #[serde(rename = "ScheduleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schedule_arn: Option<String>,
+    /// <p>The name identifier of the schedule.</p>
+    #[serde(rename = "ScheduleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schedule_name: Option<String>,
+}
+
+/// <p>The skill store category that is shown. Alexa skills are assigned a specific skill category during creation, such as News, Social, and Sports.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct Category {
+    /// <p>The ID of the skill store category.</p>
+    #[serde(rename = "CategoryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub category_id: Option<i64>,
+    /// <p>The name of the skill store category.</p>
+    #[serde(rename = "CategoryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub category_name: Option<String>,
+}
+
+/// <p>The default conference provider that is used if no other scheduled meetings are detected.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ConferencePreference {
+    /// <p>The ARN of the default conference provider.</p>
+    #[serde(rename = "DefaultConferenceProviderArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_conference_provider_arn: Option<String>,
+}
+
+/// <p>An entity that provides a conferencing solution. Alexa for Business acts as the voice interface and mediator that connects users to their preferred conference provider. Examples of conference providers include Amazon Chime, Zoom, Cisco, and Polycom. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ConferenceProvider {
+    /// <p>The ARN of the newly created conference provider.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The IP endpoint and protocol for calling.</p>
+    #[serde(rename = "IPDialIn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ip_dial_in: Option<IPDialIn>,
+    /// <p>The meeting settings for the conference provider.</p>
+    #[serde(rename = "MeetingSetting")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub meeting_setting: Option<MeetingSetting>,
+    /// <p>The name of the conference provider.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The information for PSTN conferencing.</p>
+    #[serde(rename = "PSTNDialIn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pstn_dial_in: Option<PSTNDialIn>,
+    /// <p>The type of conference providers.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
 
 /// <p>A contact with attributes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -187,6 +377,79 @@ pub struct CreateAddressBookResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateBusinessReportScheduleRequest {
+    /// <p>The client request token.</p>
+    #[serde(rename = "ClientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The content range of the reports.</p>
+    #[serde(rename = "ContentRange")]
+    pub content_range: BusinessReportContentRange,
+    /// <p>The format of the generated report (individual CSV files or zipped files of individual files).</p>
+    #[serde(rename = "Format")]
+    pub format: String,
+    /// <p>The recurrence of the reports.</p>
+    #[serde(rename = "Recurrence")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recurrence: Option<BusinessReportRecurrence>,
+    /// <p>The S3 bucket name of the output reports.</p>
+    #[serde(rename = "S3BucketName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_bucket_name: Option<String>,
+    /// <p>The S3 key where the report is delivered.</p>
+    #[serde(rename = "S3KeyPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_key_prefix: Option<String>,
+    /// <p>The name identifier of the schedule.</p>
+    #[serde(rename = "ScheduleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schedule_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateBusinessReportScheduleResponse {
+    /// <p>The ARN of the business report schedule.</p>
+    #[serde(rename = "ScheduleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schedule_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateConferenceProviderRequest {
+    /// <p>The request token of the client.</p>
+    #[serde(rename = "ClientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The name of the conference provider.</p>
+    #[serde(rename = "ConferenceProviderName")]
+    pub conference_provider_name: String,
+    /// <p>Represents a type within a list of predefined types.</p>
+    #[serde(rename = "ConferenceProviderType")]
+    pub conference_provider_type: String,
+    /// <p>The IP endpoint and protocol for calling.</p>
+    #[serde(rename = "IPDialIn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ip_dial_in: Option<IPDialIn>,
+    /// <p>The meeting settings for the conference provider.</p>
+    #[serde(rename = "MeetingSetting")]
+    pub meeting_setting: MeetingSetting,
+    /// <p>The information for PSTN conferencing.</p>
+    #[serde(rename = "PSTNDialIn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pstn_dial_in: Option<PSTNDialIn>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateConferenceProviderResponse {
+    /// <p>The ARN of the newly-created conference provider.</p>
+    #[serde(rename = "ConferenceProviderArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conference_provider_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateContactRequest {
     /// <p>A unique, user-specified identifier for this request that ensures idempotency.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -205,7 +468,8 @@ pub struct CreateContactRequest {
     pub last_name: Option<String>,
     /// <p>The phone number of the contact in E.164 format.</p>
     #[serde(rename = "PhoneNumber")]
-    pub phone_number: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub phone_number: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -372,6 +636,28 @@ pub struct DeleteAddressBookRequest {
 pub struct DeleteAddressBookResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteBusinessReportScheduleRequest {
+    /// <p>The ARN of the business report schedule.</p>
+    #[serde(rename = "ScheduleArn")]
+    pub schedule_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteBusinessReportScheduleResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteConferenceProviderRequest {
+    /// <p>The ARN of the conference provider.</p>
+    #[serde(rename = "ConferenceProviderArn")]
+    pub conference_provider_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteConferenceProviderResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteContactRequest {
     /// <p>The ARN of the contact to delete.</p>
     #[serde(rename = "ContactArn")]
@@ -381,6 +667,17 @@ pub struct DeleteContactRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeleteContactResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteDeviceRequest {
+    /// <p>The ARN of the device for which to request details.</p>
+    #[serde(rename = "DeviceArn")]
+    pub device_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteDeviceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteProfileRequest {
@@ -425,6 +722,21 @@ pub struct DeleteRoomSkillParameterRequest {
 pub struct DeleteRoomSkillParameterResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteSkillAuthorizationRequest {
+    /// <p>The room that the skill is authorized for.</p>
+    #[serde(rename = "RoomArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub room_arn: Option<String>,
+    /// <p>The unique identifier of a skill.</p>
+    #[serde(rename = "SkillId")]
+    pub skill_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteSkillAuthorizationResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteSkillGroupRequest {
     /// <p>The ARN of the skill group to delete. Required.</p>
     #[serde(rename = "SkillGroupArn")]
@@ -450,6 +762,28 @@ pub struct DeleteUserRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeleteUserResponse {}
+
+/// <p>The details about the developer that published the skill.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeveloperInfo {
+    /// <p>The name of the developer.</p>
+    #[serde(rename = "DeveloperName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub developer_name: Option<String>,
+    /// <p>The email of the developer.</p>
+    #[serde(rename = "Email")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub email: Option<String>,
+    /// <p>The URL of the privacy policy.</p>
+    #[serde(rename = "PrivacyPolicy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub privacy_policy: Option<String>,
+    /// <p>The website of the developer.</p>
+    #[serde(rename = "Url")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+}
 
 /// <p>A device with attributes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -608,6 +942,36 @@ pub struct DisassociateDeviceFromRoomRequest {
 pub struct DisassociateDeviceFromRoomResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DisassociateSkillFromSkillGroupRequest {
+    /// <p>The unique identifier of a skill. Required.</p>
+    #[serde(rename = "SkillGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub skill_group_arn: Option<String>,
+    /// <p>The ARN of a skill group to associate to a skill.</p>
+    #[serde(rename = "SkillId")]
+    pub skill_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DisassociateSkillFromSkillGroupResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DisassociateSkillFromUsersRequest {
+    /// <p>The ARN of the organization.</p>
+    #[serde(rename = "OrganizationArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_arn: Option<String>,
+    /// <p> The private skill ID you want to make unavailable for enrolled users.</p>
+    #[serde(rename = "SkillId")]
+    pub skill_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DisassociateSkillFromUsersResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisassociateSkillGroupFromRoomRequest {
     /// <p>The ARN of the room from which the skill group is to be disassociated. Required.</p>
     #[serde(rename = "RoomArn")]
@@ -635,6 +999,17 @@ pub struct Filter {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ForgetSmartHomeAppliancesRequest {
+    /// <p>The room that the appliances are associated with.</p>
+    #[serde(rename = "RoomArn")]
+    pub room_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ForgetSmartHomeAppliancesResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetAddressBookRequest {
     /// <p>The ARN of the address book for which to request details.</p>
     #[serde(rename = "AddressBookArn")]
@@ -648,6 +1023,34 @@ pub struct GetAddressBookResponse {
     #[serde(rename = "AddressBook")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub address_book: Option<AddressBook>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetConferencePreferenceRequest {}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetConferencePreferenceResponse {
+    /// <p>The conference preference.</p>
+    #[serde(rename = "Preference")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preference: Option<ConferencePreference>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetConferenceProviderRequest {
+    /// <p>The ARN of the newly created conference provider.</p>
+    #[serde(rename = "ConferenceProviderArn")]
+    pub conference_provider_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetConferenceProviderResponse {
+    /// <p>The conference provider.</p>
+    #[serde(rename = "ConferenceProvider")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conference_provider: Option<ConferenceProvider>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -757,20 +1160,81 @@ pub struct GetSkillGroupResponse {
     pub skill_group: Option<SkillGroup>,
 }
 
+/// <p>The IP endpoint and protocol for calling.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct IPDialIn {
+    /// <p>The protocol, including SIP, SIPS, and H323.</p>
+    #[serde(rename = "CommsProtocol")]
+    pub comms_protocol: String,
+    /// <p>The IP address.</p>
+    #[serde(rename = "Endpoint")]
+    pub endpoint: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListBusinessReportSchedulesRequest {
+    /// <p>The maximum number of schedules listed in the call.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token used to list the remaining schedules from the previous API call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListBusinessReportSchedulesResponse {
+    /// <p>The schedule of the reports.</p>
+    #[serde(rename = "BusinessReportSchedules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub business_report_schedules: Option<Vec<BusinessReportSchedule>>,
+    /// <p>The token used to list the remaining schedules from the previous API call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListConferenceProvidersRequest {
+    /// <p>The maximum number of conference providers to be returned, per paginated calls.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The tokens used for pagination.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListConferenceProvidersResponse {
+    /// <p>The conference providers.</p>
+    #[serde(rename = "ConferenceProviders")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub conference_providers: Option<Vec<ConferenceProvider>>,
+    /// <p>The tokens used for pagination.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListDeviceEventsRequest {
     /// <p>The ARN of a device.</p>
     #[serde(rename = "DeviceArn")]
     pub device_arn: String,
-    /// <p>The event type to filter device events.</p>
+    /// <p>The event type to filter device events. If EventType isn't specified, this returns a list of all device events in reverse chronological order. If EventType is specified, this returns a list of device events for that EventType in reverse chronological order. </p>
     #[serde(rename = "EventType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_type: Option<String>,
-    /// <p>The maximum number of results to include in the response. If more results exist than the specified MaxResults value, a token is included in the response so that the remaining results can be retrieved. Required. </p>
+    /// <p>The maximum number of results to include in the response. The default value is 50. If more results exist than the specified MaxResults value, a token is included in the response so that the remaining results can be retrieved. </p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response only includes results beyond the token, up to the value specified by MaxResults.</p>
+    /// <p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response only includes results beyond the token, up to the value specified by MaxResults. When the end of results is reached, the response has a value of null.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -779,11 +1243,11 @@ pub struct ListDeviceEventsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ListDeviceEventsResponse {
-    /// <p><p/></p>
+    /// <p>The device events requested for the device ARN.</p>
     #[serde(rename = "DeviceEvents")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub device_events: Option<Vec<DeviceEvent>>,
-    /// <p><p/></p>
+    /// <p>The token returned to indicate that there is more data available.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -791,18 +1255,26 @@ pub struct ListDeviceEventsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListSkillsRequest {
-    /// <p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved. Required.</p>
+    /// <p>Whether the skill is enabled under the user's account, or if it requires linking to be used.</p>
+    #[serde(rename = "EnablementType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enablement_type: Option<String>,
+    /// <p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token, up to the value specified by <code>MaxResults</code>. Required.</p>
+    /// <p>An optional token returned from a prior request. Use this token for pagination of results from this action. If this parameter is specified, the response includes only results beyond the token, up to the value specified by <code>MaxResults</code>.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The ARN of the skill group for which to list enabled skills. Required.</p>
+    /// <p>The ARN of the skill group for which to list enabled skills.</p>
     #[serde(rename = "SkillGroupArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub skill_group_arn: Option<String>,
+    /// <p>Whether the skill is publicly available or is a private skill.</p>
+    #[serde(rename = "SkillType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub skill_type: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -819,8 +1291,89 @@ pub struct ListSkillsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListSkillsStoreCategoriesRequest {
+    /// <p>The maximum number of categories returned, per paginated calls.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The tokens used for pagination.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListSkillsStoreCategoriesResponse {
+    /// <p>The list of categories.</p>
+    #[serde(rename = "CategoryList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub category_list: Option<Vec<Category>>,
+    /// <p>The tokens used for pagination.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListSkillsStoreSkillsByCategoryRequest {
+    /// <p>The category ID for which the skills are being retrieved from the skill store.</p>
+    #[serde(rename = "CategoryId")]
+    pub category_id: i64,
+    /// <p>The maximum number of skills returned per paginated calls.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The tokens used for pagination.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListSkillsStoreSkillsByCategoryResponse {
+    /// <p>The tokens used for pagination.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The skill store skills.</p>
+    #[serde(rename = "SkillsStoreSkills")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub skills_store_skills: Option<Vec<SkillsStoreSkill>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListSmartHomeAppliancesRequest {
+    /// <p>The maximum number of appliances to be returned, per paginated calls.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The tokens used for pagination.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The room that the appliances are associated with.</p>
+    #[serde(rename = "RoomArn")]
+    pub room_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListSmartHomeAppliancesResponse {
+    /// <p>The tokens used for pagination.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The smart home appliances.</p>
+    #[serde(rename = "SmartHomeAppliances")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub smart_home_appliances: Option<Vec<SmartHomeAppliance>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTagsRequest {
-    /// <p>The ARN of the specific resource for which to list tags. Required.</p>
+    /// <p>The ARN of the specified resource for which to list tags.</p>
     #[serde(rename = "Arn")]
     pub arn: String,
     /// <p>The maximum number of results to include in the response. If more results exist than the specified <code>MaxResults</code> value, a token is included in the response so that the remaining results can be retrieved.</p>
@@ -840,10 +1393,35 @@ pub struct ListTagsResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The list of tags requested for the specific resource.</p>
+    /// <p>The tags requested for the specified resource.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+/// <p><p>The values that indicate whether a pin is always required (YES), never required (NO), or OPTIONAL.</p> <ul> <li> <p>If YES, Alexa will always ask for a meeting pin.</p> </li> <li> <p>If NO, Alexa will never ask for a meeting pin.</p> </li> <li> <p>If OPTIONAL, Alexa will ask if you have a meeting pin and if the customer responds with yes, it will ask for the meeting pin.</p> </li> </ul></p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct MeetingSetting {
+    /// <p>The values that indicate whether the pin is always required.</p>
+    #[serde(rename = "RequirePin")]
+    pub require_pin: String,
+}
+
+/// <p>The information for public switched telephone network (PSTN) conferencing.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct PSTNDialIn {
+    /// <p>The zip code.</p>
+    #[serde(rename = "CountryCode")]
+    pub country_code: String,
+    /// <p>The delay duration before Alexa enters the conference ID with dual-tone multi-frequency (DTMF). Each number on the dial pad corresponds to a DTMF tone, which is how we send data over the telephone network.</p>
+    #[serde(rename = "OneClickIdDelay")]
+    pub one_click_id_delay: String,
+    /// <p>The delay duration before Alexa enters the conference pin with dual-tone multi-frequency (DTMF). Each number on the dial pad corresponds to a DTMF tone, which is how we send data over the telephone network.</p>
+    #[serde(rename = "OneClickPinDelay")]
+    pub one_click_pin_delay: String,
+    /// <p>The phone number to call to join the conference.</p>
+    #[serde(rename = "PhoneNumber")]
+    pub phone_number: String,
 }
 
 /// <p>A room profile with attributes.</p>
@@ -854,10 +1432,18 @@ pub struct Profile {
     #[serde(rename = "Address")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub address: Option<String>,
+    /// <p>The ARN of the address book.</p>
+    #[serde(rename = "AddressBookArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub address_book_arn: Option<String>,
     /// <p>The distance unit of a room profile.</p>
     #[serde(rename = "DistanceUnit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub distance_unit: Option<String>,
+    /// <p>Retrieves if the profile is default or not.</p>
+    #[serde(rename = "IsDefault")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_default: Option<bool>,
     /// <p>The max volume limit of a room profile.</p>
     #[serde(rename = "MaxVolumeLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -904,6 +1490,10 @@ pub struct ProfileData {
     #[serde(rename = "DistanceUnit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub distance_unit: Option<String>,
+    /// <p>Retrieves if the profile data is default or not.</p>
+    #[serde(rename = "IsDefault")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_default: Option<bool>,
     /// <p>The ARN of a room profile.</p>
     #[serde(rename = "ProfileArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -927,6 +1517,17 @@ pub struct ProfileData {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct PutConferencePreferenceRequest {
+    /// <p>The conference preference of a specific conference provider.</p>
+    #[serde(rename = "ConferencePreference")]
+    pub conference_preference: ConferencePreference,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PutConferencePreferenceResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutRoomSkillParameterRequest {
     /// <p>The ARN of the room associated with the room skill parameter. Required.</p>
     #[serde(rename = "RoomArn")]
@@ -943,6 +1544,63 @@ pub struct PutRoomSkillParameterRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct PutRoomSkillParameterResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct PutSkillAuthorizationRequest {
+    /// <p>The authorization result specific to OAUTH code grant output. "Code” must be populated in the AuthorizationResult map to establish the authorization.</p>
+    #[serde(rename = "AuthorizationResult")]
+    pub authorization_result: ::std::collections::HashMap<String, String>,
+    /// <p>The room that the skill is authorized for.</p>
+    #[serde(rename = "RoomArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub room_arn: Option<String>,
+    /// <p>The unique identifier of a skill.</p>
+    #[serde(rename = "SkillId")]
+    pub skill_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PutSkillAuthorizationResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct RegisterAVSDeviceRequest {
+    /// <p>The device type ID for your AVS device generated by Amazon when the OEM creates a new product on Amazon's Developer Console.</p>
+    #[serde(rename = "AmazonId")]
+    pub amazon_id: String,
+    /// <p>The client ID of the OEM used for code-based linking authorization on an AVS device.</p>
+    #[serde(rename = "ClientId")]
+    pub client_id: String,
+    /// <p>The key generated by the OEM that uniquely identifies a specified instance of your AVS device.</p>
+    #[serde(rename = "DeviceSerialNumber")]
+    pub device_serial_number: String,
+    /// <p>The product ID used to identify your AVS device during authorization.</p>
+    #[serde(rename = "ProductId")]
+    pub product_id: String,
+    /// <p>The code that is obtained after your AVS device has made a POST request to LWA as a part of the Device Authorization Request component of the OAuth code-based linking specification.</p>
+    #[serde(rename = "UserCode")]
+    pub user_code: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RegisterAVSDeviceResponse {
+    /// <p>The ARN of the device.</p>
+    #[serde(rename = "DeviceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub device_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct RejectSkillRequest {
+    /// <p>The unique identifier of the skill.</p>
+    #[serde(rename = "SkillId")]
+    pub skill_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RejectSkillResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ResolveRoomRequest {
@@ -1325,6 +1983,52 @@ pub struct SendInvitationRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct SendInvitationResponse {}
 
+/// <p>Granular information about the skill.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SkillDetails {
+    /// <p>The details about what the skill supports organized as bullet points.</p>
+    #[serde(rename = "BulletPoints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bullet_points: Option<Vec<String>>,
+    /// <p>The details about the developer that published the skill.</p>
+    #[serde(rename = "DeveloperInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub developer_info: Option<DeveloperInfo>,
+    /// <p>The URL of the end user license agreement.</p>
+    #[serde(rename = "EndUserLicenseAgreement")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_user_license_agreement: Option<String>,
+    /// <p>The generic keywords associated with the skill that can be used to find a skill.</p>
+    #[serde(rename = "GenericKeywords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub generic_keywords: Option<Vec<String>>,
+    /// <p>The phrase used to trigger the skill.</p>
+    #[serde(rename = "InvocationPhrase")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub invocation_phrase: Option<String>,
+    /// <p>The updates added in bullet points.</p>
+    #[serde(rename = "NewInThisVersionBulletPoints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub new_in_this_version_bullet_points: Option<Vec<String>>,
+    /// <p>The description of the product.</p>
+    #[serde(rename = "ProductDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub product_description: Option<String>,
+    /// <p>The date when the skill was released.</p>
+    #[serde(rename = "ReleaseDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub release_date: Option<String>,
+    /// <p>The list of reviews for the skill, including Key and Value pair.</p>
+    #[serde(rename = "Reviews")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reviews: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The types of skills.</p>
+    #[serde(rename = "SkillTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub skill_types: Option<Vec<String>>,
+}
+
 /// <p>A skill group with attributes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -1365,7 +2069,49 @@ pub struct SkillGroupData {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct SkillSummary {
+    /// <p>Whether the skill is enabled under the user's account, or if it requires linking to be used.</p>
+    #[serde(rename = "EnablementType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enablement_type: Option<String>,
     /// <p>The ARN of the skill summary.</p>
+    #[serde(rename = "SkillId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub skill_id: Option<String>,
+    /// <p>The name of the skill.</p>
+    #[serde(rename = "SkillName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub skill_name: Option<String>,
+    /// <p>Whether the skill is publicly available or is a private skill.</p>
+    #[serde(rename = "SkillType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub skill_type: Option<String>,
+    /// <p>Linking support for a skill.</p>
+    #[serde(rename = "SupportsLinking")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub supports_linking: Option<bool>,
+}
+
+/// <p>The detailed information about an Alexa skill.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SkillsStoreSkill {
+    /// <p>The URL where the skill icon resides.</p>
+    #[serde(rename = "IconUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub icon_url: Option<String>,
+    /// <p>Sample utterances that interact with the skill.</p>
+    #[serde(rename = "SampleUtterances")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sample_utterances: Option<Vec<String>>,
+    /// <p>Short description about the skill.</p>
+    #[serde(rename = "ShortDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub short_description: Option<String>,
+    /// <p>Information about the skill.</p>
+    #[serde(rename = "SkillDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub skill_details: Option<SkillDetails>,
+    /// <p>The ARN of the skill.</p>
     #[serde(rename = "SkillId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub skill_id: Option<String>,
@@ -1377,6 +2123,24 @@ pub struct SkillSummary {
     #[serde(rename = "SupportsLinking")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub supports_linking: Option<bool>,
+}
+
+/// <p>A smart home appliance that can connect to a central system. Any domestic device can be a smart appliance. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SmartHomeAppliance {
+    /// <p>The description of the smart home appliance.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The friendly name of the smart home appliance.</p>
+    #[serde(rename = "FriendlyName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub friendly_name: Option<String>,
+    /// <p>The name of the manufacturer of the smart home appliance.</p>
+    #[serde(rename = "ManufacturerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub manufacturer_name: Option<String>,
 }
 
 /// <p>An object representing a sort criteria. </p>
@@ -1409,17 +2173,26 @@ pub struct StartDeviceSyncRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct StartDeviceSyncResponse {}
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StartSmartHomeApplianceDiscoveryRequest {
+    /// <p>The room where smart home appliance discovery was initiated.</p>
+    #[serde(rename = "RoomArn")]
+    pub room_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StartSmartHomeApplianceDiscoveryResponse {}
+
 /// <p>A key-value pair that can be associated with a resource. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Tag {
     /// <p>The key of a tag. Tag keys are case-sensitive. </p>
     #[serde(rename = "Key")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub key: Option<String>,
+    pub key: String,
     /// <p>The value of a tag. Tag values are case-sensitive and can be null.</p>
     #[serde(rename = "Value")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub value: Option<String>,
+    pub value: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1468,6 +2241,62 @@ pub struct UpdateAddressBookRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct UpdateAddressBookResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateBusinessReportScheduleRequest {
+    /// <p>The format of the generated report (individual CSV files or zipped files of individual files).</p>
+    #[serde(rename = "Format")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub format: Option<String>,
+    /// <p>The recurrence of the reports.</p>
+    #[serde(rename = "Recurrence")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recurrence: Option<BusinessReportRecurrence>,
+    /// <p>The S3 location of the output reports.</p>
+    #[serde(rename = "S3BucketName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_bucket_name: Option<String>,
+    /// <p>The S3 key where the report is delivered.</p>
+    #[serde(rename = "S3KeyPrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_key_prefix: Option<String>,
+    /// <p>The ARN of the business report schedule.</p>
+    #[serde(rename = "ScheduleArn")]
+    pub schedule_arn: String,
+    /// <p>The name identifier of the schedule.</p>
+    #[serde(rename = "ScheduleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schedule_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateBusinessReportScheduleResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateConferenceProviderRequest {
+    /// <p>The ARN of the conference provider.</p>
+    #[serde(rename = "ConferenceProviderArn")]
+    pub conference_provider_arn: String,
+    /// <p>The type of the conference provider.</p>
+    #[serde(rename = "ConferenceProviderType")]
+    pub conference_provider_type: String,
+    /// <p>The IP endpoint and protocol for calling.</p>
+    #[serde(rename = "IPDialIn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ip_dial_in: Option<IPDialIn>,
+    /// <p>The meeting settings for the conference provider.</p>
+    #[serde(rename = "MeetingSetting")]
+    pub meeting_setting: MeetingSetting,
+    /// <p>The information for PSTN conferencing.</p>
+    #[serde(rename = "PSTNDialIn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pstn_dial_in: Option<PSTNDialIn>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateConferenceProviderResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateContactRequest {
@@ -1522,6 +2351,10 @@ pub struct UpdateProfileRequest {
     #[serde(rename = "DistanceUnit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub distance_unit: Option<String>,
+    /// <p>Sets the profile as default if selected. If this is missing, no update is done to the default status.</p>
+    #[serde(rename = "IsDefault")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_default: Option<bool>,
     /// <p>The updated maximum volume limit for the room profile.</p>
     #[serde(rename = "MaxVolumeLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1638,10 +2471,102 @@ pub struct UserData {
     pub user_arn: Option<String>,
 }
 
+/// Errors returned by ApproveSkill
+#[derive(Debug, PartialEq)]
+pub enum ApproveSkillError {
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// <p>You are performing an action that would put you beyond your account's limits.</p>
+    LimitExceeded(String),
+    /// <p>The resource is not found.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ApproveSkillError {
+    pub fn from_response(res: BufferedHttpResponse) -> ApproveSkillError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ConcurrentModificationException" => {
+                    return ApproveSkillError::ConcurrentModification(String::from(error_message));
+                }
+                "LimitExceededException" => {
+                    return ApproveSkillError::LimitExceeded(String::from(error_message));
+                }
+                "NotFoundException" => {
+                    return ApproveSkillError::NotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return ApproveSkillError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ApproveSkillError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ApproveSkillError {
+    fn from(err: serde_json::error::Error) -> ApproveSkillError {
+        ApproveSkillError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ApproveSkillError {
+    fn from(err: CredentialsError) -> ApproveSkillError {
+        ApproveSkillError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ApproveSkillError {
+    fn from(err: HttpDispatchError) -> ApproveSkillError {
+        ApproveSkillError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ApproveSkillError {
+    fn from(err: io::Error) -> ApproveSkillError {
+        ApproveSkillError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ApproveSkillError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ApproveSkillError {
+    fn description(&self) -> &str {
+        match *self {
+            ApproveSkillError::ConcurrentModification(ref cause) => cause,
+            ApproveSkillError::LimitExceeded(ref cause) => cause,
+            ApproveSkillError::NotFound(ref cause) => cause,
+            ApproveSkillError::Validation(ref cause) => cause,
+            ApproveSkillError::Credentials(ref err) => err.description(),
+            ApproveSkillError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ApproveSkillError::ParseError(ref cause) => cause,
+            ApproveSkillError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by AssociateContactWithAddressBook
 #[derive(Debug, PartialEq)]
 pub enum AssociateContactWithAddressBookError {
-    /// <p>You are performing an action that would put you beyond your account's limits. HTTP Status Code: 400</p>
+    /// <p>You are performing an action that would put you beyond your account's limits.</p>
     LimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1727,8 +2652,11 @@ impl Error for AssociateContactWithAddressBookError {
 /// Errors returned by AssociateDeviceWithRoom
 #[derive(Debug, PartialEq)]
 pub enum AssociateDeviceWithRoomError {
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// <p>The request failed because this device is no longer registered and therefore no longer managed by this account.</p>
     DeviceNotRegistered(String),
-    /// <p>You are performing an action that would put you beyond your account's limits. HTTP Status Code: 400</p>
+    /// <p>You are performing an action that would put you beyond your account's limits.</p>
     LimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1755,6 +2683,11 @@ impl AssociateDeviceWithRoomError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "ConcurrentModificationException" => {
+                    return AssociateDeviceWithRoomError::ConcurrentModification(String::from(
+                        error_message,
+                    ));
+                }
                 "DeviceNotRegisteredException" => {
                     return AssociateDeviceWithRoomError::DeviceNotRegistered(String::from(
                         error_message,
@@ -1801,6 +2734,7 @@ impl fmt::Display for AssociateDeviceWithRoomError {
 impl Error for AssociateDeviceWithRoomError {
     fn description(&self) -> &str {
         match *self {
+            AssociateDeviceWithRoomError::ConcurrentModification(ref cause) => cause,
             AssociateDeviceWithRoomError::DeviceNotRegistered(ref cause) => cause,
             AssociateDeviceWithRoomError::LimitExceeded(ref cause) => cause,
             AssociateDeviceWithRoomError::Validation(ref cause) => cause,
@@ -1816,6 +2750,8 @@ impl Error for AssociateDeviceWithRoomError {
 /// Errors returned by AssociateSkillGroupWithRoom
 #[derive(Debug, PartialEq)]
 pub enum AssociateSkillGroupWithRoomError {
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1841,6 +2777,11 @@ impl AssociateSkillGroupWithRoomError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "ConcurrentModificationException" => {
+                    return AssociateSkillGroupWithRoomError::ConcurrentModification(String::from(
+                        error_message,
+                    ));
+                }
                 "ValidationException" => {
                     return AssociateSkillGroupWithRoomError::Validation(error_message.to_string());
                 }
@@ -1879,6 +2820,7 @@ impl fmt::Display for AssociateSkillGroupWithRoomError {
 impl Error for AssociateSkillGroupWithRoomError {
     fn description(&self) -> &str {
         match *self {
+            AssociateSkillGroupWithRoomError::ConcurrentModification(ref cause) => cause,
             AssociateSkillGroupWithRoomError::Validation(ref cause) => cause,
             AssociateSkillGroupWithRoomError::Credentials(ref err) => err.description(),
             AssociateSkillGroupWithRoomError::HttpDispatch(ref dispatch_error) => {
@@ -1889,12 +2831,194 @@ impl Error for AssociateSkillGroupWithRoomError {
         }
     }
 }
+/// Errors returned by AssociateSkillWithSkillGroup
+#[derive(Debug, PartialEq)]
+pub enum AssociateSkillWithSkillGroupError {
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// <p>The resource is not found.</p>
+    NotFound(String),
+    /// <p>The skill must be linked to a third-party account.</p>
+    SkillNotLinked(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl AssociateSkillWithSkillGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> AssociateSkillWithSkillGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ConcurrentModificationException" => {
+                    return AssociateSkillWithSkillGroupError::ConcurrentModification(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return AssociateSkillWithSkillGroupError::NotFound(String::from(error_message));
+                }
+                "SkillNotLinkedException" => {
+                    return AssociateSkillWithSkillGroupError::SkillNotLinked(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return AssociateSkillWithSkillGroupError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return AssociateSkillWithSkillGroupError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for AssociateSkillWithSkillGroupError {
+    fn from(err: serde_json::error::Error) -> AssociateSkillWithSkillGroupError {
+        AssociateSkillWithSkillGroupError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AssociateSkillWithSkillGroupError {
+    fn from(err: CredentialsError) -> AssociateSkillWithSkillGroupError {
+        AssociateSkillWithSkillGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AssociateSkillWithSkillGroupError {
+    fn from(err: HttpDispatchError) -> AssociateSkillWithSkillGroupError {
+        AssociateSkillWithSkillGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AssociateSkillWithSkillGroupError {
+    fn from(err: io::Error) -> AssociateSkillWithSkillGroupError {
+        AssociateSkillWithSkillGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AssociateSkillWithSkillGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AssociateSkillWithSkillGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            AssociateSkillWithSkillGroupError::ConcurrentModification(ref cause) => cause,
+            AssociateSkillWithSkillGroupError::NotFound(ref cause) => cause,
+            AssociateSkillWithSkillGroupError::SkillNotLinked(ref cause) => cause,
+            AssociateSkillWithSkillGroupError::Validation(ref cause) => cause,
+            AssociateSkillWithSkillGroupError::Credentials(ref err) => err.description(),
+            AssociateSkillWithSkillGroupError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            AssociateSkillWithSkillGroupError::ParseError(ref cause) => cause,
+            AssociateSkillWithSkillGroupError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by AssociateSkillWithUsers
+#[derive(Debug, PartialEq)]
+pub enum AssociateSkillWithUsersError {
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl AssociateSkillWithUsersError {
+    pub fn from_response(res: BufferedHttpResponse) -> AssociateSkillWithUsersError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ConcurrentModificationException" => {
+                    return AssociateSkillWithUsersError::ConcurrentModification(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return AssociateSkillWithUsersError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return AssociateSkillWithUsersError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for AssociateSkillWithUsersError {
+    fn from(err: serde_json::error::Error) -> AssociateSkillWithUsersError {
+        AssociateSkillWithUsersError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AssociateSkillWithUsersError {
+    fn from(err: CredentialsError) -> AssociateSkillWithUsersError {
+        AssociateSkillWithUsersError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AssociateSkillWithUsersError {
+    fn from(err: HttpDispatchError) -> AssociateSkillWithUsersError {
+        AssociateSkillWithUsersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AssociateSkillWithUsersError {
+    fn from(err: io::Error) -> AssociateSkillWithUsersError {
+        AssociateSkillWithUsersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AssociateSkillWithUsersError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AssociateSkillWithUsersError {
+    fn description(&self) -> &str {
+        match *self {
+            AssociateSkillWithUsersError::ConcurrentModification(ref cause) => cause,
+            AssociateSkillWithUsersError::Validation(ref cause) => cause,
+            AssociateSkillWithUsersError::Credentials(ref err) => err.description(),
+            AssociateSkillWithUsersError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            AssociateSkillWithUsersError::ParseError(ref cause) => cause,
+            AssociateSkillWithUsersError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by CreateAddressBook
 #[derive(Debug, PartialEq)]
 pub enum CreateAddressBookError {
-    /// <p>The resource being created already exists. HTTP Status Code: 400</p>
+    /// <p>The resource being created already exists.</p>
     AlreadyExists(String),
-    /// <p>You are performing an action that would put you beyond your account's limits. HTTP Status Code: 400</p>
+    /// <p>You are performing an action that would put you beyond your account's limits.</p>
     LimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1977,12 +3101,178 @@ impl Error for CreateAddressBookError {
         }
     }
 }
+/// Errors returned by CreateBusinessReportSchedule
+#[derive(Debug, PartialEq)]
+pub enum CreateBusinessReportScheduleError {
+    /// <p>The resource being created already exists.</p>
+    AlreadyExists(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl CreateBusinessReportScheduleError {
+    pub fn from_response(res: BufferedHttpResponse) -> CreateBusinessReportScheduleError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AlreadyExistsException" => {
+                    return CreateBusinessReportScheduleError::AlreadyExists(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return CreateBusinessReportScheduleError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return CreateBusinessReportScheduleError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for CreateBusinessReportScheduleError {
+    fn from(err: serde_json::error::Error) -> CreateBusinessReportScheduleError {
+        CreateBusinessReportScheduleError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateBusinessReportScheduleError {
+    fn from(err: CredentialsError) -> CreateBusinessReportScheduleError {
+        CreateBusinessReportScheduleError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateBusinessReportScheduleError {
+    fn from(err: HttpDispatchError) -> CreateBusinessReportScheduleError {
+        CreateBusinessReportScheduleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateBusinessReportScheduleError {
+    fn from(err: io::Error) -> CreateBusinessReportScheduleError {
+        CreateBusinessReportScheduleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateBusinessReportScheduleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateBusinessReportScheduleError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateBusinessReportScheduleError::AlreadyExists(ref cause) => cause,
+            CreateBusinessReportScheduleError::Validation(ref cause) => cause,
+            CreateBusinessReportScheduleError::Credentials(ref err) => err.description(),
+            CreateBusinessReportScheduleError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateBusinessReportScheduleError::ParseError(ref cause) => cause,
+            CreateBusinessReportScheduleError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by CreateConferenceProvider
+#[derive(Debug, PartialEq)]
+pub enum CreateConferenceProviderError {
+    /// <p>The resource being created already exists.</p>
+    AlreadyExists(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl CreateConferenceProviderError {
+    pub fn from_response(res: BufferedHttpResponse) -> CreateConferenceProviderError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AlreadyExistsException" => {
+                    return CreateConferenceProviderError::AlreadyExists(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return CreateConferenceProviderError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return CreateConferenceProviderError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for CreateConferenceProviderError {
+    fn from(err: serde_json::error::Error) -> CreateConferenceProviderError {
+        CreateConferenceProviderError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateConferenceProviderError {
+    fn from(err: CredentialsError) -> CreateConferenceProviderError {
+        CreateConferenceProviderError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateConferenceProviderError {
+    fn from(err: HttpDispatchError) -> CreateConferenceProviderError {
+        CreateConferenceProviderError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateConferenceProviderError {
+    fn from(err: io::Error) -> CreateConferenceProviderError {
+        CreateConferenceProviderError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateConferenceProviderError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateConferenceProviderError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateConferenceProviderError::AlreadyExists(ref cause) => cause,
+            CreateConferenceProviderError::Validation(ref cause) => cause,
+            CreateConferenceProviderError::Credentials(ref err) => err.description(),
+            CreateConferenceProviderError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateConferenceProviderError::ParseError(ref cause) => cause,
+            CreateConferenceProviderError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by CreateContact
 #[derive(Debug, PartialEq)]
 pub enum CreateContactError {
-    /// <p>The resource being created already exists. HTTP Status Code: 400</p>
+    /// <p>The resource being created already exists.</p>
     AlreadyExists(String),
-    /// <p>You are performing an action that would put you beyond your account's limits. HTTP Status Code: 400</p>
+    /// <p>You are performing an action that would put you beyond your account's limits.</p>
     LimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2066,9 +3356,11 @@ impl Error for CreateContactError {
 /// Errors returned by CreateProfile
 #[derive(Debug, PartialEq)]
 pub enum CreateProfileError {
-    /// <p>The resource being created already exists. HTTP Status Code: 400</p>
+    /// <p>The resource being created already exists.</p>
     AlreadyExists(String),
-    /// <p>You are performing an action that would put you beyond your account's limits. HTTP Status Code: 400</p>
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// <p>You are performing an action that would put you beyond your account's limits.</p>
     LimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2097,6 +3389,9 @@ impl CreateProfileError {
             match *error_type {
                 "AlreadyExistsException" => {
                     return CreateProfileError::AlreadyExists(String::from(error_message));
+                }
+                "ConcurrentModificationException" => {
+                    return CreateProfileError::ConcurrentModification(String::from(error_message));
                 }
                 "LimitExceededException" => {
                     return CreateProfileError::LimitExceeded(String::from(error_message));
@@ -2140,6 +3435,7 @@ impl Error for CreateProfileError {
     fn description(&self) -> &str {
         match *self {
             CreateProfileError::AlreadyExists(ref cause) => cause,
+            CreateProfileError::ConcurrentModification(ref cause) => cause,
             CreateProfileError::LimitExceeded(ref cause) => cause,
             CreateProfileError::Validation(ref cause) => cause,
             CreateProfileError::Credentials(ref err) => err.description(),
@@ -2152,9 +3448,9 @@ impl Error for CreateProfileError {
 /// Errors returned by CreateRoom
 #[derive(Debug, PartialEq)]
 pub enum CreateRoomError {
-    /// <p>The resource being created already exists. HTTP Status Code: 400</p>
+    /// <p>The resource being created already exists.</p>
     AlreadyExists(String),
-    /// <p>You are performing an action that would put you beyond your account's limits. HTTP Status Code: 400</p>
+    /// <p>You are performing an action that would put you beyond your account's limits.</p>
     LimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2238,9 +3534,11 @@ impl Error for CreateRoomError {
 /// Errors returned by CreateSkillGroup
 #[derive(Debug, PartialEq)]
 pub enum CreateSkillGroupError {
-    /// <p>The resource being created already exists. HTTP Status Code: 400</p>
+    /// <p>The resource being created already exists.</p>
     AlreadyExists(String),
-    /// <p>You are performing an action that would put you beyond your account's limits. HTTP Status Code: 400</p>
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// <p>You are performing an action that would put you beyond your account's limits.</p>
     LimitExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2269,6 +3567,11 @@ impl CreateSkillGroupError {
             match *error_type {
                 "AlreadyExistsException" => {
                     return CreateSkillGroupError::AlreadyExists(String::from(error_message));
+                }
+                "ConcurrentModificationException" => {
+                    return CreateSkillGroupError::ConcurrentModification(String::from(
+                        error_message,
+                    ));
                 }
                 "LimitExceededException" => {
                     return CreateSkillGroupError::LimitExceeded(String::from(error_message));
@@ -2312,6 +3615,7 @@ impl Error for CreateSkillGroupError {
     fn description(&self) -> &str {
         match *self {
             CreateSkillGroupError::AlreadyExists(ref cause) => cause,
+            CreateSkillGroupError::ConcurrentModification(ref cause) => cause,
             CreateSkillGroupError::LimitExceeded(ref cause) => cause,
             CreateSkillGroupError::Validation(ref cause) => cause,
             CreateSkillGroupError::Credentials(ref err) => err.description(),
@@ -2324,9 +3628,11 @@ impl Error for CreateSkillGroupError {
 /// Errors returned by CreateUser
 #[derive(Debug, PartialEq)]
 pub enum CreateUserError {
-    /// <p>You are performing an action that would put you beyond your account's limits. HTTP Status Code: 400</p>
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// <p>You are performing an action that would put you beyond your account's limits.</p>
     LimitExceeded(String),
-    /// <p>The resource in the request is already in use. HTTP Status Code: 400</p>
+    /// <p>The resource in the request is already in use.</p>
     ResourceInUse(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2353,6 +3659,9 @@ impl CreateUserError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "ConcurrentModificationException" => {
+                    return CreateUserError::ConcurrentModification(String::from(error_message));
+                }
                 "LimitExceededException" => {
                     return CreateUserError::LimitExceeded(String::from(error_message));
                 }
@@ -2397,6 +3706,7 @@ impl fmt::Display for CreateUserError {
 impl Error for CreateUserError {
     fn description(&self) -> &str {
         match *self {
+            CreateUserError::ConcurrentModification(ref cause) => cause,
             CreateUserError::LimitExceeded(ref cause) => cause,
             CreateUserError::ResourceInUse(ref cause) => cause,
             CreateUserError::Validation(ref cause) => cause,
@@ -2410,7 +3720,9 @@ impl Error for CreateUserError {
 /// Errors returned by DeleteAddressBook
 #[derive(Debug, PartialEq)]
 pub enum DeleteAddressBookError {
-    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// <p>The resource is not found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2437,6 +3749,11 @@ impl DeleteAddressBookError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "ConcurrentModificationException" => {
+                    return DeleteAddressBookError::ConcurrentModification(String::from(
+                        error_message,
+                    ));
+                }
                 "NotFoundException" => {
                     return DeleteAddressBookError::NotFound(String::from(error_message));
                 }
@@ -2478,6 +3795,7 @@ impl fmt::Display for DeleteAddressBookError {
 impl Error for DeleteAddressBookError {
     fn description(&self) -> &str {
         match *self {
+            DeleteAddressBookError::ConcurrentModification(ref cause) => cause,
             DeleteAddressBookError::NotFound(ref cause) => cause,
             DeleteAddressBookError::Validation(ref cause) => cause,
             DeleteAddressBookError::Credentials(ref err) => err.description(),
@@ -2489,10 +3807,184 @@ impl Error for DeleteAddressBookError {
         }
     }
 }
+/// Errors returned by DeleteBusinessReportSchedule
+#[derive(Debug, PartialEq)]
+pub enum DeleteBusinessReportScheduleError {
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// <p>The resource is not found.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DeleteBusinessReportScheduleError {
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteBusinessReportScheduleError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ConcurrentModificationException" => {
+                    return DeleteBusinessReportScheduleError::ConcurrentModification(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return DeleteBusinessReportScheduleError::NotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return DeleteBusinessReportScheduleError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DeleteBusinessReportScheduleError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteBusinessReportScheduleError {
+    fn from(err: serde_json::error::Error) -> DeleteBusinessReportScheduleError {
+        DeleteBusinessReportScheduleError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteBusinessReportScheduleError {
+    fn from(err: CredentialsError) -> DeleteBusinessReportScheduleError {
+        DeleteBusinessReportScheduleError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteBusinessReportScheduleError {
+    fn from(err: HttpDispatchError) -> DeleteBusinessReportScheduleError {
+        DeleteBusinessReportScheduleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteBusinessReportScheduleError {
+    fn from(err: io::Error) -> DeleteBusinessReportScheduleError {
+        DeleteBusinessReportScheduleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteBusinessReportScheduleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteBusinessReportScheduleError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteBusinessReportScheduleError::ConcurrentModification(ref cause) => cause,
+            DeleteBusinessReportScheduleError::NotFound(ref cause) => cause,
+            DeleteBusinessReportScheduleError::Validation(ref cause) => cause,
+            DeleteBusinessReportScheduleError::Credentials(ref err) => err.description(),
+            DeleteBusinessReportScheduleError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteBusinessReportScheduleError::ParseError(ref cause) => cause,
+            DeleteBusinessReportScheduleError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DeleteConferenceProvider
+#[derive(Debug, PartialEq)]
+pub enum DeleteConferenceProviderError {
+    /// <p>The resource is not found.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DeleteConferenceProviderError {
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteConferenceProviderError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "NotFoundException" => {
+                    return DeleteConferenceProviderError::NotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return DeleteConferenceProviderError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DeleteConferenceProviderError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteConferenceProviderError {
+    fn from(err: serde_json::error::Error) -> DeleteConferenceProviderError {
+        DeleteConferenceProviderError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteConferenceProviderError {
+    fn from(err: CredentialsError) -> DeleteConferenceProviderError {
+        DeleteConferenceProviderError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteConferenceProviderError {
+    fn from(err: HttpDispatchError) -> DeleteConferenceProviderError {
+        DeleteConferenceProviderError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteConferenceProviderError {
+    fn from(err: io::Error) -> DeleteConferenceProviderError {
+        DeleteConferenceProviderError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteConferenceProviderError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteConferenceProviderError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteConferenceProviderError::NotFound(ref cause) => cause,
+            DeleteConferenceProviderError::Validation(ref cause) => cause,
+            DeleteConferenceProviderError::Credentials(ref err) => err.description(),
+            DeleteConferenceProviderError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteConferenceProviderError::ParseError(ref cause) => cause,
+            DeleteConferenceProviderError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by DeleteContact
 #[derive(Debug, PartialEq)]
 pub enum DeleteContactError {
-    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// <p>The resource is not found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2519,6 +4011,9 @@ impl DeleteContactError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "ConcurrentModificationException" => {
+                    return DeleteContactError::ConcurrentModification(String::from(error_message));
+                }
                 "NotFoundException" => {
                     return DeleteContactError::NotFound(String::from(error_message));
                 }
@@ -2560,6 +4055,7 @@ impl fmt::Display for DeleteContactError {
 impl Error for DeleteContactError {
     fn description(&self) -> &str {
         match *self {
+            DeleteContactError::ConcurrentModification(ref cause) => cause,
             DeleteContactError::NotFound(ref cause) => cause,
             DeleteContactError::Validation(ref cause) => cause,
             DeleteContactError::Credentials(ref err) => err.description(),
@@ -2569,10 +4065,106 @@ impl Error for DeleteContactError {
         }
     }
 }
+/// Errors returned by DeleteDevice
+#[derive(Debug, PartialEq)]
+pub enum DeleteDeviceError {
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// <p>The Certificate Authority can't issue or revoke a certificate.</p>
+    InvalidCertificateAuthority(String),
+    /// <p>The resource is not found.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DeleteDeviceError {
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteDeviceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ConcurrentModificationException" => {
+                    return DeleteDeviceError::ConcurrentModification(String::from(error_message));
+                }
+                "InvalidCertificateAuthorityException" => {
+                    return DeleteDeviceError::InvalidCertificateAuthority(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return DeleteDeviceError::NotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return DeleteDeviceError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DeleteDeviceError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteDeviceError {
+    fn from(err: serde_json::error::Error) -> DeleteDeviceError {
+        DeleteDeviceError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteDeviceError {
+    fn from(err: CredentialsError) -> DeleteDeviceError {
+        DeleteDeviceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteDeviceError {
+    fn from(err: HttpDispatchError) -> DeleteDeviceError {
+        DeleteDeviceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteDeviceError {
+    fn from(err: io::Error) -> DeleteDeviceError {
+        DeleteDeviceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteDeviceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteDeviceError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteDeviceError::ConcurrentModification(ref cause) => cause,
+            DeleteDeviceError::InvalidCertificateAuthority(ref cause) => cause,
+            DeleteDeviceError::NotFound(ref cause) => cause,
+            DeleteDeviceError::Validation(ref cause) => cause,
+            DeleteDeviceError::Credentials(ref err) => err.description(),
+            DeleteDeviceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteDeviceError::ParseError(ref cause) => cause,
+            DeleteDeviceError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by DeleteProfile
 #[derive(Debug, PartialEq)]
 pub enum DeleteProfileError {
-    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// <p>The resource is not found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2599,6 +4191,9 @@ impl DeleteProfileError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "ConcurrentModificationException" => {
+                    return DeleteProfileError::ConcurrentModification(String::from(error_message));
+                }
                 "NotFoundException" => {
                     return DeleteProfileError::NotFound(String::from(error_message));
                 }
@@ -2640,6 +4235,7 @@ impl fmt::Display for DeleteProfileError {
 impl Error for DeleteProfileError {
     fn description(&self) -> &str {
         match *self {
+            DeleteProfileError::ConcurrentModification(ref cause) => cause,
             DeleteProfileError::NotFound(ref cause) => cause,
             DeleteProfileError::Validation(ref cause) => cause,
             DeleteProfileError::Credentials(ref err) => err.description(),
@@ -2652,7 +4248,9 @@ impl Error for DeleteProfileError {
 /// Errors returned by DeleteRoom
 #[derive(Debug, PartialEq)]
 pub enum DeleteRoomError {
-    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// <p>The resource is not found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2679,6 +4277,9 @@ impl DeleteRoomError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "ConcurrentModificationException" => {
+                    return DeleteRoomError::ConcurrentModification(String::from(error_message));
+                }
                 "NotFoundException" => {
                     return DeleteRoomError::NotFound(String::from(error_message));
                 }
@@ -2720,6 +4321,7 @@ impl fmt::Display for DeleteRoomError {
 impl Error for DeleteRoomError {
     fn description(&self) -> &str {
         match *self {
+            DeleteRoomError::ConcurrentModification(ref cause) => cause,
             DeleteRoomError::NotFound(ref cause) => cause,
             DeleteRoomError::Validation(ref cause) => cause,
             DeleteRoomError::Credentials(ref err) => err.description(),
@@ -2732,6 +4334,8 @@ impl Error for DeleteRoomError {
 /// Errors returned by DeleteRoomSkillParameter
 #[derive(Debug, PartialEq)]
 pub enum DeleteRoomSkillParameterError {
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2757,6 +4361,11 @@ impl DeleteRoomSkillParameterError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "ConcurrentModificationException" => {
+                    return DeleteRoomSkillParameterError::ConcurrentModification(String::from(
+                        error_message,
+                    ));
+                }
                 "ValidationException" => {
                     return DeleteRoomSkillParameterError::Validation(error_message.to_string());
                 }
@@ -2795,6 +4404,7 @@ impl fmt::Display for DeleteRoomSkillParameterError {
 impl Error for DeleteRoomSkillParameterError {
     fn description(&self) -> &str {
         match *self {
+            DeleteRoomSkillParameterError::ConcurrentModification(ref cause) => cause,
             DeleteRoomSkillParameterError::Validation(ref cause) => cause,
             DeleteRoomSkillParameterError::Credentials(ref err) => err.description(),
             DeleteRoomSkillParameterError::HttpDispatch(ref dispatch_error) => {
@@ -2805,10 +4415,102 @@ impl Error for DeleteRoomSkillParameterError {
         }
     }
 }
+/// Errors returned by DeleteSkillAuthorization
+#[derive(Debug, PartialEq)]
+pub enum DeleteSkillAuthorizationError {
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// <p>The resource is not found.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DeleteSkillAuthorizationError {
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteSkillAuthorizationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ConcurrentModificationException" => {
+                    return DeleteSkillAuthorizationError::ConcurrentModification(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return DeleteSkillAuthorizationError::NotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return DeleteSkillAuthorizationError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DeleteSkillAuthorizationError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteSkillAuthorizationError {
+    fn from(err: serde_json::error::Error) -> DeleteSkillAuthorizationError {
+        DeleteSkillAuthorizationError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteSkillAuthorizationError {
+    fn from(err: CredentialsError) -> DeleteSkillAuthorizationError {
+        DeleteSkillAuthorizationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteSkillAuthorizationError {
+    fn from(err: HttpDispatchError) -> DeleteSkillAuthorizationError {
+        DeleteSkillAuthorizationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteSkillAuthorizationError {
+    fn from(err: io::Error) -> DeleteSkillAuthorizationError {
+        DeleteSkillAuthorizationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteSkillAuthorizationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteSkillAuthorizationError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteSkillAuthorizationError::ConcurrentModification(ref cause) => cause,
+            DeleteSkillAuthorizationError::NotFound(ref cause) => cause,
+            DeleteSkillAuthorizationError::Validation(ref cause) => cause,
+            DeleteSkillAuthorizationError::Credentials(ref err) => err.description(),
+            DeleteSkillAuthorizationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteSkillAuthorizationError::ParseError(ref cause) => cause,
+            DeleteSkillAuthorizationError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by DeleteSkillGroup
 #[derive(Debug, PartialEq)]
 pub enum DeleteSkillGroupError {
-    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// <p>The resource is not found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2835,6 +4537,11 @@ impl DeleteSkillGroupError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "ConcurrentModificationException" => {
+                    return DeleteSkillGroupError::ConcurrentModification(String::from(
+                        error_message,
+                    ));
+                }
                 "NotFoundException" => {
                     return DeleteSkillGroupError::NotFound(String::from(error_message));
                 }
@@ -2876,6 +4583,7 @@ impl fmt::Display for DeleteSkillGroupError {
 impl Error for DeleteSkillGroupError {
     fn description(&self) -> &str {
         match *self {
+            DeleteSkillGroupError::ConcurrentModification(ref cause) => cause,
             DeleteSkillGroupError::NotFound(ref cause) => cause,
             DeleteSkillGroupError::Validation(ref cause) => cause,
             DeleteSkillGroupError::Credentials(ref err) => err.description(),
@@ -2888,7 +4596,9 @@ impl Error for DeleteSkillGroupError {
 /// Errors returned by DeleteUser
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserError {
-    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// <p>The resource is not found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2915,6 +4625,9 @@ impl DeleteUserError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "ConcurrentModificationException" => {
+                    return DeleteUserError::ConcurrentModification(String::from(error_message));
+                }
                 "NotFoundException" => {
                     return DeleteUserError::NotFound(String::from(error_message));
                 }
@@ -2956,6 +4669,7 @@ impl fmt::Display for DeleteUserError {
 impl Error for DeleteUserError {
     fn description(&self) -> &str {
         match *self {
+            DeleteUserError::ConcurrentModification(ref cause) => cause,
             DeleteUserError::NotFound(ref cause) => cause,
             DeleteUserError::Validation(ref cause) => cause,
             DeleteUserError::Credentials(ref err) => err.description(),
@@ -3046,6 +4760,9 @@ impl Error for DisassociateContactFromAddressBookError {
 /// Errors returned by DisassociateDeviceFromRoom
 #[derive(Debug, PartialEq)]
 pub enum DisassociateDeviceFromRoomError {
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// <p>The request failed because this device is no longer registered and therefore no longer managed by this account.</p>
     DeviceNotRegistered(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3072,6 +4789,11 @@ impl DisassociateDeviceFromRoomError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "ConcurrentModificationException" => {
+                    return DisassociateDeviceFromRoomError::ConcurrentModification(String::from(
+                        error_message,
+                    ));
+                }
                 "DeviceNotRegisteredException" => {
                     return DisassociateDeviceFromRoomError::DeviceNotRegistered(String::from(
                         error_message,
@@ -3115,6 +4837,7 @@ impl fmt::Display for DisassociateDeviceFromRoomError {
 impl Error for DisassociateDeviceFromRoomError {
     fn description(&self) -> &str {
         match *self {
+            DisassociateDeviceFromRoomError::ConcurrentModification(ref cause) => cause,
             DisassociateDeviceFromRoomError::DeviceNotRegistered(ref cause) => cause,
             DisassociateDeviceFromRoomError::Validation(ref cause) => cause,
             DisassociateDeviceFromRoomError::Credentials(ref err) => err.description(),
@@ -3126,9 +4849,189 @@ impl Error for DisassociateDeviceFromRoomError {
         }
     }
 }
+/// Errors returned by DisassociateSkillFromSkillGroup
+#[derive(Debug, PartialEq)]
+pub enum DisassociateSkillFromSkillGroupError {
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// <p>The resource is not found.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DisassociateSkillFromSkillGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> DisassociateSkillFromSkillGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ConcurrentModificationException" => {
+                    return DisassociateSkillFromSkillGroupError::ConcurrentModification(
+                        String::from(error_message),
+                    );
+                }
+                "NotFoundException" => {
+                    return DisassociateSkillFromSkillGroupError::NotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return DisassociateSkillFromSkillGroupError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return DisassociateSkillFromSkillGroupError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DisassociateSkillFromSkillGroupError {
+    fn from(err: serde_json::error::Error) -> DisassociateSkillFromSkillGroupError {
+        DisassociateSkillFromSkillGroupError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DisassociateSkillFromSkillGroupError {
+    fn from(err: CredentialsError) -> DisassociateSkillFromSkillGroupError {
+        DisassociateSkillFromSkillGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DisassociateSkillFromSkillGroupError {
+    fn from(err: HttpDispatchError) -> DisassociateSkillFromSkillGroupError {
+        DisassociateSkillFromSkillGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DisassociateSkillFromSkillGroupError {
+    fn from(err: io::Error) -> DisassociateSkillFromSkillGroupError {
+        DisassociateSkillFromSkillGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DisassociateSkillFromSkillGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DisassociateSkillFromSkillGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            DisassociateSkillFromSkillGroupError::ConcurrentModification(ref cause) => cause,
+            DisassociateSkillFromSkillGroupError::NotFound(ref cause) => cause,
+            DisassociateSkillFromSkillGroupError::Validation(ref cause) => cause,
+            DisassociateSkillFromSkillGroupError::Credentials(ref err) => err.description(),
+            DisassociateSkillFromSkillGroupError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DisassociateSkillFromSkillGroupError::ParseError(ref cause) => cause,
+            DisassociateSkillFromSkillGroupError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DisassociateSkillFromUsers
+#[derive(Debug, PartialEq)]
+pub enum DisassociateSkillFromUsersError {
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DisassociateSkillFromUsersError {
+    pub fn from_response(res: BufferedHttpResponse) -> DisassociateSkillFromUsersError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ConcurrentModificationException" => {
+                    return DisassociateSkillFromUsersError::ConcurrentModification(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return DisassociateSkillFromUsersError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DisassociateSkillFromUsersError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DisassociateSkillFromUsersError {
+    fn from(err: serde_json::error::Error) -> DisassociateSkillFromUsersError {
+        DisassociateSkillFromUsersError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DisassociateSkillFromUsersError {
+    fn from(err: CredentialsError) -> DisassociateSkillFromUsersError {
+        DisassociateSkillFromUsersError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DisassociateSkillFromUsersError {
+    fn from(err: HttpDispatchError) -> DisassociateSkillFromUsersError {
+        DisassociateSkillFromUsersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DisassociateSkillFromUsersError {
+    fn from(err: io::Error) -> DisassociateSkillFromUsersError {
+        DisassociateSkillFromUsersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DisassociateSkillFromUsersError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DisassociateSkillFromUsersError {
+    fn description(&self) -> &str {
+        match *self {
+            DisassociateSkillFromUsersError::ConcurrentModification(ref cause) => cause,
+            DisassociateSkillFromUsersError::Validation(ref cause) => cause,
+            DisassociateSkillFromUsersError::Credentials(ref err) => err.description(),
+            DisassociateSkillFromUsersError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DisassociateSkillFromUsersError::ParseError(ref cause) => cause,
+            DisassociateSkillFromUsersError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by DisassociateSkillGroupFromRoom
 #[derive(Debug, PartialEq)]
 pub enum DisassociateSkillGroupFromRoomError {
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -3154,6 +5057,11 @@ impl DisassociateSkillGroupFromRoomError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "ConcurrentModificationException" => {
+                    return DisassociateSkillGroupFromRoomError::ConcurrentModification(
+                        String::from(error_message),
+                    );
+                }
                 "ValidationException" => {
                     return DisassociateSkillGroupFromRoomError::Validation(
                         error_message.to_string(),
@@ -3194,6 +5102,7 @@ impl fmt::Display for DisassociateSkillGroupFromRoomError {
 impl Error for DisassociateSkillGroupFromRoomError {
     fn description(&self) -> &str {
         match *self {
+            DisassociateSkillGroupFromRoomError::ConcurrentModification(ref cause) => cause,
             DisassociateSkillGroupFromRoomError::Validation(ref cause) => cause,
             DisassociateSkillGroupFromRoomError::Credentials(ref err) => err.description(),
             DisassociateSkillGroupFromRoomError::HttpDispatch(ref dispatch_error) => {
@@ -3204,10 +5113,92 @@ impl Error for DisassociateSkillGroupFromRoomError {
         }
     }
 }
+/// Errors returned by ForgetSmartHomeAppliances
+#[derive(Debug, PartialEq)]
+pub enum ForgetSmartHomeAppliancesError {
+    /// <p>The resource is not found.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ForgetSmartHomeAppliancesError {
+    pub fn from_response(res: BufferedHttpResponse) -> ForgetSmartHomeAppliancesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "NotFoundException" => {
+                    return ForgetSmartHomeAppliancesError::NotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return ForgetSmartHomeAppliancesError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ForgetSmartHomeAppliancesError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ForgetSmartHomeAppliancesError {
+    fn from(err: serde_json::error::Error) -> ForgetSmartHomeAppliancesError {
+        ForgetSmartHomeAppliancesError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ForgetSmartHomeAppliancesError {
+    fn from(err: CredentialsError) -> ForgetSmartHomeAppliancesError {
+        ForgetSmartHomeAppliancesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ForgetSmartHomeAppliancesError {
+    fn from(err: HttpDispatchError) -> ForgetSmartHomeAppliancesError {
+        ForgetSmartHomeAppliancesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ForgetSmartHomeAppliancesError {
+    fn from(err: io::Error) -> ForgetSmartHomeAppliancesError {
+        ForgetSmartHomeAppliancesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ForgetSmartHomeAppliancesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ForgetSmartHomeAppliancesError {
+    fn description(&self) -> &str {
+        match *self {
+            ForgetSmartHomeAppliancesError::NotFound(ref cause) => cause,
+            ForgetSmartHomeAppliancesError::Validation(ref cause) => cause,
+            ForgetSmartHomeAppliancesError::Credentials(ref err) => err.description(),
+            ForgetSmartHomeAppliancesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ForgetSmartHomeAppliancesError::ParseError(ref cause) => cause,
+            ForgetSmartHomeAppliancesError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by GetAddressBook
 #[derive(Debug, PartialEq)]
 pub enum GetAddressBookError {
-    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    /// <p>The resource is not found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3284,10 +5275,174 @@ impl Error for GetAddressBookError {
         }
     }
 }
+/// Errors returned by GetConferencePreference
+#[derive(Debug, PartialEq)]
+pub enum GetConferencePreferenceError {
+    /// <p>The resource is not found.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetConferencePreferenceError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetConferencePreferenceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "NotFoundException" => {
+                    return GetConferencePreferenceError::NotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return GetConferencePreferenceError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetConferencePreferenceError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetConferencePreferenceError {
+    fn from(err: serde_json::error::Error) -> GetConferencePreferenceError {
+        GetConferencePreferenceError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetConferencePreferenceError {
+    fn from(err: CredentialsError) -> GetConferencePreferenceError {
+        GetConferencePreferenceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetConferencePreferenceError {
+    fn from(err: HttpDispatchError) -> GetConferencePreferenceError {
+        GetConferencePreferenceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetConferencePreferenceError {
+    fn from(err: io::Error) -> GetConferencePreferenceError {
+        GetConferencePreferenceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetConferencePreferenceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetConferencePreferenceError {
+    fn description(&self) -> &str {
+        match *self {
+            GetConferencePreferenceError::NotFound(ref cause) => cause,
+            GetConferencePreferenceError::Validation(ref cause) => cause,
+            GetConferencePreferenceError::Credentials(ref err) => err.description(),
+            GetConferencePreferenceError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetConferencePreferenceError::ParseError(ref cause) => cause,
+            GetConferencePreferenceError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetConferenceProvider
+#[derive(Debug, PartialEq)]
+pub enum GetConferenceProviderError {
+    /// <p>The resource is not found.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetConferenceProviderError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetConferenceProviderError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "NotFoundException" => {
+                    return GetConferenceProviderError::NotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return GetConferenceProviderError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetConferenceProviderError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetConferenceProviderError {
+    fn from(err: serde_json::error::Error) -> GetConferenceProviderError {
+        GetConferenceProviderError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetConferenceProviderError {
+    fn from(err: CredentialsError) -> GetConferenceProviderError {
+        GetConferenceProviderError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetConferenceProviderError {
+    fn from(err: HttpDispatchError) -> GetConferenceProviderError {
+        GetConferenceProviderError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetConferenceProviderError {
+    fn from(err: io::Error) -> GetConferenceProviderError {
+        GetConferenceProviderError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetConferenceProviderError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetConferenceProviderError {
+    fn description(&self) -> &str {
+        match *self {
+            GetConferenceProviderError::NotFound(ref cause) => cause,
+            GetConferenceProviderError::Validation(ref cause) => cause,
+            GetConferenceProviderError::Credentials(ref err) => err.description(),
+            GetConferenceProviderError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetConferenceProviderError::ParseError(ref cause) => cause,
+            GetConferenceProviderError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by GetContact
 #[derive(Debug, PartialEq)]
 pub enum GetContactError {
-    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    /// <p>The resource is not found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3367,7 +5522,7 @@ impl Error for GetContactError {
 /// Errors returned by GetDevice
 #[derive(Debug, PartialEq)]
 pub enum GetDeviceError {
-    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    /// <p>The resource is not found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3445,7 +5600,7 @@ impl Error for GetDeviceError {
 /// Errors returned by GetProfile
 #[derive(Debug, PartialEq)]
 pub enum GetProfileError {
-    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    /// <p>The resource is not found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3525,7 +5680,7 @@ impl Error for GetProfileError {
 /// Errors returned by GetRoom
 #[derive(Debug, PartialEq)]
 pub enum GetRoomError {
-    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    /// <p>The resource is not found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3601,7 +5756,7 @@ impl Error for GetRoomError {
 /// Errors returned by GetRoomSkillParameter
 #[derive(Debug, PartialEq)]
 pub enum GetRoomSkillParameterError {
-    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    /// <p>The resource is not found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3683,7 +5838,7 @@ impl Error for GetRoomSkillParameterError {
 /// Errors returned by GetSkillGroup
 #[derive(Debug, PartialEq)]
 pub enum GetSkillGroupError {
-    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    /// <p>The resource is not found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3760,10 +5915,162 @@ impl Error for GetSkillGroupError {
         }
     }
 }
+/// Errors returned by ListBusinessReportSchedules
+#[derive(Debug, PartialEq)]
+pub enum ListBusinessReportSchedulesError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListBusinessReportSchedulesError {
+    pub fn from_response(res: BufferedHttpResponse) -> ListBusinessReportSchedulesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ValidationException" => {
+                    return ListBusinessReportSchedulesError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ListBusinessReportSchedulesError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListBusinessReportSchedulesError {
+    fn from(err: serde_json::error::Error) -> ListBusinessReportSchedulesError {
+        ListBusinessReportSchedulesError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListBusinessReportSchedulesError {
+    fn from(err: CredentialsError) -> ListBusinessReportSchedulesError {
+        ListBusinessReportSchedulesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListBusinessReportSchedulesError {
+    fn from(err: HttpDispatchError) -> ListBusinessReportSchedulesError {
+        ListBusinessReportSchedulesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListBusinessReportSchedulesError {
+    fn from(err: io::Error) -> ListBusinessReportSchedulesError {
+        ListBusinessReportSchedulesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListBusinessReportSchedulesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListBusinessReportSchedulesError {
+    fn description(&self) -> &str {
+        match *self {
+            ListBusinessReportSchedulesError::Validation(ref cause) => cause,
+            ListBusinessReportSchedulesError::Credentials(ref err) => err.description(),
+            ListBusinessReportSchedulesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListBusinessReportSchedulesError::ParseError(ref cause) => cause,
+            ListBusinessReportSchedulesError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by ListConferenceProviders
+#[derive(Debug, PartialEq)]
+pub enum ListConferenceProvidersError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListConferenceProvidersError {
+    pub fn from_response(res: BufferedHttpResponse) -> ListConferenceProvidersError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ValidationException" => {
+                    return ListConferenceProvidersError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ListConferenceProvidersError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListConferenceProvidersError {
+    fn from(err: serde_json::error::Error) -> ListConferenceProvidersError {
+        ListConferenceProvidersError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListConferenceProvidersError {
+    fn from(err: CredentialsError) -> ListConferenceProvidersError {
+        ListConferenceProvidersError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListConferenceProvidersError {
+    fn from(err: HttpDispatchError) -> ListConferenceProvidersError {
+        ListConferenceProvidersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListConferenceProvidersError {
+    fn from(err: io::Error) -> ListConferenceProvidersError {
+        ListConferenceProvidersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListConferenceProvidersError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListConferenceProvidersError {
+    fn description(&self) -> &str {
+        match *self {
+            ListConferenceProvidersError::Validation(ref cause) => cause,
+            ListConferenceProvidersError::Credentials(ref err) => err.description(),
+            ListConferenceProvidersError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListConferenceProvidersError::ParseError(ref cause) => cause,
+            ListConferenceProvidersError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by ListDeviceEvents
 #[derive(Debug, PartialEq)]
 pub enum ListDeviceEventsError {
-    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    /// <p>The resource is not found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3914,10 +6221,246 @@ impl Error for ListSkillsError {
         }
     }
 }
+/// Errors returned by ListSkillsStoreCategories
+#[derive(Debug, PartialEq)]
+pub enum ListSkillsStoreCategoriesError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListSkillsStoreCategoriesError {
+    pub fn from_response(res: BufferedHttpResponse) -> ListSkillsStoreCategoriesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ValidationException" => {
+                    return ListSkillsStoreCategoriesError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ListSkillsStoreCategoriesError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListSkillsStoreCategoriesError {
+    fn from(err: serde_json::error::Error) -> ListSkillsStoreCategoriesError {
+        ListSkillsStoreCategoriesError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListSkillsStoreCategoriesError {
+    fn from(err: CredentialsError) -> ListSkillsStoreCategoriesError {
+        ListSkillsStoreCategoriesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListSkillsStoreCategoriesError {
+    fn from(err: HttpDispatchError) -> ListSkillsStoreCategoriesError {
+        ListSkillsStoreCategoriesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListSkillsStoreCategoriesError {
+    fn from(err: io::Error) -> ListSkillsStoreCategoriesError {
+        ListSkillsStoreCategoriesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListSkillsStoreCategoriesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListSkillsStoreCategoriesError {
+    fn description(&self) -> &str {
+        match *self {
+            ListSkillsStoreCategoriesError::Validation(ref cause) => cause,
+            ListSkillsStoreCategoriesError::Credentials(ref err) => err.description(),
+            ListSkillsStoreCategoriesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListSkillsStoreCategoriesError::ParseError(ref cause) => cause,
+            ListSkillsStoreCategoriesError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by ListSkillsStoreSkillsByCategory
+#[derive(Debug, PartialEq)]
+pub enum ListSkillsStoreSkillsByCategoryError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListSkillsStoreSkillsByCategoryError {
+    pub fn from_response(res: BufferedHttpResponse) -> ListSkillsStoreSkillsByCategoryError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ValidationException" => {
+                    return ListSkillsStoreSkillsByCategoryError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return ListSkillsStoreSkillsByCategoryError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListSkillsStoreSkillsByCategoryError {
+    fn from(err: serde_json::error::Error) -> ListSkillsStoreSkillsByCategoryError {
+        ListSkillsStoreSkillsByCategoryError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListSkillsStoreSkillsByCategoryError {
+    fn from(err: CredentialsError) -> ListSkillsStoreSkillsByCategoryError {
+        ListSkillsStoreSkillsByCategoryError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListSkillsStoreSkillsByCategoryError {
+    fn from(err: HttpDispatchError) -> ListSkillsStoreSkillsByCategoryError {
+        ListSkillsStoreSkillsByCategoryError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListSkillsStoreSkillsByCategoryError {
+    fn from(err: io::Error) -> ListSkillsStoreSkillsByCategoryError {
+        ListSkillsStoreSkillsByCategoryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListSkillsStoreSkillsByCategoryError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListSkillsStoreSkillsByCategoryError {
+    fn description(&self) -> &str {
+        match *self {
+            ListSkillsStoreSkillsByCategoryError::Validation(ref cause) => cause,
+            ListSkillsStoreSkillsByCategoryError::Credentials(ref err) => err.description(),
+            ListSkillsStoreSkillsByCategoryError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListSkillsStoreSkillsByCategoryError::ParseError(ref cause) => cause,
+            ListSkillsStoreSkillsByCategoryError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by ListSmartHomeAppliances
+#[derive(Debug, PartialEq)]
+pub enum ListSmartHomeAppliancesError {
+    /// <p>The resource is not found.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListSmartHomeAppliancesError {
+    pub fn from_response(res: BufferedHttpResponse) -> ListSmartHomeAppliancesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "NotFoundException" => {
+                    return ListSmartHomeAppliancesError::NotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return ListSmartHomeAppliancesError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ListSmartHomeAppliancesError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListSmartHomeAppliancesError {
+    fn from(err: serde_json::error::Error) -> ListSmartHomeAppliancesError {
+        ListSmartHomeAppliancesError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListSmartHomeAppliancesError {
+    fn from(err: CredentialsError) -> ListSmartHomeAppliancesError {
+        ListSmartHomeAppliancesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListSmartHomeAppliancesError {
+    fn from(err: HttpDispatchError) -> ListSmartHomeAppliancesError {
+        ListSmartHomeAppliancesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListSmartHomeAppliancesError {
+    fn from(err: io::Error) -> ListSmartHomeAppliancesError {
+        ListSmartHomeAppliancesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListSmartHomeAppliancesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListSmartHomeAppliancesError {
+    fn description(&self) -> &str {
+        match *self {
+            ListSmartHomeAppliancesError::NotFound(ref cause) => cause,
+            ListSmartHomeAppliancesError::Validation(ref cause) => cause,
+            ListSmartHomeAppliancesError::Credentials(ref err) => err.description(),
+            ListSmartHomeAppliancesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListSmartHomeAppliancesError::ParseError(ref cause) => cause,
+            ListSmartHomeAppliancesError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by ListTags
 #[derive(Debug, PartialEq)]
 pub enum ListTagsError {
-    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    /// <p>The resource is not found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3992,9 +6535,93 @@ impl Error for ListTagsError {
         }
     }
 }
+/// Errors returned by PutConferencePreference
+#[derive(Debug, PartialEq)]
+pub enum PutConferencePreferenceError {
+    /// <p>The resource is not found.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl PutConferencePreferenceError {
+    pub fn from_response(res: BufferedHttpResponse) -> PutConferencePreferenceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "NotFoundException" => {
+                    return PutConferencePreferenceError::NotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return PutConferencePreferenceError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return PutConferencePreferenceError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for PutConferencePreferenceError {
+    fn from(err: serde_json::error::Error) -> PutConferencePreferenceError {
+        PutConferencePreferenceError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for PutConferencePreferenceError {
+    fn from(err: CredentialsError) -> PutConferencePreferenceError {
+        PutConferencePreferenceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for PutConferencePreferenceError {
+    fn from(err: HttpDispatchError) -> PutConferencePreferenceError {
+        PutConferencePreferenceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutConferencePreferenceError {
+    fn from(err: io::Error) -> PutConferencePreferenceError {
+        PutConferencePreferenceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for PutConferencePreferenceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutConferencePreferenceError {
+    fn description(&self) -> &str {
+        match *self {
+            PutConferencePreferenceError::NotFound(ref cause) => cause,
+            PutConferencePreferenceError::Validation(ref cause) => cause,
+            PutConferencePreferenceError::Credentials(ref err) => err.description(),
+            PutConferencePreferenceError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            PutConferencePreferenceError::ParseError(ref cause) => cause,
+            PutConferencePreferenceError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by PutRoomSkillParameter
 #[derive(Debug, PartialEq)]
 pub enum PutRoomSkillParameterError {
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -4020,6 +6647,11 @@ impl PutRoomSkillParameterError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "ConcurrentModificationException" => {
+                    return PutRoomSkillParameterError::ConcurrentModification(String::from(
+                        error_message,
+                    ));
+                }
                 "ValidationException" => {
                     return PutRoomSkillParameterError::Validation(error_message.to_string());
                 }
@@ -4058,6 +6690,7 @@ impl fmt::Display for PutRoomSkillParameterError {
 impl Error for PutRoomSkillParameterError {
     fn description(&self) -> &str {
         match *self {
+            PutRoomSkillParameterError::ConcurrentModification(ref cause) => cause,
             PutRoomSkillParameterError::Validation(ref cause) => cause,
             PutRoomSkillParameterError::Credentials(ref err) => err.description(),
             PutRoomSkillParameterError::HttpDispatch(ref dispatch_error) => {
@@ -4068,10 +6701,282 @@ impl Error for PutRoomSkillParameterError {
         }
     }
 }
+/// Errors returned by PutSkillAuthorization
+#[derive(Debug, PartialEq)]
+pub enum PutSkillAuthorizationError {
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// <p>The caller has no permissions to operate on the resource involved in the API call.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl PutSkillAuthorizationError {
+    pub fn from_response(res: BufferedHttpResponse) -> PutSkillAuthorizationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ConcurrentModificationException" => {
+                    return PutSkillAuthorizationError::ConcurrentModification(String::from(
+                        error_message,
+                    ));
+                }
+                "UnauthorizedException" => {
+                    return PutSkillAuthorizationError::Unauthorized(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return PutSkillAuthorizationError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return PutSkillAuthorizationError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for PutSkillAuthorizationError {
+    fn from(err: serde_json::error::Error) -> PutSkillAuthorizationError {
+        PutSkillAuthorizationError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for PutSkillAuthorizationError {
+    fn from(err: CredentialsError) -> PutSkillAuthorizationError {
+        PutSkillAuthorizationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for PutSkillAuthorizationError {
+    fn from(err: HttpDispatchError) -> PutSkillAuthorizationError {
+        PutSkillAuthorizationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutSkillAuthorizationError {
+    fn from(err: io::Error) -> PutSkillAuthorizationError {
+        PutSkillAuthorizationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for PutSkillAuthorizationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutSkillAuthorizationError {
+    fn description(&self) -> &str {
+        match *self {
+            PutSkillAuthorizationError::ConcurrentModification(ref cause) => cause,
+            PutSkillAuthorizationError::Unauthorized(ref cause) => cause,
+            PutSkillAuthorizationError::Validation(ref cause) => cause,
+            PutSkillAuthorizationError::Credentials(ref err) => err.description(),
+            PutSkillAuthorizationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            PutSkillAuthorizationError::ParseError(ref cause) => cause,
+            PutSkillAuthorizationError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by RegisterAVSDevice
+#[derive(Debug, PartialEq)]
+pub enum RegisterAVSDeviceError {
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// <p>The device is in an invalid state.</p>
+    InvalidDevice(String),
+    /// <p>You are performing an action that would put you beyond your account's limits.</p>
+    LimitExceeded(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl RegisterAVSDeviceError {
+    pub fn from_response(res: BufferedHttpResponse) -> RegisterAVSDeviceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ConcurrentModificationException" => {
+                    return RegisterAVSDeviceError::ConcurrentModification(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidDeviceException" => {
+                    return RegisterAVSDeviceError::InvalidDevice(String::from(error_message));
+                }
+                "LimitExceededException" => {
+                    return RegisterAVSDeviceError::LimitExceeded(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return RegisterAVSDeviceError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return RegisterAVSDeviceError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for RegisterAVSDeviceError {
+    fn from(err: serde_json::error::Error) -> RegisterAVSDeviceError {
+        RegisterAVSDeviceError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for RegisterAVSDeviceError {
+    fn from(err: CredentialsError) -> RegisterAVSDeviceError {
+        RegisterAVSDeviceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for RegisterAVSDeviceError {
+    fn from(err: HttpDispatchError) -> RegisterAVSDeviceError {
+        RegisterAVSDeviceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RegisterAVSDeviceError {
+    fn from(err: io::Error) -> RegisterAVSDeviceError {
+        RegisterAVSDeviceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for RegisterAVSDeviceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for RegisterAVSDeviceError {
+    fn description(&self) -> &str {
+        match *self {
+            RegisterAVSDeviceError::ConcurrentModification(ref cause) => cause,
+            RegisterAVSDeviceError::InvalidDevice(ref cause) => cause,
+            RegisterAVSDeviceError::LimitExceeded(ref cause) => cause,
+            RegisterAVSDeviceError::Validation(ref cause) => cause,
+            RegisterAVSDeviceError::Credentials(ref err) => err.description(),
+            RegisterAVSDeviceError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            RegisterAVSDeviceError::ParseError(ref cause) => cause,
+            RegisterAVSDeviceError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by RejectSkill
+#[derive(Debug, PartialEq)]
+pub enum RejectSkillError {
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// <p>The resource is not found.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl RejectSkillError {
+    pub fn from_response(res: BufferedHttpResponse) -> RejectSkillError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ConcurrentModificationException" => {
+                    return RejectSkillError::ConcurrentModification(String::from(error_message));
+                }
+                "NotFoundException" => {
+                    return RejectSkillError::NotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return RejectSkillError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return RejectSkillError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for RejectSkillError {
+    fn from(err: serde_json::error::Error) -> RejectSkillError {
+        RejectSkillError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for RejectSkillError {
+    fn from(err: CredentialsError) -> RejectSkillError {
+        RejectSkillError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for RejectSkillError {
+    fn from(err: HttpDispatchError) -> RejectSkillError {
+        RejectSkillError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RejectSkillError {
+    fn from(err: io::Error) -> RejectSkillError {
+        RejectSkillError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for RejectSkillError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for RejectSkillError {
+    fn description(&self) -> &str {
+        match *self {
+            RejectSkillError::ConcurrentModification(ref cause) => cause,
+            RejectSkillError::NotFound(ref cause) => cause,
+            RejectSkillError::Validation(ref cause) => cause,
+            RejectSkillError::Credentials(ref err) => err.description(),
+            RejectSkillError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            RejectSkillError::ParseError(ref cause) => cause,
+            RejectSkillError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by ResolveRoom
 #[derive(Debug, PartialEq)]
 pub enum ResolveRoomError {
-    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    /// <p>The resource is not found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4151,7 +7056,9 @@ impl Error for ResolveRoomError {
 /// Errors returned by RevokeInvitation
 #[derive(Debug, PartialEq)]
 pub enum RevokeInvitationError {
-    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// <p>The resource is not found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4178,6 +7085,11 @@ impl RevokeInvitationError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "ConcurrentModificationException" => {
+                    return RevokeInvitationError::ConcurrentModification(String::from(
+                        error_message,
+                    ));
+                }
                 "NotFoundException" => {
                     return RevokeInvitationError::NotFound(String::from(error_message));
                 }
@@ -4219,6 +7131,7 @@ impl fmt::Display for RevokeInvitationError {
 impl Error for RevokeInvitationError {
     fn description(&self) -> &str {
         match *self {
+            RevokeInvitationError::ConcurrentModification(ref cause) => cause,
             RevokeInvitationError::NotFound(ref cause) => cause,
             RevokeInvitationError::Validation(ref cause) => cause,
             RevokeInvitationError::Credentials(ref err) => err.description(),
@@ -4753,9 +7666,11 @@ impl Error for SearchUsersError {
 /// Errors returned by SendInvitation
 #[derive(Debug, PartialEq)]
 pub enum SendInvitationError {
-    /// <p>The attempt to update a user is invalid due to the user's current status. HTTP Status Code: 400</p>
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// <p>The attempt to update a user is invalid due to the user's current status.</p>
     InvalidUserStatus(String),
-    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    /// <p>The resource is not found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4782,6 +7697,9 @@ impl SendInvitationError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "ConcurrentModificationException" => {
+                    return SendInvitationError::ConcurrentModification(String::from(error_message));
+                }
                 "InvalidUserStatusException" => {
                     return SendInvitationError::InvalidUserStatus(String::from(error_message));
                 }
@@ -4826,6 +7744,7 @@ impl fmt::Display for SendInvitationError {
 impl Error for SendInvitationError {
     fn description(&self) -> &str {
         match *self {
+            SendInvitationError::ConcurrentModification(ref cause) => cause,
             SendInvitationError::InvalidUserStatus(ref cause) => cause,
             SendInvitationError::NotFound(ref cause) => cause,
             SendInvitationError::Validation(ref cause) => cause,
@@ -4839,6 +7758,7 @@ impl Error for SendInvitationError {
 /// Errors returned by StartDeviceSync
 #[derive(Debug, PartialEq)]
 pub enum StartDeviceSyncError {
+    /// <p>The request failed because this device is no longer registered and therefore no longer managed by this account.</p>
     DeviceNotRegistered(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4915,10 +7835,96 @@ impl Error for StartDeviceSyncError {
         }
     }
 }
+/// Errors returned by StartSmartHomeApplianceDiscovery
+#[derive(Debug, PartialEq)]
+pub enum StartSmartHomeApplianceDiscoveryError {
+    /// <p>The resource is not found.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl StartSmartHomeApplianceDiscoveryError {
+    pub fn from_response(res: BufferedHttpResponse) -> StartSmartHomeApplianceDiscoveryError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "NotFoundException" => {
+                    return StartSmartHomeApplianceDiscoveryError::NotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return StartSmartHomeApplianceDiscoveryError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return StartSmartHomeApplianceDiscoveryError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for StartSmartHomeApplianceDiscoveryError {
+    fn from(err: serde_json::error::Error) -> StartSmartHomeApplianceDiscoveryError {
+        StartSmartHomeApplianceDiscoveryError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for StartSmartHomeApplianceDiscoveryError {
+    fn from(err: CredentialsError) -> StartSmartHomeApplianceDiscoveryError {
+        StartSmartHomeApplianceDiscoveryError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for StartSmartHomeApplianceDiscoveryError {
+    fn from(err: HttpDispatchError) -> StartSmartHomeApplianceDiscoveryError {
+        StartSmartHomeApplianceDiscoveryError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StartSmartHomeApplianceDiscoveryError {
+    fn from(err: io::Error) -> StartSmartHomeApplianceDiscoveryError {
+        StartSmartHomeApplianceDiscoveryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for StartSmartHomeApplianceDiscoveryError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartSmartHomeApplianceDiscoveryError {
+    fn description(&self) -> &str {
+        match *self {
+            StartSmartHomeApplianceDiscoveryError::NotFound(ref cause) => cause,
+            StartSmartHomeApplianceDiscoveryError::Validation(ref cause) => cause,
+            StartSmartHomeApplianceDiscoveryError::Credentials(ref err) => err.description(),
+            StartSmartHomeApplianceDiscoveryError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            StartSmartHomeApplianceDiscoveryError::ParseError(ref cause) => cause,
+            StartSmartHomeApplianceDiscoveryError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
-    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    /// <p>The resource is not found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4998,7 +8004,7 @@ impl Error for TagResourceError {
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
-    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    /// <p>The resource is not found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5078,9 +8084,11 @@ impl Error for UntagResourceError {
 /// Errors returned by UpdateAddressBook
 #[derive(Debug, PartialEq)]
 pub enum UpdateAddressBookError {
-    /// <p>The name sent in the request is already in use. HTTP Status Code: 400</p>
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// <p>The name sent in the request is already in use.</p>
     NameInUse(String),
-    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    /// <p>The resource is not found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5107,6 +8115,11 @@ impl UpdateAddressBookError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "ConcurrentModificationException" => {
+                    return UpdateAddressBookError::ConcurrentModification(String::from(
+                        error_message,
+                    ));
+                }
                 "NameInUseException" => {
                     return UpdateAddressBookError::NameInUse(String::from(error_message));
                 }
@@ -5151,6 +8164,7 @@ impl fmt::Display for UpdateAddressBookError {
 impl Error for UpdateAddressBookError {
     fn description(&self) -> &str {
         match *self {
+            UpdateAddressBookError::ConcurrentModification(ref cause) => cause,
             UpdateAddressBookError::NameInUse(ref cause) => cause,
             UpdateAddressBookError::NotFound(ref cause) => cause,
             UpdateAddressBookError::Validation(ref cause) => cause,
@@ -5163,10 +8177,184 @@ impl Error for UpdateAddressBookError {
         }
     }
 }
+/// Errors returned by UpdateBusinessReportSchedule
+#[derive(Debug, PartialEq)]
+pub enum UpdateBusinessReportScheduleError {
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// <p>The resource is not found.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl UpdateBusinessReportScheduleError {
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateBusinessReportScheduleError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ConcurrentModificationException" => {
+                    return UpdateBusinessReportScheduleError::ConcurrentModification(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return UpdateBusinessReportScheduleError::NotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return UpdateBusinessReportScheduleError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return UpdateBusinessReportScheduleError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateBusinessReportScheduleError {
+    fn from(err: serde_json::error::Error) -> UpdateBusinessReportScheduleError {
+        UpdateBusinessReportScheduleError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateBusinessReportScheduleError {
+    fn from(err: CredentialsError) -> UpdateBusinessReportScheduleError {
+        UpdateBusinessReportScheduleError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateBusinessReportScheduleError {
+    fn from(err: HttpDispatchError) -> UpdateBusinessReportScheduleError {
+        UpdateBusinessReportScheduleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateBusinessReportScheduleError {
+    fn from(err: io::Error) -> UpdateBusinessReportScheduleError {
+        UpdateBusinessReportScheduleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateBusinessReportScheduleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateBusinessReportScheduleError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateBusinessReportScheduleError::ConcurrentModification(ref cause) => cause,
+            UpdateBusinessReportScheduleError::NotFound(ref cause) => cause,
+            UpdateBusinessReportScheduleError::Validation(ref cause) => cause,
+            UpdateBusinessReportScheduleError::Credentials(ref err) => err.description(),
+            UpdateBusinessReportScheduleError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateBusinessReportScheduleError::ParseError(ref cause) => cause,
+            UpdateBusinessReportScheduleError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by UpdateConferenceProvider
+#[derive(Debug, PartialEq)]
+pub enum UpdateConferenceProviderError {
+    /// <p>The resource is not found.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl UpdateConferenceProviderError {
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateConferenceProviderError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "NotFoundException" => {
+                    return UpdateConferenceProviderError::NotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return UpdateConferenceProviderError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return UpdateConferenceProviderError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateConferenceProviderError {
+    fn from(err: serde_json::error::Error) -> UpdateConferenceProviderError {
+        UpdateConferenceProviderError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateConferenceProviderError {
+    fn from(err: CredentialsError) -> UpdateConferenceProviderError {
+        UpdateConferenceProviderError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateConferenceProviderError {
+    fn from(err: HttpDispatchError) -> UpdateConferenceProviderError {
+        UpdateConferenceProviderError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateConferenceProviderError {
+    fn from(err: io::Error) -> UpdateConferenceProviderError {
+        UpdateConferenceProviderError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateConferenceProviderError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateConferenceProviderError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateConferenceProviderError::NotFound(ref cause) => cause,
+            UpdateConferenceProviderError::Validation(ref cause) => cause,
+            UpdateConferenceProviderError::Credentials(ref err) => err.description(),
+            UpdateConferenceProviderError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateConferenceProviderError::ParseError(ref cause) => cause,
+            UpdateConferenceProviderError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by UpdateContact
 #[derive(Debug, PartialEq)]
 pub enum UpdateContactError {
-    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// <p>The resource is not found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5193,6 +8381,9 @@ impl UpdateContactError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "ConcurrentModificationException" => {
+                    return UpdateContactError::ConcurrentModification(String::from(error_message));
+                }
                 "NotFoundException" => {
                     return UpdateContactError::NotFound(String::from(error_message));
                 }
@@ -5234,6 +8425,7 @@ impl fmt::Display for UpdateContactError {
 impl Error for UpdateContactError {
     fn description(&self) -> &str {
         match *self {
+            UpdateContactError::ConcurrentModification(ref cause) => cause,
             UpdateContactError::NotFound(ref cause) => cause,
             UpdateContactError::Validation(ref cause) => cause,
             UpdateContactError::Credentials(ref err) => err.description(),
@@ -5246,8 +8438,11 @@ impl Error for UpdateContactError {
 /// Errors returned by UpdateDevice
 #[derive(Debug, PartialEq)]
 pub enum UpdateDeviceError {
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// <p>The request failed because this device is no longer registered and therefore no longer managed by this account.</p>
     DeviceNotRegistered(String),
-    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    /// <p>The resource is not found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5274,6 +8469,9 @@ impl UpdateDeviceError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "ConcurrentModificationException" => {
+                    return UpdateDeviceError::ConcurrentModification(String::from(error_message));
+                }
                 "DeviceNotRegisteredException" => {
                     return UpdateDeviceError::DeviceNotRegistered(String::from(error_message));
                 }
@@ -5318,6 +8516,7 @@ impl fmt::Display for UpdateDeviceError {
 impl Error for UpdateDeviceError {
     fn description(&self) -> &str {
         match *self {
+            UpdateDeviceError::ConcurrentModification(ref cause) => cause,
             UpdateDeviceError::DeviceNotRegistered(ref cause) => cause,
             UpdateDeviceError::NotFound(ref cause) => cause,
             UpdateDeviceError::Validation(ref cause) => cause,
@@ -5331,9 +8530,11 @@ impl Error for UpdateDeviceError {
 /// Errors returned by UpdateProfile
 #[derive(Debug, PartialEq)]
 pub enum UpdateProfileError {
-    /// <p>The name sent in the request is already in use. HTTP Status Code: 400</p>
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// <p>The name sent in the request is already in use.</p>
     NameInUse(String),
-    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    /// <p>The resource is not found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5360,6 +8561,9 @@ impl UpdateProfileError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "ConcurrentModificationException" => {
+                    return UpdateProfileError::ConcurrentModification(String::from(error_message));
+                }
                 "NameInUseException" => {
                     return UpdateProfileError::NameInUse(String::from(error_message));
                 }
@@ -5404,6 +8608,7 @@ impl fmt::Display for UpdateProfileError {
 impl Error for UpdateProfileError {
     fn description(&self) -> &str {
         match *self {
+            UpdateProfileError::ConcurrentModification(ref cause) => cause,
             UpdateProfileError::NameInUse(ref cause) => cause,
             UpdateProfileError::NotFound(ref cause) => cause,
             UpdateProfileError::Validation(ref cause) => cause,
@@ -5417,9 +8622,9 @@ impl Error for UpdateProfileError {
 /// Errors returned by UpdateRoom
 #[derive(Debug, PartialEq)]
 pub enum UpdateRoomError {
-    /// <p>The name sent in the request is already in use. HTTP Status Code: 400</p>
+    /// <p>The name sent in the request is already in use.</p>
     NameInUse(String),
-    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    /// <p>The resource is not found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5503,9 +8708,11 @@ impl Error for UpdateRoomError {
 /// Errors returned by UpdateSkillGroup
 #[derive(Debug, PartialEq)]
 pub enum UpdateSkillGroupError {
-    /// <p>The name sent in the request is already in use. HTTP Status Code: 400</p>
+    /// <p>Concurrent modification of resources. HTTP Status Code: 400.</p>
+    ConcurrentModification(String),
+    /// <p>The name sent in the request is already in use.</p>
     NameInUse(String),
-    /// <p>The resource is not found. HTTP Status Code: 400</p>
+    /// <p>The resource is not found.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5532,6 +8739,11 @@ impl UpdateSkillGroupError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "ConcurrentModificationException" => {
+                    return UpdateSkillGroupError::ConcurrentModification(String::from(
+                        error_message,
+                    ));
+                }
                 "NameInUseException" => {
                     return UpdateSkillGroupError::NameInUse(String::from(error_message));
                 }
@@ -5576,6 +8788,7 @@ impl fmt::Display for UpdateSkillGroupError {
 impl Error for UpdateSkillGroupError {
     fn description(&self) -> &str {
         match *self {
+            UpdateSkillGroupError::ConcurrentModification(ref cause) => cause,
             UpdateSkillGroupError::NameInUse(ref cause) => cause,
             UpdateSkillGroupError::NotFound(ref cause) => cause,
             UpdateSkillGroupError::Validation(ref cause) => cause,
@@ -5588,6 +8801,12 @@ impl Error for UpdateSkillGroupError {
 }
 /// Trait representing the capabilities of the Alexa For Business API. Alexa For Business clients implement this trait.
 pub trait AlexaForBusiness {
+    /// <p>Associates a skill with the organization under the customer's AWS account. If a skill is private, the user implicitly accepts access to this skill during enablement.</p>
+    fn approve_skill(
+        &self,
+        input: ApproveSkillRequest,
+    ) -> RusotoFuture<ApproveSkillResponse, ApproveSkillError>;
+
     /// <p>Associates a contact with a given address book.</p>
     fn associate_contact_with_address_book(
         &self,
@@ -5606,11 +8825,35 @@ pub trait AlexaForBusiness {
         input: AssociateSkillGroupWithRoomRequest,
     ) -> RusotoFuture<AssociateSkillGroupWithRoomResponse, AssociateSkillGroupWithRoomError>;
 
+    /// <p>Associates a skill with a skill group.</p>
+    fn associate_skill_with_skill_group(
+        &self,
+        input: AssociateSkillWithSkillGroupRequest,
+    ) -> RusotoFuture<AssociateSkillWithSkillGroupResponse, AssociateSkillWithSkillGroupError>;
+
+    /// <p>Makes a private skill available for enrolled users to enable on their devices.</p>
+    fn associate_skill_with_users(
+        &self,
+        input: AssociateSkillWithUsersRequest,
+    ) -> RusotoFuture<AssociateSkillWithUsersResponse, AssociateSkillWithUsersError>;
+
     /// <p>Creates an address book with the specified details.</p>
     fn create_address_book(
         &self,
         input: CreateAddressBookRequest,
     ) -> RusotoFuture<CreateAddressBookResponse, CreateAddressBookError>;
+
+    /// <p>Creates a recurring schedule for usage reports to deliver to the specified S3 location with a specified daily or weekly interval.</p>
+    fn create_business_report_schedule(
+        &self,
+        input: CreateBusinessReportScheduleRequest,
+    ) -> RusotoFuture<CreateBusinessReportScheduleResponse, CreateBusinessReportScheduleError>;
+
+    /// <p>Adds a new conference provider under the user's AWS account.</p>
+    fn create_conference_provider(
+        &self,
+        input: CreateConferenceProviderRequest,
+    ) -> RusotoFuture<CreateConferenceProviderResponse, CreateConferenceProviderError>;
 
     /// <p>Creates a contact with the specified details.</p>
     fn create_contact(
@@ -5648,11 +8891,29 @@ pub trait AlexaForBusiness {
         input: DeleteAddressBookRequest,
     ) -> RusotoFuture<DeleteAddressBookResponse, DeleteAddressBookError>;
 
+    /// <p>Deletes the recurring report delivery schedule with the specified schedule ARN.</p>
+    fn delete_business_report_schedule(
+        &self,
+        input: DeleteBusinessReportScheduleRequest,
+    ) -> RusotoFuture<DeleteBusinessReportScheduleResponse, DeleteBusinessReportScheduleError>;
+
+    /// <p>Deletes a conference provider.</p>
+    fn delete_conference_provider(
+        &self,
+        input: DeleteConferenceProviderRequest,
+    ) -> RusotoFuture<DeleteConferenceProviderResponse, DeleteConferenceProviderError>;
+
     /// <p>Deletes a contact by the contact ARN.</p>
     fn delete_contact(
         &self,
         input: DeleteContactRequest,
     ) -> RusotoFuture<DeleteContactResponse, DeleteContactError>;
+
+    /// <p>Removes a device from Alexa For Business.</p>
+    fn delete_device(
+        &self,
+        input: DeleteDeviceRequest,
+    ) -> RusotoFuture<DeleteDeviceResponse, DeleteDeviceError>;
 
     /// <p>Deletes a room profile by the profile ARN.</p>
     fn delete_profile(
@@ -5671,6 +8932,12 @@ pub trait AlexaForBusiness {
         &self,
         input: DeleteRoomSkillParameterRequest,
     ) -> RusotoFuture<DeleteRoomSkillParameterResponse, DeleteRoomSkillParameterError>;
+
+    /// <p>Unlinks a third-party account from a skill.</p>
+    fn delete_skill_authorization(
+        &self,
+        input: DeleteSkillAuthorizationRequest,
+    ) -> RusotoFuture<DeleteSkillAuthorizationResponse, DeleteSkillAuthorizationError>;
 
     /// <p>Deletes a skill group by skill group ARN.</p>
     fn delete_skill_group(
@@ -5699,17 +8966,46 @@ pub trait AlexaForBusiness {
         input: DisassociateDeviceFromRoomRequest,
     ) -> RusotoFuture<DisassociateDeviceFromRoomResponse, DisassociateDeviceFromRoomError>;
 
+    /// <p>Disassociates a skill from a skill group.</p>
+    fn disassociate_skill_from_skill_group(
+        &self,
+        input: DisassociateSkillFromSkillGroupRequest,
+    ) -> RusotoFuture<DisassociateSkillFromSkillGroupResponse, DisassociateSkillFromSkillGroupError>;
+
+    /// <p>Makes a private skill unavailable for enrolled users and prevents them from enabling it on their devices.</p>
+    fn disassociate_skill_from_users(
+        &self,
+        input: DisassociateSkillFromUsersRequest,
+    ) -> RusotoFuture<DisassociateSkillFromUsersResponse, DisassociateSkillFromUsersError>;
+
     /// <p>Disassociates a skill group from a specified room. This disables all skills in the skill group on all devices in the room.</p>
     fn disassociate_skill_group_from_room(
         &self,
         input: DisassociateSkillGroupFromRoomRequest,
     ) -> RusotoFuture<DisassociateSkillGroupFromRoomResponse, DisassociateSkillGroupFromRoomError>;
 
+    /// <p>Forgets smart home appliances associated to a room.</p>
+    fn forget_smart_home_appliances(
+        &self,
+        input: ForgetSmartHomeAppliancesRequest,
+    ) -> RusotoFuture<ForgetSmartHomeAppliancesResponse, ForgetSmartHomeAppliancesError>;
+
     /// <p>Gets address the book details by the address book ARN.</p>
     fn get_address_book(
         &self,
         input: GetAddressBookRequest,
     ) -> RusotoFuture<GetAddressBookResponse, GetAddressBookError>;
+
+    /// <p>Retrieves the existing conference preferences.</p>
+    fn get_conference_preference(
+        &self,
+    ) -> RusotoFuture<GetConferencePreferenceResponse, GetConferencePreferenceError>;
+
+    /// <p>Gets details about a specific conference provider.</p>
+    fn get_conference_provider(
+        &self,
+        input: GetConferenceProviderRequest,
+    ) -> RusotoFuture<GetConferenceProviderResponse, GetConferenceProviderError>;
 
     /// <p>Gets the contact details by the contact ARN.</p>
     fn get_contact(
@@ -5744,7 +9040,19 @@ pub trait AlexaForBusiness {
         input: GetSkillGroupRequest,
     ) -> RusotoFuture<GetSkillGroupResponse, GetSkillGroupError>;
 
-    /// <p>Lists the Device Event history for up to 30 days. If EventType isn't specified in the request, this returns a list of all device events in reverse chronological order. If EventType is specified, this returns a list of device events for that EventType in reverse chronological order. </p>
+    /// <p>Lists the details of the schedules that a user configured.</p>
+    fn list_business_report_schedules(
+        &self,
+        input: ListBusinessReportSchedulesRequest,
+    ) -> RusotoFuture<ListBusinessReportSchedulesResponse, ListBusinessReportSchedulesError>;
+
+    /// <p>Lists conference providers under a specific AWS account.</p>
+    fn list_conference_providers(
+        &self,
+        input: ListConferenceProvidersRequest,
+    ) -> RusotoFuture<ListConferenceProvidersResponse, ListConferenceProvidersError>;
+
+    /// <p>Lists the device event history, including device connection status, for up to 30 days.</p>
     fn list_device_events(
         &self,
         input: ListDeviceEventsRequest,
@@ -5756,14 +9064,56 @@ pub trait AlexaForBusiness {
         input: ListSkillsRequest,
     ) -> RusotoFuture<ListSkillsResponse, ListSkillsError>;
 
-    /// <p>Lists all tags for a specific resource.</p>
+    /// <p>Lists all categories in the Alexa skill store.</p>
+    fn list_skills_store_categories(
+        &self,
+        input: ListSkillsStoreCategoriesRequest,
+    ) -> RusotoFuture<ListSkillsStoreCategoriesResponse, ListSkillsStoreCategoriesError>;
+
+    /// <p>Lists all skills in the Alexa skill store by category.</p>
+    fn list_skills_store_skills_by_category(
+        &self,
+        input: ListSkillsStoreSkillsByCategoryRequest,
+    ) -> RusotoFuture<ListSkillsStoreSkillsByCategoryResponse, ListSkillsStoreSkillsByCategoryError>;
+
+    /// <p>Lists all of the smart home appliances associated with a room.</p>
+    fn list_smart_home_appliances(
+        &self,
+        input: ListSmartHomeAppliancesRequest,
+    ) -> RusotoFuture<ListSmartHomeAppliancesResponse, ListSmartHomeAppliancesError>;
+
+    /// <p>Lists all tags for the specified resource.</p>
     fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError>;
+
+    /// <p>Sets the conference preferences on a specific conference provider at the account level.</p>
+    fn put_conference_preference(
+        &self,
+        input: PutConferencePreferenceRequest,
+    ) -> RusotoFuture<PutConferencePreferenceResponse, PutConferencePreferenceError>;
 
     /// <p>Updates room skill parameter details by room, skill, and parameter key ID. Not all skills have a room skill parameter.</p>
     fn put_room_skill_parameter(
         &self,
         input: PutRoomSkillParameterRequest,
     ) -> RusotoFuture<PutRoomSkillParameterResponse, PutRoomSkillParameterError>;
+
+    /// <p>Links a user's account to a third-party skill provider. If this API operation is called by an assumed IAM role, the skill being linked must be a private skill. Also, the skill must be owned by the AWS account that assumed the IAM role.</p>
+    fn put_skill_authorization(
+        &self,
+        input: PutSkillAuthorizationRequest,
+    ) -> RusotoFuture<PutSkillAuthorizationResponse, PutSkillAuthorizationError>;
+
+    /// <p>Registers an Alexa-enabled device built by an Original Equipment Manufacturer (OEM) using Alexa Voice Service (AVS).</p>
+    fn register_avs_device(
+        &self,
+        input: RegisterAVSDeviceRequest,
+    ) -> RusotoFuture<RegisterAVSDeviceResponse, RegisterAVSDeviceError>;
+
+    /// <p>Disassociates a skill from the organization under a user's AWS account. If the skill is a private skill, it moves to an AcceptStatus of PENDING. Any private or public skill that is rejected can be added later by calling the ApproveSkill API. </p>
+    fn reject_skill(
+        &self,
+        input: RejectSkillRequest,
+    ) -> RusotoFuture<RejectSkillResponse, RejectSkillError>;
 
     /// <p>Determines the details for the room from which a skill request was invoked. This operation is used by skill developers.</p>
     fn resolve_room(
@@ -5831,6 +9181,12 @@ pub trait AlexaForBusiness {
         input: StartDeviceSyncRequest,
     ) -> RusotoFuture<StartDeviceSyncResponse, StartDeviceSyncError>;
 
+    /// <p>Initiates the discovery of any smart home appliances associated with the room.</p>
+    fn start_smart_home_appliance_discovery(
+        &self,
+        input: StartSmartHomeApplianceDiscoveryRequest,
+    ) -> RusotoFuture<StartSmartHomeApplianceDiscoveryResponse, StartSmartHomeApplianceDiscoveryError>;
+
     /// <p>Adds metadata tags to a specified resource.</p>
     fn tag_resource(
         &self,
@@ -5848,6 +9204,18 @@ pub trait AlexaForBusiness {
         &self,
         input: UpdateAddressBookRequest,
     ) -> RusotoFuture<UpdateAddressBookResponse, UpdateAddressBookError>;
+
+    /// <p>Updates the configuration of the report delivery schedule with the specified schedule ARN.</p>
+    fn update_business_report_schedule(
+        &self,
+        input: UpdateBusinessReportScheduleRequest,
+    ) -> RusotoFuture<UpdateBusinessReportScheduleResponse, UpdateBusinessReportScheduleError>;
+
+    /// <p>Updates an existing conference provider's settings.</p>
+    fn update_conference_provider(
+        &self,
+        input: UpdateConferenceProviderRequest,
+    ) -> RusotoFuture<UpdateConferenceProviderResponse, UpdateConferenceProviderError>;
 
     /// <p>Updates the contact details by the contact ARN.</p>
     fn update_contact(
@@ -5916,6 +9284,43 @@ impl AlexaForBusinessClient {
 }
 
 impl AlexaForBusiness for AlexaForBusinessClient {
+    /// <p>Associates a skill with the organization under the customer's AWS account. If a skill is private, the user implicitly accepts access to this skill during enablement.</p>
+    fn approve_skill(
+        &self,
+        input: ApproveSkillRequest,
+    ) -> RusotoFuture<ApproveSkillResponse, ApproveSkillError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.ApproveSkill");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ApproveSkillResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ApproveSkillError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Associates a contact with a given address book.</p>
     fn associate_contact_with_address_book(
         &self,
@@ -6027,6 +9432,77 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         })
     }
 
+    /// <p>Associates a skill with a skill group.</p>
+    fn associate_skill_with_skill_group(
+        &self,
+        input: AssociateSkillWithSkillGroupRequest,
+    ) -> RusotoFuture<AssociateSkillWithSkillGroupResponse, AssociateSkillWithSkillGroupError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AlexaForBusiness.AssociateSkillWithSkillGroup",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<AssociateSkillWithSkillGroupResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(AssociateSkillWithSkillGroupError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Makes a private skill available for enrolled users to enable on their devices.</p>
+    fn associate_skill_with_users(
+        &self,
+        input: AssociateSkillWithUsersRequest,
+    ) -> RusotoFuture<AssociateSkillWithUsersResponse, AssociateSkillWithUsersError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.AssociateSkillWithUsers");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<AssociateSkillWithUsersResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(AssociateSkillWithUsersError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Creates an address book with the specified details.</p>
     fn create_address_book(
         &self,
@@ -6060,6 +9536,77 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                         .from_err()
                         .and_then(|response| Err(CreateAddressBookError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p>Creates a recurring schedule for usage reports to deliver to the specified S3 location with a specified daily or weekly interval.</p>
+    fn create_business_report_schedule(
+        &self,
+        input: CreateBusinessReportScheduleRequest,
+    ) -> RusotoFuture<CreateBusinessReportScheduleResponse, CreateBusinessReportScheduleError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AlexaForBusiness.CreateBusinessReportSchedule",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<CreateBusinessReportScheduleResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateBusinessReportScheduleError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Adds a new conference provider under the user's AWS account.</p>
+    fn create_conference_provider(
+        &self,
+        input: CreateConferenceProviderRequest,
+    ) -> RusotoFuture<CreateConferenceProviderResponse, CreateConferenceProviderError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.CreateConferenceProvider");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<CreateConferenceProviderResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateConferenceProviderError::from_response(response))
+                }))
             }
         })
     }
@@ -6286,6 +9833,77 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         })
     }
 
+    /// <p>Deletes the recurring report delivery schedule with the specified schedule ARN.</p>
+    fn delete_business_report_schedule(
+        &self,
+        input: DeleteBusinessReportScheduleRequest,
+    ) -> RusotoFuture<DeleteBusinessReportScheduleResponse, DeleteBusinessReportScheduleError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AlexaForBusiness.DeleteBusinessReportSchedule",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DeleteBusinessReportScheduleResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteBusinessReportScheduleError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Deletes a conference provider.</p>
+    fn delete_conference_provider(
+        &self,
+        input: DeleteConferenceProviderRequest,
+    ) -> RusotoFuture<DeleteConferenceProviderResponse, DeleteConferenceProviderError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.DeleteConferenceProvider");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DeleteConferenceProviderResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteConferenceProviderError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Deletes a contact by the contact ARN.</p>
     fn delete_contact(
         &self,
@@ -6318,6 +9936,43 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(DeleteContactError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Removes a device from Alexa For Business.</p>
+    fn delete_device(
+        &self,
+        input: DeleteDeviceRequest,
+    ) -> RusotoFuture<DeleteDeviceResponse, DeleteDeviceError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.DeleteDevice");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DeleteDeviceResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteDeviceError::from_response(response))),
                 )
             }
         })
@@ -6426,6 +10081,40 @@ impl AlexaForBusiness for AlexaForBusinessClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteRoomSkillParameterError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Unlinks a third-party account from a skill.</p>
+    fn delete_skill_authorization(
+        &self,
+        input: DeleteSkillAuthorizationRequest,
+    ) -> RusotoFuture<DeleteSkillAuthorizationResponse, DeleteSkillAuthorizationError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.DeleteSkillAuthorization");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DeleteSkillAuthorizationResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteSkillAuthorizationError::from_response(response))
                 }))
             }
         })
@@ -6584,6 +10273,83 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         })
     }
 
+    /// <p>Disassociates a skill from a skill group.</p>
+    fn disassociate_skill_from_skill_group(
+        &self,
+        input: DisassociateSkillFromSkillGroupRequest,
+    ) -> RusotoFuture<DisassociateSkillFromSkillGroupResponse, DisassociateSkillFromSkillGroupError>
+    {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AlexaForBusiness.DisassociateSkillFromSkillGroup",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DisassociateSkillFromSkillGroupResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DisassociateSkillFromSkillGroupError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Makes a private skill unavailable for enrolled users and prevents them from enabling it on their devices.</p>
+    fn disassociate_skill_from_users(
+        &self,
+        input: DisassociateSkillFromUsersRequest,
+    ) -> RusotoFuture<DisassociateSkillFromUsersResponse, DisassociateSkillFromUsersError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AlexaForBusiness.DisassociateSkillFromUsers",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DisassociateSkillFromUsersResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DisassociateSkillFromUsersError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Disassociates a skill group from a specified room. This disables all skills in the skill group on all devices in the room.</p>
     fn disassociate_skill_group_from_room(
         &self,
@@ -6622,6 +10388,40 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         })
     }
 
+    /// <p>Forgets smart home appliances associated to a room.</p>
+    fn forget_smart_home_appliances(
+        &self,
+        input: ForgetSmartHomeAppliancesRequest,
+    ) -> RusotoFuture<ForgetSmartHomeAppliancesResponse, ForgetSmartHomeAppliancesError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.ForgetSmartHomeAppliances");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ForgetSmartHomeAppliancesResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ForgetSmartHomeAppliancesError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Gets address the book details by the address book ARN.</p>
     fn get_address_book(
         &self,
@@ -6654,6 +10454,74 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(GetAddressBookError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Retrieves the existing conference preferences.</p>
+    fn get_conference_preference(
+        &self,
+    ) -> RusotoFuture<GetConferencePreferenceResponse, GetConferencePreferenceError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.GetConferencePreference");
+        request.set_payload(Some(b"{}".to_vec()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetConferencePreferenceResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetConferencePreferenceError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Gets details about a specific conference provider.</p>
+    fn get_conference_provider(
+        &self,
+        input: GetConferenceProviderRequest,
+    ) -> RusotoFuture<GetConferenceProviderResponse, GetConferenceProviderError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.GetConferenceProvider");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetConferenceProviderResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetConferenceProviderError::from_response(response))
+                    }),
                 )
             }
         })
@@ -6877,7 +10745,78 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         })
     }
 
-    /// <p>Lists the Device Event history for up to 30 days. If EventType isn't specified in the request, this returns a list of all device events in reverse chronological order. If EventType is specified, this returns a list of device events for that EventType in reverse chronological order. </p>
+    /// <p>Lists the details of the schedules that a user configured.</p>
+    fn list_business_report_schedules(
+        &self,
+        input: ListBusinessReportSchedulesRequest,
+    ) -> RusotoFuture<ListBusinessReportSchedulesResponse, ListBusinessReportSchedulesError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AlexaForBusiness.ListBusinessReportSchedules",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ListBusinessReportSchedulesResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListBusinessReportSchedulesError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Lists conference providers under a specific AWS account.</p>
+    fn list_conference_providers(
+        &self,
+        input: ListConferenceProvidersRequest,
+    ) -> RusotoFuture<ListConferenceProvidersResponse, ListConferenceProvidersError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.ListConferenceProviders");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ListConferenceProvidersResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListConferenceProvidersError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Lists the device event history, including device connection status, for up to 30 days.</p>
     fn list_device_events(
         &self,
         input: ListDeviceEventsRequest,
@@ -6951,7 +10890,115 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         })
     }
 
-    /// <p>Lists all tags for a specific resource.</p>
+    /// <p>Lists all categories in the Alexa skill store.</p>
+    fn list_skills_store_categories(
+        &self,
+        input: ListSkillsStoreCategoriesRequest,
+    ) -> RusotoFuture<ListSkillsStoreCategoriesResponse, ListSkillsStoreCategoriesError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.ListSkillsStoreCategories");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ListSkillsStoreCategoriesResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListSkillsStoreCategoriesError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Lists all skills in the Alexa skill store by category.</p>
+    fn list_skills_store_skills_by_category(
+        &self,
+        input: ListSkillsStoreSkillsByCategoryRequest,
+    ) -> RusotoFuture<ListSkillsStoreSkillsByCategoryResponse, ListSkillsStoreSkillsByCategoryError>
+    {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AlexaForBusiness.ListSkillsStoreSkillsByCategory",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ListSkillsStoreSkillsByCategoryResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListSkillsStoreSkillsByCategoryError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Lists all of the smart home appliances associated with a room.</p>
+    fn list_smart_home_appliances(
+        &self,
+        input: ListSmartHomeAppliancesRequest,
+    ) -> RusotoFuture<ListSmartHomeAppliancesResponse, ListSmartHomeAppliancesError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.ListSmartHomeAppliances");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ListSmartHomeAppliancesResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListSmartHomeAppliancesError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Lists all tags for the specified resource.</p>
     fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError> {
         let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
 
@@ -6981,6 +11028,40 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                         .from_err()
                         .and_then(|response| Err(ListTagsError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p>Sets the conference preferences on a specific conference provider at the account level.</p>
+    fn put_conference_preference(
+        &self,
+        input: PutConferencePreferenceRequest,
+    ) -> RusotoFuture<PutConferencePreferenceResponse, PutConferencePreferenceError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.PutConferencePreference");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<PutConferencePreferenceResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(PutConferencePreferenceError::from_response(response))
+                }))
             }
         })
     }
@@ -7016,6 +11097,116 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                     response.buffer().from_err().and_then(|response| {
                         Err(PutRoomSkillParameterError::from_response(response))
                     }),
+                )
+            }
+        })
+    }
+
+    /// <p>Links a user's account to a third-party skill provider. If this API operation is called by an assumed IAM role, the skill being linked must be a private skill. Also, the skill must be owned by the AWS account that assumed the IAM role.</p>
+    fn put_skill_authorization(
+        &self,
+        input: PutSkillAuthorizationRequest,
+    ) -> RusotoFuture<PutSkillAuthorizationResponse, PutSkillAuthorizationError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.PutSkillAuthorization");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<PutSkillAuthorizationResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(PutSkillAuthorizationError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Registers an Alexa-enabled device built by an Original Equipment Manufacturer (OEM) using Alexa Voice Service (AVS).</p>
+    fn register_avs_device(
+        &self,
+        input: RegisterAVSDeviceRequest,
+    ) -> RusotoFuture<RegisterAVSDeviceResponse, RegisterAVSDeviceError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.RegisterAVSDevice");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<RegisterAVSDeviceResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(RegisterAVSDeviceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Disassociates a skill from the organization under a user's AWS account. If the skill is a private skill, it moves to an AcceptStatus of PENDING. Any private or public skill that is rejected can be added later by calling the ApproveSkill API. </p>
+    fn reject_skill(
+        &self,
+        input: RejectSkillRequest,
+    ) -> RusotoFuture<RejectSkillResponse, RejectSkillError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.RejectSkill");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<RejectSkillResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(RejectSkillError::from_response(response))),
                 )
             }
         })
@@ -7428,6 +11619,46 @@ impl AlexaForBusiness for AlexaForBusinessClient {
         })
     }
 
+    /// <p>Initiates the discovery of any smart home appliances associated with the room.</p>
+    fn start_smart_home_appliance_discovery(
+        &self,
+        input: StartSmartHomeApplianceDiscoveryRequest,
+    ) -> RusotoFuture<StartSmartHomeApplianceDiscoveryResponse, StartSmartHomeApplianceDiscoveryError>
+    {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AlexaForBusiness.StartSmartHomeApplianceDiscovery",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<StartSmartHomeApplianceDiscoveryResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(StartSmartHomeApplianceDiscoveryError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Adds metadata tags to a specified resource.</p>
     fn tag_resource(
         &self,
@@ -7535,6 +11766,77 @@ impl AlexaForBusiness for AlexaForBusinessClient {
                         .from_err()
                         .and_then(|response| Err(UpdateAddressBookError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p>Updates the configuration of the report delivery schedule with the specified schedule ARN.</p>
+    fn update_business_report_schedule(
+        &self,
+        input: UpdateBusinessReportScheduleRequest,
+    ) -> RusotoFuture<UpdateBusinessReportScheduleResponse, UpdateBusinessReportScheduleError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AlexaForBusiness.UpdateBusinessReportSchedule",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<UpdateBusinessReportScheduleResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateBusinessReportScheduleError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Updates an existing conference provider's settings.</p>
+    fn update_conference_provider(
+        &self,
+        input: UpdateConferenceProviderRequest,
+    ) -> RusotoFuture<UpdateConferenceProviderResponse, UpdateConferenceProviderError> {
+        let mut request = SignedRequest::new("POST", "a4b", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AlexaForBusiness.UpdateConferenceProvider");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<UpdateConferenceProviderResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateConferenceProviderError::from_response(response))
+                }))
             }
         })
     }

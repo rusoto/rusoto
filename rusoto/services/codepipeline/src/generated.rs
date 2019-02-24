@@ -158,6 +158,10 @@ pub struct ActionDeclaration {
     #[serde(rename = "outputArtifacts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output_artifacts: Option<Vec<OutputArtifact>>,
+    /// <p>The action declaration's AWS Region, such as us-east-1.</p>
+    #[serde(rename = "region")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub region: Option<String>,
     /// <p>The ARN of the IAM service role that will perform the declared action. This is assumed through the roleArn for the pipeline.</p>
     #[serde(rename = "roleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -997,7 +1001,12 @@ pub struct PipelineContext {
 pub struct PipelineDeclaration {
     /// <p>Represents information about the Amazon S3 bucket where artifacts are stored for the pipeline. </p>
     #[serde(rename = "artifactStore")]
-    pub artifact_store: ArtifactStore,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub artifact_store: Option<ArtifactStore>,
+    /// <p>A mapping of artifactStore objects and their corresponding regions. There must be an artifact store for the pipeline region and for each cross-region action within the pipeline. You can only use either artifactStore or artifactStores, not both.</p> <p>If you create a cross-region action in your pipeline, you must use artifactStores.</p>
+    #[serde(rename = "artifactStores")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub artifact_stores: Option<::std::collections::HashMap<String, ArtifactStore>>,
     /// <p>The name of the action to be performed.</p>
     #[serde(rename = "name")]
     pub name: String,
@@ -1051,6 +1060,7 @@ pub struct PipelineExecutionSummary {
     #[serde(rename = "pipelineExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pipeline_execution_id: Option<String>,
+    /// <p>A list of the source artifact revisions that initiated a pipeline execution.</p>
     #[serde(rename = "sourceRevisions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_revisions: Option<Vec<SourceRevision>>,
@@ -1348,17 +1358,22 @@ pub struct S3ArtifactLocation {
     pub object_key: String,
 }
 
+/// <p>Information about the version (or revision) of a source artifact that initiated a pipeline execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct SourceRevision {
+    /// <p>The name of the action that processed the revision to the source artifact.</p>
     #[serde(rename = "actionName")]
     pub action_name: String,
+    /// <p>The system-generated unique ID that identifies the revision number of the artifact.</p>
     #[serde(rename = "revisionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub revision_id: Option<String>,
+    /// <p>Summary information about the most recent revision of the artifact. For GitHub and AWS CodeCommit repositories, the commit message. For Amazon S3 buckets or actions, the user-provided content of a <code>codepipeline-artifact-revision-summary</code> key specified in the object metadata.</p>
     #[serde(rename = "revisionSummary")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub revision_summary: Option<String>,
+    /// <p>The commit ID for the artifact revision. For artifacts stored in GitHub or AWS CodeCommit repositories, the commit ID is linked to a commit details page.</p>
     #[serde(rename = "revisionUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub revision_url: Option<String>,
@@ -1426,6 +1441,10 @@ pub struct StageState {
 /// <p>Represents the input of a StartPipelineExecution action.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartPipelineExecutionInput {
+    /// <p>The system-generated unique ID used to identify a unique execution request.</p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
     /// <p>The name of the pipeline to start.</p>
     #[serde(rename = "name")]
     pub name: String,
@@ -1551,11 +1570,14 @@ pub struct UpdatePipelineOutput {
     pub pipeline: Option<PipelineDeclaration>,
 }
 
+/// <p>The authentication applied to incoming webhook trigger requests.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WebhookAuthConfiguration {
+    /// <p>The property used to configure acceptance of webhooks within a specific IP range. For IP, only the AllowedIPRange property must be set, and this property must be set to a valid CIDR range.</p>
     #[serde(rename = "AllowedIPRange")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allowed_ip_range: Option<String>,
+    /// <p>The property used to configure GitHub authentication. For GITHUB_HMAC, only the SecretToken property must be set.</p>
     #[serde(rename = "SecretToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub secret_token: Option<String>,

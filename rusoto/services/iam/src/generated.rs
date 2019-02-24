@@ -125,14 +125,14 @@ impl AccessKeyIdTypeDeserializer {
         Ok(obj)
     }
 }
-/// <p>Contains information about the last time an AWS access key was used.</p> <p>This data type is used as a response element in the <a>GetAccessKeyLastUsed</a> operation.</p>
+/// <p>Contains information about the last time an AWS access key was used since IAM began tracking this information on April 22, 2015.</p> <p>This data type is used as a response element in the <a>GetAccessKeyLastUsed</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AccessKeyLastUsed {
-    /// <p><p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when the access key was most recently used. This field is null in the following situations:</p> <ul> <li> <p>The user does not have an access key.</p> </li> <li> <p>An access key exists but has never been used, at least not since IAM started tracking this information on April 22nd, 2015.</p> </li> <li> <p>There is no sign-in data associated with the user</p> </li> </ul></p>
+    /// <p><p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when the access key was most recently used. This field is null in the following situations:</p> <ul> <li> <p>The user does not have an access key.</p> </li> <li> <p>An access key exists but has not been used since IAM began tracking this information.</p> </li> <li> <p>There is no sign-in data associated with the user</p> </li> </ul></p>
     pub last_used_date: String,
-    /// <p>The AWS region where this access key was most recently used. This field is displays "N/A" in the following situations:</p> <ul> <li> <p>The user does not have an access key.</p> </li> <li> <p>An access key exists but has never been used, at least not since IAM started tracking this information on April 22nd, 2015.</p> </li> <li> <p>There is no sign-in data associated with the user</p> </li> </ul> <p>For more information about AWS regions, see <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html">Regions and Endpoints</a> in the Amazon Web Services General Reference.</p>
+    /// <p>The AWS region where this access key was most recently used. The value for this field is "N/A" in the following situations:</p> <ul> <li> <p>The user does not have an access key.</p> </li> <li> <p>An access key exists but has not been used since IAM began tracking this information.</p> </li> <li> <p>There is no sign-in data associated with the user</p> </li> </ul> <p>For more information about AWS regions, see <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html">Regions and Endpoints</a> in the Amazon Web Services General Reference.</p>
     pub region: String,
-    /// <p><p>The name of the AWS service with which this access key was most recently used. This field displays &quot;N/A&quot; in the following situations:</p> <ul> <li> <p>The user does not have an access key.</p> </li> <li> <p>An access key exists but has never been used, at least not since IAM started tracking this information on April 22nd, 2015.</p> </li> <li> <p>There is no sign-in data associated with the user</p> </li> </ul></p>
+    /// <p><p>The name of the AWS service with which this access key was most recently used. The value of this field is &quot;N/A&quot; in the following situations:</p> <ul> <li> <p>The user does not have an access key.</p> </li> <li> <p>An access key exists but has not been used since IAM started tracking this information.</p> </li> <li> <p>There is no sign-in data associated with the user</p> </li> </ul></p>
     pub service_name: String,
 }
 
@@ -190,7 +190,7 @@ pub struct AccessKeyMetadata {
     pub access_key_id: Option<String>,
     /// <p>The date when the access key was created.</p>
     pub create_date: Option<String>,
-    /// <p>The status of the access key. <code>Active</code> means the key is valid for API calls; <code>Inactive</code> means it is not.</p>
+    /// <p>The status of the access key. <code>Active</code> means that the key is valid for API calls; <code>Inactive</code> means it is not.</p>
     pub status: Option<String>,
     /// <p>The name of the IAM user that the key is associated with.</p>
     pub user_name: Option<String>,
@@ -410,9 +410,9 @@ impl AddClientIDToOpenIDConnectProviderRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AddRoleToInstanceProfileRequest {
-    /// <p>The name of the instance profile to update.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the instance profile to update.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub instance_profile_name: String,
-    /// <p>The name of the role to add.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the role to add.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub role_name: String,
 }
 
@@ -435,9 +435,9 @@ impl AddRoleToInstanceProfileRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AddUserToGroupRequest {
-    /// <p>The name of the group to update.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the group to update.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
-    /// <p>The name of the user to add.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the user to add.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
 }
 
@@ -511,7 +511,7 @@ impl ArnTypeDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AttachGroupPolicyRequest {
-    /// <p>The name (friendly name, not ARN) of the group to attach the policy to.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name (friendly name, not ARN) of the group to attach the policy to.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
     /// <p>The Amazon Resource Name (ARN) of the IAM policy you want to attach.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
@@ -535,7 +535,7 @@ impl AttachGroupPolicyRequestSerializer {
 pub struct AttachRolePolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM policy you want to attach.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
-    /// <p>The name (friendly name, not ARN) of the role to attach the policy to.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name (friendly name, not ARN) of the role to attach the policy to.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub role_name: String,
 }
 
@@ -557,7 +557,7 @@ impl AttachRolePolicyRequestSerializer {
 pub struct AttachUserPolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM policy you want to attach.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
-    /// <p>The name (friendly name, not ARN) of the IAM user to attach the policy to.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name (friendly name, not ARN) of the IAM user to attach the policy to.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
 }
 
@@ -575,7 +575,7 @@ impl AttachUserPolicyRequestSerializer {
     }
 }
 
-/// <p>Contains information about an attached permissions boundary.</p> <p>An attached permissions boundary is a managed policy that has been attached to a user or role to set the permissions boundary.</p> <p>For more information about permissions boundaries, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html">Permissions Boundaries for IAM Identities </a> in the <i>IAM User Guide</i>.</p>
+/// <p>Contains information about an attached permissions boundary.</p> <p>An attached permissions boundary is a managed policy that has been attached to a user or role to set the permissions boundary.</p> <p>For more information about permissions boundaries, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html">Permissions Boundaries for IAM Identities </a> in the <i>IAM User Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AttachedPermissionsBoundary {
     /// <p> The ARN of the policy used to set the permissions boundary for the user or role.</p>
@@ -1086,7 +1086,7 @@ impl ContextKeyValueListTypeSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateAccessKeyRequest {
-    /// <p>The name of the IAM user that the new key will belong to.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the IAM user that the new key will belong to.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: Option<String>,
 }
 
@@ -1153,7 +1153,7 @@ impl CreateAccessKeyResponseDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateAccountAliasRequest {
-    /// <p>The account alias to create.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of lowercase letters, digits, and dashes. You cannot start or finish with a dash, nor can you have two dashes in a row.</p>
+    /// <p>The account alias to create.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of lowercase letters, digits, and dashes. You cannot start or finish with a dash, nor can you have two dashes in a row.</p>
     pub account_alias: String,
 }
 
@@ -1172,9 +1172,9 @@ impl CreateAccountAliasRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateGroupRequest {
-    /// <p>The name of the group to create. Do not include the path in this value.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-. The group name must be unique within the account. Group names are not distinguished by case. For example, you cannot create groups named both "ADMINS" and "admins".</p>
+    /// <p>The name of the group to create. Do not include the path in this value.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-. The group name must be unique within the account. Group names are not distinguished by case. For example, you cannot create groups named both "ADMINS" and "admins".</p>
     pub group_name: String,
-    /// <p> The path to the group. For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
+    /// <p> The path to the group. For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path: Option<String>,
 }
 
@@ -1242,9 +1242,9 @@ impl CreateGroupResponseDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateInstanceProfileRequest {
-    /// <p>The name of the instance profile to create.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the instance profile to create.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub instance_profile_name: String,
-    /// <p> The path to the instance profile. For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
+    /// <p> The path to the instance profile. For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path: Option<String>,
 }
 
@@ -1320,7 +1320,7 @@ pub struct CreateLoginProfileRequest {
     pub password: String,
     /// <p>Specifies whether the user is required to set a new password on next sign-in.</p>
     pub password_reset_required: Option<bool>,
-    /// <p>The name of the IAM user to create a password for. The user must already exist.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the IAM user to create a password for. The user must already exist.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
 }
 
@@ -1479,11 +1479,11 @@ impl CreateOpenIDConnectProviderResponseDeserializer {
 pub struct CreatePolicyRequest {
     /// <p>A friendly description of the policy.</p> <p>Typically used to store information about the permissions defined in the policy. For example, "Grants access to production DynamoDB tables."</p> <p>The policy description is immutable. After a value is assigned, it cannot be changed.</p>
     pub description: Option<String>,
-    /// <p>The path for the policy.</p> <p>For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
+    /// <p>The path for the policy.</p> <p>For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path: Option<String>,
     /// <p><p>The JSON policy document that you want to use as the content for the new policy.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub policy_document: String,
-    /// <p>The friendly name of the policy.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The friendly name of the policy.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub policy_name: String,
 }
 
@@ -1646,12 +1646,14 @@ pub struct CreateRoleRequest {
     pub description: Option<String>,
     /// <p>The maximum session duration (in seconds) that you want to set for the specified role. If you do not specify a value for this setting, the default maximum of one hour is applied. This setting can have a value from 1 hour to 12 hours.</p> <p>Anyone who assumes the role from the AWS CLI or API can use the <code>DurationSeconds</code> API parameter or the <code>duration-seconds</code> CLI parameter to request a longer session. The <code>MaxSessionDuration</code> setting determines the maximum duration that can be requested using the <code>DurationSeconds</code> parameter. If users don't specify a value for the <code>DurationSeconds</code> parameter, their security credentials are valid for one hour by default. This applies when you use the <code>AssumeRole*</code> API operations or the <code>assume-role*</code> CLI operations but does not apply when you use those operations to create a console URL. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use.html">Using IAM Roles</a> in the <i>IAM User Guide</i>.</p>
     pub max_session_duration: Option<i64>,
-    /// <p> The path to the role. For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
+    /// <p> The path to the role. For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path: Option<String>,
     /// <p>The ARN of the policy that is used to set the permissions boundary for the role.</p>
     pub permissions_boundary: Option<String>,
-    /// <p>The name of the role to create.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p> <p>Role names are not distinguished by case. For example, you cannot create roles named both "PRODROLE" and "prodrole".</p>
+    /// <p>The name of the role to create.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p> <p>Role names are not distinguished by case. For example, you cannot create roles named both "PRODROLE" and "prodrole".</p>
     pub role_name: String,
+    /// <p><p>A list of tags that you want to attach to the newly created role. Each tag consists of a key name and an associated value. For more information about tagging, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p> <note> <p>If any one of the tags is invalid or if you exceed the allowed number of tags per role, then the entire request fails and the role is not created.</p> </note></p>
+    pub tags: Option<Vec<Tag>>,
 }
 
 /// Serialize `CreateRoleRequest` contents to a `SignedRequest`.
@@ -1686,6 +1688,9 @@ impl CreateRoleRequestSerializer {
             );
         }
         params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
+        if let Some(ref field_value) = obj.tags {
+            TagListTypeSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
+        }
     }
 }
 
@@ -1737,7 +1742,7 @@ impl CreateRoleResponseDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateSAMLProviderRequest {
-    /// <p>The name of the provider to create.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the provider to create.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub name: String,
     /// <p>An XML document generated by an identity provider (IdP) that supports SAML 2.0. The document includes the issuer's name, expiration information, and keys that can be used to validate the SAML authentication response (assertions) that are received from the IdP. You must generate the metadata document using the identity management software that is used as your organization's IdP.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_saml.html">About SAML 2.0-based Federation</a> in the <i>IAM User Guide</i> </p>
     pub saml_metadata_document: String,
@@ -1809,9 +1814,9 @@ impl CreateSAMLProviderResponseDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateServiceLinkedRoleRequest {
-    /// <p>The AWS service to which this role is attached. You use a string similar to a URL but without the http:// in front. For example: <code>elasticbeanstalk.amazonaws.com</code> </p>
+    /// <p>The service principal for the AWS service to which this role is attached. You use a string similar to a URL but without the http:// in front. For example: <code>elasticbeanstalk.amazonaws.com</code>. </p> <p>Service principals are unique and case-sensitive. To find the exact service principal for your service-linked role, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_aws-services-that-work-with-iam.html">AWS Services That Work with IAM</a> in the <i>IAM User Guide</i> and look for the services that have <b>Yes </b>in the <b>Service-Linked Role</b> column. Choose the <b>Yes</b> link to view the service-linked role documentation for that service.</p>
     pub aws_service_name: String,
-    /// <p>A string that you provide, which is combined with the service name to form the complete role name. If you make multiple requests for the same service, then you must supply a different <code>CustomSuffix</code> for each request. Otherwise the request fails with a duplicate role name error. For example, you could add <code>-1</code> or <code>-debug</code> to the suffix.</p>
+    /// <p><p/> <p>A string that you provide, which is combined with the service-provided prefix to form the complete role name. If you make multiple requests for the same service, then you must supply a different <code>CustomSuffix</code> for each request. Otherwise the request fails with a duplicate role name error. For example, you could add <code>-1</code> or <code>-debug</code> to the suffix.</p> <p>Some services do not support the <code>CustomSuffix</code> parameter. If you provide an optional suffix and the operation fails, try the operation again without the suffix.</p></p>
     pub custom_suffix: Option<String>,
     /// <p>The description of the role.</p>
     pub description: Option<String>,
@@ -1888,7 +1893,7 @@ impl CreateServiceLinkedRoleResponseDeserializer {
 pub struct CreateServiceSpecificCredentialRequest {
     /// <p>The name of the AWS service that is to be associated with the credentials. The service you specify here is the only service that can be accessed using these credentials.</p>
     pub service_name: String,
-    /// <p>The name of the IAM user that is to be associated with the credentials. The new service-specific credentials have the same permissions as the associated user except that they can be used only to access the specified service.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the IAM user that is to be associated with the credentials. The new service-specific credentials have the same permissions as the associated user except that they can be used only to access the specified service.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
 }
 
@@ -1957,11 +1962,13 @@ impl CreateServiceSpecificCredentialResponseDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateUserRequest {
-    /// <p> The path for the user name. For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
+    /// <p> The path for the user name. For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path: Option<String>,
     /// <p>The ARN of the policy that is used to set the permissions boundary for the user.</p>
     pub permissions_boundary: Option<String>,
-    /// <p>The name of the user to create.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-. User names are not distinguished by case. For example, you cannot create users named both "TESTUSER" and "testuser".</p>
+    /// <p><p>A list of tags that you want to attach to the newly created user. Each tag consists of a key name and an associated value. For more information about tagging, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p> <note> <p>If any one of the tags is invalid or if you exceed the allowed number of tags per user, then the entire request fails and the user is not created.</p> </note></p>
+    pub tags: Option<Vec<Tag>>,
+    /// <p>The name of the user to create.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-. User names are not distinguished by case. For example, you cannot create users named both "TESTUSER" and "testuser".</p>
     pub user_name: String,
 }
 
@@ -1982,6 +1989,9 @@ impl CreateUserRequestSerializer {
                 &format!("{}{}", prefix, "PermissionsBoundary"),
                 &field_value,
             );
+        }
+        if let Some(ref field_value) = obj.tags {
+            TagListTypeSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), field_value);
         }
         params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
     }
@@ -2035,9 +2045,9 @@ impl CreateUserResponseDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateVirtualMFADeviceRequest {
-    /// <p> The path for the virtual MFA device. For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
+    /// <p> The path for the virtual MFA device. For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/).</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path: Option<String>,
-    /// <p>The name of the virtual MFA device. Use with path to uniquely identify a virtual MFA device.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the virtual MFA device. Use with path to uniquely identify a virtual MFA device.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub virtual_mfa_device_name: String,
 }
 
@@ -2123,9 +2133,9 @@ impl DateTypeDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeactivateMFADeviceRequest {
-    /// <p>The serial number that uniquely identifies the MFA device. For virtual MFA devices, the serial number is the device ARN.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@:/-</p>
+    /// <p>The serial number that uniquely identifies the MFA device. For virtual MFA devices, the serial number is the device ARN.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@:/-</p>
     pub serial_number: String,
-    /// <p>The name of the user whose MFA device you want to deactivate.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the user whose MFA device you want to deactivate.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
 }
 
@@ -2145,9 +2155,9 @@ impl DeactivateMFADeviceRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteAccessKeyRequest {
-    /// <p>The access key ID for the access key ID and secret access key you want to delete.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
+    /// <p>The access key ID for the access key ID and secret access key you want to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub access_key_id: String,
-    /// <p>The name of the user whose access key pair you want to delete.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the user whose access key pair you want to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: Option<String>,
 }
 
@@ -2169,7 +2179,7 @@ impl DeleteAccessKeyRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteAccountAliasRequest {
-    /// <p>The name of the account alias to delete.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of lowercase letters, digits, and dashes. You cannot start or finish with a dash, nor can you have two dashes in a row.</p>
+    /// <p>The name of the account alias to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of lowercase letters, digits, and dashes. You cannot start or finish with a dash, nor can you have two dashes in a row.</p>
     pub account_alias: String,
 }
 
@@ -2188,9 +2198,9 @@ impl DeleteAccountAliasRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteGroupPolicyRequest {
-    /// <p>The name (friendly name, not ARN) identifying the group that the policy is embedded in.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name (friendly name, not ARN) identifying the group that the policy is embedded in.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
-    /// <p>The name identifying the policy document to delete.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name identifying the policy document to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub policy_name: String,
 }
 
@@ -2210,7 +2220,7 @@ impl DeleteGroupPolicyRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteGroupRequest {
-    /// <p>The name of the IAM group to delete.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the IAM group to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
 }
 
@@ -2229,7 +2239,7 @@ impl DeleteGroupRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteInstanceProfileRequest {
-    /// <p>The name of the instance profile to delete.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the instance profile to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub instance_profile_name: String,
 }
 
@@ -2251,7 +2261,7 @@ impl DeleteInstanceProfileRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteLoginProfileRequest {
-    /// <p>The name of the user whose password you want to delete.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the user whose password you want to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
 }
 
@@ -2313,7 +2323,7 @@ impl DeletePolicyRequestSerializer {
 pub struct DeletePolicyVersionRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM policy from which you want to delete a version.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
-    /// <p>The policy version to delete.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that consists of the lowercase letter 'v' followed by one or two digits, and optionally followed by a period '.' and a string of letters and digits.</p> <p>For more information about managed policy versions, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>
+    /// <p>The policy version to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that consists of the lowercase letter 'v' followed by one or two digits, and optionally followed by a period '.' and a string of letters and digits.</p> <p>For more information about managed policy versions, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>
     pub version_id: String,
 }
 
@@ -2352,9 +2362,9 @@ impl DeleteRolePermissionsBoundaryRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteRolePolicyRequest {
-    /// <p>The name of the inline policy to delete from the specified IAM role.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the inline policy to delete from the specified IAM role.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub policy_name: String,
-    /// <p>The name (friendly name, not ARN) identifying the role that the policy is embedded in.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name (friendly name, not ARN) identifying the role that the policy is embedded in.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub role_name: String,
 }
 
@@ -2374,7 +2384,7 @@ impl DeleteRolePolicyRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteRoleRequest {
-    /// <p>The name of the role to delete.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the role to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub role_name: String,
 }
 
@@ -2415,9 +2425,9 @@ impl DeleteSAMLProviderRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteSSHPublicKeyRequest {
-    /// <p>The unique identifier for the SSH public key.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
+    /// <p>The unique identifier for the SSH public key.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub ssh_public_key_id: String,
-    /// <p>The name of the IAM user associated with the SSH public key.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the IAM user associated with the SSH public key.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
 }
 
@@ -2440,7 +2450,7 @@ impl DeleteSSHPublicKeyRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteServerCertificateRequest {
-    /// <p>The name of the server certificate you want to delete.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the server certificate you want to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub server_certificate_name: String,
 }
 
@@ -2527,9 +2537,9 @@ impl DeleteServiceLinkedRoleResponseDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteServiceSpecificCredentialRequest {
-    /// <p>The unique identifier of the service-specific credential. You can get this value by calling <a>ListServiceSpecificCredentials</a>.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
+    /// <p>The unique identifier of the service-specific credential. You can get this value by calling <a>ListServiceSpecificCredentials</a>.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub service_specific_credential_id: String,
-    /// <p>The name of the IAM user associated with the service-specific credential. If this value is not specified, then the operation assumes the user whose credentials are used to call the operation.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the IAM user associated with the service-specific credential. If this value is not specified, then the operation assumes the user whose credentials are used to call the operation.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: Option<String>,
 }
 
@@ -2556,7 +2566,7 @@ impl DeleteServiceSpecificCredentialRequestSerializer {
 pub struct DeleteSigningCertificateRequest {
     /// <p>The ID of the signing certificate to delete.</p> <p>The format of this parameter, as described by its <a href="http://wikipedia.org/wiki/regex">regex</a> pattern, is a string of characters that can be upper- or lower-cased letters or digits.</p>
     pub certificate_id: String,
-    /// <p>The name of the user the signing certificate belongs to.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the user the signing certificate belongs to.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: Option<String>,
 }
 
@@ -2600,9 +2610,9 @@ impl DeleteUserPermissionsBoundaryRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteUserPolicyRequest {
-    /// <p>The name identifying the policy document to delete.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name identifying the policy document to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub policy_name: String,
-    /// <p>The name (friendly name, not ARN) identifying the user that the policy is embedded in.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name (friendly name, not ARN) identifying the user that the policy is embedded in.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
 }
 
@@ -2622,7 +2632,7 @@ impl DeleteUserPolicyRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteUserRequest {
-    /// <p>The name of the user to delete.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the user to delete.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
 }
 
@@ -2641,7 +2651,7 @@ impl DeleteUserRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteVirtualMFADeviceRequest {
-    /// <p>The serial number that uniquely identifies the MFA device. For virtual MFA devices, the serial number is the same as the ARN.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@:/-</p>
+    /// <p>The serial number that uniquely identifies the MFA device. For virtual MFA devices, the serial number is the same as the ARN.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@:/-</p>
     pub serial_number: String,
 }
 
@@ -2751,7 +2761,7 @@ impl DeletionTaskStatusTypeDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DetachGroupPolicyRequest {
-    /// <p>The name (friendly name, not ARN) of the IAM group to detach the policy from.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name (friendly name, not ARN) of the IAM group to detach the policy from.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
     /// <p>The Amazon Resource Name (ARN) of the IAM policy you want to detach.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
@@ -2775,7 +2785,7 @@ impl DetachGroupPolicyRequestSerializer {
 pub struct DetachRolePolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM policy you want to detach.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
-    /// <p>The name (friendly name, not ARN) of the IAM role to detach the policy from.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name (friendly name, not ARN) of the IAM role to detach the policy from.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub role_name: String,
 }
 
@@ -2797,7 +2807,7 @@ impl DetachRolePolicyRequestSerializer {
 pub struct DetachUserPolicyRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM policy you want to detach.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
-    /// <p>The name (friendly name, not ARN) of the IAM user to detach the policy from.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name (friendly name, not ARN) of the IAM user to detach the policy from.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
 }
 
@@ -2821,9 +2831,9 @@ pub struct EnableMFADeviceRequest {
     pub authentication_code_1: String,
     /// <p><p>A subsequent authentication code emitted by the device.</p> <p>The format for this parameter is a string of six digits.</p> <important> <p>Submit your request immediately after generating the authentication codes. If you generate the codes and then wait too long to submit the request, the MFA device successfully associates with the user but the MFA device becomes out of sync. This happens because time-based one-time passwords (TOTP) expire after a short period of time. If this happens, you can <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_mfa_sync.html">resync the device</a>.</p> </important></p>
     pub authentication_code_2: String,
-    /// <p>The serial number that uniquely identifies the MFA device. For virtual MFA devices, the serial number is the device ARN.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@:/-</p>
+    /// <p>The serial number that uniquely identifies the MFA device. For virtual MFA devices, the serial number is the device ARN.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@:/-</p>
     pub serial_number: String,
-    /// <p>The name of the IAM user for whom you want to enable the MFA device.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the IAM user for whom you want to enable the MFA device.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
 }
 
@@ -2849,6 +2859,166 @@ impl EnableMFADeviceRequestSerializer {
     }
 }
 
+/// <p>An object that contains details about when the IAM entities (users or roles) were last used in an attempt to access the specified AWS service.</p> <p>This data type is a response element in the <a>GetServiceLastAccessedDetailsWithEntities</a> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EntityDetails {
+    /// <p>The <code>EntityInfo</code> object that contains details about the entity (user or role).</p>
+    pub entity_info: EntityInfo,
+    /// <p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when the authenticated entity last attempted to access AWS. AWS does not report unauthenticated requests.</p> <p>This field is null if no IAM entities attempted to access the service within the <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html#service-last-accessed-reporting-period">reporting period</a>.</p>
+    pub last_authenticated: Option<String>,
+}
+
+struct EntityDetailsDeserializer;
+impl EntityDetailsDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EntityDetails, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = EntityDetails::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "EntityInfo" => {
+                        obj.entity_info = EntityInfoDeserializer::deserialize("EntityInfo", stack)?;
+                    }
+                    "LastAuthenticated" => {
+                        obj.last_authenticated = Some(DateTypeDeserializer::deserialize(
+                            "LastAuthenticated",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct EntityDetailsListTypeDeserializer;
+impl EntityDetailsListTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<EntityDetails>, XmlParseError> {
+        let mut obj = vec![];
+        start_element(tag_name, stack)?;
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "member" {
+                        obj.push(EntityDetailsDeserializer::deserialize("member", stack)?);
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    end_element(tag_name, stack)?;
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+/// <p>Contains details about the specified entity (user or role).</p> <p>This data type is an element of the <a>EntityDetails</a> object.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct EntityInfo {
+    pub arn: String,
+    /// <p>The identifier of the entity (user or role).</p>
+    pub id: String,
+    /// <p>The name of the entity (user or role).</p>
+    pub name: String,
+    /// <p>The path to the entity (user or role). For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>
+    pub path: Option<String>,
+    /// <p>The type of entity (user or role).</p>
+    pub type_: String,
+}
+
+struct EntityInfoDeserializer;
+impl EntityInfoDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<EntityInfo, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = EntityInfo::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Arn" => {
+                        obj.arn = ArnTypeDeserializer::deserialize("Arn", stack)?;
+                    }
+                    "Id" => {
+                        obj.id = IdTypeDeserializer::deserialize("Id", stack)?;
+                    }
+                    "Name" => {
+                        obj.name = UserNameTypeDeserializer::deserialize("Name", stack)?;
+                    }
+                    "Path" => {
+                        obj.path = Some(PathTypeDeserializer::deserialize("Path", stack)?);
+                    }
+                    "Type" => {
+                        obj.type_ = PolicyOwnerEntityTypeDeserializer::deserialize("Type", stack)?;
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+
 /// Serialize `EntityListType` contents to a `SignedRequest`.
 struct EntityListTypeSerializer;
 impl EntityListTypeSerializer {
@@ -2860,6 +3030,71 @@ impl EntityListTypeSerializer {
     }
 }
 
+struct EntityNameTypeDeserializer;
+impl EntityNameTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+/// <p>Contains information about the reason that the operation failed.</p> <p>This data type is used as a response element in the <a>GetServiceLastAccessedDetails</a> operation and the <a>GetServiceLastAccessedDetailsWithEntities</a> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ErrorDetails {
+    /// <p>The error code associated with the operation failure.</p>
+    pub code: String,
+    /// <p>Detailed information about the reason that the operation failed.</p>
+    pub message: String,
+}
+
+struct ErrorDetailsDeserializer;
+impl ErrorDetailsDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ErrorDetails, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = ErrorDetails::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Code" => {
+                        obj.code = StringTypeDeserializer::deserialize("Code", stack)?;
+                    }
+                    "Message" => {
+                        obj.message = StringTypeDeserializer::deserialize("Message", stack)?;
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 struct EvalDecisionDetailsTypeDeserializer;
 impl EvalDecisionDetailsTypeDeserializer {
     #[allow(unused_variables)]
@@ -2908,7 +3143,7 @@ pub struct EvaluationResult {
     pub eval_decision_details: Option<::std::collections::HashMap<String, String>>,
     /// <p>The ARN of the resource that the indicated API operation was tested on.</p>
     pub eval_resource_name: Option<String>,
-    /// <p>A list of the statements in the input policies that determine the result for this scenario. Remember that even if multiple statements allow the operation on the resource, if only one statement denies that operation, then the explicit deny overrides any allow, and the deny statement is the only entry included in the result.</p>
+    /// <p>A list of the statements in the input policies that determine the result for this scenario. Remember that even if multiple statements allow the operation on the resource, if only one statement denies that operation, then the explicit deny overrides any allow. Inaddition, the deny statement is the only entry included in the result.</p>
     pub matched_statements: Option<Vec<Statement>>,
     /// <p>A list of context keys that are required by the included input policies but that were not provided by one of the input parameters. This list is used when the resource in a simulation is "*", either explicitly, or when the <code>ResourceArns</code> parameter blank. If you include a list of resources, then any missing context values are instead included under the <code>ResourceSpecificResults</code> section. To discover the context keys used by a set of policies, you can call <a>GetContextKeysForCustomPolicy</a> or <a>GetContextKeysForPrincipalPolicy</a>.</p>
     pub missing_context_values: Option<Vec<String>>,
@@ -3143,8 +3378,72 @@ impl GenerateCredentialReportResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct GenerateServiceLastAccessedDetailsRequest {
+    /// <p>The ARN of the IAM resource (user, group, role, or managed policy) used to generate information about when the resource was last used in an attempt to access an AWS service.</p>
+    pub arn: String,
+}
+
+/// Serialize `GenerateServiceLastAccessedDetailsRequest` contents to a `SignedRequest`.
+struct GenerateServiceLastAccessedDetailsRequestSerializer;
+impl GenerateServiceLastAccessedDetailsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &GenerateServiceLastAccessedDetailsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "Arn"), &obj.arn);
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GenerateServiceLastAccessedDetailsResponse {
+    /// <p>The job ID that you can use in the <a>GetServiceLastAccessedDetails</a> or <a>GetServiceLastAccessedDetailsWithEntities</a> operations.</p>
+    pub job_id: Option<String>,
+}
+
+struct GenerateServiceLastAccessedDetailsResponseDeserializer;
+impl GenerateServiceLastAccessedDetailsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GenerateServiceLastAccessedDetailsResponse, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = GenerateServiceLastAccessedDetailsResponse::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "JobId" => {
+                        obj.job_id = Some(JobIDTypeDeserializer::deserialize("JobId", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetAccessKeyLastUsedRequest {
-    /// <p>The identifier of an access key.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
+    /// <p>The identifier of an access key.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub access_key_id: String,
 }
 
@@ -3222,7 +3521,7 @@ pub struct GetAccountAuthorizationDetailsRequest {
     pub filter: Option<Vec<String>>,
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
-    /// <p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
 }
 
@@ -3259,7 +3558,7 @@ impl GetAccountAuthorizationDetailsRequestSerializer {
 pub struct GetAccountAuthorizationDetailsResponse {
     /// <p>A list containing information about IAM groups.</p>
     pub group_detail_list: Option<Vec<GroupDetail>>,
-    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
@@ -3424,7 +3723,7 @@ impl GetAccountPasswordPolicyResponseDeserializer {
 /// <p>Contains the response to a successful <a>GetAccountSummary</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetAccountSummaryResponse {
-    /// <p>A set of key value pairs containing information about IAM entity usage and IAM quotas.</p>
+    /// <p>A set of key–value pairs containing information about IAM entity usage and IAM quotas.</p>
     pub summary_map: Option<::std::collections::HashMap<String, i64>>,
 }
 
@@ -3648,9 +3947,9 @@ impl GetCredentialReportResponseDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetGroupPolicyRequest {
-    /// <p>The name of the group the policy is associated with.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the group the policy is associated with.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
-    /// <p>The name of the policy document to get.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the policy document to get.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub policy_name: String,
 }
 
@@ -3729,11 +4028,11 @@ impl GetGroupPolicyResponseDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetGroupRequest {
-    /// <p>The name of the group.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the group.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
-    /// <p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
 }
 
@@ -3764,7 +4063,7 @@ impl GetGroupRequestSerializer {
 pub struct GetGroupResponse {
     /// <p>A structure that contains details about the group.</p>
     pub group: Group,
-    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
@@ -3824,7 +4123,7 @@ impl GetGroupResponseDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetInstanceProfileRequest {
-    /// <p>The name of the instance profile to get information about.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the instance profile to get information about.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub instance_profile_name: String,
 }
 
@@ -3893,7 +4192,7 @@ impl GetInstanceProfileResponseDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetLoginProfileRequest {
-    /// <p>The name of the user whose login profile you want to retrieve.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the user whose login profile you want to retrieve.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
 }
 
@@ -4136,7 +4435,7 @@ impl GetPolicyResponseDeserializer {
 pub struct GetPolicyVersionRequest {
     /// <p>The Amazon Resource Name (ARN) of the managed policy that you want information about.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
-    /// <p>Identifies the policy version to retrieve.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that consists of the lowercase letter 'v' followed by one or two digits, and optionally followed by a period '.' and a string of letters and digits.</p>
+    /// <p>Identifies the policy version to retrieve.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that consists of the lowercase letter 'v' followed by one or two digits, and optionally followed by a period '.' and a string of letters and digits.</p>
     pub version_id: String,
 }
 
@@ -4205,9 +4504,9 @@ impl GetPolicyVersionResponseDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetRolePolicyRequest {
-    /// <p>The name of the policy document to get.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the policy document to get.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub policy_name: String,
-    /// <p>The name of the role associated with the policy.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the role associated with the policy.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub role_name: String,
 }
 
@@ -4285,7 +4584,7 @@ impl GetRolePolicyResponseDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetRoleRequest {
-    /// <p>The name of the IAM role to get information about.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the IAM role to get information about.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub role_name: String,
 }
 
@@ -4436,9 +4735,9 @@ impl GetSAMLProviderResponseDeserializer {
 pub struct GetSSHPublicKeyRequest {
     /// <p>Specifies the public key encoding format to use in the response. To retrieve the public key in ssh-rsa format, use <code>SSH</code>. To retrieve the public key in PEM format, use <code>PEM</code>.</p>
     pub encoding: String,
-    /// <p>The unique identifier for the SSH public key.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
+    /// <p>The unique identifier for the SSH public key.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub ssh_public_key_id: String,
-    /// <p>The name of the IAM user associated with the SSH public key.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the IAM user associated with the SSH public key.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
 }
 
@@ -4511,7 +4810,7 @@ impl GetSSHPublicKeyResponseDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetServerCertificateRequest {
-    /// <p>The name of the server certificate you want to retrieve information about.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the server certificate you want to retrieve information about.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub server_certificate_name: String,
 }
 
@@ -4563,6 +4862,248 @@ impl GetServerCertificateResponseDeserializer {
                     "ServerCertificate" => {
                         obj.server_certificate =
                             ServerCertificateDeserializer::deserialize("ServerCertificate", stack)?;
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetServiceLastAccessedDetailsRequest {
+    /// <p>The ID of the request generated by the <a>GenerateServiceLastAccessedDetails</a> operation.</p>
+    pub job_id: String,
+    /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
+    pub marker: Option<String>,
+    /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    pub max_items: Option<i64>,
+}
+
+/// Serialize `GetServiceLastAccessedDetailsRequest` contents to a `SignedRequest`.
+struct GetServiceLastAccessedDetailsRequestSerializer;
+impl GetServiceLastAccessedDetailsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &GetServiceLastAccessedDetailsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "JobId"), &obj.job_id);
+        if let Some(ref field_value) = obj.marker {
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+        }
+        if let Some(ref field_value) = obj.max_items {
+            params.put(
+                &format!("{}{}", prefix, "MaxItems"),
+                &field_value.to_string(),
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetServiceLastAccessedDetailsResponse {
+    /// <p>An object that contains details about the reason the operation failed.</p>
+    pub error: Option<ErrorDetails>,
+    /// <p><p/> <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p></p>
+    pub is_truncated: Option<bool>,
+    /// <p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when the generated report job was completed or failed.</p> <p>This field is null if the job is still in progress, as indicated by a <code>JobStatus</code> value of <code>IN_PROGRESS</code>.</p>
+    pub job_completion_date: String,
+    /// <p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when the report job was created.</p>
+    pub job_creation_date: String,
+    /// <p>The status of the job.</p>
+    pub job_status: String,
+    /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
+    pub marker: Option<String>,
+    /// <p> A <code>ServiceLastAccessed</code> object that contains details about the most recent attempt to access the service.</p>
+    pub services_last_accessed: Vec<ServiceLastAccessed>,
+}
+
+struct GetServiceLastAccessedDetailsResponseDeserializer;
+impl GetServiceLastAccessedDetailsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetServiceLastAccessedDetailsResponse, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = GetServiceLastAccessedDetailsResponse::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Error" => {
+                        obj.error = Some(ErrorDetailsDeserializer::deserialize("Error", stack)?);
+                    }
+                    "IsTruncated" => {
+                        obj.is_truncated =
+                            Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
+                    }
+                    "JobCompletionDate" => {
+                        obj.job_completion_date =
+                            DateTypeDeserializer::deserialize("JobCompletionDate", stack)?;
+                    }
+                    "JobCreationDate" => {
+                        obj.job_creation_date =
+                            DateTypeDeserializer::deserialize("JobCreationDate", stack)?;
+                    }
+                    "JobStatus" => {
+                        obj.job_status =
+                            JobStatusTypeDeserializer::deserialize("JobStatus", stack)?;
+                    }
+                    "Marker" => {
+                        obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "ServicesLastAccessed" => {
+                        obj.services_last_accessed.extend(
+                            ServicesLastAccessedDeserializer::deserialize(
+                                "ServicesLastAccessed",
+                                stack,
+                            )?,
+                        );
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetServiceLastAccessedDetailsWithEntitiesRequest {
+    /// <p>The ID of the request generated by the <code>GenerateServiceLastAccessedDetails</code> operation.</p>
+    pub job_id: String,
+    /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
+    pub marker: Option<String>,
+    /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    pub max_items: Option<i64>,
+    /// <p>The service namespace for an AWS service. Provide the service namespace to learn when the IAM entity last attempted to access the specified service.</p> <p>To learn the service namespace for a service, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_actions-resources-contextkeys.html">Actions, Resources, and Condition Keys for AWS Services</a> in the <i>IAM User Guide</i> and choose the name of the service to view details for that service. In the first paragraph, find the service prefix. For example, <code>(service prefix: a4b)</code>. For more information about service namespaces, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#genref-aws-service-namespaces">AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
+    pub service_namespace: String,
+}
+
+/// Serialize `GetServiceLastAccessedDetailsWithEntitiesRequest` contents to a `SignedRequest`.
+struct GetServiceLastAccessedDetailsWithEntitiesRequestSerializer;
+impl GetServiceLastAccessedDetailsWithEntitiesRequestSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &GetServiceLastAccessedDetailsWithEntitiesRequest,
+    ) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "JobId"), &obj.job_id);
+        if let Some(ref field_value) = obj.marker {
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+        }
+        if let Some(ref field_value) = obj.max_items {
+            params.put(
+                &format!("{}{}", prefix, "MaxItems"),
+                &field_value.to_string(),
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "ServiceNamespace"),
+            &obj.service_namespace,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetServiceLastAccessedDetailsWithEntitiesResponse {
+    /// <p>An <code>EntityDetailsList</code> object that contains details about when an IAM entity (user or role) used group or policy permissions in an attempt to access the specified AWS service.</p>
+    pub entity_details_list: Vec<EntityDetails>,
+    /// <p>An object that contains details about the reason the operation failed.</p>
+    pub error: Option<ErrorDetails>,
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
+    pub is_truncated: Option<bool>,
+    /// <p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when the generated report job was completed or failed.</p>
+    pub job_completion_date: String,
+    /// <p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when the report job was created.</p>
+    pub job_creation_date: String,
+    /// <p>The status of the job.</p>
+    pub job_status: String,
+    /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
+    pub marker: Option<String>,
+}
+
+struct GetServiceLastAccessedDetailsWithEntitiesResponseDeserializer;
+impl GetServiceLastAccessedDetailsWithEntitiesResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetServiceLastAccessedDetailsWithEntitiesResponse, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = GetServiceLastAccessedDetailsWithEntitiesResponse::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "EntityDetailsList" => {
+                        obj.entity_details_list.extend(
+                            EntityDetailsListTypeDeserializer::deserialize(
+                                "EntityDetailsList",
+                                stack,
+                            )?,
+                        );
+                    }
+                    "Error" => {
+                        obj.error = Some(ErrorDetailsDeserializer::deserialize("Error", stack)?);
+                    }
+                    "IsTruncated" => {
+                        obj.is_truncated =
+                            Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
+                    }
+                    "JobCompletionDate" => {
+                        obj.job_completion_date =
+                            DateTypeDeserializer::deserialize("JobCompletionDate", stack)?;
+                    }
+                    "JobCreationDate" => {
+                        obj.job_creation_date =
+                            DateTypeDeserializer::deserialize("JobCreationDate", stack)?;
+                    }
+                    "JobStatus" => {
+                        obj.job_status =
+                            JobStatusTypeDeserializer::deserialize("JobStatus", stack)?;
+                    }
+                    "Marker" => {
+                        obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -4655,9 +5196,9 @@ impl GetServiceLinkedRoleDeletionStatusResponseDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetUserPolicyRequest {
-    /// <p>The name of the policy document to get.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the policy document to get.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub policy_name: String,
-    /// <p>The name of the user who the policy is associated with.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the user who the policy is associated with.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
 }
 
@@ -4736,7 +5277,7 @@ impl GetUserPolicyResponseDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetUserRequest {
-    /// <p>The name of the user to get information about.</p> <p>This parameter is optional. If it is not included, it defaults to the user making the request. This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the user to get information about.</p> <p>This parameter is optional. If it is not included, it defaults to the user making the request. This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: Option<String>,
 }
 
@@ -4758,7 +5299,7 @@ impl GetUserRequestSerializer {
 /// <p>Contains the response to a successful <a>GetUser</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetUserResponse {
-    /// <p><p>A structure containing details about the IAM user.</p> <important> <p>Due to a service issue, password last used data does not include password use from May 3rd 2018 22:50 PDT to May 23rd 2018 14:08 PDT. This affects <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_finding-unused.html">last sign-in</a> dates shown in the IAM console and password last used dates in the <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html">IAM credential report</a>, and returned by this GetUser API. If users signed in during the affected time, the password last used date that is returned is the date the user last signed in before May 3rd 2018. For users that signed in after May 23rd 2018 14:08 PDT, the returned password last used date is accurate.</p> <p>If you use password last used information to identify unused credentials for deletion, such as deleting users who did not sign in to AWS in the last 90 days, we recommend that you adjust your evaluation window to include dates after May 23rd 2018. Alternatively, if your users use access keys to access AWS programmatically you can refer to access key last used information because it is accurate for all dates. </p> </important></p>
+    /// <p><p>A structure containing details about the IAM user.</p> <important> <p>Due to a service issue, password last used data does not include password use from May 3, 2018 22:50 PDT to May 23, 2018 14:08 PDT. This affects <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_finding-unused.html">last sign-in</a> dates shown in the IAM console and password last used dates in the <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_getting-report.html">IAM credential report</a>, and returned by this GetUser API. If users signed in during the affected time, the password last used date that is returned is the date the user last signed in before May 3, 2018. For users that signed in after May 23, 2018 14:08 PDT, the returned password last used date is accurate.</p> <p>You can use password last used information to identify unused credentials for deletion. For example, you might delete users who did not sign in to AWS in the last 90 days. In cases like this, we recommend that you adjust your evaluation window to include dates after May 23, 2018. Alternatively, if your users use access keys to access AWS programmatically you can refer to access key last used information because it is accurate for all dates. </p> </important></p>
     pub user: User,
 }
 
@@ -5248,6 +5789,48 @@ impl InstanceProfileNameTypeDeserializer {
         Ok(obj)
     }
 }
+struct IntegerTypeDeserializer;
+impl IntegerTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct JobIDTypeDeserializer;
+impl JobIDTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct JobStatusTypeDeserializer;
+impl JobStatusTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 struct LineNumberDeserializer;
 impl LineNumberDeserializer {
     #[allow(unused_variables)]
@@ -5266,9 +5849,9 @@ impl LineNumberDeserializer {
 pub struct ListAccessKeysRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
-    /// <p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
-    /// <p>The name of the user.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the user.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: Option<String>,
 }
 
@@ -5301,7 +5884,7 @@ impl ListAccessKeysRequestSerializer {
 pub struct ListAccessKeysResponse {
     /// <p>A list of objects containing metadata about the access keys.</p>
     pub access_key_metadata: Vec<AccessKeyMetadata>,
-    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
@@ -5362,7 +5945,7 @@ impl ListAccessKeysResponseDeserializer {
 pub struct ListAccountAliasesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
-    /// <p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
 }
 
@@ -5392,7 +5975,7 @@ impl ListAccountAliasesRequestSerializer {
 pub struct ListAccountAliasesResponse {
     /// <p>A list of aliases associated with the account. AWS supports only one alias per account.</p>
     pub account_aliases: Vec<String>,
-    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
@@ -5450,13 +6033,13 @@ impl ListAccountAliasesResponseDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListAttachedGroupPoliciesRequest {
-    /// <p>The name (friendly name, not ARN) of the group to list attached policies for.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name (friendly name, not ARN) of the group to list attached policies for.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
-    /// <p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
-    /// <p>The path prefix for filtering the results. This parameter is optional. If it is not included, it defaults to a slash (/), listing all policies.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
+    /// <p>The path prefix for filtering the results. This parameter is optional. If it is not included, it defaults to a slash (/), listing all policies.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path_prefix: Option<String>,
 }
 
@@ -5490,7 +6073,7 @@ impl ListAttachedGroupPoliciesRequestSerializer {
 pub struct ListAttachedGroupPoliciesResponse {
     /// <p>A list of the attached policies.</p>
     pub attached_policies: Option<Vec<AttachedPolicy>>,
-    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
@@ -5558,11 +6141,11 @@ impl ListAttachedGroupPoliciesResponseDeserializer {
 pub struct ListAttachedRolePoliciesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
-    /// <p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
-    /// <p>The path prefix for filtering the results. This parameter is optional. If it is not included, it defaults to a slash (/), listing all policies.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
+    /// <p>The path prefix for filtering the results. This parameter is optional. If it is not included, it defaults to a slash (/), listing all policies.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path_prefix: Option<String>,
-    /// <p>The name (friendly name, not ARN) of the role to list attached policies for.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name (friendly name, not ARN) of the role to list attached policies for.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub role_name: String,
 }
 
@@ -5596,7 +6179,7 @@ impl ListAttachedRolePoliciesRequestSerializer {
 pub struct ListAttachedRolePoliciesResponse {
     /// <p>A list of the attached policies.</p>
     pub attached_policies: Option<Vec<AttachedPolicy>>,
-    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
@@ -5664,11 +6247,11 @@ impl ListAttachedRolePoliciesResponseDeserializer {
 pub struct ListAttachedUserPoliciesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
-    /// <p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
-    /// <p>The path prefix for filtering the results. This parameter is optional. If it is not included, it defaults to a slash (/), listing all policies.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
+    /// <p>The path prefix for filtering the results. This parameter is optional. If it is not included, it defaults to a slash (/), listing all policies.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path_prefix: Option<String>,
-    /// <p>The name (friendly name, not ARN) of the user to list attached policies for.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name (friendly name, not ARN) of the user to list attached policies for.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
 }
 
@@ -5702,7 +6285,7 @@ impl ListAttachedUserPoliciesRequestSerializer {
 pub struct ListAttachedUserPoliciesResponse {
     /// <p>A list of the attached policies.</p>
     pub attached_policies: Option<Vec<AttachedPolicy>>,
-    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
@@ -5772,9 +6355,9 @@ pub struct ListEntitiesForPolicyRequest {
     pub entity_filter: Option<String>,
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
-    /// <p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
-    /// <p>The path prefix for filtering the results. This parameter is optional. If it is not included, it defaults to a slash (/), listing all entities.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
+    /// <p>The path prefix for filtering the results. This parameter is optional. If it is not included, it defaults to a slash (/), listing all entities.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path_prefix: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the IAM policy for which you want the versions.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
@@ -5816,7 +6399,7 @@ impl ListEntitiesForPolicyRequestSerializer {
 /// <p>Contains the response to a successful <a>ListEntitiesForPolicy</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListEntitiesForPolicyResponse {
-    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
@@ -5918,11 +6501,11 @@ impl ListEntitiesForPolicyResponseDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListGroupPoliciesRequest {
-    /// <p>The name of the group to list policies for.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the group to list policies for.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
-    /// <p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
 }
 
@@ -5951,11 +6534,11 @@ impl ListGroupPoliciesRequestSerializer {
 /// <p>Contains the response to a successful <a>ListGroupPolicies</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListGroupPoliciesResponse {
-    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
-    /// <p>A list of policy names.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>A list of policy names.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub policy_names: Vec<String>,
 }
 
@@ -6013,9 +6596,9 @@ impl ListGroupPoliciesResponseDeserializer {
 pub struct ListGroupsForUserRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
-    /// <p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
-    /// <p>The name of the user to list groups for.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the user to list groups for.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
 }
 
@@ -6046,7 +6629,7 @@ impl ListGroupsForUserRequestSerializer {
 pub struct ListGroupsForUserResponse {
     /// <p>A list of groups.</p>
     pub groups: Vec<Group>,
-    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
@@ -6103,9 +6686,9 @@ impl ListGroupsForUserResponseDeserializer {
 pub struct ListGroupsRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
-    /// <p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
-    /// <p> The path prefix for filtering the results. For example, the prefix <code>/division_abc/subdivision_xyz/</code> gets all groups whose path starts with <code>/division_abc/subdivision_xyz/</code>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/), listing all groups. This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
+    /// <p> The path prefix for filtering the results. For example, the prefix <code>/division_abc/subdivision_xyz/</code> gets all groups whose path starts with <code>/division_abc/subdivision_xyz/</code>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/), listing all groups. This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path_prefix: Option<String>,
 }
 
@@ -6138,7 +6721,7 @@ impl ListGroupsRequestSerializer {
 pub struct ListGroupsResponse {
     /// <p>A list of groups.</p>
     pub groups: Vec<Group>,
-    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
@@ -6195,9 +6778,9 @@ impl ListGroupsResponseDeserializer {
 pub struct ListInstanceProfilesForRoleRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
-    /// <p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
-    /// <p>The name of the role to list instance profiles for.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the role to list instance profiles for.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub role_name: String,
 }
 
@@ -6228,7 +6811,7 @@ impl ListInstanceProfilesForRoleRequestSerializer {
 pub struct ListInstanceProfilesForRoleResponse {
     /// <p>A list of instance profiles.</p>
     pub instance_profiles: Vec<InstanceProfile>,
-    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
@@ -6289,9 +6872,9 @@ impl ListInstanceProfilesForRoleResponseDeserializer {
 pub struct ListInstanceProfilesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
-    /// <p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
-    /// <p> The path prefix for filtering the results. For example, the prefix <code>/application_abc/component_xyz/</code> gets all instance profiles whose path starts with <code>/application_abc/component_xyz/</code>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/), listing all instance profiles. This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
+    /// <p> The path prefix for filtering the results. For example, the prefix <code>/application_abc/component_xyz/</code> gets all instance profiles whose path starts with <code>/application_abc/component_xyz/</code>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/), listing all instance profiles. This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path_prefix: Option<String>,
 }
 
@@ -6324,7 +6907,7 @@ impl ListInstanceProfilesRequestSerializer {
 pub struct ListInstanceProfilesResponse {
     /// <p>A list of instance profiles.</p>
     pub instance_profiles: Vec<InstanceProfile>,
-    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
@@ -6385,9 +6968,9 @@ impl ListInstanceProfilesResponseDeserializer {
 pub struct ListMFADevicesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
-    /// <p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
-    /// <p>The name of the user whose MFA devices you want to list.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the user whose MFA devices you want to list.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: Option<String>,
 }
 
@@ -6418,7 +7001,7 @@ impl ListMFADevicesRequestSerializer {
 /// <p>Contains the response to a successful <a>ListMFADevices</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListMFADevicesResponse {
-    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
     /// <p>A list of MFA devices.</p>
     pub mfa_devices: Vec<MFADevice>,
@@ -6551,15 +7134,169 @@ impl ListOpenIDConnectProvidersResponseDeserializer {
         Ok(obj)
     }
 }
+/// <p>Contains details about the permissions policies that are attached to the specified identity (user, group, or role).</p> <p>This data type is used as a response element in the <a>ListPoliciesGrantingServiceAccess</a> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ListPoliciesGrantingServiceAccessEntry {
+    /// <p>The <code>PoliciesGrantingServiceAccess</code> object that contains details about the policy.</p>
+    pub policies: Option<Vec<PolicyGrantingServiceAccess>>,
+    /// <p>The namespace of the service that was accessed.</p> <p>To learn the service namespace of a service, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_actions-resources-contextkeys.html">Actions, Resources, and Condition Keys for AWS Services</a> in the <i>IAM User Guide</i>. Choose the name of the service to view details for that service. In the first paragraph, find the service prefix. For example, <code>(service prefix: a4b)</code>. For more information about service namespaces, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#genref-aws-service-namespaces">AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
+    pub service_namespace: Option<String>,
+}
+
+struct ListPoliciesGrantingServiceAccessEntryDeserializer;
+impl ListPoliciesGrantingServiceAccessEntryDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListPoliciesGrantingServiceAccessEntry, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = ListPoliciesGrantingServiceAccessEntry::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    match &name[..] {
+                        "Policies" => {
+                            obj.policies = match obj.policies {
+                                Some(ref mut existing) => {
+                                    existing.extend(PolicyGrantingServiceAccessListTypeDeserializer::deserialize("Policies", stack)?);
+                                    Some(existing.to_vec())
+                                }
+                                None => Some(
+                                    PolicyGrantingServiceAccessListTypeDeserializer::deserialize(
+                                        "Policies", stack,
+                                    )?,
+                                ),
+                            };
+                        }
+                        "ServiceNamespace" => {
+                            obj.service_namespace =
+                                Some(ServiceNamespaceTypeDeserializer::deserialize(
+                                    "ServiceNamespace",
+                                    stack,
+                                )?);
+                        }
+                        _ => skip_tree(stack),
+                    }
+                }
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ListPoliciesGrantingServiceAccessRequest {
+    /// <p>The ARN of the IAM identity (user, group, or role) whose policies you want to list.</p>
+    pub arn: String,
+    /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
+    pub marker: Option<String>,
+    /// <p>The service namespace for the AWS services whose policies you want to list.</p> <p>To learn the service namespace for a service, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_actions-resources-contextkeys.html">Actions, Resources, and Condition Keys for AWS Services</a> in the <i>IAM User Guide</i>. Choose the name of the service to view details for that service. In the first paragraph, find the service prefix. For example, <code>(service prefix: a4b)</code>. For more information about service namespaces, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#genref-aws-service-namespaces">AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
+    pub service_namespaces: Vec<String>,
+}
+
+/// Serialize `ListPoliciesGrantingServiceAccessRequest` contents to a `SignedRequest`.
+struct ListPoliciesGrantingServiceAccessRequestSerializer;
+impl ListPoliciesGrantingServiceAccessRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ListPoliciesGrantingServiceAccessRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "Arn"), &obj.arn);
+        if let Some(ref field_value) = obj.marker {
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+        }
+        ServiceNamespaceListTypeSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "ServiceNamespaces"),
+            &obj.service_namespaces,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ListPoliciesGrantingServiceAccessResponse {
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
+    pub is_truncated: Option<bool>,
+    /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
+    pub marker: Option<String>,
+    /// <p>A <code>ListPoliciesGrantingServiceAccess</code> object that contains details about the permissions policies attached to the specified identity (user, group, or role).</p>
+    pub policies_granting_service_access: Vec<ListPoliciesGrantingServiceAccessEntry>,
+}
+
+struct ListPoliciesGrantingServiceAccessResponseDeserializer;
+impl ListPoliciesGrantingServiceAccessResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListPoliciesGrantingServiceAccessResponse, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = ListPoliciesGrantingServiceAccessResponse::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "IsTruncated" => {
+                        obj.is_truncated =
+                            Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
+                    }
+                    "Marker" => {
+                        obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "PoliciesGrantingServiceAccess" => {
+                        obj.policies_granting_service_access.extend(ListPolicyGrantingServiceAccessResponseListTypeDeserializer::deserialize("PoliciesGrantingServiceAccess", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListPoliciesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
-    /// <p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
     /// <p>A flag to filter the results to only the attached policies.</p> <p>When <code>OnlyAttached</code> is <code>true</code>, the returned list contains only the policies that are attached to an IAM user, group, or role. When <code>OnlyAttached</code> is <code>false</code>, or when the parameter is not included, all policies are returned.</p>
     pub only_attached: Option<bool>,
-    /// <p>The path prefix for filtering the results. This parameter is optional. If it is not included, it defaults to a slash (/), listing all policies. This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
+    /// <p>The path prefix for filtering the results. This parameter is optional. If it is not included, it defaults to a slash (/), listing all policies. This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path_prefix: Option<String>,
     /// <p>The policy usage method to use for filtering the results.</p> <p>To list only permissions policies, set <code>PolicyUsageFilter</code> to <code>PermissionsPolicy</code>. To list only the policies used to set permissions boundaries, set the value to <code>PermissionsBoundary</code>.</p> <p>This parameter is optional. If it is not included, all policies are returned. </p>
     pub policy_usage_filter: Option<String>,
@@ -6606,7 +7343,7 @@ impl ListPoliciesRequestSerializer {
 /// <p>Contains the response to a successful <a>ListPolicies</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListPoliciesResponse {
-    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
@@ -6670,11 +7407,55 @@ impl ListPoliciesResponseDeserializer {
         Ok(obj)
     }
 }
+struct ListPolicyGrantingServiceAccessResponseListTypeDeserializer;
+impl ListPolicyGrantingServiceAccessResponseListTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<ListPoliciesGrantingServiceAccessEntry>, XmlParseError> {
+        let mut obj = vec![];
+        start_element(tag_name, stack)?;
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "member" {
+                        obj.push(
+                            ListPoliciesGrantingServiceAccessEntryDeserializer::deserialize(
+                                "member", stack,
+                            )?,
+                        );
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    end_element(tag_name, stack)?;
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListPolicyVersionsRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
-    /// <p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
     /// <p>The Amazon Resource Name (ARN) of the IAM policy for which you want the versions.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub policy_arn: String,
@@ -6705,7 +7486,7 @@ impl ListPolicyVersionsRequestSerializer {
 /// <p>Contains the response to a successful <a>ListPolicyVersions</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListPolicyVersionsResponse {
-    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
@@ -6775,9 +7556,9 @@ impl ListPolicyVersionsResponseDeserializer {
 pub struct ListRolePoliciesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
-    /// <p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
-    /// <p>The name of the role to list policies for.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the role to list policies for.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub role_name: String,
 }
 
@@ -6806,7 +7587,7 @@ impl ListRolePoliciesRequestSerializer {
 /// <p>Contains the response to a successful <a>ListRolePolicies</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListRolePoliciesResponse {
-    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
@@ -6865,12 +7646,101 @@ impl ListRolePoliciesResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct ListRoleTagsRequest {
+    /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response to indicate where the next call should start.</p>
+    pub marker: Option<String>,
+    /// <p>(Optional) Use this only when paginating results to indicate the maximum number of items that you want in the response. If additional items exist beyond the maximum that you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when more results are available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    pub max_items: Option<i64>,
+    /// <p>The name of the IAM role for which you want to see the list of tags.</p> <p>This parameter accepts (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that consist of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    pub role_name: String,
+}
+
+/// Serialize `ListRoleTagsRequest` contents to a `SignedRequest`.
+struct ListRoleTagsRequestSerializer;
+impl ListRoleTagsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ListRoleTagsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.marker {
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+        }
+        if let Some(ref field_value) = obj.max_items {
+            params.put(
+                &format!("{}{}", prefix, "MaxItems"),
+                &field_value.to_string(),
+            );
+        }
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ListRoleTagsResponse {
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can use the <code>Marker</code> request parameter to make a subsequent pagination request that retrieves more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when more results are available. Check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
+    pub is_truncated: Option<bool>,
+    /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
+    pub marker: Option<String>,
+    /// <p>The list of tags currently that is attached to the role. Each tag consists of a key name and an associated value. If no tags are attached to the specified role, the response contains an empty list.</p>
+    pub tags: Vec<Tag>,
+}
+
+struct ListRoleTagsResponseDeserializer;
+impl ListRoleTagsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListRoleTagsResponse, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = ListRoleTagsResponse::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "IsTruncated" => {
+                        obj.is_truncated =
+                            Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
+                    }
+                    "Marker" => {
+                        obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "Tags" => {
+                        obj.tags
+                            .extend(TagListTypeDeserializer::deserialize("Tags", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListRolesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
-    /// <p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
-    /// <p> The path prefix for filtering the results. For example, the prefix <code>/application_abc/component_xyz/</code> gets all roles whose path starts with <code>/application_abc/component_xyz/</code>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/), listing all roles. This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
+    /// <p> The path prefix for filtering the results. For example, the prefix <code>/application_abc/component_xyz/</code> gets all roles whose path starts with <code>/application_abc/component_xyz/</code>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/), listing all roles. This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path_prefix: Option<String>,
 }
 
@@ -6901,7 +7771,7 @@ impl ListRolesRequestSerializer {
 /// <p>Contains the response to a successful <a>ListRoles</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListRolesResponse {
-    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
@@ -7032,9 +7902,9 @@ impl ListSAMLProvidersResponseDeserializer {
 pub struct ListSSHPublicKeysRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
-    /// <p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
-    /// <p>The name of the IAM user to list SSH public keys for. If none is specified, the <code>UserName</code> field is determined implicitly based on the AWS access key used to sign the request.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the IAM user to list SSH public keys for. If none is specified, the <code>UserName</code> field is determined implicitly based on the AWS access key used to sign the request.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: Option<String>,
 }
 
@@ -7065,7 +7935,7 @@ impl ListSSHPublicKeysRequestSerializer {
 /// <p>Contains the response to a successful <a>ListSSHPublicKeys</a> request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListSSHPublicKeysResponse {
-    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
@@ -7135,9 +8005,9 @@ impl ListSSHPublicKeysResponseDeserializer {
 pub struct ListServerCertificatesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
-    /// <p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
-    /// <p> The path prefix for filtering the results. For example: <code>/company/servercerts</code> would get all server certificates for which the path starts with <code>/company/servercerts</code>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/), listing all server certificates. This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
+    /// <p> The path prefix for filtering the results. For example: <code>/company/servercerts</code> would get all server certificates for which the path starts with <code>/company/servercerts</code>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/), listing all server certificates. This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path_prefix: Option<String>,
 }
 
@@ -7168,7 +8038,7 @@ impl ListServerCertificatesRequestSerializer {
 /// <p>Contains the response to a successful <a>ListServerCertificates</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListServerCertificatesResponse {
-    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
@@ -7231,7 +8101,7 @@ impl ListServerCertificatesResponseDeserializer {
 pub struct ListServiceSpecificCredentialsRequest {
     /// <p>Filters the returned results to only those for the specified AWS service. If not specified, then AWS returns service-specific credentials for all services.</p>
     pub service_name: Option<String>,
-    /// <p>The name of the user whose service-specific credentials you want information about. If this value is not specified, then the operation assumes the user whose credentials are used to call the operation.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the user whose service-specific credentials you want information about. If this value is not specified, then the operation assumes the user whose credentials are used to call the operation.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: Option<String>,
 }
 
@@ -7317,9 +8187,9 @@ impl ListServiceSpecificCredentialsResponseDeserializer {
 pub struct ListSigningCertificatesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
-    /// <p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
-    /// <p>The name of the IAM user whose signing certificates you want to examine.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the IAM user whose signing certificates you want to examine.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: Option<String>,
 }
 
@@ -7352,7 +8222,7 @@ impl ListSigningCertificatesRequestSerializer {
 pub struct ListSigningCertificatesResponse {
     /// <p>A list of the user's signing certificate information.</p>
     pub certificates: Vec<SigningCertificate>,
-    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
@@ -7412,9 +8282,9 @@ impl ListSigningCertificatesResponseDeserializer {
 pub struct ListUserPoliciesRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
-    /// <p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
-    /// <p>The name of the user to list policies for.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the user to list policies for.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
 }
 
@@ -7443,7 +8313,7 @@ impl ListUserPoliciesRequestSerializer {
 /// <p>Contains the response to a successful <a>ListUserPolicies</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListUserPoliciesResponse {
-    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
@@ -7502,12 +8372,101 @@ impl ListUserPoliciesResponseDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct ListUserTagsRequest {
+    /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response to indicate where the next call should start.</p>
+    pub marker: Option<String>,
+    /// <p>(Optional) Use this only when paginating results to indicate the maximum number of items that you want in the response. If additional items exist beyond the maximum that you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when more results are available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    pub max_items: Option<i64>,
+    /// <p>The name of the IAM user whose tags you want to see.</p> <p>This parameter accepts (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that consist of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>
+    pub user_name: String,
+}
+
+/// Serialize `ListUserTagsRequest` contents to a `SignedRequest`.
+struct ListUserTagsRequestSerializer;
+impl ListUserTagsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ListUserTagsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.marker {
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+        }
+        if let Some(ref field_value) = obj.max_items {
+            params.put(
+                &format!("{}{}", prefix, "MaxItems"),
+                &field_value.to_string(),
+            );
+        }
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ListUserTagsResponse {
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can use the <code>Marker</code> request parameter to make a subsequent pagination request that retrieves more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when more results are available. Check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
+    pub is_truncated: Option<bool>,
+    /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
+    pub marker: Option<String>,
+    /// <p>The list of tags that are currently attached to the user. Each tag consists of a key name and an associated value. If no tags are attached to the specified user, the response contains an empty list.</p>
+    pub tags: Vec<Tag>,
+}
+
+struct ListUserTagsResponseDeserializer;
+impl ListUserTagsResponseDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ListUserTagsResponse, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = ListUserTagsResponse::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "IsTruncated" => {
+                        obj.is_truncated =
+                            Some(BooleanTypeDeserializer::deserialize("IsTruncated", stack)?);
+                    }
+                    "Marker" => {
+                        obj.marker = Some(MarkerTypeDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "Tags" => {
+                        obj.tags
+                            .extend(TagListTypeDeserializer::deserialize("Tags", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListUsersRequest {
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
-    /// <p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
-    /// <p> The path prefix for filtering the results. For example: <code>/division_abc/subdivision_xyz/</code>, which would get all user names whose path starts with <code>/division_abc/subdivision_xyz/</code>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/), listing all user names. This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
+    /// <p> The path prefix for filtering the results. For example: <code>/division_abc/subdivision_xyz/</code>, which would get all user names whose path starts with <code>/division_abc/subdivision_xyz/</code>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/), listing all user names. This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub path_prefix: Option<String>,
 }
 
@@ -7538,7 +8497,7 @@ impl ListUsersRequestSerializer {
 /// <p>Contains the response to a successful <a>ListUsers</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListUsersResponse {
-    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
@@ -7595,11 +8554,11 @@ impl ListUsersResponseDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListVirtualMFADevicesRequest {
-    /// <p> The status (<code>Unassigned</code> or <code>Assigned</code>) of the devices to list. If you do not specify an <code>AssignmentStatus</code>, the operation defaults to <code>Any</code> which lists both assigned and unassigned virtual MFA devices.</p>
+    /// <p> The status (<code>Unassigned</code> or <code>Assigned</code>) of the devices to list. If you do not specify an <code>AssignmentStatus</code>, the operation defaults to <code>Any</code>, which lists both assigned and unassigned virtual MFA devices.,</p>
     pub assignment_status: Option<String>,
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
-    /// <p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
 }
 
@@ -7630,7 +8589,7 @@ impl ListVirtualMFADevicesRequestSerializer {
 /// <p>Contains the response to a successful <a>ListVirtualMFADevices</a> request. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListVirtualMFADevicesResponse {
-    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
@@ -7821,7 +8780,7 @@ pub struct ManagedPolicyDetail {
     pub is_attachable: Option<bool>,
     /// <p>The path to the policy.</p> <p>For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>
     pub path: Option<String>,
-    /// <p>The number of entities (users and roles) for which the policy is used as the permissions boundary. </p> <p>For more information about permissions boundaries, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html">Permissions Boundaries for IAM Identities </a> in the <i>IAM User Guide</i>.</p>
+    /// <p>The number of entities (users and roles) for which the policy is used as the permissions boundary. </p> <p>For more information about permissions boundaries, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html">Permissions Boundaries for IAM Identities </a> in the <i>IAM User Guide</i>.</p>
     pub permissions_boundary_usage_count: Option<i64>,
     /// <p>The stable and unique string identifying the policy.</p> <p>For more information about IDs, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>
     pub policy_id: Option<String>,
@@ -8397,7 +9356,7 @@ pub struct Policy {
     pub is_attachable: Option<bool>,
     /// <p>The path to the policy.</p> <p>For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>
     pub path: Option<String>,
-    /// <p>The number of entities (users and roles) for which the policy is used to set the permissions boundary. </p> <p>For more information about permissions boundaries, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html">Permissions Boundaries for IAM Identities </a> in the <i>IAM User Guide</i>.</p>
+    /// <p>The number of entities (users and roles) for which the policy is used to set the permissions boundary. </p> <p>For more information about permissions boundaries, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html">Permissions Boundaries for IAM Identities </a> in the <i>IAM User Guide</i>.</p>
     pub permissions_boundary_usage_count: Option<i64>,
     /// <p>The stable and unique string identifying the policy.</p> <p>For more information about IDs, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>
     pub policy_id: Option<String>,
@@ -8675,6 +9634,121 @@ impl PolicyEvaluationDecisionTypeDeserializer {
         Ok(obj)
     }
 }
+/// <p>Contains details about the permissions policies that are attached to the specified identity (user, group, or role).</p> <p>This data type is an element of the <a>ListPoliciesGrantingServiceAccessEntry</a> object.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PolicyGrantingServiceAccess {
+    /// <p>The name of the entity (user or role) to which the inline policy is attached.</p> <p>This field is null for managed policies. For more information about these policy types, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
+    pub entity_name: Option<String>,
+    /// <p>The type of entity (user or role) that used the policy to access the service to which the inline policy is attached.</p> <p>This field is null for managed policies. For more information about these policy types, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
+    pub entity_type: Option<String>,
+    pub policy_arn: Option<String>,
+    /// <p>The policy name.</p>
+    pub policy_name: String,
+    /// <p>The policy type. For more information about these policy types, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
+    pub policy_type: String,
+}
+
+struct PolicyGrantingServiceAccessDeserializer;
+impl PolicyGrantingServiceAccessDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PolicyGrantingServiceAccess, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = PolicyGrantingServiceAccess::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "EntityName" => {
+                        obj.entity_name = Some(EntityNameTypeDeserializer::deserialize(
+                            "EntityName",
+                            stack,
+                        )?);
+                    }
+                    "EntityType" => {
+                        obj.entity_type = Some(PolicyOwnerEntityTypeDeserializer::deserialize(
+                            "EntityType",
+                            stack,
+                        )?);
+                    }
+                    "PolicyArn" => {
+                        obj.policy_arn =
+                            Some(ArnTypeDeserializer::deserialize("PolicyArn", stack)?);
+                    }
+                    "PolicyName" => {
+                        obj.policy_name =
+                            PolicyNameTypeDeserializer::deserialize("PolicyName", stack)?;
+                    }
+                    "PolicyType" => {
+                        obj.policy_type = PolicyTypeDeserializer::deserialize("PolicyType", stack)?;
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct PolicyGrantingServiceAccessListTypeDeserializer;
+impl PolicyGrantingServiceAccessListTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<PolicyGrantingServiceAccess>, XmlParseError> {
+        let mut obj = vec![];
+        start_element(tag_name, stack)?;
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "member" {
+                        obj.push(PolicyGrantingServiceAccessDeserializer::deserialize(
+                            "member", stack,
+                        )?);
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    end_element(tag_name, stack)?;
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
 /// <p>Contains information about a group that a managed policy is attached to.</p> <p>This data type is used as a response element in the <a>ListEntitiesForPolicy</a> operation. </p> <p>For more information about managed policies, refer to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>Using IAM</i> guide. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PolicyGroup {
@@ -8875,6 +9949,20 @@ impl PolicyNameTypeDeserializer {
         Ok(obj)
     }
 }
+struct PolicyOwnerEntityTypeDeserializer;
+impl PolicyOwnerEntityTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 struct PolicyPathTypeDeserializer;
 impl PolicyPathTypeDeserializer {
     #[allow(unused_variables)]
@@ -8983,6 +10071,20 @@ impl PolicyRoleListTypeDeserializer {
 }
 struct PolicySourceTypeDeserializer;
 impl PolicySourceTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct PolicyTypeDeserializer;
+impl PolicyTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(
         tag_name: &str,
@@ -9266,11 +10368,11 @@ impl PublicKeyMaterialTypeDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutGroupPolicyRequest {
-    /// <p>The name of the group to associate the policy with.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the group to associate the policy with.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
     /// <p><p>The policy document.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub policy_document: String,
-    /// <p>The name of the policy document.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the policy document.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub policy_name: String,
 }
 
@@ -9321,9 +10423,9 @@ impl PutRolePermissionsBoundaryRequestSerializer {
 pub struct PutRolePolicyRequest {
     /// <p><p>The policy document.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub policy_document: String,
-    /// <p>The name of the policy document.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the policy document.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub policy_name: String,
-    /// <p>The name of the role to associate the policy with.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the role to associate the policy with.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub role_name: String,
 }
 
@@ -9374,9 +10476,9 @@ impl PutUserPermissionsBoundaryRequestSerializer {
 pub struct PutUserPolicyRequest {
     /// <p><p>The policy document.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub policy_document: String,
-    /// <p>The name of the policy document.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the policy document.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub policy_name: String,
-    /// <p>The name of the user to associate the policy with.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the user to associate the policy with.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
 }
 
@@ -9457,9 +10559,9 @@ impl RemoveClientIDFromOpenIDConnectProviderRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct RemoveRoleFromInstanceProfileRequest {
-    /// <p>The name of the instance profile to update.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the instance profile to update.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub instance_profile_name: String,
-    /// <p>The name of the role to remove.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the role to remove.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub role_name: String,
 }
 
@@ -9482,9 +10584,9 @@ impl RemoveRoleFromInstanceProfileRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct RemoveUserFromGroupRequest {
-    /// <p>The name of the group to update.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the group to update.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
-    /// <p>The name of the user to remove.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the user to remove.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
 }
 
@@ -9560,9 +10662,9 @@ impl ReportStateTypeDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ResetServiceSpecificCredentialRequest {
-    /// <p>The unique identifier of the service-specific credential.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
+    /// <p>The unique identifier of the service-specific credential.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub service_specific_credential_id: String,
-    /// <p>The name of the IAM user associated with the service-specific credential. If this value is not specified, then the operation assumes the user whose credentials are used to call the operation.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the IAM user associated with the service-specific credential. If this value is not specified, then the operation assumes the user whose credentials are used to call the operation.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: Option<String>,
 }
 
@@ -9669,7 +10771,7 @@ pub struct ResourceSpecificResult {
     pub eval_resource_decision: String,
     /// <p>The name of the simulated resource, in Amazon Resource Name (ARN) format.</p>
     pub eval_resource_name: String,
-    /// <p>A list of the statements in the input policies that determine the result for this part of the simulation. Remember that even if multiple statements allow the operation on the resource, if <i>any</i> statement denies that operation, then the explicit deny overrides any allow, and the deny statement is the only entry included in the result.</p>
+    /// <p>A list of the statements in the input policies that determine the result for this part of the simulation. Remember that even if multiple statements allow the operation on the resource, if <i>any</i> statement denies that operation, then the explicit deny overrides any allow. In addition, the deny statement is the only entry included in the result.</p>
     pub matched_statements: Option<Vec<Statement>>,
     /// <p>A list of context keys that are required by the included input policies but that were not provided by one of the input parameters. This list is used when a list of ARNs is included in the <code>ResourceArns</code> parameter instead of "*". If you do not specify individual resources, by setting <code>ResourceArns</code> to "*" or by not including the <code>ResourceArns</code> parameter, then any missing context values are instead included under the <code>EvaluationResults</code> section. To discover the context keys used by a set of policies, you can call <a>GetContextKeysForCustomPolicy</a> or <a>GetContextKeysForPrincipalPolicy</a>.</p>
     pub missing_context_values: Option<Vec<String>>,
@@ -9809,9 +10911,9 @@ pub struct ResyncMFADeviceRequest {
     pub authentication_code_1: String,
     /// <p>A subsequent authentication code emitted by the device.</p> <p>The format for this parameter is a sequence of six digits.</p>
     pub authentication_code_2: String,
-    /// <p>Serial number that uniquely identifies the MFA device.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>Serial number that uniquely identifies the MFA device.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub serial_number: String,
-    /// <p>The name of the user whose MFA device you want to resynchronize.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the user whose MFA device you want to resynchronize.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
 }
 
@@ -9848,16 +10950,18 @@ pub struct Role {
     pub create_date: String,
     /// <p>A description of the role that you provide.</p>
     pub description: Option<String>,
-    /// <p>The maximum session duration (in seconds) for the specified role. Anyone who uses the AWS CLI or API to assume the role can specify the duration using the optional <code>DurationSeconds</code> API parameter or <code>duration-seconds</code> CLI parameter.</p>
+    /// <p>The maximum session duration (in seconds) for the specified role. Anyone who uses the AWS CLI, or API to assume the role can specify the duration using the optional <code>DurationSeconds</code> API parameter or <code>duration-seconds</code> CLI parameter.</p>
     pub max_session_duration: Option<i64>,
     /// <p> The path to the role. For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>
     pub path: String,
-    /// <p>The ARN of the policy used to set the permissions boundary for the role.</p> <p>For more information about permissions boundaries, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html">Permissions Boundaries for IAM Identities </a> in the <i>IAM User Guide</i>.</p>
+    /// <p>The ARN of the policy used to set the permissions boundary for the role.</p> <p>For more information about permissions boundaries, see <a href="IAM/latest/UserGuide/access_policies_boundaries.html">Permissions Boundaries for IAM Identities </a> in the <i>IAM User Guide</i>.</p>
     pub permissions_boundary: Option<AttachedPermissionsBoundary>,
     /// <p> The stable and unique string identifying the role. For more information about IDs, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide. </p>
     pub role_id: String,
     /// <p>The friendly name that identifies the role.</p>
     pub role_name: String,
+    /// <p>A list of tags that are attached to the specified role. For more information about tagging, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
+    pub tags: Option<Vec<Tag>>,
 }
 
 struct RoleDeserializer;
@@ -9924,6 +11028,16 @@ impl RoleDeserializer {
                     "RoleName" => {
                         obj.role_name = RoleNameTypeDeserializer::deserialize("RoleName", stack)?;
                     }
+                    "Tags" => {
+                        obj.tags = match obj.tags {
+                            Some(ref mut existing) => {
+                                existing
+                                    .extend(TagListTypeDeserializer::deserialize("Tags", stack)?);
+                                Some(existing.to_vec())
+                            }
+                            None => Some(TagListTypeDeserializer::deserialize("Tags", stack)?),
+                        };
+                    }
                     _ => skip_tree(stack),
                 },
                 DeserializerNext::Close => break,
@@ -9966,7 +11080,7 @@ pub struct RoleDetail {
     pub instance_profile_list: Option<Vec<InstanceProfile>>,
     /// <p>The path to the role. For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>
     pub path: Option<String>,
-    /// <p>The ARN of the policy used to set the permissions boundary for the role.</p> <p>For more information about permissions boundaries, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html">Permissions Boundaries for IAM Identities </a> in the <i>IAM User Guide</i>.</p>
+    /// <p>The ARN of the policy used to set the permissions boundary for the role.</p> <p>For more information about permissions boundaries, see <a href="IAM/latest/UserGuide/access_policies_boundaries.html">Permissions Boundaries for IAM Identities </a> in the <i>IAM User Guide</i>.</p>
     pub permissions_boundary: Option<AttachedPermissionsBoundary>,
     /// <p>The stable and unique string identifying the role. For more information about IDs, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>
     pub role_id: Option<String>,
@@ -9974,6 +11088,8 @@ pub struct RoleDetail {
     pub role_name: Option<String>,
     /// <p>A list of inline policies embedded in the role. These policies are the role's access (permissions) policies.</p>
     pub role_policy_list: Option<Vec<PolicyDetail>>,
+    /// <p>A list of tags that are attached to the specified role. For more information about tagging, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
+    pub tags: Option<Vec<Tag>>,
 }
 
 struct RoleDetailDeserializer;
@@ -10072,6 +11188,16 @@ impl RoleDetailDeserializer {
                                 "RolePolicyList",
                                 stack,
                             )?),
+                        };
+                    }
+                    "Tags" => {
+                        obj.tags = match obj.tags {
+                            Some(ref mut existing) => {
+                                existing
+                                    .extend(TagListTypeDeserializer::deserialize("Tags", stack)?);
+                                Some(existing.to_vec())
+                            }
+                            None => Some(TagListTypeDeserializer::deserialize("Tags", stack)?),
                         };
                     }
                     _ => skip_tree(stack),
@@ -10807,8 +11933,128 @@ impl ServerCertificateNameTypeDeserializer {
         Ok(obj)
     }
 }
+/// <p>Contains details about the most recent attempt to access the service.</p> <p>This data type is used as a response element in the <a>GetServiceLastAccessedDetails</a> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ServiceLastAccessed {
+    /// <p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when an authenticated entity most recently attempted to access the service. AWS does not report unauthenticated requests.</p> <p>This field is null if no IAM entities attempted to access the service within the <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html#service-last-accessed-reporting-period">reporting period</a>.</p>
+    pub last_authenticated: Option<String>,
+    /// <p>The ARN of the authenticated entity (user or role) that last attempted to access the service. AWS does not report unauthenticated requests.</p> <p>This field is null if no IAM entities attempted to access the service within the <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html#service-last-accessed-reporting-period">reporting period</a>.</p>
+    pub last_authenticated_entity: Option<String>,
+    /// <p>The name of the service in which access was attempted.</p>
+    pub service_name: String,
+    /// <p>The namespace of the service in which access was attempted.</p> <p>To learn the service namespace of a service, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_actions-resources-contextkeys.html">Actions, Resources, and Condition Keys for AWS Services</a> in the <i>IAM User Guide</i>. Choose the name of the service to view details for that service. In the first paragraph, find the service prefix. For example, <code>(service prefix: a4b)</code>. For more information about service namespaces, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#genref-aws-service-namespaces">AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
+    pub service_namespace: String,
+    /// <p>The total number of authenticated entities that have attempted to access the service.</p> <p>This field is null if no IAM entities attempted to access the service within the <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html#service-last-accessed-reporting-period">reporting period</a>.</p>
+    pub total_authenticated_entities: Option<i64>,
+}
+
+struct ServiceLastAccessedDeserializer;
+impl ServiceLastAccessedDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ServiceLastAccessed, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = ServiceLastAccessed::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "LastAuthenticated" => {
+                        obj.last_authenticated = Some(DateTypeDeserializer::deserialize(
+                            "LastAuthenticated",
+                            stack,
+                        )?);
+                    }
+                    "LastAuthenticatedEntity" => {
+                        obj.last_authenticated_entity = Some(ArnTypeDeserializer::deserialize(
+                            "LastAuthenticatedEntity",
+                            stack,
+                        )?);
+                    }
+                    "ServiceName" => {
+                        obj.service_name =
+                            ServiceNameTypeDeserializer::deserialize("ServiceName", stack)?;
+                    }
+                    "ServiceNamespace" => {
+                        obj.service_namespace = ServiceNamespaceTypeDeserializer::deserialize(
+                            "ServiceNamespace",
+                            stack,
+                        )?;
+                    }
+                    "TotalAuthenticatedEntities" => {
+                        obj.total_authenticated_entities =
+                            Some(IntegerTypeDeserializer::deserialize(
+                                "TotalAuthenticatedEntities",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 struct ServiceNameDeserializer;
 impl ServiceNameDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct ServiceNameTypeDeserializer;
+impl ServiceNameTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `ServiceNamespaceListType` contents to a `SignedRequest`.
+struct ServiceNamespaceListTypeSerializer;
+impl ServiceNamespaceListTypeSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
+struct ServiceNamespaceTypeDeserializer;
+impl ServiceNamespaceTypeDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(
         tag_name: &str,
@@ -11065,6 +12311,48 @@ impl ServiceUserNameDeserializer {
         Ok(obj)
     }
 }
+struct ServicesLastAccessedDeserializer;
+impl ServicesLastAccessedDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<ServiceLastAccessed>, XmlParseError> {
+        let mut obj = vec![];
+        start_element(tag_name, stack)?;
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "member" {
+                        obj.push(ServiceLastAccessedDeserializer::deserialize(
+                            "member", stack,
+                        )?);
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    end_element(tag_name, stack)?;
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SetDefaultPolicyVersionRequest {
     /// <p>The Amazon Resource Name (ARN) of the IAM policy whose default version you want to set.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
@@ -11166,11 +12454,11 @@ pub struct SimulateCustomPolicyRequest {
     pub context_entries: Option<Vec<ContextEntry>>,
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
-    /// <p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
     /// <p><p>A list of policy documents to include in the simulation. Each document is specified as a string containing the complete, valid JSON text of an IAM policy. Do not include any resource-based policies in this parameter. Any resource-based policy must be submitted with the <code>ResourcePolicy</code> parameter. The policies cannot be &quot;scope-down&quot; policies, such as you could include in a call to <a href="http://docs.aws.amazon.com/IAM/latest/APIReference/API_GetFederationToken.html">GetFederationToken</a> or one of the <a href="http://docs.aws.amazon.com/IAM/latest/APIReference/API_AssumeRole.html">AssumeRole</a> API operations. In other words, do not use policies designed to restrict what a user can do while using the temporary credentials.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub policy_input_list: Vec<String>,
-    /// <p>A list of ARNs of AWS resources to include in the simulation. If this parameter is not provided then the value defaults to <code>*</code> (all resources). Each API in the <code>ActionNames</code> parameter is evaluated for each resource in this list. The simulation determines the access result (allowed or denied) of each combination and reports it in the response.</p> <p>The simulation does not automatically retrieve policies for the specified resources. If you want to include a resource policy in the simulation, then you must include the policy as a string in the <code>ResourcePolicy</code> parameter.</p> <p>If you include a <code>ResourcePolicy</code>, then it must be applicable to all of the resources included in the simulation or you receive an invalid input error.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
+    /// <p>A list of ARNs of AWS resources to include in the simulation. If this parameter is not provided, then the value defaults to <code>*</code> (all resources). Each API in the <code>ActionNames</code> parameter is evaluated for each resource in this list. The simulation determines the access result (allowed or denied) of each combination and reports it in the response.</p> <p>The simulation does not automatically retrieve policies for the specified resources. If you want to include a resource policy in the simulation, then you must include the policy as a string in the <code>ResourcePolicy</code> parameter.</p> <p>If you include a <code>ResourcePolicy</code>, then it must be applicable to all of the resources included in the simulation or you receive an invalid input error.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub resource_arns: Option<Vec<String>>,
     /// <p><p>Specifies the type of simulation to run. Different API operations that support resource-based policies require different combinations of resources. By specifying the type of simulation to run, you enable the policy simulator to enforce the presence of the required resources to ensure reliable simulation results. If your simulation does not match one of the following scenarios, then you can omit this parameter. The following list shows each of the supported scenario values and the resources that you must define to run the simulation.</p> <p>Each of the EC2 scenarios requires that you specify instance, image, and security-group resources. If your scenario includes an EBS volume, then you must specify that volume as a resource. If the EC2 scenario includes VPC, then you must supply the network-interface resource. If it includes an IP subnet, then you must specify the subnet resource. For more information on the EC2 scenario options, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-supported-platforms.html">Supported Platforms</a> in the <i>Amazon EC2 User Guide</i>.</p> <ul> <li> <p> <b>EC2-Classic-InstanceStore</b> </p> <p>instance, image, security-group</p> </li> <li> <p> <b>EC2-Classic-EBS</b> </p> <p>instance, image, security-group, volume</p> </li> <li> <p> <b>EC2-VPC-InstanceStore</b> </p> <p>instance, image, security-group, network-interface</p> </li> <li> <p> <b>EC2-VPC-InstanceStore-Subnet</b> </p> <p>instance, image, security-group, network-interface, subnet</p> </li> <li> <p> <b>EC2-VPC-EBS</b> </p> <p>instance, image, security-group, network-interface, volume</p> </li> <li> <p> <b>EC2-VPC-EBS-Subnet</b> </p> <p>instance, image, security-group, network-interface, subnet, volume</p> </li> </ul></p>
     pub resource_handling_option: Option<String>,
@@ -11245,7 +12533,7 @@ impl SimulateCustomPolicyRequestSerializer {
 pub struct SimulatePolicyResponse {
     /// <p>The results of the simulation.</p>
     pub evaluation_results: Option<Vec<EvaluationResult>>,
-    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all of your results.</p>
+    /// <p>A flag that indicates whether there are more items to return. If your results were truncated, you can make a subsequent pagination request using the <code>Marker</code> request parameter to retrieve more items. Note that IAM might return fewer than the <code>MaxItems</code> number of results even when there are more results available. We recommend that you check <code>IsTruncated</code> after every call to ensure that you receive all your results.</p>
     pub is_truncated: Option<bool>,
     /// <p>When <code>IsTruncated</code> is <code>true</code>, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent pagination request.</p>
     pub marker: Option<String>,
@@ -11321,7 +12609,7 @@ pub struct SimulatePrincipalPolicyRequest {
     pub context_entries: Option<Vec<ContextEntry>>,
     /// <p>Use this parameter only when paginating results and only after you receive a response indicating that the results are truncated. Set it to the value of the <code>Marker</code> element in the response that you received to indicate where the next call should start.</p>
     pub marker: Option<String>,
-    /// <p>(Optional) Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, it defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code> and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
+    /// <p>Use this only when paginating results to indicate the maximum number of items you want in the response. If additional items exist beyond the maximum you specify, the <code>IsTruncated</code> response element is <code>true</code>.</p> <p>If you do not include this parameter, the number of items defaults to 100. Note that IAM might return fewer results, even when there are more results available. In that case, the <code>IsTruncated</code> response element returns <code>true</code>, and <code>Marker</code> contains a value to include in the subsequent call that tells the service where to continue from.</p>
     pub max_items: Option<i64>,
     /// <p><p>An optional list of additional policy documents to include in the simulation. Each document is specified as a string containing the complete, valid JSON text of an IAM policy.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub policy_input_list: Option<Vec<String>>,
@@ -11329,7 +12617,7 @@ pub struct SimulatePrincipalPolicyRequest {
     pub policy_source_arn: String,
     /// <p>A list of ARNs of AWS resources to include in the simulation. If this parameter is not provided, then the value defaults to <code>*</code> (all resources). Each API in the <code>ActionNames</code> parameter is evaluated for each resource in this list. The simulation determines the access result (allowed or denied) of each combination and reports it in the response.</p> <p>The simulation does not automatically retrieve policies for the specified resources. If you want to include a resource policy in the simulation, then you must include the policy as a string in the <code>ResourcePolicy</code> parameter.</p> <p>For more information about ARNs, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html">Amazon Resource Names (ARNs) and AWS Service Namespaces</a> in the <i>AWS General Reference</i>.</p>
     pub resource_arns: Option<Vec<String>>,
-    /// <p><p>Specifies the type of simulation to run. Different API operations that support resource-based policies require different combinations of resources. By specifying the type of simulation to run, you enable the policy simulator to enforce the presence of the required resources to ensure reliable simulation results. If your simulation does not match one of the following scenarios, then you can omit this parameter. The following list shows each of the supported scenario values and the resources that you must define to run the simulation.</p> <p>Each of the EC2 scenarios requires that you specify instance, image, and security-group resources. If your scenario includes an EBS volume, then you must specify that volume as a resource. If the EC2 scenario includes VPC, then you must supply the network-interface resource. If it includes an IP subnet, then you must specify the subnet resource. For more information on the EC2 scenario options, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-supported-platforms.html">Supported Platforms</a> in the <i>Amazon EC2 User Guide</i>.</p> <ul> <li> <p> <b>EC2-Classic-InstanceStore</b> </p> <p>instance, image, security-group</p> </li> <li> <p> <b>EC2-Classic-EBS</b> </p> <p>instance, image, security-group, volume</p> </li> <li> <p> <b>EC2-VPC-InstanceStore</b> </p> <p>instance, image, security-group, network-interface</p> </li> <li> <p> <b>EC2-VPC-InstanceStore-Subnet</b> </p> <p>instance, image, security-group, network-interface, subnet</p> </li> <li> <p> <b>EC2-VPC-EBS</b> </p> <p>instance, image, security-group, network-interface, volume</p> </li> <li> <p> <b>EC2-VPC-EBS-Subnet</b> </p> <p>instance, image, security-group, network-interface, subnet, volume</p> </li> </ul></p>
+    /// <p><p>Specifies the type of simulation to run. Different API operations that support resource-based policies require different combinations of resources. By specifying the type of simulation to run, you enable the policy simulator to enforce the presence of the required resources to ensure reliable simulation results. If your simulation does not match one of the following scenarios, then you can omit this parameter. The following list shows each of the supported scenario values and the resources that you must define to run the simulation.</p> <p>Each of the EC2 scenarios requires that you specify instance, image, and security group resources. If your scenario includes an EBS volume, then you must specify that volume as a resource. If the EC2 scenario includes VPC, then you must supply the network interface resource. If it includes an IP subnet, then you must specify the subnet resource. For more information on the EC2 scenario options, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-supported-platforms.html">Supported Platforms</a> in the <i>Amazon EC2 User Guide</i>.</p> <ul> <li> <p> <b>EC2-Classic-InstanceStore</b> </p> <p>instance, image, security group</p> </li> <li> <p> <b>EC2-Classic-EBS</b> </p> <p>instance, image, security group, volume</p> </li> <li> <p> <b>EC2-VPC-InstanceStore</b> </p> <p>instance, image, security group, network interface</p> </li> <li> <p> <b>EC2-VPC-InstanceStore-Subnet</b> </p> <p>instance, image, security group, network interface, subnet</p> </li> <li> <p> <b>EC2-VPC-EBS</b> </p> <p>instance, image, security group, network interface, volume</p> </li> <li> <p> <b>EC2-VPC-EBS-Subnet</b> </p> <p>instance, image, security group, network interface, subnet, volume</p> </li> </ul></p>
     pub resource_handling_option: Option<String>,
     /// <p>An AWS account ID that specifies the owner of any simulated resource that does not identify its owner in the resource ARN, such as an S3 bucket or object. If <code>ResourceOwner</code> is specified, it is also used as the account owner of any <code>ResourcePolicy</code> included in the simulation. If the <code>ResourceOwner</code> parameter is not specified, then the owner of the resources and the resource policy defaults to the account of the identity provided in <code>CallerArn</code>. This parameter is required only if you specify a resource-based policy and account that owns the resource is different from the account that owns the simulated calling user <code>CallerArn</code>.</p>
     pub resource_owner: Option<String>,
@@ -11602,6 +12890,207 @@ impl SummaryValueTypeDeserializer {
         Ok(obj)
     }
 }
+/// <p>A structure that represents user-provided metadata that can be associated with a resource such as an IAM user or role. For more information about tagging, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct Tag {
+    /// <p>The key name that can be used to look up or retrieve the associated value. For example, <code>Department</code> or <code>Cost Center</code> are common choices.</p>
+    pub key: String,
+    /// <p><p>The value associated with this tag. For example, tags with a key name of <code>Department</code> could have values such as <code>Human Resources</code>, <code>Accounting</code>, and <code>Support</code>. Tags with a key name of <code>Cost Center</code> might have values that consist of the number associated with the different cost centers in your company. Typically, many resources have tags with the same key name but with different values.</p> <note> <p>AWS always interprets the tag <code>Value</code> as a single string. If you need to store an array, you can store comma-separated values in the string. However, you must interpret the value in your code.</p> </note></p>
+    pub value: String,
+}
+
+struct TagDeserializer;
+impl TagDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Tag, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = Tag::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Key" => {
+                        obj.key = TagKeyTypeDeserializer::deserialize("Key", stack)?;
+                    }
+                    "Value" => {
+                        obj.value = TagValueTypeDeserializer::deserialize("Value", stack)?;
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `Tag` contents to a `SignedRequest`.
+struct TagSerializer;
+impl TagSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Tag) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "Key"), &obj.key);
+        params.put(&format!("{}{}", prefix, "Value"), &obj.value);
+    }
+}
+
+/// Serialize `TagKeyListType` contents to a `SignedRequest`.
+struct TagKeyListTypeSerializer;
+impl TagKeyListTypeSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
+struct TagKeyTypeDeserializer;
+impl TagKeyTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct TagListTypeDeserializer;
+impl TagListTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<Tag>, XmlParseError> {
+        let mut obj = vec![];
+        start_element(tag_name, stack)?;
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "member" {
+                        obj.push(TagDeserializer::deserialize("member", stack)?);
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    end_element(tag_name, stack)?;
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `TagListType` contents to a `SignedRequest`.
+struct TagListTypeSerializer;
+impl TagListTypeSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<Tag>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            TagSerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TagRoleRequest {
+    /// <p>The name of the role that you want to add tags to.</p> <p>This parameter accepts (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that consist of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    pub role_name: String,
+    /// <p>The list of tags that you want to attach to the role. Each tag consists of a key name and an associated value. You can specify this with a JSON string.</p>
+    pub tags: Vec<Tag>,
+}
+
+/// Serialize `TagRoleRequest` contents to a `SignedRequest`.
+struct TagRoleRequestSerializer;
+impl TagRoleRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &TagRoleRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
+        TagListTypeSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), &obj.tags);
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TagUserRequest {
+    /// <p>The list of tags that you want to attach to the user. Each tag consists of a key name and an associated value.</p>
+    pub tags: Vec<Tag>,
+    /// <p>The name of the user that you want to add tags to.</p> <p>This parameter accepts (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that consist of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>
+    pub user_name: String,
+}
+
+/// Serialize `TagUserRequest` contents to a `SignedRequest`.
+struct TagUserRequestSerializer;
+impl TagUserRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &TagUserRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        TagListTypeSerializer::serialize(params, &format!("{}{}", prefix, "Tags"), &obj.tags);
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+    }
+}
+
+struct TagValueTypeDeserializer;
+impl TagValueTypeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 struct ThumbprintListTypeDeserializer;
 impl ThumbprintListTypeDeserializer {
     #[allow(unused_variables)]
@@ -11669,12 +13158,64 @@ impl ThumbprintTypeDeserializer {
     }
 }
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct UntagRoleRequest {
+    /// <p>The name of the IAM role from which you want to remove tags.</p> <p>This parameter accepts (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that consist of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    pub role_name: String,
+    /// <p>A list of key names as a simple array of strings. The tags with matching keys are removed from the specified role.</p>
+    pub tag_keys: Vec<String>,
+}
+
+/// Serialize `UntagRoleRequest` contents to a `SignedRequest`.
+struct UntagRoleRequestSerializer;
+impl UntagRoleRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &UntagRoleRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "RoleName"), &obj.role_name);
+        TagKeyListTypeSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "TagKeys"),
+            &obj.tag_keys,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct UntagUserRequest {
+    /// <p>A list of key names as a simple array of strings. The tags with matching keys are removed from the specified user.</p>
+    pub tag_keys: Vec<String>,
+    /// <p>The name of the IAM user from which you want to remove tags.</p> <p>This parameter accepts (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that consist of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: =,.@-</p>
+    pub user_name: String,
+}
+
+/// Serialize `UntagUserRequest` contents to a `SignedRequest`.
+struct UntagUserRequestSerializer;
+impl UntagUserRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &UntagUserRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        TagKeyListTypeSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "TagKeys"),
+            &obj.tag_keys,
+        );
+        params.put(&format!("{}{}", prefix, "UserName"), &obj.user_name);
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateAccessKeyRequest {
-    /// <p>The access key ID of the secret access key you want to update.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
+    /// <p>The access key ID of the secret access key you want to update.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub access_key_id: String,
     /// <p> The status you want to assign to the secret access key. <code>Active</code> means that the key can be used for API calls to AWS, while <code>Inactive</code> means that the key cannot be used.</p>
     pub status: String,
-    /// <p>The name of the user whose key you want to update.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the user whose key you want to update.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: Option<String>,
 }
 
@@ -11787,7 +13328,7 @@ impl UpdateAccountPasswordPolicyRequestSerializer {
 pub struct UpdateAssumeRolePolicyRequest {
     /// <p><p>The policy that grants an entity permission to assume the role.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub policy_document: String,
-    /// <p>The name of the role to update with the new policy.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the role to update with the new policy.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub role_name: String,
 }
 
@@ -11810,11 +13351,11 @@ impl UpdateAssumeRolePolicyRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateGroupRequest {
-    /// <p>Name of the IAM group to update. If you're changing the name of the group, this is the original name.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>Name of the IAM group to update. If you're changing the name of the group, this is the original name.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub group_name: String,
-    /// <p>New name for the IAM group. Only include this if changing the group's name.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>New name for the IAM group. Only include this if changing the group's name.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub new_group_name: Option<String>,
-    /// <p>New path for the IAM group. Only include this if changing the group's path.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
+    /// <p>New path for the IAM group. Only include this if changing the group's path.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub new_path: Option<String>,
 }
 
@@ -11843,7 +13384,7 @@ pub struct UpdateLoginProfileRequest {
     pub password: Option<String>,
     /// <p>Allows this new password to be used only once by requiring the specified IAM user to set a new password on next sign-in.</p>
     pub password_reset_required: Option<bool>,
-    /// <p>The name of the user whose password you want to update.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the user whose password you want to update.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
 }
 
@@ -12097,11 +13638,11 @@ impl UpdateSAMLProviderResponseDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateSSHPublicKeyRequest {
-    /// <p>The unique identifier for the SSH public key.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
+    /// <p>The unique identifier for the SSH public key.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub ssh_public_key_id: String,
     /// <p>The status to assign to the SSH public key. <code>Active</code> means that the key can be used for authentication with an AWS CodeCommit repository. <code>Inactive</code> means that the key cannot be used.</p>
     pub status: String,
-    /// <p>The name of the IAM user associated with the SSH public key.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the IAM user associated with the SSH public key.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
 }
 
@@ -12125,11 +13666,11 @@ impl UpdateSSHPublicKeyRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateServerCertificateRequest {
-    /// <p>The new path for the server certificate. Include this only if you are updating the server certificate's path.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
+    /// <p>The new path for the server certificate. Include this only if you are updating the server certificate's path.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub new_path: Option<String>,
-    /// <p>The new name for the server certificate. Include this only if you are updating the server certificate's name. The name of the certificate cannot contain any spaces.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The new name for the server certificate. Include this only if you are updating the server certificate's name. The name of the certificate cannot contain any spaces.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub new_server_certificate_name: Option<String>,
-    /// <p>The name of the server certificate that you want to update.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the server certificate that you want to update.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub server_certificate_name: String,
 }
 
@@ -12160,11 +13701,11 @@ impl UpdateServerCertificateRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateServiceSpecificCredentialRequest {
-    /// <p>The unique identifier of the service-specific credential.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
+    /// <p>The unique identifier of the service-specific credential.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub service_specific_credential_id: String,
     /// <p>The status to be assigned to the service-specific credential.</p>
     pub status: String,
-    /// <p>The name of the IAM user associated with the service-specific credential. If you do not specify this value, then the operation assumes the user whose credentials are used to call the operation.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the IAM user associated with the service-specific credential. If you do not specify this value, then the operation assumes the user whose credentials are used to call the operation.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: Option<String>,
 }
 
@@ -12190,11 +13731,11 @@ impl UpdateServiceSpecificCredentialRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateSigningCertificateRequest {
-    /// <p>The ID of the signing certificate you want to update.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
+    /// <p>The ID of the signing certificate you want to update.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters that can consist of any upper or lowercased letter or digit.</p>
     pub certificate_id: String,
     /// <p> The status you want to assign to the certificate. <code>Active</code> means that the certificate can be used for API calls to AWS <code>Inactive</code> means that the certificate cannot be used.</p>
     pub status: String,
-    /// <p>The name of the IAM user the signing certificate belongs to.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the IAM user the signing certificate belongs to.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: Option<String>,
 }
 
@@ -12220,11 +13761,11 @@ impl UpdateSigningCertificateRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateUserRequest {
-    /// <p>New path for the IAM user. Include this parameter only if you're changing the user's path.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
+    /// <p>New path for the IAM user. Include this parameter only if you're changing the user's path.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p>
     pub new_path: Option<String>,
-    /// <p>New name for the user. Include this parameter only if you're changing the user's name.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>New name for the user. Include this parameter only if you're changing the user's name.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub new_user_name: Option<String>,
-    /// <p>Name of the user to update. If you're changing the name of the user, this is the original user name.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>Name of the user to update. If you're changing the name of the user, this is the original user name.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
 }
 
@@ -12249,9 +13790,9 @@ impl UpdateUserRequestSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UploadSSHPublicKeyRequest {
-    /// <p><p>The SSH public key. The public key must be encoded in ssh-rsa format or PEM format. The miminum bit-length of the public key is 2048 bits. For example, you can generate a 2048-bit key, and the resulting PEM file is 1679 bytes long.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
+    /// <p><p>The SSH public key. The public key must be encoded in ssh-rsa format or PEM format. The minimum bit-length of the public key is 2048 bits. For example, you can generate a 2048-bit key, and the resulting PEM file is 1679 bytes long.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub ssh_public_key_body: String,
-    /// <p>The name of the IAM user to associate the SSH public key with.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the IAM user to associate the SSH public key with.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: String,
 }
 
@@ -12327,11 +13868,11 @@ pub struct UploadServerCertificateRequest {
     pub certificate_body: String,
     /// <p><p>The contents of the certificate chain. This is typically a concatenation of the PEM-encoded public key certificates of the chain.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub certificate_chain: Option<String>,
-    /// <p><p>The path for the server certificate. For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/). This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p> <note> <p> If you are uploading a server certificate specifically for use with Amazon CloudFront distributions, you must specify a path using the <code>path</code> parameter. The path must begin with <code>/cloudfront</code> and must include a trailing slash (for example, <code>/cloudfront/test/</code>).</p> </note></p>
+    /// <p><p>The path for the server certificate. For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>IAM User Guide</i>.</p> <p>This parameter is optional. If it is not included, it defaults to a slash (/). This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of either a forward slash (/) by itself or a string that must begin and end with forward slashes. In addition, it can contain any ASCII character from the ! (\u0021) through the DEL character (\u007F), including most punctuation characters, digits, and upper and lowercased letters.</p> <note> <p> If you are uploading a server certificate specifically for use with Amazon CloudFront distributions, you must specify a path using the <code>path</code> parameter. The path must begin with <code>/cloudfront</code> and must include a trailing slash (for example, <code>/cloudfront/test/</code>).</p> </note></p>
     pub path: Option<String>,
     /// <p><p>The contents of the private key in PEM-encoded format.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub private_key: String,
-    /// <p>The name for the server certificate. Do not include the path in this value. The name of the certificate cannot contain any spaces.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name for the server certificate. Do not include the path in this value. The name of the certificate cannot contain any spaces.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub server_certificate_name: String,
 }
 
@@ -12416,7 +13957,7 @@ impl UploadServerCertificateResponseDeserializer {
 pub struct UploadSigningCertificateRequest {
     /// <p><p>The contents of the signing certificate.</p> <p>The <a href="http://wikipedia.org/wiki/regex">regex pattern</a> used to validate this parameter is a string of characters consisting of the following:</p> <ul> <li> <p>Any printable ASCII character ranging from the space character (\u0020) through the end of the ASCII character range</p> </li> <li> <p>The printable characters in the Basic Latin and Latin-1 Supplement character set (through \u00FF)</p> </li> <li> <p>The special characters tab (\u0009), line feed (\u000A), and carriage return (\u000D)</p> </li> </ul></p>
     pub certificate_body: String,
-    /// <p>The name of the user the signing certificate is for.</p> <p>This parameter allows (per its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
+    /// <p>The name of the user the signing certificate is for.</p> <p>This parameter allows (through its <a href="http://wikipedia.org/wiki/regex">regex pattern</a>) a string of characters consisting of upper and lowercase alphanumeric characters with no spaces. You can also include any of the following characters: _+=,.@-</p>
     pub user_name: Option<String>,
 }
 
@@ -12493,12 +14034,14 @@ pub struct User {
     pub arn: String,
     /// <p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when the user was created.</p>
     pub create_date: String,
-    /// <p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when the user's password was last used to sign in to an AWS website. For a list of AWS websites that capture a user's last sign-in time, see the <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/credential-reports.html">Credential Reports</a> topic in the <i>Using IAM</i> guide. If a password is used more than once in a five-minute span, only the first use is returned in this field. If the field is null (no value) then it indicates that they never signed in with a password. This can be because:</p> <ul> <li> <p>The user never had a password.</p> </li> <li> <p>A password exists but has not been used since IAM started tracking this information on October 20th, 2014.</p> </li> </ul> <p>A null does not mean that the user <i>never</i> had a password. Also, if the user does not currently have a password, but had one in the past, then this field contains the date and time the most recent password was used.</p> <p>This value is returned only in the <a>GetUser</a> and <a>ListUsers</a> operations. </p>
+    /// <p>The date and time, in <a href="http://www.iso.org/iso/iso8601">ISO 8601 date-time format</a>, when the user's password was last used to sign in to an AWS website. For a list of AWS websites that capture a user's last sign-in time, see the <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/credential-reports.html">Credential Reports</a> topic in the <i>Using IAM</i> guide. If a password is used more than once in a five-minute span, only the first use is returned in this field. If the field is null (no value), then it indicates that they never signed in with a password. This can be because:</p> <ul> <li> <p>The user never had a password.</p> </li> <li> <p>A password exists but has not been used since IAM started tracking this information on October 20, 2014.</p> </li> </ul> <p>A null valuedoes not mean that the user <i>never</i> had a password. Also, if the user does not currently have a password, but had one in the past, then this field contains the date and time the most recent password was used.</p> <p>This value is returned only in the <a>GetUser</a> and <a>ListUsers</a> operations. </p>
     pub password_last_used: Option<String>,
     /// <p>The path to the user. For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>
     pub path: String,
-    /// <p>The ARN of the policy used to set the permissions boundary for the user.</p> <p>For more information about permissions boundaries, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html">Permissions Boundaries for IAM Identities </a> in the <i>IAM User Guide</i>.</p>
+    /// <p>The ARN of the policy used to set the permissions boundary for the user.</p> <p>For more information about permissions boundaries, see <a href="IAM/latest/UserGuide/access_policies_boundaries.html">Permissions Boundaries for IAM Identities </a> in the <i>IAM User Guide</i>.</p>
     pub permissions_boundary: Option<AttachedPermissionsBoundary>,
+    /// <p>A list of tags that are associated with the specified user. For more information about tagging, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
+    pub tags: Option<Vec<Tag>>,
     /// <p>The stable and unique string identifying the user. For more information about IDs, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>
     pub user_id: String,
     /// <p>The friendly name identifying the user.</p>
@@ -12549,6 +14092,16 @@ impl UserDeserializer {
                                 stack,
                             )?);
                     }
+                    "Tags" => {
+                        obj.tags = match obj.tags {
+                            Some(ref mut existing) => {
+                                existing
+                                    .extend(TagListTypeDeserializer::deserialize("Tags", stack)?);
+                                Some(existing.to_vec())
+                            }
+                            None => Some(TagListTypeDeserializer::deserialize("Tags", stack)?),
+                        };
+                    }
                     "UserId" => {
                         obj.user_id = IdTypeDeserializer::deserialize("UserId", stack)?;
                     }
@@ -12581,8 +14134,10 @@ pub struct UserDetail {
     pub group_list: Option<Vec<String>>,
     /// <p>The path to the user. For more information about paths, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>
     pub path: Option<String>,
-    /// <p>The ARN of the policy used to set the permissions boundary for the user.</p> <p>For more information about permissions boundaries, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_boundaries.html">Permissions Boundaries for IAM Identities </a> in the <i>IAM User Guide</i>.</p>
+    /// <p>The ARN of the policy used to set the permissions boundary for the user.</p> <p>For more information about permissions boundaries, see <a href="IAM/latest/UserGuide/access_policies_boundaries.html">Permissions Boundaries for IAM Identities </a> in the <i>IAM User Guide</i>.</p>
     pub permissions_boundary: Option<AttachedPermissionsBoundary>,
+    /// <p>A list of tags that are associated with the specified user. For more information about tagging, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
+    pub tags: Option<Vec<Tag>>,
     /// <p>The stable and unique string identifying the user. For more information about IDs, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_Identifiers.html">IAM Identifiers</a> in the <i>Using IAM</i> guide.</p>
     pub user_id: Option<String>,
     /// <p>The friendly name identifying the user.</p>
@@ -12659,6 +14214,16 @@ impl UserDetailDeserializer {
                                 "PermissionsBoundary",
                                 stack,
                             )?);
+                    }
+                    "Tags" => {
+                        obj.tags = match obj.tags {
+                            Some(ref mut existing) => {
+                                existing
+                                    .extend(TagListTypeDeserializer::deserialize("Tags", stack)?);
+                                Some(existing.to_vec())
+                            }
+                            None => Some(TagListTypeDeserializer::deserialize("Tags", stack)?),
+                        };
                     }
                     "UserId" => {
                         obj.user_id = Some(IdTypeDeserializer::deserialize("UserId", stack)?);
@@ -12793,11 +14358,11 @@ impl UserNameTypeDeserializer {
 /// <p>Contains information about a virtual MFA device.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct VirtualMFADevice {
-    /// <p> The Base32 seed defined as specified in <a href="https://tools.ietf.org/html/rfc3548.txt">RFC3548</a>. The <code>Base32StringSeed</code> is Base64-encoded. </p>
+    /// <p> The base32 seed defined as specified in <a href="https://tools.ietf.org/html/rfc3548.txt">RFC3548</a>. The <code>Base32StringSeed</code> is base64-encoded. </p>
     pub base_32_string_seed: Option<Vec<u8>>,
     /// <p>The date and time on which the virtual MFA device was enabled.</p>
     pub enable_date: Option<String>,
-    /// <p> A QR code PNG image that encodes <code>otpauth://totp/$virtualMFADeviceName@$AccountName?secret=$Base32String</code> where <code>$virtualMFADeviceName</code> is one of the create call arguments, <code>AccountName</code> is the user name if set (otherwise, the account ID otherwise), and <code>Base32String</code> is the seed in Base32 format. The <code>Base32String</code> value is Base64-encoded. </p>
+    /// <p> A QR code PNG image that encodes <code>otpauth://totp/$virtualMFADeviceName@$AccountName?secret=$Base32String</code> where <code>$virtualMFADeviceName</code> is one of the create call arguments. <code>AccountName</code> is the user name if set (otherwise, the account ID otherwise), and <code>Base32String</code> is the seed in base32 format. The <code>Base32String</code> value is base64-encoded. </p>
     pub qr_code_png: Option<Vec<u8>>,
     /// <p>The serial number associated with <code>VirtualMFADevice</code>.</p>
     pub serial_number: String,
@@ -12909,7 +14474,7 @@ pub enum AddClientIDToOpenIDConnectProviderError {
     InvalidInput(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -13019,7 +14584,7 @@ pub enum AddRoleToInstanceProfileError {
     EntityAlreadyExists(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -13135,7 +14700,7 @@ impl Error for AddRoleToInstanceProfileError {
 pub enum AddUserToGroupError {
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -13235,7 +14800,7 @@ pub enum AttachGroupPolicyError {
     InvalidInput(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request failed because AWS service role policies can only be attached to the service-linked role for that service.</p>
     PolicyNotAttachable(String),
@@ -13353,7 +14918,7 @@ pub enum AttachRolePolicyError {
     InvalidInput(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request failed because AWS service role policies can only be attached to the service-linked role for that service.</p>
     PolicyNotAttachable(String),
@@ -13477,7 +15042,7 @@ pub enum AttachUserPolicyError {
     InvalidInput(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request failed because AWS service role policies can only be attached to the service-linked role for that service.</p>
     PolicyNotAttachable(String),
@@ -13595,7 +15160,7 @@ pub enum ChangePasswordError {
     InvalidUserType(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request was rejected because the provided password did not meet the requirements imposed by the account password policy.</p>
     PasswordPolicyViolation(String),
@@ -13713,7 +15278,7 @@ impl Error for ChangePasswordError {
 pub enum CreateAccessKeyError {
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -13917,7 +15482,7 @@ pub enum CreateGroupError {
     EntityAlreadyExists(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -14121,7 +15686,7 @@ pub enum CreateLoginProfileError {
     EntityAlreadyExists(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request was rejected because the provided password did not meet the requirements imposed by the account password policy.</p>
     PasswordPolicyViolation(String),
@@ -14461,7 +16026,7 @@ pub enum CreatePolicyVersionError {
     LimitExceeded(String),
     /// <p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
     MalformedPolicyDocument(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -14573,6 +16138,8 @@ impl Error for CreatePolicyVersionError {
 /// Errors returned by CreateRole
 #[derive(Debug, PartialEq)]
 pub enum CreateRoleError {
+    /// <p>The request was rejected because multiple requests to change this object were submitted simultaneously. Wait a few minutes and submit your request again.</p>
+    ConcurrentModification(String),
     /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
     EntityAlreadyExists(String),
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
@@ -14603,6 +16170,11 @@ impl CreateRoleError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
+                    "ConcurrentModification" => {
+                        return CreateRoleError::ConcurrentModification(String::from(
+                            parsed_error.message,
+                        ));
+                    }
                     "EntityAlreadyExists" => {
                         return CreateRoleError::EntityAlreadyExists(String::from(
                             parsed_error.message,
@@ -14667,6 +16239,7 @@ impl fmt::Display for CreateRoleError {
 impl Error for CreateRoleError {
     fn description(&self) -> &str {
         match *self {
+            CreateRoleError::ConcurrentModification(ref cause) => cause,
             CreateRoleError::EntityAlreadyExists(ref cause) => cause,
             CreateRoleError::InvalidInput(ref cause) => cause,
             CreateRoleError::LimitExceeded(ref cause) => cause,
@@ -14797,7 +16370,7 @@ pub enum CreateServiceLinkedRoleError {
     InvalidInput(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -14905,7 +16478,7 @@ impl Error for CreateServiceLinkedRoleError {
 pub enum CreateServiceSpecificCredentialError {
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The specified service does not support service-specific credentials.</p>
     ServiceNotSupported(String),
@@ -15005,11 +16578,15 @@ impl Error for CreateServiceSpecificCredentialError {
 /// Errors returned by CreateUser
 #[derive(Debug, PartialEq)]
 pub enum CreateUserError {
+    /// <p>The request was rejected because multiple requests to change this object were submitted simultaneously. Wait a few minutes and submit your request again.</p>
+    ConcurrentModification(String),
     /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
     EntityAlreadyExists(String),
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    InvalidInput(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -15033,10 +16610,18 @@ impl CreateUserError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
+                    "ConcurrentModification" => {
+                        return CreateUserError::ConcurrentModification(String::from(
+                            parsed_error.message,
+                        ));
+                    }
                     "EntityAlreadyExists" => {
                         return CreateUserError::EntityAlreadyExists(String::from(
                             parsed_error.message,
                         ));
+                    }
+                    "InvalidInput" => {
+                        return CreateUserError::InvalidInput(String::from(parsed_error.message));
                     }
                     "LimitExceeded" => {
                         return CreateUserError::LimitExceeded(String::from(parsed_error.message));
@@ -15092,7 +16677,9 @@ impl fmt::Display for CreateUserError {
 impl Error for CreateUserError {
     fn description(&self) -> &str {
         match *self {
+            CreateUserError::ConcurrentModification(ref cause) => cause,
             CreateUserError::EntityAlreadyExists(ref cause) => cause,
+            CreateUserError::InvalidInput(ref cause) => cause,
             CreateUserError::LimitExceeded(ref cause) => cause,
             CreateUserError::NoSuchEntity(ref cause) => cause,
             CreateUserError::ServiceFailure(ref cause) => cause,
@@ -15213,7 +16800,7 @@ pub enum DeactivateMFADeviceError {
     EntityTemporarilyUnmodifiable(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -15321,7 +16908,7 @@ impl Error for DeactivateMFADeviceError {
 pub enum DeleteAccessKeyError {
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -15421,7 +17008,7 @@ impl Error for DeleteAccessKeyError {
 pub enum DeleteAccountAliasError {
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -15523,7 +17110,7 @@ impl Error for DeleteAccountAliasError {
 pub enum DeleteAccountPasswordPolicyError {
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -15627,7 +17214,7 @@ pub enum DeleteGroupError {
     DeleteConflict(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -15725,7 +17312,7 @@ impl Error for DeleteGroupError {
 pub enum DeleteGroupPolicyError {
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -15829,7 +17416,7 @@ pub enum DeleteInstanceProfileError {
     DeleteConflict(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -15939,7 +17526,7 @@ pub enum DeleteLoginProfileError {
     EntityTemporarilyUnmodifiable(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -16047,7 +17634,7 @@ impl Error for DeleteLoginProfileError {
 pub enum DeleteOpenIDConnectProviderError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -16153,7 +17740,7 @@ pub enum DeletePolicyError {
     InvalidInput(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -16259,7 +17846,7 @@ pub enum DeletePolicyVersionError {
     InvalidInput(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -16371,11 +17958,13 @@ impl Error for DeletePolicyVersionError {
 /// Errors returned by DeleteRole
 #[derive(Debug, PartialEq)]
 pub enum DeleteRoleError {
+    /// <p>The request was rejected because multiple requests to change this object were submitted simultaneously. Wait a few minutes and submit your request again.</p>
+    ConcurrentModification(String),
     /// <p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
     DeleteConflict(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -16401,6 +17990,11 @@ impl DeleteRoleError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
+                    "ConcurrentModification" => {
+                        return DeleteRoleError::ConcurrentModification(String::from(
+                            parsed_error.message,
+                        ));
+                    }
                     "DeleteConflict" => {
                         return DeleteRoleError::DeleteConflict(String::from(parsed_error.message));
                     }
@@ -16463,6 +18057,7 @@ impl fmt::Display for DeleteRoleError {
 impl Error for DeleteRoleError {
     fn description(&self) -> &str {
         match *self {
+            DeleteRoleError::ConcurrentModification(ref cause) => cause,
             DeleteRoleError::DeleteConflict(ref cause) => cause,
             DeleteRoleError::LimitExceeded(ref cause) => cause,
             DeleteRoleError::NoSuchEntity(ref cause) => cause,
@@ -16479,7 +18074,7 @@ impl Error for DeleteRoleError {
 /// Errors returned by DeleteRolePermissionsBoundary
 #[derive(Debug, PartialEq)]
 pub enum DeleteRolePermissionsBoundaryError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -16583,7 +18178,7 @@ impl Error for DeleteRolePermissionsBoundaryError {
 pub enum DeleteRolePolicyError {
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -16693,7 +18288,7 @@ pub enum DeleteSAMLProviderError {
     InvalidInput(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -16799,7 +18394,7 @@ impl Error for DeleteSAMLProviderError {
 /// Errors returned by DeleteSSHPublicKey
 #[derive(Debug, PartialEq)]
 pub enum DeleteSSHPublicKeyError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -16889,7 +18484,7 @@ pub enum DeleteServerCertificateError {
     DeleteConflict(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -16997,7 +18592,7 @@ impl Error for DeleteServerCertificateError {
 pub enum DeleteServiceLinkedRoleError {
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -17097,7 +18692,7 @@ impl Error for DeleteServiceLinkedRoleError {
 /// Errors returned by DeleteServiceSpecificCredential
 #[derive(Debug, PartialEq)]
 pub enum DeleteServiceSpecificCredentialError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -17185,7 +18780,7 @@ impl Error for DeleteServiceSpecificCredentialError {
 pub enum DeleteSigningCertificateError {
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -17285,11 +18880,13 @@ impl Error for DeleteSigningCertificateError {
 /// Errors returned by DeleteUser
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserError {
+    /// <p>The request was rejected because multiple requests to change this object were submitted simultaneously. Wait a few minutes and submit your request again.</p>
+    ConcurrentModification(String),
     /// <p>The request was rejected because it attempted to delete a resource that has attached subordinate entities. The error message describes these entities.</p>
     DeleteConflict(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -17313,6 +18910,11 @@ impl DeleteUserError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
+                    "ConcurrentModification" => {
+                        return DeleteUserError::ConcurrentModification(String::from(
+                            parsed_error.message,
+                        ));
+                    }
                     "DeleteConflict" => {
                         return DeleteUserError::DeleteConflict(String::from(parsed_error.message));
                     }
@@ -17370,6 +18972,7 @@ impl fmt::Display for DeleteUserError {
 impl Error for DeleteUserError {
     fn description(&self) -> &str {
         match *self {
+            DeleteUserError::ConcurrentModification(ref cause) => cause,
             DeleteUserError::DeleteConflict(ref cause) => cause,
             DeleteUserError::LimitExceeded(ref cause) => cause,
             DeleteUserError::NoSuchEntity(ref cause) => cause,
@@ -17385,7 +18988,7 @@ impl Error for DeleteUserError {
 /// Errors returned by DeleteUserPermissionsBoundary
 #[derive(Debug, PartialEq)]
 pub enum DeleteUserPermissionsBoundaryError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -17481,7 +19084,7 @@ impl Error for DeleteUserPermissionsBoundaryError {
 pub enum DeleteUserPolicyError {
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -17583,7 +19186,7 @@ pub enum DeleteVirtualMFADeviceError {
     DeleteConflict(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -17693,7 +19296,7 @@ pub enum DetachGroupPolicyError {
     InvalidInput(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -17803,7 +19406,7 @@ pub enum DetachRolePolicyError {
     InvalidInput(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -17919,7 +19522,7 @@ pub enum DetachUserPolicyError {
     InvalidInput(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -18031,7 +19634,7 @@ pub enum EnableMFADeviceError {
     InvalidAuthenticationCode(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -18238,10 +19841,104 @@ impl Error for GenerateCredentialReportError {
         }
     }
 }
+/// Errors returned by GenerateServiceLastAccessedDetails
+#[derive(Debug, PartialEq)]
+pub enum GenerateServiceLastAccessedDetailsError {
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    InvalidInput(String),
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
+    NoSuchEntity(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GenerateServiceLastAccessedDetailsError {
+    pub fn from_response(res: BufferedHttpResponse) -> GenerateServiceLastAccessedDetailsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return GenerateServiceLastAccessedDetailsError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    "NoSuchEntity" => {
+                        return GenerateServiceLastAccessedDetailsError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    _ => {}
+                }
+            }
+        }
+        GenerateServiceLastAccessedDetailsError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for GenerateServiceLastAccessedDetailsError {
+    fn from(err: XmlParseError) -> GenerateServiceLastAccessedDetailsError {
+        let XmlParseError(message) = err;
+        GenerateServiceLastAccessedDetailsError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for GenerateServiceLastAccessedDetailsError {
+    fn from(err: CredentialsError) -> GenerateServiceLastAccessedDetailsError {
+        GenerateServiceLastAccessedDetailsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GenerateServiceLastAccessedDetailsError {
+    fn from(err: HttpDispatchError) -> GenerateServiceLastAccessedDetailsError {
+        GenerateServiceLastAccessedDetailsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GenerateServiceLastAccessedDetailsError {
+    fn from(err: io::Error) -> GenerateServiceLastAccessedDetailsError {
+        GenerateServiceLastAccessedDetailsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GenerateServiceLastAccessedDetailsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GenerateServiceLastAccessedDetailsError {
+    fn description(&self) -> &str {
+        match *self {
+            GenerateServiceLastAccessedDetailsError::InvalidInput(ref cause) => cause,
+            GenerateServiceLastAccessedDetailsError::NoSuchEntity(ref cause) => cause,
+            GenerateServiceLastAccessedDetailsError::Validation(ref cause) => cause,
+            GenerateServiceLastAccessedDetailsError::Credentials(ref err) => err.description(),
+            GenerateServiceLastAccessedDetailsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GenerateServiceLastAccessedDetailsError::ParseError(ref cause) => cause,
+            GenerateServiceLastAccessedDetailsError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by GetAccessKeyLastUsed
 #[derive(Debug, PartialEq)]
 pub enum GetAccessKeyLastUsedError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -18413,7 +20110,7 @@ impl Error for GetAccountAuthorizationDetailsError {
 /// Errors returned by GetAccountPasswordPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetAccountPasswordPolicyError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -18681,7 +20378,7 @@ impl Error for GetContextKeysForCustomPolicyError {
 pub enum GetContextKeysForPrincipalPolicyError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -18883,7 +20580,7 @@ impl Error for GetCredentialReportError {
 /// Errors returned by GetGroup
 #[derive(Debug, PartialEq)]
 pub enum GetGroupError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -18971,7 +20668,7 @@ impl Error for GetGroupError {
 /// Errors returned by GetGroupPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetGroupPolicyError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -19061,7 +20758,7 @@ impl Error for GetGroupPolicyError {
 /// Errors returned by GetInstanceProfile
 #[derive(Debug, PartialEq)]
 pub enum GetInstanceProfileError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -19155,7 +20852,7 @@ impl Error for GetInstanceProfileError {
 /// Errors returned by GetLoginProfile
 #[derive(Debug, PartialEq)]
 pub enum GetLoginProfileError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -19249,7 +20946,7 @@ impl Error for GetLoginProfileError {
 pub enum GetOpenIDConnectProviderError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -19351,7 +21048,7 @@ impl Error for GetOpenIDConnectProviderError {
 pub enum GetPolicyError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -19445,7 +21142,7 @@ impl Error for GetPolicyError {
 pub enum GetPolicyVersionError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -19543,7 +21240,7 @@ impl Error for GetPolicyVersionError {
 /// Errors returned by GetRole
 #[derive(Debug, PartialEq)]
 pub enum GetRoleError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -19631,7 +21328,7 @@ impl Error for GetRoleError {
 /// Errors returned by GetRolePolicy
 #[derive(Debug, PartialEq)]
 pub enum GetRolePolicyError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -19723,7 +21420,7 @@ impl Error for GetRolePolicyError {
 pub enum GetSAMLProviderError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -19821,7 +21518,7 @@ impl Error for GetSAMLProviderError {
 /// Errors returned by GetSSHPublicKey
 #[derive(Debug, PartialEq)]
 pub enum GetSSHPublicKeyError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request was rejected because the public key encoding format is unsupported or unrecognized.</p>
     UnrecognizedPublicKeyEncoding(String),
@@ -19913,7 +21610,7 @@ impl Error for GetSSHPublicKeyError {
 /// Errors returned by GetServerCertificate
 #[derive(Debug, PartialEq)]
 pub enum GetServerCertificateError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -20004,12 +21701,204 @@ impl Error for GetServerCertificateError {
         }
     }
 }
+/// Errors returned by GetServiceLastAccessedDetails
+#[derive(Debug, PartialEq)]
+pub enum GetServiceLastAccessedDetailsError {
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    InvalidInput(String),
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
+    NoSuchEntity(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetServiceLastAccessedDetailsError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetServiceLastAccessedDetailsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return GetServiceLastAccessedDetailsError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    "NoSuchEntity" => {
+                        return GetServiceLastAccessedDetailsError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    _ => {}
+                }
+            }
+        }
+        GetServiceLastAccessedDetailsError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for GetServiceLastAccessedDetailsError {
+    fn from(err: XmlParseError) -> GetServiceLastAccessedDetailsError {
+        let XmlParseError(message) = err;
+        GetServiceLastAccessedDetailsError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for GetServiceLastAccessedDetailsError {
+    fn from(err: CredentialsError) -> GetServiceLastAccessedDetailsError {
+        GetServiceLastAccessedDetailsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetServiceLastAccessedDetailsError {
+    fn from(err: HttpDispatchError) -> GetServiceLastAccessedDetailsError {
+        GetServiceLastAccessedDetailsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetServiceLastAccessedDetailsError {
+    fn from(err: io::Error) -> GetServiceLastAccessedDetailsError {
+        GetServiceLastAccessedDetailsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetServiceLastAccessedDetailsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetServiceLastAccessedDetailsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetServiceLastAccessedDetailsError::InvalidInput(ref cause) => cause,
+            GetServiceLastAccessedDetailsError::NoSuchEntity(ref cause) => cause,
+            GetServiceLastAccessedDetailsError::Validation(ref cause) => cause,
+            GetServiceLastAccessedDetailsError::Credentials(ref err) => err.description(),
+            GetServiceLastAccessedDetailsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetServiceLastAccessedDetailsError::ParseError(ref cause) => cause,
+            GetServiceLastAccessedDetailsError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetServiceLastAccessedDetailsWithEntities
+#[derive(Debug, PartialEq)]
+pub enum GetServiceLastAccessedDetailsWithEntitiesError {
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    InvalidInput(String),
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
+    NoSuchEntity(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetServiceLastAccessedDetailsWithEntitiesError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> GetServiceLastAccessedDetailsWithEntitiesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return GetServiceLastAccessedDetailsWithEntitiesError::InvalidInput(
+                            String::from(parsed_error.message),
+                        );
+                    }
+                    "NoSuchEntity" => {
+                        return GetServiceLastAccessedDetailsWithEntitiesError::NoSuchEntity(
+                            String::from(parsed_error.message),
+                        );
+                    }
+                    _ => {}
+                }
+            }
+        }
+        GetServiceLastAccessedDetailsWithEntitiesError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for GetServiceLastAccessedDetailsWithEntitiesError {
+    fn from(err: XmlParseError) -> GetServiceLastAccessedDetailsWithEntitiesError {
+        let XmlParseError(message) = err;
+        GetServiceLastAccessedDetailsWithEntitiesError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for GetServiceLastAccessedDetailsWithEntitiesError {
+    fn from(err: CredentialsError) -> GetServiceLastAccessedDetailsWithEntitiesError {
+        GetServiceLastAccessedDetailsWithEntitiesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetServiceLastAccessedDetailsWithEntitiesError {
+    fn from(err: HttpDispatchError) -> GetServiceLastAccessedDetailsWithEntitiesError {
+        GetServiceLastAccessedDetailsWithEntitiesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetServiceLastAccessedDetailsWithEntitiesError {
+    fn from(err: io::Error) -> GetServiceLastAccessedDetailsWithEntitiesError {
+        GetServiceLastAccessedDetailsWithEntitiesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetServiceLastAccessedDetailsWithEntitiesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetServiceLastAccessedDetailsWithEntitiesError {
+    fn description(&self) -> &str {
+        match *self {
+            GetServiceLastAccessedDetailsWithEntitiesError::InvalidInput(ref cause) => cause,
+            GetServiceLastAccessedDetailsWithEntitiesError::NoSuchEntity(ref cause) => cause,
+            GetServiceLastAccessedDetailsWithEntitiesError::Validation(ref cause) => cause,
+            GetServiceLastAccessedDetailsWithEntitiesError::Credentials(ref err) => {
+                err.description()
+            }
+            GetServiceLastAccessedDetailsWithEntitiesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetServiceLastAccessedDetailsWithEntitiesError::ParseError(ref cause) => cause,
+            GetServiceLastAccessedDetailsWithEntitiesError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by GetServiceLinkedRoleDeletionStatus
 #[derive(Debug, PartialEq)]
 pub enum GetServiceLinkedRoleDeletionStatusError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -20109,7 +21998,7 @@ impl Error for GetServiceLinkedRoleDeletionStatusError {
 /// Errors returned by GetUser
 #[derive(Debug, PartialEq)]
 pub enum GetUserError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -20197,7 +22086,7 @@ impl Error for GetUserError {
 /// Errors returned by GetUserPolicy
 #[derive(Debug, PartialEq)]
 pub enum GetUserPolicyError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -20287,7 +22176,7 @@ impl Error for GetUserPolicyError {
 /// Errors returned by ListAccessKeys
 #[derive(Debug, PartialEq)]
 pub enum ListAccessKeysError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -20465,7 +22354,7 @@ impl Error for ListAccountAliasesError {
 pub enum ListAttachedGroupPoliciesError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -20567,7 +22456,7 @@ impl Error for ListAttachedGroupPoliciesError {
 pub enum ListAttachedRolePoliciesError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -20669,7 +22558,7 @@ impl Error for ListAttachedRolePoliciesError {
 pub enum ListAttachedUserPoliciesError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -20771,7 +22660,7 @@ impl Error for ListAttachedUserPoliciesError {
 pub enum ListEntitiesForPolicyError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -20871,7 +22760,7 @@ impl Error for ListEntitiesForPolicyError {
 /// Errors returned by ListGroupPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListGroupPoliciesError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -21047,7 +22936,7 @@ impl Error for ListGroupsError {
 /// Errors returned by ListGroupsForUser
 #[derive(Debug, PartialEq)]
 pub enum ListGroupsForUserError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -21227,7 +23116,7 @@ impl Error for ListInstanceProfilesError {
 /// Errors returned by ListInstanceProfilesForRole
 #[derive(Debug, PartialEq)]
 pub enum ListInstanceProfilesForRoleError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -21321,7 +23210,7 @@ impl Error for ListInstanceProfilesForRoleError {
 /// Errors returned by ListMFADevices
 #[derive(Debug, PartialEq)]
 pub enum ListMFADevicesError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -21576,12 +23465,106 @@ impl Error for ListPoliciesError {
         }
     }
 }
+/// Errors returned by ListPoliciesGrantingServiceAccess
+#[derive(Debug, PartialEq)]
+pub enum ListPoliciesGrantingServiceAccessError {
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    InvalidInput(String),
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
+    NoSuchEntity(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListPoliciesGrantingServiceAccessError {
+    pub fn from_response(res: BufferedHttpResponse) -> ListPoliciesGrantingServiceAccessError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidInput" => {
+                        return ListPoliciesGrantingServiceAccessError::InvalidInput(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    "NoSuchEntity" => {
+                        return ListPoliciesGrantingServiceAccessError::NoSuchEntity(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    _ => {}
+                }
+            }
+        }
+        ListPoliciesGrantingServiceAccessError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for ListPoliciesGrantingServiceAccessError {
+    fn from(err: XmlParseError) -> ListPoliciesGrantingServiceAccessError {
+        let XmlParseError(message) = err;
+        ListPoliciesGrantingServiceAccessError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for ListPoliciesGrantingServiceAccessError {
+    fn from(err: CredentialsError) -> ListPoliciesGrantingServiceAccessError {
+        ListPoliciesGrantingServiceAccessError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListPoliciesGrantingServiceAccessError {
+    fn from(err: HttpDispatchError) -> ListPoliciesGrantingServiceAccessError {
+        ListPoliciesGrantingServiceAccessError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListPoliciesGrantingServiceAccessError {
+    fn from(err: io::Error) -> ListPoliciesGrantingServiceAccessError {
+        ListPoliciesGrantingServiceAccessError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListPoliciesGrantingServiceAccessError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListPoliciesGrantingServiceAccessError {
+    fn description(&self) -> &str {
+        match *self {
+            ListPoliciesGrantingServiceAccessError::InvalidInput(ref cause) => cause,
+            ListPoliciesGrantingServiceAccessError::NoSuchEntity(ref cause) => cause,
+            ListPoliciesGrantingServiceAccessError::Validation(ref cause) => cause,
+            ListPoliciesGrantingServiceAccessError::Credentials(ref err) => err.description(),
+            ListPoliciesGrantingServiceAccessError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListPoliciesGrantingServiceAccessError::ParseError(ref cause) => cause,
+            ListPoliciesGrantingServiceAccessError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by ListPolicyVersions
 #[derive(Debug, PartialEq)]
 pub enum ListPolicyVersionsError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -21681,7 +23664,7 @@ impl Error for ListPolicyVersionsError {
 /// Errors returned by ListRolePolicies
 #[derive(Debug, PartialEq)]
 pub enum ListRolePoliciesError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -21767,6 +23750,94 @@ impl Error for ListRolePoliciesError {
             ListRolePoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             ListRolePoliciesError::ParseError(ref cause) => cause,
             ListRolePoliciesError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by ListRoleTags
+#[derive(Debug, PartialEq)]
+pub enum ListRoleTagsError {
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
+    NoSuchEntity(String),
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
+    ServiceFailure(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListRoleTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> ListRoleTagsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return ListRoleTagsError::NoSuchEntity(String::from(parsed_error.message));
+                    }
+                    "ServiceFailure" => {
+                        return ListRoleTagsError::ServiceFailure(String::from(parsed_error.message));
+                    }
+                    _ => {}
+                }
+            }
+        }
+        ListRoleTagsError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for ListRoleTagsError {
+    fn from(err: XmlParseError) -> ListRoleTagsError {
+        let XmlParseError(message) = err;
+        ListRoleTagsError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for ListRoleTagsError {
+    fn from(err: CredentialsError) -> ListRoleTagsError {
+        ListRoleTagsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListRoleTagsError {
+    fn from(err: HttpDispatchError) -> ListRoleTagsError {
+        ListRoleTagsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListRoleTagsError {
+    fn from(err: io::Error) -> ListRoleTagsError {
+        ListRoleTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListRoleTagsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListRoleTagsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListRoleTagsError::NoSuchEntity(ref cause) => cause,
+            ListRoleTagsError::ServiceFailure(ref cause) => cause,
+            ListRoleTagsError::Validation(ref cause) => cause,
+            ListRoleTagsError::Credentials(ref err) => err.description(),
+            ListRoleTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ListRoleTagsError::ParseError(ref cause) => cause,
+            ListRoleTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21941,7 +24012,7 @@ impl Error for ListSAMLProvidersError {
 /// Errors returned by ListSSHPublicKeys
 #[derive(Debug, PartialEq)]
 pub enum ListSSHPublicKeysError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -22113,7 +24184,7 @@ impl Error for ListServerCertificatesError {
 /// Errors returned by ListServiceSpecificCredentials
 #[derive(Debug, PartialEq)]
 pub enum ListServiceSpecificCredentialsError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The specified service does not support service-specific credentials.</p>
     ServiceNotSupported(String),
@@ -22207,7 +24278,7 @@ impl Error for ListServiceSpecificCredentialsError {
 /// Errors returned by ListSigningCertificates
 #[derive(Debug, PartialEq)]
 pub enum ListSigningCertificatesError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -22301,7 +24372,7 @@ impl Error for ListSigningCertificatesError {
 /// Errors returned by ListUserPolicies
 #[derive(Debug, PartialEq)]
 pub enum ListUserPoliciesError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -22387,6 +24458,94 @@ impl Error for ListUserPoliciesError {
             ListUserPoliciesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             ListUserPoliciesError::ParseError(ref cause) => cause,
             ListUserPoliciesError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by ListUserTags
+#[derive(Debug, PartialEq)]
+pub enum ListUserTagsError {
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
+    NoSuchEntity(String),
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
+    ServiceFailure(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListUserTagsError {
+    pub fn from_response(res: BufferedHttpResponse) -> ListUserTagsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "NoSuchEntity" => {
+                        return ListUserTagsError::NoSuchEntity(String::from(parsed_error.message));
+                    }
+                    "ServiceFailure" => {
+                        return ListUserTagsError::ServiceFailure(String::from(parsed_error.message));
+                    }
+                    _ => {}
+                }
+            }
+        }
+        ListUserTagsError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for ListUserTagsError {
+    fn from(err: XmlParseError) -> ListUserTagsError {
+        let XmlParseError(message) = err;
+        ListUserTagsError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for ListUserTagsError {
+    fn from(err: CredentialsError) -> ListUserTagsError {
+        ListUserTagsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListUserTagsError {
+    fn from(err: HttpDispatchError) -> ListUserTagsError {
+        ListUserTagsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListUserTagsError {
+    fn from(err: io::Error) -> ListUserTagsError {
+        ListUserTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListUserTagsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListUserTagsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListUserTagsError::NoSuchEntity(ref cause) => cause,
+            ListUserTagsError::ServiceFailure(ref cause) => cause,
+            ListUserTagsError::Validation(ref cause) => cause,
+            ListUserTagsError::Credentials(ref err) => err.description(),
+            ListUserTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ListUserTagsError::ParseError(ref cause) => cause,
+            ListUserTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22557,7 +24716,7 @@ pub enum PutGroupPolicyError {
     LimitExceeded(String),
     /// <p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
     MalformedPolicyDocument(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -22661,7 +24820,7 @@ impl Error for PutGroupPolicyError {
 pub enum PutRolePermissionsBoundaryError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request failed because AWS service role policies can only be attached to the service-linked role for that service.</p>
     PolicyNotAttachable(String),
@@ -22781,7 +24940,7 @@ pub enum PutRolePolicyError {
     LimitExceeded(String),
     /// <p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
     MalformedPolicyDocument(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -22891,7 +25050,7 @@ impl Error for PutRolePolicyError {
 pub enum PutUserPermissionsBoundaryError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request failed because AWS service role policies can only be attached to the service-linked role for that service.</p>
     PolicyNotAttachable(String),
@@ -23003,7 +25162,7 @@ pub enum PutUserPolicyError {
     LimitExceeded(String),
     /// <p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
     MalformedPolicyDocument(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -23105,7 +25264,7 @@ impl Error for PutUserPolicyError {
 pub enum RemoveClientIDFromOpenIDConnectProviderError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -23209,7 +25368,7 @@ impl Error for RemoveClientIDFromOpenIDConnectProviderError {
 pub enum RemoveRoleFromInstanceProfileError {
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -23319,7 +25478,7 @@ impl Error for RemoveRoleFromInstanceProfileError {
 pub enum RemoveUserFromGroupError {
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -23419,7 +25578,7 @@ impl Error for RemoveUserFromGroupError {
 /// Errors returned by ResetServiceSpecificCredential
 #[derive(Debug, PartialEq)]
 pub enum ResetServiceSpecificCredentialError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -23509,7 +25668,7 @@ pub enum ResyncMFADeviceError {
     InvalidAuthenticationCode(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -23617,7 +25776,7 @@ pub enum SetDefaultPolicyVersionError {
     InvalidInput(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -23819,7 +25978,7 @@ impl Error for SimulateCustomPolicyError {
 pub enum SimulatePrincipalPolicyError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request failed because a provided policy could not be successfully evaluated. An additional detailed message indicates the source of the failure.</p>
     PolicyEvaluation(String),
@@ -23916,12 +26075,420 @@ impl Error for SimulatePrincipalPolicyError {
         }
     }
 }
+/// Errors returned by TagRole
+#[derive(Debug, PartialEq)]
+pub enum TagRoleError {
+    /// <p>The request was rejected because multiple requests to change this object were submitted simultaneously. Wait a few minutes and submit your request again.</p>
+    ConcurrentModification(String),
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    InvalidInput(String),
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
+    NoSuchEntity(String),
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
+    ServiceFailure(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl TagRoleError {
+    pub fn from_response(res: BufferedHttpResponse) -> TagRoleError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ConcurrentModification" => {
+                        return TagRoleError::ConcurrentModification(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    "InvalidInput" => {
+                        return TagRoleError::InvalidInput(String::from(parsed_error.message));
+                    }
+                    "LimitExceeded" => {
+                        return TagRoleError::LimitExceeded(String::from(parsed_error.message));
+                    }
+                    "NoSuchEntity" => {
+                        return TagRoleError::NoSuchEntity(String::from(parsed_error.message));
+                    }
+                    "ServiceFailure" => {
+                        return TagRoleError::ServiceFailure(String::from(parsed_error.message));
+                    }
+                    _ => {}
+                }
+            }
+        }
+        TagRoleError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for TagRoleError {
+    fn from(err: XmlParseError) -> TagRoleError {
+        let XmlParseError(message) = err;
+        TagRoleError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for TagRoleError {
+    fn from(err: CredentialsError) -> TagRoleError {
+        TagRoleError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for TagRoleError {
+    fn from(err: HttpDispatchError) -> TagRoleError {
+        TagRoleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for TagRoleError {
+    fn from(err: io::Error) -> TagRoleError {
+        TagRoleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for TagRoleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TagRoleError {
+    fn description(&self) -> &str {
+        match *self {
+            TagRoleError::ConcurrentModification(ref cause) => cause,
+            TagRoleError::InvalidInput(ref cause) => cause,
+            TagRoleError::LimitExceeded(ref cause) => cause,
+            TagRoleError::NoSuchEntity(ref cause) => cause,
+            TagRoleError::ServiceFailure(ref cause) => cause,
+            TagRoleError::Validation(ref cause) => cause,
+            TagRoleError::Credentials(ref err) => err.description(),
+            TagRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            TagRoleError::ParseError(ref cause) => cause,
+            TagRoleError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by TagUser
+#[derive(Debug, PartialEq)]
+pub enum TagUserError {
+    /// <p>The request was rejected because multiple requests to change this object were submitted simultaneously. Wait a few minutes and submit your request again.</p>
+    ConcurrentModification(String),
+    /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
+    InvalidInput(String),
+    /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
+    NoSuchEntity(String),
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
+    ServiceFailure(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl TagUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> TagUserError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ConcurrentModification" => {
+                        return TagUserError::ConcurrentModification(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    "InvalidInput" => {
+                        return TagUserError::InvalidInput(String::from(parsed_error.message));
+                    }
+                    "LimitExceeded" => {
+                        return TagUserError::LimitExceeded(String::from(parsed_error.message));
+                    }
+                    "NoSuchEntity" => {
+                        return TagUserError::NoSuchEntity(String::from(parsed_error.message));
+                    }
+                    "ServiceFailure" => {
+                        return TagUserError::ServiceFailure(String::from(parsed_error.message));
+                    }
+                    _ => {}
+                }
+            }
+        }
+        TagUserError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for TagUserError {
+    fn from(err: XmlParseError) -> TagUserError {
+        let XmlParseError(message) = err;
+        TagUserError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for TagUserError {
+    fn from(err: CredentialsError) -> TagUserError {
+        TagUserError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for TagUserError {
+    fn from(err: HttpDispatchError) -> TagUserError {
+        TagUserError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for TagUserError {
+    fn from(err: io::Error) -> TagUserError {
+        TagUserError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for TagUserError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TagUserError {
+    fn description(&self) -> &str {
+        match *self {
+            TagUserError::ConcurrentModification(ref cause) => cause,
+            TagUserError::InvalidInput(ref cause) => cause,
+            TagUserError::LimitExceeded(ref cause) => cause,
+            TagUserError::NoSuchEntity(ref cause) => cause,
+            TagUserError::ServiceFailure(ref cause) => cause,
+            TagUserError::Validation(ref cause) => cause,
+            TagUserError::Credentials(ref err) => err.description(),
+            TagUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            TagUserError::ParseError(ref cause) => cause,
+            TagUserError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by UntagRole
+#[derive(Debug, PartialEq)]
+pub enum UntagRoleError {
+    /// <p>The request was rejected because multiple requests to change this object were submitted simultaneously. Wait a few minutes and submit your request again.</p>
+    ConcurrentModification(String),
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
+    NoSuchEntity(String),
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
+    ServiceFailure(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl UntagRoleError {
+    pub fn from_response(res: BufferedHttpResponse) -> UntagRoleError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ConcurrentModification" => {
+                        return UntagRoleError::ConcurrentModification(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    "NoSuchEntity" => {
+                        return UntagRoleError::NoSuchEntity(String::from(parsed_error.message));
+                    }
+                    "ServiceFailure" => {
+                        return UntagRoleError::ServiceFailure(String::from(parsed_error.message));
+                    }
+                    _ => {}
+                }
+            }
+        }
+        UntagRoleError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for UntagRoleError {
+    fn from(err: XmlParseError) -> UntagRoleError {
+        let XmlParseError(message) = err;
+        UntagRoleError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for UntagRoleError {
+    fn from(err: CredentialsError) -> UntagRoleError {
+        UntagRoleError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UntagRoleError {
+    fn from(err: HttpDispatchError) -> UntagRoleError {
+        UntagRoleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UntagRoleError {
+    fn from(err: io::Error) -> UntagRoleError {
+        UntagRoleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UntagRoleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UntagRoleError {
+    fn description(&self) -> &str {
+        match *self {
+            UntagRoleError::ConcurrentModification(ref cause) => cause,
+            UntagRoleError::NoSuchEntity(ref cause) => cause,
+            UntagRoleError::ServiceFailure(ref cause) => cause,
+            UntagRoleError::Validation(ref cause) => cause,
+            UntagRoleError::Credentials(ref err) => err.description(),
+            UntagRoleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UntagRoleError::ParseError(ref cause) => cause,
+            UntagRoleError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by UntagUser
+#[derive(Debug, PartialEq)]
+pub enum UntagUserError {
+    /// <p>The request was rejected because multiple requests to change this object were submitted simultaneously. Wait a few minutes and submit your request again.</p>
+    ConcurrentModification(String),
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
+    NoSuchEntity(String),
+    /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
+    ServiceFailure(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl UntagUserError {
+    pub fn from_response(res: BufferedHttpResponse) -> UntagUserError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ConcurrentModification" => {
+                        return UntagUserError::ConcurrentModification(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    "NoSuchEntity" => {
+                        return UntagUserError::NoSuchEntity(String::from(parsed_error.message));
+                    }
+                    "ServiceFailure" => {
+                        return UntagUserError::ServiceFailure(String::from(parsed_error.message));
+                    }
+                    _ => {}
+                }
+            }
+        }
+        UntagUserError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for UntagUserError {
+    fn from(err: XmlParseError) -> UntagUserError {
+        let XmlParseError(message) = err;
+        UntagUserError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for UntagUserError {
+    fn from(err: CredentialsError) -> UntagUserError {
+        UntagUserError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UntagUserError {
+    fn from(err: HttpDispatchError) -> UntagUserError {
+        UntagUserError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UntagUserError {
+    fn from(err: io::Error) -> UntagUserError {
+        UntagUserError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UntagUserError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UntagUserError {
+    fn description(&self) -> &str {
+        match *self {
+            UntagUserError::ConcurrentModification(ref cause) => cause,
+            UntagUserError::NoSuchEntity(ref cause) => cause,
+            UntagUserError::ServiceFailure(ref cause) => cause,
+            UntagUserError::Validation(ref cause) => cause,
+            UntagUserError::Credentials(ref err) => err.description(),
+            UntagUserError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UntagUserError::ParseError(ref cause) => cause,
+            UntagUserError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by UpdateAccessKey
 #[derive(Debug, PartialEq)]
 pub enum UpdateAccessKeyError {
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -24023,7 +26590,7 @@ pub enum UpdateAccountPasswordPolicyError {
     LimitExceeded(String),
     /// <p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
     MalformedPolicyDocument(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -24133,7 +26700,7 @@ pub enum UpdateAssumeRolePolicyError {
     LimitExceeded(String),
     /// <p>The request was rejected because the policy document was malformed. The error message describes the specific error.</p>
     MalformedPolicyDocument(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -24251,7 +26818,7 @@ pub enum UpdateGroupError {
     EntityAlreadyExists(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -24353,7 +26920,7 @@ pub enum UpdateLoginProfileError {
     EntityTemporarilyUnmodifiable(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request was rejected because the provided password did not meet the requirements imposed by the account password policy.</p>
     PasswordPolicyViolation(String),
@@ -24469,7 +27036,7 @@ impl Error for UpdateLoginProfileError {
 pub enum UpdateOpenIDConnectProviderThumbprintError {
     /// <p>The request was rejected because an invalid or out-of-range value was supplied for an input parameter.</p>
     InvalidInput(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -24569,7 +27136,7 @@ impl Error for UpdateOpenIDConnectProviderThumbprintError {
 /// Errors returned by UpdateRole
 #[derive(Debug, PartialEq)]
 pub enum UpdateRoleError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -24665,7 +27232,7 @@ impl Error for UpdateRoleError {
 /// Errors returned by UpdateRoleDescription
 #[derive(Debug, PartialEq)]
 pub enum UpdateRoleDescriptionError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -24771,7 +27338,7 @@ pub enum UpdateSAMLProviderError {
     InvalidInput(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -24877,7 +27444,7 @@ impl Error for UpdateSAMLProviderError {
 /// Errors returned by UpdateSSHPublicKey
 #[derive(Debug, PartialEq)]
 pub enum UpdateSSHPublicKeyError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -24967,7 +27534,7 @@ pub enum UpdateServerCertificateError {
     EntityAlreadyExists(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -25073,7 +27640,7 @@ impl Error for UpdateServerCertificateError {
 /// Errors returned by UpdateServiceSpecificCredential
 #[derive(Debug, PartialEq)]
 pub enum UpdateServiceSpecificCredentialError {
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -25161,7 +27728,7 @@ impl Error for UpdateServiceSpecificCredentialError {
 pub enum UpdateSigningCertificateError {
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -25261,13 +27828,15 @@ impl Error for UpdateSigningCertificateError {
 /// Errors returned by UpdateUser
 #[derive(Debug, PartialEq)]
 pub enum UpdateUserError {
+    /// <p>The request was rejected because multiple requests to change this object were submitted simultaneously. Wait a few minutes and submit your request again.</p>
+    ConcurrentModification(String),
     /// <p>The request was rejected because it attempted to create a resource that already exists.</p>
     EntityAlreadyExists(String),
     /// <p>The request was rejected because it referenced an entity that is temporarily unmodifiable, such as a user name that was deleted and then recreated. The error indicates that the request is likely to succeed if you try again after waiting several minutes. The error message describes the entity.</p>
     EntityTemporarilyUnmodifiable(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -25291,6 +27860,11 @@ impl UpdateUserError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
+                    "ConcurrentModification" => {
+                        return UpdateUserError::ConcurrentModification(String::from(
+                            parsed_error.message,
+                        ));
+                    }
                     "EntityAlreadyExists" => {
                         return UpdateUserError::EntityAlreadyExists(String::from(
                             parsed_error.message,
@@ -25355,6 +27929,7 @@ impl fmt::Display for UpdateUserError {
 impl Error for UpdateUserError {
     fn description(&self) -> &str {
         match *self {
+            UpdateUserError::ConcurrentModification(ref cause) => cause,
             UpdateUserError::EntityAlreadyExists(ref cause) => cause,
             UpdateUserError::EntityTemporarilyUnmodifiable(ref cause) => cause,
             UpdateUserError::LimitExceeded(ref cause) => cause,
@@ -25377,7 +27952,7 @@ pub enum UploadSSHPublicKeyError {
     InvalidPublicKey(String),
     /// <p>The request was rejected because it attempted to create resources beyond the current AWS account limits. The error message describes the limit exceeded.</p>
     LimitExceeded(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request was rejected because the public key encoding format is unsupported or unrecognized.</p>
     UnrecognizedPublicKeyEncoding(String),
@@ -25617,7 +28192,7 @@ pub enum UploadSigningCertificateError {
     LimitExceeded(String),
     /// <p>The request was rejected because the certificate was malformed or expired. The error message describes the specific error.</p>
     MalformedCertificate(String),
-    /// <p>The request was rejected because it referenced an entity that does not exist. The error message describes the entity.</p>
+    /// <p>The request was rejected because it referenced a resource entity that does not exist. The error message describes the resource.</p>
     NoSuchEntity(String),
     /// <p>The request processing has failed because of an unknown error, exception or failure.</p>
     ServiceFailure(String),
@@ -25746,7 +28321,7 @@ pub trait Iam {
         input: AddClientIDToOpenIDConnectProviderRequest,
     ) -> RusotoFuture<(), AddClientIDToOpenIDConnectProviderError>;
 
-    /// <p>Adds the specified IAM role to the specified instance profile. An instance profile can contain only one role, and this limit cannot be increased. You can remove the existing role and then add a different role to an instance profile. You must then wait for the change to appear across all of AWS because of <a href="https://en.wikipedia.org/wiki/Eventual_consistency">eventual consistency</a>. To force the change, you must <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DisassociateIamInstanceProfile.html">disassociate the instance profile</a> and then <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_AssociateIamInstanceProfile.html">associate the instance profile</a>, or you can stop your instance and then restart it.</p> <note> <p>The caller of this API must be granted the <code>PassRole</code> permission on the IAM role by a permission policy.</p> </note> <p>For more information about roles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>. For more information about instance profiles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p>
+    /// <p>Adds the specified IAM role to the specified instance profile. An instance profile can contain only one role, and this limit cannot be increased. You can remove the existing role and then add a different role to an instance profile. You must then wait for the change to appear across all of AWS because of <a href="https://en.wikipedia.org/wiki/Eventual_consistency">eventual consistency</a>. To force the change, you must <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DisassociateIamInstanceProfile.html">disassociate the instance profile</a> and then <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_AssociateIamInstanceProfile.html">associate the instance profile</a>, or you can stop your instance and then restart it.</p> <note> <p>The caller of this API must be granted the <code>PassRole</code> permission on the IAM role by a permissions policy.</p> </note> <p>For more information about roles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>. For more information about instance profiles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p>
     fn add_role_to_instance_profile(
         &self,
         input: AddRoleToInstanceProfileRequest,
@@ -25782,7 +28357,7 @@ pub trait Iam {
         input: ChangePasswordRequest,
     ) -> RusotoFuture<(), ChangePasswordError>;
 
-    /// <p><p> Creates a new AWS secret access key and corresponding AWS access key ID for the specified user. The default status for new keys is <code>Active</code>.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. Because this operation works for access keys under the AWS account, you can use this operation to manage AWS account root user credentials. This is true even if the AWS account has no associated users.</p> <p> For information about limits on the number of keys you can create, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <important> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation. You must save the key (for example, in a text file) if you want to be able to access it again. If a secret key is lost, you can delete the access keys for the associated user and then create new keys.</p> </important></p>
+    /// <p><p> Creates a new AWS secret access key and corresponding AWS access key ID for the specified user. The default status for new keys is <code>Active</code>.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials. This is true even if the AWS account has no associated users.</p> <p> For information about limits on the number of keys you can create, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <important> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation. You must save the key (for example, in a text file) if you want to be able to access it again. If a secret key is lost, you can delete the access keys for the associated user and then create new keys.</p> </important></p>
     fn create_access_key(
         &self,
         input: CreateAccessKeyRequest,
@@ -25842,7 +28417,7 @@ pub trait Iam {
         input: CreateSAMLProviderRequest,
     ) -> RusotoFuture<CreateSAMLProviderResponse, CreateSAMLProviderError>;
 
-    /// <p>Creates an IAM role that is linked to a specific AWS service. The service controls the attached policies and when the role can be deleted. This helps ensure that the service is not broken by an unexpectedly changed or deleted role, which could put your AWS resources into an unknown state. Allowing the service to control the role helps improve service stability and proper cleanup when a service and its role are no longer needed.</p> <p>The name of the role is generated by combining the string that you specify for the <code>AWSServiceName</code> parameter with the string that you specify for the <code>CustomSuffix</code> parameter. The resulting name must be unique in your account or the request fails.</p> <p>To attach a policy to this service-linked role, you must make the request using the AWS service that depends on this role.</p>
+    /// <p>Creates an IAM role that is linked to a specific AWS service. The service controls the attached policies and when the role can be deleted. This helps ensure that the service is not broken by an unexpectedly changed or deleted role, which could put your AWS resources into an unknown state. Allowing the service to control the role helps improve service stability and proper cleanup when a service and its role are no longer needed. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/using-service-linked-roles.html">Using Service-Linked Roles</a> in the <i>IAM User Guide</i>. </p> <p>To attach a policy to this service-linked role, you must make the request using the AWS service that depends on this role.</p>
     fn create_service_linked_role(
         &self,
         input: CreateServiceLinkedRoleRequest,
@@ -25866,13 +28441,13 @@ pub trait Iam {
         input: CreateVirtualMFADeviceRequest,
     ) -> RusotoFuture<CreateVirtualMFADeviceResponse, CreateVirtualMFADeviceError>;
 
-    /// <p>Deactivates the specified MFA device and removes it from association with the user name for which it was originally enabled.</p> <p>For more information about creating and working with virtual MFA devices, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p>
+    /// <p>Deactivates the specified MFA device and removes it from association with the user name for which it was originally enabled.</p> <p>For more information about creating and working with virtual MFA devices, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html">Enabling a Virtual Multi-factor Authentication (MFA) Device</a> in the <i>IAM User Guide</i>.</p>
     fn deactivate_mfa_device(
         &self,
         input: DeactivateMFADeviceRequest,
     ) -> RusotoFuture<(), DeactivateMFADeviceError>;
 
-    /// <p>Deletes the access key pair associated with the specified IAM user.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. Because this operation works for access keys under the AWS account, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p>
+    /// <p>Deletes the access key pair associated with the specified IAM user.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p>
     fn delete_access_key(
         &self,
         input: DeleteAccessKeyRequest,
@@ -25902,7 +28477,7 @@ pub trait Iam {
         input: DeleteInstanceProfileRequest,
     ) -> RusotoFuture<(), DeleteInstanceProfileError>;
 
-    /// <p><p>Deletes the password for the specified IAM user, which terminates the user&#39;s ability to access AWS services through the AWS Management Console.</p> <important> <p> Deleting a user&#39;s password does not prevent a user from accessing AWS through the command line interface or the API. To prevent all user access you must also either make any access keys inactive or delete them. For more information about making keys inactive or deleting them, see <a>UpdateAccessKey</a> and <a>DeleteAccessKey</a>. </p> </important></p>
+    /// <p><p>Deletes the password for the specified IAM user, which terminates the user&#39;s ability to access AWS services through the AWS Management Console.</p> <important> <p> Deleting a user&#39;s password does not prevent a user from accessing AWS through the command line interface or the API. To prevent all user access, you must also either make any access keys inactive or delete them. For more information about making keys inactive or deleting them, see <a>UpdateAccessKey</a> and <a>DeleteAccessKey</a>. </p> </important></p>
     fn delete_login_profile(
         &self,
         input: DeleteLoginProfileRequest,
@@ -25914,7 +28489,7 @@ pub trait Iam {
         input: DeleteOpenIDConnectProviderRequest,
     ) -> RusotoFuture<(), DeleteOpenIDConnectProviderError>;
 
-    /// <p>Deletes the specified managed policy.</p> <p>Before you can delete a managed policy, you must first detach the policy from all users, groups, and roles that it is attached to. In addition you must delete all the policy's versions. The following steps describe the process for deleting a managed policy:</p> <ul> <li> <p>Detach the policy from all users, groups, and roles that the policy is attached to, using the <a>DetachUserPolicy</a>, <a>DetachGroupPolicy</a>, or <a>DetachRolePolicy</a> API operations. To list all the users, groups, and roles that a policy is attached to, use <a>ListEntitiesForPolicy</a>.</p> </li> <li> <p>Delete all versions of the policy using <a>DeletePolicyVersion</a>. To list the policy's versions, use <a>ListPolicyVersions</a>. You cannot use <a>DeletePolicyVersion</a> to delete the version that is marked as the default version. You delete the policy's default version in the next step of the process.</p> </li> <li> <p>Delete the policy (this automatically deletes the policy's default version) using this API.</p> </li> </ul> <p>For information about managed policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
+    /// <p>Deletes the specified managed policy.</p> <p>Before you can delete a managed policy, you must first detach the policy from all users, groups, and roles that it is attached to. In addition, you must delete all the policy's versions. The following steps describe the process for deleting a managed policy:</p> <ul> <li> <p>Detach the policy from all users, groups, and roles that the policy is attached to, using the <a>DetachUserPolicy</a>, <a>DetachGroupPolicy</a>, or <a>DetachRolePolicy</a> API operations. To list all the users, groups, and roles that a policy is attached to, use <a>ListEntitiesForPolicy</a>.</p> </li> <li> <p>Delete all versions of the policy using <a>DeletePolicyVersion</a>. To list the policy's versions, use <a>ListPolicyVersions</a>. You cannot use <a>DeletePolicyVersion</a> to delete the version that is marked as the default version. You delete the policy's default version in the next step of the process.</p> </li> <li> <p>Delete the policy (this automatically deletes the policy's default version) using this API.</p> </li> </ul> <p>For information about managed policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn delete_policy(&self, input: DeletePolicyRequest) -> RusotoFuture<(), DeletePolicyError>;
 
     /// <p>Deletes the specified version from the specified managed policy.</p> <p>You cannot delete the default version from a policy using this API. To delete the default version from a policy, use <a>DeletePolicy</a>. To find out which version of a policy is marked as the default version, use <a>ListPolicyVersions</a>.</p> <p>For information about versions for managed policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-versions.html">Versioning for Managed Policies</a> in the <i>IAM User Guide</i>.</p>
@@ -25968,13 +28543,13 @@ pub trait Iam {
         input: DeleteServiceSpecificCredentialRequest,
     ) -> RusotoFuture<(), DeleteServiceSpecificCredentialError>;
 
-    /// <p>Deletes a signing certificate associated with the specified IAM user.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. Because this operation works for access keys under the AWS account, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated IAM users.</p>
+    /// <p>Deletes a signing certificate associated with the specified IAM user.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated IAM users.</p>
     fn delete_signing_certificate(
         &self,
         input: DeleteSigningCertificateRequest,
     ) -> RusotoFuture<(), DeleteSigningCertificateError>;
 
-    /// <p>Deletes the specified IAM user. The user must not belong to any groups or have any access keys, signing certificates, or attached policies.</p>
+    /// <p>Deletes the specified IAM user. The user must not belong to any groups or have any access keys, signing certificates, MFA devices enabled for AWS, or attached policies.</p>
     fn delete_user(&self, input: DeleteUserRequest) -> RusotoFuture<(), DeleteUserError>;
 
     /// <p><p>Deletes the permissions boundary for the specified IAM user.</p> <important> <p>Deleting the permissions boundary for a user might increase its permissions by allowing the user to perform all the actions granted in its permissions policies. </p> </important></p>
@@ -26023,6 +28598,15 @@ pub trait Iam {
     fn generate_credential_report(
         &self,
     ) -> RusotoFuture<GenerateCredentialReportResponse, GenerateCredentialReportError>;
+
+    /// <p>Generates a request for a report that includes details about when an IAM resource (user, group, role, or policy) was last used in an attempt to access AWS services. Recent activity usually appears within four hours. IAM reports activity for the last 365 days, or less if your region began supporting this feature within the last year. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html#access-advisor_tracking-period">Regions Where Data Is Tracked</a>.</p> <important> <p>The service last accessed data includes all attempts to access an AWS API, not just the successful ones. This includes all attempts that were made using the AWS Management Console, the AWS API through any of the SDKs, or any of the command line tools. An unexpected entry in the service last accessed data does not mean that your account has been compromised, because the request might have been denied. Refer to your CloudTrail logs as the authoritative source for information about all API calls and whether they were successful or denied access. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/cloudtrail-integration.html">Logging IAM Events with CloudTrail</a> in the <i>IAM User Guide</i>.</p> </important> <p>The <code>GenerateServiceLastAccessedDetails</code> operation returns a <code>JobId</code>. Use this parameter in the following operations to retrieve the following details from your report: </p> <ul> <li> <p> <a>GetServiceLastAccessedDetails</a> – Use this operation for users, groups, roles, or policies to list every AWS service that the resource could access using permissions policies. For each service, the response includes information about the most recent access attempt. </p> </li> <li> <p> <a>GetServiceLastAccessedDetailsWithEntities</a> – Use this operation for groups and policies to list information about the associated entities (users or roles) that attempted to access a specific AWS service. </p> </li> </ul> <p>To check the status of the <code>GenerateServiceLastAccessedDetails</code> request, use the <code>JobId</code> parameter in the same operations and test the <code>JobStatus</code> response parameter.</p> <p>For additional information about the permissions policies that allow an identity (user, group, or role) to access specific services, use the <a>ListPoliciesGrantingServiceAccess</a> operation.</p> <note> <p>Service last accessed data does not use other policy types when determining whether a resource could access a service. These other policy types include resource-based policies, access control lists, AWS Organizations policies, IAM permissions boundaries, and AWS STS assume role policies. It only applies permissions policy logic. For more about the evaluation of policy types, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-basics">Evaluating Policies</a> in the <i>IAM User Guide</i>.</p> </note> <p>For more information about service last accessed data, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html">Reducing Policy Scope by Viewing User Activity</a> in the <i>IAM User Guide</i>.</p>
+    fn generate_service_last_accessed_details(
+        &self,
+        input: GenerateServiceLastAccessedDetailsRequest,
+    ) -> RusotoFuture<
+        GenerateServiceLastAccessedDetailsResponse,
+        GenerateServiceLastAccessedDetailsError,
+    >;
 
     /// <p>Retrieves information about when the specified access key was last used. The information includes the date and time of last use, along with the AWS service and region that were specified in the last request made with that key.</p>
     fn get_access_key_last_used(
@@ -26129,6 +28713,21 @@ pub trait Iam {
         input: GetServerCertificateRequest,
     ) -> RusotoFuture<GetServerCertificateResponse, GetServerCertificateError>;
 
+    /// <p>After you generate a user, group, role, or policy report using the <code>GenerateServiceLastAccessedDetails</code> operation, you can use the <code>JobId</code> parameter in <code>GetServiceLastAccessedDetails</code>. This operation retrieves the status of your report job and a list of AWS services that the resource (user, group, role, or managed policy) can access.</p> <note> <p>Service last accessed data does not use other policy types when determining whether a resource could access a service. These other policy types include resource-based policies, access control lists, AWS Organizations policies, IAM permissions boundaries, and AWS STS assume role policies. It only applies permissions policy logic. For more about the evaluation of policy types, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-basics">Evaluating Policies</a> in the <i>IAM User Guide</i>.</p> </note> <p>For each service that the resource could access using permissions policies, the operation returns details about the most recent access attempt. If there was no attempt, the service is listed without details about the most recent attempt to access the service. If the operation fails, the <code>GetServiceLastAccessedDetails</code> operation returns the reason that it failed.</p> <p>The <code>GetServiceLastAccessedDetails</code> operation returns a list of services that includes the number of entities that have attempted to access the service and the date and time of the last attempt. It also returns the ARN of the following entity, depending on the resource ARN that you used to generate the report:</p> <ul> <li> <p> <b>User</b> – Returns the user ARN that you used to generate the report</p> </li> <li> <p> <b>Group</b> – Returns the ARN of the group member (user) that last attempted to access the service</p> </li> <li> <p> <b>Role</b> – Returns the role ARN that you used to generate the report</p> </li> <li> <p> <b>Policy</b> – Returns the ARN of the user or role that last used the policy to attempt to access the service</p> </li> </ul> <p>By default, the list is sorted by service namespace.</p>
+    fn get_service_last_accessed_details(
+        &self,
+        input: GetServiceLastAccessedDetailsRequest,
+    ) -> RusotoFuture<GetServiceLastAccessedDetailsResponse, GetServiceLastAccessedDetailsError>;
+
+    /// <p>After you generate a group or policy report using the <code>GenerateServiceLastAccessedDetails</code> operation, you can use the <code>JobId</code> parameter in <code>GetServiceLastAccessedDetailsWithEntities</code>. This operation retrieves the status of your report job and a list of entities that could have used group or policy permissions to access the specified service.</p> <ul> <li> <p> <b>Group</b> – For a group report, this operation returns a list of users in the group that could have used the group’s policies in an attempt to access the service.</p> </li> <li> <p> <b>Policy</b> – For a policy report, this operation returns a list of entities (users or roles) that could have used the policy in an attempt to access the service.</p> </li> </ul> <p>You can also use this operation for user or role reports to retrieve details about those entities.</p> <p>If the operation fails, the <code>GetServiceLastAccessedDetailsWithEntities</code> operation returns the reason that it failed.</p> <p>By default, the list of associated entities is sorted by date, with the most recent access listed first.</p>
+    fn get_service_last_accessed_details_with_entities(
+        &self,
+        input: GetServiceLastAccessedDetailsWithEntitiesRequest,
+    ) -> RusotoFuture<
+        GetServiceLastAccessedDetailsWithEntitiesResponse,
+        GetServiceLastAccessedDetailsWithEntitiesError,
+    >;
+
     /// <p>Retrieves the status of your service-linked role deletion. After you use the <a>DeleteServiceLinkedRole</a> API operation to submit a service-linked role for deletion, you can use the <code>DeletionTaskId</code> parameter in <code>GetServiceLinkedRoleDeletionStatus</code> to check the status of the deletion. If the deletion fails, this operation returns the reason that it failed, if that information is returned by the service.</p>
     fn get_service_linked_role_deletion_status(
         &self,
@@ -26147,7 +28746,7 @@ pub trait Iam {
         input: GetUserPolicyRequest,
     ) -> RusotoFuture<GetUserPolicyResponse, GetUserPolicyError>;
 
-    /// <p><p>Returns information about the access key IDs associated with the specified IAM user. If there are none, the operation returns an empty list.</p> <p>Although each user is limited to a small number of keys, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request. Because this operation works for access keys under the AWS account, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p> <note> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation.</p> </note></p>
+    /// <p><p>Returns information about the access key IDs associated with the specified IAM user. If there is none, the operation returns an empty list.</p> <p>Although each user is limited to a small number of keys, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p> <note> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation.</p> </note></p>
     fn list_access_keys(
         &self,
         input: ListAccessKeysRequest,
@@ -26231,6 +28830,15 @@ pub trait Iam {
         input: ListPoliciesRequest,
     ) -> RusotoFuture<ListPoliciesResponse, ListPoliciesError>;
 
+    /// <p>Retrieves a list of policies that the IAM identity (user, group, or role) can use to access each specified service.</p> <note> <p>This operation does not use other policy types when determining whether a resource could access a service. These other policy types include resource-based policies, access control lists, AWS Organizations policies, IAM permissions boundaries, and AWS STS assume role policies. It only applies permissions policy logic. For more about the evaluation of policy types, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-basics">Evaluating Policies</a> in the <i>IAM User Guide</i>.</p> </note> <p>The list of policies returned by the operation depends on the ARN of the identity that you provide.</p> <ul> <li> <p> <b>User</b> – The list of policies includes the managed and inline policies that are attached to the user directly. The list also includes any additional managed and inline policies that are attached to the group to which the user belongs. </p> </li> <li> <p> <b>Group</b> – The list of policies includes only the managed and inline policies that are attached to the group directly. Policies that are attached to the group’s user are not included.</p> </li> <li> <p> <b>Role</b> – The list of policies includes only the managed and inline policies that are attached to the role.</p> </li> </ul> <p>For each managed policy, this operation returns the ARN and policy name. For each inline policy, it returns the policy name and the entity to which it is attached. Inline policies do not have an ARN. For more information about these policy types, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>Policies that are attached to users and roles as permissions boundaries are not returned. To view which managed policy is currently used to set the permissions boundary for a user or role, use the <a>GetUser</a> or <a>GetRole</a> operations.</p>
+    fn list_policies_granting_service_access(
+        &self,
+        input: ListPoliciesGrantingServiceAccessRequest,
+    ) -> RusotoFuture<
+        ListPoliciesGrantingServiceAccessResponse,
+        ListPoliciesGrantingServiceAccessError,
+    >;
+
     /// <p>Lists information about the versions of the specified managed policy, including the version that is currently set as the policy's default version.</p> <p>For more information about managed policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn list_policy_versions(
         &self,
@@ -26242,6 +28850,12 @@ pub trait Iam {
         &self,
         input: ListRolePoliciesRequest,
     ) -> RusotoFuture<ListRolePoliciesResponse, ListRolePoliciesError>;
+
+    /// <p>Lists the tags that are attached to the specified role. The returned list of tags is sorted by tag key. For more information about tagging, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
+    fn list_role_tags(
+        &self,
+        input: ListRoleTagsRequest,
+    ) -> RusotoFuture<ListRoleTagsResponse, ListRoleTagsError>;
 
     /// <p>Lists the IAM roles that have the specified path prefix. If there are none, the operation returns an empty list. For more information about roles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_roles(
@@ -26255,7 +28869,7 @@ pub trait Iam {
         input: ListSAMLProvidersRequest,
     ) -> RusotoFuture<ListSAMLProvidersResponse, ListSAMLProvidersError>;
 
-    /// <p>Returns information about the SSH public keys associated with the specified IAM user. If there are none, the operation returns an empty list.</p> <p>The SSH public keys returned by this operation are used only for authenticating the IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p> <p>Although each user is limited to a small number of keys, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
+    /// <p>Returns information about the SSH public keys associated with the specified IAM user. If there none exists, the operation returns an empty list.</p> <p>The SSH public keys returned by this operation are used only for authenticating the IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p> <p>Although each user is limited to a small number of keys, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_ssh_public_keys(
         &self,
         input: ListSSHPublicKeysRequest,
@@ -26267,13 +28881,13 @@ pub trait Iam {
         input: ListServerCertificatesRequest,
     ) -> RusotoFuture<ListServerCertificatesResponse, ListServerCertificatesError>;
 
-    /// <p>Returns information about the service-specific credentials associated with the specified IAM user. If there are none, the operation returns an empty list. The service-specific credentials returned by this operation are used only for authenticating the IAM user to a specific service. For more information about using service-specific credentials to authenticate to an AWS service, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-gc.html">Set Up service-specific credentials</a> in the AWS CodeCommit User Guide.</p>
+    /// <p>Returns information about the service-specific credentials associated with the specified IAM user. If none exists, the operation returns an empty list. The service-specific credentials returned by this operation are used only for authenticating the IAM user to a specific service. For more information about using service-specific credentials to authenticate to an AWS service, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-gc.html">Set Up service-specific credentials</a> in the AWS CodeCommit User Guide.</p>
     fn list_service_specific_credentials(
         &self,
         input: ListServiceSpecificCredentialsRequest,
     ) -> RusotoFuture<ListServiceSpecificCredentialsResponse, ListServiceSpecificCredentialsError>;
 
-    /// <p>Returns information about the signing certificates associated with the specified IAM user. If there are none, the operation returns an empty list.</p> <p>Although each user is limited to a small number of signing certificates, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request for this API. Because this operation works for access keys under the AWS account, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p>
+    /// <p>Returns information about the signing certificates associated with the specified IAM user. If there none exists, the operation returns an empty list.</p> <p>Although each user is limited to a small number of signing certificates, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request for this API. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p>
     fn list_signing_certificates(
         &self,
         input: ListSigningCertificatesRequest,
@@ -26284,6 +28898,12 @@ pub trait Iam {
         &self,
         input: ListUserPoliciesRequest,
     ) -> RusotoFuture<ListUserPoliciesResponse, ListUserPoliciesError>;
+
+    /// <p>Lists the tags that are attached to the specified user. The returned list of tags is sorted by tag key. For more information about tagging, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
+    fn list_user_tags(
+        &self,
+        input: ListUserTagsRequest,
+    ) -> RusotoFuture<ListUserTagsResponse, ListUserTagsError>;
 
     /// <p>Lists the IAM users that have the specified path prefix. If no path prefix is specified, the operation returns all users in the AWS account. If there are none, the operation returns an empty list.</p> <p>You can paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_users(
@@ -26303,7 +28923,7 @@ pub trait Iam {
         input: PutGroupPolicyRequest,
     ) -> RusotoFuture<(), PutGroupPolicyError>;
 
-    /// <p><p>Adds or updates the policy that is specified as the IAM role&#39;s permissions boundary. You can use an AWS managed policy or a customer managed policy to set the boundary for a role. Use the boundary to control the maximum permissions that the role can have. Setting a permissions boundary is an advanced feature that can affect the permissions for the role.</p> <p>You cannot set the boundary for a service-linked role. </p> <important> <p>Policies used as permissions boundaries do not provide permissions. You must also attach a permissions policy to the role. To learn how the effective permissions for a role are evaluated, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html">IAM JSON Policy Evaluation Logic</a> in the IAM User Guide. </p> </important></p>
+    /// <p><p>Adds or updates the policy that is specified as the IAM role&#39;s permissions boundary. You can use an AWS managed policy or a customer managed policy to set the boundary for a role. Use the boundary to control the maximum permissions that the role can have. Setting a permissions boundary is an advanced feature that can affect the permissions for the role.</p> <p>You cannot set the boundary for a service-linked role. </p> <important> <p>Policies used as permissions boundaries do not provide permissions. You must also attach a permissions policy to the role. To learn how the effective permissions for a role are evaluated, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html">IAM JSON Policy Evaluation Logic</a> in the IAM User Guide. </p> </important></p>
     fn put_role_permissions_boundary(
         &self,
         input: PutRolePermissionsBoundaryRequest,
@@ -26312,7 +28932,7 @@ pub trait Iam {
     /// <p><p>Adds or updates an inline policy document that is embedded in the specified IAM role.</p> <p>When you embed an inline policy in a role, the inline policy is used as part of the role&#39;s access (permissions) policy. The role&#39;s trust policy is created at the same time as the role, using <a>CreateRole</a>. You can update a role&#39;s trust policy using <a>UpdateAssumeRolePolicy</a>. For more information about IAM roles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/roles-toplevel.html">Using Roles to Delegate Permissions and Federate Identities</a>.</p> <p>A role can also have a managed policy attached to it. To attach a managed policy to a role, use <a>AttachRolePolicy</a>. To create a new managed policy, use <a>CreatePolicy</a>. For information about policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>For information about limits on the number of inline policies that you can embed with a role, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because policy documents can be large, you should use POST rather than GET when calling <code>PutRolePolicy</code>. For general information about using the Query API with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
     fn put_role_policy(&self, input: PutRolePolicyRequest) -> RusotoFuture<(), PutRolePolicyError>;
 
-    /// <p><p>Adds or updates the policy that is specified as the IAM user&#39;s permissions boundary. You can use an AWS managed policy or a customer managed policy to set the boundary for a user. Use the boundary to control the maximum permissions that the user can have. Setting a permissions boundary is an advanced feature that can affect the permissions for the user.</p> <important> <p>Policies that are used as permissions boundaries do not provide permissions. You must also attach a permissions policy to the user. To learn how the effective permissions for a user are evaluated, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html">IAM JSON Policy Evaluation Logic</a> in the IAM User Guide. </p> </important></p>
+    /// <p><p>Adds or updates the policy that is specified as the IAM user&#39;s permissions boundary. You can use an AWS managed policy or a customer managed policy to set the boundary for a user. Use the boundary to control the maximum permissions that the user can have. Setting a permissions boundary is an advanced feature that can affect the permissions for the user.</p> <important> <p>Policies that are used as permissions boundaries do not provide permissions. You must also attach a permissions policy to the user. To learn how the effective permissions for a user are evaluated, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html">IAM JSON Policy Evaluation Logic</a> in the IAM User Guide. </p> </important></p>
     fn put_user_permissions_boundary(
         &self,
         input: PutUserPermissionsBoundaryRequest,
@@ -26369,7 +28989,19 @@ pub trait Iam {
         input: SimulatePrincipalPolicyRequest,
     ) -> RusotoFuture<SimulatePolicyResponse, SimulatePrincipalPolicyError>;
 
-    /// <p>Changes the status of the specified access key from Active to Inactive, or vice versa. This operation can be used to disable a user's key as part of a key rotation workflow.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request. Because this operation works for access keys under the AWS account, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p> <p>For information about rotating keys, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/ManagingCredentials.html">Managing Keys and Certificates</a> in the <i>IAM User Guide</i>.</p>
+    /// <p>Adds one or more tags to an IAM role. The role can be a regular role or a service-linked role. If a tag with the same key name already exists, then that tag is overwritten with the new value.</p> <p>A tag consists of a key name and an associated value. By assigning tags to your resources, you can do the following:</p> <ul> <li> <p> <b>Administrative grouping and discovery</b> - Attach tags to resources to aid in organization and search. For example, you could search for all resources with the key name <i>Project</i> and the value <i>MyImportantProject</i>. Or search for all resources with the key name <i>Cost Center</i> and the value <i>41200</i>. </p> </li> <li> <p> <b>Access control</b> - Reference tags in IAM user-based and resource-based policies. You can use tags to restrict access to only an IAM user or role that has a specified tag attached. You can also restrict access to only those resources that have a certain tag attached. For examples of policies that show how to use tags to control access, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/access_tags.html">Control Access Using IAM Tags</a> in the <i>IAM User Guide</i>.</p> </li> <li> <p> <b>Cost allocation</b> - Use tags to help track which individuals and teams are using which AWS resources.</p> </li> </ul> <note> <ul> <li> <p>Make sure that you have no invalid tags and that you do not exceed the allowed number of tags per role. In either case, the entire request fails and <i>no</i> tags are added to the role.</p> </li> <li> <p>AWS always interprets the tag <code>Value</code> as a single string. If you need to store an array, you can store comma-separated values in the string. However, you must interpret the value in your code.</p> </li> </ul> </note> <p>For more information about tagging, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
+    fn tag_role(&self, input: TagRoleRequest) -> RusotoFuture<(), TagRoleError>;
+
+    /// <p>Adds one or more tags to an IAM user. If a tag with the same key name already exists, then that tag is overwritten with the new value.</p> <p>A tag consists of a key name and an associated value. By assigning tags to your resources, you can do the following:</p> <ul> <li> <p> <b>Administrative grouping and discovery</b> - Attach tags to resources to aid in organization and search. For example, you could search for all resources with the key name <i>Project</i> and the value <i>MyImportantProject</i>. Or search for all resources with the key name <i>Cost Center</i> and the value <i>41200</i>. </p> </li> <li> <p> <b>Access control</b> - Reference tags in IAM user-based and resource-based policies. You can use tags to restrict access to only an IAM requesting user or to a role that has a specified tag attached. You can also restrict access to only those resources that have a certain tag attached. For examples of policies that show how to use tags to control access, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/access_tags.html">Control Access Using IAM Tags</a> in the <i>IAM User Guide</i>.</p> </li> <li> <p> <b>Cost allocation</b> - Use tags to help track which individuals and teams are using which AWS resources.</p> </li> </ul> <note> <ul> <li> <p>Make sure that you have no invalid tags and that you do not exceed the allowed number of tags per role. In either case, the entire request fails and <i>no</i> tags are added to the role.</p> </li> <li> <p>AWS always interprets the tag <code>Value</code> as a single string. If you need to store an array, you can store comma-separated values in the string. However, you must interpret the value in your code.</p> </li> </ul> </note> <p>For more information about tagging, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
+    fn tag_user(&self, input: TagUserRequest) -> RusotoFuture<(), TagUserError>;
+
+    /// <p>Removes the specified tags from the role. For more information about tagging, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
+    fn untag_role(&self, input: UntagRoleRequest) -> RusotoFuture<(), UntagRoleError>;
+
+    /// <p>Removes the specified tags from the user. For more information about tagging, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
+    fn untag_user(&self, input: UntagUserRequest) -> RusotoFuture<(), UntagUserError>;
+
+    /// <p>Changes the status of the specified access key from Active to Inactive, or vice versa. This operation can be used to disable a user's key as part of a key rotation workflow.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p> <p>For information about rotating keys, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/ManagingCredentials.html">Managing Keys and Certificates</a> in the <i>IAM User Guide</i>.</p>
     fn update_access_key(
         &self,
         input: UpdateAccessKeyRequest,
@@ -26396,7 +29028,7 @@ pub trait Iam {
         input: UpdateLoginProfileRequest,
     ) -> RusotoFuture<(), UpdateLoginProfileError>;
 
-    /// <p><p>Replaces the existing list of server certificate thumbprints associated with an OpenID Connect (OIDC) provider resource object with a new list of thumbprints.</p> <p>The list that you pass with this operation completely replaces the existing list of thumbprints. (The lists are not merged.)</p> <p>Typically, you need to update a thumbprint only when the identity provider&#39;s certificate changes, which occurs rarely. However, if the provider&#39;s certificate <i>does</i> change, any attempt to assume an IAM role that specifies the OIDC provider as a principal fails until the certificate thumbprint is updated.</p> <note> <p>Because trust for the OIDC provider is derived from the provider&#39;s certificate and is validated by the thumbprint, it is best to limit access to the <code>UpdateOpenIDConnectProviderThumbprint</code> operation to highly privileged users.</p> </note></p>
+    /// <p><p>Replaces the existing list of server certificate thumbprints associated with an OpenID Connect (OIDC) provider resource object with a new list of thumbprints.</p> <p>The list that you pass with this operation completely replaces the existing list of thumbprints. (The lists are not merged.)</p> <p>Typically, you need to update a thumbprint only when the identity provider&#39;s certificate changes, which occurs rarely. However, if the provider&#39;s certificate <i>does</i> change, any attempt to assume an IAM role that specifies the OIDC provider as a principal fails until the certificate thumbprint is updated.</p> <note> <p>Trust for the OIDC provider is derived from the provider&#39;s certificate and is validated by the thumbprint. Therefore, it is best to limit access to the <code>UpdateOpenIDConnectProviderThumbprint</code> operation to highly privileged users.</p> </note></p>
     fn update_open_id_connect_provider_thumbprint(
         &self,
         input: UpdateOpenIDConnectProviderThumbprintRequest,
@@ -26408,7 +29040,7 @@ pub trait Iam {
         input: UpdateRoleRequest,
     ) -> RusotoFuture<UpdateRoleResponse, UpdateRoleError>;
 
-    /// <p>Use instead.</p> <p>Modifies only the description of a role. This operation performs the same function as the <code>Description</code> parameter in the <code>UpdateRole</code> operation.</p>
+    /// <p>Use <a>UpdateRole</a> instead.</p> <p>Modifies only the description of a role. This operation performs the same function as the <code>Description</code> parameter in the <code>UpdateRole</code> operation.</p>
     fn update_role_description(
         &self,
         input: UpdateRoleDescriptionRequest,
@@ -26438,7 +29070,7 @@ pub trait Iam {
         input: UpdateServiceSpecificCredentialRequest,
     ) -> RusotoFuture<(), UpdateServiceSpecificCredentialError>;
 
-    /// <p>Changes the status of the specified user signing certificate from active to disabled, or vice versa. This operation can be used to disable an IAM user's signing certificate as part of a certificate rotation work flow.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request. Because this operation works for access keys under the AWS account, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p>
+    /// <p>Changes the status of the specified user signing certificate from active to disabled, or vice versa. This operation can be used to disable an IAM user's signing certificate as part of a certificate rotation work flow.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p>
     fn update_signing_certificate(
         &self,
         input: UpdateSigningCertificateRequest,
@@ -26453,13 +29085,13 @@ pub trait Iam {
         input: UploadSSHPublicKeyRequest,
     ) -> RusotoFuture<UploadSSHPublicKeyResponse, UploadSSHPublicKeyError>;
 
-    /// <p><p>Uploads a server certificate entity for the AWS account. The server certificate entity includes a public key certificate, a private key, and an optional certificate chain, which should all be PEM-encoded.</p> <p>We recommend that you use <a href="https://aws.amazon.com/certificate-manager/">AWS Certificate Manager</a> to provision, manage, and deploy your server certificates. With ACM you can request a certificate, deploy it to AWS resources, and let ACM handle certificate renewals for you. Certificates provided by ACM are free. For more information about using ACM, see the <a href="http://docs.aws.amazon.com/acm/latest/userguide/">AWS Certificate Manager User Guide</a>.</p> <p>For more information about working with server certificates, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>. This topic includes a list of AWS services that can use the server certificates that you manage with IAM.</p> <p>For information about the number of server certificates you can upload, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-limits.html">Limitations on IAM Entities and Objects</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because the body of the public key certificate, private key, and the certificate chain can be large, you should use POST rather than GET when calling <code>UploadServerCertificate</code>. For information about setting up signatures and authorization through the API, go to <a href="http://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html">Signing AWS API Requests</a> in the <i>AWS General Reference</i>. For general information about using the Query API with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/programming.html">Calling the API by Making HTTP Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
+    /// <p><p>Uploads a server certificate entity for the AWS account. The server certificate entity includes a public key certificate, a private key, and an optional certificate chain, which should all be PEM-encoded.</p> <p>We recommend that you use <a href="http://docs.aws.amazon.com/certificate-manager/">AWS Certificate Manager</a> to provision, manage, and deploy your server certificates. With ACM you can request a certificate, deploy it to AWS resources, and let ACM handle certificate renewals for you. Certificates provided by ACM are free. For more information about using ACM, see the <a href="http://docs.aws.amazon.com/acm/latest/userguide/">AWS Certificate Manager User Guide</a>.</p> <p>For more information about working with server certificates, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>. This topic includes a list of AWS services that can use the server certificates that you manage with IAM.</p> <p>For information about the number of server certificates you can upload, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-limits.html">Limitations on IAM Entities and Objects</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because the body of the public key certificate, private key, and the certificate chain can be large, you should use POST rather than GET when calling <code>UploadServerCertificate</code>. For information about setting up signatures and authorization through the API, go to <a href="http://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html">Signing AWS API Requests</a> in the <i>AWS General Reference</i>. For general information about using the Query API with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/programming.html">Calling the API by Making HTTP Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
     fn upload_server_certificate(
         &self,
         input: UploadServerCertificateRequest,
     ) -> RusotoFuture<UploadServerCertificateResponse, UploadServerCertificateError>;
 
-    /// <p><p>Uploads an X.509 signing certificate and associates it with the specified IAM user. Some AWS services use X.509 signing certificates to validate requests that are signed with a corresponding private key. When you upload the certificate, its default status is <code>Active</code>.</p> <p>If the <code>UserName</code> field is not specified, the IAM user name is determined implicitly based on the AWS access key ID used to sign the request. Because this operation works for access keys under the AWS account, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p> <note> <p>Because the body of an X.509 certificate can be large, you should use POST rather than GET when calling <code>UploadSigningCertificate</code>. For information about setting up signatures and authorization through the API, go to <a href="http://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html">Signing AWS API Requests</a> in the <i>AWS General Reference</i>. For general information about using the Query API with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
+    /// <p><p>Uploads an X.509 signing certificate and associates it with the specified IAM user. Some AWS services use X.509 signing certificates to validate requests that are signed with a corresponding private key. When you upload the certificate, its default status is <code>Active</code>.</p> <p>If the <code>UserName</code> field is not specified, the IAM user name is determined implicitly based on the AWS access key ID used to sign the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p> <note> <p>Because the body of an X.509 certificate can be large, you should use POST rather than GET when calling <code>UploadSigningCertificate</code>. For information about setting up signatures and authorization through the API, go to <a href="http://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html">Signing AWS API Requests</a> in the <i>AWS General Reference</i>. For general information about using the Query API with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
     fn upload_signing_certificate(
         &self,
         input: UploadSigningCertificateRequest,
@@ -26531,7 +29163,7 @@ impl Iam for IamClient {
         })
     }
 
-    /// <p>Adds the specified IAM role to the specified instance profile. An instance profile can contain only one role, and this limit cannot be increased. You can remove the existing role and then add a different role to an instance profile. You must then wait for the change to appear across all of AWS because of <a href="https://en.wikipedia.org/wiki/Eventual_consistency">eventual consistency</a>. To force the change, you must <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DisassociateIamInstanceProfile.html">disassociate the instance profile</a> and then <a href="https://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_AssociateIamInstanceProfile.html">associate the instance profile</a>, or you can stop your instance and then restart it.</p> <note> <p>The caller of this API must be granted the <code>PassRole</code> permission on the IAM role by a permission policy.</p> </note> <p>For more information about roles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>. For more information about instance profiles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p>
+    /// <p>Adds the specified IAM role to the specified instance profile. An instance profile can contain only one role, and this limit cannot be increased. You can remove the existing role and then add a different role to an instance profile. You must then wait for the change to appear across all of AWS because of <a href="https://en.wikipedia.org/wiki/Eventual_consistency">eventual consistency</a>. To force the change, you must <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_DisassociateIamInstanceProfile.html">disassociate the instance profile</a> and then <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/API_AssociateIamInstanceProfile.html">associate the instance profile</a>, or you can stop your instance and then restart it.</p> <note> <p>The caller of this API must be granted the <code>PassRole</code> permission on the IAM role by a permissions policy.</p> </note> <p>For more information about roles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/WorkingWithRoles.html">Working with Roles</a>. For more information about instance profiles, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/AboutInstanceProfiles.html">About Instance Profiles</a>.</p>
     fn add_role_to_instance_profile(
         &self,
         input: AddRoleToInstanceProfileRequest,
@@ -26708,7 +29340,7 @@ impl Iam for IamClient {
         })
     }
 
-    /// <p><p> Creates a new AWS secret access key and corresponding AWS access key ID for the specified user. The default status for new keys is <code>Active</code>.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. Because this operation works for access keys under the AWS account, you can use this operation to manage AWS account root user credentials. This is true even if the AWS account has no associated users.</p> <p> For information about limits on the number of keys you can create, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <important> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation. You must save the key (for example, in a text file) if you want to be able to access it again. If a secret key is lost, you can delete the access keys for the associated user and then create new keys.</p> </important></p>
+    /// <p><p> Creates a new AWS secret access key and corresponding AWS access key ID for the specified user. The default status for new keys is <code>Active</code>.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials. This is true even if the AWS account has no associated users.</p> <p> For information about limits on the number of keys you can create, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/LimitationsOnEntities.html">Limitations on IAM Entities</a> in the <i>IAM User Guide</i>.</p> <important> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation. You must save the key (for example, in a text file) if you want to be able to access it again. If a secret key is lost, you can delete the access keys for the associated user and then create new keys.</p> </important></p>
     fn create_access_key(
         &self,
         input: CreateAccessKeyRequest,
@@ -26755,7 +29387,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -26838,7 +29470,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -26890,7 +29522,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -26943,7 +29575,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -26993,7 +29625,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -27046,7 +29678,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -27098,7 +29730,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -27151,7 +29783,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -27204,13 +29836,13 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
     }
 
-    /// <p>Creates an IAM role that is linked to a specific AWS service. The service controls the attached policies and when the role can be deleted. This helps ensure that the service is not broken by an unexpectedly changed or deleted role, which could put your AWS resources into an unknown state. Allowing the service to control the role helps improve service stability and proper cleanup when a service and its role are no longer needed.</p> <p>The name of the role is generated by combining the string that you specify for the <code>AWSServiceName</code> parameter with the string that you specify for the <code>CustomSuffix</code> parameter. The resulting name must be unique in your account or the request fails.</p> <p>To attach a policy to this service-linked role, you must make the request using the AWS service that depends on this role.</p>
+    /// <p>Creates an IAM role that is linked to a specific AWS service. The service controls the attached policies and when the role can be deleted. This helps ensure that the service is not broken by an unexpectedly changed or deleted role, which could put your AWS resources into an unknown state. Allowing the service to control the role helps improve service stability and proper cleanup when a service and its role are no longer needed. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/using-service-linked-roles.html">Using Service-Linked Roles</a> in the <i>IAM User Guide</i>. </p> <p>To attach a policy to this service-linked role, you must make the request using the AWS service that depends on this role.</p>
     fn create_service_linked_role(
         &self,
         input: CreateServiceLinkedRoleRequest,
@@ -27254,7 +29886,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -27307,7 +29939,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -27360,7 +29992,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -27410,13 +30042,13 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
     }
 
-    /// <p>Deactivates the specified MFA device and removes it from association with the user name for which it was originally enabled.</p> <p>For more information about creating and working with virtual MFA devices, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html">Using a Virtual MFA Device</a> in the <i>IAM User Guide</i>.</p>
+    /// <p>Deactivates the specified MFA device and removes it from association with the user name for which it was originally enabled.</p> <p>For more information about creating and working with virtual MFA devices, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/Using_VirtualMFA.html">Enabling a Virtual Multi-factor Authentication (MFA) Device</a> in the <i>IAM User Guide</i>.</p>
     fn deactivate_mfa_device(
         &self,
         input: DeactivateMFADeviceRequest,
@@ -27445,7 +30077,7 @@ impl Iam for IamClient {
         })
     }
 
-    /// <p>Deletes the access key pair associated with the specified IAM user.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. Because this operation works for access keys under the AWS account, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p>
+    /// <p>Deletes the access key pair associated with the specified IAM user.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p>
     fn delete_access_key(
         &self,
         input: DeleteAccessKeyRequest,
@@ -27615,7 +30247,7 @@ impl Iam for IamClient {
         })
     }
 
-    /// <p><p>Deletes the password for the specified IAM user, which terminates the user&#39;s ability to access AWS services through the AWS Management Console.</p> <important> <p> Deleting a user&#39;s password does not prevent a user from accessing AWS through the command line interface or the API. To prevent all user access you must also either make any access keys inactive or delete them. For more information about making keys inactive or deleting them, see <a>UpdateAccessKey</a> and <a>DeleteAccessKey</a>. </p> </important></p>
+    /// <p><p>Deletes the password for the specified IAM user, which terminates the user&#39;s ability to access AWS services through the AWS Management Console.</p> <important> <p> Deleting a user&#39;s password does not prevent a user from accessing AWS through the command line interface or the API. To prevent all user access, you must also either make any access keys inactive or delete them. For more information about making keys inactive or deleting them, see <a>UpdateAccessKey</a> and <a>DeleteAccessKey</a>. </p> </important></p>
     fn delete_login_profile(
         &self,
         input: DeleteLoginProfileRequest,
@@ -27672,7 +30304,7 @@ impl Iam for IamClient {
         })
     }
 
-    /// <p>Deletes the specified managed policy.</p> <p>Before you can delete a managed policy, you must first detach the policy from all users, groups, and roles that it is attached to. In addition you must delete all the policy's versions. The following steps describe the process for deleting a managed policy:</p> <ul> <li> <p>Detach the policy from all users, groups, and roles that the policy is attached to, using the <a>DetachUserPolicy</a>, <a>DetachGroupPolicy</a>, or <a>DetachRolePolicy</a> API operations. To list all the users, groups, and roles that a policy is attached to, use <a>ListEntitiesForPolicy</a>.</p> </li> <li> <p>Delete all versions of the policy using <a>DeletePolicyVersion</a>. To list the policy's versions, use <a>ListPolicyVersions</a>. You cannot use <a>DeletePolicyVersion</a> to delete the version that is marked as the default version. You delete the policy's default version in the next step of the process.</p> </li> <li> <p>Delete the policy (this automatically deletes the policy's default version) using this API.</p> </li> </ul> <p>For information about managed policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
+    /// <p>Deletes the specified managed policy.</p> <p>Before you can delete a managed policy, you must first detach the policy from all users, groups, and roles that it is attached to. In addition, you must delete all the policy's versions. The following steps describe the process for deleting a managed policy:</p> <ul> <li> <p>Detach the policy from all users, groups, and roles that the policy is attached to, using the <a>DetachUserPolicy</a>, <a>DetachGroupPolicy</a>, or <a>DetachRolePolicy</a> API operations. To list all the users, groups, and roles that a policy is attached to, use <a>ListEntitiesForPolicy</a>.</p> </li> <li> <p>Delete all versions of the policy using <a>DeletePolicyVersion</a>. To list the policy's versions, use <a>ListPolicyVersions</a>. You cannot use <a>DeletePolicyVersion</a> to delete the version that is marked as the default version. You delete the policy's default version in the next step of the process.</p> </li> <li> <p>Delete the policy (this automatically deletes the policy's default version) using this API.</p> </li> </ul> <p>For information about managed policies, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/policies-managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p>
     fn delete_policy(&self, input: DeletePolicyRequest) -> RusotoFuture<(), DeletePolicyError> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
         let mut params = Params::new();
@@ -27943,7 +30575,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -27978,7 +30610,7 @@ impl Iam for IamClient {
         })
     }
 
-    /// <p>Deletes a signing certificate associated with the specified IAM user.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. Because this operation works for access keys under the AWS account, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated IAM users.</p>
+    /// <p>Deletes a signing certificate associated with the specified IAM user.</p> <p>If you do not specify a user name, IAM determines the user name implicitly based on the AWS access key ID signing the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated IAM users.</p>
     fn delete_signing_certificate(
         &self,
         input: DeleteSigningCertificateRequest,
@@ -28005,7 +30637,7 @@ impl Iam for IamClient {
         })
     }
 
-    /// <p>Deletes the specified IAM user. The user must not belong to any groups or have any access keys, signing certificates, or attached policies.</p>
+    /// <p>Deletes the specified IAM user. The user must not belong to any groups or have any access keys, signing certificates, MFA devices enabled for AWS, or attached policies.</p>
     fn delete_user(&self, input: DeleteUserRequest) -> RusotoFuture<(), DeleteUserError> {
         let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
         let mut params = Params::new();
@@ -28279,7 +30911,62 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
 
+    /// <p>Generates a request for a report that includes details about when an IAM resource (user, group, role, or policy) was last used in an attempt to access AWS services. Recent activity usually appears within four hours. IAM reports activity for the last 365 days, or less if your region began supporting this feature within the last year. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html#access-advisor_tracking-period">Regions Where Data Is Tracked</a>.</p> <important> <p>The service last accessed data includes all attempts to access an AWS API, not just the successful ones. This includes all attempts that were made using the AWS Management Console, the AWS API through any of the SDKs, or any of the command line tools. An unexpected entry in the service last accessed data does not mean that your account has been compromised, because the request might have been denied. Refer to your CloudTrail logs as the authoritative source for information about all API calls and whether they were successful or denied access. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/cloudtrail-integration.html">Logging IAM Events with CloudTrail</a> in the <i>IAM User Guide</i>.</p> </important> <p>The <code>GenerateServiceLastAccessedDetails</code> operation returns a <code>JobId</code>. Use this parameter in the following operations to retrieve the following details from your report: </p> <ul> <li> <p> <a>GetServiceLastAccessedDetails</a> – Use this operation for users, groups, roles, or policies to list every AWS service that the resource could access using permissions policies. For each service, the response includes information about the most recent access attempt. </p> </li> <li> <p> <a>GetServiceLastAccessedDetailsWithEntities</a> – Use this operation for groups and policies to list information about the associated entities (users or roles) that attempted to access a specific AWS service. </p> </li> </ul> <p>To check the status of the <code>GenerateServiceLastAccessedDetails</code> request, use the <code>JobId</code> parameter in the same operations and test the <code>JobStatus</code> response parameter.</p> <p>For additional information about the permissions policies that allow an identity (user, group, or role) to access specific services, use the <a>ListPoliciesGrantingServiceAccess</a> operation.</p> <note> <p>Service last accessed data does not use other policy types when determining whether a resource could access a service. These other policy types include resource-based policies, access control lists, AWS Organizations policies, IAM permissions boundaries, and AWS STS assume role policies. It only applies permissions policy logic. For more about the evaluation of policy types, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-basics">Evaluating Policies</a> in the <i>IAM User Guide</i>.</p> </note> <p>For more information about service last accessed data, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_access-advisor.html">Reducing Policy Scope by Viewing User Activity</a> in the <i>IAM User Guide</i>.</p>
+    fn generate_service_last_accessed_details(
+        &self,
+        input: GenerateServiceLastAccessedDetailsRequest,
+    ) -> RusotoFuture<
+        GenerateServiceLastAccessedDetailsResponse,
+        GenerateServiceLastAccessedDetailsError,
+    > {
+        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "GenerateServiceLastAccessedDetails");
+        params.put("Version", "2010-05-08");
+        GenerateServiceLastAccessedDetailsRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GenerateServiceLastAccessedDetailsError::from_response(
+                        response,
+                    ))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = GenerateServiceLastAccessedDetailsResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = GenerateServiceLastAccessedDetailsResponseDeserializer::deserialize(
+                        "GenerateServiceLastAccessedDetailsResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -28331,7 +31018,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -28382,7 +31069,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -28431,7 +31118,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -28483,7 +31170,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -28533,7 +31220,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -28585,7 +31272,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -28636,7 +31323,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -28684,7 +31371,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -28737,7 +31424,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -28790,7 +31477,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -28843,7 +31530,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -28893,7 +31580,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -28944,7 +31631,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -28997,7 +31684,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -29044,7 +31731,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -29097,7 +31784,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -29150,7 +31837,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -29203,7 +31890,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -29255,7 +31942,116 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
 
+    /// <p>After you generate a user, group, role, or policy report using the <code>GenerateServiceLastAccessedDetails</code> operation, you can use the <code>JobId</code> parameter in <code>GetServiceLastAccessedDetails</code>. This operation retrieves the status of your report job and a list of AWS services that the resource (user, group, role, or managed policy) can access.</p> <note> <p>Service last accessed data does not use other policy types when determining whether a resource could access a service. These other policy types include resource-based policies, access control lists, AWS Organizations policies, IAM permissions boundaries, and AWS STS assume role policies. It only applies permissions policy logic. For more about the evaluation of policy types, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-basics">Evaluating Policies</a> in the <i>IAM User Guide</i>.</p> </note> <p>For each service that the resource could access using permissions policies, the operation returns details about the most recent access attempt. If there was no attempt, the service is listed without details about the most recent attempt to access the service. If the operation fails, the <code>GetServiceLastAccessedDetails</code> operation returns the reason that it failed.</p> <p>The <code>GetServiceLastAccessedDetails</code> operation returns a list of services that includes the number of entities that have attempted to access the service and the date and time of the last attempt. It also returns the ARN of the following entity, depending on the resource ARN that you used to generate the report:</p> <ul> <li> <p> <b>User</b> – Returns the user ARN that you used to generate the report</p> </li> <li> <p> <b>Group</b> – Returns the ARN of the group member (user) that last attempted to access the service</p> </li> <li> <p> <b>Role</b> – Returns the role ARN that you used to generate the report</p> </li> <li> <p> <b>Policy</b> – Returns the ARN of the user or role that last used the policy to attempt to access the service</p> </li> </ul> <p>By default, the list is sorted by service namespace.</p>
+    fn get_service_last_accessed_details(
+        &self,
+        input: GetServiceLastAccessedDetailsRequest,
+    ) -> RusotoFuture<GetServiceLastAccessedDetailsResponse, GetServiceLastAccessedDetailsError>
+    {
+        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "GetServiceLastAccessedDetails");
+        params.put("Version", "2010-05-08");
+        GetServiceLastAccessedDetailsRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetServiceLastAccessedDetailsError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = GetServiceLastAccessedDetailsResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = GetServiceLastAccessedDetailsResponseDeserializer::deserialize(
+                        "GetServiceLastAccessedDetailsResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>After you generate a group or policy report using the <code>GenerateServiceLastAccessedDetails</code> operation, you can use the <code>JobId</code> parameter in <code>GetServiceLastAccessedDetailsWithEntities</code>. This operation retrieves the status of your report job and a list of entities that could have used group or policy permissions to access the specified service.</p> <ul> <li> <p> <b>Group</b> – For a group report, this operation returns a list of users in the group that could have used the group’s policies in an attempt to access the service.</p> </li> <li> <p> <b>Policy</b> – For a policy report, this operation returns a list of entities (users or roles) that could have used the policy in an attempt to access the service.</p> </li> </ul> <p>You can also use this operation for user or role reports to retrieve details about those entities.</p> <p>If the operation fails, the <code>GetServiceLastAccessedDetailsWithEntities</code> operation returns the reason that it failed.</p> <p>By default, the list of associated entities is sorted by date, with the most recent access listed first.</p>
+    fn get_service_last_accessed_details_with_entities(
+        &self,
+        input: GetServiceLastAccessedDetailsWithEntitiesRequest,
+    ) -> RusotoFuture<
+        GetServiceLastAccessedDetailsWithEntitiesResponse,
+        GetServiceLastAccessedDetailsWithEntitiesError,
+    > {
+        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "GetServiceLastAccessedDetailsWithEntities");
+        params.put("Version", "2010-05-08");
+        GetServiceLastAccessedDetailsWithEntitiesRequestSerializer::serialize(
+            &mut params,
+            "",
+            &input,
+        );
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetServiceLastAccessedDetailsWithEntitiesError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = GetServiceLastAccessedDetailsWithEntitiesResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result =
+                        GetServiceLastAccessedDetailsWithEntitiesResponseDeserializer::deserialize(
+                            "GetServiceLastAccessedDetailsWithEntitiesResult",
+                            &mut stack,
+                        )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -29310,7 +32106,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -29357,7 +32153,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -29410,13 +32206,13 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
     }
 
-    /// <p><p>Returns information about the access key IDs associated with the specified IAM user. If there are none, the operation returns an empty list.</p> <p>Although each user is limited to a small number of keys, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request. Because this operation works for access keys under the AWS account, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p> <note> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation.</p> </note></p>
+    /// <p><p>Returns information about the access key IDs associated with the specified IAM user. If there is none, the operation returns an empty list.</p> <p>Although each user is limited to a small number of keys, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p> <note> <p>To ensure the security of your AWS account, the secret access key is accessible only during key and user creation.</p> </note></p>
     fn list_access_keys(
         &self,
         input: ListAccessKeysRequest,
@@ -29463,7 +32259,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -29516,7 +32312,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -29566,7 +32362,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -29616,7 +32412,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -29666,7 +32462,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -29718,7 +32514,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -29771,7 +32567,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -29824,7 +32620,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -29877,7 +32673,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -29929,7 +32725,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -29979,7 +32775,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -30032,7 +32828,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -30082,7 +32878,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -30135,7 +32931,62 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
 
+    /// <p>Retrieves a list of policies that the IAM identity (user, group, or role) can use to access each specified service.</p> <note> <p>This operation does not use other policy types when determining whether a resource could access a service. These other policy types include resource-based policies, access control lists, AWS Organizations policies, IAM permissions boundaries, and AWS STS assume role policies. It only applies permissions policy logic. For more about the evaluation of policy types, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html#policy-eval-basics">Evaluating Policies</a> in the <i>IAM User Guide</i>.</p> </note> <p>The list of policies returned by the operation depends on the ARN of the identity that you provide.</p> <ul> <li> <p> <b>User</b> – The list of policies includes the managed and inline policies that are attached to the user directly. The list also includes any additional managed and inline policies that are attached to the group to which the user belongs. </p> </li> <li> <p> <b>Group</b> – The list of policies includes only the managed and inline policies that are attached to the group directly. Policies that are attached to the group’s user are not included.</p> </li> <li> <p> <b>Role</b> – The list of policies includes only the managed and inline policies that are attached to the role.</p> </li> </ul> <p>For each managed policy, this operation returns the ARN and policy name. For each inline policy, it returns the policy name and the entity to which it is attached. Inline policies do not have an ARN. For more information about these policy types, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_managed-vs-inline.html">Managed Policies and Inline Policies</a> in the <i>IAM User Guide</i>.</p> <p>Policies that are attached to users and roles as permissions boundaries are not returned. To view which managed policy is currently used to set the permissions boundary for a user or role, use the <a>GetUser</a> or <a>GetRole</a> operations.</p>
+    fn list_policies_granting_service_access(
+        &self,
+        input: ListPoliciesGrantingServiceAccessRequest,
+    ) -> RusotoFuture<
+        ListPoliciesGrantingServiceAccessResponse,
+        ListPoliciesGrantingServiceAccessError,
+    > {
+        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ListPoliciesGrantingServiceAccess");
+        params.put("Version", "2010-05-08");
+        ListPoliciesGrantingServiceAccessRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListPoliciesGrantingServiceAccessError::from_response(
+                        response,
+                    ))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = ListPoliciesGrantingServiceAccessResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ListPoliciesGrantingServiceAccessResponseDeserializer::deserialize(
+                        "ListPoliciesGrantingServiceAccessResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -30188,7 +33039,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -30241,7 +33092,60 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
 
+    /// <p>Lists the tags that are attached to the specified role. The returned list of tags is sorted by tag key. For more information about tagging, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
+    fn list_role_tags(
+        &self,
+        input: ListRoleTagsRequest,
+    ) -> RusotoFuture<ListRoleTagsResponse, ListRoleTagsError> {
+        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ListRoleTags");
+        params.put("Version", "2010-05-08");
+        ListRoleTagsRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListRoleTagsError::from_response(response))),
+                );
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = ListRoleTagsResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ListRoleTagsResponseDeserializer::deserialize(
+                        "ListRoleTagsResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -30292,7 +33196,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -30345,13 +33249,13 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
     }
 
-    /// <p>Returns information about the SSH public keys associated with the specified IAM user. If there are none, the operation returns an empty list.</p> <p>The SSH public keys returned by this operation are used only for authenticating the IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p> <p>Although each user is limited to a small number of keys, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
+    /// <p>Returns information about the SSH public keys associated with the specified IAM user. If there none exists, the operation returns an empty list.</p> <p>The SSH public keys returned by this operation are used only for authenticating the IAM user to an AWS CodeCommit repository. For more information about using SSH keys to authenticate to an AWS CodeCommit repository, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-credentials-ssh.html">Set up AWS CodeCommit for SSH Connections</a> in the <i>AWS CodeCommit User Guide</i>.</p> <p>Although each user is limited to a small number of keys, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p>
     fn list_ssh_public_keys(
         &self,
         input: ListSSHPublicKeysRequest,
@@ -30398,7 +33302,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -30448,13 +33352,13 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
     }
 
-    /// <p>Returns information about the service-specific credentials associated with the specified IAM user. If there are none, the operation returns an empty list. The service-specific credentials returned by this operation are used only for authenticating the IAM user to a specific service. For more information about using service-specific credentials to authenticate to an AWS service, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-gc.html">Set Up service-specific credentials</a> in the AWS CodeCommit User Guide.</p>
+    /// <p>Returns information about the service-specific credentials associated with the specified IAM user. If none exists, the operation returns an empty list. The service-specific credentials returned by this operation are used only for authenticating the IAM user to a specific service. For more information about using service-specific credentials to authenticate to an AWS service, see <a href="http://docs.aws.amazon.com/codecommit/latest/userguide/setting-up-gc.html">Set Up service-specific credentials</a> in the AWS CodeCommit User Guide.</p>
     fn list_service_specific_credentials(
         &self,
         input: ListServiceSpecificCredentialsRequest,
@@ -30499,13 +33403,13 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
     }
 
-    /// <p>Returns information about the signing certificates associated with the specified IAM user. If there are none, the operation returns an empty list.</p> <p>Although each user is limited to a small number of signing certificates, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request for this API. Because this operation works for access keys under the AWS account, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p>
+    /// <p>Returns information about the signing certificates associated with the specified IAM user. If there none exists, the operation returns an empty list.</p> <p>Although each user is limited to a small number of signing certificates, you can still paginate the results using the <code>MaxItems</code> and <code>Marker</code> parameters.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request for this API. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p>
     fn list_signing_certificates(
         &self,
         input: ListSigningCertificatesRequest,
@@ -30549,7 +33453,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -30602,7 +33506,60 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
 
+    /// <p>Lists the tags that are attached to the specified user. The returned list of tags is sorted by tag key. For more information about tagging, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
+    fn list_user_tags(
+        &self,
+        input: ListUserTagsRequest,
+    ) -> RusotoFuture<ListUserTagsResponse, ListUserTagsError> {
+        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ListUserTags");
+        params.put("Version", "2010-05-08");
+        ListUserTagsRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListUserTagsError::from_response(response))),
+                );
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = ListUserTagsResponse::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ListUserTagsResponseDeserializer::deserialize(
+                        "ListUserTagsResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -30653,7 +33610,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -30705,7 +33662,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -30741,7 +33698,7 @@ impl Iam for IamClient {
         })
     }
 
-    /// <p><p>Adds or updates the policy that is specified as the IAM role&#39;s permissions boundary. You can use an AWS managed policy or a customer managed policy to set the boundary for a role. Use the boundary to control the maximum permissions that the role can have. Setting a permissions boundary is an advanced feature that can affect the permissions for the role.</p> <p>You cannot set the boundary for a service-linked role. </p> <important> <p>Policies used as permissions boundaries do not provide permissions. You must also attach a permissions policy to the role. To learn how the effective permissions for a role are evaluated, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html">IAM JSON Policy Evaluation Logic</a> in the IAM User Guide. </p> </important></p>
+    /// <p><p>Adds or updates the policy that is specified as the IAM role&#39;s permissions boundary. You can use an AWS managed policy or a customer managed policy to set the boundary for a role. Use the boundary to control the maximum permissions that the role can have. Setting a permissions boundary is an advanced feature that can affect the permissions for the role.</p> <p>You cannot set the boundary for a service-linked role. </p> <important> <p>Policies used as permissions boundaries do not provide permissions. You must also attach a permissions policy to the role. To learn how the effective permissions for a role are evaluated, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html">IAM JSON Policy Evaluation Logic</a> in the IAM User Guide. </p> </important></p>
     fn put_role_permissions_boundary(
         &self,
         input: PutRolePermissionsBoundaryRequest,
@@ -30795,7 +33752,7 @@ impl Iam for IamClient {
         })
     }
 
-    /// <p><p>Adds or updates the policy that is specified as the IAM user&#39;s permissions boundary. You can use an AWS managed policy or a customer managed policy to set the boundary for a user. Use the boundary to control the maximum permissions that the user can have. Setting a permissions boundary is an advanced feature that can affect the permissions for the user.</p> <important> <p>Policies that are used as permissions boundaries do not provide permissions. You must also attach a permissions policy to the user. To learn how the effective permissions for a user are evaluated, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html">IAM JSON Policy Evaluation Logic</a> in the IAM User Guide. </p> </important></p>
+    /// <p><p>Adds or updates the policy that is specified as the IAM user&#39;s permissions boundary. You can use an AWS managed policy or a customer managed policy to set the boundary for a user. Use the boundary to control the maximum permissions that the user can have. Setting a permissions boundary is an advanced feature that can affect the permissions for the user.</p> <important> <p>Policies that are used as permissions boundaries do not provide permissions. You must also attach a permissions policy to the user. To learn how the effective permissions for a user are evaluated, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_policies_evaluation-logic.html">IAM JSON Policy Evaluation Logic</a> in the IAM User Guide. </p> </important></p>
     fn put_user_permissions_boundary(
         &self,
         input: PutUserPermissionsBoundaryRequest,
@@ -30983,7 +33940,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -31092,7 +34049,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -31142,13 +34099,121 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
     }
 
-    /// <p>Changes the status of the specified access key from Active to Inactive, or vice versa. This operation can be used to disable a user's key as part of a key rotation workflow.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request. Because this operation works for access keys under the AWS account, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p> <p>For information about rotating keys, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/ManagingCredentials.html">Managing Keys and Certificates</a> in the <i>IAM User Guide</i>.</p>
+    /// <p>Adds one or more tags to an IAM role. The role can be a regular role or a service-linked role. If a tag with the same key name already exists, then that tag is overwritten with the new value.</p> <p>A tag consists of a key name and an associated value. By assigning tags to your resources, you can do the following:</p> <ul> <li> <p> <b>Administrative grouping and discovery</b> - Attach tags to resources to aid in organization and search. For example, you could search for all resources with the key name <i>Project</i> and the value <i>MyImportantProject</i>. Or search for all resources with the key name <i>Cost Center</i> and the value <i>41200</i>. </p> </li> <li> <p> <b>Access control</b> - Reference tags in IAM user-based and resource-based policies. You can use tags to restrict access to only an IAM user or role that has a specified tag attached. You can also restrict access to only those resources that have a certain tag attached. For examples of policies that show how to use tags to control access, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/access_tags.html">Control Access Using IAM Tags</a> in the <i>IAM User Guide</i>.</p> </li> <li> <p> <b>Cost allocation</b> - Use tags to help track which individuals and teams are using which AWS resources.</p> </li> </ul> <note> <ul> <li> <p>Make sure that you have no invalid tags and that you do not exceed the allowed number of tags per role. In either case, the entire request fails and <i>no</i> tags are added to the role.</p> </li> <li> <p>AWS always interprets the tag <code>Value</code> as a single string. If you need to store an array, you can store comma-separated values in the string. However, you must interpret the value in your code.</p> </li> </ul> </note> <p>For more information about tagging, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
+    fn tag_role(&self, input: TagRoleRequest) -> RusotoFuture<(), TagRoleError> {
+        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "TagRole");
+        params.put("Version", "2010-05-08");
+        TagRoleRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagRoleError::from_response(response))),
+                );
+            }
+
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
+    }
+
+    /// <p>Adds one or more tags to an IAM user. If a tag with the same key name already exists, then that tag is overwritten with the new value.</p> <p>A tag consists of a key name and an associated value. By assigning tags to your resources, you can do the following:</p> <ul> <li> <p> <b>Administrative grouping and discovery</b> - Attach tags to resources to aid in organization and search. For example, you could search for all resources with the key name <i>Project</i> and the value <i>MyImportantProject</i>. Or search for all resources with the key name <i>Cost Center</i> and the value <i>41200</i>. </p> </li> <li> <p> <b>Access control</b> - Reference tags in IAM user-based and resource-based policies. You can use tags to restrict access to only an IAM requesting user or to a role that has a specified tag attached. You can also restrict access to only those resources that have a certain tag attached. For examples of policies that show how to use tags to control access, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/access_tags.html">Control Access Using IAM Tags</a> in the <i>IAM User Guide</i>.</p> </li> <li> <p> <b>Cost allocation</b> - Use tags to help track which individuals and teams are using which AWS resources.</p> </li> </ul> <note> <ul> <li> <p>Make sure that you have no invalid tags and that you do not exceed the allowed number of tags per role. In either case, the entire request fails and <i>no</i> tags are added to the role.</p> </li> <li> <p>AWS always interprets the tag <code>Value</code> as a single string. If you need to store an array, you can store comma-separated values in the string. However, you must interpret the value in your code.</p> </li> </ul> </note> <p>For more information about tagging, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
+    fn tag_user(&self, input: TagUserRequest) -> RusotoFuture<(), TagUserError> {
+        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "TagUser");
+        params.put("Version", "2010-05-08");
+        TagUserRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagUserError::from_response(response))),
+                );
+            }
+
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
+    }
+
+    /// <p>Removes the specified tags from the role. For more information about tagging, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
+    fn untag_role(&self, input: UntagRoleRequest) -> RusotoFuture<(), UntagRoleError> {
+        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "UntagRole");
+        params.put("Version", "2010-05-08");
+        UntagRoleRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagRoleError::from_response(response))),
+                );
+            }
+
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
+    }
+
+    /// <p>Removes the specified tags from the user. For more information about tagging, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_tags.html">Tagging IAM Identities</a> in the <i>IAM User Guide</i>.</p>
+    fn untag_user(&self, input: UntagUserRequest) -> RusotoFuture<(), UntagUserError> {
+        let mut request = SignedRequest::new("POST", "iam", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "UntagUser");
+        params.put("Version", "2010-05-08");
+        UntagUserRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagUserError::from_response(response))),
+                );
+            }
+
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
+    }
+
+    /// <p>Changes the status of the specified access key from Active to Inactive, or vice versa. This operation can be used to disable a user's key as part of a key rotation workflow.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p> <p>For information about rotating keys, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/ManagingCredentials.html">Managing Keys and Certificates</a> in the <i>IAM User Guide</i>.</p>
     fn update_access_key(
         &self,
         input: UpdateAccessKeyRequest,
@@ -31289,7 +34354,7 @@ impl Iam for IamClient {
         })
     }
 
-    /// <p><p>Replaces the existing list of server certificate thumbprints associated with an OpenID Connect (OIDC) provider resource object with a new list of thumbprints.</p> <p>The list that you pass with this operation completely replaces the existing list of thumbprints. (The lists are not merged.)</p> <p>Typically, you need to update a thumbprint only when the identity provider&#39;s certificate changes, which occurs rarely. However, if the provider&#39;s certificate <i>does</i> change, any attempt to assume an IAM role that specifies the OIDC provider as a principal fails until the certificate thumbprint is updated.</p> <note> <p>Because trust for the OIDC provider is derived from the provider&#39;s certificate and is validated by the thumbprint, it is best to limit access to the <code>UpdateOpenIDConnectProviderThumbprint</code> operation to highly privileged users.</p> </note></p>
+    /// <p><p>Replaces the existing list of server certificate thumbprints associated with an OpenID Connect (OIDC) provider resource object with a new list of thumbprints.</p> <p>The list that you pass with this operation completely replaces the existing list of thumbprints. (The lists are not merged.)</p> <p>Typically, you need to update a thumbprint only when the identity provider&#39;s certificate changes, which occurs rarely. However, if the provider&#39;s certificate <i>does</i> change, any attempt to assume an IAM role that specifies the OIDC provider as a principal fails until the certificate thumbprint is updated.</p> <note> <p>Trust for the OIDC provider is derived from the provider&#39;s certificate and is validated by the thumbprint. Therefore, it is best to limit access to the <code>UpdateOpenIDConnectProviderThumbprint</code> operation to highly privileged users.</p> </note></p>
     fn update_open_id_connect_provider_thumbprint(
         &self,
         input: UpdateOpenIDConnectProviderThumbprintRequest,
@@ -31365,13 +34430,13 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
     }
 
-    /// <p>Use instead.</p> <p>Modifies only the description of a role. This operation performs the same function as the <code>Description</code> parameter in the <code>UpdateRole</code> operation.</p>
+    /// <p>Use <a>UpdateRole</a> instead.</p> <p>Modifies only the description of a role. This operation performs the same function as the <code>Description</code> parameter in the <code>UpdateRole</code> operation.</p>
     fn update_role_description(
         &self,
         input: UpdateRoleDescriptionRequest,
@@ -31417,7 +34482,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -31470,7 +34535,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -31562,7 +34627,7 @@ impl Iam for IamClient {
         })
     }
 
-    /// <p>Changes the status of the specified user signing certificate from active to disabled, or vice versa. This operation can be used to disable an IAM user's signing certificate as part of a certificate rotation work flow.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request. Because this operation works for access keys under the AWS account, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p>
+    /// <p>Changes the status of the specified user signing certificate from active to disabled, or vice versa. This operation can be used to disable an IAM user's signing certificate as part of a certificate rotation work flow.</p> <p>If the <code>UserName</code> field is not specified, the user name is determined implicitly based on the AWS access key ID used to sign the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p>
     fn update_signing_certificate(
         &self,
         input: UpdateSigningCertificateRequest,
@@ -31663,13 +34728,13 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
     }
 
-    /// <p><p>Uploads a server certificate entity for the AWS account. The server certificate entity includes a public key certificate, a private key, and an optional certificate chain, which should all be PEM-encoded.</p> <p>We recommend that you use <a href="https://aws.amazon.com/certificate-manager/">AWS Certificate Manager</a> to provision, manage, and deploy your server certificates. With ACM you can request a certificate, deploy it to AWS resources, and let ACM handle certificate renewals for you. Certificates provided by ACM are free. For more information about using ACM, see the <a href="http://docs.aws.amazon.com/acm/latest/userguide/">AWS Certificate Manager User Guide</a>.</p> <p>For more information about working with server certificates, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>. This topic includes a list of AWS services that can use the server certificates that you manage with IAM.</p> <p>For information about the number of server certificates you can upload, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-limits.html">Limitations on IAM Entities and Objects</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because the body of the public key certificate, private key, and the certificate chain can be large, you should use POST rather than GET when calling <code>UploadServerCertificate</code>. For information about setting up signatures and authorization through the API, go to <a href="http://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html">Signing AWS API Requests</a> in the <i>AWS General Reference</i>. For general information about using the Query API with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/programming.html">Calling the API by Making HTTP Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
+    /// <p><p>Uploads a server certificate entity for the AWS account. The server certificate entity includes a public key certificate, a private key, and an optional certificate chain, which should all be PEM-encoded.</p> <p>We recommend that you use <a href="http://docs.aws.amazon.com/certificate-manager/">AWS Certificate Manager</a> to provision, manage, and deploy your server certificates. With ACM you can request a certificate, deploy it to AWS resources, and let ACM handle certificate renewals for you. Certificates provided by ACM are free. For more information about using ACM, see the <a href="http://docs.aws.amazon.com/acm/latest/userguide/">AWS Certificate Manager User Guide</a>.</p> <p>For more information about working with server certificates, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_server-certs.html">Working with Server Certificates</a> in the <i>IAM User Guide</i>. This topic includes a list of AWS services that can use the server certificates that you manage with IAM.</p> <p>For information about the number of server certificates you can upload, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/reference_iam-limits.html">Limitations on IAM Entities and Objects</a> in the <i>IAM User Guide</i>.</p> <note> <p>Because the body of the public key certificate, private key, and the certificate chain can be large, you should use POST rather than GET when calling <code>UploadServerCertificate</code>. For information about setting up signatures and authorization through the API, go to <a href="http://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html">Signing AWS API Requests</a> in the <i>AWS General Reference</i>. For general information about using the Query API with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/programming.html">Calling the API by Making HTTP Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
     fn upload_server_certificate(
         &self,
         input: UploadServerCertificateRequest,
@@ -31713,13 +34778,13 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
     }
 
-    /// <p><p>Uploads an X.509 signing certificate and associates it with the specified IAM user. Some AWS services use X.509 signing certificates to validate requests that are signed with a corresponding private key. When you upload the certificate, its default status is <code>Active</code>.</p> <p>If the <code>UserName</code> field is not specified, the IAM user name is determined implicitly based on the AWS access key ID used to sign the request. Because this operation works for access keys under the AWS account, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p> <note> <p>Because the body of an X.509 certificate can be large, you should use POST rather than GET when calling <code>UploadSigningCertificate</code>. For information about setting up signatures and authorization through the API, go to <a href="http://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html">Signing AWS API Requests</a> in the <i>AWS General Reference</i>. For general information about using the Query API with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
+    /// <p><p>Uploads an X.509 signing certificate and associates it with the specified IAM user. Some AWS services use X.509 signing certificates to validate requests that are signed with a corresponding private key. When you upload the certificate, its default status is <code>Active</code>.</p> <p>If the <code>UserName</code> field is not specified, the IAM user name is determined implicitly based on the AWS access key ID used to sign the request. This operation works for access keys under the AWS account. Consequently, you can use this operation to manage AWS account root user credentials even if the AWS account has no associated users.</p> <note> <p>Because the body of an X.509 certificate can be large, you should use POST rather than GET when calling <code>UploadSigningCertificate</code>. For information about setting up signatures and authorization through the API, go to <a href="http://docs.aws.amazon.com/general/latest/gr/signing_aws_api_requests.html">Signing AWS API Requests</a> in the <i>AWS General Reference</i>. For general information about using the Query API with IAM, go to <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/IAM_UsingQueryAPI.html">Making Query Requests</a> in the <i>IAM User Guide</i>.</p> </note></p>
     fn upload_signing_certificate(
         &self,
         input: UploadSigningCertificateRequest,
@@ -31763,7 +34828,7 @@ impl Iam for IamClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })

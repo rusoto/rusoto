@@ -34,9 +34,48 @@ pub struct AddTagsToStreamInput {
     /// <p>The name of the stream.</p>
     #[serde(rename = "StreamName")]
     pub stream_name: String,
-    /// <p>The set of key-value pairs to use to create the tags.</p>
+    /// <p>A set of up to 10 key-value pairs to use to create the tags.</p>
     #[serde(rename = "Tags")]
     pub tags: ::std::collections::HashMap<String, String>,
+}
+
+/// <p>An object that represents the details of the consumer you registered.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct Consumer {
+    /// <p>When you register a consumer, Kinesis Data Streams generates an ARN for it. You need this ARN to be able to call <a>SubscribeToShard</a>.</p> <p>If you delete a consumer and then create a new one with the same name, it won't have the same ARN. That's because consumer ARNs contain the creation timestamp. This is important to keep in mind if you have IAM policies that reference consumer ARNs.</p>
+    #[serde(rename = "ConsumerARN")]
+    pub consumer_arn: String,
+    /// <p><p/></p>
+    #[serde(rename = "ConsumerCreationTimestamp")]
+    pub consumer_creation_timestamp: f64,
+    /// <p>The name of the consumer is something you choose when you register the consumer.</p>
+    #[serde(rename = "ConsumerName")]
+    pub consumer_name: String,
+    /// <p>A consumer can't read data while in the <code>CREATING</code> or <code>DELETING</code> states.</p>
+    #[serde(rename = "ConsumerStatus")]
+    pub consumer_status: String,
+}
+
+/// <p>An object that represents the details of a registered consumer.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ConsumerDescription {
+    /// <p>When you register a consumer, Kinesis Data Streams generates an ARN for it. You need this ARN to be able to call <a>SubscribeToShard</a>.</p> <p>If you delete a consumer and then create a new one with the same name, it won't have the same ARN. That's because consumer ARNs contain the creation timestamp. This is important to keep in mind if you have IAM policies that reference consumer ARNs.</p>
+    #[serde(rename = "ConsumerARN")]
+    pub consumer_arn: String,
+    /// <p><p/></p>
+    #[serde(rename = "ConsumerCreationTimestamp")]
+    pub consumer_creation_timestamp: f64,
+    /// <p>The name of the consumer is something you choose when you register the consumer.</p>
+    #[serde(rename = "ConsumerName")]
+    pub consumer_name: String,
+    /// <p>A consumer can't read data while in the <code>CREATING</code> or <code>DELETING</code> states.</p>
+    #[serde(rename = "ConsumerStatus")]
+    pub consumer_status: String,
+    /// <p>The ARN of the stream with which you registered the consumer.</p>
+    #[serde(rename = "StreamARN")]
+    pub stream_arn: String,
 }
 
 /// <p>Represents the input for <code>CreateStream</code>.</p>
@@ -64,9 +103,29 @@ pub struct DecreaseStreamRetentionPeriodInput {
 /// <p>Represents the input for <a>DeleteStream</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteStreamInput {
+    /// <p>If this parameter is unset (<code>null</code>) or if you set it to <code>false</code>, and the stream has registered consumers, the call to <code>DeleteStream</code> fails with a <code>ResourceInUseException</code>. </p>
+    #[serde(rename = "EnforceConsumerDeletion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enforce_consumer_deletion: Option<bool>,
     /// <p>The name of the stream to delete.</p>
     #[serde(rename = "StreamName")]
     pub stream_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeregisterStreamConsumerInput {
+    /// <p>The ARN returned by Kinesis Data Streams when you registered the consumer. If you don't know the ARN of the consumer that you want to deregister, you can use the ListStreamConsumers operation to get a list of the descriptions of all the consumers that are currently registered with a given data stream. The description of a consumer contains its ARN.</p>
+    #[serde(rename = "ConsumerARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub consumer_arn: Option<String>,
+    /// <p>The name that you gave to the consumer.</p>
+    #[serde(rename = "ConsumerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub consumer_name: Option<String>,
+    /// <p>The ARN of the Kinesis data stream that the consumer is registered with. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-kinesis-streams">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p>
+    #[serde(rename = "StreamARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_arn: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -81,6 +140,30 @@ pub struct DescribeLimitsOutput {
     /// <p>The maximum number of shards.</p>
     #[serde(rename = "ShardLimit")]
     pub shard_limit: i64,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeStreamConsumerInput {
+    /// <p>The ARN returned by Kinesis Data Streams when you registered the consumer.</p>
+    #[serde(rename = "ConsumerARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub consumer_arn: Option<String>,
+    /// <p>The name that you gave to the consumer.</p>
+    #[serde(rename = "ConsumerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub consumer_name: Option<String>,
+    /// <p>The ARN of the Kinesis data stream that the consumer is registered with. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-kinesis-streams">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p>
+    #[serde(rename = "StreamARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeStreamConsumerOutput {
+    /// <p>An object that represents the details of the consumer.</p>
+    #[serde(rename = "ConsumerDescription")]
+    pub consumer_description: ConsumerDescription,
 }
 
 /// <p>Represents the input for <code>DescribeStream</code>.</p>
@@ -173,6 +256,19 @@ pub struct EnhancedMonitoringOutput {
     pub stream_name: Option<String>,
 }
 
+/// <p>The provided iterator exceeds the maximum age allowed.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ExpiredIteratorException {
+    /// <p>A message that provides information about the error.</p>
+    pub message: Option<String>,
+}
+
+/// <p>The pagination token passed to the operation is expired.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ExpiredNextTokenException {
+    pub message: Option<String>,
+}
+
 /// <p>Represents the input for <a>GetRecords</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetRecordsInput {
@@ -257,9 +353,91 @@ pub struct IncreaseStreamRetentionPeriodInput {
     pub stream_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct InternalFailureException {
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+}
+
+/// <p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct InvalidArgumentException {
+    /// <p>A message that provides information about the error.</p>
+    pub message: Option<String>,
+}
+
+/// <p>The ciphertext references a key that doesn't exist or that you don't have access to.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct KMSAccessDeniedException {
+    /// <p>A message that provides information about the error.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+}
+
+/// <p>The request was rejected because the specified customer master key (CMK) isn't enabled.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct KMSDisabledException {
+    /// <p>A message that provides information about the error.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+}
+
+/// <p>The request was rejected because the state of the specified resource isn't valid for this request. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct KMSInvalidStateException {
+    /// <p>A message that provides information about the error.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+}
+
+/// <p>The request was rejected because the specified entity or resource can't be found.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct KMSNotFoundException {
+    /// <p>A message that provides information about the error.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+}
+
+/// <p>The AWS access key ID needs a subscription for the service.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct KMSOptInRequired {
+    /// <p>A message that provides information about the error.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+}
+
+/// <p>The request was denied due to request throttling. For more information about throttling, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html#requests-per-second">Limits</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct KMSThrottlingException {
+    /// <p>A message that provides information about the error.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+}
+
+/// <p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LimitExceededException {
+    /// <p>A message that provides information about the error.</p>
+    pub message: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListShardsInput {
-    /// <p>The ID of the shard to start the list with. </p> <p>If you don't specify this parameter, the default behavior is for <code>ListShards</code> to list the shards starting with the first one in the stream.</p> <p>You cannot specify this parameter if you specify <code>NextToken</code>.</p>
+    /// <p>Specify this parameter to indicate that you want to list the shards starting with the shard whose ID immediately follows <code>ExclusiveStartShardId</code>.</p> <p>If you don't specify this parameter, the default behavior is for <code>ListShards</code> to list the shards starting with the first one in the stream.</p> <p>You cannot specify this parameter if you specify <code>NextToken</code>.</p>
     #[serde(rename = "ExclusiveStartShardId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub exclusive_start_shard_id: Option<String>,
@@ -292,6 +470,38 @@ pub struct ListShardsOutput {
     #[serde(rename = "Shards")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub shards: Option<Vec<Shard>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListStreamConsumersInput {
+    /// <p>The maximum number of consumers that you want a single call of <code>ListStreamConsumers</code> to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p><p>When the number of consumers that are registered with the data stream is greater than the default value for the <code>MaxResults</code> parameter, or if you explicitly specify a value for <code>MaxResults</code> that is less than the number of consumers that are registered with the data stream, the response includes a pagination token named <code>NextToken</code>. You can specify this <code>NextToken</code> value in a subsequent call to <code>ListStreamConsumers</code> to list the next set of registered consumers.</p> <p>Don&#39;t specify <code>StreamName</code> or <code>StreamCreationTimestamp</code> if you specify <code>NextToken</code> because the latter unambiguously identifies the stream.</p> <p>You can optionally specify a value for the <code>MaxResults</code> parameter when you specify <code>NextToken</code>. If you specify a <code>MaxResults</code> value that is less than the number of consumers that the operation returns if you don&#39;t specify <code>MaxResults</code>, the response will contain a new <code>NextToken</code> value. You can use the new <code>NextToken</code> value in a subsequent call to the <code>ListStreamConsumers</code> operation to list the next set of consumers.</p> <important> <p>Tokens expire after 300 seconds. When you obtain a value for <code>NextToken</code> in the response to a call to <code>ListStreamConsumers</code>, you have 300 seconds to use that value. If you specify an expired token in a call to <code>ListStreamConsumers</code>, you get <code>ExpiredNextTokenException</code>.</p> </important></p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The ARN of the Kinesis data stream for which you want to list the registered consumers. For more information, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-kinesis-streams">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p>
+    #[serde(rename = "StreamARN")]
+    pub stream_arn: String,
+    /// <p>Specify this input parameter to distinguish data streams that have the same name. For example, if you create a data stream and then delete it, and you later create another data stream with the same name, you can use this input parameter to specify which of the two streams you want to list the consumers for. </p> <p>You can't specify this parameter if you specify the NextToken parameter. </p>
+    #[serde(rename = "StreamCreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_creation_timestamp: Option<f64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListStreamConsumersOutput {
+    /// <p>An array of JSON objects. Each object represents one registered consumer.</p>
+    #[serde(rename = "Consumers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub consumers: Option<Vec<Consumer>>,
+    /// <p><p>When the number of consumers that are registered with the data stream is greater than the default value for the <code>MaxResults</code> parameter, or if you explicitly specify a value for <code>MaxResults</code> that is less than the number of registered consumers, the response includes a pagination token named <code>NextToken</code>. You can specify this <code>NextToken</code> value in a subsequent call to <code>ListStreamConsumers</code> to list the next set of registered consumers. For more information about the use of this pagination token when calling the <code>ListStreamConsumers</code> operation, see <a>ListStreamConsumersInput$NextToken</a>.</p> <important> <p>Tokens expire after 300 seconds. When you obtain a value for <code>NextToken</code> in the response to a call to <code>ListStreamConsumers</code>, you have 300 seconds to use that value. If you specify an expired token in a call to <code>ListStreamConsumers</code>, you get <code>ExpiredNextTokenException</code>.</p> </important></p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
 }
 
 /// <p>Represents the input for <code>ListStreams</code>.</p>
@@ -359,6 +569,13 @@ pub struct MergeShardsInput {
     /// <p>The name of the stream for the merge.</p>
     #[serde(rename = "StreamName")]
     pub stream_name: String,
+}
+
+/// <p>The request rate for the stream is too high, or the requested data is too large for the available throughput. Reduce the frequency or size of your requests. For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html">Streams Limits</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>, and <a href="http://docs.aws.amazon.com/general/latest/gr/api-retries.html">Error Retries and Exponential Backoff in AWS</a> in the <i>AWS General Reference</i>.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ProvisionedThroughputExceededException {
+    /// <p>A message that provides information about the error.</p>
+    pub message: Option<String>,
 }
 
 /// <p>Represents the input for <code>PutRecord</code>.</p>
@@ -502,6 +719,24 @@ pub struct Record {
     pub sequence_number: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct RegisterStreamConsumerInput {
+    /// <p>For a given Kinesis data stream, each consumer must have a unique name. However, consumer names don't have to be unique across data streams.</p>
+    #[serde(rename = "ConsumerName")]
+    pub consumer_name: String,
+    /// <p>The ARN of the Kinesis data stream that you want to register the consumer with. For more info, see <a href="https://docs.aws.amazon.com/general/latest/gr/aws-arns-and-namespaces.html#arn-syntax-kinesis-streams">Amazon Resource Names (ARNs) and AWS Service Namespaces</a>.</p>
+    #[serde(rename = "StreamARN")]
+    pub stream_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RegisterStreamConsumerOutput {
+    /// <p>An object that represents the details of the consumer you registered. When you register a consumer, it gets an ARN that is generated by Kinesis Data Streams.</p>
+    #[serde(rename = "Consumer")]
+    pub consumer: Consumer,
+}
+
 /// <p>Represents the input for <code>RemoveTagsFromStream</code>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RemoveTagsFromStreamInput {
@@ -511,6 +746,26 @@ pub struct RemoveTagsFromStreamInput {
     /// <p>A list of tag keys. Each corresponding tag is removed from the stream.</p>
     #[serde(rename = "TagKeys")]
     pub tag_keys: Vec<String>,
+}
+
+/// <p>The resource is not available for this operation. For successful operation, the resource must be in the <code>ACTIVE</code> state.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ResourceInUseException {
+    /// <p>A message that provides information about the error.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+}
+
+/// <p>The requested resource could not be found. The stream might not be specified correctly.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ResourceNotFoundException {
+    /// <p>A message that provides information about the error.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
 }
 
 /// <p>The range of possible sequence numbers for the shard.</p>
@@ -577,6 +832,18 @@ pub struct StartStreamEncryptionInput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StartingPosition {
+    #[serde(rename = "SequenceNumber")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sequence_number: Option<String>,
+    #[serde(rename = "Timestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timestamp: Option<f64>,
+    #[serde(rename = "Type")]
+    pub type_: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StopStreamEncryptionInput {
     /// <p>The encryption type. The only valid value is <code>KMS</code>.</p>
     #[serde(rename = "EncryptionType")]
@@ -631,6 +898,10 @@ pub struct StreamDescription {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct StreamDescriptionSummary {
+    /// <p>The number of enhanced fan-out consumers registered with the stream.</p>
+    #[serde(rename = "ConsumerCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub consumer_count: Option<i64>,
     /// <p><p>The encryption type used. This value is one of the following:</p> <ul> <li> <p> <code>KMS</code> </p> </li> <li> <p> <code>NONE</code> </p> </li> </ul></p>
     #[serde(rename = "EncryptionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -660,6 +931,75 @@ pub struct StreamDescriptionSummary {
     /// <p><p>The current status of the stream being described. The stream status is one of the following states:</p> <ul> <li> <p> <code>CREATING</code> - The stream is being created. Kinesis Data Streams immediately returns and sets <code>StreamStatus</code> to <code>CREATING</code>.</p> </li> <li> <p> <code>DELETING</code> - The stream is being deleted. The specified stream is in the <code>DELETING</code> state until Kinesis Data Streams completes the deletion.</p> </li> <li> <p> <code>ACTIVE</code> - The stream exists and is ready for read and write operations or deletion. You should perform read and write operations only on an <code>ACTIVE</code> stream.</p> </li> <li> <p> <code>UPDATING</code> - Shards in the stream are being merged or split. Read and write operations continue to work while the stream is in the <code>UPDATING</code> state.</p> </li> </ul></p>
     #[serde(rename = "StreamStatus")]
     pub stream_status: String,
+}
+
+/// <p>After you call <a>SubscribeToShard</a>, Kinesis Data Streams sends events of this type to your consumer. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SubscribeToShardEvent {
+    /// <p>Use this as <code>StartingSequenceNumber</code> in the next call to <a>SubscribeToShard</a>.</p>
+    #[serde(rename = "ContinuationSequenceNumber")]
+    pub continuation_sequence_number: String,
+    /// <p>The number of milliseconds the read records are from the tip of the stream, indicating how far behind current time the consumer is. A value of zero indicates that record processing is caught up, and there are no new records to process at this moment.</p>
+    #[serde(rename = "MillisBehindLatest")]
+    pub millis_behind_latest: i64,
+    /// <p><p/></p>
+    #[serde(rename = "Records")]
+    pub records: Vec<Record>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SubscribeToShardEventStream {
+    #[serde(rename = "InternalFailureException")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub internal_failure_exception: Option<InternalFailureException>,
+    #[serde(rename = "KMSAccessDeniedException")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_access_denied_exception: Option<KMSAccessDeniedException>,
+    #[serde(rename = "KMSDisabledException")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_disabled_exception: Option<KMSDisabledException>,
+    #[serde(rename = "KMSInvalidStateException")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_invalid_state_exception: Option<KMSInvalidStateException>,
+    #[serde(rename = "KMSNotFoundException")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_not_found_exception: Option<KMSNotFoundException>,
+    #[serde(rename = "KMSOptInRequired")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_opt_in_required: Option<KMSOptInRequired>,
+    #[serde(rename = "KMSThrottlingException")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_throttling_exception: Option<KMSThrottlingException>,
+    #[serde(rename = "ResourceInUseException")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_in_use_exception: Option<ResourceInUseException>,
+    #[serde(rename = "ResourceNotFoundException")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_not_found_exception: Option<ResourceNotFoundException>,
+    #[serde(rename = "SubscribeToShardEvent")]
+    pub subscribe_to_shard_event: SubscribeToShardEvent,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct SubscribeToShardInput {
+    /// <p>For this parameter, use the value you obtained when you called <a>RegisterStreamConsumer</a>.</p>
+    #[serde(rename = "ConsumerARN")]
+    pub consumer_arn: String,
+    /// <p>The ID of the shard you want to subscribe to. To see a list of all the shards for a given stream, use <a>ListShards</a>.</p>
+    #[serde(rename = "ShardId")]
+    pub shard_id: String,
+    #[serde(rename = "StartingPosition")]
+    pub starting_position: StartingPosition,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SubscribeToShardOutput {
+    /// <p>The event stream that your consumer can use to read records from the shard.</p>
+    #[serde(rename = "EventStream")]
+    pub event_stream: SubscribeToShardEventStream,
 }
 
 /// <p>Metadata assigned to the stream, consisting of a key-value pair.</p>
@@ -1008,6 +1348,8 @@ impl Error for DecreaseStreamRetentionPeriodError {
 pub enum DeleteStreamError {
     /// <p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed. </p>
     LimitExceeded(String),
+    /// <p>The resource is not available for this operation. For successful operation, the resource must be in the <code>ACTIVE</code> state.</p>
+    ResourceInUse(String),
     /// <p>The requested resource could not be found. The stream might not be specified correctly.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
@@ -1037,6 +1379,9 @@ impl DeleteStreamError {
             match *error_type {
                 "LimitExceededException" => {
                     return DeleteStreamError::LimitExceeded(String::from(error_message));
+                }
+                "ResourceInUseException" => {
+                    return DeleteStreamError::ResourceInUse(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return DeleteStreamError::ResourceNotFound(String::from(error_message));
@@ -1080,12 +1425,111 @@ impl Error for DeleteStreamError {
     fn description(&self) -> &str {
         match *self {
             DeleteStreamError::LimitExceeded(ref cause) => cause,
+            DeleteStreamError::ResourceInUse(ref cause) => cause,
             DeleteStreamError::ResourceNotFound(ref cause) => cause,
             DeleteStreamError::Validation(ref cause) => cause,
             DeleteStreamError::Credentials(ref err) => err.description(),
             DeleteStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             DeleteStreamError::ParseError(ref cause) => cause,
             DeleteStreamError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DeregisterStreamConsumer
+#[derive(Debug, PartialEq)]
+pub enum DeregisterStreamConsumerError {
+    /// <p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
+    InvalidArgument(String),
+    /// <p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed. </p>
+    LimitExceeded(String),
+    /// <p>The requested resource could not be found. The stream might not be specified correctly.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DeregisterStreamConsumerError {
+    pub fn from_response(res: BufferedHttpResponse) -> DeregisterStreamConsumerError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InvalidArgumentException" => {
+                    return DeregisterStreamConsumerError::InvalidArgument(String::from(
+                        error_message,
+                    ));
+                }
+                "LimitExceededException" => {
+                    return DeregisterStreamConsumerError::LimitExceeded(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return DeregisterStreamConsumerError::ResourceNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return DeregisterStreamConsumerError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DeregisterStreamConsumerError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DeregisterStreamConsumerError {
+    fn from(err: serde_json::error::Error) -> DeregisterStreamConsumerError {
+        DeregisterStreamConsumerError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeregisterStreamConsumerError {
+    fn from(err: CredentialsError) -> DeregisterStreamConsumerError {
+        DeregisterStreamConsumerError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeregisterStreamConsumerError {
+    fn from(err: HttpDispatchError) -> DeregisterStreamConsumerError {
+        DeregisterStreamConsumerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeregisterStreamConsumerError {
+    fn from(err: io::Error) -> DeregisterStreamConsumerError {
+        DeregisterStreamConsumerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeregisterStreamConsumerError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeregisterStreamConsumerError {
+    fn description(&self) -> &str {
+        match *self {
+            DeregisterStreamConsumerError::InvalidArgument(ref cause) => cause,
+            DeregisterStreamConsumerError::LimitExceeded(ref cause) => cause,
+            DeregisterStreamConsumerError::ResourceNotFound(ref cause) => cause,
+            DeregisterStreamConsumerError::Validation(ref cause) => cause,
+            DeregisterStreamConsumerError::Credentials(ref err) => err.description(),
+            DeregisterStreamConsumerError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeregisterStreamConsumerError::ParseError(ref cause) => cause,
+            DeregisterStreamConsumerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1252,6 +1696,102 @@ impl Error for DescribeStreamError {
             DescribeStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             DescribeStreamError::ParseError(ref cause) => cause,
             DescribeStreamError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DescribeStreamConsumer
+#[derive(Debug, PartialEq)]
+pub enum DescribeStreamConsumerError {
+    /// <p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
+    InvalidArgument(String),
+    /// <p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed. </p>
+    LimitExceeded(String),
+    /// <p>The requested resource could not be found. The stream might not be specified correctly.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DescribeStreamConsumerError {
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeStreamConsumerError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InvalidArgumentException" => {
+                    return DescribeStreamConsumerError::InvalidArgument(String::from(error_message));
+                }
+                "LimitExceededException" => {
+                    return DescribeStreamConsumerError::LimitExceeded(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return DescribeStreamConsumerError::ResourceNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return DescribeStreamConsumerError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DescribeStreamConsumerError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeStreamConsumerError {
+    fn from(err: serde_json::error::Error) -> DescribeStreamConsumerError {
+        DescribeStreamConsumerError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeStreamConsumerError {
+    fn from(err: CredentialsError) -> DescribeStreamConsumerError {
+        DescribeStreamConsumerError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeStreamConsumerError {
+    fn from(err: HttpDispatchError) -> DescribeStreamConsumerError {
+        DescribeStreamConsumerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeStreamConsumerError {
+    fn from(err: io::Error) -> DescribeStreamConsumerError {
+        DescribeStreamConsumerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeStreamConsumerError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeStreamConsumerError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeStreamConsumerError::InvalidArgument(ref cause) => cause,
+            DescribeStreamConsumerError::LimitExceeded(ref cause) => cause,
+            DescribeStreamConsumerError::ResourceNotFound(ref cause) => cause,
+            DescribeStreamConsumerError::Validation(ref cause) => cause,
+            DescribeStreamConsumerError::Credentials(ref err) => err.description(),
+            DescribeStreamConsumerError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeStreamConsumerError::ParseError(ref cause) => cause,
+            DescribeStreamConsumerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1896,7 +2436,7 @@ impl Error for IncreaseStreamRetentionPeriodError {
 /// Errors returned by ListShards
 #[derive(Debug, PartialEq)]
 pub enum ListShardsError {
-    /// <p>The pagination token passed to the <code>ListShards</code> operation is expired. For more information, see <a>ListShardsInput$NextToken</a>.</p>
+    /// <p>The pagination token passed to the operation is expired.</p>
     ExpiredNextToken(String),
     /// <p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
     InvalidArgument(String),
@@ -1994,6 +2534,112 @@ impl Error for ListShardsError {
             ListShardsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             ListShardsError::ParseError(ref cause) => cause,
             ListShardsError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by ListStreamConsumers
+#[derive(Debug, PartialEq)]
+pub enum ListStreamConsumersError {
+    /// <p>The pagination token passed to the operation is expired.</p>
+    ExpiredNextToken(String),
+    /// <p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
+    InvalidArgument(String),
+    /// <p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed. </p>
+    LimitExceeded(String),
+    /// <p>The resource is not available for this operation. For successful operation, the resource must be in the <code>ACTIVE</code> state.</p>
+    ResourceInUse(String),
+    /// <p>The requested resource could not be found. The stream might not be specified correctly.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListStreamConsumersError {
+    pub fn from_response(res: BufferedHttpResponse) -> ListStreamConsumersError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ExpiredNextTokenException" => {
+                    return ListStreamConsumersError::ExpiredNextToken(String::from(error_message));
+                }
+                "InvalidArgumentException" => {
+                    return ListStreamConsumersError::InvalidArgument(String::from(error_message));
+                }
+                "LimitExceededException" => {
+                    return ListStreamConsumersError::LimitExceeded(String::from(error_message));
+                }
+                "ResourceInUseException" => {
+                    return ListStreamConsumersError::ResourceInUse(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return ListStreamConsumersError::ResourceNotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return ListStreamConsumersError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ListStreamConsumersError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListStreamConsumersError {
+    fn from(err: serde_json::error::Error) -> ListStreamConsumersError {
+        ListStreamConsumersError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListStreamConsumersError {
+    fn from(err: CredentialsError) -> ListStreamConsumersError {
+        ListStreamConsumersError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListStreamConsumersError {
+    fn from(err: HttpDispatchError) -> ListStreamConsumersError {
+        ListStreamConsumersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListStreamConsumersError {
+    fn from(err: io::Error) -> ListStreamConsumersError {
+        ListStreamConsumersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListStreamConsumersError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListStreamConsumersError {
+    fn description(&self) -> &str {
+        match *self {
+            ListStreamConsumersError::ExpiredNextToken(ref cause) => cause,
+            ListStreamConsumersError::InvalidArgument(ref cause) => cause,
+            ListStreamConsumersError::LimitExceeded(ref cause) => cause,
+            ListStreamConsumersError::ResourceInUse(ref cause) => cause,
+            ListStreamConsumersError::ResourceNotFound(ref cause) => cause,
+            ListStreamConsumersError::Validation(ref cause) => cause,
+            ListStreamConsumersError::Credentials(ref err) => err.description(),
+            ListStreamConsumersError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListStreamConsumersError::ParseError(ref cause) => cause,
+            ListStreamConsumersError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2529,6 +3175,108 @@ impl Error for PutRecordsError {
         }
     }
 }
+/// Errors returned by RegisterStreamConsumer
+#[derive(Debug, PartialEq)]
+pub enum RegisterStreamConsumerError {
+    /// <p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
+    InvalidArgument(String),
+    /// <p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed. </p>
+    LimitExceeded(String),
+    /// <p>The resource is not available for this operation. For successful operation, the resource must be in the <code>ACTIVE</code> state.</p>
+    ResourceInUse(String),
+    /// <p>The requested resource could not be found. The stream might not be specified correctly.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl RegisterStreamConsumerError {
+    pub fn from_response(res: BufferedHttpResponse) -> RegisterStreamConsumerError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InvalidArgumentException" => {
+                    return RegisterStreamConsumerError::InvalidArgument(String::from(error_message));
+                }
+                "LimitExceededException" => {
+                    return RegisterStreamConsumerError::LimitExceeded(String::from(error_message));
+                }
+                "ResourceInUseException" => {
+                    return RegisterStreamConsumerError::ResourceInUse(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return RegisterStreamConsumerError::ResourceNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return RegisterStreamConsumerError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return RegisterStreamConsumerError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for RegisterStreamConsumerError {
+    fn from(err: serde_json::error::Error) -> RegisterStreamConsumerError {
+        RegisterStreamConsumerError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for RegisterStreamConsumerError {
+    fn from(err: CredentialsError) -> RegisterStreamConsumerError {
+        RegisterStreamConsumerError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for RegisterStreamConsumerError {
+    fn from(err: HttpDispatchError) -> RegisterStreamConsumerError {
+        RegisterStreamConsumerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RegisterStreamConsumerError {
+    fn from(err: io::Error) -> RegisterStreamConsumerError {
+        RegisterStreamConsumerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for RegisterStreamConsumerError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for RegisterStreamConsumerError {
+    fn description(&self) -> &str {
+        match *self {
+            RegisterStreamConsumerError::InvalidArgument(ref cause) => cause,
+            RegisterStreamConsumerError::LimitExceeded(ref cause) => cause,
+            RegisterStreamConsumerError::ResourceInUse(ref cause) => cause,
+            RegisterStreamConsumerError::ResourceNotFound(ref cause) => cause,
+            RegisterStreamConsumerError::Validation(ref cause) => cause,
+            RegisterStreamConsumerError::Credentials(ref err) => err.description(),
+            RegisterStreamConsumerError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            RegisterStreamConsumerError::ParseError(ref cause) => cause,
+            RegisterStreamConsumerError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by RemoveTagsFromStream
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsFromStreamError {
@@ -2963,6 +3711,104 @@ impl Error for StopStreamEncryptionError {
         }
     }
 }
+/// Errors returned by SubscribeToShard
+#[derive(Debug, PartialEq)]
+pub enum SubscribeToShardError {
+    /// <p>A specified parameter exceeds its restrictions, is not supported, or can't be used. For more information, see the returned message.</p>
+    InvalidArgument(String),
+    /// <p>The requested resource exceeds the maximum number allowed, or the number of concurrent stream requests exceeds the maximum number allowed. </p>
+    LimitExceeded(String),
+    /// <p>The resource is not available for this operation. For successful operation, the resource must be in the <code>ACTIVE</code> state.</p>
+    ResourceInUse(String),
+    /// <p>The requested resource could not be found. The stream might not be specified correctly.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl SubscribeToShardError {
+    pub fn from_response(res: BufferedHttpResponse) -> SubscribeToShardError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InvalidArgumentException" => {
+                    return SubscribeToShardError::InvalidArgument(String::from(error_message));
+                }
+                "LimitExceededException" => {
+                    return SubscribeToShardError::LimitExceeded(String::from(error_message));
+                }
+                "ResourceInUseException" => {
+                    return SubscribeToShardError::ResourceInUse(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return SubscribeToShardError::ResourceNotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return SubscribeToShardError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return SubscribeToShardError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for SubscribeToShardError {
+    fn from(err: serde_json::error::Error) -> SubscribeToShardError {
+        SubscribeToShardError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for SubscribeToShardError {
+    fn from(err: CredentialsError) -> SubscribeToShardError {
+        SubscribeToShardError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for SubscribeToShardError {
+    fn from(err: HttpDispatchError) -> SubscribeToShardError {
+        SubscribeToShardError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for SubscribeToShardError {
+    fn from(err: io::Error) -> SubscribeToShardError {
+        SubscribeToShardError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for SubscribeToShardError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for SubscribeToShardError {
+    fn description(&self) -> &str {
+        match *self {
+            SubscribeToShardError::InvalidArgument(ref cause) => cause,
+            SubscribeToShardError::LimitExceeded(ref cause) => cause,
+            SubscribeToShardError::ResourceInUse(ref cause) => cause,
+            SubscribeToShardError::ResourceNotFound(ref cause) => cause,
+            SubscribeToShardError::Validation(ref cause) => cause,
+            SubscribeToShardError::Credentials(ref err) => err.description(),
+            SubscribeToShardError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            SubscribeToShardError::ParseError(ref cause) => cause,
+            SubscribeToShardError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by UpdateShardCount
 #[derive(Debug, PartialEq)]
 pub enum UpdateShardCountError {
@@ -3063,7 +3909,7 @@ impl Error for UpdateShardCountError {
 }
 /// Trait representing the capabilities of the Kinesis API. Kinesis clients implement this trait.
 pub trait Kinesis {
-    /// <p>Adds or updates tags for the specified Kinesis data stream. Each stream can have up to 10 tags.</p> <p>If tags have already been assigned to the stream, <code>AddTagsToStream</code> overwrites any existing tags that correspond to the specified tag keys.</p> <p> <a>AddTagsToStream</a> has a limit of five transactions per second per account.</p>
+    /// <p>Adds or updates tags for the specified Kinesis data stream. Each time you invoke this operation, you can specify up to 10 tags. If you want to add more than 10 tags to your stream, you can invoke this operation multiple times. In total, each stream can have up to 50 tags.</p> <p>If tags have already been assigned to the stream, <code>AddTagsToStream</code> overwrites any existing tags that correspond to the specified tag keys.</p> <p> <a>AddTagsToStream</a> has a limit of five transactions per second per account.</p>
     fn add_tags_to_stream(
         &self,
         input: AddTagsToStreamInput,
@@ -3081,6 +3927,12 @@ pub trait Kinesis {
     /// <p>Deletes a Kinesis data stream and all its shards and data. You must shut down any applications that are operating on the stream before you delete the stream. If an application attempts to operate on a deleted stream, it receives the exception <code>ResourceNotFoundException</code>.</p> <p>If the stream is in the <code>ACTIVE</code> state, you can delete it. After a <code>DeleteStream</code> request, the specified stream is in the <code>DELETING</code> state until Kinesis Data Streams completes the deletion.</p> <p> <b>Note:</b> Kinesis Data Streams might continue to accept data read and write operations, such as <a>PutRecord</a>, <a>PutRecords</a>, and <a>GetRecords</a>, on a stream in the <code>DELETING</code> state until the stream deletion is complete.</p> <p>When you delete a stream, any shards in that stream are also deleted, and any tags are dissociated from the stream.</p> <p>You can use the <a>DescribeStream</a> operation to check the state of the stream, which is returned in <code>StreamStatus</code>.</p> <p> <a>DeleteStream</a> has a limit of five transactions per second per account.</p>
     fn delete_stream(&self, input: DeleteStreamInput) -> RusotoFuture<(), DeleteStreamError>;
 
+    /// <p>To deregister a consumer, provide its ARN. Alternatively, you can provide the ARN of the data stream and the name you gave the consumer when you registered it. You may also provide all three parameters, as long as they don't conflict with each other. If you don't know the name or ARN of the consumer that you want to deregister, you can use the <a>ListStreamConsumers</a> operation to get a list of the descriptions of all the consumers that are currently registered with a given data stream. The description of a consumer contains its name and ARN.</p> <p>This operation has a limit of five transactions per second per account.</p>
+    fn deregister_stream_consumer(
+        &self,
+        input: DeregisterStreamConsumerInput,
+    ) -> RusotoFuture<(), DeregisterStreamConsumerError>;
+
     /// <p>Describes the shard limits and usage for the account.</p> <p>If you update your account limits, the old limits might be returned for a few minutes.</p> <p>This operation has a limit of one transaction per second per account.</p>
     fn describe_limits(&self) -> RusotoFuture<DescribeLimitsOutput, DescribeLimitsError>;
 
@@ -3089,6 +3941,12 @@ pub trait Kinesis {
         &self,
         input: DescribeStreamInput,
     ) -> RusotoFuture<DescribeStreamOutput, DescribeStreamError>;
+
+    /// <p>To get the description of a registered consumer, provide the ARN of the consumer. Alternatively, you can provide the ARN of the data stream and the name you gave the consumer when you registered it. You may also provide all three parameters, as long as they don't conflict with each other. If you don't know the name or ARN of the consumer that you want to describe, you can use the <a>ListStreamConsumers</a> operation to get a list of the descriptions of all the consumers that are currently registered with a given data stream.</p> <p>This operation has a limit of 20 transactions per second per account.</p>
+    fn describe_stream_consumer(
+        &self,
+        input: DescribeStreamConsumerInput,
+    ) -> RusotoFuture<DescribeStreamConsumerOutput, DescribeStreamConsumerError>;
 
     /// <p>Provides a summarized description of the specified Kinesis data stream without the shard list.</p> <p>The information returned includes the stream name, Amazon Resource Name (ARN), status, record retention period, approximate creation time, monitoring, encryption details, and open shard count. </p>
     fn describe_stream_summary(
@@ -3108,13 +3966,13 @@ pub trait Kinesis {
         input: EnableEnhancedMonitoringInput,
     ) -> RusotoFuture<EnhancedMonitoringOutput, EnableEnhancedMonitoringError>;
 
-    /// <p>Gets data records from a Kinesis data stream's shard.</p> <p>Specify a shard iterator using the <code>ShardIterator</code> parameter. The shard iterator specifies the position in the shard from which you want to start reading data records sequentially. If there are no records available in the portion of the shard that the iterator points to, <a>GetRecords</a> returns an empty list. It might take multiple calls to get to a portion of the shard that contains records.</p> <p>You can scale by provisioning multiple shards per stream while considering service limits (for more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html">Amazon Kinesis Data Streams Limits</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>). Your application should have one thread per shard, each reading continuously from its stream. To read from a stream continually, call <a>GetRecords</a> in a loop. Use <a>GetShardIterator</a> to get the shard iterator to specify in the first <a>GetRecords</a> call. <a>GetRecords</a> returns a new shard iterator in <code>NextShardIterator</code>. Specify the shard iterator returned in <code>NextShardIterator</code> in subsequent calls to <a>GetRecords</a>. If the shard has been closed, the shard iterator can't return more data and <a>GetRecords</a> returns <code>null</code> in <code>NextShardIterator</code>. You can terminate the loop when the shard is closed, or when the shard iterator reaches the record with the sequence number or other attribute that marks it as the last record to process.</p> <p>Each data record can be up to 1 MB in size, and each shard can read up to 2 MB per second. You can ensure that your calls don't exceed the maximum supported size or throughput by using the <code>Limit</code> parameter to specify the maximum number of records that <a>GetRecords</a> can return. Consider your average record size when determining this limit.</p> <p>The size of the data returned by <a>GetRecords</a> varies depending on the utilization of the shard. The maximum size of data that <a>GetRecords</a> can return is 10 MB. If a call returns this amount of data, subsequent calls made within the next five seconds throw <code>ProvisionedThroughputExceededException</code>. If there is insufficient provisioned throughput on the stream, subsequent calls made within the next one second throw <code>ProvisionedThroughputExceededException</code>. <a>GetRecords</a> won't return any data when it throws an exception. For this reason, we recommend that you wait one second between calls to <a>GetRecords</a>; however, it's possible that the application will get exceptions for longer than 1 second.</p> <p>To detect whether the application is falling behind in processing, you can use the <code>MillisBehindLatest</code> response attribute. You can also monitor the stream using CloudWatch metrics and other mechanisms (see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/monitoring.html">Monitoring</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>).</p> <p>Each Amazon Kinesis record includes a value, <code>ApproximateArrivalTimestamp</code>, that is set when a stream successfully receives and stores a record. This is commonly referred to as a server-side time stamp, whereas a client-side time stamp is set when a data producer creates or sends the record to a stream (a data producer is any data source putting data records into a stream, for example with <a>PutRecords</a>). The time stamp has millisecond precision. There are no guarantees about the time stamp accuracy, or that the time stamp is always increasing. For example, records in a shard or across a stream might have time stamps that are out of order.</p>
+    /// <p>Gets data records from a Kinesis data stream's shard.</p> <p>Specify a shard iterator using the <code>ShardIterator</code> parameter. The shard iterator specifies the position in the shard from which you want to start reading data records sequentially. If there are no records available in the portion of the shard that the iterator points to, <a>GetRecords</a> returns an empty list. It might take multiple calls to get to a portion of the shard that contains records.</p> <p>You can scale by provisioning multiple shards per stream while considering service limits (for more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html">Amazon Kinesis Data Streams Limits</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>). Your application should have one thread per shard, each reading continuously from its stream. To read from a stream continually, call <a>GetRecords</a> in a loop. Use <a>GetShardIterator</a> to get the shard iterator to specify in the first <a>GetRecords</a> call. <a>GetRecords</a> returns a new shard iterator in <code>NextShardIterator</code>. Specify the shard iterator returned in <code>NextShardIterator</code> in subsequent calls to <a>GetRecords</a>. If the shard has been closed, the shard iterator can't return more data and <a>GetRecords</a> returns <code>null</code> in <code>NextShardIterator</code>. You can terminate the loop when the shard is closed, or when the shard iterator reaches the record with the sequence number or other attribute that marks it as the last record to process.</p> <p>Each data record can be up to 1 MiB in size, and each shard can read up to 2 MiB per second. You can ensure that your calls don't exceed the maximum supported size or throughput by using the <code>Limit</code> parameter to specify the maximum number of records that <a>GetRecords</a> can return. Consider your average record size when determining this limit. The maximum number of records that can be returned per call is 10,000.</p> <p>The size of the data returned by <a>GetRecords</a> varies depending on the utilization of the shard. The maximum size of data that <a>GetRecords</a> can return is 10 MiB. If a call returns this amount of data, subsequent calls made within the next 5 seconds throw <code>ProvisionedThroughputExceededException</code>. If there is insufficient provisioned throughput on the stream, subsequent calls made within the next 1 second throw <code>ProvisionedThroughputExceededException</code>. <a>GetRecords</a> doesn't return any data when it throws an exception. For this reason, we recommend that you wait 1 second between calls to <a>GetRecords</a>. However, it's possible that the application will get exceptions for longer than 1 second.</p> <p>To detect whether the application is falling behind in processing, you can use the <code>MillisBehindLatest</code> response attribute. You can also monitor the stream using CloudWatch metrics and other mechanisms (see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/monitoring.html">Monitoring</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>).</p> <p>Each Amazon Kinesis record includes a value, <code>ApproximateArrivalTimestamp</code>, that is set when a stream successfully receives and stores a record. This is commonly referred to as a server-side time stamp, whereas a client-side time stamp is set when a data producer creates or sends the record to a stream (a data producer is any data source putting data records into a stream, for example with <a>PutRecords</a>). The time stamp has millisecond precision. There are no guarantees about the time stamp accuracy, or that the time stamp is always increasing. For example, records in a shard or across a stream might have time stamps that are out of order.</p> <p>This operation has a limit of five transactions per second per account.</p>
     fn get_records(
         &self,
         input: GetRecordsInput,
     ) -> RusotoFuture<GetRecordsOutput, GetRecordsError>;
 
-    /// <p>Gets an Amazon Kinesis shard iterator. A shard iterator expires five minutes after it is returned to the requester.</p> <p>A shard iterator specifies the shard position from which to start reading data records sequentially. The position is specified using the sequence number of a data record in a shard. A sequence number is the identifier associated with every record ingested in the stream, and is assigned when a record is put into the stream. Each stream has one or more shards.</p> <p>You must specify the shard iterator type. For example, you can set the <code>ShardIteratorType</code> parameter to read exactly from the position denoted by a specific sequence number by using the <code>AT_SEQUENCE_NUMBER</code> shard iterator type. Alternatively, the parameter can read right after the sequence number by using the <code>AFTER_SEQUENCE_NUMBER</code> shard iterator type, using sequence numbers returned by earlier calls to <a>PutRecord</a>, <a>PutRecords</a>, <a>GetRecords</a>, or <a>DescribeStream</a>. In the request, you can specify the shard iterator type <code>AT_TIMESTAMP</code> to read records from an arbitrary point in time, <code>TRIM_HORIZON</code> to cause <code>ShardIterator</code> to point to the last untrimmed record in the shard in the system (the oldest data record in the shard), or <code>LATEST</code> so that you always read the most recent data in the shard. </p> <p>When you read repeatedly from a stream, use a <a>GetShardIterator</a> request to get the first shard iterator for use in your first <a>GetRecords</a> request and for subsequent reads use the shard iterator returned by the <a>GetRecords</a> request in <code>NextShardIterator</code>. A new shard iterator is returned by every <a>GetRecords</a> request in <code>NextShardIterator</code>, which you use in the <code>ShardIterator</code> parameter of the next <a>GetRecords</a> request. </p> <p>If a <a>GetShardIterator</a> request is made too often, you receive a <code>ProvisionedThroughputExceededException</code>. For more information about throughput limits, see <a>GetRecords</a>, and <a href="http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html">Streams Limits</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>.</p> <p>If the shard is closed, <a>GetShardIterator</a> returns a valid iterator for the last sequence number of the shard. A shard can be closed as a result of using <a>SplitShard</a> or <a>MergeShards</a>.</p> <p> <a>GetShardIterator</a> has a limit of five transactions per second per account per open shard.</p>
+    /// <p>Gets an Amazon Kinesis shard iterator. A shard iterator expires 5 minutes after it is returned to the requester.</p> <p>A shard iterator specifies the shard position from which to start reading data records sequentially. The position is specified using the sequence number of a data record in a shard. A sequence number is the identifier associated with every record ingested in the stream, and is assigned when a record is put into the stream. Each stream has one or more shards.</p> <p>You must specify the shard iterator type. For example, you can set the <code>ShardIteratorType</code> parameter to read exactly from the position denoted by a specific sequence number by using the <code>AT_SEQUENCE_NUMBER</code> shard iterator type. Alternatively, the parameter can read right after the sequence number by using the <code>AFTER_SEQUENCE_NUMBER</code> shard iterator type, using sequence numbers returned by earlier calls to <a>PutRecord</a>, <a>PutRecords</a>, <a>GetRecords</a>, or <a>DescribeStream</a>. In the request, you can specify the shard iterator type <code>AT_TIMESTAMP</code> to read records from an arbitrary point in time, <code>TRIM_HORIZON</code> to cause <code>ShardIterator</code> to point to the last untrimmed record in the shard in the system (the oldest data record in the shard), or <code>LATEST</code> so that you always read the most recent data in the shard. </p> <p>When you read repeatedly from a stream, use a <a>GetShardIterator</a> request to get the first shard iterator for use in your first <a>GetRecords</a> request and for subsequent reads use the shard iterator returned by the <a>GetRecords</a> request in <code>NextShardIterator</code>. A new shard iterator is returned by every <a>GetRecords</a> request in <code>NextShardIterator</code>, which you use in the <code>ShardIterator</code> parameter of the next <a>GetRecords</a> request. </p> <p>If a <a>GetShardIterator</a> request is made too often, you receive a <code>ProvisionedThroughputExceededException</code>. For more information about throughput limits, see <a>GetRecords</a>, and <a href="http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html">Streams Limits</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>.</p> <p>If the shard is closed, <a>GetShardIterator</a> returns a valid iterator for the last sequence number of the shard. A shard can be closed as a result of using <a>SplitShard</a> or <a>MergeShards</a>.</p> <p> <a>GetShardIterator</a> has a limit of five transactions per second per account per open shard.</p>
     fn get_shard_iterator(
         &self,
         input: GetShardIteratorInput,
@@ -3126,11 +3984,17 @@ pub trait Kinesis {
         input: IncreaseStreamRetentionPeriodInput,
     ) -> RusotoFuture<(), IncreaseStreamRetentionPeriodError>;
 
-    /// <p><p>Lists the shards in a stream and provides information about each shard.</p> <important> <p>This API is a new operation that is used by the Amazon Kinesis Client Library (KCL). If you have a fine-grained IAM policy that only allows specific operations, you must update your policy to allow calls to this API. For more information, see <a href="https://docs.aws.amazon.com/streams/latest/dev/controlling-access.html">Controlling Access to Amazon Kinesis Data Streams Resources Using IAM</a>.</p> </important></p>
+    /// <p><p>Lists the shards in a stream and provides information about each shard. This operation has a limit of 100 transactions per second per data stream.</p> <important> <p>This API is a new operation that is used by the Amazon Kinesis Client Library (KCL). If you have a fine-grained IAM policy that only allows specific operations, you must update your policy to allow calls to this API. For more information, see <a href="https://docs.aws.amazon.com/streams/latest/dev/controlling-access.html">Controlling Access to Amazon Kinesis Data Streams Resources Using IAM</a>.</p> </important></p>
     fn list_shards(
         &self,
         input: ListShardsInput,
     ) -> RusotoFuture<ListShardsOutput, ListShardsError>;
+
+    /// <p>Lists the consumers registered to receive data from a stream using enhanced fan-out, and provides information about each consumer.</p> <p>This operation has a limit of 10 transactions per second per account.</p>
+    fn list_stream_consumers(
+        &self,
+        input: ListStreamConsumersInput,
+    ) -> RusotoFuture<ListStreamConsumersOutput, ListStreamConsumersError>;
 
     /// <p>Lists your Kinesis data streams.</p> <p>The number of streams may be too large to return from a single call to <code>ListStreams</code>. You can limit the number of returned streams using the <code>Limit</code> parameter. If you do not specify a value for the <code>Limit</code> parameter, Kinesis Data Streams uses the default limit, which is currently 10.</p> <p>You can detect if there are more streams available to list by using the <code>HasMoreStreams</code> flag from the returned output. If there are more streams available, you can request more streams by using the name of the last stream returned by the <code>ListStreams</code> request in the <code>ExclusiveStartStreamName</code> parameter in a subsequent request to <code>ListStreams</code>. The group of stream names returned by the subsequent request is then added to the list. You can continue this process until all the stream names have been collected in the list. </p> <p> <a>ListStreams</a> has a limit of five transactions per second per account.</p>
     fn list_streams(
@@ -3156,28 +4020,40 @@ pub trait Kinesis {
         input: PutRecordsInput,
     ) -> RusotoFuture<PutRecordsOutput, PutRecordsError>;
 
+    /// <p>Registers a consumer with a Kinesis data stream. When you use this operation, the consumer you register can read data from the stream at a rate of up to 2 MiB per second. This rate is unaffected by the total number of consumers that read from the same stream.</p> <p>You can register up to 5 consumers per stream. A given consumer can only be registered with one stream.</p> <p>This operation has a limit of five transactions per second per account.</p>
+    fn register_stream_consumer(
+        &self,
+        input: RegisterStreamConsumerInput,
+    ) -> RusotoFuture<RegisterStreamConsumerOutput, RegisterStreamConsumerError>;
+
     /// <p>Removes tags from the specified Kinesis data stream. Removed tags are deleted and cannot be recovered after this operation successfully completes.</p> <p>If you specify a tag that does not exist, it is ignored.</p> <p> <a>RemoveTagsFromStream</a> has a limit of five transactions per second per account.</p>
     fn remove_tags_from_stream(
         &self,
         input: RemoveTagsFromStreamInput,
     ) -> RusotoFuture<(), RemoveTagsFromStreamError>;
 
-    /// <p>Splits a shard into two new shards in the Kinesis data stream, to increase the stream's capacity to ingest and transport data. <code>SplitShard</code> is called when there is a need to increase the overall capacity of a stream because of an expected increase in the volume of data records being ingested. </p> <p>You can also use <code>SplitShard</code> when a shard appears to be approaching its maximum utilization; for example, the producers sending data into the specific shard are suddenly sending more than previously anticipated. You can also call <code>SplitShard</code> to increase stream capacity, so that more Kinesis Data Streams applications can simultaneously read data from the stream for real-time processing. </p> <p>You must specify the shard to be split and the new hash key, which is the position in the shard where the shard gets split in two. In many cases, the new hash key might be the average of the beginning and ending hash key, but it can be any hash key value in the range being mapped into the shard. For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/kinesis-using-sdk-java-resharding-split.html">Split a Shard</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>.</p> <p>You can use <a>DescribeStream</a> to determine the shard ID and hash key values for the <code>ShardToSplit</code> and <code>NewStartingHashKey</code> parameters that are specified in the <code>SplitShard</code> request.</p> <p> <code>SplitShard</code> is an asynchronous operation. Upon receiving a <code>SplitShard</code> request, Kinesis Data Streams immediately returns a response and sets the stream status to <code>UPDATING</code>. After the operation is completed, Kinesis Data Streams sets the stream status to <code>ACTIVE</code>. Read and write operations continue to work while the stream is in the <code>UPDATING</code> state. </p> <p>You can use <code>DescribeStream</code> to check the status of the stream, which is returned in <code>StreamStatus</code>. If the stream is in the <code>ACTIVE</code> state, you can call <code>SplitShard</code>. If a stream is in <code>CREATING</code> or <code>UPDATING</code> or <code>DELETING</code> states, <code>DescribeStream</code> returns a <code>ResourceInUseException</code>.</p> <p>If the specified stream does not exist, <code>DescribeStream</code> returns a <code>ResourceNotFoundException</code>. If you try to create more shards than are authorized for your account, you receive a <code>LimitExceededException</code>. </p> <p>For the default shard limit for an AWS account, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html">Streams Limits</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>. To increase this limit, <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html">contact AWS Support</a>.</p> <p>If you try to operate on too many streams simultaneously using <a>CreateStream</a>, <a>DeleteStream</a>, <a>MergeShards</a>, and/or <a>SplitShard</a>, you receive a <code>LimitExceededException</code>. </p> <p> <code>SplitShard</code> has a limit of five transactions per second per account.</p>
+    /// <p>Splits a shard into two new shards in the Kinesis data stream, to increase the stream's capacity to ingest and transport data. <code>SplitShard</code> is called when there is a need to increase the overall capacity of a stream because of an expected increase in the volume of data records being ingested. </p> <p>You can also use <code>SplitShard</code> when a shard appears to be approaching its maximum utilization; for example, the producers sending data into the specific shard are suddenly sending more than previously anticipated. You can also call <code>SplitShard</code> to increase stream capacity, so that more Kinesis Data Streams applications can simultaneously read data from the stream for real-time processing. </p> <p>You must specify the shard to be split and the new hash key, which is the position in the shard where the shard gets split in two. In many cases, the new hash key might be the average of the beginning and ending hash key, but it can be any hash key value in the range being mapped into the shard. For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/kinesis-using-sdk-java-resharding-split.html">Split a Shard</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>.</p> <p>You can use <a>DescribeStream</a> to determine the shard ID and hash key values for the <code>ShardToSplit</code> and <code>NewStartingHashKey</code> parameters that are specified in the <code>SplitShard</code> request.</p> <p> <code>SplitShard</code> is an asynchronous operation. Upon receiving a <code>SplitShard</code> request, Kinesis Data Streams immediately returns a response and sets the stream status to <code>UPDATING</code>. After the operation is completed, Kinesis Data Streams sets the stream status to <code>ACTIVE</code>. Read and write operations continue to work while the stream is in the <code>UPDATING</code> state. </p> <p>You can use <code>DescribeStream</code> to check the status of the stream, which is returned in <code>StreamStatus</code>. If the stream is in the <code>ACTIVE</code> state, you can call <code>SplitShard</code>. If a stream is in <code>CREATING</code> or <code>UPDATING</code> or <code>DELETING</code> states, <code>DescribeStream</code> returns a <code>ResourceInUseException</code>.</p> <p>If the specified stream does not exist, <code>DescribeStream</code> returns a <code>ResourceNotFoundException</code>. If you try to create more shards than are authorized for your account, you receive a <code>LimitExceededException</code>. </p> <p>For the default shard limit for an AWS account, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html">Kinesis Data Streams Limits</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>. To increase this limit, <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html">contact AWS Support</a>.</p> <p>If you try to operate on too many streams simultaneously using <a>CreateStream</a>, <a>DeleteStream</a>, <a>MergeShards</a>, and/or <a>SplitShard</a>, you receive a <code>LimitExceededException</code>. </p> <p> <code>SplitShard</code> has a limit of five transactions per second per account.</p>
     fn split_shard(&self, input: SplitShardInput) -> RusotoFuture<(), SplitShardError>;
 
-    /// <p>Enables or updates server-side encryption using an AWS KMS key for a specified stream. </p> <p>Starting encryption is an asynchronous operation. Upon receiving the request, Kinesis Data Streams returns immediately and sets the status of the stream to <code>UPDATING</code>. After the update is complete, Kinesis Data Streams sets the status of the stream back to <code>ACTIVE</code>. Updating or applying encryption normally takes a few seconds to complete, but it can take minutes. You can continue to read and write data to your stream while its status is <code>UPDATING</code>. Once the status of the stream is <code>ACTIVE</code>, encryption begins for records written to the stream. </p> <p>API Limits: You can successfully apply a new AWS KMS key for server-side encryption 25 times in a rolling 24-hour period.</p> <p>Note: It can take up to five seconds after the stream is in an <code>ACTIVE</code> status before all records written to the stream are encrypted. After you enable encryption, you can verify that encryption is applied by inspecting the API response from <code>PutRecord</code> or <code>PutRecords</code>.</p>
+    /// <p>Enables or updates server-side encryption using an AWS KMS key for a specified stream. </p> <p>Starting encryption is an asynchronous operation. Upon receiving the request, Kinesis Data Streams returns immediately and sets the status of the stream to <code>UPDATING</code>. After the update is complete, Kinesis Data Streams sets the status of the stream back to <code>ACTIVE</code>. Updating or applying encryption normally takes a few seconds to complete, but it can take minutes. You can continue to read and write data to your stream while its status is <code>UPDATING</code>. Once the status of the stream is <code>ACTIVE</code>, encryption begins for records written to the stream. </p> <p>API Limits: You can successfully apply a new AWS KMS key for server-side encryption 25 times in a rolling 24-hour period.</p> <p>Note: It can take up to 5 seconds after the stream is in an <code>ACTIVE</code> status before all records written to the stream are encrypted. After you enable encryption, you can verify that encryption is applied by inspecting the API response from <code>PutRecord</code> or <code>PutRecords</code>.</p>
     fn start_stream_encryption(
         &self,
         input: StartStreamEncryptionInput,
     ) -> RusotoFuture<(), StartStreamEncryptionError>;
 
-    /// <p>Disables server-side encryption for a specified stream. </p> <p>Stopping encryption is an asynchronous operation. Upon receiving the request, Kinesis Data Streams returns immediately and sets the status of the stream to <code>UPDATING</code>. After the update is complete, Kinesis Data Streams sets the status of the stream back to <code>ACTIVE</code>. Stopping encryption normally takes a few seconds to complete, but it can take minutes. You can continue to read and write data to your stream while its status is <code>UPDATING</code>. Once the status of the stream is <code>ACTIVE</code>, records written to the stream are no longer encrypted by Kinesis Data Streams. </p> <p>API Limits: You can successfully disable server-side encryption 25 times in a rolling 24-hour period. </p> <p>Note: It can take up to five seconds after the stream is in an <code>ACTIVE</code> status before all records written to the stream are no longer subject to encryption. After you disabled encryption, you can verify that encryption is not applied by inspecting the API response from <code>PutRecord</code> or <code>PutRecords</code>.</p>
+    /// <p>Disables server-side encryption for a specified stream. </p> <p>Stopping encryption is an asynchronous operation. Upon receiving the request, Kinesis Data Streams returns immediately and sets the status of the stream to <code>UPDATING</code>. After the update is complete, Kinesis Data Streams sets the status of the stream back to <code>ACTIVE</code>. Stopping encryption normally takes a few seconds to complete, but it can take minutes. You can continue to read and write data to your stream while its status is <code>UPDATING</code>. Once the status of the stream is <code>ACTIVE</code>, records written to the stream are no longer encrypted by Kinesis Data Streams. </p> <p>API Limits: You can successfully disable server-side encryption 25 times in a rolling 24-hour period. </p> <p>Note: It can take up to 5 seconds after the stream is in an <code>ACTIVE</code> status before all records written to the stream are no longer subject to encryption. After you disabled encryption, you can verify that encryption is not applied by inspecting the API response from <code>PutRecord</code> or <code>PutRecords</code>.</p>
     fn stop_stream_encryption(
         &self,
         input: StopStreamEncryptionInput,
     ) -> RusotoFuture<(), StopStreamEncryptionError>;
 
-    /// <p>Updates the shard count of the specified stream to the specified number of shards.</p> <p>Updating the shard count is an asynchronous operation. Upon receiving the request, Kinesis Data Streams returns immediately and sets the status of the stream to <code>UPDATING</code>. After the update is complete, Kinesis Data Streams sets the status of the stream back to <code>ACTIVE</code>. Depending on the size of the stream, the scaling action could take a few minutes to complete. You can continue to read and write data to your stream while its status is <code>UPDATING</code>.</p> <p>To update the shard count, Kinesis Data Streams performs splits or merges on individual shards. This can cause short-lived shards to be created, in addition to the final shards. We recommend that you double or halve the shard count, as this results in the fewest number of splits or merges.</p> <p>This operation has the following limits. You cannot do the following:</p> <ul> <li> <p>Scale more than twice per rolling 24-hour period per stream</p> </li> <li> <p>Scale up to more than double your current shard count for a stream</p> </li> <li> <p>Scale down below half your current shard count for a stream</p> </li> <li> <p>Scale up to more than 500 shards in a stream</p> </li> <li> <p>Scale a stream with more than 500 shards down unless the result is less than 500 shards</p> </li> <li> <p>Scale up to more than the shard limit for your account</p> </li> </ul> <p>For the default limits for an AWS account, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html">Streams Limits</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>. To request an increase in the call rate limit, the shard limit for this API, or your overall shard limit, use the <a href="https://console.aws.amazon.com/support/v1#/case/create?issueType=service-limit-increase&amp;limitType=service-code-kinesis">limits form</a>.</p>
+    /// <p>Call this operation from your consumer after you call <a>RegisterStreamConsumer</a> to register the consumer with Kinesis Data Streams. If the call succeeds, your consumer starts receiving events of type <a>SubscribeToShardEvent</a> for up to 5 minutes, after which time you need to call <code>SubscribeToShard</code> again to renew the subscription if you want to continue to receive records.</p> <p>You can make one call to <code>SubscribeToShard</code> per second per <code>ConsumerARN</code>. If your call succeeds, and then you call the operation again less than 5 seconds later, the second call generates a <a>ResourceInUseException</a>. If you call the operation a second time more than 5 seconds after the first call succeeds, the second call succeeds and the first connection gets shut down.</p>
+    fn subscribe_to_shard(
+        &self,
+        input: SubscribeToShardInput,
+    ) -> RusotoFuture<SubscribeToShardOutput, SubscribeToShardError>;
+
+    /// <p>Updates the shard count of the specified stream to the specified number of shards.</p> <p>Updating the shard count is an asynchronous operation. Upon receiving the request, Kinesis Data Streams returns immediately and sets the status of the stream to <code>UPDATING</code>. After the update is complete, Kinesis Data Streams sets the status of the stream back to <code>ACTIVE</code>. Depending on the size of the stream, the scaling action could take a few minutes to complete. You can continue to read and write data to your stream while its status is <code>UPDATING</code>.</p> <p>To update the shard count, Kinesis Data Streams performs splits or merges on individual shards. This can cause short-lived shards to be created, in addition to the final shards. We recommend that you double or halve the shard count, as this results in the fewest number of splits or merges.</p> <p>This operation has the following default limits. By default, you cannot do the following:</p> <ul> <li> <p>Scale more than twice per rolling 24-hour period per stream</p> </li> <li> <p>Scale up to more than double your current shard count for a stream</p> </li> <li> <p>Scale down below half your current shard count for a stream</p> </li> <li> <p>Scale up to more than 500 shards in a stream</p> </li> <li> <p>Scale a stream with more than 500 shards down unless the result is less than 500 shards</p> </li> <li> <p>Scale up to more than the shard limit for your account</p> </li> </ul> <p>For the default limits for an AWS account, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html">Streams Limits</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>. To request an increase in the call rate limit, the shard limit for this API, or your overall shard limit, use the <a href="https://console.aws.amazon.com/support/v1#/case/create?issueType=service-limit-increase&amp;limitType=service-code-kinesis">limits form</a>.</p>
     fn update_shard_count(
         &self,
         input: UpdateShardCountInput,
@@ -3220,7 +4096,7 @@ impl KinesisClient {
 }
 
 impl Kinesis for KinesisClient {
-    /// <p>Adds or updates tags for the specified Kinesis data stream. Each stream can have up to 10 tags.</p> <p>If tags have already been assigned to the stream, <code>AddTagsToStream</code> overwrites any existing tags that correspond to the specified tag keys.</p> <p> <a>AddTagsToStream</a> has a limit of five transactions per second per account.</p>
+    /// <p>Adds or updates tags for the specified Kinesis data stream. Each time you invoke this operation, you can specify up to 10 tags. If you want to add more than 10 tags to your stream, you can invoke this operation multiple times. In total, each stream can have up to 50 tags.</p> <p>If tags have already been assigned to the stream, <code>AddTagsToStream</code> overwrites any existing tags that correspond to the specified tag keys.</p> <p> <a>AddTagsToStream</a> has a limit of five transactions per second per account.</p>
     fn add_tags_to_stream(
         &self,
         input: AddTagsToStreamInput,
@@ -3318,6 +4194,29 @@ impl Kinesis for KinesisClient {
         })
     }
 
+    /// <p>To deregister a consumer, provide its ARN. Alternatively, you can provide the ARN of the data stream and the name you gave the consumer when you registered it. You may also provide all three parameters, as long as they don't conflict with each other. If you don't know the name or ARN of the consumer that you want to deregister, you can use the <a>ListStreamConsumers</a> operation to get a list of the descriptions of all the consumers that are currently registered with a given data stream. The description of a consumer contains its name and ARN.</p> <p>This operation has a limit of five transactions per second per account.</p>
+    fn deregister_stream_consumer(
+        &self,
+        input: DeregisterStreamConsumerInput,
+    ) -> RusotoFuture<(), DeregisterStreamConsumerError> {
+        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Kinesis_20131202.DeregisterStreamConsumer");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(future::ok(::std::mem::drop(response)))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeregisterStreamConsumerError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Describes the shard limits and usage for the account.</p> <p>If you update your account limits, the old limits might be returned for a few minutes.</p> <p>This operation has a limit of one transaction per second per account.</p>
     fn describe_limits(&self) -> RusotoFuture<DescribeLimitsOutput, DescribeLimitsError> {
         let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
@@ -3383,6 +4282,42 @@ impl Kinesis for KinesisClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(DescribeStreamError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>To get the description of a registered consumer, provide the ARN of the consumer. Alternatively, you can provide the ARN of the data stream and the name you gave the consumer when you registered it. You may also provide all three parameters, as long as they don't conflict with each other. If you don't know the name or ARN of the consumer that you want to describe, you can use the <a>ListStreamConsumers</a> operation to get a list of the descriptions of all the consumers that are currently registered with a given data stream.</p> <p>This operation has a limit of 20 transactions per second per account.</p>
+    fn describe_stream_consumer(
+        &self,
+        input: DescribeStreamConsumerInput,
+    ) -> RusotoFuture<DescribeStreamConsumerOutput, DescribeStreamConsumerError> {
+        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Kinesis_20131202.DescribeStreamConsumer");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeStreamConsumerOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeStreamConsumerError::from_response(response))
+                    }),
                 )
             }
         })
@@ -3492,7 +4427,7 @@ impl Kinesis for KinesisClient {
         })
     }
 
-    /// <p>Gets data records from a Kinesis data stream's shard.</p> <p>Specify a shard iterator using the <code>ShardIterator</code> parameter. The shard iterator specifies the position in the shard from which you want to start reading data records sequentially. If there are no records available in the portion of the shard that the iterator points to, <a>GetRecords</a> returns an empty list. It might take multiple calls to get to a portion of the shard that contains records.</p> <p>You can scale by provisioning multiple shards per stream while considering service limits (for more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html">Amazon Kinesis Data Streams Limits</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>). Your application should have one thread per shard, each reading continuously from its stream. To read from a stream continually, call <a>GetRecords</a> in a loop. Use <a>GetShardIterator</a> to get the shard iterator to specify in the first <a>GetRecords</a> call. <a>GetRecords</a> returns a new shard iterator in <code>NextShardIterator</code>. Specify the shard iterator returned in <code>NextShardIterator</code> in subsequent calls to <a>GetRecords</a>. If the shard has been closed, the shard iterator can't return more data and <a>GetRecords</a> returns <code>null</code> in <code>NextShardIterator</code>. You can terminate the loop when the shard is closed, or when the shard iterator reaches the record with the sequence number or other attribute that marks it as the last record to process.</p> <p>Each data record can be up to 1 MB in size, and each shard can read up to 2 MB per second. You can ensure that your calls don't exceed the maximum supported size or throughput by using the <code>Limit</code> parameter to specify the maximum number of records that <a>GetRecords</a> can return. Consider your average record size when determining this limit.</p> <p>The size of the data returned by <a>GetRecords</a> varies depending on the utilization of the shard. The maximum size of data that <a>GetRecords</a> can return is 10 MB. If a call returns this amount of data, subsequent calls made within the next five seconds throw <code>ProvisionedThroughputExceededException</code>. If there is insufficient provisioned throughput on the stream, subsequent calls made within the next one second throw <code>ProvisionedThroughputExceededException</code>. <a>GetRecords</a> won't return any data when it throws an exception. For this reason, we recommend that you wait one second between calls to <a>GetRecords</a>; however, it's possible that the application will get exceptions for longer than 1 second.</p> <p>To detect whether the application is falling behind in processing, you can use the <code>MillisBehindLatest</code> response attribute. You can also monitor the stream using CloudWatch metrics and other mechanisms (see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/monitoring.html">Monitoring</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>).</p> <p>Each Amazon Kinesis record includes a value, <code>ApproximateArrivalTimestamp</code>, that is set when a stream successfully receives and stores a record. This is commonly referred to as a server-side time stamp, whereas a client-side time stamp is set when a data producer creates or sends the record to a stream (a data producer is any data source putting data records into a stream, for example with <a>PutRecords</a>). The time stamp has millisecond precision. There are no guarantees about the time stamp accuracy, or that the time stamp is always increasing. For example, records in a shard or across a stream might have time stamps that are out of order.</p>
+    /// <p>Gets data records from a Kinesis data stream's shard.</p> <p>Specify a shard iterator using the <code>ShardIterator</code> parameter. The shard iterator specifies the position in the shard from which you want to start reading data records sequentially. If there are no records available in the portion of the shard that the iterator points to, <a>GetRecords</a> returns an empty list. It might take multiple calls to get to a portion of the shard that contains records.</p> <p>You can scale by provisioning multiple shards per stream while considering service limits (for more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html">Amazon Kinesis Data Streams Limits</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>). Your application should have one thread per shard, each reading continuously from its stream. To read from a stream continually, call <a>GetRecords</a> in a loop. Use <a>GetShardIterator</a> to get the shard iterator to specify in the first <a>GetRecords</a> call. <a>GetRecords</a> returns a new shard iterator in <code>NextShardIterator</code>. Specify the shard iterator returned in <code>NextShardIterator</code> in subsequent calls to <a>GetRecords</a>. If the shard has been closed, the shard iterator can't return more data and <a>GetRecords</a> returns <code>null</code> in <code>NextShardIterator</code>. You can terminate the loop when the shard is closed, or when the shard iterator reaches the record with the sequence number or other attribute that marks it as the last record to process.</p> <p>Each data record can be up to 1 MiB in size, and each shard can read up to 2 MiB per second. You can ensure that your calls don't exceed the maximum supported size or throughput by using the <code>Limit</code> parameter to specify the maximum number of records that <a>GetRecords</a> can return. Consider your average record size when determining this limit. The maximum number of records that can be returned per call is 10,000.</p> <p>The size of the data returned by <a>GetRecords</a> varies depending on the utilization of the shard. The maximum size of data that <a>GetRecords</a> can return is 10 MiB. If a call returns this amount of data, subsequent calls made within the next 5 seconds throw <code>ProvisionedThroughputExceededException</code>. If there is insufficient provisioned throughput on the stream, subsequent calls made within the next 1 second throw <code>ProvisionedThroughputExceededException</code>. <a>GetRecords</a> doesn't return any data when it throws an exception. For this reason, we recommend that you wait 1 second between calls to <a>GetRecords</a>. However, it's possible that the application will get exceptions for longer than 1 second.</p> <p>To detect whether the application is falling behind in processing, you can use the <code>MillisBehindLatest</code> response attribute. You can also monitor the stream using CloudWatch metrics and other mechanisms (see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/monitoring.html">Monitoring</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>).</p> <p>Each Amazon Kinesis record includes a value, <code>ApproximateArrivalTimestamp</code>, that is set when a stream successfully receives and stores a record. This is commonly referred to as a server-side time stamp, whereas a client-side time stamp is set when a data producer creates or sends the record to a stream (a data producer is any data source putting data records into a stream, for example with <a>PutRecords</a>). The time stamp has millisecond precision. There are no guarantees about the time stamp accuracy, or that the time stamp is always increasing. For example, records in a shard or across a stream might have time stamps that are out of order.</p> <p>This operation has a limit of five transactions per second per account.</p>
     fn get_records(
         &self,
         input: GetRecordsInput,
@@ -3529,7 +4464,7 @@ impl Kinesis for KinesisClient {
         })
     }
 
-    /// <p>Gets an Amazon Kinesis shard iterator. A shard iterator expires five minutes after it is returned to the requester.</p> <p>A shard iterator specifies the shard position from which to start reading data records sequentially. The position is specified using the sequence number of a data record in a shard. A sequence number is the identifier associated with every record ingested in the stream, and is assigned when a record is put into the stream. Each stream has one or more shards.</p> <p>You must specify the shard iterator type. For example, you can set the <code>ShardIteratorType</code> parameter to read exactly from the position denoted by a specific sequence number by using the <code>AT_SEQUENCE_NUMBER</code> shard iterator type. Alternatively, the parameter can read right after the sequence number by using the <code>AFTER_SEQUENCE_NUMBER</code> shard iterator type, using sequence numbers returned by earlier calls to <a>PutRecord</a>, <a>PutRecords</a>, <a>GetRecords</a>, or <a>DescribeStream</a>. In the request, you can specify the shard iterator type <code>AT_TIMESTAMP</code> to read records from an arbitrary point in time, <code>TRIM_HORIZON</code> to cause <code>ShardIterator</code> to point to the last untrimmed record in the shard in the system (the oldest data record in the shard), or <code>LATEST</code> so that you always read the most recent data in the shard. </p> <p>When you read repeatedly from a stream, use a <a>GetShardIterator</a> request to get the first shard iterator for use in your first <a>GetRecords</a> request and for subsequent reads use the shard iterator returned by the <a>GetRecords</a> request in <code>NextShardIterator</code>. A new shard iterator is returned by every <a>GetRecords</a> request in <code>NextShardIterator</code>, which you use in the <code>ShardIterator</code> parameter of the next <a>GetRecords</a> request. </p> <p>If a <a>GetShardIterator</a> request is made too often, you receive a <code>ProvisionedThroughputExceededException</code>. For more information about throughput limits, see <a>GetRecords</a>, and <a href="http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html">Streams Limits</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>.</p> <p>If the shard is closed, <a>GetShardIterator</a> returns a valid iterator for the last sequence number of the shard. A shard can be closed as a result of using <a>SplitShard</a> or <a>MergeShards</a>.</p> <p> <a>GetShardIterator</a> has a limit of five transactions per second per account per open shard.</p>
+    /// <p>Gets an Amazon Kinesis shard iterator. A shard iterator expires 5 minutes after it is returned to the requester.</p> <p>A shard iterator specifies the shard position from which to start reading data records sequentially. The position is specified using the sequence number of a data record in a shard. A sequence number is the identifier associated with every record ingested in the stream, and is assigned when a record is put into the stream. Each stream has one or more shards.</p> <p>You must specify the shard iterator type. For example, you can set the <code>ShardIteratorType</code> parameter to read exactly from the position denoted by a specific sequence number by using the <code>AT_SEQUENCE_NUMBER</code> shard iterator type. Alternatively, the parameter can read right after the sequence number by using the <code>AFTER_SEQUENCE_NUMBER</code> shard iterator type, using sequence numbers returned by earlier calls to <a>PutRecord</a>, <a>PutRecords</a>, <a>GetRecords</a>, or <a>DescribeStream</a>. In the request, you can specify the shard iterator type <code>AT_TIMESTAMP</code> to read records from an arbitrary point in time, <code>TRIM_HORIZON</code> to cause <code>ShardIterator</code> to point to the last untrimmed record in the shard in the system (the oldest data record in the shard), or <code>LATEST</code> so that you always read the most recent data in the shard. </p> <p>When you read repeatedly from a stream, use a <a>GetShardIterator</a> request to get the first shard iterator for use in your first <a>GetRecords</a> request and for subsequent reads use the shard iterator returned by the <a>GetRecords</a> request in <code>NextShardIterator</code>. A new shard iterator is returned by every <a>GetRecords</a> request in <code>NextShardIterator</code>, which you use in the <code>ShardIterator</code> parameter of the next <a>GetRecords</a> request. </p> <p>If a <a>GetShardIterator</a> request is made too often, you receive a <code>ProvisionedThroughputExceededException</code>. For more information about throughput limits, see <a>GetRecords</a>, and <a href="http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html">Streams Limits</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>.</p> <p>If the shard is closed, <a>GetShardIterator</a> returns a valid iterator for the last sequence number of the shard. A shard can be closed as a result of using <a>SplitShard</a> or <a>MergeShards</a>.</p> <p> <a>GetShardIterator</a> has a limit of five transactions per second per account per open shard.</p>
     fn get_shard_iterator(
         &self,
         input: GetShardIteratorInput,
@@ -3592,7 +4527,7 @@ impl Kinesis for KinesisClient {
         })
     }
 
-    /// <p><p>Lists the shards in a stream and provides information about each shard.</p> <important> <p>This API is a new operation that is used by the Amazon Kinesis Client Library (KCL). If you have a fine-grained IAM policy that only allows specific operations, you must update your policy to allow calls to this API. For more information, see <a href="https://docs.aws.amazon.com/streams/latest/dev/controlling-access.html">Controlling Access to Amazon Kinesis Data Streams Resources Using IAM</a>.</p> </important></p>
+    /// <p><p>Lists the shards in a stream and provides information about each shard. This operation has a limit of 100 transactions per second per data stream.</p> <important> <p>This API is a new operation that is used by the Amazon Kinesis Client Library (KCL). If you have a fine-grained IAM policy that only allows specific operations, you must update your policy to allow calls to this API. For more information, see <a href="https://docs.aws.amazon.com/streams/latest/dev/controlling-access.html">Controlling Access to Amazon Kinesis Data Streams Resources Using IAM</a>.</p> </important></p>
     fn list_shards(
         &self,
         input: ListShardsInput,
@@ -3624,6 +4559,42 @@ impl Kinesis for KinesisClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(ListShardsError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Lists the consumers registered to receive data from a stream using enhanced fan-out, and provides information about each consumer.</p> <p>This operation has a limit of 10 transactions per second per account.</p>
+    fn list_stream_consumers(
+        &self,
+        input: ListStreamConsumersInput,
+    ) -> RusotoFuture<ListStreamConsumersOutput, ListStreamConsumersError> {
+        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Kinesis_20131202.ListStreamConsumers");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ListStreamConsumersOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListStreamConsumersError::from_response(response))
+                    }),
                 )
             }
         })
@@ -3797,6 +4768,42 @@ impl Kinesis for KinesisClient {
         })
     }
 
+    /// <p>Registers a consumer with a Kinesis data stream. When you use this operation, the consumer you register can read data from the stream at a rate of up to 2 MiB per second. This rate is unaffected by the total number of consumers that read from the same stream.</p> <p>You can register up to 5 consumers per stream. A given consumer can only be registered with one stream.</p> <p>This operation has a limit of five transactions per second per account.</p>
+    fn register_stream_consumer(
+        &self,
+        input: RegisterStreamConsumerInput,
+    ) -> RusotoFuture<RegisterStreamConsumerOutput, RegisterStreamConsumerError> {
+        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Kinesis_20131202.RegisterStreamConsumer");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<RegisterStreamConsumerOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(RegisterStreamConsumerError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>Removes tags from the specified Kinesis data stream. Removed tags are deleted and cannot be recovered after this operation successfully completes.</p> <p>If you specify a tag that does not exist, it is ignored.</p> <p> <a>RemoveTagsFromStream</a> has a limit of five transactions per second per account.</p>
     fn remove_tags_from_stream(
         &self,
@@ -3822,7 +4829,7 @@ impl Kinesis for KinesisClient {
         })
     }
 
-    /// <p>Splits a shard into two new shards in the Kinesis data stream, to increase the stream's capacity to ingest and transport data. <code>SplitShard</code> is called when there is a need to increase the overall capacity of a stream because of an expected increase in the volume of data records being ingested. </p> <p>You can also use <code>SplitShard</code> when a shard appears to be approaching its maximum utilization; for example, the producers sending data into the specific shard are suddenly sending more than previously anticipated. You can also call <code>SplitShard</code> to increase stream capacity, so that more Kinesis Data Streams applications can simultaneously read data from the stream for real-time processing. </p> <p>You must specify the shard to be split and the new hash key, which is the position in the shard where the shard gets split in two. In many cases, the new hash key might be the average of the beginning and ending hash key, but it can be any hash key value in the range being mapped into the shard. For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/kinesis-using-sdk-java-resharding-split.html">Split a Shard</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>.</p> <p>You can use <a>DescribeStream</a> to determine the shard ID and hash key values for the <code>ShardToSplit</code> and <code>NewStartingHashKey</code> parameters that are specified in the <code>SplitShard</code> request.</p> <p> <code>SplitShard</code> is an asynchronous operation. Upon receiving a <code>SplitShard</code> request, Kinesis Data Streams immediately returns a response and sets the stream status to <code>UPDATING</code>. After the operation is completed, Kinesis Data Streams sets the stream status to <code>ACTIVE</code>. Read and write operations continue to work while the stream is in the <code>UPDATING</code> state. </p> <p>You can use <code>DescribeStream</code> to check the status of the stream, which is returned in <code>StreamStatus</code>. If the stream is in the <code>ACTIVE</code> state, you can call <code>SplitShard</code>. If a stream is in <code>CREATING</code> or <code>UPDATING</code> or <code>DELETING</code> states, <code>DescribeStream</code> returns a <code>ResourceInUseException</code>.</p> <p>If the specified stream does not exist, <code>DescribeStream</code> returns a <code>ResourceNotFoundException</code>. If you try to create more shards than are authorized for your account, you receive a <code>LimitExceededException</code>. </p> <p>For the default shard limit for an AWS account, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html">Streams Limits</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>. To increase this limit, <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html">contact AWS Support</a>.</p> <p>If you try to operate on too many streams simultaneously using <a>CreateStream</a>, <a>DeleteStream</a>, <a>MergeShards</a>, and/or <a>SplitShard</a>, you receive a <code>LimitExceededException</code>. </p> <p> <code>SplitShard</code> has a limit of five transactions per second per account.</p>
+    /// <p>Splits a shard into two new shards in the Kinesis data stream, to increase the stream's capacity to ingest and transport data. <code>SplitShard</code> is called when there is a need to increase the overall capacity of a stream because of an expected increase in the volume of data records being ingested. </p> <p>You can also use <code>SplitShard</code> when a shard appears to be approaching its maximum utilization; for example, the producers sending data into the specific shard are suddenly sending more than previously anticipated. You can also call <code>SplitShard</code> to increase stream capacity, so that more Kinesis Data Streams applications can simultaneously read data from the stream for real-time processing. </p> <p>You must specify the shard to be split and the new hash key, which is the position in the shard where the shard gets split in two. In many cases, the new hash key might be the average of the beginning and ending hash key, but it can be any hash key value in the range being mapped into the shard. For more information, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/kinesis-using-sdk-java-resharding-split.html">Split a Shard</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>.</p> <p>You can use <a>DescribeStream</a> to determine the shard ID and hash key values for the <code>ShardToSplit</code> and <code>NewStartingHashKey</code> parameters that are specified in the <code>SplitShard</code> request.</p> <p> <code>SplitShard</code> is an asynchronous operation. Upon receiving a <code>SplitShard</code> request, Kinesis Data Streams immediately returns a response and sets the stream status to <code>UPDATING</code>. After the operation is completed, Kinesis Data Streams sets the stream status to <code>ACTIVE</code>. Read and write operations continue to work while the stream is in the <code>UPDATING</code> state. </p> <p>You can use <code>DescribeStream</code> to check the status of the stream, which is returned in <code>StreamStatus</code>. If the stream is in the <code>ACTIVE</code> state, you can call <code>SplitShard</code>. If a stream is in <code>CREATING</code> or <code>UPDATING</code> or <code>DELETING</code> states, <code>DescribeStream</code> returns a <code>ResourceInUseException</code>.</p> <p>If the specified stream does not exist, <code>DescribeStream</code> returns a <code>ResourceNotFoundException</code>. If you try to create more shards than are authorized for your account, you receive a <code>LimitExceededException</code>. </p> <p>For the default shard limit for an AWS account, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html">Kinesis Data Streams Limits</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>. To increase this limit, <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html">contact AWS Support</a>.</p> <p>If you try to operate on too many streams simultaneously using <a>CreateStream</a>, <a>DeleteStream</a>, <a>MergeShards</a>, and/or <a>SplitShard</a>, you receive a <code>LimitExceededException</code>. </p> <p> <code>SplitShard</code> has a limit of five transactions per second per account.</p>
     fn split_shard(&self, input: SplitShardInput) -> RusotoFuture<(), SplitShardError> {
         let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
 
@@ -3845,7 +4852,7 @@ impl Kinesis for KinesisClient {
         })
     }
 
-    /// <p>Enables or updates server-side encryption using an AWS KMS key for a specified stream. </p> <p>Starting encryption is an asynchronous operation. Upon receiving the request, Kinesis Data Streams returns immediately and sets the status of the stream to <code>UPDATING</code>. After the update is complete, Kinesis Data Streams sets the status of the stream back to <code>ACTIVE</code>. Updating or applying encryption normally takes a few seconds to complete, but it can take minutes. You can continue to read and write data to your stream while its status is <code>UPDATING</code>. Once the status of the stream is <code>ACTIVE</code>, encryption begins for records written to the stream. </p> <p>API Limits: You can successfully apply a new AWS KMS key for server-side encryption 25 times in a rolling 24-hour period.</p> <p>Note: It can take up to five seconds after the stream is in an <code>ACTIVE</code> status before all records written to the stream are encrypted. After you enable encryption, you can verify that encryption is applied by inspecting the API response from <code>PutRecord</code> or <code>PutRecords</code>.</p>
+    /// <p>Enables or updates server-side encryption using an AWS KMS key for a specified stream. </p> <p>Starting encryption is an asynchronous operation. Upon receiving the request, Kinesis Data Streams returns immediately and sets the status of the stream to <code>UPDATING</code>. After the update is complete, Kinesis Data Streams sets the status of the stream back to <code>ACTIVE</code>. Updating or applying encryption normally takes a few seconds to complete, but it can take minutes. You can continue to read and write data to your stream while its status is <code>UPDATING</code>. Once the status of the stream is <code>ACTIVE</code>, encryption begins for records written to the stream. </p> <p>API Limits: You can successfully apply a new AWS KMS key for server-side encryption 25 times in a rolling 24-hour period.</p> <p>Note: It can take up to 5 seconds after the stream is in an <code>ACTIVE</code> status before all records written to the stream are encrypted. After you enable encryption, you can verify that encryption is applied by inspecting the API response from <code>PutRecord</code> or <code>PutRecords</code>.</p>
     fn start_stream_encryption(
         &self,
         input: StartStreamEncryptionInput,
@@ -3870,7 +4877,7 @@ impl Kinesis for KinesisClient {
         })
     }
 
-    /// <p>Disables server-side encryption for a specified stream. </p> <p>Stopping encryption is an asynchronous operation. Upon receiving the request, Kinesis Data Streams returns immediately and sets the status of the stream to <code>UPDATING</code>. After the update is complete, Kinesis Data Streams sets the status of the stream back to <code>ACTIVE</code>. Stopping encryption normally takes a few seconds to complete, but it can take minutes. You can continue to read and write data to your stream while its status is <code>UPDATING</code>. Once the status of the stream is <code>ACTIVE</code>, records written to the stream are no longer encrypted by Kinesis Data Streams. </p> <p>API Limits: You can successfully disable server-side encryption 25 times in a rolling 24-hour period. </p> <p>Note: It can take up to five seconds after the stream is in an <code>ACTIVE</code> status before all records written to the stream are no longer subject to encryption. After you disabled encryption, you can verify that encryption is not applied by inspecting the API response from <code>PutRecord</code> or <code>PutRecords</code>.</p>
+    /// <p>Disables server-side encryption for a specified stream. </p> <p>Stopping encryption is an asynchronous operation. Upon receiving the request, Kinesis Data Streams returns immediately and sets the status of the stream to <code>UPDATING</code>. After the update is complete, Kinesis Data Streams sets the status of the stream back to <code>ACTIVE</code>. Stopping encryption normally takes a few seconds to complete, but it can take minutes. You can continue to read and write data to your stream while its status is <code>UPDATING</code>. Once the status of the stream is <code>ACTIVE</code>, records written to the stream are no longer encrypted by Kinesis Data Streams. </p> <p>API Limits: You can successfully disable server-side encryption 25 times in a rolling 24-hour period. </p> <p>Note: It can take up to 5 seconds after the stream is in an <code>ACTIVE</code> status before all records written to the stream are no longer subject to encryption. After you disabled encryption, you can verify that encryption is not applied by inspecting the API response from <code>PutRecord</code> or <code>PutRecords</code>.</p>
     fn stop_stream_encryption(
         &self,
         input: StopStreamEncryptionInput,
@@ -3895,7 +4902,44 @@ impl Kinesis for KinesisClient {
         })
     }
 
-    /// <p>Updates the shard count of the specified stream to the specified number of shards.</p> <p>Updating the shard count is an asynchronous operation. Upon receiving the request, Kinesis Data Streams returns immediately and sets the status of the stream to <code>UPDATING</code>. After the update is complete, Kinesis Data Streams sets the status of the stream back to <code>ACTIVE</code>. Depending on the size of the stream, the scaling action could take a few minutes to complete. You can continue to read and write data to your stream while its status is <code>UPDATING</code>.</p> <p>To update the shard count, Kinesis Data Streams performs splits or merges on individual shards. This can cause short-lived shards to be created, in addition to the final shards. We recommend that you double or halve the shard count, as this results in the fewest number of splits or merges.</p> <p>This operation has the following limits. You cannot do the following:</p> <ul> <li> <p>Scale more than twice per rolling 24-hour period per stream</p> </li> <li> <p>Scale up to more than double your current shard count for a stream</p> </li> <li> <p>Scale down below half your current shard count for a stream</p> </li> <li> <p>Scale up to more than 500 shards in a stream</p> </li> <li> <p>Scale a stream with more than 500 shards down unless the result is less than 500 shards</p> </li> <li> <p>Scale up to more than the shard limit for your account</p> </li> </ul> <p>For the default limits for an AWS account, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html">Streams Limits</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>. To request an increase in the call rate limit, the shard limit for this API, or your overall shard limit, use the <a href="https://console.aws.amazon.com/support/v1#/case/create?issueType=service-limit-increase&amp;limitType=service-code-kinesis">limits form</a>.</p>
+    /// <p>Call this operation from your consumer after you call <a>RegisterStreamConsumer</a> to register the consumer with Kinesis Data Streams. If the call succeeds, your consumer starts receiving events of type <a>SubscribeToShardEvent</a> for up to 5 minutes, after which time you need to call <code>SubscribeToShard</code> again to renew the subscription if you want to continue to receive records.</p> <p>You can make one call to <code>SubscribeToShard</code> per second per <code>ConsumerARN</code>. If your call succeeds, and then you call the operation again less than 5 seconds later, the second call generates a <a>ResourceInUseException</a>. If you call the operation a second time more than 5 seconds after the first call succeeds, the second call succeeds and the first connection gets shut down.</p>
+    fn subscribe_to_shard(
+        &self,
+        input: SubscribeToShardInput,
+    ) -> RusotoFuture<SubscribeToShardOutput, SubscribeToShardError> {
+        let mut request = SignedRequest::new("POST", "kinesis", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Kinesis_20131202.SubscribeToShard");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<SubscribeToShardOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(SubscribeToShardError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Updates the shard count of the specified stream to the specified number of shards.</p> <p>Updating the shard count is an asynchronous operation. Upon receiving the request, Kinesis Data Streams returns immediately and sets the status of the stream to <code>UPDATING</code>. After the update is complete, Kinesis Data Streams sets the status of the stream back to <code>ACTIVE</code>. Depending on the size of the stream, the scaling action could take a few minutes to complete. You can continue to read and write data to your stream while its status is <code>UPDATING</code>.</p> <p>To update the shard count, Kinesis Data Streams performs splits or merges on individual shards. This can cause short-lived shards to be created, in addition to the final shards. We recommend that you double or halve the shard count, as this results in the fewest number of splits or merges.</p> <p>This operation has the following default limits. By default, you cannot do the following:</p> <ul> <li> <p>Scale more than twice per rolling 24-hour period per stream</p> </li> <li> <p>Scale up to more than double your current shard count for a stream</p> </li> <li> <p>Scale down below half your current shard count for a stream</p> </li> <li> <p>Scale up to more than 500 shards in a stream</p> </li> <li> <p>Scale a stream with more than 500 shards down unless the result is less than 500 shards</p> </li> <li> <p>Scale up to more than the shard limit for your account</p> </li> </ul> <p>For the default limits for an AWS account, see <a href="http://docs.aws.amazon.com/kinesis/latest/dev/service-sizes-and-limits.html">Streams Limits</a> in the <i>Amazon Kinesis Data Streams Developer Guide</i>. To request an increase in the call rate limit, the shard limit for this API, or your overall shard limit, use the <a href="https://console.aws.amazon.com/support/v1#/case/create?issueType=service-limit-increase&amp;limitType=service-code-kinesis">limits form</a>.</p>
     fn update_shard_count(
         &self,
         input: UpdateShardCountInput,

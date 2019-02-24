@@ -31,7 +31,7 @@ use serde_json::Value as SerdeJsonValue;
 /// <p>Specifies the tags to add to a trail.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AddTagsRequest {
-    /// <p>Specifies the ARN of the trail to which one or more tags will be added. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p>
+    /// <p>Specifies the ARN of the trail to which one or more tags will be added. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
     /// <p>Contains a list of CloudTrail tags, up to a limit of 50</p>
@@ -68,7 +68,11 @@ pub struct CreateTrailRequest {
     #[serde(rename = "IsMultiRegionTrail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_multi_region_trail: Option<bool>,
-    /// <p><p>Specifies the KMS key ID to use to encrypt the logs delivered by CloudTrail. The value can be an alias name prefixed by &quot;alias/&quot;, a fully specified ARN to an alias, a fully specified ARN to a key, or a globally unique identifier.</p> <p>Examples:</p> <ul> <li> <p>alias/MyAliasName</p> </li> <li> <p>arn:aws:kms:us-east-1:123456789012:alias/MyAliasName</p> </li> <li> <p>arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>12345678-1234-1234-1234-123456789012</p> </li> </ul></p>
+    /// <p>Specifies whether the trail is created for all accounts in an organization in AWS Organizations, or only for the current AWS account. The default is false, and cannot be true unless the call is made on behalf of an AWS account that is the master account for an organization in AWS Organizations.</p>
+    #[serde(rename = "IsOrganizationTrail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_organization_trail: Option<bool>,
+    /// <p><p>Specifies the KMS key ID to use to encrypt the logs delivered by CloudTrail. The value can be an alias name prefixed by &quot;alias/&quot;, a fully specified ARN to an alias, a fully specified ARN to a key, or a globally unique identifier.</p> <p>Examples:</p> <ul> <li> <p>alias/MyAliasName</p> </li> <li> <p>arn:aws:kms:us-east-2:123456789012:alias/MyAliasName</p> </li> <li> <p>arn:aws:kms:us-east-2:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>12345678-1234-1234-1234-123456789012</p> </li> </ul></p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
@@ -108,7 +112,11 @@ pub struct CreateTrailResponse {
     #[serde(rename = "IsMultiRegionTrail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_multi_region_trail: Option<bool>,
-    /// <p>Specifies the KMS key ID that encrypts the logs delivered by CloudTrail. The value is a fully specified ARN to a KMS key in the format:</p> <p> <code>arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</code> </p>
+    /// <p>Specifies whether the trail is an organization trail.</p>
+    #[serde(rename = "IsOrganizationTrail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_organization_trail: Option<bool>,
+    /// <p>Specifies the KMS key ID that encrypts the logs delivered by CloudTrail. The value is a fully specified ARN to a KMS key in the format:</p> <p> <code>arn:aws:kms:us-east-2:123456789012:key/12345678-1234-1234-1234-123456789012</code> </p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
@@ -128,24 +136,24 @@ pub struct CreateTrailResponse {
     #[serde(rename = "S3KeyPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_key_prefix: Option<String>,
-    /// <p>Specifies the ARN of the Amazon SNS topic that CloudTrail uses to send notifications when log files are delivered. The format of a topic ARN is:</p> <p> <code>arn:aws:sns:us-east-1:123456789012:MyTopic</code> </p>
+    /// <p>Specifies the ARN of the Amazon SNS topic that CloudTrail uses to send notifications when log files are delivered. The format of a topic ARN is:</p> <p> <code>arn:aws:sns:us-east-2:123456789012:MyTopic</code> </p>
     #[serde(rename = "SnsTopicARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sns_topic_arn: Option<String>,
-    /// <p>Specifies the ARN of the trail that was created. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p>
+    /// <p>Specifies the ARN of the trail that was created. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p>
     #[serde(rename = "TrailARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trail_arn: Option<String>,
 }
 
-/// <p><p>The Amazon S3 objects that you specify in your event selectors for your trail to log data events. Data events are object-level API operations that access S3 objects, such as <code>GetObject</code>, <code>DeleteObject</code>, and <code>PutObject</code>. You can specify up to 250 S3 buckets and object prefixes for a trail. </p> <p>Example</p> <ol> <li> <p>You create an event selector for a trail and specify an S3 bucket and an empty prefix, such as <code>arn:aws:s3:::bucket-1/</code>.</p> </li> <li> <p>You upload an image file to <code>bucket-1</code>.</p> </li> <li> <p>The <code>PutObject</code> API operation occurs on an object in the S3 bucket that you specified in the event selector. The trail processes and logs the event.</p> </li> <li> <p>You upload another image file to a different S3 bucket named <code>arn:aws:s3:::bucket-2</code>.</p> </li> <li> <p>The event occurs on an object in an S3 bucket that you didn&#39;t specify in the event selector. The trail doesn’t log the event.</p> </li> </ol></p>
+/// <p><p>The Amazon S3 buckets or AWS Lambda functions that you specify in your event selectors for your trail to log data events. Data events provide insight into the resource operations performed on or within a resource itself. These are also known as data plane operations. You can specify up to 250 data resources for a trail.</p> <note> <p>The total number of allowed data resources is 250. This number can be distributed between 1 and 5 event selectors, but the total cannot exceed 250 across all selectors.</p> </note> <p>The following example demonstrates how logging works when you configure logging of all data events for an S3 bucket named <code>bucket-1</code>. In this example, the CloudTrail user spcified an empty prefix, and the option to log both <code>Read</code> and <code>Write</code> data events.</p> <ol> <li> <p>A user uploads an image file to <code>bucket-1</code>.</p> </li> <li> <p>The <code>PutObject</code> API operation is an Amazon S3 object-level API. It is recorded as a data event in CloudTrail. Because the CloudTrail user specified an S3 bucket with an empty prefix, events that occur on any object in that bucket are logged. The trail processes and logs the event.</p> </li> <li> <p>A user uploads an object to an Amazon S3 bucket named <code>arn:aws:s3:::bucket-2</code>.</p> </li> <li> <p>The <code>PutObject</code> API operation occurred for an object in an S3 bucket that the CloudTrail user didn&#39;t specify for the trail. The trail doesn’t log the event.</p> </li> </ol> <p>The following example demonstrates how logging works when you configure logging of AWS Lambda data events for a Lambda function named <i>MyLambdaFunction</i>, but not for all AWS Lambda functions.</p> <ol> <li> <p>A user runs a script that includes a call to the <i>MyLambdaFunction</i> function and the <i>MyOtherLambdaFunction</i> function.</p> </li> <li> <p>The <code>Invoke</code> API operation on <i>MyLambdaFunction</i> is an AWS Lambda API. It is recorded as a data event in CloudTrail. Because the CloudTrail user specified logging data events for <i>MyLambdaFunction</i>, any invocations of that function are logged. The trail processes and logs the event. </p> </li> <li> <p>The <code>Invoke</code> API operation on <i>MyOtherLambdaFunction</i> is an AWS Lambda API. Because the CloudTrail user did not specify logging data events for all Lambda functions, the <code>Invoke</code> operation for <i>MyOtherLambdaFunction</i> does not match the function specified for the trail. The trail doesn’t log the event. </p> </li> </ol></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DataResource {
-    /// <p>The resource type in which you want to log data events. You can specify only the following value: <code>AWS::S3::Object</code>.</p>
+    /// <p>The resource type in which you want to log data events. You can specify <code>AWS::S3::Object</code> or <code>AWS::Lambda::Function</code> resources.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
-    /// <p>A list of ARN-like strings for the specified S3 objects.</p> <p>To log data events for all objects in an S3 bucket, specify the bucket and an empty object prefix such as <code>arn:aws:s3:::bucket-1/</code>. The trail logs data events for all objects in this S3 bucket.</p> <p>To log data events for specific objects, specify the S3 bucket and object prefix such as <code>arn:aws:s3:::bucket-1/example-images</code>. The trail logs data events for objects in this S3 bucket that match the prefix.</p>
+    /// <p><p>An array of Amazon Resource Name (ARN) strings or partial ARN strings for the specified objects.</p> <ul> <li> <p>To log data events for all objects in all S3 buckets in your AWS account, specify the prefix as <code>arn:aws:s3:::</code>. </p> <note> <p>This will also enable logging of data event activity performed by any user or role in your AWS account, even if that activity is performed on a bucket that belongs to another AWS account. </p> </note> </li> <li> <p>To log data events for all objects in all S3 buckets that include <i>my-bucket</i> in their names, specify the prefix as <code>aws:s3:::my-bucket</code>. The trail logs data events for all objects in all buckets whose name contains a match for <i>my-bucket</i>. </p> </li> <li> <p>To log data events for all objects in an S3 bucket, specify the bucket and an empty object prefix such as <code>arn:aws:s3:::bucket-1/</code>. The trail logs data events for all objects in this S3 bucket.</p> </li> <li> <p>To log data events for specific objects, specify the S3 bucket and object prefix such as <code>arn:aws:s3:::bucket-1/example-images</code>. The trail logs data events for objects in this S3 bucket that match the prefix.</p> </li> <li> <p>To log data events for all functions in your AWS account, specify the prefix as <code>arn:aws:lambda</code>.</p> <note> <p>This will also enable logging of <code>Invoke</code> activity performed by any user or role in your AWS account, even if that activity is performed on a function that belongs to another AWS account. </p> </note> </li> <li> <p>To log data eents for a specific Lambda function, specify the function ARN.</p> <note> <p>Lambda function ARNs are exact. Unlike S3, you cannot use matching. For example, if you specify a function ARN <i>arn:aws:lambda:us-west-2:111111111111:function:helloworld</i>, data events will only be logged for <i>arn:aws:lambda:us-west-2:111111111111:function:helloworld</i>. They will not be logged for <i>arn:aws:lambda:us-west-2:111111111111:function:helloworld2</i>.</p> </note> </li> </ul></p>
     #[serde(rename = "Values")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub values: Option<Vec<String>>,
@@ -154,7 +162,7 @@ pub struct DataResource {
 /// <p>The request that specifies the name of a trail to delete.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteTrailRequest {
-    /// <p>Specifies the name or the CloudTrail ARN of the trail to be deleted. The format of a trail ARN is: <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p>
+    /// <p>Specifies the name or the CloudTrail ARN of the trail to be deleted. The format of a trail ARN is: <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p>
     #[serde(rename = "Name")]
     pub name: String,
 }
@@ -167,11 +175,11 @@ pub struct DeleteTrailResponse {}
 /// <p>Returns information about the trail.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeTrailsRequest {
-    /// <p>Specifies whether to include shadow trails in the response. A shadow trail is the replication in a region of a trail that was created in a different region. The default is true.</p>
+    /// <p>Specifies whether to include shadow trails in the response. A shadow trail is the replication in a region of a trail that was created in a different region, or in the case of an organization trail, the replication of an organization trail in member accounts. If you do not include shadow trails, organization trails in a member account and region replication trails will not be returned. The default is true.</p>
     #[serde(rename = "includeShadowTrails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_shadow_trails: Option<bool>,
-    /// <p><p>Specifies a list of trail names, trail ARNs, or both, of the trails to describe. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p> <p>If an empty list is specified, information for the trail in the current region is returned.</p> <ul> <li> <p>If an empty list is specified and <code>IncludeShadowTrails</code> is false, then information for all trails in the current region is returned.</p> </li> <li> <p>If an empty list is specified and IncludeShadowTrails is null or true, then information for all trails in the current region and any associated shadow trails in other regions is returned.</p> </li> </ul> <note> <p>If one or more trail names are specified, information is returned only if the names match the names of trails belonging only to the current region. To return information about a trail in another region, you must specify its trail ARN.</p> </note></p>
+    /// <p><p>Specifies a list of trail names, trail ARNs, or both, of the trails to describe. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p> <p>If an empty list is specified, information for the trail in the current region is returned.</p> <ul> <li> <p>If an empty list is specified and <code>IncludeShadowTrails</code> is false, then information for all trails in the current region is returned.</p> </li> <li> <p>If an empty list is specified and IncludeShadowTrails is null or true, then information for all trails in the current region and any associated shadow trails in other regions is returned.</p> </li> </ul> <note> <p>If one or more trail names are specified, information is returned only if the names match the names of trails belonging only to the current region. To return information about a trail in another region, you must specify its trail ARN.</p> </note></p>
     #[serde(rename = "trailNameList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trail_name_list: Option<Vec<String>>,
@@ -191,6 +199,10 @@ pub struct DescribeTrailsResponse {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Event {
+    /// <p>The AWS access key ID that was used to sign the request. If the request was made with temporary security credentials, this is the access key ID of the temporary credentials.</p>
+    #[serde(rename = "AccessKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_key_id: Option<String>,
     /// <p>A JSON string that contains a representation of the event returned.</p>
     #[serde(rename = "CloudTrailEvent")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -211,6 +223,10 @@ pub struct Event {
     #[serde(rename = "EventTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_time: Option<f64>,
+    /// <p>Information about whether the event is a write event or a read event. </p>
+    #[serde(rename = "ReadOnly")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub read_only: Option<String>,
     /// <p>A list of resources referenced by the event returned.</p>
     #[serde(rename = "Resources")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -221,10 +237,10 @@ pub struct Event {
     pub username: Option<String>,
 }
 
-/// <p>Use event selectors to specify whether you want your trail to log management and/or data events. When an event occurs in your account, CloudTrail evaluates the event selector for all trails. For each trail, if the event matches any event selector, the trail processes and logs the event. If the event doesn't match any event selector, the trail doesn't log the event.</p> <p>You can configure up to five event selectors for a trail.</p>
+/// <p>Use event selectors to further specify the management and data event settings for your trail. By default, trails created without specific event selectors will be configured to log all read and write management events, and no data events. When an event occurs in your account, CloudTrail evaluates the event selector for all trails. For each trail, if the event matches any event selector, the trail processes and logs the event. If the event doesn't match any event selector, the trail doesn't log the event.</p> <p>You can configure up to five event selectors for a trail.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EventSelector {
-    /// <p>CloudTrail supports logging only data events for S3 objects. You can specify up to 250 S3 buckets and object prefixes for a trail.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html#logging-data-events">Data Events</a> in the <i>AWS CloudTrail User Guide</i>.</p>
+    /// <p>CloudTrail supports data event logging for Amazon S3 objects and AWS Lambda functions. You can specify up to 250 resources for an individual event selector, but the total number of data resources cannot exceed 250 across all event selectors in a trail. This limit does not apply if you configure resource logging for all data events. </p> <p>For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html#logging-data-events">Data Events</a> and <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/WhatIsCloudTrail-Limits.html">Limits in AWS CloudTrail</a> in the <i>AWS CloudTrail User Guide</i>.</p>
     #[serde(rename = "DataResources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_resources: Option<Vec<DataResource>>,
@@ -240,7 +256,7 @@ pub struct EventSelector {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetEventSelectorsRequest {
-    /// <p>Specifies the name of the trail or trail ARN. If you specify a trail name, the string must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul> <p>If you specify a trail ARN, it must be in the format:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p>
+    /// <p>Specifies the name of the trail or trail ARN. If you specify a trail name, the string must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are not valid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul> <p>If you specify a trail ARN, it must be in the format:</p> <p> <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p>
     #[serde(rename = "TrailName")]
     pub trail_name: String,
 }
@@ -261,7 +277,7 @@ pub struct GetEventSelectorsResponse {
 /// <p>The name of a trail about which you want the current status.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetTrailStatusRequest {
-    /// <p>Specifies the name or the CloudTrail ARN of the trail for which you are requesting status. To get the status of a shadow trail (a replication of the trail in another region), you must specify its ARN. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p>
+    /// <p>Specifies the name or the CloudTrail ARN of the trail for which you are requesting status. To get the status of a shadow trail (a replication of the trail in another region), you must specify its ARN. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p>
     #[serde(rename = "Name")]
     pub name: String,
 }
@@ -378,7 +394,7 @@ pub struct ListTagsRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Specifies a list of trail ARNs whose tags will be listed. The list has a limit of 20 ARNs. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p>
+    /// <p>Specifies a list of trail ARNs whose tags will be listed. The list has a limit of 20 ARNs. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p>
     #[serde(rename = "ResourceIdList")]
     pub resource_id_list: Vec<String>,
 }
@@ -419,7 +435,7 @@ pub struct LookupEventsRequest {
     #[serde(rename = "LookupAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lookup_attributes: Option<Vec<LookupAttribute>>,
-    /// <p>The number of events to return. Possible values are 1 through 50. The default is 10.</p>
+    /// <p>The number of events to return. Possible values are 1 through 50. The default is 50.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -479,7 +495,7 @@ pub struct PutEventSelectorsRequest {
     /// <p>Specifies the settings for your event selectors. You can configure up to five event selectors for a trail.</p>
     #[serde(rename = "EventSelectors")]
     pub event_selectors: Vec<EventSelector>,
-    /// <p>Specifies the name of the trail or trail ARN. If you specify a trail name, the string must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul> <p>If you specify a trail ARN, it must be in the format:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p>
+    /// <p>Specifies the name of the trail or trail ARN. If you specify a trail name, the string must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul> <p>If you specify a trail ARN, it must be in the format:</p> <p> <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p>
     #[serde(rename = "TrailName")]
     pub trail_name: String,
 }
@@ -491,7 +507,7 @@ pub struct PutEventSelectorsResponse {
     #[serde(rename = "EventSelectors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_selectors: Option<Vec<EventSelector>>,
-    /// <p>Specifies the ARN of the trail that was updated with event selectors. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p>
+    /// <p>Specifies the ARN of the trail that was updated with event selectors. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p>
     #[serde(rename = "TrailARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trail_arn: Option<String>,
@@ -500,7 +516,7 @@ pub struct PutEventSelectorsResponse {
 /// <p>Specifies the tags to remove from a trail.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RemoveTagsRequest {
-    /// <p>Specifies the ARN of the trail from which tags should be removed. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p>
+    /// <p>Specifies the ARN of the trail from which tags should be removed. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
     /// <p>Specifies a list of tags to be removed.</p>
@@ -545,7 +561,7 @@ pub struct ResourceTag {
 /// <p>The request to CloudTrail to start logging AWS API calls for an account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartLoggingRequest {
-    /// <p>Specifies the name or the CloudTrail ARN of the trail for which CloudTrail logs AWS API calls. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p>
+    /// <p>Specifies the name or the CloudTrail ARN of the trail for which CloudTrail logs AWS API calls. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p>
     #[serde(rename = "Name")]
     pub name: String,
 }
@@ -558,7 +574,7 @@ pub struct StartLoggingResponse {}
 /// <p>Passes the request to CloudTrail to stop logging AWS API calls for the specified account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StopLoggingRequest {
-    /// <p>Specifies the name or the CloudTrail ARN of the trail for which CloudTrail will stop logging AWS API calls. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p>
+    /// <p>Specifies the name or the CloudTrail ARN of the trail for which CloudTrail will stop logging AWS API calls. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p>
     #[serde(rename = "Name")]
     pub name: String,
 }
@@ -608,7 +624,11 @@ pub struct Trail {
     #[serde(rename = "IsMultiRegionTrail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_multi_region_trail: Option<bool>,
-    /// <p>Specifies the KMS key ID that encrypts the logs delivered by CloudTrail. The value is a fully specified ARN to a KMS key in the format:</p> <p> <code>arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</code> </p>
+    /// <p>Specifies whether the trail is an organization trail.</p>
+    #[serde(rename = "IsOrganizationTrail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_organization_trail: Option<bool>,
+    /// <p>Specifies the KMS key ID that encrypts the logs delivered by CloudTrail. The value is a fully specified ARN to a KMS key in the format:</p> <p> <code>arn:aws:kms:us-east-2:123456789012:key/12345678-1234-1234-1234-123456789012</code> </p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
@@ -628,11 +648,11 @@ pub struct Trail {
     #[serde(rename = "S3KeyPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_key_prefix: Option<String>,
-    /// <p>Specifies the ARN of the Amazon SNS topic that CloudTrail uses to send notifications when log files are delivered. The format of a topic ARN is:</p> <p> <code>arn:aws:sns:us-east-1:123456789012:MyTopic</code> </p>
+    /// <p>Specifies the ARN of the Amazon SNS topic that CloudTrail uses to send notifications when log files are delivered. The format of a topic ARN is:</p> <p> <code>arn:aws:sns:us-east-2:123456789012:MyTopic</code> </p>
     #[serde(rename = "SnsTopicARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sns_topic_arn: Option<String>,
-    /// <p>Specifies the ARN of the trail. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p>
+    /// <p>Specifies the ARN of the trail. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p>
     #[serde(rename = "TrailARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trail_arn: Option<String>,
@@ -661,11 +681,15 @@ pub struct UpdateTrailRequest {
     #[serde(rename = "IsMultiRegionTrail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_multi_region_trail: Option<bool>,
-    /// <p><p>Specifies the KMS key ID to use to encrypt the logs delivered by CloudTrail. The value can be an alias name prefixed by &quot;alias/&quot;, a fully specified ARN to an alias, a fully specified ARN to a key, or a globally unique identifier.</p> <p>Examples:</p> <ul> <li> <p>alias/MyAliasName</p> </li> <li> <p>arn:aws:kms:us-east-1:123456789012:alias/MyAliasName</p> </li> <li> <p>arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>12345678-1234-1234-1234-123456789012</p> </li> </ul></p>
+    /// <p>Specifies whether the trail is applied to all accounts in an organization in AWS Organizations, or only for the current AWS account. The default is false, and cannot be true unless the call is made on behalf of an AWS account that is the master account for an organization in AWS Organizations. If the trail is not an organization trail and this is set to true, the trail will be created in all AWS accounts that belong to the organization. If the trail is an organization trail and this is set to false, the trail will remain in the current AWS account but be deleted from all member accounts in the organization.</p>
+    #[serde(rename = "IsOrganizationTrail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_organization_trail: Option<bool>,
+    /// <p><p>Specifies the KMS key ID to use to encrypt the logs delivered by CloudTrail. The value can be an alias name prefixed by &quot;alias/&quot;, a fully specified ARN to an alias, a fully specified ARN to a key, or a globally unique identifier.</p> <p>Examples:</p> <ul> <li> <p>alias/MyAliasName</p> </li> <li> <p>arn:aws:kms:us-east-2:123456789012:alias/MyAliasName</p> </li> <li> <p>arn:aws:kms:us-east-2:123456789012:key/12345678-1234-1234-1234-123456789012</p> </li> <li> <p>12345678-1234-1234-1234-123456789012</p> </li> </ul></p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
-    /// <p>Specifies the name of the trail or trail ARN. If <code>Name</code> is a trail name, the string must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul> <p>If <code>Name</code> is a trail ARN, it must be in the format:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p>
+    /// <p>Specifies the name of the trail or trail ARN. If <code>Name</code> is a trail name, the string must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (_), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-_namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul> <p>If <code>Name</code> is a trail ARN, it must be in the format:</p> <p> <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>Specifies the name of the Amazon S3 bucket designated for publishing log files. See <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/create_trail_naming_policy.html">Amazon S3 Bucket Naming Requirements</a>.</p>
@@ -702,7 +726,11 @@ pub struct UpdateTrailResponse {
     #[serde(rename = "IsMultiRegionTrail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_multi_region_trail: Option<bool>,
-    /// <p>Specifies the KMS key ID that encrypts the logs delivered by CloudTrail. The value is a fully specified ARN to a KMS key in the format:</p> <p> <code>arn:aws:kms:us-east-1:123456789012:key/12345678-1234-1234-1234-123456789012</code> </p>
+    /// <p>Specifies whether the trail is an organization trail.</p>
+    #[serde(rename = "IsOrganizationTrail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_organization_trail: Option<bool>,
+    /// <p>Specifies the KMS key ID that encrypts the logs delivered by CloudTrail. The value is a fully specified ARN to a KMS key in the format:</p> <p> <code>arn:aws:kms:us-east-2:123456789012:key/12345678-1234-1234-1234-123456789012</code> </p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
@@ -722,11 +750,11 @@ pub struct UpdateTrailResponse {
     #[serde(rename = "S3KeyPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_key_prefix: Option<String>,
-    /// <p>Specifies the ARN of the Amazon SNS topic that CloudTrail uses to send notifications when log files are delivered. The format of a topic ARN is:</p> <p> <code>arn:aws:sns:us-east-1:123456789012:MyTopic</code> </p>
+    /// <p>Specifies the ARN of the Amazon SNS topic that CloudTrail uses to send notifications when log files are delivered. The format of a topic ARN is:</p> <p> <code>arn:aws:sns:us-east-2:123456789012:MyTopic</code> </p>
     #[serde(rename = "SnsTopicARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sns_topic_arn: Option<String>,
-    /// <p>Specifies the ARN of the trail that was updated. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p>
+    /// <p>Specifies the ARN of the trail that was updated. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p>
     #[serde(rename = "TrailARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trail_arn: Option<String>,
@@ -735,12 +763,14 @@ pub struct UpdateTrailResponse {
 /// Errors returned by AddTags
 #[derive(Debug, PartialEq)]
 pub enum AddTagsError {
-    /// <p>This exception is thrown when an operation is called with an invalid trail ARN. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p>
+    /// <p>This exception is thrown when an operation is called with an invalid trail ARN. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p>
     CloudTrailARNInvalid(String),
     /// <p>This exception is thrown when the key or value specified for the tag does not match the regular expression <code>^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$</code>.</p>
     InvalidTagParameter(String),
     /// <p><p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (<em>), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-</em>namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul></p>
     InvalidTrailName(String),
+    /// <p>This exception is thrown when the AWS account making the request to create or update an organization trail is not the master account for an organization in AWS Organizations. For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html">Prepare For Creating a Trail For Your Organization</a>.</p>
+    NotOrganizationMasterAccount(String),
     /// <p>This exception is thrown when the requested operation is not permitted.</p>
     OperationNotPermitted(String),
     /// <p>This exception is thrown when the specified resource is not found.</p>
@@ -784,6 +814,9 @@ impl AddTagsError {
                 }
                 "InvalidTrailNameException" => {
                     return AddTagsError::InvalidTrailName(String::from(error_message));
+                }
+                "NotOrganizationMasterAccountException" => {
+                    return AddTagsError::NotOrganizationMasterAccount(String::from(error_message));
                 }
                 "OperationNotPermittedException" => {
                     return AddTagsError::OperationNotPermitted(String::from(error_message));
@@ -839,6 +872,7 @@ impl Error for AddTagsError {
             AddTagsError::CloudTrailARNInvalid(ref cause) => cause,
             AddTagsError::InvalidTagParameter(ref cause) => cause,
             AddTagsError::InvalidTrailName(ref cause) => cause,
+            AddTagsError::NotOrganizationMasterAccount(ref cause) => cause,
             AddTagsError::OperationNotPermitted(ref cause) => cause,
             AddTagsError::ResourceNotFound(ref cause) => cause,
             AddTagsError::ResourceTypeNotSupported(ref cause) => cause,
@@ -855,8 +889,12 @@ impl Error for AddTagsError {
 /// Errors returned by CreateTrail
 #[derive(Debug, PartialEq)]
 pub enum CreateTrailError {
+    /// <p>This exception is thrown when trusted access has not been enabled between AWS CloudTrail and AWS Organizations. For more information, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services.html">Enabling Trusted Access with Other AWS Services</a> and <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html">Prepare For Creating a Trail For Your Organization</a>. </p>
+    CloudTrailAccessNotEnabled(String),
     /// <p>Cannot set a CloudWatch Logs delivery for this region.</p>
     CloudWatchLogsDeliveryUnavailable(String),
+    /// <p>This exception is thrown when the IAM user or role that is used to create the organization trail is lacking one or more required permissions for creating an organization trail in a required service. For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html">Prepare For Creating a Trail For Your Organization</a>.</p>
+    InsufficientDependencyServiceAccessPermission(String),
     /// <p>This exception is thrown when the policy on the S3 bucket or KMS key is not sufficient.</p>
     InsufficientEncryptionPolicy(String),
     /// <p>This exception is thrown when the policy on the S3 bucket is not sufficient.</p>
@@ -887,8 +925,14 @@ pub enum CreateTrailError {
     KmsKeyNotFound(String),
     /// <p>This exception is thrown when the maximum number of trails is reached.</p>
     MaximumNumberOfTrailsExceeded(String),
+    /// <p>This exception is thrown when the AWS account making the request to create or update an organization trail is not the master account for an organization in AWS Organizations. For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html">Prepare For Creating a Trail For Your Organization</a>.</p>
+    NotOrganizationMasterAccount(String),
     /// <p>This exception is thrown when the requested operation is not permitted.</p>
     OperationNotPermitted(String),
+    /// <p>This exception is thrown when AWS Organizations is not configured to support all features. All features must be enabled in AWS Organization to support creating an organization trail. For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html">Prepare For Creating a Trail For Your Organization</a>.</p>
+    OrganizationNotInAllFeaturesMode(String),
+    /// <p>This exception is thrown when the request is made from an AWS account that is not a member of an organization. To make this request, sign in using the credentials of an account that belongs to an organization.</p>
+    OrganizationsNotInUse(String),
     /// <p>This exception is thrown when the specified S3 bucket does not exist.</p>
     S3BucketDoesNotExist(String),
     /// <p>This exception is thrown when the specified trail already exists.</p>
@@ -922,10 +966,18 @@ impl CreateTrailError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "CloudTrailAccessNotEnabledException" => {
+                    return CreateTrailError::CloudTrailAccessNotEnabled(String::from(error_message));
+                }
                 "CloudWatchLogsDeliveryUnavailableException" => {
                     return CreateTrailError::CloudWatchLogsDeliveryUnavailable(String::from(
                         error_message,
                     ));
+                }
+                "InsufficientDependencyServiceAccessPermissionException" => {
+                    return CreateTrailError::InsufficientDependencyServiceAccessPermission(
+                        String::from(error_message),
+                    );
                 }
                 "InsufficientEncryptionPolicyException" => {
                     return CreateTrailError::InsufficientEncryptionPolicy(String::from(
@@ -980,8 +1032,21 @@ impl CreateTrailError {
                         error_message,
                     ));
                 }
+                "NotOrganizationMasterAccountException" => {
+                    return CreateTrailError::NotOrganizationMasterAccount(String::from(
+                        error_message,
+                    ));
+                }
                 "OperationNotPermittedException" => {
                     return CreateTrailError::OperationNotPermitted(String::from(error_message));
+                }
+                "OrganizationNotInAllFeaturesModeException" => {
+                    return CreateTrailError::OrganizationNotInAllFeaturesMode(String::from(
+                        error_message,
+                    ));
+                }
+                "OrganizationsNotInUseException" => {
+                    return CreateTrailError::OrganizationsNotInUse(String::from(error_message));
                 }
                 "S3BucketDoesNotExistException" => {
                     return CreateTrailError::S3BucketDoesNotExist(String::from(error_message));
@@ -1033,7 +1098,9 @@ impl fmt::Display for CreateTrailError {
 impl Error for CreateTrailError {
     fn description(&self) -> &str {
         match *self {
+            CreateTrailError::CloudTrailAccessNotEnabled(ref cause) => cause,
             CreateTrailError::CloudWatchLogsDeliveryUnavailable(ref cause) => cause,
+            CreateTrailError::InsufficientDependencyServiceAccessPermission(ref cause) => cause,
             CreateTrailError::InsufficientEncryptionPolicy(ref cause) => cause,
             CreateTrailError::InsufficientS3BucketPolicy(ref cause) => cause,
             CreateTrailError::InsufficientSnsTopicPolicy(ref cause) => cause,
@@ -1049,7 +1116,10 @@ impl Error for CreateTrailError {
             CreateTrailError::KmsKeyDisabled(ref cause) => cause,
             CreateTrailError::KmsKeyNotFound(ref cause) => cause,
             CreateTrailError::MaximumNumberOfTrailsExceeded(ref cause) => cause,
+            CreateTrailError::NotOrganizationMasterAccount(ref cause) => cause,
             CreateTrailError::OperationNotPermitted(ref cause) => cause,
+            CreateTrailError::OrganizationNotInAllFeaturesMode(ref cause) => cause,
+            CreateTrailError::OrganizationsNotInUse(ref cause) => cause,
             CreateTrailError::S3BucketDoesNotExist(ref cause) => cause,
             CreateTrailError::TrailAlreadyExists(ref cause) => cause,
             CreateTrailError::TrailNotProvided(ref cause) => cause,
@@ -1065,12 +1135,20 @@ impl Error for CreateTrailError {
 /// Errors returned by DeleteTrail
 #[derive(Debug, PartialEq)]
 pub enum DeleteTrailError {
+    /// <p>This exception is thrown when the IAM user or role that is used to create the organization trail is lacking one or more required permissions for creating an organization trail in a required service. For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html">Prepare For Creating a Trail For Your Organization</a>.</p>
+    InsufficientDependencyServiceAccessPermission(String),
     /// <p>This exception is thrown when an operation is called on a trail from a region other than the region in which the trail was created.</p>
     InvalidHomeRegion(String),
     /// <p><p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (<em>), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-</em>namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul></p>
     InvalidTrailName(String),
+    /// <p>This exception is thrown when the AWS account making the request to create or update an organization trail is not the master account for an organization in AWS Organizations. For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html">Prepare For Creating a Trail For Your Organization</a>.</p>
+    NotOrganizationMasterAccount(String),
+    /// <p>This exception is thrown when the requested operation is not permitted.</p>
+    OperationNotPermitted(String),
     /// <p>This exception is thrown when the trail with the given name is not found.</p>
     TrailNotFound(String),
+    /// <p>This exception is thrown when the requested operation is not supported.</p>
+    UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1096,14 +1174,30 @@ impl DeleteTrailError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "InsufficientDependencyServiceAccessPermissionException" => {
+                    return DeleteTrailError::InsufficientDependencyServiceAccessPermission(
+                        String::from(error_message),
+                    );
+                }
                 "InvalidHomeRegionException" => {
                     return DeleteTrailError::InvalidHomeRegion(String::from(error_message));
                 }
                 "InvalidTrailNameException" => {
                     return DeleteTrailError::InvalidTrailName(String::from(error_message));
                 }
+                "NotOrganizationMasterAccountException" => {
+                    return DeleteTrailError::NotOrganizationMasterAccount(String::from(
+                        error_message,
+                    ));
+                }
+                "OperationNotPermittedException" => {
+                    return DeleteTrailError::OperationNotPermitted(String::from(error_message));
+                }
                 "TrailNotFoundException" => {
                     return DeleteTrailError::TrailNotFound(String::from(error_message));
+                }
+                "UnsupportedOperationException" => {
+                    return DeleteTrailError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
                     return DeleteTrailError::Validation(error_message.to_string());
@@ -1143,9 +1237,13 @@ impl fmt::Display for DeleteTrailError {
 impl Error for DeleteTrailError {
     fn description(&self) -> &str {
         match *self {
+            DeleteTrailError::InsufficientDependencyServiceAccessPermission(ref cause) => cause,
             DeleteTrailError::InvalidHomeRegion(ref cause) => cause,
             DeleteTrailError::InvalidTrailName(ref cause) => cause,
+            DeleteTrailError::NotOrganizationMasterAccount(ref cause) => cause,
+            DeleteTrailError::OperationNotPermitted(ref cause) => cause,
             DeleteTrailError::TrailNotFound(ref cause) => cause,
+            DeleteTrailError::UnsupportedOperation(ref cause) => cause,
             DeleteTrailError::Validation(ref cause) => cause,
             DeleteTrailError::Credentials(ref err) => err.description(),
             DeleteTrailError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -1529,7 +1627,7 @@ impl Error for ListPublicKeysError {
 /// Errors returned by ListTags
 #[derive(Debug, PartialEq)]
 pub enum ListTagsError {
-    /// <p>This exception is thrown when an operation is called with an invalid trail ARN. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p>
+    /// <p>This exception is thrown when an operation is called with an invalid trail ARN. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p>
     CloudTrailARNInvalid(String),
     /// <p>Reserved for future use.</p>
     InvalidToken(String),
@@ -1743,12 +1841,16 @@ impl Error for LookupEventsError {
 /// Errors returned by PutEventSelectors
 #[derive(Debug, PartialEq)]
 pub enum PutEventSelectorsError {
-    /// <p><p>This exception is thrown when the <code>PutEventSelectors</code> operation is called with an invalid number of event selectors, data resources, or an invalid value for a parameter:</p> <ul> <li> <p>Specify a valid number of event selectors (1 to 5) for a trail.</p> </li> <li> <p>Specify a valid number of data resources (1 to 250) for an event selector.</p> </li> <li> <p>Specify a valid value for a parameter. For example, specifying the <code>ReadWriteType</code> parameter with a value of <code>read-only</code> is invalid.</p> </li> </ul></p>
+    /// <p>This exception is thrown when the IAM user or role that is used to create the organization trail is lacking one or more required permissions for creating an organization trail in a required service. For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html">Prepare For Creating a Trail For Your Organization</a>.</p>
+    InsufficientDependencyServiceAccessPermission(String),
+    /// <p><p>This exception is thrown when the <code>PutEventSelectors</code> operation is called with a number of event selectors or data resources that is not valid. The combination of event selectors and data resources is not valid. A trail can have up to 5 event selectors. A trail is limited to 250 data resources. These data resources can be distributed across event selectors, but the overall total cannot exceed 250.</p> <p>You can:</p> <ul> <li> <p>Specify a valid number of event selectors (1 to 5) for a trail.</p> </li> <li> <p>Specify a valid number of data resources (1 to 250) for an event selector. The limit of number of resources on an individual event selector is configurable up to 250. However, this upper limit is allowed only if the total number of data resources does not exceed 250 across all event selectors for a trail.</p> </li> <li> <p>Specify a valid value for a parameter. For example, specifying the <code>ReadWriteType</code> parameter with a value of <code>read-only</code> is invalid.</p> </li> </ul></p>
     InvalidEventSelectors(String),
     /// <p>This exception is thrown when an operation is called on a trail from a region other than the region in which the trail was created.</p>
     InvalidHomeRegion(String),
     /// <p><p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (<em>), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-</em>namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul></p>
     InvalidTrailName(String),
+    /// <p>This exception is thrown when the AWS account making the request to create or update an organization trail is not the master account for an organization in AWS Organizations. For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html">Prepare For Creating a Trail For Your Organization</a>.</p>
+    NotOrganizationMasterAccount(String),
     /// <p>This exception is thrown when the requested operation is not permitted.</p>
     OperationNotPermitted(String),
     /// <p>This exception is thrown when the trail with the given name is not found.</p>
@@ -1780,6 +1882,11 @@ impl PutEventSelectorsError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "InsufficientDependencyServiceAccessPermissionException" => {
+                    return PutEventSelectorsError::InsufficientDependencyServiceAccessPermission(
+                        String::from(error_message),
+                    );
+                }
                 "InvalidEventSelectorsException" => {
                     return PutEventSelectorsError::InvalidEventSelectors(String::from(
                         error_message,
@@ -1790,6 +1897,11 @@ impl PutEventSelectorsError {
                 }
                 "InvalidTrailNameException" => {
                     return PutEventSelectorsError::InvalidTrailName(String::from(error_message));
+                }
+                "NotOrganizationMasterAccountException" => {
+                    return PutEventSelectorsError::NotOrganizationMasterAccount(String::from(
+                        error_message,
+                    ));
                 }
                 "OperationNotPermittedException" => {
                     return PutEventSelectorsError::OperationNotPermitted(String::from(
@@ -1840,9 +1952,13 @@ impl fmt::Display for PutEventSelectorsError {
 impl Error for PutEventSelectorsError {
     fn description(&self) -> &str {
         match *self {
+            PutEventSelectorsError::InsufficientDependencyServiceAccessPermission(ref cause) => {
+                cause
+            }
             PutEventSelectorsError::InvalidEventSelectors(ref cause) => cause,
             PutEventSelectorsError::InvalidHomeRegion(ref cause) => cause,
             PutEventSelectorsError::InvalidTrailName(ref cause) => cause,
+            PutEventSelectorsError::NotOrganizationMasterAccount(ref cause) => cause,
             PutEventSelectorsError::OperationNotPermitted(ref cause) => cause,
             PutEventSelectorsError::TrailNotFound(ref cause) => cause,
             PutEventSelectorsError::UnsupportedOperation(ref cause) => cause,
@@ -1859,12 +1975,14 @@ impl Error for PutEventSelectorsError {
 /// Errors returned by RemoveTags
 #[derive(Debug, PartialEq)]
 pub enum RemoveTagsError {
-    /// <p>This exception is thrown when an operation is called with an invalid trail ARN. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-1:123456789012:trail/MyTrail</code> </p>
+    /// <p>This exception is thrown when an operation is called with an invalid trail ARN. The format of a trail ARN is:</p> <p> <code>arn:aws:cloudtrail:us-east-2:123456789012:trail/MyTrail</code> </p>
     CloudTrailARNInvalid(String),
     /// <p>This exception is thrown when the key or value specified for the tag does not match the regular expression <code>^([\\p{L}\\p{Z}\\p{N}_.:/=+\\-@]*)$</code>.</p>
     InvalidTagParameter(String),
     /// <p><p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (<em>), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-</em>namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul></p>
     InvalidTrailName(String),
+    /// <p>This exception is thrown when the AWS account making the request to create or update an organization trail is not the master account for an organization in AWS Organizations. For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html">Prepare For Creating a Trail For Your Organization</a>.</p>
+    NotOrganizationMasterAccount(String),
     /// <p>This exception is thrown when the requested operation is not permitted.</p>
     OperationNotPermitted(String),
     /// <p>This exception is thrown when the specified resource is not found.</p>
@@ -1906,6 +2024,11 @@ impl RemoveTagsError {
                 }
                 "InvalidTrailNameException" => {
                     return RemoveTagsError::InvalidTrailName(String::from(error_message));
+                }
+                "NotOrganizationMasterAccountException" => {
+                    return RemoveTagsError::NotOrganizationMasterAccount(String::from(
+                        error_message,
+                    ));
                 }
                 "OperationNotPermittedException" => {
                     return RemoveTagsError::OperationNotPermitted(String::from(error_message));
@@ -1960,6 +2083,7 @@ impl Error for RemoveTagsError {
             RemoveTagsError::CloudTrailARNInvalid(ref cause) => cause,
             RemoveTagsError::InvalidTagParameter(ref cause) => cause,
             RemoveTagsError::InvalidTrailName(ref cause) => cause,
+            RemoveTagsError::NotOrganizationMasterAccount(ref cause) => cause,
             RemoveTagsError::OperationNotPermitted(ref cause) => cause,
             RemoveTagsError::ResourceNotFound(ref cause) => cause,
             RemoveTagsError::ResourceTypeNotSupported(ref cause) => cause,
@@ -1975,12 +2099,20 @@ impl Error for RemoveTagsError {
 /// Errors returned by StartLogging
 #[derive(Debug, PartialEq)]
 pub enum StartLoggingError {
+    /// <p>This exception is thrown when the IAM user or role that is used to create the organization trail is lacking one or more required permissions for creating an organization trail in a required service. For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html">Prepare For Creating a Trail For Your Organization</a>.</p>
+    InsufficientDependencyServiceAccessPermission(String),
     /// <p>This exception is thrown when an operation is called on a trail from a region other than the region in which the trail was created.</p>
     InvalidHomeRegion(String),
     /// <p><p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (<em>), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-</em>namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul></p>
     InvalidTrailName(String),
+    /// <p>This exception is thrown when the AWS account making the request to create or update an organization trail is not the master account for an organization in AWS Organizations. For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html">Prepare For Creating a Trail For Your Organization</a>.</p>
+    NotOrganizationMasterAccount(String),
+    /// <p>This exception is thrown when the requested operation is not permitted.</p>
+    OperationNotPermitted(String),
     /// <p>This exception is thrown when the trail with the given name is not found.</p>
     TrailNotFound(String),
+    /// <p>This exception is thrown when the requested operation is not supported.</p>
+    UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2006,14 +2138,30 @@ impl StartLoggingError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "InsufficientDependencyServiceAccessPermissionException" => {
+                    return StartLoggingError::InsufficientDependencyServiceAccessPermission(
+                        String::from(error_message),
+                    );
+                }
                 "InvalidHomeRegionException" => {
                     return StartLoggingError::InvalidHomeRegion(String::from(error_message));
                 }
                 "InvalidTrailNameException" => {
                     return StartLoggingError::InvalidTrailName(String::from(error_message));
                 }
+                "NotOrganizationMasterAccountException" => {
+                    return StartLoggingError::NotOrganizationMasterAccount(String::from(
+                        error_message,
+                    ));
+                }
+                "OperationNotPermittedException" => {
+                    return StartLoggingError::OperationNotPermitted(String::from(error_message));
+                }
                 "TrailNotFoundException" => {
                     return StartLoggingError::TrailNotFound(String::from(error_message));
+                }
+                "UnsupportedOperationException" => {
+                    return StartLoggingError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
                     return StartLoggingError::Validation(error_message.to_string());
@@ -2053,9 +2201,13 @@ impl fmt::Display for StartLoggingError {
 impl Error for StartLoggingError {
     fn description(&self) -> &str {
         match *self {
+            StartLoggingError::InsufficientDependencyServiceAccessPermission(ref cause) => cause,
             StartLoggingError::InvalidHomeRegion(ref cause) => cause,
             StartLoggingError::InvalidTrailName(ref cause) => cause,
+            StartLoggingError::NotOrganizationMasterAccount(ref cause) => cause,
+            StartLoggingError::OperationNotPermitted(ref cause) => cause,
             StartLoggingError::TrailNotFound(ref cause) => cause,
+            StartLoggingError::UnsupportedOperation(ref cause) => cause,
             StartLoggingError::Validation(ref cause) => cause,
             StartLoggingError::Credentials(ref err) => err.description(),
             StartLoggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -2067,12 +2219,20 @@ impl Error for StartLoggingError {
 /// Errors returned by StopLogging
 #[derive(Debug, PartialEq)]
 pub enum StopLoggingError {
+    /// <p>This exception is thrown when the IAM user or role that is used to create the organization trail is lacking one or more required permissions for creating an organization trail in a required service. For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html">Prepare For Creating a Trail For Your Organization</a>.</p>
+    InsufficientDependencyServiceAccessPermission(String),
     /// <p>This exception is thrown when an operation is called on a trail from a region other than the region in which the trail was created.</p>
     InvalidHomeRegion(String),
     /// <p><p>This exception is thrown when the provided trail name is not valid. Trail names must meet the following requirements:</p> <ul> <li> <p>Contain only ASCII letters (a-z, A-Z), numbers (0-9), periods (.), underscores (<em>), or dashes (-)</p> </li> <li> <p>Start with a letter or number, and end with a letter or number</p> </li> <li> <p>Be between 3 and 128 characters</p> </li> <li> <p>Have no adjacent periods, underscores or dashes. Names like <code>my-</em>namespace</code> and <code>my--namespace</code> are invalid.</p> </li> <li> <p>Not be in IP address format (for example, 192.168.5.4)</p> </li> </ul></p>
     InvalidTrailName(String),
+    /// <p>This exception is thrown when the AWS account making the request to create or update an organization trail is not the master account for an organization in AWS Organizations. For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html">Prepare For Creating a Trail For Your Organization</a>.</p>
+    NotOrganizationMasterAccount(String),
+    /// <p>This exception is thrown when the requested operation is not permitted.</p>
+    OperationNotPermitted(String),
     /// <p>This exception is thrown when the trail with the given name is not found.</p>
     TrailNotFound(String),
+    /// <p>This exception is thrown when the requested operation is not supported.</p>
+    UnsupportedOperation(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -2098,14 +2258,30 @@ impl StopLoggingError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "InsufficientDependencyServiceAccessPermissionException" => {
+                    return StopLoggingError::InsufficientDependencyServiceAccessPermission(
+                        String::from(error_message),
+                    );
+                }
                 "InvalidHomeRegionException" => {
                     return StopLoggingError::InvalidHomeRegion(String::from(error_message));
                 }
                 "InvalidTrailNameException" => {
                     return StopLoggingError::InvalidTrailName(String::from(error_message));
                 }
+                "NotOrganizationMasterAccountException" => {
+                    return StopLoggingError::NotOrganizationMasterAccount(String::from(
+                        error_message,
+                    ));
+                }
+                "OperationNotPermittedException" => {
+                    return StopLoggingError::OperationNotPermitted(String::from(error_message));
+                }
                 "TrailNotFoundException" => {
                     return StopLoggingError::TrailNotFound(String::from(error_message));
+                }
+                "UnsupportedOperationException" => {
+                    return StopLoggingError::UnsupportedOperation(String::from(error_message));
                 }
                 "ValidationException" => {
                     return StopLoggingError::Validation(error_message.to_string());
@@ -2145,9 +2321,13 @@ impl fmt::Display for StopLoggingError {
 impl Error for StopLoggingError {
     fn description(&self) -> &str {
         match *self {
+            StopLoggingError::InsufficientDependencyServiceAccessPermission(ref cause) => cause,
             StopLoggingError::InvalidHomeRegion(ref cause) => cause,
             StopLoggingError::InvalidTrailName(ref cause) => cause,
+            StopLoggingError::NotOrganizationMasterAccount(ref cause) => cause,
+            StopLoggingError::OperationNotPermitted(ref cause) => cause,
             StopLoggingError::TrailNotFound(ref cause) => cause,
+            StopLoggingError::UnsupportedOperation(ref cause) => cause,
             StopLoggingError::Validation(ref cause) => cause,
             StopLoggingError::Credentials(ref err) => err.description(),
             StopLoggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -2159,8 +2339,12 @@ impl Error for StopLoggingError {
 /// Errors returned by UpdateTrail
 #[derive(Debug, PartialEq)]
 pub enum UpdateTrailError {
+    /// <p>This exception is thrown when trusted access has not been enabled between AWS CloudTrail and AWS Organizations. For more information, see <a href="https://docs.aws.amazon.com/organizations/latest/userguide/orgs_integrate_services.html">Enabling Trusted Access with Other AWS Services</a> and <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html">Prepare For Creating a Trail For Your Organization</a>. </p>
+    CloudTrailAccessNotEnabled(String),
     /// <p>Cannot set a CloudWatch Logs delivery for this region.</p>
     CloudWatchLogsDeliveryUnavailable(String),
+    /// <p>This exception is thrown when the IAM user or role that is used to create the organization trail is lacking one or more required permissions for creating an organization trail in a required service. For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html">Prepare For Creating a Trail For Your Organization</a>.</p>
+    InsufficientDependencyServiceAccessPermission(String),
     /// <p>This exception is thrown when the policy on the S3 bucket or KMS key is not sufficient.</p>
     InsufficientEncryptionPolicy(String),
     /// <p>This exception is thrown when the policy on the S3 bucket is not sufficient.</p>
@@ -2191,8 +2375,14 @@ pub enum UpdateTrailError {
     KmsKeyDisabled(String),
     /// <p>This exception is thrown when the KMS key does not exist, or when the S3 bucket and the KMS key are not in the same region.</p>
     KmsKeyNotFound(String),
+    /// <p>This exception is thrown when the AWS account making the request to create or update an organization trail is not the master account for an organization in AWS Organizations. For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html">Prepare For Creating a Trail For Your Organization</a>.</p>
+    NotOrganizationMasterAccount(String),
     /// <p>This exception is thrown when the requested operation is not permitted.</p>
     OperationNotPermitted(String),
+    /// <p>This exception is thrown when AWS Organizations is not configured to support all features. All features must be enabled in AWS Organization to support creating an organization trail. For more information, see <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/creating-an-organizational-trail-prepare.html">Prepare For Creating a Trail For Your Organization</a>.</p>
+    OrganizationNotInAllFeaturesMode(String),
+    /// <p>This exception is thrown when the request is made from an AWS account that is not a member of an organization. To make this request, sign in using the credentials of an account that belongs to an organization.</p>
+    OrganizationsNotInUse(String),
     /// <p>This exception is thrown when the specified S3 bucket does not exist.</p>
     S3BucketDoesNotExist(String),
     /// <p>This exception is thrown when the trail with the given name is not found.</p>
@@ -2226,10 +2416,18 @@ impl UpdateTrailError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "CloudTrailAccessNotEnabledException" => {
+                    return UpdateTrailError::CloudTrailAccessNotEnabled(String::from(error_message));
+                }
                 "CloudWatchLogsDeliveryUnavailableException" => {
                     return UpdateTrailError::CloudWatchLogsDeliveryUnavailable(String::from(
                         error_message,
                     ));
+                }
+                "InsufficientDependencyServiceAccessPermissionException" => {
+                    return UpdateTrailError::InsufficientDependencyServiceAccessPermission(
+                        String::from(error_message),
+                    );
                 }
                 "InsufficientEncryptionPolicyException" => {
                     return UpdateTrailError::InsufficientEncryptionPolicy(String::from(
@@ -2282,8 +2480,21 @@ impl UpdateTrailError {
                 "KmsKeyNotFoundException" => {
                     return UpdateTrailError::KmsKeyNotFound(String::from(error_message));
                 }
+                "NotOrganizationMasterAccountException" => {
+                    return UpdateTrailError::NotOrganizationMasterAccount(String::from(
+                        error_message,
+                    ));
+                }
                 "OperationNotPermittedException" => {
                     return UpdateTrailError::OperationNotPermitted(String::from(error_message));
+                }
+                "OrganizationNotInAllFeaturesModeException" => {
+                    return UpdateTrailError::OrganizationNotInAllFeaturesMode(String::from(
+                        error_message,
+                    ));
+                }
+                "OrganizationsNotInUseException" => {
+                    return UpdateTrailError::OrganizationsNotInUse(String::from(error_message));
                 }
                 "S3BucketDoesNotExistException" => {
                     return UpdateTrailError::S3BucketDoesNotExist(String::from(error_message));
@@ -2335,7 +2546,9 @@ impl fmt::Display for UpdateTrailError {
 impl Error for UpdateTrailError {
     fn description(&self) -> &str {
         match *self {
+            UpdateTrailError::CloudTrailAccessNotEnabled(ref cause) => cause,
             UpdateTrailError::CloudWatchLogsDeliveryUnavailable(ref cause) => cause,
+            UpdateTrailError::InsufficientDependencyServiceAccessPermission(ref cause) => cause,
             UpdateTrailError::InsufficientEncryptionPolicy(ref cause) => cause,
             UpdateTrailError::InsufficientS3BucketPolicy(ref cause) => cause,
             UpdateTrailError::InsufficientSnsTopicPolicy(ref cause) => cause,
@@ -2351,7 +2564,10 @@ impl Error for UpdateTrailError {
             UpdateTrailError::Kms(ref cause) => cause,
             UpdateTrailError::KmsKeyDisabled(ref cause) => cause,
             UpdateTrailError::KmsKeyNotFound(ref cause) => cause,
+            UpdateTrailError::NotOrganizationMasterAccount(ref cause) => cause,
             UpdateTrailError::OperationNotPermitted(ref cause) => cause,
+            UpdateTrailError::OrganizationNotInAllFeaturesMode(ref cause) => cause,
+            UpdateTrailError::OrganizationsNotInUse(ref cause) => cause,
             UpdateTrailError::S3BucketDoesNotExist(ref cause) => cause,
             UpdateTrailError::TrailNotFound(ref cause) => cause,
             UpdateTrailError::TrailNotProvided(ref cause) => cause,
@@ -2387,7 +2603,7 @@ pub trait CloudTrail {
         input: DescribeTrailsRequest,
     ) -> RusotoFuture<DescribeTrailsResponse, DescribeTrailsError>;
 
-    /// <p>Describes the settings for the event selectors that you configured for your trail. The information returned for your event selectors includes the following:</p> <ul> <li> <p>The S3 objects that you are logging for data events.</p> </li> <li> <p>If your event selector includes management events.</p> </li> <li> <p>If your event selector includes read-only events, write-only events, or all. </p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>
+    /// <p>Describes the settings for the event selectors that you configured for your trail. The information returned for your event selectors includes the following:</p> <ul> <li> <p>If your event selector includes read-only events, write-only events, or all events. This applies to both management events and data events.</p> </li> <li> <p>If your event selector includes management events.</p> </li> <li> <p>If your event selector includes data events, the Amazon S3 objects or AWS Lambda functions that you are logging for data events.</p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>
     fn get_event_selectors(
         &self,
         input: GetEventSelectorsRequest,
@@ -2408,13 +2624,13 @@ pub trait CloudTrail {
     /// <p>Lists the tags for the trail in the current region.</p>
     fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError>;
 
-    /// <p><p>Looks up API activity events captured by CloudTrail that create, update, or delete resources in your account. Events for a region can be looked up for the times in which you had CloudTrail turned on in that region during the last seven days. Lookup supports the following attributes:</p> <ul> <li> <p>Event ID</p> </li> <li> <p>Event name</p> </li> <li> <p>Event source</p> </li> <li> <p>Resource name</p> </li> <li> <p>Resource type</p> </li> <li> <p>User name</p> </li> </ul> <p>All attributes are optional. The default number of results returned is 10, with a maximum of 50 possible. The response includes a token that you can use to get the next page of results.</p> <important> <p>The rate of lookup requests is limited to one per second per account. If this limit is exceeded, a throttling error occurs.</p> </important> <important> <p>Events that occurred during the selected time range will not be available for lookup if CloudTrail logging was not enabled when the events occurred.</p> </important></p>
+    /// <p><p>Looks up <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html#cloudtrail-concepts-management-events">management events</a> captured by CloudTrail. Events for a region can be looked up in that region during the last 90 days. Lookup supports the following attributes:</p> <ul> <li> <p>AWS access key</p> </li> <li> <p>Event ID</p> </li> <li> <p>Event name</p> </li> <li> <p>Event source</p> </li> <li> <p>Read only</p> </li> <li> <p>Resource name</p> </li> <li> <p>Resource type</p> </li> <li> <p>User name</p> </li> </ul> <p>All attributes are optional. The default number of results returned is 50, with a maximum of 50 possible. The response includes a token that you can use to get the next page of results.</p> <important> <p>The rate of lookup requests is limited to one per second per account. If this limit is exceeded, a throttling error occurs.</p> </important> <important> <p>Events that occurred during the selected time range will not be available for lookup if CloudTrail logging was not enabled when the events occurred.</p> </important></p>
     fn lookup_events(
         &self,
         input: LookupEventsRequest,
     ) -> RusotoFuture<LookupEventsResponse, LookupEventsError>;
 
-    /// <p>Configures an event selector for your trail. Use event selectors to specify whether you want your trail to log management and/or data events. When an event occurs in your account, CloudTrail evaluates the event selectors in all trails. For each trail, if the event matches any event selector, the trail processes and logs the event. If the event doesn't match any event selector, the trail doesn't log the event. </p> <p>Example</p> <ol> <li> <p>You create an event selector for a trail and specify that you want write-only events.</p> </li> <li> <p>The EC2 <code>GetConsoleOutput</code> and <code>RunInstances</code> API operations occur in your account.</p> </li> <li> <p>CloudTrail evaluates whether the events match your event selectors.</p> </li> <li> <p>The <code>RunInstances</code> is a write-only event and it matches your event selector. The trail logs the event.</p> </li> <li> <p>The <code>GetConsoleOutput</code> is a read-only event but it doesn't match your event selector. The trail doesn't log the event. </p> </li> </ol> <p>The <code>PutEventSelectors</code> operation must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p> <p>You can configure up to five event selectors for each trail. For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>
+    /// <p>Configures an event selector for your trail. Use event selectors to further specify the management and data event settings for your trail. By default, trails created without specific event selectors will be configured to log all read and write management events, and no data events. </p> <p>When an event occurs in your account, CloudTrail evaluates the event selectors in all trails. For each trail, if the event matches any event selector, the trail processes and logs the event. If the event doesn't match any event selector, the trail doesn't log the event. </p> <p>Example</p> <ol> <li> <p>You create an event selector for a trail and specify that you want write-only events.</p> </li> <li> <p>The EC2 <code>GetConsoleOutput</code> and <code>RunInstances</code> API operations occur in your account.</p> </li> <li> <p>CloudTrail evaluates whether the events match your event selectors.</p> </li> <li> <p>The <code>RunInstances</code> is a write-only event and it matches your event selector. The trail logs the event.</p> </li> <li> <p>The <code>GetConsoleOutput</code> is a read-only event but it doesn't match your event selector. The trail doesn't log the event. </p> </li> </ol> <p>The <code>PutEventSelectors</code> operation must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p> <p>You can configure up to five event selectors for each trail. For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> and <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/WhatIsCloudTrail-Limits.html">Limits in AWS CloudTrail</a> in the <i>AWS CloudTrail User Guide</i>.</p>
     fn put_event_selectors(
         &self,
         input: PutEventSelectorsRequest,
@@ -2638,7 +2854,7 @@ impl CloudTrail for CloudTrailClient {
         })
     }
 
-    /// <p>Describes the settings for the event selectors that you configured for your trail. The information returned for your event selectors includes the following:</p> <ul> <li> <p>The S3 objects that you are logging for data events.</p> </li> <li> <p>If your event selector includes management events.</p> </li> <li> <p>If your event selector includes read-only events, write-only events, or all. </p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>
+    /// <p>Describes the settings for the event selectors that you configured for your trail. The information returned for your event selectors includes the following:</p> <ul> <li> <p>If your event selector includes read-only events, write-only events, or all events. This applies to both management events and data events.</p> </li> <li> <p>If your event selector includes management events.</p> </li> <li> <p>If your event selector includes data events, the Amazon S3 objects or AWS Lambda functions that you are logging for data events.</p> </li> </ul> <p>For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>
     fn get_event_selectors(
         &self,
         input: GetEventSelectorsRequest,
@@ -2795,7 +3011,7 @@ impl CloudTrail for CloudTrailClient {
         })
     }
 
-    /// <p><p>Looks up API activity events captured by CloudTrail that create, update, or delete resources in your account. Events for a region can be looked up for the times in which you had CloudTrail turned on in that region during the last seven days. Lookup supports the following attributes:</p> <ul> <li> <p>Event ID</p> </li> <li> <p>Event name</p> </li> <li> <p>Event source</p> </li> <li> <p>Resource name</p> </li> <li> <p>Resource type</p> </li> <li> <p>User name</p> </li> </ul> <p>All attributes are optional. The default number of results returned is 10, with a maximum of 50 possible. The response includes a token that you can use to get the next page of results.</p> <important> <p>The rate of lookup requests is limited to one per second per account. If this limit is exceeded, a throttling error occurs.</p> </important> <important> <p>Events that occurred during the selected time range will not be available for lookup if CloudTrail logging was not enabled when the events occurred.</p> </important></p>
+    /// <p><p>Looks up <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/cloudtrail-concepts.html#cloudtrail-concepts-management-events">management events</a> captured by CloudTrail. Events for a region can be looked up in that region during the last 90 days. Lookup supports the following attributes:</p> <ul> <li> <p>AWS access key</p> </li> <li> <p>Event ID</p> </li> <li> <p>Event name</p> </li> <li> <p>Event source</p> </li> <li> <p>Read only</p> </li> <li> <p>Resource name</p> </li> <li> <p>Resource type</p> </li> <li> <p>User name</p> </li> </ul> <p>All attributes are optional. The default number of results returned is 50, with a maximum of 50 possible. The response includes a token that you can use to get the next page of results.</p> <important> <p>The rate of lookup requests is limited to one per second per account. If this limit is exceeded, a throttling error occurs.</p> </important> <important> <p>Events that occurred during the selected time range will not be available for lookup if CloudTrail logging was not enabled when the events occurred.</p> </important></p>
     fn lookup_events(
         &self,
         input: LookupEventsRequest,
@@ -2835,7 +3051,7 @@ impl CloudTrail for CloudTrailClient {
         })
     }
 
-    /// <p>Configures an event selector for your trail. Use event selectors to specify whether you want your trail to log management and/or data events. When an event occurs in your account, CloudTrail evaluates the event selectors in all trails. For each trail, if the event matches any event selector, the trail processes and logs the event. If the event doesn't match any event selector, the trail doesn't log the event. </p> <p>Example</p> <ol> <li> <p>You create an event selector for a trail and specify that you want write-only events.</p> </li> <li> <p>The EC2 <code>GetConsoleOutput</code> and <code>RunInstances</code> API operations occur in your account.</p> </li> <li> <p>CloudTrail evaluates whether the events match your event selectors.</p> </li> <li> <p>The <code>RunInstances</code> is a write-only event and it matches your event selector. The trail logs the event.</p> </li> <li> <p>The <code>GetConsoleOutput</code> is a read-only event but it doesn't match your event selector. The trail doesn't log the event. </p> </li> </ol> <p>The <code>PutEventSelectors</code> operation must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p> <p>You can configure up to five event selectors for each trail. For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> in the <i>AWS CloudTrail User Guide</i>.</p>
+    /// <p>Configures an event selector for your trail. Use event selectors to further specify the management and data event settings for your trail. By default, trails created without specific event selectors will be configured to log all read and write management events, and no data events. </p> <p>When an event occurs in your account, CloudTrail evaluates the event selectors in all trails. For each trail, if the event matches any event selector, the trail processes and logs the event. If the event doesn't match any event selector, the trail doesn't log the event. </p> <p>Example</p> <ol> <li> <p>You create an event selector for a trail and specify that you want write-only events.</p> </li> <li> <p>The EC2 <code>GetConsoleOutput</code> and <code>RunInstances</code> API operations occur in your account.</p> </li> <li> <p>CloudTrail evaluates whether the events match your event selectors.</p> </li> <li> <p>The <code>RunInstances</code> is a write-only event and it matches your event selector. The trail logs the event.</p> </li> <li> <p>The <code>GetConsoleOutput</code> is a read-only event but it doesn't match your event selector. The trail doesn't log the event. </p> </li> </ol> <p>The <code>PutEventSelectors</code> operation must be called from the region in which the trail was created; otherwise, an <code>InvalidHomeRegionException</code> is thrown.</p> <p>You can configure up to five event selectors for each trail. For more information, see <a href="http://docs.aws.amazon.com/awscloudtrail/latest/userguide/logging-management-and-data-events-with-cloudtrail.html">Logging Data and Management Events for Trails </a> and <a href="https://docs.aws.amazon.com/awscloudtrail/latest/userguide/WhatIsCloudTrail-Limits.html">Limits in AWS CloudTrail</a> in the <i>AWS CloudTrail User Guide</i>.</p>
     fn put_event_selectors(
         &self,
         input: PutEventSelectorsRequest,

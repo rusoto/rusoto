@@ -54,7 +54,7 @@ pub struct CreateExportTaskRequest {
     #[serde(rename = "destinationPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_prefix: Option<String>,
-    /// <p>The start time of the range for the request, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a time stamp earlier than this time are not exported.</p>
+    /// <p>The start time of the range for the request, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a timestamp earlier than this time are not exported.</p>
     #[serde(rename = "from")]
     pub from: i64,
     /// <p>The name of the log group.</p>
@@ -68,7 +68,7 @@ pub struct CreateExportTaskRequest {
     #[serde(rename = "taskName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_name: Option<String>,
-    /// <p>The end time of the range for the request, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a time stamp later than this time are not exported.</p>
+    /// <p>The end time of the range for the request, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a timestamp later than this time are not exported.</p>
     #[serde(rename = "to")]
     pub to: i64,
 }
@@ -267,7 +267,7 @@ pub struct DescribeLogStreamsRequest {
     /// <p>The name of the log group.</p>
     #[serde(rename = "logGroupName")]
     pub log_group_name: String,
-    /// <p>The prefix to match.</p> <p>iIf <code>orderBy</code> is <code>LastEventTime</code>,you cannot specify this parameter.</p>
+    /// <p>The prefix to match.</p> <p>If <code>orderBy</code> is <code>LastEventTime</code>,you cannot specify this parameter.</p>
     #[serde(rename = "logStreamNamePrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_stream_name_prefix: Option<String>,
@@ -307,10 +307,11 @@ pub struct DescribeMetricFiltersRequest {
     #[serde(rename = "logGroupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_group_name: Option<String>,
+    /// <p>Filters results to include only those with the specified metric name. If you include this parameter in your request, you must also include the <code>metricNamespace</code> parameter.</p>
     #[serde(rename = "metricName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metric_name: Option<String>,
-    /// <p>The namespace of the CloudWatch metric.</p>
+    /// <p>Filters results to include only those in the specified namespace. If you include this parameter in your request, you must also include the <code>metricName</code> parameter.</p>
     #[serde(rename = "metricNamespace")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metric_namespace: Option<String>,
@@ -330,6 +331,37 @@ pub struct DescribeMetricFiltersResponse {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeQueriesRequest {
+    /// <p>Limits the returned queries to only those for the specified log group.</p>
+    #[serde(rename = "logGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_group_name: Option<String>,
+    /// <p>Limits the number of returned queries to the specified number.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Limits the returned queries to only those that have the specified status. Valid values are <code>Cancelled</code>, <code>Complete</code>, <code>Failed</code>, <code>Running</code>, and <code>Scheduled</code>.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeQueriesResponse {
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The list of queries that match the request.</p>
+    #[serde(rename = "queries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub queries: Option<Vec<QueryInfo>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -439,7 +471,7 @@ pub struct ExportTask {
     #[serde(rename = "executionInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_info: Option<ExportTaskExecutionInfo>,
-    /// <p>The start time, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a time stamp before this time are not exported.</p>
+    /// <p>The start time, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a timestamp before this time are not exported.</p>
     #[serde(rename = "from")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub from: Option<i64>,
@@ -459,7 +491,7 @@ pub struct ExportTask {
     #[serde(rename = "taskName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_name: Option<String>,
-    /// <p>The end time, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a time stamp later than this time are not exported.</p>
+    /// <p>The end time, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a timestamp later than this time are not exported.</p>
     #[serde(rename = "to")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub to: Option<i64>,
@@ -495,11 +527,11 @@ pub struct ExportTaskStatus {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct FilterLogEventsRequest {
-    /// <p>The end of the time range, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a time stamp later than this time are not returned.</p>
+    /// <p>The end of the time range, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a timestamp later than this time are not returned.</p>
     #[serde(rename = "endTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<i64>,
-    /// <p>The filter pattern to use. If not provided, all the events are matched.</p>
+    /// <p>The filter pattern to use. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/FilterAndPatternSyntax.html">Filter and Pattern Syntax</a>.</p> <p>If not provided, all the events are matched.</p>
     #[serde(rename = "filterPattern")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter_pattern: Option<String>,
@@ -511,10 +543,14 @@ pub struct FilterLogEventsRequest {
     #[serde(rename = "limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    /// <p>The name of the log group.</p>
+    /// <p>The name of the log group to search.</p>
     #[serde(rename = "logGroupName")]
     pub log_group_name: String,
-    /// <p>Optional list of log stream names.</p>
+    /// <p>Filters the results to include only events from log streams that have names starting with this prefix.</p> <p>If you specify a value for both <code>logStreamNamePrefix</code> and <code>logStreamNames</code>, but the value for <code>logStreamNamePrefix</code> does not match any log stream names specified in <code>logStreamNames</code>, the action returns an <code>InvalidParameterException</code> error.</p>
+    #[serde(rename = "logStreamNamePrefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_stream_name_prefix: Option<String>,
+    /// <p>Filters the results to only logs from the log streams in this list.</p> <p>If you specify a value for both <code>logStreamNamePrefix</code> and <code>logStreamNames</code>, the action returns an <code>InvalidParameterException</code> error.</p>
     #[serde(rename = "logStreamNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_stream_names: Option<Vec<String>>,
@@ -522,7 +558,7 @@ pub struct FilterLogEventsRequest {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The start of the time range, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a time stamp before this time are not returned.</p>
+    /// <p>The start of the time range, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a timestamp before this time are not returned.</p>
     #[serde(rename = "startTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<i64>,
@@ -557,7 +593,7 @@ pub struct FilteredLogEvent {
     #[serde(rename = "ingestionTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ingestion_time: Option<i64>,
-    /// <p>The name of the log stream this event belongs to.</p>
+    /// <p>The name of the log stream to which this event belongs.</p>
     #[serde(rename = "logStreamName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_stream_name: Option<String>,
@@ -573,7 +609,7 @@ pub struct FilteredLogEvent {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetLogEventsRequest {
-    /// <p>The end of the time range, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a time stamp later than this time are not included.</p>
+    /// <p>The end of the time range, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a timestamp equal to or later than this time are not included.</p>
     #[serde(rename = "endTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<i64>,
@@ -595,7 +631,7 @@ pub struct GetLogEventsRequest {
     #[serde(rename = "startFromHead")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_from_head: Option<bool>,
-    /// <p>The start of the time range, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a time stamp earlier than this time are not included.</p>
+    /// <p>The start of the time range, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. Events with a timestamp equal to this time or later than this time are included. Events with a timestamp earlier than this time are not included.</p>
     #[serde(rename = "startTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<i64>,
@@ -608,14 +644,74 @@ pub struct GetLogEventsResponse {
     #[serde(rename = "events")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub events: Option<Vec<OutputLogEvent>>,
-    /// <p>The token for the next set of items in the backward direction. The token expires after 24 hours.</p>
+    /// <p>The token for the next set of items in the backward direction. The token expires after 24 hours. This token will never be null. If you have reached the end of the stream, it will return the same token you passed in.</p>
     #[serde(rename = "nextBackwardToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_backward_token: Option<String>,
-    /// <p>The token for the next set of items in the forward direction. The token expires after 24 hours.</p>
+    /// <p>The token for the next set of items in the forward direction. The token expires after 24 hours. If you have reached the end of the stream, it will return the same token you passed in.</p>
     #[serde(rename = "nextForwardToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_forward_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetLogGroupFieldsRequest {
+    /// <p>The name of the log group to search.</p>
+    #[serde(rename = "logGroupName")]
+    pub log_group_name: String,
+    /// <p>The time to set as the center of the query. If you specify <code>time</code>, the 8 minutes before and 8 minutes after this time are searched. If you omit <code>time</code>, the past 15 minutes are queried.</p> <p>The <code>time</code> value is specified as epoch time, the number of seconds since January 1, 1970, 00:00:00 UTC.</p>
+    #[serde(rename = "time")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub time: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetLogGroupFieldsResponse {
+    /// <p>The array of fields found in the query. Each object in the array contains the name of the field, along with the percentage of time it appeared in the log events that were queried.</p>
+    #[serde(rename = "logGroupFields")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_group_fields: Option<Vec<LogGroupField>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetLogRecordRequest {
+    /// <p>The pointer corresponding to the log event record you want to retrieve. You get this from the response of a <code>GetQueryResults</code> operation. In that response, the value of the <code>@ptr</code> field for a log event is the value to use as <code>logRecordPointer</code> to retrieve that complete log event record.</p>
+    #[serde(rename = "logRecordPointer")]
+    pub log_record_pointer: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetLogRecordResponse {
+    /// <p>The requested log event, as a JSON string.</p>
+    #[serde(rename = "logRecord")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_record: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetQueryResultsRequest {
+    /// <p>The ID number of the query.</p>
+    #[serde(rename = "queryId")]
+    pub query_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetQueryResultsResponse {
+    /// <p>The log events that matched the query criteria during the most recent time it ran.</p> <p>The <code>results</code> value is an array of arrays. Each log event is one object in the top-level array. Each of these log event objects is an array of <code>field</code>/<code>value</code> pairs.</p>
+    #[serde(rename = "results")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub results: Option<Vec<Vec<ResultField>>>,
+    /// <p>Includes the number of log events scanned by the query, the number of log events that matched the query criteria, and the total number of bytes in the log events that were scanned.</p>
+    #[serde(rename = "statistics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub statistics: Option<QueryStatistics>,
+    /// <p>The status of the most recent running of the query. Possible values are <code>Cancelled</code>, <code>Complete</code>, <code>Failed</code>, <code>Running</code>, <code>Scheduled</code>, and <code>Unknown</code>.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
 }
 
 /// <p>Represents a log event, which is a record of activity that was recorded by the application or resource being monitored.</p>
@@ -624,7 +720,7 @@ pub struct InputLogEvent {
     /// <p>The raw event message.</p>
     #[serde(rename = "message")]
     pub message: String,
-    /// <p>The time the event occurred, expressed as the number of milliseconds fter Jan 1, 1970 00:00:00 UTC.</p>
+    /// <p>The time the event occurred, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC.</p>
     #[serde(rename = "timestamp")]
     pub timestamp: i64,
 }
@@ -678,6 +774,20 @@ pub struct LogGroup {
     pub stored_bytes: Option<i64>,
 }
 
+/// <p>The fields contained in log events found by a <code>GetLogGroupFields</code> operation, along with the percentage of queried log events in which each field appears.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct LogGroupField {
+    /// <p>The name of a log field.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The percentage of log events queried that contained the field.</p>
+    #[serde(rename = "percent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub percent: Option<i64>,
+}
+
 /// <p>Represents a log stream, which is a sequence of log events from a single emitter of logs.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -694,7 +804,7 @@ pub struct LogStream {
     #[serde(rename = "firstEventTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub first_event_timestamp: Option<i64>,
-    /// <p> the time of the most recent log event in the log stream in CloudWatch Logs. This number is expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. lastEventTime updates on an eventual consistency basis. It typically updates in less than an hour from ingestion, but may take longer in some rare situations.</p>
+    /// <p>The time of the most recent log event in the log stream in CloudWatch Logs. This number is expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. The <code>lastEventTime</code> value updates on an eventual consistency basis. It typically updates in less than an hour from ingestion, but may take longer in some rare situations.</p>
     #[serde(rename = "lastEventTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_event_timestamp: Option<i64>,
@@ -759,7 +869,7 @@ pub struct MetricFilterMatchRecord {
     pub extracted_values: Option<::std::collections::HashMap<String, String>>,
 }
 
-/// <p>Indicates how to transform ingested log events in to metric data in a CloudWatch metric.</p>
+/// <p>Indicates how to transform ingested log eventsto metric data in a CloudWatch metric.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MetricTransformation {
     /// <p>(Optional) The value to emit when a filter pattern does not match a log event. This value can be null.</p>
@@ -875,7 +985,7 @@ pub struct PutMetricFilterRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutResourcePolicyRequest {
-    /// <p>Details of the new policy, including the identity of the principal that is enabled to put logs to this account. This is formatted as a JSON string.</p> <p>The following example creates a resource policy enabling the Route 53 service to put DNS query logs in to the specified log group. Replace "logArn" with the ARN of your CloudWatch Logs resource, such as a log group or log stream.</p> <p> { "Version": "2012-10-17" "Statement": [ { "Sid": "Route53LogsToCloudWatchLogs", "Effect": "Allow", "Principal": { "Service": [ "route53.amazonaws.com" ] }, "Action":"logs:PutLogEvents", "Resource": logArn } ] } </p>
+    /// <p>Details of the new policy, including the identity of the principal that is enabled to put logs to this account. This is formatted as a JSON string.</p> <p>The following example creates a resource policy enabling the Route 53 service to put DNS query logs in to the specified log group. Replace "logArn" with the ARN of your CloudWatch Logs resource, such as a log group or log stream.</p> <p> <code>{ "Version": "2012-10-17", "Statement": [ { "Sid": "Route53LogsToCloudWatchLogs", "Effect": "Allow", "Principal": { "Service": [ "route53.amazonaws.com" ] }, "Action":"logs:PutLogEvents", "Resource": "logArn" } ] } </code> </p>
     #[serde(rename = "policyDocument")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_document: Option<String>,
@@ -927,6 +1037,68 @@ pub struct PutSubscriptionFilterRequest {
     pub role_arn: Option<String>,
 }
 
+/// <p>Reserved.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct QueryCompileError {
+    /// <p>Reserved.</p>
+    pub location: Option<QueryCompileErrorLocation>,
+    /// <p>Reserved.</p>
+    pub message: Option<String>,
+}
+
+/// <p>Reserved.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct QueryCompileErrorLocation {
+    /// <p>Reserved.</p>
+    pub end_char_offset: Option<i64>,
+    /// <p>Reserved.</p>
+    pub start_char_offset: Option<i64>,
+}
+
+/// <p>Information about one CloudWatch Logs Insights query that matches the request in a <code>DescribeQueries</code> operation. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct QueryInfo {
+    /// <p>The date and time that this query was created.</p>
+    #[serde(rename = "createTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_time: Option<i64>,
+    /// <p>The name of the log group scanned by this query.</p>
+    #[serde(rename = "logGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_group_name: Option<String>,
+    /// <p>The unique ID number of this query.</p>
+    #[serde(rename = "queryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_id: Option<String>,
+    /// <p>The query string used in this query.</p>
+    #[serde(rename = "queryString")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_string: Option<String>,
+    /// <p>The status of this query. Possible values are <code>Cancelled</code>, <code>Complete</code>, <code>Failed</code>, <code>Running</code>, <code>Scheduled</code>, and <code>Unknown</code>.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p>Contains the number of log events scanned by the query, the number of log events that matched the query criteria, and the total number of bytes in the log events that were scanned.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct QueryStatistics {
+    /// <p>The total number of bytes in the log events scanned during the query.</p>
+    #[serde(rename = "bytesScanned")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bytes_scanned: Option<f64>,
+    /// <p>The number of log events that matched the query string.</p>
+    #[serde(rename = "recordsMatched")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub records_matched: Option<f64>,
+    /// <p>The total number of log events scanned during the query.</p>
+    #[serde(rename = "recordsScanned")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub records_scanned: Option<f64>,
+}
+
 /// <p>Represents the rejected events.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -949,7 +1121,7 @@ pub struct RejectedLogEventsInfo {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ResourcePolicy {
-    /// <p>Time stamp showing when this policy was last updated, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC.</p>
+    /// <p>Timestamp showing when this policy was last updated, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC.</p>
     #[serde(rename = "lastUpdatedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_time: Option<i64>,
@@ -961,6 +1133,20 @@ pub struct ResourcePolicy {
     #[serde(rename = "policyName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy_name: Option<String>,
+}
+
+/// <p>Contains one field from one log event returned by a CloudWatch Logs Insights query, along with the value of that field.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ResultField {
+    /// <p>The log event field.</p>
+    #[serde(rename = "field")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub field: Option<String>,
+    /// <p>The value of this field.</p>
+    #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
 }
 
 /// <p>Represents the search status of a log stream.</p>
@@ -975,6 +1161,51 @@ pub struct SearchedLogStream {
     #[serde(rename = "searchedCompletely")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub searched_completely: Option<bool>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StartQueryRequest {
+    /// <p>The end of the time range to query. Specified as epoch time, the number of seconds since January 1, 1970, 00:00:00 UTC.</p>
+    #[serde(rename = "endTime")]
+    pub end_time: i64,
+    /// <p>The maximum number of log events to return in the query. If the query string uses the <code>fields</code> command, only the specified fields and their values are returned.</p>
+    #[serde(rename = "limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The log group on which to perform the query.</p>
+    #[serde(rename = "logGroupName")]
+    pub log_group_name: String,
+    /// <p>The query string to use. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html">CloudWatch Logs Insights Query Syntax</a>.</p>
+    #[serde(rename = "queryString")]
+    pub query_string: String,
+    /// <p>The beginning of the time range to query. Specified as epoch time, the number of seconds since January 1, 1970, 00:00:00 UTC.</p>
+    #[serde(rename = "startTime")]
+    pub start_time: i64,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StartQueryResponse {
+    /// <p>The unique ID of the query. </p>
+    #[serde(rename = "queryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StopQueryRequest {
+    /// <p>The ID number of the query to stop. If necessary, you can use <code>DescribeQueries</code> to find this ID number.</p>
+    #[serde(rename = "queryId")]
+    pub query_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StopQueryResponse {
+    /// <p>This is true if the query was stopped by the <code>StopQuery</code> operation.</p>
+    #[serde(rename = "success")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub success: Option<bool>,
 }
 
 /// <p>Represents a subscription filter.</p>
@@ -2713,6 +2944,98 @@ impl Error for DescribeMetricFiltersError {
         }
     }
 }
+/// Errors returned by DescribeQueries
+#[derive(Debug, PartialEq)]
+pub enum DescribeQueriesError {
+    /// <p>A parameter is specified incorrectly.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service cannot complete the request.</p>
+    ServiceUnavailable(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DescribeQueriesError {
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeQueriesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InvalidParameterException" => {
+                    return DescribeQueriesError::InvalidParameter(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return DescribeQueriesError::ResourceNotFound(String::from(error_message));
+                }
+                "ServiceUnavailableException" => {
+                    return DescribeQueriesError::ServiceUnavailable(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return DescribeQueriesError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DescribeQueriesError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeQueriesError {
+    fn from(err: serde_json::error::Error) -> DescribeQueriesError {
+        DescribeQueriesError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeQueriesError {
+    fn from(err: CredentialsError) -> DescribeQueriesError {
+        DescribeQueriesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeQueriesError {
+    fn from(err: HttpDispatchError) -> DescribeQueriesError {
+        DescribeQueriesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeQueriesError {
+    fn from(err: io::Error) -> DescribeQueriesError {
+        DescribeQueriesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeQueriesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeQueriesError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeQueriesError::InvalidParameter(ref cause) => cause,
+            DescribeQueriesError::ResourceNotFound(ref cause) => cause,
+            DescribeQueriesError::ServiceUnavailable(ref cause) => cause,
+            DescribeQueriesError::Validation(ref cause) => cause,
+            DescribeQueriesError::Credentials(ref err) => err.description(),
+            DescribeQueriesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DescribeQueriesError::ParseError(ref cause) => cause,
+            DescribeQueriesError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by DescribeResourcePolicies
 #[derive(Debug, PartialEq)]
 pub enum DescribeResourcePoliciesError {
@@ -3189,6 +3512,296 @@ impl Error for GetLogEventsError {
         }
     }
 }
+/// Errors returned by GetLogGroupFields
+#[derive(Debug, PartialEq)]
+pub enum GetLogGroupFieldsError {
+    /// <p>A parameter is specified incorrectly.</p>
+    InvalidParameter(String),
+    /// <p>You have reached the maximum number of resources that can be created.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service cannot complete the request.</p>
+    ServiceUnavailable(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetLogGroupFieldsError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetLogGroupFieldsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InvalidParameterException" => {
+                    return GetLogGroupFieldsError::InvalidParameter(String::from(error_message));
+                }
+                "LimitExceededException" => {
+                    return GetLogGroupFieldsError::LimitExceeded(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return GetLogGroupFieldsError::ResourceNotFound(String::from(error_message));
+                }
+                "ServiceUnavailableException" => {
+                    return GetLogGroupFieldsError::ServiceUnavailable(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return GetLogGroupFieldsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetLogGroupFieldsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetLogGroupFieldsError {
+    fn from(err: serde_json::error::Error) -> GetLogGroupFieldsError {
+        GetLogGroupFieldsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetLogGroupFieldsError {
+    fn from(err: CredentialsError) -> GetLogGroupFieldsError {
+        GetLogGroupFieldsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetLogGroupFieldsError {
+    fn from(err: HttpDispatchError) -> GetLogGroupFieldsError {
+        GetLogGroupFieldsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetLogGroupFieldsError {
+    fn from(err: io::Error) -> GetLogGroupFieldsError {
+        GetLogGroupFieldsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetLogGroupFieldsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetLogGroupFieldsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetLogGroupFieldsError::InvalidParameter(ref cause) => cause,
+            GetLogGroupFieldsError::LimitExceeded(ref cause) => cause,
+            GetLogGroupFieldsError::ResourceNotFound(ref cause) => cause,
+            GetLogGroupFieldsError::ServiceUnavailable(ref cause) => cause,
+            GetLogGroupFieldsError::Validation(ref cause) => cause,
+            GetLogGroupFieldsError::Credentials(ref err) => err.description(),
+            GetLogGroupFieldsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetLogGroupFieldsError::ParseError(ref cause) => cause,
+            GetLogGroupFieldsError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetLogRecord
+#[derive(Debug, PartialEq)]
+pub enum GetLogRecordError {
+    /// <p>A parameter is specified incorrectly.</p>
+    InvalidParameter(String),
+    /// <p>You have reached the maximum number of resources that can be created.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service cannot complete the request.</p>
+    ServiceUnavailable(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetLogRecordError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetLogRecordError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InvalidParameterException" => {
+                    return GetLogRecordError::InvalidParameter(String::from(error_message));
+                }
+                "LimitExceededException" => {
+                    return GetLogRecordError::LimitExceeded(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return GetLogRecordError::ResourceNotFound(String::from(error_message));
+                }
+                "ServiceUnavailableException" => {
+                    return GetLogRecordError::ServiceUnavailable(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return GetLogRecordError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetLogRecordError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetLogRecordError {
+    fn from(err: serde_json::error::Error) -> GetLogRecordError {
+        GetLogRecordError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetLogRecordError {
+    fn from(err: CredentialsError) -> GetLogRecordError {
+        GetLogRecordError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetLogRecordError {
+    fn from(err: HttpDispatchError) -> GetLogRecordError {
+        GetLogRecordError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetLogRecordError {
+    fn from(err: io::Error) -> GetLogRecordError {
+        GetLogRecordError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetLogRecordError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetLogRecordError {
+    fn description(&self) -> &str {
+        match *self {
+            GetLogRecordError::InvalidParameter(ref cause) => cause,
+            GetLogRecordError::LimitExceeded(ref cause) => cause,
+            GetLogRecordError::ResourceNotFound(ref cause) => cause,
+            GetLogRecordError::ServiceUnavailable(ref cause) => cause,
+            GetLogRecordError::Validation(ref cause) => cause,
+            GetLogRecordError::Credentials(ref err) => err.description(),
+            GetLogRecordError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetLogRecordError::ParseError(ref cause) => cause,
+            GetLogRecordError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetQueryResults
+#[derive(Debug, PartialEq)]
+pub enum GetQueryResultsError {
+    /// <p>A parameter is specified incorrectly.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service cannot complete the request.</p>
+    ServiceUnavailable(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetQueryResultsError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetQueryResultsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InvalidParameterException" => {
+                    return GetQueryResultsError::InvalidParameter(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return GetQueryResultsError::ResourceNotFound(String::from(error_message));
+                }
+                "ServiceUnavailableException" => {
+                    return GetQueryResultsError::ServiceUnavailable(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return GetQueryResultsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetQueryResultsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetQueryResultsError {
+    fn from(err: serde_json::error::Error) -> GetQueryResultsError {
+        GetQueryResultsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetQueryResultsError {
+    fn from(err: CredentialsError) -> GetQueryResultsError {
+        GetQueryResultsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetQueryResultsError {
+    fn from(err: HttpDispatchError) -> GetQueryResultsError {
+        GetQueryResultsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetQueryResultsError {
+    fn from(err: io::Error) -> GetQueryResultsError {
+        GetQueryResultsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetQueryResultsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetQueryResultsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetQueryResultsError::InvalidParameter(ref cause) => cause,
+            GetQueryResultsError::ResourceNotFound(ref cause) => cause,
+            GetQueryResultsError::ServiceUnavailable(ref cause) => cause,
+            GetQueryResultsError::Validation(ref cause) => cause,
+            GetQueryResultsError::Credentials(ref err) => err.description(),
+            GetQueryResultsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetQueryResultsError::ParseError(ref cause) => cause,
+            GetQueryResultsError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by ListTagsLogGroup
 #[derive(Debug, PartialEq)]
 pub enum ListTagsLogGroupError {
@@ -3476,6 +4089,8 @@ pub enum PutLogEventsError {
     ResourceNotFound(String),
     /// <p>The service cannot complete the request.</p>
     ServiceUnavailable(String),
+    /// <p>The most likely cause is an invalid AWS access key ID or secret key.</p>
+    UnrecognizedClient(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -3515,6 +4130,9 @@ impl PutLogEventsError {
                 }
                 "ServiceUnavailableException" => {
                     return PutLogEventsError::ServiceUnavailable(String::from(error_message));
+                }
+                "UnrecognizedClientException" => {
+                    return PutLogEventsError::UnrecognizedClient(String::from(error_message));
                 }
                 "ValidationException" => {
                     return PutLogEventsError::Validation(error_message.to_string());
@@ -3559,6 +4177,7 @@ impl Error for PutLogEventsError {
             PutLogEventsError::InvalidSequenceToken(ref cause) => cause,
             PutLogEventsError::ResourceNotFound(ref cause) => cause,
             PutLogEventsError::ServiceUnavailable(ref cause) => cause,
+            PutLogEventsError::UnrecognizedClient(ref cause) => cause,
             PutLogEventsError::Validation(ref cause) => cause,
             PutLogEventsError::Credentials(ref err) => err.description(),
             PutLogEventsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -3973,6 +4592,202 @@ impl Error for PutSubscriptionFilterError {
         }
     }
 }
+/// Errors returned by StartQuery
+#[derive(Debug, PartialEq)]
+pub enum StartQueryError {
+    /// <p>A parameter is specified incorrectly.</p>
+    InvalidParameter(String),
+    /// <p>You have reached the maximum number of resources that can be created.</p>
+    LimitExceeded(String),
+    /// <p>The query string is not valid. Details about this error are displayed in a <code>QueryCompileError</code> object. For more information, see .</p> <p>For more information about valid query syntax, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html">CloudWatch Logs Insights Query Syntax</a>.</p>
+    MalformedQuery(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service cannot complete the request.</p>
+    ServiceUnavailable(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl StartQueryError {
+    pub fn from_response(res: BufferedHttpResponse) -> StartQueryError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InvalidParameterException" => {
+                    return StartQueryError::InvalidParameter(String::from(error_message));
+                }
+                "LimitExceededException" => {
+                    return StartQueryError::LimitExceeded(String::from(error_message));
+                }
+                "MalformedQueryException" => {
+                    return StartQueryError::MalformedQuery(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return StartQueryError::ResourceNotFound(String::from(error_message));
+                }
+                "ServiceUnavailableException" => {
+                    return StartQueryError::ServiceUnavailable(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return StartQueryError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return StartQueryError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for StartQueryError {
+    fn from(err: serde_json::error::Error) -> StartQueryError {
+        StartQueryError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for StartQueryError {
+    fn from(err: CredentialsError) -> StartQueryError {
+        StartQueryError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for StartQueryError {
+    fn from(err: HttpDispatchError) -> StartQueryError {
+        StartQueryError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StartQueryError {
+    fn from(err: io::Error) -> StartQueryError {
+        StartQueryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for StartQueryError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartQueryError {
+    fn description(&self) -> &str {
+        match *self {
+            StartQueryError::InvalidParameter(ref cause) => cause,
+            StartQueryError::LimitExceeded(ref cause) => cause,
+            StartQueryError::MalformedQuery(ref cause) => cause,
+            StartQueryError::ResourceNotFound(ref cause) => cause,
+            StartQueryError::ServiceUnavailable(ref cause) => cause,
+            StartQueryError::Validation(ref cause) => cause,
+            StartQueryError::Credentials(ref err) => err.description(),
+            StartQueryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            StartQueryError::ParseError(ref cause) => cause,
+            StartQueryError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by StopQuery
+#[derive(Debug, PartialEq)]
+pub enum StopQueryError {
+    /// <p>A parameter is specified incorrectly.</p>
+    InvalidParameter(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service cannot complete the request.</p>
+    ServiceUnavailable(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl StopQueryError {
+    pub fn from_response(res: BufferedHttpResponse) -> StopQueryError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InvalidParameterException" => {
+                    return StopQueryError::InvalidParameter(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return StopQueryError::ResourceNotFound(String::from(error_message));
+                }
+                "ServiceUnavailableException" => {
+                    return StopQueryError::ServiceUnavailable(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return StopQueryError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return StopQueryError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for StopQueryError {
+    fn from(err: serde_json::error::Error) -> StopQueryError {
+        StopQueryError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for StopQueryError {
+    fn from(err: CredentialsError) -> StopQueryError {
+        StopQueryError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for StopQueryError {
+    fn from(err: HttpDispatchError) -> StopQueryError {
+        StopQueryError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StopQueryError {
+    fn from(err: io::Error) -> StopQueryError {
+        StopQueryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for StopQueryError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StopQueryError {
+    fn description(&self) -> &str {
+        match *self {
+            StopQueryError::InvalidParameter(ref cause) => cause,
+            StopQueryError::ResourceNotFound(ref cause) => cause,
+            StopQueryError::ServiceUnavailable(ref cause) => cause,
+            StopQueryError::Validation(ref cause) => cause,
+            StopQueryError::Credentials(ref err) => err.description(),
+            StopQueryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            StopQueryError::ParseError(ref cause) => cause,
+            StopQueryError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by TagLogGroup
 #[derive(Debug, PartialEq)]
 pub enum TagLogGroupError {
@@ -4329,6 +5144,12 @@ pub trait CloudWatchLogs {
         input: DescribeMetricFiltersRequest,
     ) -> RusotoFuture<DescribeMetricFiltersResponse, DescribeMetricFiltersError>;
 
+    /// <p>Returns a list of CloudWatch Logs Insights queries that are scheduled, executing, or have been executed recently in this account. You can request all queries, or limit it to queries of a specific log group or queries with a certain status.</p>
+    fn describe_queries(
+        &self,
+        input: DescribeQueriesRequest,
+    ) -> RusotoFuture<DescribeQueriesResponse, DescribeQueriesError>;
+
     /// <p>Lists the resource policies in this account.</p>
     fn describe_resource_policies(
         &self,
@@ -4359,6 +5180,24 @@ pub trait CloudWatchLogs {
         input: GetLogEventsRequest,
     ) -> RusotoFuture<GetLogEventsResponse, GetLogEventsError>;
 
+    /// <p>Returns a list of the fields that are included in log events in the specified log group, along with the percentage of log events that contain each field. The search is limited to a time period that you specify.</p> <p>In the results, fields that start with @ are fields generated by CloudWatch Logs. For example, <code>@timestamp</code> is the timestamp of each log event.</p> <p>The response results are sorted by the frequency percentage, starting with the highest percentage.</p>
+    fn get_log_group_fields(
+        &self,
+        input: GetLogGroupFieldsRequest,
+    ) -> RusotoFuture<GetLogGroupFieldsResponse, GetLogGroupFieldsError>;
+
+    /// <p>Retrieves all the fields and values of a single log event. All fields are retrieved, even if the original query that produced the <code>logRecordPointer</code> retrieved only a subset of fields. Fields are returned as field name/field value pairs.</p> <p>Additionally, the entire unparsed log event is returned within <code>@message</code>.</p>
+    fn get_log_record(
+        &self,
+        input: GetLogRecordRequest,
+    ) -> RusotoFuture<GetLogRecordResponse, GetLogRecordError>;
+
+    /// <p>Returns the results from the specified query. If the query is in progress, partial results of that current execution are returned. Only the fields requested in the query are returned.</p> <p> <code>GetQueryResults</code> does not start a query execution. To run a query, use .</p>
+    fn get_query_results(
+        &self,
+        input: GetQueryResultsRequest,
+    ) -> RusotoFuture<GetQueryResultsResponse, GetQueryResultsError>;
+
     /// <p>Lists the tags for the specified log group.</p>
     fn list_tags_log_group(
         &self,
@@ -4377,7 +5216,7 @@ pub trait CloudWatchLogs {
         input: PutDestinationPolicyRequest,
     ) -> RusotoFuture<(), PutDestinationPolicyError>;
 
-    /// <p><p>Uploads a batch of log events to the specified log stream.</p> <p>You must include the sequence token obtained from the response of the previous call. An upload in a newly created log stream does not require a sequence token. You can also get the sequence token using <a>DescribeLogStreams</a>. If you call <code>PutLogEvents</code> twice within a narrow time period using the same value for <code>sequenceToken</code>, both calls may be successful, or one may be rejected.</p> <p>The batch of events must satisfy the following constraints:</p> <ul> <li> <p>The maximum batch size is 1,048,576 bytes, and this size is calculated as the sum of all event messages in UTF-8, plus 26 bytes for each log event.</p> </li> <li> <p>None of the log events in the batch can be more than 2 hours in the future.</p> </li> <li> <p>None of the log events in the batch can be older than 14 days or the retention period of the log group.</p> </li> <li> <p>The log events in the batch must be in chronological ordered by their time stamp (the time the event occurred, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC).</p> </li> <li> <p>The maximum number of log events in a batch is 10,000.</p> </li> <li> <p>A batch of log events in a single request cannot span more than 24 hours. Otherwise, the operation fails.</p> </li> </ul></p>
+    /// <p>Uploads a batch of log events to the specified log stream.</p> <p>You must include the sequence token obtained from the response of the previous call. An upload in a newly created log stream does not require a sequence token. You can also get the sequence token using <a>DescribeLogStreams</a>. If you call <code>PutLogEvents</code> twice within a narrow time period using the same value for <code>sequenceToken</code>, both calls may be successful, or one may be rejected.</p> <p>The batch of events must satisfy the following constraints:</p> <ul> <li> <p>The maximum batch size is 1,048,576 bytes, and this size is calculated as the sum of all event messages in UTF-8, plus 26 bytes for each log event.</p> </li> <li> <p>None of the log events in the batch can be more than 2 hours in the future.</p> </li> <li> <p>None of the log events in the batch can be older than 14 days or the retention period of the log group.</p> </li> <li> <p>The log events in the batch must be in chronological ordered by their timestamp. The timestamp is the time the event occurred, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. (In AWS Tools for PowerShell and the AWS SDK for .NET, the timestamp is specified in .NET format: yyyy-mm-ddThh:mm:ss. For example, 2017-09-15T13:45:30.) </p> </li> <li> <p>The maximum number of log events in a batch is 10,000.</p> </li> <li> <p>A batch of log events in a single request cannot span more than 24 hours. Otherwise, the operation fails.</p> </li> </ul> <p>If a call to PutLogEvents returns "UnrecognizedClientException" the most likely cause is an invalid AWS access key ID or secret key. </p>
     fn put_log_events(
         &self,
         input: PutLogEventsRequest,
@@ -4389,7 +5228,7 @@ pub trait CloudWatchLogs {
         input: PutMetricFilterRequest,
     ) -> RusotoFuture<(), PutMetricFilterError>;
 
-    /// <p>Creates or updates a resource policy allowing other AWS services to put log events to this account, such as Amazon Route 53. An account can have up to 50 resource policies per region.</p>
+    /// <p>Creates or updates a resource policy allowing other AWS services to put log events to this account, such as Amazon Route 53. An account can have up to 10 resource policies per region.</p>
     fn put_resource_policy(
         &self,
         input: PutResourcePolicyRequest,
@@ -4406,6 +5245,18 @@ pub trait CloudWatchLogs {
         &self,
         input: PutSubscriptionFilterRequest,
     ) -> RusotoFuture<(), PutSubscriptionFilterError>;
+
+    /// <p>Schedules a query of a log group using CloudWatch Logs Insights. You specify the log group and time range to query, and the query string to use.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html">CloudWatch Logs Insights Query Syntax</a>.</p>
+    fn start_query(
+        &self,
+        input: StartQueryRequest,
+    ) -> RusotoFuture<StartQueryResponse, StartQueryError>;
+
+    /// <p>Stops a CloudWatch Logs Insights query that is in progress. If the query has already ended, the operation returns an error indicating that the specified query is not running.</p>
+    fn stop_query(
+        &self,
+        input: StopQueryRequest,
+    ) -> RusotoFuture<StopQueryResponse, StopQueryError>;
 
     /// <p>Adds or updates the specified tags for the specified log group.</p> <p>To list the tags for a log group, use <a>ListTagsLogGroup</a>. To remove tags, use <a>UntagLogGroup</a>.</p> <p>For more information about tags, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/log-group-tagging.html">Tag Log Groups in Amazon CloudWatch Logs</a> in the <i>Amazon CloudWatch Logs User Guide</i>.</p>
     fn tag_log_group(&self, input: TagLogGroupRequest) -> RusotoFuture<(), TagLogGroupError>;
@@ -4956,6 +5807,43 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         })
     }
 
+    /// <p>Returns a list of CloudWatch Logs Insights queries that are scheduled, executing, or have been executed recently in this account. You can request all queries, or limit it to queries of a specific log group or queries with a certain status.</p>
+    fn describe_queries(
+        &self,
+        input: DescribeQueriesRequest,
+    ) -> RusotoFuture<DescribeQueriesResponse, DescribeQueriesError> {
+        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Logs_20140328.DescribeQueries");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeQueriesResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeQueriesError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Lists the resource policies in this account.</p>
     fn describe_resource_policies(
         &self,
@@ -5124,6 +6012,117 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         })
     }
 
+    /// <p>Returns a list of the fields that are included in log events in the specified log group, along with the percentage of log events that contain each field. The search is limited to a time period that you specify.</p> <p>In the results, fields that start with @ are fields generated by CloudWatch Logs. For example, <code>@timestamp</code> is the timestamp of each log event.</p> <p>The response results are sorted by the frequency percentage, starting with the highest percentage.</p>
+    fn get_log_group_fields(
+        &self,
+        input: GetLogGroupFieldsRequest,
+    ) -> RusotoFuture<GetLogGroupFieldsResponse, GetLogGroupFieldsError> {
+        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Logs_20140328.GetLogGroupFields");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetLogGroupFieldsResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetLogGroupFieldsError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Retrieves all the fields and values of a single log event. All fields are retrieved, even if the original query that produced the <code>logRecordPointer</code> retrieved only a subset of fields. Fields are returned as field name/field value pairs.</p> <p>Additionally, the entire unparsed log event is returned within <code>@message</code>.</p>
+    fn get_log_record(
+        &self,
+        input: GetLogRecordRequest,
+    ) -> RusotoFuture<GetLogRecordResponse, GetLogRecordError> {
+        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Logs_20140328.GetLogRecord");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetLogRecordResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetLogRecordError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Returns the results from the specified query. If the query is in progress, partial results of that current execution are returned. Only the fields requested in the query are returned.</p> <p> <code>GetQueryResults</code> does not start a query execution. To run a query, use .</p>
+    fn get_query_results(
+        &self,
+        input: GetQueryResultsRequest,
+    ) -> RusotoFuture<GetQueryResultsResponse, GetQueryResultsError> {
+        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Logs_20140328.GetQueryResults");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetQueryResultsResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetQueryResultsError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Lists the tags for the specified log group.</p>
     fn list_tags_log_group(
         &self,
@@ -5223,7 +6222,7 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         })
     }
 
-    /// <p><p>Uploads a batch of log events to the specified log stream.</p> <p>You must include the sequence token obtained from the response of the previous call. An upload in a newly created log stream does not require a sequence token. You can also get the sequence token using <a>DescribeLogStreams</a>. If you call <code>PutLogEvents</code> twice within a narrow time period using the same value for <code>sequenceToken</code>, both calls may be successful, or one may be rejected.</p> <p>The batch of events must satisfy the following constraints:</p> <ul> <li> <p>The maximum batch size is 1,048,576 bytes, and this size is calculated as the sum of all event messages in UTF-8, plus 26 bytes for each log event.</p> </li> <li> <p>None of the log events in the batch can be more than 2 hours in the future.</p> </li> <li> <p>None of the log events in the batch can be older than 14 days or the retention period of the log group.</p> </li> <li> <p>The log events in the batch must be in chronological ordered by their time stamp (the time the event occurred, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC).</p> </li> <li> <p>The maximum number of log events in a batch is 10,000.</p> </li> <li> <p>A batch of log events in a single request cannot span more than 24 hours. Otherwise, the operation fails.</p> </li> </ul></p>
+    /// <p>Uploads a batch of log events to the specified log stream.</p> <p>You must include the sequence token obtained from the response of the previous call. An upload in a newly created log stream does not require a sequence token. You can also get the sequence token using <a>DescribeLogStreams</a>. If you call <code>PutLogEvents</code> twice within a narrow time period using the same value for <code>sequenceToken</code>, both calls may be successful, or one may be rejected.</p> <p>The batch of events must satisfy the following constraints:</p> <ul> <li> <p>The maximum batch size is 1,048,576 bytes, and this size is calculated as the sum of all event messages in UTF-8, plus 26 bytes for each log event.</p> </li> <li> <p>None of the log events in the batch can be more than 2 hours in the future.</p> </li> <li> <p>None of the log events in the batch can be older than 14 days or the retention period of the log group.</p> </li> <li> <p>The log events in the batch must be in chronological ordered by their timestamp. The timestamp is the time the event occurred, expressed as the number of milliseconds after Jan 1, 1970 00:00:00 UTC. (In AWS Tools for PowerShell and the AWS SDK for .NET, the timestamp is specified in .NET format: yyyy-mm-ddThh:mm:ss. For example, 2017-09-15T13:45:30.) </p> </li> <li> <p>The maximum number of log events in a batch is 10,000.</p> </li> <li> <p>A batch of log events in a single request cannot span more than 24 hours. Otherwise, the operation fails.</p> </li> </ul> <p>If a call to PutLogEvents returns "UnrecognizedClientException" the most likely cause is an invalid AWS access key ID or secret key. </p>
     fn put_log_events(
         &self,
         input: PutLogEventsRequest,
@@ -5286,7 +6285,7 @@ impl CloudWatchLogs for CloudWatchLogsClient {
         })
     }
 
-    /// <p>Creates or updates a resource policy allowing other AWS services to put log events to this account, such as Amazon Route 53. An account can have up to 50 resource policies per region.</p>
+    /// <p>Creates or updates a resource policy allowing other AWS services to put log events to this account, such as Amazon Route 53. An account can have up to 10 resource policies per region.</p>
     fn put_resource_policy(
         &self,
         input: PutResourcePolicyRequest,
@@ -5369,6 +6368,80 @@ impl CloudWatchLogs for CloudWatchLogsClient {
                     response.buffer().from_err().and_then(|response| {
                         Err(PutSubscriptionFilterError::from_response(response))
                     }),
+                )
+            }
+        })
+    }
+
+    /// <p>Schedules a query of a log group using CloudWatch Logs Insights. You specify the log group and time range to query, and the query string to use.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/logs/CWL_QuerySyntax.html">CloudWatch Logs Insights Query Syntax</a>.</p>
+    fn start_query(
+        &self,
+        input: StartQueryRequest,
+    ) -> RusotoFuture<StartQueryResponse, StartQueryError> {
+        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Logs_20140328.StartQuery");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<StartQueryResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StartQueryError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Stops a CloudWatch Logs Insights query that is in progress. If the query has already ended, the operation returns an error indicating that the specified query is not running.</p>
+    fn stop_query(
+        &self,
+        input: StopQueryRequest,
+    ) -> RusotoFuture<StopQueryResponse, StopQueryError> {
+        let mut request = SignedRequest::new("POST", "logs", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Logs_20140328.StopQuery");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<StopQueryResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StopQueryError::from_response(response))),
                 )
             }
         })

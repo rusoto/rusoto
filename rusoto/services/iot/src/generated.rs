@@ -29,6 +29,31 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
+/// <p>Details of abort criteria to abort the job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AbortConfig {
+    /// <p>The list of abort criteria to define rules to abort the job.</p>
+    #[serde(rename = "criteriaList")]
+    pub criteria_list: Vec<AbortCriteria>,
+}
+
+/// <p>Details of abort criteria to define rules to abort the job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AbortCriteria {
+    /// <p>The type of abort action to initiate a job abort.</p>
+    #[serde(rename = "action")]
+    pub action: String,
+    /// <p>The type of job execution failure to define a rule to initiate a job abort.</p>
+    #[serde(rename = "failureType")]
+    pub failure_type: String,
+    /// <p>Minimum number of executed things before evaluating an abort rule.</p>
+    #[serde(rename = "minNumberOfExecutedThings")]
+    pub min_number_of_executed_things: i64,
+    /// <p>The threshold as a percentage of the total number of executed things that will initiate a job abort.</p> <p>AWS IoT supports up to two digits after the decimal (for example, 10.9 and 10.99, but not 10.999).</p>
+    #[serde(rename = "thresholdPercentage")]
+    pub threshold_percentage: f64,
+}
+
 /// <p>The input for the AcceptCertificateTransfer operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AcceptCertificateTransferRequest {
@@ -72,6 +97,10 @@ pub struct Action {
     #[serde(rename = "iotAnalytics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iot_analytics: Option<IotAnalyticsAction>,
+    /// <p>Sends an input to an AWS IoT Events detector.</p>
+    #[serde(rename = "iotEvents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iot_events: Option<IotEventsAction>,
     /// <p>Write data to an Amazon Kinesis stream.</p>
     #[serde(rename = "kinesis")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -141,7 +170,35 @@ pub struct ActiveViolation {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct AddThingToBillingGroupRequest {
+    /// <p>The ARN of the billing group.</p>
+    #[serde(rename = "billingGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billing_group_arn: Option<String>,
+    /// <p>The name of the billing group.</p>
+    #[serde(rename = "billingGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billing_group_name: Option<String>,
+    /// <p>The ARN of the thing to be added to the billing group.</p>
+    #[serde(rename = "thingArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_arn: Option<String>,
+    /// <p>The name of the thing to be added to the billing group.</p>
+    #[serde(rename = "thingName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AddThingToBillingGroupResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AddThingToThingGroupRequest {
+    /// <p>Override dynamic thing groups with static thing groups when 10-group limit is reached. If a thing belongs to 10 thing groups, and one or more of those groups are dynamic thing groups, adding a thing to a static group removes the thing from the last dynamic group.</p>
+    #[serde(rename = "overrideDynamicGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub override_dynamic_groups: Option<bool>,
     /// <p>The ARN of the thing to add to a group.</p>
     #[serde(rename = "thingArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -221,7 +278,7 @@ pub struct AttachPolicyRequest {
     /// <p>The name of the policy to attach.</p>
     #[serde(rename = "policyName")]
     pub policy_name: String,
-    /// <p>The identity to which the policy is attached.</p>
+    /// <p>The <a href="https://docs.aws.amazon.com/iot/latest/developerguide/iot-security-identity.html">identity</a> to which the policy is attached.</p>
     #[serde(rename = "target")]
     pub target: String,
 }
@@ -487,6 +544,15 @@ pub struct AuthorizerSummary {
     pub authorizer_name: Option<String>,
 }
 
+/// <p>Configuration for the rollout of OTA updates.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsJobExecutionsRolloutConfig {
+    /// <p>The maximum number of OTA update job executions started per minute.</p>
+    #[serde(rename = "maximumPerMinute")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub maximum_per_minute: Option<i64>,
+}
+
 /// <p>A Device Defender security profile behavior.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Behavior {
@@ -506,18 +572,49 @@ pub struct Behavior {
 /// <p>The criteria by which the behavior is determined to be normal.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct BehaviorCriteria {
-    /// <p>The operator that relates the thing measured (<code>metric</code>) to the criteria (<code>value</code>).</p>
+    /// <p>The operator that relates the thing measured (<code>metric</code>) to the criteria (containing a <code>value</code> or <code>statisticalThreshold</code>).</p>
     #[serde(rename = "comparisonOperator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub comparison_operator: Option<String>,
-    /// <p>Use this to specify the period of time over which the behavior is evaluated, for those criteria which have a time dimension (for example, <code>NUM_MESSAGES_SENT</code>).</p>
+    /// <p>If a device is in violation of the behavior for the specified number of consecutive datapoints, an alarm occurs. If not specified, the default is 1.</p>
+    #[serde(rename = "consecutiveDatapointsToAlarm")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub consecutive_datapoints_to_alarm: Option<i64>,
+    /// <p>If an alarm has occurred and the offending device is no longer in violation of the behavior for the specified number of consecutive datapoints, the alarm is cleared. If not specified, the default is 1.</p>
+    #[serde(rename = "consecutiveDatapointsToClear")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub consecutive_datapoints_to_clear: Option<i64>,
+    /// <p>Use this to specify the time duration over which the behavior is evaluated, for those criteria which have a time dimension (for example, <code>NUM_MESSAGES_SENT</code>). For a <code>statisticalThreshhold</code> metric comparison, measurements from all devices are accumulated over this time duration before being used to calculate percentiles, and later, measurements from an individual device are also accumulated over this time duration before being given a percentile rank.</p>
     #[serde(rename = "durationSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub duration_seconds: Option<i64>,
+    /// <p>A statistical ranking (percentile) which indicates a threshold value by which a behavior is determined to be in compliance or in violation of the behavior.</p>
+    #[serde(rename = "statisticalThreshold")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub statistical_threshold: Option<StatisticalThreshold>,
     /// <p>The value to be compared with the <code>metric</code>.</p>
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<MetricValue>,
+}
+
+/// <p>Additional information about the billing group.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct BillingGroupMetadata {
+    /// <p>The date the billing group was created.</p>
+    #[serde(rename = "creationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<f64>,
+}
+
+/// <p>The properties of a billing group.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct BillingGroupProperties {
+    /// <p>The description of the billing group.</p>
+    #[serde(rename = "billingGroupDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billing_group_description: Option<String>,
 }
 
 /// <p>A CA certificate.</p>
@@ -646,6 +743,10 @@ pub struct CancelJobRequest {
     /// <p>The unique identifier you assigned to this job when it was created.</p>
     #[serde(rename = "jobId")]
     pub job_id: String,
+    /// <p>(Optional)A reason code string that explains why the job was canceled.</p>
+    #[serde(rename = "reasonCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reason_code: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -792,11 +893,11 @@ pub struct CloudwatchMetricAction {
     /// <p>The CloudWatch metric namespace name.</p>
     #[serde(rename = "metricNamespace")]
     pub metric_namespace: String,
-    /// <p>An optional <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/cloudwatch_concepts.html#about_timestamp">Unix timestamp</a>.</p>
+    /// <p>An optional <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/cloudwatch_concepts.html#about_timestamp">Unix timestamp</a>.</p>
     #[serde(rename = "metricTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub metric_timestamp: Option<String>,
-    /// <p>The <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/cloudwatch_concepts.html#Unit">metric unit</a> supported by CloudWatch.</p>
+    /// <p>The <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/DeveloperGuide/cloudwatch_concepts.html#Unit">metric unit</a> supported by CloudWatch.</p>
     #[serde(rename = "metricUnit")]
     pub metric_unit: String,
     /// <p>The CloudWatch metric value.</p>
@@ -818,6 +919,10 @@ pub struct CodeSigning {
     #[serde(rename = "customCodeSigning")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_code_signing: Option<CustomCodeSigning>,
+    /// <p>Describes the code-signing job.</p>
+    #[serde(rename = "startSigningJobParameter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_signing_job_parameter: Option<StartSigningJobParameter>,
 }
 
 /// <p>Describes the certificate chain being used when code signing a file.</p>
@@ -831,10 +936,6 @@ pub struct CodeSigningCertificateChain {
     #[serde(rename = "inlineDocument")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inline_document: Option<String>,
-    /// <p>A stream of the certificate chain files.</p>
-    #[serde(rename = "stream")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub stream: Option<Stream>,
 }
 
 /// <p>Describes the signature for a file.</p>
@@ -849,10 +950,6 @@ pub struct CodeSigningSignature {
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub inline_document: Option<Vec<u8>>,
-    /// <p>A stream of the code signing signature.</p>
-    #[serde(rename = "stream")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub stream: Option<Stream>,
 }
 
 /// <p>Configuration.</p>
@@ -897,6 +994,38 @@ pub struct CreateAuthorizerResponse {
     pub authorizer_name: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateBillingGroupRequest {
+    /// <p>The name you wish to give to the billing group.</p>
+    #[serde(rename = "billingGroupName")]
+    pub billing_group_name: String,
+    /// <p>The properties of the billing group.</p>
+    #[serde(rename = "billingGroupProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billing_group_properties: Option<BillingGroupProperties>,
+    /// <p>Metadata which can be used to manage the billing group.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateBillingGroupResponse {
+    /// <p>The ARN of the billing group.</p>
+    #[serde(rename = "billingGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billing_group_arn: Option<String>,
+    /// <p>The ID of the billing group.</p>
+    #[serde(rename = "billingGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billing_group_id: Option<String>,
+    /// <p>The name you gave to the billing group.</p>
+    #[serde(rename = "billingGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billing_group_name: Option<String>,
+}
+
 /// <p>The input for the CreateCertificateFromCsr operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateCertificateFromCsrRequest {
@@ -928,12 +1057,71 @@ pub struct CreateCertificateFromCsrResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateDynamicThingGroupRequest {
+    /// <p><p>The dynamic thing group index name.</p> <note> <p>Currently one index is supported: &quot;AWS_Things&quot;.</p> </note></p>
+    #[serde(rename = "indexName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_name: Option<String>,
+    /// <p>The dynamic thing group search query string.</p> <p>See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/query-syntax.html">Query Syntax</a> for information about query string syntax.</p>
+    #[serde(rename = "queryString")]
+    pub query_string: String,
+    /// <p><p>The dynamic thing group query version.</p> <note> <p>Currently one query version is supported: &quot;2017-09-30&quot;. If not specified, the query version defaults to this value.</p> </note></p>
+    #[serde(rename = "queryVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_version: Option<String>,
+    /// <p>Metadata which can be used to manage the dynamic thing group.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>The dynamic thing group name to create.</p>
+    #[serde(rename = "thingGroupName")]
+    pub thing_group_name: String,
+    /// <p>The dynamic thing group properties.</p>
+    #[serde(rename = "thingGroupProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_group_properties: Option<ThingGroupProperties>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateDynamicThingGroupResponse {
+    /// <p>The dynamic thing group index name.</p>
+    #[serde(rename = "indexName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_name: Option<String>,
+    /// <p>The dynamic thing group search query string.</p>
+    #[serde(rename = "queryString")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_string: Option<String>,
+    /// <p>The dynamic thing group query version.</p>
+    #[serde(rename = "queryVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_version: Option<String>,
+    /// <p>The dynamic thing group ARN.</p>
+    #[serde(rename = "thingGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_group_arn: Option<String>,
+    /// <p>The dynamic thing group ID.</p>
+    #[serde(rename = "thingGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_group_id: Option<String>,
+    /// <p>The dynamic thing group name.</p>
+    #[serde(rename = "thingGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_group_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateJobRequest {
+    /// <p>Allows you to create criteria to abort a job.</p>
+    #[serde(rename = "abortConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub abort_config: Option<AbortConfig>,
     /// <p>A short text description of the job.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The job document.</p>
+    /// <p><p>The job document.</p> <note> <p>If the job document resides in an S3 bucket, you must use a placeholder link when specifying the document.</p> <p>The placeholder link is of the following form:</p> <p> <code>${aws:iot:s3-presigned-url:https://s3.amazonaws.com/<i>bucket</i>/<i>key</i>}</code> </p> <p>where <i>bucket</i> is your bucket name and <i>key</i> is the object in the bucket to which you are linking.</p> </note></p>
     #[serde(rename = "document")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document: Option<String>,
@@ -952,6 +1140,10 @@ pub struct CreateJobRequest {
     #[serde(rename = "presignedUrlConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub presigned_url_config: Option<PresignedUrlConfig>,
+    /// <p>Metadata which can be used to manage the job.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>Specifies whether the job will continue to run (CONTINUOUS), or will be complete after all those things specified as targets have completed the job (SNAPSHOT). If continuous, the job may also be run on a thing when a change is detected in a target. For example, a job will run on a thing when the thing is added to a target group, even after the job was completed by all things originally in the group.</p>
     #[serde(rename = "targetSelection")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -959,6 +1151,10 @@ pub struct CreateJobRequest {
     /// <p>A list of things and thing groups to which the job should be sent.</p>
     #[serde(rename = "targets")]
     pub targets: Vec<String>,
+    /// <p>Specifies the amount of time each device has to finish its execution of the job. The timer is started when the job execution status is set to <code>IN_PROGRESS</code>. If the job execution status is not set to another terminal state before the time expires, it will be automatically set to <code>TIMED_OUT</code>.</p>
+    #[serde(rename = "timeoutConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout_config: Option<TimeoutConfig>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1015,6 +1211,10 @@ pub struct CreateOTAUpdateRequest {
     #[serde(rename = "additionalParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_parameters: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Configuration for the rollout of OTA updates.</p>
+    #[serde(rename = "awsJobExecutionsRolloutConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_job_executions_rollout_config: Option<AwsJobExecutionsRolloutConfig>,
     /// <p>The description of the OTA update.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1175,6 +1375,10 @@ pub struct CreateScheduledAuditRequest {
     /// <p>The name you want to give to the scheduled audit. (Max. 128 chars)</p>
     #[serde(rename = "scheduledAuditName")]
     pub scheduled_audit_name: String,
+    /// <p>Metadata which can be used to manage the scheduled audit.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>Which checks are performed during the scheduled audit. Checks must be enabled for your account. (Use <code>DescribeAccountAuditConfiguration</code> to see the list of all checks including those that are enabled or <code>UpdateAccountAuditConfiguration</code> to select which checks are enabled.)</p>
     #[serde(rename = "targetCheckNames")]
     pub target_check_names: Vec<String>,
@@ -1191,13 +1395,18 @@ pub struct CreateScheduledAuditResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateSecurityProfileRequest {
+    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's <code>behaviors</code> but it is also retained for any metric specified here.</p>
+    #[serde(rename = "additionalMetricsToRetain")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub additional_metrics_to_retain: Option<Vec<String>>,
     /// <p>Specifies the destinations to which alerts are sent. (Alerts are always sent to the console.) Alerts are generated when a device (thing) violates a behavior.</p>
     #[serde(rename = "alertTargets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub alert_targets: Option<::std::collections::HashMap<String, AlertTarget>>,
     /// <p>Specifies the behaviors that, when violated by a device (thing), cause an alert.</p>
     #[serde(rename = "behaviors")]
-    pub behaviors: Vec<Behavior>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub behaviors: Option<Vec<Behavior>>,
     /// <p>A description of the security profile.</p>
     #[serde(rename = "securityProfileDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1205,6 +1414,10 @@ pub struct CreateSecurityProfileRequest {
     /// <p>The name you are giving to the security profile.</p>
     #[serde(rename = "securityProfileName")]
     pub security_profile_name: String,
+    /// <p>Metadata which can be used to manage the security profile.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1264,6 +1477,10 @@ pub struct CreateThingGroupRequest {
     #[serde(rename = "parentGroupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parent_group_name: Option<String>,
+    /// <p>Metadata which can be used to manage the thing group.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>The thing group name to create.</p>
     #[serde(rename = "thingGroupName")]
     pub thing_group_name: String,
@@ -1297,6 +1514,10 @@ pub struct CreateThingRequest {
     #[serde(rename = "attributePayload")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attribute_payload: Option<AttributePayload>,
+    /// <p>The name of the billing group the thing will be added to.</p>
+    #[serde(rename = "billingGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billing_group_name: Option<String>,
     /// <p>The name of the thing to create.</p>
     #[serde(rename = "thingName")]
     pub thing_name: String,
@@ -1327,6 +1548,10 @@ pub struct CreateThingResponse {
 /// <p>The input for the CreateThingType operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateThingTypeRequest {
+    /// <p>Metadata which can be used to manage the thing type.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>The name of the thing type.</p>
     #[serde(rename = "thingTypeName")]
     pub thing_type_name: String,
@@ -1360,6 +1585,10 @@ pub struct CreateTopicRuleRequest {
     /// <p>The name of the rule.</p>
     #[serde(rename = "ruleName")]
     pub rule_name: String,
+    /// <p><p>Metadata which can be used to manage the topic rule.</p> <note> <p>For URI Request parameters use format: ...key1=value1&amp;key2=value2...</p> <p>For the CLI command-line parameter use format: --tags &quot;key1=value1&amp;key2=value2...&quot;</p> <p>For the cli-input-json file use format: &quot;tags&quot;: &quot;key1=value1&amp;key2=value2...&quot;</p> </note></p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<String>,
     /// <p>The rule payload.</p>
     #[serde(rename = "topicRulePayload")]
     pub topic_rule_payload: TopicRulePayload,
@@ -1409,6 +1638,21 @@ pub struct DeleteAuthorizerRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeleteAuthorizerResponse {}
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteBillingGroupRequest {
+    /// <p>The name of the billing group.</p>
+    #[serde(rename = "billingGroupName")]
+    pub billing_group_name: String,
+    /// <p>The expected version of the billing group. If the version of the billing group does not match the expected version specified in the request, the <code>DeleteBillingGroup</code> request is rejected with a <code>VersionConflictException</code>.</p>
+    #[serde(rename = "expectedVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expected_version: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteBillingGroupResponse {}
+
 /// <p>Input for the DeleteCACertificate operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteCACertificateRequest {
@@ -1433,6 +1677,21 @@ pub struct DeleteCertificateRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub force_delete: Option<bool>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteDynamicThingGroupRequest {
+    /// <p>The expected version of the dynamic thing group to delete.</p>
+    #[serde(rename = "expectedVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expected_version: Option<i64>,
+    /// <p>The name of the dynamic thing group to delete.</p>
+    #[serde(rename = "thingGroupName")]
+    pub thing_group_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteDynamicThingGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteJobExecutionRequest {
@@ -1464,6 +1723,14 @@ pub struct DeleteJobRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteOTAUpdateRequest {
+    /// <p>Specifies if the stream associated with an OTA update should be deleted when the OTA update is deleted.</p>
+    #[serde(rename = "deleteStream")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delete_stream: Option<bool>,
+    /// <p>Specifies if the AWS Job associated with the OTA update should be deleted with the OTA update is deleted.</p>
+    #[serde(rename = "forceDeleteAWSJob")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub force_delete_aws_job: Option<bool>,
     /// <p>The OTA update ID to delete.</p>
     #[serde(rename = "otaUpdateId")]
     pub ota_update_id: String,
@@ -1717,6 +1984,42 @@ pub struct DescribeAuthorizerResponse {
     pub authorizer_description: Option<AuthorizerDescription>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeBillingGroupRequest {
+    /// <p>The name of the billing group.</p>
+    #[serde(rename = "billingGroupName")]
+    pub billing_group_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeBillingGroupResponse {
+    /// <p>The ARN of the billing group.</p>
+    #[serde(rename = "billingGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billing_group_arn: Option<String>,
+    /// <p>The ID of the billing group.</p>
+    #[serde(rename = "billingGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billing_group_id: Option<String>,
+    /// <p>Additional information about the billing group.</p>
+    #[serde(rename = "billingGroupMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billing_group_metadata: Option<BillingGroupMetadata>,
+    /// <p>The name of the billing group.</p>
+    #[serde(rename = "billingGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billing_group_name: Option<String>,
+    /// <p>The properties of the billing group.</p>
+    #[serde(rename = "billingGroupProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billing_group_properties: Option<BillingGroupProperties>,
+    /// <p>The version of the billing group.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<i64>,
+}
+
 /// <p>The input for the DescribeCACertificate operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeCACertificateRequest {
@@ -1772,7 +2075,7 @@ pub struct DescribeDefaultAuthorizerResponse {
 /// <p>The input for the DescribeEndpoint operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeEndpointRequest {
-    /// <p>The endpoint type.</p>
+    /// <p><p>The endpoint type. Valid endpoint types include:</p> <ul> <li> <p> <code>iot:Data</code> - Returns a VeriSign signed data endpoint.</p> </li> </ul> <ul> <li> <p> <code>iot:Data-ATS</code> - Returns an ATS signed data endpoint.</p> </li> </ul> <ul> <li> <p> <code>iot:CredentialProvider</code> - Returns an AWS IoT credentials provider API endpoint.</p> </li> </ul> <ul> <li> <p> <code>iot:Jobs</code> - Returns an AWS IoT device management Jobs API endpoint.</p> </li> </ul></p>
     #[serde(rename = "endpointType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint_type: Option<String>,
@@ -1826,7 +2129,7 @@ pub struct DescribeIndexResponse {
     #[serde(rename = "indexStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub index_status: Option<String>,
-    /// <p><p>Contains a value that specifies the type of indexing performed. Valid values are:</p> <ol> <li> <p>REGISTRY – Your thing index will contain only registry data.</p> </li> <li> <p>REGISTRY<em>AND</em>SHADOW - Your thing index will contain registry and shadow data.</p> </li> </ol></p>
+    /// <p><p>Contains a value that specifies the type of indexing performed. Valid values are:</p> <ul> <li> <p>REGISTRY – Your thing index will contain only registry data.</p> </li> <li> <p>REGISTRY<em>AND</em>SHADOW - Your thing index will contain registry data and shadow data.</p> </li> <li> <p>REGISTRY<em>AND</em>CONNECTIVITY<em>STATUS - Your thing index will contain registry data and thing connectivity status data.</p> </li> <li> <p>REGISTRY</em>AND<em>SHADOW</em>AND<em>CONNECTIVITY</em>STATUS - Your thing index will contain registry data, shadow data, and thing connectivity status data.</p> </li> </ul></p>
     #[serde(rename = "schema")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schema: Option<String>,
@@ -1937,6 +2240,10 @@ pub struct DescribeSecurityProfileRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeSecurityProfileResponse {
+    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's <code>behaviors</code> but it is also retained for any metric specified here.</p>
+    #[serde(rename = "additionalMetricsToRetain")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub additional_metrics_to_retain: Option<Vec<String>>,
     /// <p>Where the alerts are sent. (Alerts are always sent to the console.)</p>
     #[serde(rename = "alertTargets")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1997,6 +2304,22 @@ pub struct DescribeThingGroupRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeThingGroupResponse {
+    /// <p>The dynamic thing group index name.</p>
+    #[serde(rename = "indexName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_name: Option<String>,
+    /// <p>The dynamic thing group search query string.</p>
+    #[serde(rename = "queryString")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_string: Option<String>,
+    /// <p>The dynamic thing group query version.</p>
+    #[serde(rename = "queryVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_version: Option<String>,
+    /// <p>The dynamic thing group status.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
     /// <p>The thing group ARN.</p>
     #[serde(rename = "thingGroupArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2099,6 +2422,10 @@ pub struct DescribeThingResponse {
     #[serde(rename = "attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The name of the billing group the thing belongs to.</p>
+    #[serde(rename = "billingGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billing_group_name: Option<String>,
     /// <p>The default client ID.</p>
     #[serde(rename = "defaultClientId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2157,6 +2484,15 @@ pub struct DescribeThingTypeResponse {
     #[serde(rename = "thingTypeProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_type_properties: Option<ThingTypeProperties>,
+}
+
+/// <p>Describes the location of the updated firmware.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Destination {
+    /// <p>Describes the location in S3 of the updated firmware.</p>
+    #[serde(rename = "s3Destination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s_3_destination: Option<S3Destination>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2264,12 +2600,10 @@ pub struct DynamoDBAction {
 pub struct DynamoDBv2Action {
     /// <p>Specifies the DynamoDB table to which the message data will be written. For example:</p> <p> <code>{ "dynamoDBv2": { "roleArn": "aws:iam:12341251:my-role" "putItem": { "tableName": "my-table" } } }</code> </p> <p>Each attribute in the message payload will be written to a separate column in the DynamoDB database.</p>
     #[serde(rename = "putItem")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub put_item: Option<PutItemInput>,
+    pub put_item: PutItemInput,
     /// <p>The ARN of the IAM role that grants access to the DynamoDB table.</p>
     #[serde(rename = "roleArn")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub role_arn: Option<String>,
+    pub role_arn: String,
 }
 
 /// <p>The policy that has the effect on the authorization results.</p>
@@ -2342,6 +2676,33 @@ pub struct ExplicitDeny {
     pub policies: Option<Vec<Policy>>,
 }
 
+/// <p>Allows you to create an exponential rate of rollout for a job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ExponentialRolloutRate {
+    /// <p>The minimum number of things that will be notified of a pending job, per minute at the start of job rollout. This parameter allows you to define the initial rate of rollout.</p>
+    #[serde(rename = "baseRatePerMinute")]
+    pub base_rate_per_minute: i64,
+    /// <p>The exponential factor to increase the rate of rollout for a job.</p>
+    #[serde(rename = "incrementFactor")]
+    pub increment_factor: f64,
+    /// <p>The criteria to initiate the increase in rate of rollout for a job.</p> <p>AWS IoT supports up to one digit after the decimal (for example, 1.5, but not 1.55).</p>
+    #[serde(rename = "rateIncreaseCriteria")]
+    pub rate_increase_criteria: RateIncreaseCriteria,
+}
+
+/// <p>The location of the OTA update.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct FileLocation {
+    /// <p>The location of the updated firmware in S3.</p>
+    #[serde(rename = "s3Location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s_3_location: Option<S3Location>,
+    /// <p>The stream that contains the OTA update.</p>
+    #[serde(rename = "stream")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream: Option<Stream>,
+}
+
 /// <p>Describes an action that writes data to an Amazon Kinesis Firehose stream.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FirehoseAction {
@@ -2388,6 +2749,10 @@ pub struct GetIndexingConfigurationRequest {}
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetIndexingConfigurationResponse {
+    /// <p>The index configuration.</p>
+    #[serde(rename = "thingGroupIndexingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_group_indexing_configuration: Option<ThingGroupIndexingConfiguration>,
     /// <p>Thing indexing configuration.</p>
     #[serde(rename = "thingIndexingConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2632,19 +2997,38 @@ pub struct IotAnalyticsAction {
     pub role_arn: Option<String>,
 }
 
+/// <p>Sends an input to an AWS IoT Events detector.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct IotEventsAction {
+    /// <p>The name of the AWS IoT Events input.</p>
+    #[serde(rename = "inputName")]
+    pub input_name: String,
+    /// <p>[Optional] Use this to ensure that only one input (message) with a given messageId will be processed by an AWS IoT Events detector.</p>
+    #[serde(rename = "messageId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message_id: Option<String>,
+    /// <p>The ARN of the role that grants AWS IoT permission to send an input to an AWS IoT Events detector. ("Action":"iotevents:BatchPutMessage").</p>
+    #[serde(rename = "roleArn")]
+    pub role_arn: String,
+}
+
 /// <p>The <code>Job</code> object contains details about a job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Job {
+    /// <p>Configuration for criteria to abort the job.</p>
+    #[serde(rename = "abortConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub abort_config: Option<AbortConfig>,
     /// <p>If the job was updated, describes the reason for the update.</p>
     #[serde(rename = "comment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub comment: Option<String>,
-    /// <p>The time, in milliseconds since the epoch, when the job was completed.</p>
+    /// <p>The time, in seconds since the epoch, when the job was completed.</p>
     #[serde(rename = "completedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub completed_at: Option<f64>,
-    /// <p>The time, in milliseconds since the epoch, when the job was created.</p>
+    /// <p>The time, in seconds since the epoch, when the job was created.</p>
     #[serde(rename = "createdAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<f64>,
@@ -2672,7 +3056,7 @@ pub struct Job {
     #[serde(rename = "jobProcessDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_process_details: Option<JobProcessDetails>,
-    /// <p>The time, in milliseconds since the epoch, when the job was last updated.</p>
+    /// <p>The time, in seconds since the epoch, when the job was last updated.</p>
     #[serde(rename = "lastUpdatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_at: Option<f64>,
@@ -2680,7 +3064,11 @@ pub struct Job {
     #[serde(rename = "presignedUrlConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub presigned_url_config: Option<PresignedUrlConfig>,
-    /// <p>The status of the job, one of <code>IN_PROGRESS</code>, <code>CANCELED</code>, or <code>COMPLETED</code>. </p>
+    /// <p>If the job was updated, provides the reason code for the update.</p>
+    #[serde(rename = "reasonCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reason_code: Option<String>,
+    /// <p>The status of the job, one of <code>IN_PROGRESS</code>, <code>CANCELED</code>, <code>DELETION_IN_PROGRESS</code> or <code>COMPLETED</code>. </p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -2692,12 +3080,20 @@ pub struct Job {
     #[serde(rename = "targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<String>>,
+    /// <p>Specifies the amount of time each device has to finish its execution of the job. A timer is started when the job execution status is set to <code>IN_PROGRESS</code>. If the job execution status is not set to another terminal state before the timer expires, it will be automatically set to <code>TIMED_OUT</code>.</p>
+    #[serde(rename = "timeoutConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout_config: Option<TimeoutConfig>,
 }
 
 /// <p>The job execution object represents the execution of a job on a particular device.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct JobExecution {
+    /// <p>The estimated number of seconds that remain before the job execution status will be changed to <code>TIMED_OUT</code>. The timeout interval can be anywhere between 1 minute and 7 days (1 to 10080 minutes). The actual job execution timeout can occur up to 60 seconds later than the estimated duration. This value will not be included if the job execution has reached a terminal status.</p>
+    #[serde(rename = "approximateSecondsBeforeTimedOut")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub approximate_seconds_before_timed_out: Option<i64>,
     /// <p>A string (consisting of the digits "0" through "9") which identifies this particular job execution on this particular device. It can be used in commands which return or update job execution information. </p>
     #[serde(rename = "executionNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2710,19 +3106,19 @@ pub struct JobExecution {
     #[serde(rename = "jobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_id: Option<String>,
-    /// <p>The time, in milliseconds since the epoch, when the job execution was last updated.</p>
+    /// <p>The time, in seconds since the epoch, when the job execution was last updated.</p>
     #[serde(rename = "lastUpdatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_at: Option<f64>,
-    /// <p>The time, in milliseconds since the epoch, when the job execution was queued.</p>
+    /// <p>The time, in seconds since the epoch, when the job execution was queued.</p>
     #[serde(rename = "queuedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub queued_at: Option<f64>,
-    /// <p>The time, in milliseconds since the epoch, when the job execution started.</p>
+    /// <p>The time, in seconds since the epoch, when the job execution started.</p>
     #[serde(rename = "startedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub started_at: Option<f64>,
-    /// <p>The status of the job execution (IN_PROGRESS, QUEUED, FAILED, SUCCESS, CANCELED, or REJECTED).</p>
+    /// <p>The status of the job execution (IN_PROGRESS, QUEUED, FAILED, SUCCEEDED, TIMED_OUT, CANCELED, or REJECTED).</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -2758,15 +3154,15 @@ pub struct JobExecutionSummary {
     #[serde(rename = "executionNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub execution_number: Option<i64>,
-    /// <p>The time, in milliseconds since the epoch, when the job execution was last updated.</p>
+    /// <p>The time, in seconds since the epoch, when the job execution was last updated.</p>
     #[serde(rename = "lastUpdatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_at: Option<f64>,
-    /// <p>The time, in milliseconds since the epoch, when the job execution was queued.</p>
+    /// <p>The time, in seconds since the epoch, when the job execution was queued.</p>
     #[serde(rename = "queuedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub queued_at: Option<f64>,
-    /// <p>The time, in milliseconds since the epoch, when the job execution started.</p>
+    /// <p>The time, in seconds since the epoch, when the job execution started.</p>
     #[serde(rename = "startedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub started_at: Option<f64>,
@@ -2807,6 +3203,10 @@ pub struct JobExecutionSummaryForThing {
 /// <p>Allows you to create a staged rollout of a job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct JobExecutionsRolloutConfig {
+    /// <p>The rate of increase for a job rollout. This parameter allows you to define an exponential rate for a job rollout.</p>
+    #[serde(rename = "exponentialRate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exponential_rate: Option<ExponentialRolloutRate>,
     /// <p>The maximum number of things that will be notified of a pending job, per minute. This parameter allows you to create a staged rollout.</p>
     #[serde(rename = "maximumPerMinute")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2845,6 +3245,10 @@ pub struct JobProcessDetails {
     #[serde(rename = "numberOfSucceededThings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_succeeded_things: Option<i64>,
+    /// <p>The number of things whose job execution status is <code>TIMED_OUT</code>.</p>
+    #[serde(rename = "numberOfTimedOutThings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_timed_out_things: Option<i64>,
     /// <p>The target devices to which the job execution is being rolled out. This value will be null after the job execution has finished rolling out to all the target devices.</p>
     #[serde(rename = "processingTargets")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2855,11 +3259,11 @@ pub struct JobProcessDetails {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct JobSummary {
-    /// <p>The time, in milliseconds since the epoch, when the job completed.</p>
+    /// <p>The time, in seconds since the epoch, when the job completed.</p>
     #[serde(rename = "completedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub completed_at: Option<f64>,
-    /// <p>The time, in milliseconds since the epoch, when the job was created.</p>
+    /// <p>The time, in seconds since the epoch, when the job was created.</p>
     #[serde(rename = "createdAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<f64>,
@@ -2871,7 +3275,7 @@ pub struct JobSummary {
     #[serde(rename = "jobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_id: Option<String>,
-    /// <p>The time, in milliseconds since the epoch, when the job was last updated.</p>
+    /// <p>The time, in seconds since the epoch, when the job was last updated.</p>
     #[serde(rename = "lastUpdatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_at: Option<f64>,
@@ -3106,6 +3510,35 @@ pub struct ListAuthorizersResponse {
     #[serde(rename = "nextMarker")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_marker: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListBillingGroupsRequest {
+    /// <p>The maximum number of results to return per request.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Limit the results to billing groups whose names have the given prefix.</p>
+    #[serde(rename = "namePrefixFilter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name_prefix_filter: Option<String>,
+    /// <p>The token to retrieve the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListBillingGroupsResponse {
+    /// <p>The list of billing groups.</p>
+    #[serde(rename = "billingGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billing_groups: Option<Vec<GroupNameAndArn>>,
+    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
 }
 
 /// <p>Input for the ListCACertificates operation.</p>
@@ -3682,6 +4115,30 @@ pub struct ListStreamsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListTagsForResourceRequest {
+    /// <p>The token to retrieve the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The ARN of the resource.</p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The list of tags assigned to the resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTargetsForPolicyRequest {
     /// <p>A marker used to get the next set of results.</p>
     #[serde(rename = "marker")]
@@ -3913,6 +4370,34 @@ pub struct ListThingTypesResponse {
     #[serde(rename = "thingTypes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_types: Option<Vec<ThingTypeDefinition>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListThingsInBillingGroupRequest {
+    /// <p>The name of the billing group.</p>
+    #[serde(rename = "billingGroupName")]
+    pub billing_group_name: String,
+    /// <p>The maximum number of results to return per request.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token to retrieve the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListThingsInBillingGroupResponse {
+    /// <p>The token used to get the next set of results, or <b>null</b> if there are no additional results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of things in the billing group.</p>
+    #[serde(rename = "things")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub things: Option<Vec<String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -4173,14 +4658,14 @@ pub struct OTAUpdateFile {
     #[serde(rename = "codeSigning")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub code_signing: Option<CodeSigning>,
+    /// <p>The location of the updated firmware.</p>
+    #[serde(rename = "fileLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub file_location: Option<FileLocation>,
     /// <p>The name of the file.</p>
     #[serde(rename = "fileName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_name: Option<String>,
-    /// <p>The source of the file.</p>
-    #[serde(rename = "fileSource")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub file_source: Option<Stream>,
     /// <p>The file version.</p>
     #[serde(rename = "fileVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4203,6 +4688,10 @@ pub struct OTAUpdateInfo {
     #[serde(rename = "awsIotJobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_iot_job_id: Option<String>,
+    /// <p>Configuration for the rollout of OTA updates.</p>
+    #[serde(rename = "awsJobExecutionsRolloutConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_job_executions_rollout_config: Option<AwsJobExecutionsRolloutConfig>,
     /// <p>The date when the OTA update was created.</p>
     #[serde(rename = "creationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4359,6 +4848,19 @@ pub struct PutItemInput {
     pub table_name: String,
 }
 
+/// <p>Allows you to define a criteria to initiate the increase in rate of rollout for a job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct RateIncreaseCriteria {
+    /// <p>The threshold for number of notified things that will initiate the increase in rate of rollout.</p>
+    #[serde(rename = "numberOfNotifiedThings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_notified_things: Option<i64>,
+    /// <p>The threshold for number of succeeded things that will initiate the increase in rate of rollout.</p>
+    #[serde(rename = "numberOfSucceededThings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_succeeded_things: Option<i64>,
+}
+
 /// <p>The input to the RegisterCACertificate operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RegisterCACertificateRequest {
@@ -4428,11 +4930,11 @@ pub struct RegisterCertificateResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RegisterThingRequest {
-    /// <p>The parameters for provisioning a thing. See <a href="http://docs.aws.amazon.com/iot/latest/developerguide/programmatic-provisioning.html">Programmatic Provisioning</a> for more information.</p>
+    /// <p>The parameters for provisioning a thing. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/programmatic-provisioning.html">Programmatic Provisioning</a> for more information.</p>
     #[serde(rename = "parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The provisioning template. See <a href="http://docs.aws.amazon.com/iot/latest/developerguide/programmatic-provisioning.html">Programmatic Provisioning</a> for more information.</p>
+    /// <p>The provisioning template. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/programmatic-provisioning.html">Programmatic Provisioning</a> for more information.</p>
     #[serde(rename = "templateBody")]
     pub template_body: String,
 }
@@ -4492,6 +4994,30 @@ pub struct RelatedResource {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_type: Option<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct RemoveThingFromBillingGroupRequest {
+    /// <p>The ARN of the billing group.</p>
+    #[serde(rename = "billingGroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billing_group_arn: Option<String>,
+    /// <p>The name of the billing group.</p>
+    #[serde(rename = "billingGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub billing_group_name: Option<String>,
+    /// <p>The ARN of the thing to be removed from the billing group.</p>
+    #[serde(rename = "thingArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_arn: Option<String>,
+    /// <p>The name of the thing to be removed from the billing group.</p>
+    #[serde(rename = "thingName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RemoveThingFromBillingGroupResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RemoveThingFromThingGroupRequest {
@@ -4608,7 +5134,7 @@ pub struct S3Action {
     /// <p>The Amazon S3 bucket.</p>
     #[serde(rename = "bucketName")]
     pub bucket_name: String,
-    /// <p>The Amazon S3 canned ACL that controls access to the object identified by the object key. For more information, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl">S3 canned ACLs</a>.</p>
+    /// <p>The Amazon S3 canned ACL that controls access to the object identified by the object key. For more information, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/acl-overview.html#canned-acl">S3 canned ACLs</a>.</p>
     #[serde(rename = "cannedAcl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub canned_acl: Option<String>,
@@ -4620,16 +5146,31 @@ pub struct S3Action {
     pub role_arn: String,
 }
 
-/// <p>The location in S3 the contains the files to stream.</p>
+/// <p>Describes the location of updated firmware in S3.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct S3Destination {
+    /// <p>The S3 bucket that contains the updated firmware.</p>
+    #[serde(rename = "bucket")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bucket: Option<String>,
+    /// <p>The S3 prefix.</p>
+    #[serde(rename = "prefix")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prefix: Option<String>,
+}
+
+/// <p>The S3 location.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct S3Location {
-    /// <p>The S3 bucket that contains the file to stream.</p>
+    /// <p>The S3 bucket.</p>
     #[serde(rename = "bucket")]
-    pub bucket: String,
-    /// <p>The name of the file within the S3 bucket to stream.</p>
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bucket: Option<String>,
+    /// <p>The S3 key.</p>
     #[serde(rename = "key")]
-    pub key: String,
-    /// <p>The file version.</p>
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    /// <p>The S3 bucket version.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
@@ -4702,6 +5243,10 @@ pub struct SearchIndexResponse {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p>The thing groups that match the search query.</p>
+    #[serde(rename = "thingGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_groups: Option<Vec<ThingGroupDocument>>,
     /// <p>The things that match the search query.</p>
     #[serde(rename = "things")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4808,10 +5353,27 @@ pub struct SetV2LoggingOptionsRequest {
     pub role_arn: Option<String>,
 }
 
+/// <p>Describes the code-signing profile.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SigningProfileParameter {
+    /// <p>Certificate ARN.</p>
+    #[serde(rename = "certificateArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_arn: Option<String>,
+    /// <p>The location of the code-signing certificate on your device.</p>
+    #[serde(rename = "certificatePathOnDevice")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub certificate_path_on_device: Option<String>,
+    /// <p>The hardware platform of your device.</p>
+    #[serde(rename = "platform")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub platform: Option<String>,
+}
+
 /// <p>Describes an action to publish to an Amazon SNS topic.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SnsAction {
-    /// <p>(Optional) The message format of the message to publish. Accepted values are "JSON" and "RAW". The default value of the attribute is "RAW". SNS uses this setting to determine if the payload should be parsed and relevant platform-specific bits of the payload should be extracted. To read more about SNS message formats, see <a href="http://docs.aws.amazon.com/sns/latest/dg/json-formats.html">http://docs.aws.amazon.com/sns/latest/dg/json-formats.html</a> refer to their official documentation.</p>
+    /// <p>(Optional) The message format of the message to publish. Accepted values are "JSON" and "RAW". The default value of the attribute is "RAW". SNS uses this setting to determine if the payload should be parsed and relevant platform-specific bits of the payload should be extracted. To read more about SNS message formats, see <a href="https://docs.aws.amazon.com/sns/latest/dg/json-formats.html">https://docs.aws.amazon.com/sns/latest/dg/json-formats.html</a> refer to their official documentation.</p>
     #[serde(rename = "messageFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message_format: Option<String>,
@@ -4854,6 +5416,23 @@ pub struct StartOnDemandAuditTaskResponse {
     pub task_id: Option<String>,
 }
 
+/// <p>Information required to start a signing job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct StartSigningJobParameter {
+    /// <p>The location to write the code-signed file.</p>
+    #[serde(rename = "destination")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination: Option<Destination>,
+    /// <p>The code-signing profile name.</p>
+    #[serde(rename = "signingProfileName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub signing_profile_name: Option<String>,
+    /// <p>Describes the code-signing profile.</p>
+    #[serde(rename = "signingProfileParameter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub signing_profile_parameter: Option<SigningProfileParameter>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartThingRegistrationTaskRequest {
     /// <p>The S3 bucket that contains the input file.</p>
@@ -4877,6 +5456,15 @@ pub struct StartThingRegistrationTaskResponse {
     #[serde(rename = "taskId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub task_id: Option<String>,
+}
+
+/// <p>A statistical ranking (percentile) which indicates a threshold value by which a behavior is determined to be in compliance or in violation of the behavior.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct StatisticalThreshold {
+    /// <p>The percentile which resolves to a threshold value by which compliance with a behavior is determined. Metrics are collected over the specified period (<code>durationSeconds</code>) from all reporting devices in your account and statistical ranks are calculated. Then, the measurements from a device are collected over the same period. If the accumulated measurements from the device fall above or below (<code>comparisonOperator</code>) the value associated with the percentile specified, then the device is considered to be in compliance with the behavior, otherwise a violation occurs.</p>
+    #[serde(rename = "statistic")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub statistic: Option<String>,
 }
 
 /// <p>Starts execution of a Step Functions state machine.</p>
@@ -4990,6 +5578,33 @@ pub struct StreamSummary {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream_version: Option<i64>,
 }
+
+/// <p>A set of key/value pairs that are used to manage the resource.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Tag {
+    /// <p>The tag's key.</p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    /// <p>The tag's value.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TagResourceRequest {
+    /// <p>The ARN of the resource.</p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+    /// <p>The new or modified tags for the resource.</p>
+    #[serde(rename = "tags")]
+    pub tags: Vec<Tag>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TagResourceResponse {}
 
 /// <p>Statistics for the checks performed during the audit.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -5125,6 +5740,20 @@ pub struct ThingAttribute {
     pub version: Option<i64>,
 }
 
+/// <p>The connectivity status of the thing.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ThingConnectivity {
+    /// <p>True if the thing is connected to the AWS IoT service, false if it is not connected.</p>
+    #[serde(rename = "connected")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connected: Option<bool>,
+    /// <p>The epoch time (in milliseconds) when the thing last connected or disconnected. Note that if the thing has been disconnected for more than a few weeks, the time value can be missing.</p>
+    #[serde(rename = "timestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timestamp: Option<i64>,
+}
+
 /// <p>The thing search index document.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -5133,6 +5762,10 @@ pub struct ThingDocument {
     #[serde(rename = "attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Indicates whether or not the thing is connected to the AWS IoT service.</p>
+    #[serde(rename = "connectivity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connectivity: Option<ThingConnectivity>,
     /// <p>The shadow.</p>
     #[serde(rename = "shadow")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5153,6 +5786,40 @@ pub struct ThingDocument {
     #[serde(rename = "thingTypeName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_type_name: Option<String>,
+}
+
+/// <p>The thing group search index document.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ThingGroupDocument {
+    /// <p>The thing group attributes.</p>
+    #[serde(rename = "attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Parent group names.</p>
+    #[serde(rename = "parentGroupNames")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parent_group_names: Option<Vec<String>>,
+    /// <p>The thing group description.</p>
+    #[serde(rename = "thingGroupDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_group_description: Option<String>,
+    /// <p>The thing group ID.</p>
+    #[serde(rename = "thingGroupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_group_id: Option<String>,
+    /// <p>The thing group name.</p>
+    #[serde(rename = "thingGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_group_name: Option<String>,
+}
+
+/// <p>Thing group indexing configuration.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ThingGroupIndexingConfiguration {
+    /// <p>Thing group indexing mode.</p>
+    #[serde(rename = "thingGroupIndexingMode")]
+    pub thing_group_indexing_mode: String,
 }
 
 /// <p>Thing group metadata.</p>
@@ -5186,13 +5853,16 @@ pub struct ThingGroupProperties {
     pub thing_group_description: Option<String>,
 }
 
-/// <p>Thing indexing configuration.</p>
+/// <p>The thing indexing configuration. For more information, see <a href="https://docs.aws.amazon.com/iot/latest/developerguide/managing-index.html">Managing Thing Indexing</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ThingIndexingConfiguration {
-    /// <p><p>Thing indexing mode. Valid values are: </p> <ul> <li> <p>REGISTRY – Your thing index will contain only registry data.</p> </li> <li> <p>REGISTRY<em>AND</em>SHADOW - Your thing index will contain registry and shadow data.</p> </li> <li> <p>OFF - Thing indexing is disabled.</p> </li> </ul></p>
-    #[serde(rename = "thingIndexingMode")]
+    /// <p><p>Thing connectivity indexing mode. Valid values are: </p> <ul> <li> <p>STATUS – Your thing index will contain connectivity status. In order to enable thing connectivity indexing, thingIndexMode must not be set to OFF.</p> </li> <li> <p>OFF - Thing connectivity status indexing is disabled.</p> </li> </ul></p>
+    #[serde(rename = "thingConnectivityIndexingMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub thing_indexing_mode: Option<String>,
+    pub thing_connectivity_indexing_mode: Option<String>,
+    /// <p><p>Thing indexing mode. Valid values are:</p> <ul> <li> <p>REGISTRY – Your thing index will contain only registry data.</p> </li> <li> <p>REGISTRY<em>AND</em>SHADOW - Your thing index will contain registry and shadow data.</p> </li> <li> <p>OFF - Thing indexing is disabled.</p> </li> </ul></p>
+    #[serde(rename = "thingIndexingMode")]
+    pub thing_indexing_mode: String,
 }
 
 /// <p>The definition of the thing type, including thing type name and description.</p>
@@ -5246,6 +5916,15 @@ pub struct ThingTypeProperties {
     #[serde(rename = "thingTypeDescription")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub thing_type_description: Option<String>,
+}
+
+/// <p>Specifies the amount of time each device has to finish its execution of the job. A timer is started when the job execution status is set to <code>IN_PROGRESS</code>. If the job execution status is not set to another terminal state before the timer expires, it will be automatically set to <code>TIMED_OUT</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TimeoutConfig {
+    /// <p>Specifies the amount of time, in minutes, this device has to finish execution of this job. The timeout interval can be anywhere between 1 minute and 7 days (1 to 10080 minutes). The in progress timer can't be updated and will apply to all job executions for the job. Whenever a job execution remains in the IN_PROGRESS status for longer than this interval, the job execution will fail and switch to the terminal <code>TIMED_OUT</code> status.</p>
+    #[serde(rename = "inProgressTimeoutInMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub in_progress_timeout_in_minutes: Option<i64>,
 }
 
 /// <p>Describes a rule.</p>
@@ -5334,7 +6013,7 @@ pub struct TopicRulePayload {
     #[serde(rename = "ruleDisabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rule_disabled: Option<bool>,
-    /// <p>The SQL statement used to query the topic. For more information, see <a href="http://docs.aws.amazon.com/iot/latest/developerguide/iot-rules.html#aws-iot-sql-reference">AWS IoT SQL Reference</a> in the <i>AWS IoT Developer Guide</i>.</p>
+    /// <p>The SQL statement used to query the topic. For more information, see <a href="https://docs.aws.amazon.com/iot/latest/developerguide/iot-rules.html#aws-iot-sql-reference">AWS IoT SQL Reference</a> in the <i>AWS IoT Developer Guide</i>.</p>
     #[serde(rename = "sql")]
     pub sql: String,
 }
@@ -5389,6 +6068,20 @@ pub struct TransferData {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub transfer_message: Option<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UntagResourceRequest {
+    /// <p>The ARN of the resource.</p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+    /// <p>A list of the keys of the tags to be removed from the resource.</p>
+    #[serde(rename = "tagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateAccountAuditConfigurationRequest {
@@ -5448,6 +6141,29 @@ pub struct UpdateAuthorizerResponse {
     pub authorizer_name: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateBillingGroupRequest {
+    /// <p>The name of the billing group.</p>
+    #[serde(rename = "billingGroupName")]
+    pub billing_group_name: String,
+    /// <p>The properties of the billing group.</p>
+    #[serde(rename = "billingGroupProperties")]
+    pub billing_group_properties: BillingGroupProperties,
+    /// <p>The expected version of the billing group. If the version of the billing group does not match the expected version specified in the request, the <code>UpdateBillingGroup</code> request is rejected with a <code>VersionConflictException</code>.</p>
+    #[serde(rename = "expectedVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expected_version: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateBillingGroupResponse {
+    /// <p>The latest version of the billing group.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<i64>,
+}
+
 /// <p>The input to the UpdateCACertificate operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateCACertificateRequest {
@@ -5484,6 +6200,41 @@ pub struct UpdateCertificateRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateDynamicThingGroupRequest {
+    /// <p>The expected version of the dynamic thing group to update.</p>
+    #[serde(rename = "expectedVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expected_version: Option<i64>,
+    /// <p><p>The dynamic thing group index to update.</p> <note> <p>Currently one index is supported: &#39;AWS_Things&#39;.</p> </note></p>
+    #[serde(rename = "indexName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub index_name: Option<String>,
+    /// <p>The dynamic thing group search query string to update.</p>
+    #[serde(rename = "queryString")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_string: Option<String>,
+    /// <p><p>The dynamic thing group query version to update.</p> <note> <p>Currently one query version is supported: &quot;2017-09-30&quot;. If not specified, the query version defaults to this value.</p> </note></p>
+    #[serde(rename = "queryVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub query_version: Option<String>,
+    /// <p>The name of the dynamic thing group to update.</p>
+    #[serde(rename = "thingGroupName")]
+    pub thing_group_name: String,
+    /// <p>The dynamic thing group properties to update.</p>
+    #[serde(rename = "thingGroupProperties")]
+    pub thing_group_properties: ThingGroupProperties,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateDynamicThingGroupResponse {
+    /// <p>The dynamic thing group version.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateEventConfigurationsRequest {
     /// <p>The new event configuration values.</p>
     #[serde(rename = "eventConfigurations")]
@@ -5497,6 +6248,10 @@ pub struct UpdateEventConfigurationsResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateIndexingConfigurationRequest {
+    /// <p>Thing group indexing configuration.</p>
+    #[serde(rename = "thingGroupIndexingConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub thing_group_indexing_configuration: Option<ThingGroupIndexingConfiguration>,
     /// <p>Thing indexing configuration.</p>
     #[serde(rename = "thingIndexingConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5506,6 +6261,33 @@ pub struct UpdateIndexingConfigurationRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct UpdateIndexingConfigurationResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateJobRequest {
+    /// <p>Allows you to create criteria to abort a job.</p>
+    #[serde(rename = "abortConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub abort_config: Option<AbortConfig>,
+    /// <p>A short text description of the job.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>Allows you to create a staged rollout of the job.</p>
+    #[serde(rename = "jobExecutionsRolloutConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_executions_rollout_config: Option<JobExecutionsRolloutConfig>,
+    /// <p>The ID of the job to be updated.</p>
+    #[serde(rename = "jobId")]
+    pub job_id: String,
+    /// <p>Configuration information for pre-signed S3 URLs.</p>
+    #[serde(rename = "presignedUrlConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub presigned_url_config: Option<PresignedUrlConfig>,
+    /// <p>Specifies the amount of time each device has to finish its execution of the job. The timer is started when the job execution status is set to <code>IN_PROGRESS</code>. If the job execution status is not set to another terminal state before the time expires, it will be automatically set to <code>TIMED_OUT</code>. </p>
+    #[serde(rename = "timeoutConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout_config: Option<TimeoutConfig>,
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateRoleAliasRequest {
@@ -5569,6 +6351,10 @@ pub struct UpdateScheduledAuditResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateSecurityProfileRequest {
+    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the profile's <code>behaviors</code> but it is also retained for any metric specified here.</p>
+    #[serde(rename = "additionalMetricsToRetain")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub additional_metrics_to_retain: Option<Vec<String>>,
     /// <p>Where the alerts are sent. (Alerts are always sent to the console.)</p>
     #[serde(rename = "alertTargets")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5577,6 +6363,18 @@ pub struct UpdateSecurityProfileRequest {
     #[serde(rename = "behaviors")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub behaviors: Option<Vec<Behavior>>,
+    /// <p>If true, delete all <code>additionalMetricsToRetain</code> defined for this security profile. If any <code>additionalMetricsToRetain</code> are defined in the current invocation an exception occurs.</p>
+    #[serde(rename = "deleteAdditionalMetricsToRetain")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delete_additional_metrics_to_retain: Option<bool>,
+    /// <p>If true, delete all <code>alertTargets</code> defined for this security profile. If any <code>alertTargets</code> are defined in the current invocation an exception occurs.</p>
+    #[serde(rename = "deleteAlertTargets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delete_alert_targets: Option<bool>,
+    /// <p>If true, delete all <code>behaviors</code> defined for this security profile. If any <code>behaviors</code> are defined in the current invocation an exception occurs.</p>
+    #[serde(rename = "deleteBehaviors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delete_behaviors: Option<bool>,
     /// <p>The expected version of the security profile. A new version is generated whenever the security profile is updated. If you specify a value that is different than the actual version, a <code>VersionConflictException</code> is thrown.</p>
     #[serde(rename = "expectedVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5593,6 +6391,10 @@ pub struct UpdateSecurityProfileRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct UpdateSecurityProfileResponse {
+    /// <p>A list of metrics whose data is retained (stored). By default, data is retained for any metric used in the security profile's <code>behaviors</code> but it is also retained for any metric specified here.</p>
+    #[serde(rename = "additionalMetricsToRetain")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub additional_metrics_to_retain: Option<Vec<String>>,
     /// <p>Where the alerts are sent. (Alerts are always sent to the console.)</p>
     #[serde(rename = "alertTargets")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5692,6 +6494,10 @@ pub struct UpdateThingGroupResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateThingGroupsForThingRequest {
+    /// <p>Override dynamic thing groups with static thing groups when 10-group limit is reached. If a thing belongs to 10 thing groups, and one or more of those groups are dynamic thing groups, adding a thing to a static group removes the thing from the last dynamic group.</p>
+    #[serde(rename = "overrideDynamicGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub override_dynamic_groups: Option<bool>,
     /// <p>The groups to which the thing will be added.</p>
     #[serde(rename = "thingGroupsToAdd")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5942,6 +6748,122 @@ impl Error for AcceptCertificateTransferError {
             }
             AcceptCertificateTransferError::ParseError(ref cause) => cause,
             AcceptCertificateTransferError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by AddThingToBillingGroup
+#[derive(Debug, PartialEq)]
+pub enum AddThingToBillingGroupError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl AddThingToBillingGroupError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> AddThingToBillingGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InternalFailureException" => {
+                    return AddThingToBillingGroupError::InternalFailure(String::from(error_message));
+                }
+                "InvalidRequestException" => {
+                    return AddThingToBillingGroupError::InvalidRequest(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return AddThingToBillingGroupError::ResourceNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "ThrottlingException" => {
+                    return AddThingToBillingGroupError::Throttling(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return AddThingToBillingGroupError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return AddThingToBillingGroupError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for AddThingToBillingGroupError {
+    fn from(err: serde_json::error::Error) -> AddThingToBillingGroupError {
+        AddThingToBillingGroupError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AddThingToBillingGroupError {
+    fn from(err: CredentialsError) -> AddThingToBillingGroupError {
+        AddThingToBillingGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AddThingToBillingGroupError {
+    fn from(err: HttpDispatchError) -> AddThingToBillingGroupError {
+        AddThingToBillingGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AddThingToBillingGroupError {
+    fn from(err: io::Error) -> AddThingToBillingGroupError {
+        AddThingToBillingGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AddThingToBillingGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AddThingToBillingGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            AddThingToBillingGroupError::InternalFailure(ref cause) => cause,
+            AddThingToBillingGroupError::InvalidRequest(ref cause) => cause,
+            AddThingToBillingGroupError::ResourceNotFound(ref cause) => cause,
+            AddThingToBillingGroupError::Throttling(ref cause) => cause,
+            AddThingToBillingGroupError::Validation(ref cause) => cause,
+            AddThingToBillingGroupError::Credentials(ref err) => err.description(),
+            AddThingToBillingGroupError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            AddThingToBillingGroupError::ParseError(ref cause) => cause,
+            AddThingToBillingGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7455,6 +8377,122 @@ impl Error for CreateAuthorizerError {
         }
     }
 }
+/// Errors returned by CreateBillingGroup
+#[derive(Debug, PartialEq)]
+pub enum CreateBillingGroupError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl CreateBillingGroupError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> CreateBillingGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InternalFailureException" => {
+                    return CreateBillingGroupError::InternalFailure(String::from(error_message));
+                }
+                "InvalidRequestException" => {
+                    return CreateBillingGroupError::InvalidRequest(String::from(error_message));
+                }
+                "ResourceAlreadyExistsException" => {
+                    return CreateBillingGroupError::ResourceAlreadyExists(String::from(
+                        error_message,
+                    ));
+                }
+                "ThrottlingException" => {
+                    return CreateBillingGroupError::Throttling(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return CreateBillingGroupError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return CreateBillingGroupError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for CreateBillingGroupError {
+    fn from(err: serde_json::error::Error) -> CreateBillingGroupError {
+        CreateBillingGroupError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateBillingGroupError {
+    fn from(err: CredentialsError) -> CreateBillingGroupError {
+        CreateBillingGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateBillingGroupError {
+    fn from(err: HttpDispatchError) -> CreateBillingGroupError {
+        CreateBillingGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateBillingGroupError {
+    fn from(err: io::Error) -> CreateBillingGroupError {
+        CreateBillingGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateBillingGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateBillingGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateBillingGroupError::InternalFailure(ref cause) => cause,
+            CreateBillingGroupError::InvalidRequest(ref cause) => cause,
+            CreateBillingGroupError::ResourceAlreadyExists(ref cause) => cause,
+            CreateBillingGroupError::Throttling(ref cause) => cause,
+            CreateBillingGroupError::Validation(ref cause) => cause,
+            CreateBillingGroupError::Credentials(ref err) => err.description(),
+            CreateBillingGroupError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateBillingGroupError::ParseError(ref cause) => cause,
+            CreateBillingGroupError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by CreateCertificateFromCsr
 #[derive(Debug, PartialEq)]
 pub enum CreateCertificateFromCsrError {
@@ -7578,6 +8616,144 @@ impl Error for CreateCertificateFromCsrError {
             }
             CreateCertificateFromCsrError::ParseError(ref cause) => cause,
             CreateCertificateFromCsrError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by CreateDynamicThingGroup
+#[derive(Debug, PartialEq)]
+pub enum CreateDynamicThingGroupError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The query is invalid.</p>
+    InvalidQuery(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>A limit has been exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl CreateDynamicThingGroupError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> CreateDynamicThingGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InternalFailureException" => {
+                    return CreateDynamicThingGroupError::InternalFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidQueryException" => {
+                    return CreateDynamicThingGroupError::InvalidQuery(String::from(error_message));
+                }
+                "InvalidRequestException" => {
+                    return CreateDynamicThingGroupError::InvalidRequest(String::from(error_message));
+                }
+                "LimitExceededException" => {
+                    return CreateDynamicThingGroupError::LimitExceeded(String::from(error_message));
+                }
+                "ResourceAlreadyExistsException" => {
+                    return CreateDynamicThingGroupError::ResourceAlreadyExists(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceNotFoundException" => {
+                    return CreateDynamicThingGroupError::ResourceNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "ThrottlingException" => {
+                    return CreateDynamicThingGroupError::Throttling(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return CreateDynamicThingGroupError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return CreateDynamicThingGroupError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for CreateDynamicThingGroupError {
+    fn from(err: serde_json::error::Error) -> CreateDynamicThingGroupError {
+        CreateDynamicThingGroupError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateDynamicThingGroupError {
+    fn from(err: CredentialsError) -> CreateDynamicThingGroupError {
+        CreateDynamicThingGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateDynamicThingGroupError {
+    fn from(err: HttpDispatchError) -> CreateDynamicThingGroupError {
+        CreateDynamicThingGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateDynamicThingGroupError {
+    fn from(err: io::Error) -> CreateDynamicThingGroupError {
+        CreateDynamicThingGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateDynamicThingGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateDynamicThingGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateDynamicThingGroupError::InternalFailure(ref cause) => cause,
+            CreateDynamicThingGroupError::InvalidQuery(ref cause) => cause,
+            CreateDynamicThingGroupError::InvalidRequest(ref cause) => cause,
+            CreateDynamicThingGroupError::LimitExceeded(ref cause) => cause,
+            CreateDynamicThingGroupError::ResourceAlreadyExists(ref cause) => cause,
+            CreateDynamicThingGroupError::ResourceNotFound(ref cause) => cause,
+            CreateDynamicThingGroupError::Throttling(ref cause) => cause,
+            CreateDynamicThingGroupError::Validation(ref cause) => cause,
+            CreateDynamicThingGroupError::Credentials(ref err) => err.description(),
+            CreateDynamicThingGroupError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateDynamicThingGroupError::ParseError(ref cause) => cause,
+            CreateDynamicThingGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7838,6 +9014,8 @@ pub enum CreateOTAUpdateError {
     InternalFailure(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
+    /// <p>A limit has been exceeded.</p>
+    LimitExceeded(String),
     /// <p>The resource already exists.</p>
     ResourceAlreadyExists(String),
     /// <p>The specified resource does not exist.</p>
@@ -7892,6 +9070,9 @@ impl CreateOTAUpdateError {
                 }
                 "InvalidRequestException" => {
                     return CreateOTAUpdateError::InvalidRequest(String::from(error_message));
+                }
+                "LimitExceededException" => {
+                    return CreateOTAUpdateError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceAlreadyExistsException" => {
                     return CreateOTAUpdateError::ResourceAlreadyExists(String::from(error_message));
@@ -7948,6 +9129,7 @@ impl Error for CreateOTAUpdateError {
         match *self {
             CreateOTAUpdateError::InternalFailure(ref cause) => cause,
             CreateOTAUpdateError::InvalidRequest(ref cause) => cause,
+            CreateOTAUpdateError::LimitExceeded(ref cause) => cause,
             CreateOTAUpdateError::ResourceAlreadyExists(ref cause) => cause,
             CreateOTAUpdateError::ResourceNotFound(ref cause) => cause,
             CreateOTAUpdateError::ServiceUnavailable(ref cause) => cause,
@@ -8598,6 +9780,8 @@ pub enum CreateStreamError {
     InternalFailure(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
+    /// <p>A limit has been exceeded.</p>
+    LimitExceeded(String),
     /// <p>The resource already exists.</p>
     ResourceAlreadyExists(String),
     /// <p>The specified resource does not exist.</p>
@@ -8652,6 +9836,9 @@ impl CreateStreamError {
                 }
                 "InvalidRequestException" => {
                     return CreateStreamError::InvalidRequest(String::from(error_message));
+                }
+                "LimitExceededException" => {
+                    return CreateStreamError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceAlreadyExistsException" => {
                     return CreateStreamError::ResourceAlreadyExists(String::from(error_message));
@@ -8708,6 +9895,7 @@ impl Error for CreateStreamError {
         match *self {
             CreateStreamError::InternalFailure(ref cause) => cause,
             CreateStreamError::InvalidRequest(ref cause) => cause,
+            CreateStreamError::LimitExceeded(ref cause) => cause,
             CreateStreamError::ResourceAlreadyExists(ref cause) => cause,
             CreateStreamError::ResourceNotFound(ref cause) => cause,
             CreateStreamError::ServiceUnavailable(ref cause) => cause,
@@ -9090,6 +10278,8 @@ impl Error for CreateThingTypeError {
 /// Errors returned by CreateTopicRule
 #[derive(Debug, PartialEq)]
 pub enum CreateTopicRuleError {
+    /// <p>A conflicting resource update exception. This exception is thrown when two pending updates cause a conflict.</p>
+    ConflictingResourceUpdate(String),
     /// <p>An unexpected error has occurred.</p>
     Internal(String),
     /// <p>The request is not valid.</p>
@@ -9139,6 +10329,11 @@ impl CreateTopicRuleError {
                 .unwrap_or("");
 
             match error_type {
+                "ConflictingResourceUpdateException" => {
+                    return CreateTopicRuleError::ConflictingResourceUpdate(String::from(
+                        error_message,
+                    ));
+                }
                 "InternalException" => {
                     return CreateTopicRuleError::Internal(String::from(error_message));
                 }
@@ -9192,6 +10387,7 @@ impl fmt::Display for CreateTopicRuleError {
 impl Error for CreateTopicRuleError {
     fn description(&self) -> &str {
         match *self {
+            CreateTopicRuleError::ConflictingResourceUpdate(ref cause) => cause,
             CreateTopicRuleError::Internal(ref cause) => cause,
             CreateTopicRuleError::InvalidRequest(ref cause) => cause,
             CreateTopicRuleError::ResourceAlreadyExists(ref cause) => cause,
@@ -9456,6 +10652,120 @@ impl Error for DeleteAuthorizerError {
             DeleteAuthorizerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             DeleteAuthorizerError::ParseError(ref cause) => cause,
             DeleteAuthorizerError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DeleteBillingGroup
+#[derive(Debug, PartialEq)]
+pub enum DeleteBillingGroupError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>An exception thrown when the version of an entity specified with the <code>expectedVersion</code> parameter does not match the latest version in the system.</p>
+    VersionConflict(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DeleteBillingGroupError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteBillingGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InternalFailureException" => {
+                    return DeleteBillingGroupError::InternalFailure(String::from(error_message));
+                }
+                "InvalidRequestException" => {
+                    return DeleteBillingGroupError::InvalidRequest(String::from(error_message));
+                }
+                "ThrottlingException" => {
+                    return DeleteBillingGroupError::Throttling(String::from(error_message));
+                }
+                "VersionConflictException" => {
+                    return DeleteBillingGroupError::VersionConflict(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return DeleteBillingGroupError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DeleteBillingGroupError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteBillingGroupError {
+    fn from(err: serde_json::error::Error) -> DeleteBillingGroupError {
+        DeleteBillingGroupError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteBillingGroupError {
+    fn from(err: CredentialsError) -> DeleteBillingGroupError {
+        DeleteBillingGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteBillingGroupError {
+    fn from(err: HttpDispatchError) -> DeleteBillingGroupError {
+        DeleteBillingGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteBillingGroupError {
+    fn from(err: io::Error) -> DeleteBillingGroupError {
+        DeleteBillingGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteBillingGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteBillingGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteBillingGroupError::InternalFailure(ref cause) => cause,
+            DeleteBillingGroupError::InvalidRequest(ref cause) => cause,
+            DeleteBillingGroupError::Throttling(ref cause) => cause,
+            DeleteBillingGroupError::VersionConflict(ref cause) => cause,
+            DeleteBillingGroupError::Validation(ref cause) => cause,
+            DeleteBillingGroupError::Credentials(ref err) => err.description(),
+            DeleteBillingGroupError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteBillingGroupError::ParseError(ref cause) => cause,
+            DeleteBillingGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9729,6 +11039,124 @@ impl Error for DeleteCertificateError {
         }
     }
 }
+/// Errors returned by DeleteDynamicThingGroup
+#[derive(Debug, PartialEq)]
+pub enum DeleteDynamicThingGroupError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>An exception thrown when the version of an entity specified with the <code>expectedVersion</code> parameter does not match the latest version in the system.</p>
+    VersionConflict(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DeleteDynamicThingGroupError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteDynamicThingGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InternalFailureException" => {
+                    return DeleteDynamicThingGroupError::InternalFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidRequestException" => {
+                    return DeleteDynamicThingGroupError::InvalidRequest(String::from(error_message));
+                }
+                "ThrottlingException" => {
+                    return DeleteDynamicThingGroupError::Throttling(String::from(error_message));
+                }
+                "VersionConflictException" => {
+                    return DeleteDynamicThingGroupError::VersionConflict(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return DeleteDynamicThingGroupError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DeleteDynamicThingGroupError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteDynamicThingGroupError {
+    fn from(err: serde_json::error::Error) -> DeleteDynamicThingGroupError {
+        DeleteDynamicThingGroupError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteDynamicThingGroupError {
+    fn from(err: CredentialsError) -> DeleteDynamicThingGroupError {
+        DeleteDynamicThingGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteDynamicThingGroupError {
+    fn from(err: HttpDispatchError) -> DeleteDynamicThingGroupError {
+        DeleteDynamicThingGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteDynamicThingGroupError {
+    fn from(err: io::Error) -> DeleteDynamicThingGroupError {
+        DeleteDynamicThingGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteDynamicThingGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteDynamicThingGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteDynamicThingGroupError::InternalFailure(ref cause) => cause,
+            DeleteDynamicThingGroupError::InvalidRequest(ref cause) => cause,
+            DeleteDynamicThingGroupError::Throttling(ref cause) => cause,
+            DeleteDynamicThingGroupError::VersionConflict(ref cause) => cause,
+            DeleteDynamicThingGroupError::Validation(ref cause) => cause,
+            DeleteDynamicThingGroupError::Credentials(ref err) => err.description(),
+            DeleteDynamicThingGroupError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteDynamicThingGroupError::ParseError(ref cause) => cause,
+            DeleteDynamicThingGroupError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by DeleteJob
 #[derive(Debug, PartialEq)]
 pub enum DeleteJobError {
@@ -9990,6 +11418,8 @@ pub enum DeleteOTAUpdateError {
     Throttling(String),
     /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
+    /// <p>An exception thrown when the version of an entity specified with the <code>expectedVersion</code> parameter does not match the latest version in the system.</p>
+    VersionConflict(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -10047,6 +11477,9 @@ impl DeleteOTAUpdateError {
                 "UnauthorizedException" => {
                     return DeleteOTAUpdateError::Unauthorized(String::from(error_message));
                 }
+                "VersionConflictException" => {
+                    return DeleteOTAUpdateError::VersionConflict(String::from(error_message));
+                }
                 "ValidationException" => {
                     return DeleteOTAUpdateError::Validation(error_message.to_string());
                 }
@@ -10091,6 +11524,7 @@ impl Error for DeleteOTAUpdateError {
             DeleteOTAUpdateError::ServiceUnavailable(ref cause) => cause,
             DeleteOTAUpdateError::Throttling(ref cause) => cause,
             DeleteOTAUpdateError::Unauthorized(ref cause) => cause,
+            DeleteOTAUpdateError::VersionConflict(ref cause) => cause,
             DeleteOTAUpdateError::Validation(ref cause) => cause,
             DeleteOTAUpdateError::Credentials(ref err) => err.description(),
             DeleteOTAUpdateError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -11342,6 +12776,8 @@ impl Error for DeleteThingTypeError {
 /// Errors returned by DeleteTopicRule
 #[derive(Debug, PartialEq)]
 pub enum DeleteTopicRuleError {
+    /// <p>A conflicting resource update exception. This exception is thrown when two pending updates cause a conflict.</p>
+    ConflictingResourceUpdate(String),
     /// <p>An unexpected error has occurred.</p>
     Internal(String),
     /// <p>The request is not valid.</p>
@@ -11389,6 +12825,11 @@ impl DeleteTopicRuleError {
                 .unwrap_or("");
 
             match error_type {
+                "ConflictingResourceUpdateException" => {
+                    return DeleteTopicRuleError::ConflictingResourceUpdate(String::from(
+                        error_message,
+                    ));
+                }
                 "InternalException" => {
                     return DeleteTopicRuleError::Internal(String::from(error_message));
                 }
@@ -11439,6 +12880,7 @@ impl fmt::Display for DeleteTopicRuleError {
 impl Error for DeleteTopicRuleError {
     fn description(&self) -> &str {
         match *self {
+            DeleteTopicRuleError::ConflictingResourceUpdate(ref cause) => cause,
             DeleteTopicRuleError::Internal(ref cause) => cause,
             DeleteTopicRuleError::InvalidRequest(ref cause) => cause,
             DeleteTopicRuleError::ServiceUnavailable(ref cause) => cause,
@@ -12032,6 +13474,120 @@ impl Error for DescribeAuthorizerError {
             }
             DescribeAuthorizerError::ParseError(ref cause) => cause,
             DescribeAuthorizerError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DescribeBillingGroup
+#[derive(Debug, PartialEq)]
+pub enum DescribeBillingGroupError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DescribeBillingGroupError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeBillingGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InternalFailureException" => {
+                    return DescribeBillingGroupError::InternalFailure(String::from(error_message));
+                }
+                "InvalidRequestException" => {
+                    return DescribeBillingGroupError::InvalidRequest(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return DescribeBillingGroupError::ResourceNotFound(String::from(error_message));
+                }
+                "ThrottlingException" => {
+                    return DescribeBillingGroupError::Throttling(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return DescribeBillingGroupError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DescribeBillingGroupError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeBillingGroupError {
+    fn from(err: serde_json::error::Error) -> DescribeBillingGroupError {
+        DescribeBillingGroupError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeBillingGroupError {
+    fn from(err: CredentialsError) -> DescribeBillingGroupError {
+        DescribeBillingGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeBillingGroupError {
+    fn from(err: HttpDispatchError) -> DescribeBillingGroupError {
+        DescribeBillingGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeBillingGroupError {
+    fn from(err: io::Error) -> DescribeBillingGroupError {
+        DescribeBillingGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeBillingGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeBillingGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeBillingGroupError::InternalFailure(ref cause) => cause,
+            DescribeBillingGroupError::InvalidRequest(ref cause) => cause,
+            DescribeBillingGroupError::ResourceNotFound(ref cause) => cause,
+            DescribeBillingGroupError::Throttling(ref cause) => cause,
+            DescribeBillingGroupError::Validation(ref cause) => cause,
+            DescribeBillingGroupError::Credentials(ref err) => err.description(),
+            DescribeBillingGroupError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeBillingGroupError::ParseError(ref cause) => cause,
+            DescribeBillingGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -14466,6 +16022,8 @@ impl Error for DetachThingPrincipalError {
 /// Errors returned by DisableTopicRule
 #[derive(Debug, PartialEq)]
 pub enum DisableTopicRuleError {
+    /// <p>A conflicting resource update exception. This exception is thrown when two pending updates cause a conflict.</p>
+    ConflictingResourceUpdate(String),
     /// <p>An unexpected error has occurred.</p>
     Internal(String),
     /// <p>The request is not valid.</p>
@@ -14513,6 +16071,11 @@ impl DisableTopicRuleError {
                 .unwrap_or("");
 
             match error_type {
+                "ConflictingResourceUpdateException" => {
+                    return DisableTopicRuleError::ConflictingResourceUpdate(String::from(
+                        error_message,
+                    ));
+                }
                 "InternalException" => {
                     return DisableTopicRuleError::Internal(String::from(error_message));
                 }
@@ -14563,6 +16126,7 @@ impl fmt::Display for DisableTopicRuleError {
 impl Error for DisableTopicRuleError {
     fn description(&self) -> &str {
         match *self {
+            DisableTopicRuleError::ConflictingResourceUpdate(ref cause) => cause,
             DisableTopicRuleError::Internal(ref cause) => cause,
             DisableTopicRuleError::InvalidRequest(ref cause) => cause,
             DisableTopicRuleError::ServiceUnavailable(ref cause) => cause,
@@ -14578,6 +16142,8 @@ impl Error for DisableTopicRuleError {
 /// Errors returned by EnableTopicRule
 #[derive(Debug, PartialEq)]
 pub enum EnableTopicRuleError {
+    /// <p>A conflicting resource update exception. This exception is thrown when two pending updates cause a conflict.</p>
+    ConflictingResourceUpdate(String),
     /// <p>An unexpected error has occurred.</p>
     Internal(String),
     /// <p>The request is not valid.</p>
@@ -14625,6 +16191,11 @@ impl EnableTopicRuleError {
                 .unwrap_or("");
 
             match error_type {
+                "ConflictingResourceUpdateException" => {
+                    return EnableTopicRuleError::ConflictingResourceUpdate(String::from(
+                        error_message,
+                    ));
+                }
                 "InternalException" => {
                     return EnableTopicRuleError::Internal(String::from(error_message));
                 }
@@ -14675,6 +16246,7 @@ impl fmt::Display for EnableTopicRuleError {
 impl Error for EnableTopicRuleError {
     fn description(&self) -> &str {
         match *self {
+            EnableTopicRuleError::ConflictingResourceUpdate(ref cause) => cause,
             EnableTopicRuleError::Internal(ref cause) => cause,
             EnableTopicRuleError::InvalidRequest(ref cause) => cause,
             EnableTopicRuleError::ServiceUnavailable(ref cause) => cause,
@@ -16456,6 +18028,120 @@ impl Error for ListAuthorizersError {
             ListAuthorizersError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             ListAuthorizersError::ParseError(ref cause) => cause,
             ListAuthorizersError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by ListBillingGroups
+#[derive(Debug, PartialEq)]
+pub enum ListBillingGroupsError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListBillingGroupsError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> ListBillingGroupsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InternalFailureException" => {
+                    return ListBillingGroupsError::InternalFailure(String::from(error_message));
+                }
+                "InvalidRequestException" => {
+                    return ListBillingGroupsError::InvalidRequest(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return ListBillingGroupsError::ResourceNotFound(String::from(error_message));
+                }
+                "ThrottlingException" => {
+                    return ListBillingGroupsError::Throttling(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return ListBillingGroupsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ListBillingGroupsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListBillingGroupsError {
+    fn from(err: serde_json::error::Error) -> ListBillingGroupsError {
+        ListBillingGroupsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListBillingGroupsError {
+    fn from(err: CredentialsError) -> ListBillingGroupsError {
+        ListBillingGroupsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListBillingGroupsError {
+    fn from(err: HttpDispatchError) -> ListBillingGroupsError {
+        ListBillingGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListBillingGroupsError {
+    fn from(err: io::Error) -> ListBillingGroupsError {
+        ListBillingGroupsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListBillingGroupsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListBillingGroupsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListBillingGroupsError::InternalFailure(ref cause) => cause,
+            ListBillingGroupsError::InvalidRequest(ref cause) => cause,
+            ListBillingGroupsError::ResourceNotFound(ref cause) => cause,
+            ListBillingGroupsError::Throttling(ref cause) => cause,
+            ListBillingGroupsError::Validation(ref cause) => cause,
+            ListBillingGroupsError::Credentials(ref err) => err.description(),
+            ListBillingGroupsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListBillingGroupsError::ParseError(ref cause) => cause,
+            ListBillingGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18731,6 +20417,120 @@ impl Error for ListStreamsError {
         }
     }
 }
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListTagsForResourceError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InternalFailureException" => {
+                    return ListTagsForResourceError::InternalFailure(String::from(error_message));
+                }
+                "InvalidRequestException" => {
+                    return ListTagsForResourceError::InvalidRequest(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return ListTagsForResourceError::ResourceNotFound(String::from(error_message));
+                }
+                "ThrottlingException" => {
+                    return ListTagsForResourceError::Throttling(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return ListTagsForResourceError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ListTagsForResourceError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListTagsForResourceError {
+    fn from(err: serde_json::error::Error) -> ListTagsForResourceError {
+        ListTagsForResourceError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListTagsForResourceError {
+    fn from(err: CredentialsError) -> ListTagsForResourceError {
+        ListTagsForResourceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListTagsForResourceError {
+    fn from(err: HttpDispatchError) -> ListTagsForResourceError {
+        ListTagsForResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTagsForResourceError {
+    fn from(err: io::Error) -> ListTagsForResourceError {
+        ListTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTagsForResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTagsForResourceError::InternalFailure(ref cause) => cause,
+            ListTagsForResourceError::InvalidRequest(ref cause) => cause,
+            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+            ListTagsForResourceError::Throttling(ref cause) => cause,
+            ListTagsForResourceError::Validation(ref cause) => cause,
+            ListTagsForResourceError::Credentials(ref err) => err.description(),
+            ListTagsForResourceError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListTagsForResourceError::ParseError(ref cause) => cause,
+            ListTagsForResourceError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by ListTargetsForPolicy
 #[derive(Debug, PartialEq)]
 pub enum ListTargetsForPolicyError {
@@ -19811,6 +21611,126 @@ impl Error for ListThingsError {
         }
     }
 }
+/// Errors returned by ListThingsInBillingGroup
+#[derive(Debug, PartialEq)]
+pub enum ListThingsInBillingGroupError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListThingsInBillingGroupError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> ListThingsInBillingGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InternalFailureException" => {
+                    return ListThingsInBillingGroupError::InternalFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidRequestException" => {
+                    return ListThingsInBillingGroupError::InvalidRequest(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceNotFoundException" => {
+                    return ListThingsInBillingGroupError::ResourceNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "ThrottlingException" => {
+                    return ListThingsInBillingGroupError::Throttling(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return ListThingsInBillingGroupError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ListThingsInBillingGroupError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListThingsInBillingGroupError {
+    fn from(err: serde_json::error::Error) -> ListThingsInBillingGroupError {
+        ListThingsInBillingGroupError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListThingsInBillingGroupError {
+    fn from(err: CredentialsError) -> ListThingsInBillingGroupError {
+        ListThingsInBillingGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListThingsInBillingGroupError {
+    fn from(err: HttpDispatchError) -> ListThingsInBillingGroupError {
+        ListThingsInBillingGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListThingsInBillingGroupError {
+    fn from(err: io::Error) -> ListThingsInBillingGroupError {
+        ListThingsInBillingGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListThingsInBillingGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListThingsInBillingGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            ListThingsInBillingGroupError::InternalFailure(ref cause) => cause,
+            ListThingsInBillingGroupError::InvalidRequest(ref cause) => cause,
+            ListThingsInBillingGroupError::ResourceNotFound(ref cause) => cause,
+            ListThingsInBillingGroupError::Throttling(ref cause) => cause,
+            ListThingsInBillingGroupError::Validation(ref cause) => cause,
+            ListThingsInBillingGroupError::Credentials(ref err) => err.description(),
+            ListThingsInBillingGroupError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListThingsInBillingGroupError::ParseError(ref cause) => cause,
+            ListThingsInBillingGroupError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by ListThingsInThingGroup
 #[derive(Debug, PartialEq)]
 pub enum ListThingsInThingGroupError {
@@ -20827,6 +22747,126 @@ impl Error for RejectCertificateTransferError {
         }
     }
 }
+/// Errors returned by RemoveThingFromBillingGroup
+#[derive(Debug, PartialEq)]
+pub enum RemoveThingFromBillingGroupError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl RemoveThingFromBillingGroupError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> RemoveThingFromBillingGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InternalFailureException" => {
+                    return RemoveThingFromBillingGroupError::InternalFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidRequestException" => {
+                    return RemoveThingFromBillingGroupError::InvalidRequest(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceNotFoundException" => {
+                    return RemoveThingFromBillingGroupError::ResourceNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "ThrottlingException" => {
+                    return RemoveThingFromBillingGroupError::Throttling(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return RemoveThingFromBillingGroupError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return RemoveThingFromBillingGroupError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for RemoveThingFromBillingGroupError {
+    fn from(err: serde_json::error::Error) -> RemoveThingFromBillingGroupError {
+        RemoveThingFromBillingGroupError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for RemoveThingFromBillingGroupError {
+    fn from(err: CredentialsError) -> RemoveThingFromBillingGroupError {
+        RemoveThingFromBillingGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for RemoveThingFromBillingGroupError {
+    fn from(err: HttpDispatchError) -> RemoveThingFromBillingGroupError {
+        RemoveThingFromBillingGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RemoveThingFromBillingGroupError {
+    fn from(err: io::Error) -> RemoveThingFromBillingGroupError {
+        RemoveThingFromBillingGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for RemoveThingFromBillingGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for RemoveThingFromBillingGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            RemoveThingFromBillingGroupError::InternalFailure(ref cause) => cause,
+            RemoveThingFromBillingGroupError::InvalidRequest(ref cause) => cause,
+            RemoveThingFromBillingGroupError::ResourceNotFound(ref cause) => cause,
+            RemoveThingFromBillingGroupError::Throttling(ref cause) => cause,
+            RemoveThingFromBillingGroupError::Validation(ref cause) => cause,
+            RemoveThingFromBillingGroupError::Credentials(ref err) => err.description(),
+            RemoveThingFromBillingGroupError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            RemoveThingFromBillingGroupError::ParseError(ref cause) => cause,
+            RemoveThingFromBillingGroupError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by RemoveThingFromThingGroup
 #[derive(Debug, PartialEq)]
 pub enum RemoveThingFromThingGroupError {
@@ -20950,6 +22990,8 @@ impl Error for RemoveThingFromThingGroupError {
 /// Errors returned by ReplaceTopicRule
 #[derive(Debug, PartialEq)]
 pub enum ReplaceTopicRuleError {
+    /// <p>A conflicting resource update exception. This exception is thrown when two pending updates cause a conflict.</p>
+    ConflictingResourceUpdate(String),
     /// <p>An unexpected error has occurred.</p>
     Internal(String),
     /// <p>The request is not valid.</p>
@@ -20999,6 +23041,11 @@ impl ReplaceTopicRuleError {
                 .unwrap_or("");
 
             match error_type {
+                "ConflictingResourceUpdateException" => {
+                    return ReplaceTopicRuleError::ConflictingResourceUpdate(String::from(
+                        error_message,
+                    ));
+                }
                 "InternalException" => {
                     return ReplaceTopicRuleError::Internal(String::from(error_message));
                 }
@@ -21052,6 +23099,7 @@ impl fmt::Display for ReplaceTopicRuleError {
 impl Error for ReplaceTopicRuleError {
     fn description(&self) -> &str {
         match *self {
+            ReplaceTopicRuleError::ConflictingResourceUpdate(ref cause) => cause,
             ReplaceTopicRuleError::Internal(ref cause) => cause,
             ReplaceTopicRuleError::InvalidRequest(ref cause) => cause,
             ReplaceTopicRuleError::ServiceUnavailable(ref cause) => cause,
@@ -22159,6 +24207,124 @@ impl Error for StopThingRegistrationTaskError {
         }
     }
 }
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>A limit has been exceeded.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl TagResourceError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> TagResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InternalFailureException" => {
+                    return TagResourceError::InternalFailure(String::from(error_message));
+                }
+                "InvalidRequestException" => {
+                    return TagResourceError::InvalidRequest(String::from(error_message));
+                }
+                "LimitExceededException" => {
+                    return TagResourceError::LimitExceeded(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return TagResourceError::ResourceNotFound(String::from(error_message));
+                }
+                "ThrottlingException" => {
+                    return TagResourceError::Throttling(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return TagResourceError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return TagResourceError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for TagResourceError {
+    fn from(err: serde_json::error::Error) -> TagResourceError {
+        TagResourceError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for TagResourceError {
+    fn from(err: CredentialsError) -> TagResourceError {
+        TagResourceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for TagResourceError {
+    fn from(err: HttpDispatchError) -> TagResourceError {
+        TagResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for TagResourceError {
+    fn from(err: io::Error) -> TagResourceError {
+        TagResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for TagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            TagResourceError::InternalFailure(ref cause) => cause,
+            TagResourceError::InvalidRequest(ref cause) => cause,
+            TagResourceError::LimitExceeded(ref cause) => cause,
+            TagResourceError::ResourceNotFound(ref cause) => cause,
+            TagResourceError::Throttling(ref cause) => cause,
+            TagResourceError::Validation(ref cause) => cause,
+            TagResourceError::Credentials(ref err) => err.description(),
+            TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            TagResourceError::ParseError(ref cause) => cause,
+            TagResourceError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by TestAuthorization
 #[derive(Debug, PartialEq)]
 pub enum TestAuthorizationError {
@@ -22563,6 +24729,118 @@ impl Error for TransferCertificateError {
         }
     }
 }
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl UntagResourceError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> UntagResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InternalFailureException" => {
+                    return UntagResourceError::InternalFailure(String::from(error_message));
+                }
+                "InvalidRequestException" => {
+                    return UntagResourceError::InvalidRequest(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return UntagResourceError::ResourceNotFound(String::from(error_message));
+                }
+                "ThrottlingException" => {
+                    return UntagResourceError::Throttling(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return UntagResourceError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return UntagResourceError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for UntagResourceError {
+    fn from(err: serde_json::error::Error) -> UntagResourceError {
+        UntagResourceError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UntagResourceError {
+    fn from(err: CredentialsError) -> UntagResourceError {
+        UntagResourceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UntagResourceError {
+    fn from(err: HttpDispatchError) -> UntagResourceError {
+        UntagResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UntagResourceError {
+    fn from(err: io::Error) -> UntagResourceError {
+        UntagResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UntagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UntagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            UntagResourceError::InternalFailure(ref cause) => cause,
+            UntagResourceError::InvalidRequest(ref cause) => cause,
+            UntagResourceError::ResourceNotFound(ref cause) => cause,
+            UntagResourceError::Throttling(ref cause) => cause,
+            UntagResourceError::Validation(ref cause) => cause,
+            UntagResourceError::Credentials(ref err) => err.description(),
+            UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UntagResourceError::ParseError(ref cause) => cause,
+            UntagResourceError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by UpdateAccountAuditConfiguration
 #[derive(Debug, PartialEq)]
 pub enum UpdateAccountAuditConfigurationError {
@@ -22806,6 +25084,126 @@ impl Error for UpdateAuthorizerError {
             UpdateAuthorizerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             UpdateAuthorizerError::ParseError(ref cause) => cause,
             UpdateAuthorizerError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by UpdateBillingGroup
+#[derive(Debug, PartialEq)]
+pub enum UpdateBillingGroupError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>An exception thrown when the version of an entity specified with the <code>expectedVersion</code> parameter does not match the latest version in the system.</p>
+    VersionConflict(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl UpdateBillingGroupError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateBillingGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InternalFailureException" => {
+                    return UpdateBillingGroupError::InternalFailure(String::from(error_message));
+                }
+                "InvalidRequestException" => {
+                    return UpdateBillingGroupError::InvalidRequest(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return UpdateBillingGroupError::ResourceNotFound(String::from(error_message));
+                }
+                "ThrottlingException" => {
+                    return UpdateBillingGroupError::Throttling(String::from(error_message));
+                }
+                "VersionConflictException" => {
+                    return UpdateBillingGroupError::VersionConflict(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return UpdateBillingGroupError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return UpdateBillingGroupError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateBillingGroupError {
+    fn from(err: serde_json::error::Error) -> UpdateBillingGroupError {
+        UpdateBillingGroupError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateBillingGroupError {
+    fn from(err: CredentialsError) -> UpdateBillingGroupError {
+        UpdateBillingGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateBillingGroupError {
+    fn from(err: HttpDispatchError) -> UpdateBillingGroupError {
+        UpdateBillingGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateBillingGroupError {
+    fn from(err: io::Error) -> UpdateBillingGroupError {
+        UpdateBillingGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateBillingGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateBillingGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateBillingGroupError::InternalFailure(ref cause) => cause,
+            UpdateBillingGroupError::InvalidRequest(ref cause) => cause,
+            UpdateBillingGroupError::ResourceNotFound(ref cause) => cause,
+            UpdateBillingGroupError::Throttling(ref cause) => cause,
+            UpdateBillingGroupError::VersionConflict(ref cause) => cause,
+            UpdateBillingGroupError::Validation(ref cause) => cause,
+            UpdateBillingGroupError::Credentials(ref err) => err.description(),
+            UpdateBillingGroupError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateBillingGroupError::ParseError(ref cause) => cause,
+            UpdateBillingGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -23067,6 +25465,138 @@ impl Error for UpdateCertificateError {
         }
     }
 }
+/// Errors returned by UpdateDynamicThingGroup
+#[derive(Debug, PartialEq)]
+pub enum UpdateDynamicThingGroupError {
+    /// <p>An unexpected error has occurred.</p>
+    InternalFailure(String),
+    /// <p>The query is invalid.</p>
+    InvalidQuery(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// <p>An exception thrown when the version of an entity specified with the <code>expectedVersion</code> parameter does not match the latest version in the system.</p>
+    VersionConflict(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl UpdateDynamicThingGroupError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateDynamicThingGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InternalFailureException" => {
+                    return UpdateDynamicThingGroupError::InternalFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidQueryException" => {
+                    return UpdateDynamicThingGroupError::InvalidQuery(String::from(error_message));
+                }
+                "InvalidRequestException" => {
+                    return UpdateDynamicThingGroupError::InvalidRequest(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return UpdateDynamicThingGroupError::ResourceNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "ThrottlingException" => {
+                    return UpdateDynamicThingGroupError::Throttling(String::from(error_message));
+                }
+                "VersionConflictException" => {
+                    return UpdateDynamicThingGroupError::VersionConflict(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return UpdateDynamicThingGroupError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return UpdateDynamicThingGroupError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateDynamicThingGroupError {
+    fn from(err: serde_json::error::Error) -> UpdateDynamicThingGroupError {
+        UpdateDynamicThingGroupError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateDynamicThingGroupError {
+    fn from(err: CredentialsError) -> UpdateDynamicThingGroupError {
+        UpdateDynamicThingGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateDynamicThingGroupError {
+    fn from(err: HttpDispatchError) -> UpdateDynamicThingGroupError {
+        UpdateDynamicThingGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateDynamicThingGroupError {
+    fn from(err: io::Error) -> UpdateDynamicThingGroupError {
+        UpdateDynamicThingGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateDynamicThingGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateDynamicThingGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateDynamicThingGroupError::InternalFailure(ref cause) => cause,
+            UpdateDynamicThingGroupError::InvalidQuery(ref cause) => cause,
+            UpdateDynamicThingGroupError::InvalidRequest(ref cause) => cause,
+            UpdateDynamicThingGroupError::ResourceNotFound(ref cause) => cause,
+            UpdateDynamicThingGroupError::Throttling(ref cause) => cause,
+            UpdateDynamicThingGroupError::VersionConflict(ref cause) => cause,
+            UpdateDynamicThingGroupError::Validation(ref cause) => cause,
+            UpdateDynamicThingGroupError::Credentials(ref err) => err.description(),
+            UpdateDynamicThingGroupError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateDynamicThingGroupError::ParseError(ref cause) => cause,
+            UpdateDynamicThingGroupError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by UpdateEventConfigurations
 #[derive(Debug, PartialEq)]
 pub enum UpdateEventConfigurationsError {
@@ -23304,6 +25834,118 @@ impl Error for UpdateIndexingConfigurationError {
             }
             UpdateIndexingConfigurationError::ParseError(ref cause) => cause,
             UpdateIndexingConfigurationError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by UpdateJob
+#[derive(Debug, PartialEq)]
+pub enum UpdateJobError {
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource does not exist.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The rate exceeds the limit.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl UpdateJobError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InvalidRequestException" => {
+                    return UpdateJobError::InvalidRequest(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return UpdateJobError::ResourceNotFound(String::from(error_message));
+                }
+                "ServiceUnavailableException" => {
+                    return UpdateJobError::ServiceUnavailable(String::from(error_message));
+                }
+                "ThrottlingException" => {
+                    return UpdateJobError::Throttling(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return UpdateJobError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return UpdateJobError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateJobError {
+    fn from(err: serde_json::error::Error) -> UpdateJobError {
+        UpdateJobError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateJobError {
+    fn from(err: CredentialsError) -> UpdateJobError {
+        UpdateJobError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateJobError {
+    fn from(err: HttpDispatchError) -> UpdateJobError {
+        UpdateJobError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateJobError {
+    fn from(err: io::Error) -> UpdateJobError {
+        UpdateJobError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateJobError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateJobError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateJobError::InvalidRequest(ref cause) => cause,
+            UpdateJobError::ResourceNotFound(ref cause) => cause,
+            UpdateJobError::ServiceUnavailable(ref cause) => cause,
+            UpdateJobError::Throttling(ref cause) => cause,
+            UpdateJobError::Validation(ref cause) => cause,
+            UpdateJobError::Credentials(ref err) => err.description(),
+            UpdateJobError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UpdateJobError::ParseError(ref cause) => cause,
+            UpdateJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -24281,6 +26923,12 @@ pub trait Iot {
         input: AcceptCertificateTransferRequest,
     ) -> RusotoFuture<(), AcceptCertificateTransferError>;
 
+    /// <p>Adds a thing to a billing group.</p>
+    fn add_thing_to_billing_group(
+        &self,
+        input: AddThingToBillingGroupRequest,
+    ) -> RusotoFuture<AddThingToBillingGroupResponse, AddThingToBillingGroupError>;
+
     /// <p>Adds a thing to a thing group.</p>
     fn add_thing_to_thing_group(
         &self,
@@ -24308,7 +26956,7 @@ pub trait Iot {
         input: AttachSecurityProfileRequest,
     ) -> RusotoFuture<AttachSecurityProfileResponse, AttachSecurityProfileError>;
 
-    /// <p>Attaches the specified principal to the specified thing.</p>
+    /// <p>Attaches the specified principal to the specified thing. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities.</p>
     fn attach_thing_principal(
         &self,
         input: AttachThingPrincipalRequest,
@@ -24349,11 +26997,23 @@ pub trait Iot {
         input: CreateAuthorizerRequest,
     ) -> RusotoFuture<CreateAuthorizerResponse, CreateAuthorizerError>;
 
+    /// <p>Creates a billing group.</p>
+    fn create_billing_group(
+        &self,
+        input: CreateBillingGroupRequest,
+    ) -> RusotoFuture<CreateBillingGroupResponse, CreateBillingGroupError>;
+
     /// <p>Creates an X.509 certificate using the specified certificate signing request.</p> <p> <b>Note:</b> The CSR must include a public key that is either an RSA key with a length of at least 2048 bits or an ECC key from NIST P-256 or NIST P-384 curves. </p> <p> <b>Note:</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs.</p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR.</p> <p>The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process:</p> <p>$ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_}</p> <p>On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; forfiles /p my-csr-directory /c "cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path"</p>
     fn create_certificate_from_csr(
         &self,
         input: CreateCertificateFromCsrRequest,
     ) -> RusotoFuture<CreateCertificateFromCsrResponse, CreateCertificateFromCsrError>;
+
+    /// <p>Creates a dynamic thing group.</p>
+    fn create_dynamic_thing_group(
+        &self,
+        input: CreateDynamicThingGroupRequest,
+    ) -> RusotoFuture<CreateDynamicThingGroupResponse, CreateDynamicThingGroupError>;
 
     /// <p>Creates a job.</p>
     fn create_job(
@@ -24409,13 +27069,13 @@ pub trait Iot {
         input: CreateStreamRequest,
     ) -> RusotoFuture<CreateStreamResponse, CreateStreamError>;
 
-    /// <p><p>Creates a thing record in the registry.</p> <note> <p>This is a control plane operation. See <a href="http://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
+    /// <p><p>Creates a thing record in the registry.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
     fn create_thing(
         &self,
         input: CreateThingRequest,
     ) -> RusotoFuture<CreateThingResponse, CreateThingError>;
 
-    /// <p><p>Create a thing group.</p> <note> <p>This is a control plane operation. See <a href="http://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
+    /// <p><p>Create a thing group.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
     fn create_thing_group(
         &self,
         input: CreateThingGroupRequest,
@@ -24445,6 +27105,12 @@ pub trait Iot {
         input: DeleteAuthorizerRequest,
     ) -> RusotoFuture<DeleteAuthorizerResponse, DeleteAuthorizerError>;
 
+    /// <p>Deletes the billing group.</p>
+    fn delete_billing_group(
+        &self,
+        input: DeleteBillingGroupRequest,
+    ) -> RusotoFuture<DeleteBillingGroupResponse, DeleteBillingGroupError>;
+
     /// <p>Deletes a registered CA certificate.</p>
     fn delete_ca_certificate(
         &self,
@@ -24456,6 +27122,12 @@ pub trait Iot {
         &self,
         input: DeleteCertificateRequest,
     ) -> RusotoFuture<(), DeleteCertificateError>;
+
+    /// <p>Deletes a dynamic thing group.</p>
+    fn delete_dynamic_thing_group(
+        &self,
+        input: DeleteDynamicThingGroupRequest,
+    ) -> RusotoFuture<DeleteDynamicThingGroupResponse, DeleteDynamicThingGroupError>;
 
     /// <p>Deletes a job and its related job executions.</p> <p>Deleting a job may take time, depending on the number of job executions created for the job and various other factors. While the job is being deleted, the status of the job will be shown as "DELETION_IN_PROGRESS". Attempting to delete or cancel a job whose status is already "DELETION_IN_PROGRESS" will result in an error.</p> <p>Only 10 jobs may have status "DELETION_IN_PROGRESS" at the same time, or a LimitExceededException will occur.</p>
     fn delete_job(&self, input: DeleteJobRequest) -> RusotoFuture<(), DeleteJobError>;
@@ -24510,7 +27182,7 @@ pub trait Iot {
         input: DeleteStreamRequest,
     ) -> RusotoFuture<DeleteStreamResponse, DeleteStreamError>;
 
-    /// <p>Deletes the specified thing.</p>
+    /// <p>Deletes the specified thing. Returns successfully with no error if the deletion is successful or you specify a thing that doesn't exist.</p>
     fn delete_thing(
         &self,
         input: DeleteThingRequest,
@@ -24522,7 +27194,7 @@ pub trait Iot {
         input: DeleteThingGroupRequest,
     ) -> RusotoFuture<DeleteThingGroupResponse, DeleteThingGroupError>;
 
-    /// <p>Deletes the specified thing type . You cannot delete a thing type if it has things associated with it. To delete a thing type, first mark it as deprecated by calling <a>DeprecateThingType</a>, then remove any associated things by calling <a>UpdateThing</a> to change the thing type on any associated thing, and finally use <a>DeleteThingType</a> to delete the thing type.</p>
+    /// <p>Deletes the specified thing type. You cannot delete a thing type if it has things associated with it. To delete a thing type, first mark it as deprecated by calling <a>DeprecateThingType</a>, then remove any associated things by calling <a>UpdateThing</a> to change the thing type on any associated thing, and finally use <a>DeleteThingType</a> to delete the thing type.</p>
     fn delete_thing_type(
         &self,
         input: DeleteThingTypeRequest,
@@ -24565,6 +27237,12 @@ pub trait Iot {
         &self,
         input: DescribeAuthorizerRequest,
     ) -> RusotoFuture<DescribeAuthorizerResponse, DescribeAuthorizerError>;
+
+    /// <p>Returns information about a billing group.</p>
+    fn describe_billing_group(
+        &self,
+        input: DescribeBillingGroupRequest,
+    ) -> RusotoFuture<DescribeBillingGroupResponse, DescribeBillingGroupError>;
 
     /// <p>Describes a registered CA certificate.</p>
     fn describe_ca_certificate(
@@ -24675,7 +27353,7 @@ pub trait Iot {
         input: DetachSecurityProfileRequest,
     ) -> RusotoFuture<DetachSecurityProfileResponse, DetachSecurityProfileError>;
 
-    /// <p>Detaches the specified principal from the specified thing.</p>
+    /// <p><p>Detaches the specified principal from the specified thing. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities.</p> <note> <p>This call is asynchronous. It might take several seconds for the detachment to propagate.</p> </note></p>
     fn detach_thing_principal(
         &self,
         input: DetachThingPrincipalRequest,
@@ -24779,6 +27457,12 @@ pub trait Iot {
         input: ListAuthorizersRequest,
     ) -> RusotoFuture<ListAuthorizersResponse, ListAuthorizersError>;
 
+    /// <p>Lists the billing groups you have created.</p>
+    fn list_billing_groups(
+        &self,
+        input: ListBillingGroupsRequest,
+    ) -> RusotoFuture<ListBillingGroupsResponse, ListBillingGroupsError>;
+
     /// <p>Lists the CA certificates registered for your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
     fn list_ca_certificates(
         &self,
@@ -24848,13 +27532,13 @@ pub trait Iot {
         input: ListPolicyVersionsRequest,
     ) -> RusotoFuture<ListPolicyVersionsResponse, ListPolicyVersionsError>;
 
-    /// <p>Lists the policies attached to the specified principal. If you use an Cognito identity, the ID must be in <a href="http://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetCredentialsForIdentity.html#API_GetCredentialsForIdentity_RequestSyntax">AmazonCognito Identity format</a>.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListAttachedPolicies</a> instead.</p>
+    /// <p>Lists the policies attached to the specified principal. If you use an Cognito identity, the ID must be in <a href="https://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetCredentialsForIdentity.html#API_GetCredentialsForIdentity_RequestSyntax">AmazonCognito Identity format</a>.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListAttachedPolicies</a> instead.</p>
     fn list_principal_policies(
         &self,
         input: ListPrincipalPoliciesRequest,
     ) -> RusotoFuture<ListPrincipalPoliciesResponse, ListPrincipalPoliciesError>;
 
-    /// <p>Lists the things associated with the specified principal.</p>
+    /// <p>Lists the things associated with the specified principal. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities. </p>
     fn list_principal_things(
         &self,
         input: ListPrincipalThingsRequest,
@@ -24890,6 +27574,12 @@ pub trait Iot {
         input: ListStreamsRequest,
     ) -> RusotoFuture<ListStreamsResponse, ListStreamsError>;
 
+    /// <p>Lists the tags (metadata) you have assigned to the resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+
     /// <p>List targets for the specified policy.</p>
     fn list_targets_for_policy(
         &self,
@@ -24914,7 +27604,7 @@ pub trait Iot {
         input: ListThingGroupsForThingRequest,
     ) -> RusotoFuture<ListThingGroupsForThingResponse, ListThingGroupsForThingError>;
 
-    /// <p>Lists the principals associated with the specified thing.</p>
+    /// <p>Lists the principals associated with the specified thing. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities.</p>
     fn list_thing_principals(
         &self,
         input: ListThingPrincipalsRequest,
@@ -24943,6 +27633,12 @@ pub trait Iot {
         &self,
         input: ListThingsRequest,
     ) -> RusotoFuture<ListThingsResponse, ListThingsError>;
+
+    /// <p>Lists the things you have added to the given billing group.</p>
+    fn list_things_in_billing_group(
+        &self,
+        input: ListThingsInBillingGroupRequest,
+    ) -> RusotoFuture<ListThingsInBillingGroupResponse, ListThingsInBillingGroupError>;
 
     /// <p>Lists the things in the specified group.</p>
     fn list_things_in_thing_group(
@@ -24991,6 +27687,12 @@ pub trait Iot {
         &self,
         input: RejectCertificateTransferRequest,
     ) -> RusotoFuture<(), RejectCertificateTransferError>;
+
+    /// <p>Removes the given thing from the billing group.</p>
+    fn remove_thing_from_billing_group(
+        &self,
+        input: RemoveThingFromBillingGroupRequest,
+    ) -> RusotoFuture<RemoveThingFromBillingGroupResponse, RemoveThingFromBillingGroupError>;
 
     /// <p>Remove the specified thing from the specified group.</p>
     fn remove_thing_from_thing_group(
@@ -25058,6 +27760,12 @@ pub trait Iot {
         input: StopThingRegistrationTaskRequest,
     ) -> RusotoFuture<StopThingRegistrationTaskResponse, StopThingRegistrationTaskError>;
 
+    /// <p>Adds to or modifies the tags of the given resource. Tags are metadata which can be used to manage a resource.</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+
     /// <p>Tests if a specified principal is authorized to perform an AWS IoT action on a specified resource. Use this to test and debug the authorization behavior of devices that connect to the AWS IoT device gateway.</p>
     fn test_authorization(
         &self,
@@ -25076,6 +27784,12 @@ pub trait Iot {
         input: TransferCertificateRequest,
     ) -> RusotoFuture<TransferCertificateResponse, TransferCertificateError>;
 
+    /// <p>Removes the given tags (metadata) from the resource.</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
+
     /// <p>Configures or reconfigures the Device Defender audit settings for this account. Settings include how audit notifications are sent and which audit checks are enabled or disabled.</p>
     fn update_account_audit_configuration(
         &self,
@@ -25087,6 +27801,12 @@ pub trait Iot {
         &self,
         input: UpdateAuthorizerRequest,
     ) -> RusotoFuture<UpdateAuthorizerResponse, UpdateAuthorizerError>;
+
+    /// <p>Updates information about the billing group.</p>
+    fn update_billing_group(
+        &self,
+        input: UpdateBillingGroupRequest,
+    ) -> RusotoFuture<UpdateBillingGroupResponse, UpdateBillingGroupError>;
 
     /// <p>Updates a registered CA certificate.</p>
     fn update_ca_certificate(
@@ -25100,6 +27820,12 @@ pub trait Iot {
         input: UpdateCertificateRequest,
     ) -> RusotoFuture<(), UpdateCertificateError>;
 
+    /// <p>Updates a dynamic thing group.</p>
+    fn update_dynamic_thing_group(
+        &self,
+        input: UpdateDynamicThingGroupRequest,
+    ) -> RusotoFuture<UpdateDynamicThingGroupResponse, UpdateDynamicThingGroupError>;
+
     /// <p>Updates the event configurations.</p>
     fn update_event_configurations(
         &self,
@@ -25111,6 +27837,9 @@ pub trait Iot {
         &self,
         input: UpdateIndexingConfigurationRequest,
     ) -> RusotoFuture<UpdateIndexingConfigurationResponse, UpdateIndexingConfigurationError>;
+
+    /// <p>Updates supported fields of the specified job.</p>
+    fn update_job(&self, input: UpdateJobRequest) -> RusotoFuture<(), UpdateJobError>;
 
     /// <p>Updates a role alias.</p>
     fn update_role_alias(
@@ -25229,6 +27958,46 @@ impl Iot for IotClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AcceptCertificateTransferError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p>Adds a thing to a billing group.</p>
+    fn add_thing_to_billing_group(
+        &self,
+        input: AddThingToBillingGroupRequest,
+    ) -> RusotoFuture<AddThingToBillingGroupResponse, AddThingToBillingGroupError> {
+        let request_uri = "/billing-groups/addThingToBillingGroup";
+
+        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<AddThingToBillingGroupResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(AddThingToBillingGroupError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -25425,7 +28194,7 @@ impl Iot for IotClient {
         })
     }
 
-    /// <p>Attaches the specified principal to the specified thing.</p>
+    /// <p>Attaches the specified principal to the specified thing. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities.</p>
     fn attach_thing_principal(
         &self,
         input: AttachThingPrincipalRequest,
@@ -25704,6 +28473,50 @@ impl Iot for IotClient {
         })
     }
 
+    /// <p>Creates a billing group.</p>
+    fn create_billing_group(
+        &self,
+        input: CreateBillingGroupRequest,
+    ) -> RusotoFuture<CreateBillingGroupResponse, CreateBillingGroupError> {
+        let request_uri = format!(
+            "/billing-groups/{billing_group_name}",
+            billing_group_name = input.billing_group_name
+        );
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<CreateBillingGroupResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateBillingGroupError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Creates an X.509 certificate using the specified certificate signing request.</p> <p> <b>Note:</b> The CSR must include a public key that is either an RSA key with a length of at least 2048 bits or an ECC key from NIST P-256 or NIST P-384 curves. </p> <p> <b>Note:</b> Reusing the same certificate signing request (CSR) results in a distinct certificate.</p> <p>You can create multiple certificates in a batch by creating a directory, copying multiple .csr files into that directory, and then specifying that directory on the command line. The following commands show how to create a batch of certificates given a batch of CSRs.</p> <p>Assuming a set of CSRs are located inside of the directory my-csr-directory:</p> <p>On Linux and OS X, the command is:</p> <p>$ ls my-csr-directory/ | xargs -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>This command lists all of the CSRs in my-csr-directory and pipes each CSR file name to the aws iot create-certificate-from-csr AWS CLI command to create a certificate for the corresponding CSR.</p> <p>The aws iot create-certificate-from-csr part of the command can also be run in parallel to speed up the certificate creation process:</p> <p>$ ls my-csr-directory/ | xargs -P 10 -I {} aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/{}</p> <p>On Windows PowerShell, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; ls -Name my-csr-directory | %{aws iot create-certificate-from-csr --certificate-signing-request file://my-csr-directory/$_}</p> <p>On a Windows command prompt, the command to create certificates for all CSRs in my-csr-directory is:</p> <p>&gt; forfiles /p my-csr-directory /c "cmd /c aws iot create-certificate-from-csr --certificate-signing-request file://@path"</p>
     fn create_certificate_from_csr(
         &self,
@@ -25743,6 +28556,47 @@ impl Iot for IotClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateCertificateFromCsrError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Creates a dynamic thing group.</p>
+    fn create_dynamic_thing_group(
+        &self,
+        input: CreateDynamicThingGroupRequest,
+    ) -> RusotoFuture<CreateDynamicThingGroupResponse, CreateDynamicThingGroupError> {
+        let request_uri = format!(
+            "/dynamic-thing-groups/{thing_group_name}",
+            thing_group_name = input.thing_group_name
+        );
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<CreateDynamicThingGroupResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateDynamicThingGroupError::from_response(response))
                 }))
             }
         })
@@ -26128,7 +28982,7 @@ impl Iot for IotClient {
         })
     }
 
-    /// <p><p>Creates a thing record in the registry.</p> <note> <p>This is a control plane operation. See <a href="http://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
+    /// <p><p>Creates a thing record in the registry.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
     fn create_thing(
         &self,
         input: CreateThingRequest,
@@ -26168,7 +29022,7 @@ impl Iot for IotClient {
         })
     }
 
-    /// <p><p>Create a thing group.</p> <note> <p>This is a control plane operation. See <a href="http://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
+    /// <p><p>Create a thing group.</p> <note> <p>This is a control plane operation. See <a href="https://docs.aws.amazon.com/iot/latest/developerguide/authorization.html">Authorization</a> for information about authorizing control plane actions.</p> </note></p>
     fn create_thing_group(
         &self,
         input: CreateThingGroupRequest,
@@ -26267,6 +29121,10 @@ impl Iot for IotClient {
         request.set_endpoint_prefix("iot".to_string());
         let encoded = Some(serde_json::to_vec(&input.topic_rule_payload).unwrap());
         request.set_payload(encoded);
+
+        if let Some(ref tags) = input.tags {
+            request.add_header("x-amz-tagging", &tags.to_string());
+        }
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
@@ -26373,6 +29231,54 @@ impl Iot for IotClient {
         })
     }
 
+    /// <p>Deletes the billing group.</p>
+    fn delete_billing_group(
+        &self,
+        input: DeleteBillingGroupRequest,
+    ) -> RusotoFuture<DeleteBillingGroupResponse, DeleteBillingGroupError> {
+        let request_uri = format!(
+            "/billing-groups/{billing_group_name}",
+            billing_group_name = input.billing_group_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.expected_version {
+            params.put("expectedVersion", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DeleteBillingGroupResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteBillingGroupError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Deletes a registered CA certificate.</p>
     fn delete_ca_certificate(
         &self,
@@ -26449,6 +29355,51 @@ impl Iot for IotClient {
                         .from_err()
                         .and_then(|response| Err(DeleteCertificateError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p>Deletes a dynamic thing group.</p>
+    fn delete_dynamic_thing_group(
+        &self,
+        input: DeleteDynamicThingGroupRequest,
+    ) -> RusotoFuture<DeleteDynamicThingGroupResponse, DeleteDynamicThingGroupError> {
+        let request_uri = format!(
+            "/dynamic-thing-groups/{thing_group_name}",
+            thing_group_name = input.thing_group_name
+        );
+
+        let mut request = SignedRequest::new("DELETE", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.expected_version {
+            params.put("expectedVersion", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DeleteDynamicThingGroupResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteDynamicThingGroupError::from_response(response))
+                }))
             }
         })
     }
@@ -26541,6 +29492,15 @@ impl Iot for IotClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.delete_stream {
+            params.put("deleteStream", x);
+        }
+        if let Some(ref x) = input.force_delete_aws_job {
+            params.put("forceDeleteAWSJob", x);
+        }
+        request.set_params(params);
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
@@ -26829,7 +29789,7 @@ impl Iot for IotClient {
         })
     }
 
-    /// <p>Deletes the specified thing.</p>
+    /// <p>Deletes the specified thing. Returns successfully with no error if the deletion is successful or you specify a thing that doesn't exist.</p>
     fn delete_thing(
         &self,
         input: DeleteThingRequest,
@@ -26920,7 +29880,7 @@ impl Iot for IotClient {
         })
     }
 
-    /// <p>Deletes the specified thing type . You cannot delete a thing type if it has things associated with it. To delete a thing type, first mark it as deprecated by calling <a>DeprecateThingType</a>, then remove any associated things by calling <a>UpdateThing</a> to change the thing type on any associated thing, and finally use <a>DeleteThingType</a> to delete the thing type.</p>
+    /// <p>Deletes the specified thing type. You cannot delete a thing type if it has things associated with it. To delete a thing type, first mark it as deprecated by calling <a>DeprecateThingType</a>, then remove any associated things by calling <a>UpdateThing</a> to change the thing type on any associated thing, and finally use <a>DeleteThingType</a> to delete the thing type.</p>
     fn delete_thing_type(
         &self,
         input: DeleteThingTypeRequest,
@@ -27186,6 +30146,47 @@ impl Iot for IotClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(DescribeAuthorizerError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Returns information about a billing group.</p>
+    fn describe_billing_group(
+        &self,
+        input: DescribeBillingGroupRequest,
+    ) -> RusotoFuture<DescribeBillingGroupResponse, DescribeBillingGroupError> {
+        let request_uri = format!(
+            "/billing-groups/{billing_group_name}",
+            billing_group_name = input.billing_group_name
+        );
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DescribeBillingGroupResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeBillingGroupError::from_response(response))
+                    }),
                 )
             }
         })
@@ -27946,7 +30947,7 @@ impl Iot for IotClient {
         })
     }
 
-    /// <p>Detaches the specified principal from the specified thing.</p>
+    /// <p><p>Detaches the specified principal from the specified thing. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities.</p> <note> <p>This call is asynchronous. It might take several seconds for the detachment to propagate.</p> </note></p>
     fn detach_thing_principal(
         &self,
         input: DetachThingPrincipalRequest,
@@ -28691,6 +31692,57 @@ impl Iot for IotClient {
         })
     }
 
+    /// <p>Lists the billing groups you have created.</p>
+    fn list_billing_groups(
+        &self,
+        input: ListBillingGroupsRequest,
+    ) -> RusotoFuture<ListBillingGroupsResponse, ListBillingGroupsError> {
+        let request_uri = "/billing-groups";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.name_prefix_filter {
+            params.put("namePrefixFilter", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListBillingGroupsResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListBillingGroupsError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Lists the CA certificates registered for your AWS account.</p> <p>The results are paginated with a default page size of 25. You can use the returned marker to retrieve additional results.</p>
     fn list_ca_certificates(
         &self,
@@ -29285,7 +32337,7 @@ impl Iot for IotClient {
         })
     }
 
-    /// <p>Lists the policies attached to the specified principal. If you use an Cognito identity, the ID must be in <a href="http://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetCredentialsForIdentity.html#API_GetCredentialsForIdentity_RequestSyntax">AmazonCognito Identity format</a>.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListAttachedPolicies</a> instead.</p>
+    /// <p>Lists the policies attached to the specified principal. If you use an Cognito identity, the ID must be in <a href="https://docs.aws.amazon.com/cognitoidentity/latest/APIReference/API_GetCredentialsForIdentity.html#API_GetCredentialsForIdentity_RequestSyntax">AmazonCognito Identity format</a>.</p> <p> <b>Note:</b> This API is deprecated. Please use <a>ListAttachedPolicies</a> instead.</p>
     fn list_principal_policies(
         &self,
         input: ListPrincipalPoliciesRequest,
@@ -29336,7 +32388,7 @@ impl Iot for IotClient {
         })
     }
 
-    /// <p>Lists the things associated with the specified principal.</p>
+    /// <p>Lists the things associated with the specified principal. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities. </p>
     fn list_principal_things(
         &self,
         input: ListPrincipalThingsRequest,
@@ -29632,6 +32684,51 @@ impl Iot for IotClient {
         })
     }
 
+    /// <p>Lists the tags (metadata) you have assigned to the resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+        let request_uri = "/tags";
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        params.put("resourceArn", &input.resource_arn);
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListTagsForResourceResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTagsForResourceError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>List targets for the specified policy.</p>
     fn list_targets_for_policy(
         &self,
@@ -29836,7 +32933,7 @@ impl Iot for IotClient {
         })
     }
 
-    /// <p>Lists the principals associated with the specified thing.</p>
+    /// <p>Lists the principals associated with the specified thing. A principal can be X.509 certificates, IAM users, groups, and roles, Amazon Cognito identities or federated identities.</p>
     fn list_thing_principals(
         &self,
         input: ListThingPrincipalsRequest,
@@ -30081,6 +33178,54 @@ impl Iot for IotClient {
                         .from_err()
                         .and_then(|response| Err(ListThingsError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p>Lists the things you have added to the given billing group.</p>
+    fn list_things_in_billing_group(
+        &self,
+        input: ListThingsInBillingGroupRequest,
+    ) -> RusotoFuture<ListThingsInBillingGroupResponse, ListThingsInBillingGroupError> {
+        let request_uri = format!(
+            "/billing-groups/{billing_group_name}/things",
+            billing_group_name = input.billing_group_name
+        );
+
+        let mut request = SignedRequest::new("GET", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListThingsInBillingGroupResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListThingsInBillingGroupError::from_response(response))
+                }))
             }
         })
     }
@@ -30452,6 +33597,45 @@ impl Iot for IotClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(RejectCertificateTransferError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Removes the given thing from the billing group.</p>
+    fn remove_thing_from_billing_group(
+        &self,
+        input: RemoveThingFromBillingGroupRequest,
+    ) -> RusotoFuture<RemoveThingFromBillingGroupResponse, RemoveThingFromBillingGroupError> {
+        let request_uri = "/billing-groups/removeThingFromBillingGroup";
+
+        let mut request = SignedRequest::new("PUT", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<RemoveThingFromBillingGroupResponse>(&body)
+                            .unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(RemoveThingFromBillingGroupError::from_response(response))
                 }))
             }
         })
@@ -30851,6 +34035,46 @@ impl Iot for IotClient {
         })
     }
 
+    /// <p>Adds to or modifies the tags of the given resource. Tags are metadata which can be used to manage a resource.</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
+        let request_uri = "/tags";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<TagResourceResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Tests if a specified principal is authorized to perform an AWS IoT action on a specified resource. Use this to test and debug the authorization behavior of devices that connect to the AWS IoT device gateway.</p>
     fn test_authorization(
         &self,
@@ -30988,6 +34212,46 @@ impl Iot for IotClient {
         })
     }
 
+    /// <p>Removes the given tags (metadata) from the resource.</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
+        let request_uri = "/untag";
+
+        let mut request = SignedRequest::new("POST", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<UntagResourceResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Configures or reconfigures the Device Defender audit settings for this account. Settings include how audit notifications are sent and which audit checks are enabled or disabled.</p>
     fn update_account_audit_configuration(
         &self,
@@ -31073,6 +34337,50 @@ impl Iot for IotClient {
         })
     }
 
+    /// <p>Updates information about the billing group.</p>
+    fn update_billing_group(
+        &self,
+        input: UpdateBillingGroupRequest,
+    ) -> RusotoFuture<UpdateBillingGroupResponse, UpdateBillingGroupError> {
+        let request_uri = format!(
+            "/billing-groups/{billing_group_name}",
+            billing_group_name = input.billing_group_name
+        );
+
+        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<UpdateBillingGroupResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateBillingGroupError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Updates a registered CA certificate.</p>
     fn update_ca_certificate(
         &self,
@@ -31153,6 +34461,47 @@ impl Iot for IotClient {
         })
     }
 
+    /// <p>Updates a dynamic thing group.</p>
+    fn update_dynamic_thing_group(
+        &self,
+        input: UpdateDynamicThingGroupRequest,
+    ) -> RusotoFuture<UpdateDynamicThingGroupResponse, UpdateDynamicThingGroupError> {
+        let request_uri = format!(
+            "/dynamic-thing-groups/{thing_group_name}",
+            thing_group_name = input.thing_group_name
+        );
+
+        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<UpdateDynamicThingGroupResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateDynamicThingGroupError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Updates the event configurations.</p>
     fn update_event_configurations(
         &self,
@@ -31226,6 +34575,35 @@ impl Iot for IotClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateIndexingConfigurationError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p>Updates supported fields of the specified job.</p>
+    fn update_job(&self, input: UpdateJobRequest) -> RusotoFuture<(), UpdateJobError> {
+        let request_uri = format!("/jobs/{job_id}", job_id = input.job_id);
+
+        let mut request = SignedRequest::new("PATCH", "execute-api", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        request.set_endpoint_prefix("iot".to_string());
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateJobError::from_response(response))),
+                )
             }
         })
     }

@@ -363,9 +363,17 @@ pub struct AssetAttributes {
     #[serde(rename = "ipv4Addresses")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ipv_4_addresses: Option<Vec<String>>,
+    /// <p>An array of the network interfaces interacting with the EC2 instance where the finding is generated.</p>
+    #[serde(rename = "networkInterfaces")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_interfaces: Option<Vec<NetworkInterface>>,
     /// <p>The schema version of this data type.</p>
     #[serde(rename = "schemaVersion")]
     pub schema_version: i64,
+    /// <p>The tags related to the EC2 instance where the finding is generated.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 /// <p>This data type is used as a request parameter in the <a>AddAttributesToFindings</a> and <a>CreateAssessmentTemplate</a> actions.</p>
@@ -1167,6 +1175,52 @@ pub struct ListTagsForResourceResponse {
     pub tags: Vec<Tag>,
 }
 
+/// <p>Contains information about the network interfaces interacting with an EC2 instance. This data type is used as one of the elements of the <a>AssetAttributes</a> data type.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct NetworkInterface {
+    /// <p>The IP addresses associated with the network interface.</p>
+    #[serde(rename = "ipv6Addresses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ipv_6_addresses: Option<Vec<String>>,
+    /// <p>The ID of the network interface.</p>
+    #[serde(rename = "networkInterfaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_interface_id: Option<String>,
+    /// <p>The name of a private DNS associated with the network interface.</p>
+    #[serde(rename = "privateDnsName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub private_dns_name: Option<String>,
+    /// <p>The private IP address associated with the network interface.</p>
+    #[serde(rename = "privateIpAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub private_ip_address: Option<String>,
+    /// <p>A list of the private IP addresses associated with the network interface. Includes the privateDnsName and privateIpAddress.</p>
+    #[serde(rename = "privateIpAddresses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub private_ip_addresses: Option<Vec<PrivateIp>>,
+    /// <p>The name of a public DNS associated with the network interface.</p>
+    #[serde(rename = "publicDnsName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub public_dns_name: Option<String>,
+    /// <p>The public IP address from which the network interface is reachable.</p>
+    #[serde(rename = "publicIp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub public_ip: Option<String>,
+    /// <p>A list of the security groups associated with the network interface. Includes the groupId and groupName.</p>
+    #[serde(rename = "securityGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_groups: Option<Vec<SecurityGroup>>,
+    /// <p>The ID of a subnet associated with the network interface.</p>
+    #[serde(rename = "subnetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subnet_id: Option<String>,
+    /// <p>The ID of a VPC associated with the network interface.</p>
+    #[serde(rename = "vpcId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_id: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PreviewAgentsRequest {
     /// <p>You can use this parameter to indicate the maximum number of items you want in the response. The default value is 10. The maximum value is 500.</p>
@@ -1192,6 +1246,20 @@ pub struct PreviewAgentsResponse {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+/// <p>Contains information about a private IP address associated with a network interface. This data type is used as a response element in the <a>DescribeFindings</a> action.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PrivateIp {
+    /// <p>The DNS name of the private IP address.</p>
+    #[serde(rename = "privateDnsName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub private_dns_name: Option<String>,
+    /// <p>The full IP address of the network inteface.</p>
+    #[serde(rename = "privateIpAddress")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub private_ip_address: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1280,6 +1348,20 @@ pub struct Scope {
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+/// <p>Contains information about a security group associated with a network interface. This data type is used as one of the elements of the <a>NetworkInterface</a> data type.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SecurityGroup {
+    /// <p>The ID of the security group.</p>
+    #[serde(rename = "groupId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_id: Option<String>,
+    /// <p>The name of the security group.</p>
+    #[serde(rename = "groupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]

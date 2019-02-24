@@ -64,6 +64,16 @@ pub struct AnnotationValue {
     pub string_value: Option<String>,
 }
 
+/// <p>A list of availability zones corresponding to the segments in a trace.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AvailabilityZoneDetail {
+    /// <p>The name of a corresponding availability zone.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BackendConnectionErrors {
@@ -119,6 +129,79 @@ pub struct BatchGetTracesResult {
     #[serde(rename = "UnprocessedTraceIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unprocessed_trace_ids: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateGroupRequest {
+    /// <p>The filter expression defining criteria by which to group traces.</p>
+    #[serde(rename = "FilterExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_expression: Option<String>,
+    /// <p>The case-sensitive name of the new group. Default is a reserved name and names must be unique.</p>
+    #[serde(rename = "GroupName")]
+    pub group_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateGroupResult {
+    /// <p>The group that was created. Contains the name of the group that was created, the ARN of the group that was generated based on the group name, and the filter expression that was assigned to the group.</p>
+    #[serde(rename = "Group")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group: Option<Group>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateSamplingRuleRequest {
+    /// <p>The rule definition.</p>
+    #[serde(rename = "SamplingRule")]
+    pub sampling_rule: SamplingRule,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateSamplingRuleResult {
+    /// <p>The saved rule definition and metadata.</p>
+    #[serde(rename = "SamplingRuleRecord")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sampling_rule_record: Option<SamplingRuleRecord>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteGroupRequest {
+    /// <p>The ARN of the group that was generated on creation.</p>
+    #[serde(rename = "GroupARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_arn: Option<String>,
+    /// <p>The case-sensitive name of the group.</p>
+    #[serde(rename = "GroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteGroupResult {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteSamplingRuleRequest {
+    /// <p>The ARN of the sampling rule. Specify a rule by either name or ARN, but not both.</p>
+    #[serde(rename = "RuleARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_arn: Option<String>,
+    /// <p>The name of the sampling rule. Specify a rule by either name or ARN, but not both.</p>
+    #[serde(rename = "RuleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteSamplingRuleResult {
+    /// <p>The deleted rule definition and metadata.</p>
+    #[serde(rename = "SamplingRuleRecord")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sampling_rule_record: Option<SamplingRuleRecord>,
 }
 
 /// <p>Information about a connection between two services.</p>
@@ -185,11 +268,69 @@ pub struct EncryptionConfig {
     #[serde(rename = "KeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_id: Option<String>,
-    /// <p>The encryption status. After modifying encryption configuration with <a>PutEncryptionConfig</a>, the status can be <code>UPDATING</code> for up to one hour before X-Ray starts encrypting data with the new key.</p>
+    /// <p>The encryption status. While the status is <code>UPDATING</code>, X-Ray may encrypt data with a combination of the new and old settings.</p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
     /// <p>The type of encryption. Set to <code>KMS</code> for encryption with CMKs. Set to <code>NONE</code> for default encryption.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>The root cause of a trace summary error.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ErrorRootCause {
+    /// <p>A list of services corresponding to an error. A service identifies a segment and it contains a name, account ID, type, and inferred flag.</p>
+    #[serde(rename = "Services")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub services: Option<Vec<ErrorRootCauseService>>,
+}
+
+/// <p>A collection of segments and corresponding subsegments associated to a trace summary error.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ErrorRootCauseEntity {
+    /// <p>The types and messages of the exceptions.</p>
+    #[serde(rename = "Exceptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exceptions: Option<Vec<RootCauseException>>,
+    /// <p>The name of the entity.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A flag that denotes a remote subsegment.</p>
+    #[serde(rename = "Remote")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub remote: Option<bool>,
+}
+
+/// <p>A collection of fields identifying the services in a trace summary error.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ErrorRootCauseService {
+    /// <p>The account ID associated to the service.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// <p>The path of root cause entities found on the service. </p>
+    #[serde(rename = "EntityPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entity_path: Option<Vec<ErrorRootCauseEntity>>,
+    /// <p>A Boolean value indicating if the service is inferred from the trace.</p>
+    #[serde(rename = "Inferred")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub inferred: Option<bool>,
+    /// <p>The service name.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A collection of associated service names.</p>
+    #[serde(rename = "Names")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub names: Option<Vec<String>>,
+    /// <p>The type associated to the service.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -211,6 +352,64 @@ pub struct ErrorStatistics {
     #[serde(rename = "TotalCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub total_count: Option<i64>,
+}
+
+/// <p>The root cause information for a trace summary fault.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct FaultRootCause {
+    /// <p>A list of corresponding services. A service identifies a segment and it contains a name, account ID, type, and inferred flag.</p>
+    #[serde(rename = "Services")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub services: Option<Vec<FaultRootCauseService>>,
+}
+
+/// <p>A collection of segments and corresponding subsegments associated to a trace summary fault error.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct FaultRootCauseEntity {
+    /// <p>The types and messages of the exceptions.</p>
+    #[serde(rename = "Exceptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exceptions: Option<Vec<RootCauseException>>,
+    /// <p>The name of the entity.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A flag that denotes a remote subsegment.</p>
+    #[serde(rename = "Remote")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub remote: Option<bool>,
+}
+
+/// <p>A collection of fields identifying the services in a trace summary fault.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct FaultRootCauseService {
+    /// <p>The account ID associated to the service.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// <p>The path of root cause entities found on the service. </p>
+    #[serde(rename = "EntityPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entity_path: Option<Vec<FaultRootCauseEntity>>,
+    /// <p>A Boolean value indicating if the service is inferred from the trace.</p>
+    #[serde(rename = "Inferred")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub inferred: Option<bool>,
+    /// <p>The service name.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A collection of associated service names.</p>
+    #[serde(rename = "Names")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub names: Option<Vec<String>>,
+    /// <p>The type associated to the service.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
 }
 
 /// <p>Information about requests that failed with a 5xx Server Error status code.</p>
@@ -240,10 +439,126 @@ pub struct GetEncryptionConfigResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetGroupRequest {
+    /// <p>The ARN of the group that was generated on creation.</p>
+    #[serde(rename = "GroupARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_arn: Option<String>,
+    /// <p>The case-sensitive name of the group.</p>
+    #[serde(rename = "GroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetGroupResult {
+    /// <p>The group that was requested. Contains the name of the group, the ARN of the group, and the filter expression that assigned to the group.</p>
+    #[serde(rename = "Group")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group: Option<Group>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetGroupsRequest {
+    /// <p>Pagination token. Not used.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetGroupsResult {
+    /// <p>The collection of all active groups.</p>
+    #[serde(rename = "Groups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub groups: Option<Vec<GroupSummary>>,
+    /// <p>Pagination token. Not used.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetSamplingRulesRequest {
+    /// <p>Pagination token. Not used.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetSamplingRulesResult {
+    /// <p>Pagination token. Not used.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Rule definitions and metadata.</p>
+    #[serde(rename = "SamplingRuleRecords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sampling_rule_records: Option<Vec<SamplingRuleRecord>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetSamplingStatisticSummariesRequest {
+    /// <p>Pagination token. Not used.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetSamplingStatisticSummariesResult {
+    /// <p>Pagination token. Not used.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Information about the number of requests instrumented for each sampling rule.</p>
+    #[serde(rename = "SamplingStatisticSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sampling_statistic_summaries: Option<Vec<SamplingStatisticSummary>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetSamplingTargetsRequest {
+    /// <p>Information about rules that the service is using to sample requests.</p>
+    #[serde(rename = "SamplingStatisticsDocuments")]
+    pub sampling_statistics_documents: Vec<SamplingStatisticsDocument>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetSamplingTargetsResult {
+    /// <p>The last time a user changed the sampling rule configuration. If the sampling rule configuration changed since the service last retrieved it, the service should call <a>GetSamplingRules</a> to get the latest version.</p>
+    #[serde(rename = "LastRuleModification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_rule_modification: Option<f64>,
+    /// <p>Updated rules that the service should use to sample requests.</p>
+    #[serde(rename = "SamplingTargetDocuments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sampling_target_documents: Option<Vec<SamplingTargetDocument>>,
+    /// <p>Information about <a>SamplingStatisticsDocument</a> that X-Ray could not process.</p>
+    #[serde(rename = "UnprocessedStatistics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unprocessed_statistics: Option<Vec<UnprocessedStatistics>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetServiceGraphRequest {
-    /// <p>The end of the time frame for which to generate a graph.</p>
+    /// <p>The end of the timeframe for which to generate a graph.</p>
     #[serde(rename = "EndTime")]
     pub end_time: f64,
+    /// <p>The ARN of a group to generate a graph based on.</p>
+    #[serde(rename = "GroupARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_arn: Option<String>,
+    /// <p>The name of a group to generate a graph based on.</p>
+    #[serde(rename = "GroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_name: Option<String>,
     /// <p>Pagination token. Not used.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -256,6 +571,10 @@ pub struct GetServiceGraphRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetServiceGraphResult {
+    /// <p>A flag indicating whether the group's filter expression has been consistent, or if the returned service graph may show traces from an older version of the group's filter expression.</p>
+    #[serde(rename = "ContainsOldGroupVersions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub contains_old_group_versions: Option<bool>,
     /// <p>The end of the time frame for which the graph was generated.</p>
     #[serde(rename = "EndTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -341,6 +660,42 @@ pub struct GetTraceSummariesResult {
     pub traces_processed_count: Option<i64>,
 }
 
+/// <p>Details and metadata for a group.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct Group {
+    /// <p>The filter expression defining the parameters to include traces.</p>
+    #[serde(rename = "FilterExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_expression: Option<String>,
+    /// <p>The ARN of the group generated based on the GroupName.</p>
+    #[serde(rename = "GroupARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_arn: Option<String>,
+    /// <p>The unique case-sensitive name of the group.</p>
+    #[serde(rename = "GroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_name: Option<String>,
+}
+
+/// <p>Details for a group without metadata.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GroupSummary {
+    /// <p>The filter expression defining the parameters to include traces.</p>
+    #[serde(rename = "FilterExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_expression: Option<String>,
+    /// <p>The ARN of the group generated based on the GroupName.</p>
+    #[serde(rename = "GroupARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_arn: Option<String>,
+    /// <p>The unique case-sensitive name of the group.</p>
+    #[serde(rename = "GroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_name: Option<String>,
+}
+
 /// <p>An entry in a histogram for a statistic. A histogram maps the range of observed values on the X axis, and the prevalence of each value on the Y axis.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -379,6 +734,16 @@ pub struct Http {
     #[serde(rename = "UserAgent")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_agent: Option<String>,
+}
+
+/// <p>A list of EC2 instance IDs corresponding to the segments in a trace. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct InstanceIdDetail {
+    /// <p>The ID of a corresponding EC2 instance.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -438,6 +803,282 @@ pub struct PutTraceSegmentsResult {
     #[serde(rename = "UnprocessedTraceSegments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unprocessed_trace_segments: Option<Vec<UnprocessedTraceSegment>>,
+}
+
+/// <p>A list of resources ARNs corresponding to the segments in a trace.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ResourceARNDetail {
+    /// <p>The ARN of a corresponding resource.</p>
+    #[serde(rename = "ARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+}
+
+/// <p>The root cause information for a response time warning.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ResponseTimeRootCause {
+    /// <p>A list of corresponding services. A service identifies a segment and contains a name, account ID, type, and inferred flag.</p>
+    #[serde(rename = "Services")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub services: Option<Vec<ResponseTimeRootCauseService>>,
+}
+
+/// <p>A collection of segments and corresponding subsegments associated to a response time warning.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ResponseTimeRootCauseEntity {
+    /// <p>The types and messages of the exceptions.</p>
+    #[serde(rename = "Coverage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub coverage: Option<f64>,
+    /// <p>The name of the entity.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A flag that denotes a remote subsegment.</p>
+    #[serde(rename = "Remote")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub remote: Option<bool>,
+}
+
+/// <p>A collection of fields identifying the service in a response time warning.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ResponseTimeRootCauseService {
+    /// <p>The account ID associated to the service.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// <p>The path of root cause entities found on the service. </p>
+    #[serde(rename = "EntityPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entity_path: Option<Vec<ResponseTimeRootCauseEntity>>,
+    /// <p>A Boolean value indicating if the service is inferred from the trace.</p>
+    #[serde(rename = "Inferred")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub inferred: Option<bool>,
+    /// <p>The service name.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>A collection of associated service names.</p>
+    #[serde(rename = "Names")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub names: Option<Vec<String>>,
+    /// <p>The type associated to the service.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>The exception associated with a root cause.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RootCauseException {
+    /// <p>The message of the exception.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p>The name of the exception.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+/// <p>A sampling rule that services use to decide whether to instrument a request. Rule fields can match properties of the service, or properties of a request. The service can ignore rules that don't match its properties.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SamplingRule {
+    /// <p>Matches attributes derived from the request.</p>
+    #[serde(rename = "Attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The percentage of matching requests to instrument, after the reservoir is exhausted.</p>
+    #[serde(rename = "FixedRate")]
+    pub fixed_rate: f64,
+    /// <p>Matches the HTTP method of a request.</p>
+    #[serde(rename = "HTTPMethod")]
+    pub http_method: String,
+    /// <p>Matches the hostname from a request URL.</p>
+    #[serde(rename = "Host")]
+    pub host: String,
+    /// <p>The priority of the sampling rule.</p>
+    #[serde(rename = "Priority")]
+    pub priority: i64,
+    /// <p>A fixed number of matching requests to instrument per second, prior to applying the fixed rate. The reservoir is not used directly by services, but applies to all services using the rule collectively.</p>
+    #[serde(rename = "ReservoirSize")]
+    pub reservoir_size: i64,
+    /// <p>Matches the ARN of the AWS resource on which the service runs.</p>
+    #[serde(rename = "ResourceARN")]
+    pub resource_arn: String,
+    /// <p>The ARN of the sampling rule. Specify a rule by either name or ARN, but not both.</p>
+    #[serde(rename = "RuleARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_arn: Option<String>,
+    /// <p>The name of the sampling rule. Specify a rule by either name or ARN, but not both.</p>
+    #[serde(rename = "RuleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_name: Option<String>,
+    /// <p>Matches the <code>name</code> that the service uses to identify itself in segments.</p>
+    #[serde(rename = "ServiceName")]
+    pub service_name: String,
+    /// <p>Matches the <code>origin</code> that the service uses to identify its type in segments.</p>
+    #[serde(rename = "ServiceType")]
+    pub service_type: String,
+    /// <p>Matches the path from a request URL.</p>
+    #[serde(rename = "URLPath")]
+    pub url_path: String,
+    /// <p>The version of the sampling rule format (<code>1</code>).</p>
+    #[serde(rename = "Version")]
+    pub version: i64,
+}
+
+/// <p>A <a>SamplingRule</a> and its metadata.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SamplingRuleRecord {
+    /// <p>When the rule was created.</p>
+    #[serde(rename = "CreatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>When the rule was last modified.</p>
+    #[serde(rename = "ModifiedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub modified_at: Option<f64>,
+    /// <p>The sampling rule.</p>
+    #[serde(rename = "SamplingRule")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sampling_rule: Option<SamplingRule>,
+}
+
+/// <p>A document specifying changes to a sampling rule's configuration.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct SamplingRuleUpdate {
+    /// <p>Matches attributes derived from the request.</p>
+    #[serde(rename = "Attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The percentage of matching requests to instrument, after the reservoir is exhausted.</p>
+    #[serde(rename = "FixedRate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fixed_rate: Option<f64>,
+    /// <p>Matches the HTTP method of a request.</p>
+    #[serde(rename = "HTTPMethod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub http_method: Option<String>,
+    /// <p>Matches the hostname from a request URL.</p>
+    #[serde(rename = "Host")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub host: Option<String>,
+    /// <p>The priority of the sampling rule.</p>
+    #[serde(rename = "Priority")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub priority: Option<i64>,
+    /// <p>A fixed number of matching requests to instrument per second, prior to applying the fixed rate. The reservoir is not used directly by services, but applies to all services using the rule collectively.</p>
+    #[serde(rename = "ReservoirSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reservoir_size: Option<i64>,
+    /// <p>Matches the ARN of the AWS resource on which the service runs.</p>
+    #[serde(rename = "ResourceARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_arn: Option<String>,
+    /// <p>The ARN of the sampling rule. Specify a rule by either name or ARN, but not both.</p>
+    #[serde(rename = "RuleARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_arn: Option<String>,
+    /// <p>The name of the sampling rule. Specify a rule by either name or ARN, but not both.</p>
+    #[serde(rename = "RuleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_name: Option<String>,
+    /// <p>Matches the <code>name</code> that the service uses to identify itself in segments.</p>
+    #[serde(rename = "ServiceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_name: Option<String>,
+    /// <p>Matches the <code>origin</code> that the service uses to identify its type in segments.</p>
+    #[serde(rename = "ServiceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_type: Option<String>,
+    /// <p>Matches the path from a request URL.</p>
+    #[serde(rename = "URLPath")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url_path: Option<String>,
+}
+
+/// <p>Aggregated request sampling data for a sampling rule across all services for a 10 second window.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SamplingStatisticSummary {
+    /// <p>The number of requests recorded with borrowed reservoir quota.</p>
+    #[serde(rename = "BorrowCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub borrow_count: Option<i64>,
+    /// <p>The number of requests that matched the rule.</p>
+    #[serde(rename = "RequestCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_count: Option<i64>,
+    /// <p>The name of the sampling rule.</p>
+    #[serde(rename = "RuleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_name: Option<String>,
+    /// <p>The number of requests recorded.</p>
+    #[serde(rename = "SampledCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sampled_count: Option<i64>,
+    /// <p>The start time of the reporting window.</p>
+    #[serde(rename = "Timestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timestamp: Option<f64>,
+}
+
+/// <p>Request sampling results for a single rule from a service. Results are for the last 10 seconds unless the service has been assigned a longer reporting interval after a previous call to <a>GetSamplingTargets</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct SamplingStatisticsDocument {
+    /// <p>The number of requests recorded with borrowed reservoir quota.</p>
+    #[serde(rename = "BorrowCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub borrow_count: Option<i64>,
+    /// <p>A unique identifier for the service in hexadecimal.</p>
+    #[serde(rename = "ClientID")]
+    pub client_id: String,
+    /// <p>The number of requests that matched the rule.</p>
+    #[serde(rename = "RequestCount")]
+    pub request_count: i64,
+    /// <p>The name of the sampling rule.</p>
+    #[serde(rename = "RuleName")]
+    pub rule_name: String,
+    /// <p>The number of requests recorded.</p>
+    #[serde(rename = "SampledCount")]
+    pub sampled_count: i64,
+    /// <p>The current time.</p>
+    #[serde(rename = "Timestamp")]
+    pub timestamp: f64,
+}
+
+/// <p>Temporary changes to a sampling rule configuration. To meet the global sampling target for a rule, X-Ray calculates a new reservoir for each service based on the recent sampling results of all services that called <a>GetSamplingTargets</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SamplingTargetDocument {
+    /// <p>The percentage of matching requests to instrument, after the reservoir is exhausted.</p>
+    #[serde(rename = "FixedRate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fixed_rate: Option<f64>,
+    /// <p>The number of seconds for the service to wait before getting sampling targets again.</p>
+    #[serde(rename = "Interval")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub interval: Option<i64>,
+    /// <p>The number of requests per second that X-Ray allocated this service.</p>
+    #[serde(rename = "ReservoirQuota")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reservoir_quota: Option<i64>,
+    /// <p>When the reservoir quota expires.</p>
+    #[serde(rename = "ReservoirQuotaTTL")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reservoir_quota_ttl: Option<f64>,
+    /// <p>The name of the sampling rule.</p>
+    #[serde(rename = "RuleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_name: Option<String>,
 }
 
 /// <p>A segment from a trace that has been ingested by the X-Ray service. The segment can be compiled from documents uploaded with <a>PutTraceSegments</a>, or an <code>inferred</code> segment for a downstream service, generated from a subsegment sent by the service that called it.</p> <p>For the full segment document schema, see <a href="https://docs.aws.amazon.com/xray/latest/devguide/xray-api-segmentdocuments.html">AWS X-Ray Segment Documents</a> in the <i>AWS X-Ray Developer Guide</i>.</p>
@@ -614,10 +1255,26 @@ pub struct TraceSummary {
     #[serde(rename = "Annotations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub annotations: Option<::std::collections::HashMap<String, Vec<ValueWithServiceIds>>>,
+    /// <p>A list of availability zones for any zone corresponding to the trace segments.</p>
+    #[serde(rename = "AvailabilityZones")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zones: Option<Vec<AvailabilityZoneDetail>>,
     /// <p>The length of time in seconds between the start time of the root segment and the end time of the last segment that completed.</p>
     #[serde(rename = "Duration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub duration: Option<f64>,
+    /// <p>The root of a trace.</p>
+    #[serde(rename = "EntryPoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entry_point: Option<ServiceId>,
+    /// <p>A collection of ErrorRootCause structures corresponding to the trace segments.</p>
+    #[serde(rename = "ErrorRootCauses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_root_causes: Option<Vec<ErrorRootCause>>,
+    /// <p>A collection of FaultRootCause structures corresponding to the the trace segments.</p>
+    #[serde(rename = "FaultRootCauses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fault_root_causes: Option<Vec<FaultRootCause>>,
     /// <p>One or more of the segment documents has a 400 series error.</p>
     #[serde(rename = "HasError")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -638,14 +1295,30 @@ pub struct TraceSummary {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// <p>A list of EC2 instance IDs for any instance corresponding to the trace segments.</p>
+    #[serde(rename = "InstanceIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_ids: Option<Vec<InstanceIdDetail>>,
     /// <p>One or more of the segment documents is in progress.</p>
     #[serde(rename = "IsPartial")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_partial: Option<bool>,
+    /// <p>A list of resource ARNs for any resource corresponding to the trace segments.</p>
+    #[serde(rename = "ResourceARNs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_ar_ns: Option<Vec<ResourceARNDetail>>,
     /// <p>The length of time in seconds between the start and end times of the root segment. If the service performs work asynchronously, the response time measures the time before the response is sent to the user, while the duration measures the amount of time before the last traced activity completes.</p>
     #[serde(rename = "ResponseTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub response_time: Option<f64>,
+    /// <p>A collection of ResponseTimeRootCause structures corresponding to the trace segments.</p>
+    #[serde(rename = "ResponseTimeRootCauses")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_time_root_causes: Option<Vec<ResponseTimeRootCause>>,
+    /// <p>The revision number of a trace.</p>
+    #[serde(rename = "Revision")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub revision: Option<i64>,
     /// <p>Service IDs from the trace's segment documents.</p>
     #[serde(rename = "ServiceIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -670,6 +1343,24 @@ pub struct TraceUser {
     pub user_name: Option<String>,
 }
 
+/// <p>Sampling statistics from a call to <a>GetSamplingTargets</a> that X-Ray could not process.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UnprocessedStatistics {
+    /// <p>The error code.</p>
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+    /// <p>The error message.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p>The name of the sampling rule.</p>
+    #[serde(rename = "RuleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rule_name: Option<String>,
+}
+
 /// <p>Information about a segment that failed processing.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -686,6 +1377,47 @@ pub struct UnprocessedTraceSegment {
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateGroupRequest {
+    /// <p>The updated filter expression defining criteria by which to group traces.</p>
+    #[serde(rename = "FilterExpression")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter_expression: Option<String>,
+    /// <p>The ARN that was generated upon creation.</p>
+    #[serde(rename = "GroupARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_arn: Option<String>,
+    /// <p>The case-sensitive name of the group.</p>
+    #[serde(rename = "GroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateGroupResult {
+    /// <p>The group that was updated. Contains the name of the group that was updated, the ARN of the group that was updated, and the updated filter expression assigned to the group.</p>
+    #[serde(rename = "Group")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group: Option<Group>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateSamplingRuleRequest {
+    /// <p>The rule and fields to change.</p>
+    #[serde(rename = "SamplingRuleUpdate")]
+    pub sampling_rule_update: SamplingRuleUpdate,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateSamplingRuleResult {
+    /// <p>The updated rule definition and metadata.</p>
+    #[serde(rename = "SamplingRuleRecord")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sampling_rule_record: Option<SamplingRuleRecord>,
 }
 
 /// <p>Information about a segment annotation.</p>
@@ -802,6 +1534,416 @@ impl Error for BatchGetTracesError {
         }
     }
 }
+/// Errors returned by CreateGroup
+#[derive(Debug, PartialEq)]
+pub enum CreateGroupError {
+    /// <p>The request is missing required parameters or has invalid parameters.</p>
+    InvalidRequest(String),
+    /// <p>The request exceeds the maximum number of requests per second.</p>
+    Throttled(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl CreateGroupError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> CreateGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InvalidRequestException" => {
+                    return CreateGroupError::InvalidRequest(String::from(error_message));
+                }
+                "ThrottledException" => {
+                    return CreateGroupError::Throttled(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return CreateGroupError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return CreateGroupError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for CreateGroupError {
+    fn from(err: serde_json::error::Error) -> CreateGroupError {
+        CreateGroupError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateGroupError {
+    fn from(err: CredentialsError) -> CreateGroupError {
+        CreateGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateGroupError {
+    fn from(err: HttpDispatchError) -> CreateGroupError {
+        CreateGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateGroupError {
+    fn from(err: io::Error) -> CreateGroupError {
+        CreateGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateGroupError::InvalidRequest(ref cause) => cause,
+            CreateGroupError::Throttled(ref cause) => cause,
+            CreateGroupError::Validation(ref cause) => cause,
+            CreateGroupError::Credentials(ref err) => err.description(),
+            CreateGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CreateGroupError::ParseError(ref cause) => cause,
+            CreateGroupError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by CreateSamplingRule
+#[derive(Debug, PartialEq)]
+pub enum CreateSamplingRuleError {
+    /// <p>The request is missing required parameters or has invalid parameters.</p>
+    InvalidRequest(String),
+    /// <p>You have reached the maximum number of sampling rules.</p>
+    RuleLimitExceeded(String),
+    /// <p>The request exceeds the maximum number of requests per second.</p>
+    Throttled(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl CreateSamplingRuleError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> CreateSamplingRuleError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InvalidRequestException" => {
+                    return CreateSamplingRuleError::InvalidRequest(String::from(error_message));
+                }
+                "RuleLimitExceededException" => {
+                    return CreateSamplingRuleError::RuleLimitExceeded(String::from(error_message));
+                }
+                "ThrottledException" => {
+                    return CreateSamplingRuleError::Throttled(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return CreateSamplingRuleError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return CreateSamplingRuleError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for CreateSamplingRuleError {
+    fn from(err: serde_json::error::Error) -> CreateSamplingRuleError {
+        CreateSamplingRuleError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateSamplingRuleError {
+    fn from(err: CredentialsError) -> CreateSamplingRuleError {
+        CreateSamplingRuleError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateSamplingRuleError {
+    fn from(err: HttpDispatchError) -> CreateSamplingRuleError {
+        CreateSamplingRuleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateSamplingRuleError {
+    fn from(err: io::Error) -> CreateSamplingRuleError {
+        CreateSamplingRuleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateSamplingRuleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateSamplingRuleError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateSamplingRuleError::InvalidRequest(ref cause) => cause,
+            CreateSamplingRuleError::RuleLimitExceeded(ref cause) => cause,
+            CreateSamplingRuleError::Throttled(ref cause) => cause,
+            CreateSamplingRuleError::Validation(ref cause) => cause,
+            CreateSamplingRuleError::Credentials(ref err) => err.description(),
+            CreateSamplingRuleError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateSamplingRuleError::ParseError(ref cause) => cause,
+            CreateSamplingRuleError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DeleteGroup
+#[derive(Debug, PartialEq)]
+pub enum DeleteGroupError {
+    /// <p>The request is missing required parameters or has invalid parameters.</p>
+    InvalidRequest(String),
+    /// <p>The request exceeds the maximum number of requests per second.</p>
+    Throttled(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DeleteGroupError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InvalidRequestException" => {
+                    return DeleteGroupError::InvalidRequest(String::from(error_message));
+                }
+                "ThrottledException" => {
+                    return DeleteGroupError::Throttled(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return DeleteGroupError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DeleteGroupError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteGroupError {
+    fn from(err: serde_json::error::Error) -> DeleteGroupError {
+        DeleteGroupError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteGroupError {
+    fn from(err: CredentialsError) -> DeleteGroupError {
+        DeleteGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteGroupError {
+    fn from(err: HttpDispatchError) -> DeleteGroupError {
+        DeleteGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteGroupError {
+    fn from(err: io::Error) -> DeleteGroupError {
+        DeleteGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteGroupError::InvalidRequest(ref cause) => cause,
+            DeleteGroupError::Throttled(ref cause) => cause,
+            DeleteGroupError::Validation(ref cause) => cause,
+            DeleteGroupError::Credentials(ref err) => err.description(),
+            DeleteGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteGroupError::ParseError(ref cause) => cause,
+            DeleteGroupError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DeleteSamplingRule
+#[derive(Debug, PartialEq)]
+pub enum DeleteSamplingRuleError {
+    /// <p>The request is missing required parameters or has invalid parameters.</p>
+    InvalidRequest(String),
+    /// <p>The request exceeds the maximum number of requests per second.</p>
+    Throttled(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DeleteSamplingRuleError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteSamplingRuleError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InvalidRequestException" => {
+                    return DeleteSamplingRuleError::InvalidRequest(String::from(error_message));
+                }
+                "ThrottledException" => {
+                    return DeleteSamplingRuleError::Throttled(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return DeleteSamplingRuleError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DeleteSamplingRuleError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteSamplingRuleError {
+    fn from(err: serde_json::error::Error) -> DeleteSamplingRuleError {
+        DeleteSamplingRuleError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteSamplingRuleError {
+    fn from(err: CredentialsError) -> DeleteSamplingRuleError {
+        DeleteSamplingRuleError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteSamplingRuleError {
+    fn from(err: HttpDispatchError) -> DeleteSamplingRuleError {
+        DeleteSamplingRuleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteSamplingRuleError {
+    fn from(err: io::Error) -> DeleteSamplingRuleError {
+        DeleteSamplingRuleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteSamplingRuleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteSamplingRuleError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteSamplingRuleError::InvalidRequest(ref cause) => cause,
+            DeleteSamplingRuleError::Throttled(ref cause) => cause,
+            DeleteSamplingRuleError::Validation(ref cause) => cause,
+            DeleteSamplingRuleError::Credentials(ref err) => err.description(),
+            DeleteSamplingRuleError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteSamplingRuleError::ParseError(ref cause) => cause,
+            DeleteSamplingRuleError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by GetEncryptionConfig
 #[derive(Debug, PartialEq)]
 pub enum GetEncryptionConfigError {
@@ -901,6 +2043,514 @@ impl Error for GetEncryptionConfigError {
             }
             GetEncryptionConfigError::ParseError(ref cause) => cause,
             GetEncryptionConfigError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetGroup
+#[derive(Debug, PartialEq)]
+pub enum GetGroupError {
+    /// <p>The request is missing required parameters or has invalid parameters.</p>
+    InvalidRequest(String),
+    /// <p>The request exceeds the maximum number of requests per second.</p>
+    Throttled(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetGroupError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> GetGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InvalidRequestException" => {
+                    return GetGroupError::InvalidRequest(String::from(error_message));
+                }
+                "ThrottledException" => {
+                    return GetGroupError::Throttled(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return GetGroupError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetGroupError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetGroupError {
+    fn from(err: serde_json::error::Error) -> GetGroupError {
+        GetGroupError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetGroupError {
+    fn from(err: CredentialsError) -> GetGroupError {
+        GetGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetGroupError {
+    fn from(err: HttpDispatchError) -> GetGroupError {
+        GetGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetGroupError {
+    fn from(err: io::Error) -> GetGroupError {
+        GetGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            GetGroupError::InvalidRequest(ref cause) => cause,
+            GetGroupError::Throttled(ref cause) => cause,
+            GetGroupError::Validation(ref cause) => cause,
+            GetGroupError::Credentials(ref err) => err.description(),
+            GetGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetGroupError::ParseError(ref cause) => cause,
+            GetGroupError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetGroups
+#[derive(Debug, PartialEq)]
+pub enum GetGroupsError {
+    /// <p>The request is missing required parameters or has invalid parameters.</p>
+    InvalidRequest(String),
+    /// <p>The request exceeds the maximum number of requests per second.</p>
+    Throttled(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetGroupsError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> GetGroupsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InvalidRequestException" => {
+                    return GetGroupsError::InvalidRequest(String::from(error_message));
+                }
+                "ThrottledException" => {
+                    return GetGroupsError::Throttled(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return GetGroupsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetGroupsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetGroupsError {
+    fn from(err: serde_json::error::Error) -> GetGroupsError {
+        GetGroupsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetGroupsError {
+    fn from(err: CredentialsError) -> GetGroupsError {
+        GetGroupsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetGroupsError {
+    fn from(err: HttpDispatchError) -> GetGroupsError {
+        GetGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetGroupsError {
+    fn from(err: io::Error) -> GetGroupsError {
+        GetGroupsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetGroupsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetGroupsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetGroupsError::InvalidRequest(ref cause) => cause,
+            GetGroupsError::Throttled(ref cause) => cause,
+            GetGroupsError::Validation(ref cause) => cause,
+            GetGroupsError::Credentials(ref err) => err.description(),
+            GetGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetGroupsError::ParseError(ref cause) => cause,
+            GetGroupsError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetSamplingRules
+#[derive(Debug, PartialEq)]
+pub enum GetSamplingRulesError {
+    /// <p>The request is missing required parameters or has invalid parameters.</p>
+    InvalidRequest(String),
+    /// <p>The request exceeds the maximum number of requests per second.</p>
+    Throttled(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetSamplingRulesError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> GetSamplingRulesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InvalidRequestException" => {
+                    return GetSamplingRulesError::InvalidRequest(String::from(error_message));
+                }
+                "ThrottledException" => {
+                    return GetSamplingRulesError::Throttled(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return GetSamplingRulesError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetSamplingRulesError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetSamplingRulesError {
+    fn from(err: serde_json::error::Error) -> GetSamplingRulesError {
+        GetSamplingRulesError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetSamplingRulesError {
+    fn from(err: CredentialsError) -> GetSamplingRulesError {
+        GetSamplingRulesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetSamplingRulesError {
+    fn from(err: HttpDispatchError) -> GetSamplingRulesError {
+        GetSamplingRulesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetSamplingRulesError {
+    fn from(err: io::Error) -> GetSamplingRulesError {
+        GetSamplingRulesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetSamplingRulesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetSamplingRulesError {
+    fn description(&self) -> &str {
+        match *self {
+            GetSamplingRulesError::InvalidRequest(ref cause) => cause,
+            GetSamplingRulesError::Throttled(ref cause) => cause,
+            GetSamplingRulesError::Validation(ref cause) => cause,
+            GetSamplingRulesError::Credentials(ref err) => err.description(),
+            GetSamplingRulesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetSamplingRulesError::ParseError(ref cause) => cause,
+            GetSamplingRulesError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetSamplingStatisticSummaries
+#[derive(Debug, PartialEq)]
+pub enum GetSamplingStatisticSummariesError {
+    /// <p>The request is missing required parameters or has invalid parameters.</p>
+    InvalidRequest(String),
+    /// <p>The request exceeds the maximum number of requests per second.</p>
+    Throttled(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetSamplingStatisticSummariesError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> GetSamplingStatisticSummariesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InvalidRequestException" => {
+                    return GetSamplingStatisticSummariesError::InvalidRequest(String::from(
+                        error_message,
+                    ));
+                }
+                "ThrottledException" => {
+                    return GetSamplingStatisticSummariesError::Throttled(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return GetSamplingStatisticSummariesError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetSamplingStatisticSummariesError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetSamplingStatisticSummariesError {
+    fn from(err: serde_json::error::Error) -> GetSamplingStatisticSummariesError {
+        GetSamplingStatisticSummariesError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetSamplingStatisticSummariesError {
+    fn from(err: CredentialsError) -> GetSamplingStatisticSummariesError {
+        GetSamplingStatisticSummariesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetSamplingStatisticSummariesError {
+    fn from(err: HttpDispatchError) -> GetSamplingStatisticSummariesError {
+        GetSamplingStatisticSummariesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetSamplingStatisticSummariesError {
+    fn from(err: io::Error) -> GetSamplingStatisticSummariesError {
+        GetSamplingStatisticSummariesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetSamplingStatisticSummariesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetSamplingStatisticSummariesError {
+    fn description(&self) -> &str {
+        match *self {
+            GetSamplingStatisticSummariesError::InvalidRequest(ref cause) => cause,
+            GetSamplingStatisticSummariesError::Throttled(ref cause) => cause,
+            GetSamplingStatisticSummariesError::Validation(ref cause) => cause,
+            GetSamplingStatisticSummariesError::Credentials(ref err) => err.description(),
+            GetSamplingStatisticSummariesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetSamplingStatisticSummariesError::ParseError(ref cause) => cause,
+            GetSamplingStatisticSummariesError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetSamplingTargets
+#[derive(Debug, PartialEq)]
+pub enum GetSamplingTargetsError {
+    /// <p>The request is missing required parameters or has invalid parameters.</p>
+    InvalidRequest(String),
+    /// <p>The request exceeds the maximum number of requests per second.</p>
+    Throttled(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetSamplingTargetsError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> GetSamplingTargetsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InvalidRequestException" => {
+                    return GetSamplingTargetsError::InvalidRequest(String::from(error_message));
+                }
+                "ThrottledException" => {
+                    return GetSamplingTargetsError::Throttled(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return GetSamplingTargetsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetSamplingTargetsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetSamplingTargetsError {
+    fn from(err: serde_json::error::Error) -> GetSamplingTargetsError {
+        GetSamplingTargetsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetSamplingTargetsError {
+    fn from(err: CredentialsError) -> GetSamplingTargetsError {
+        GetSamplingTargetsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetSamplingTargetsError {
+    fn from(err: HttpDispatchError) -> GetSamplingTargetsError {
+        GetSamplingTargetsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetSamplingTargetsError {
+    fn from(err: io::Error) -> GetSamplingTargetsError {
+        GetSamplingTargetsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetSamplingTargetsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetSamplingTargetsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetSamplingTargetsError::InvalidRequest(ref cause) => cause,
+            GetSamplingTargetsError::Throttled(ref cause) => cause,
+            GetSamplingTargetsError::Validation(ref cause) => cause,
+            GetSamplingTargetsError::Credentials(ref err) => err.description(),
+            GetSamplingTargetsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetSamplingTargetsError::ParseError(ref cause) => cause,
+            GetSamplingTargetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1510,6 +3160,208 @@ impl Error for PutTraceSegmentsError {
         }
     }
 }
+/// Errors returned by UpdateGroup
+#[derive(Debug, PartialEq)]
+pub enum UpdateGroupError {
+    /// <p>The request is missing required parameters or has invalid parameters.</p>
+    InvalidRequest(String),
+    /// <p>The request exceeds the maximum number of requests per second.</p>
+    Throttled(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl UpdateGroupError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InvalidRequestException" => {
+                    return UpdateGroupError::InvalidRequest(String::from(error_message));
+                }
+                "ThrottledException" => {
+                    return UpdateGroupError::Throttled(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return UpdateGroupError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return UpdateGroupError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateGroupError {
+    fn from(err: serde_json::error::Error) -> UpdateGroupError {
+        UpdateGroupError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateGroupError {
+    fn from(err: CredentialsError) -> UpdateGroupError {
+        UpdateGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateGroupError {
+    fn from(err: HttpDispatchError) -> UpdateGroupError {
+        UpdateGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateGroupError {
+    fn from(err: io::Error) -> UpdateGroupError {
+        UpdateGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateGroupError::InvalidRequest(ref cause) => cause,
+            UpdateGroupError::Throttled(ref cause) => cause,
+            UpdateGroupError::Validation(ref cause) => cause,
+            UpdateGroupError::Credentials(ref err) => err.description(),
+            UpdateGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UpdateGroupError::ParseError(ref cause) => cause,
+            UpdateGroupError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by UpdateSamplingRule
+#[derive(Debug, PartialEq)]
+pub enum UpdateSamplingRuleError {
+    /// <p>The request is missing required parameters or has invalid parameters.</p>
+    InvalidRequest(String),
+    /// <p>The request exceeds the maximum number of requests per second.</p>
+    Throttled(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl UpdateSamplingRuleError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateSamplingRuleError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InvalidRequestException" => {
+                    return UpdateSamplingRuleError::InvalidRequest(String::from(error_message));
+                }
+                "ThrottledException" => {
+                    return UpdateSamplingRuleError::Throttled(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return UpdateSamplingRuleError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return UpdateSamplingRuleError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateSamplingRuleError {
+    fn from(err: serde_json::error::Error) -> UpdateSamplingRuleError {
+        UpdateSamplingRuleError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateSamplingRuleError {
+    fn from(err: CredentialsError) -> UpdateSamplingRuleError {
+        UpdateSamplingRuleError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateSamplingRuleError {
+    fn from(err: HttpDispatchError) -> UpdateSamplingRuleError {
+        UpdateSamplingRuleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateSamplingRuleError {
+    fn from(err: io::Error) -> UpdateSamplingRuleError {
+        UpdateSamplingRuleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateSamplingRuleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateSamplingRuleError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateSamplingRuleError::InvalidRequest(ref cause) => cause,
+            UpdateSamplingRuleError::Throttled(ref cause) => cause,
+            UpdateSamplingRuleError::Validation(ref cause) => cause,
+            UpdateSamplingRuleError::Credentials(ref err) => err.description(),
+            UpdateSamplingRuleError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateSamplingRuleError::ParseError(ref cause) => cause,
+            UpdateSamplingRuleError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Trait representing the capabilities of the AWS X-Ray API. AWS X-Ray clients implement this trait.
 pub trait XRay {
     /// <p>Retrieves a list of traces specified by ID. Each trace is a collection of segment documents that originates from a single request. Use <code>GetTraceSummaries</code> to get a list of trace IDs.</p>
@@ -1518,10 +3370,58 @@ pub trait XRay {
         input: BatchGetTracesRequest,
     ) -> RusotoFuture<BatchGetTracesResult, BatchGetTracesError>;
 
+    /// <p>Creates a group resource with a name and a filter expression. </p>
+    fn create_group(
+        &self,
+        input: CreateGroupRequest,
+    ) -> RusotoFuture<CreateGroupResult, CreateGroupError>;
+
+    /// <p>Creates a rule to control sampling behavior for instrumented applications. Services retrieve rules with <a>GetSamplingRules</a>, and evaluate each rule in ascending order of <i>priority</i> for each request. If a rule matches, the service records a trace, borrowing it from the reservoir size. After 10 seconds, the service reports back to X-Ray with <a>GetSamplingTargets</a> to get updated versions of each in-use rule. The updated rule contains a trace quota that the service can use instead of borrowing from the reservoir.</p>
+    fn create_sampling_rule(
+        &self,
+        input: CreateSamplingRuleRequest,
+    ) -> RusotoFuture<CreateSamplingRuleResult, CreateSamplingRuleError>;
+
+    /// <p>Deletes a group resource.</p>
+    fn delete_group(
+        &self,
+        input: DeleteGroupRequest,
+    ) -> RusotoFuture<DeleteGroupResult, DeleteGroupError>;
+
+    /// <p>Deletes a sampling rule.</p>
+    fn delete_sampling_rule(
+        &self,
+        input: DeleteSamplingRuleRequest,
+    ) -> RusotoFuture<DeleteSamplingRuleResult, DeleteSamplingRuleError>;
+
     /// <p>Retrieves the current encryption configuration for X-Ray data.</p>
     fn get_encryption_config(
         &self,
     ) -> RusotoFuture<GetEncryptionConfigResult, GetEncryptionConfigError>;
+
+    /// <p>Retrieves group resource details.</p>
+    fn get_group(&self, input: GetGroupRequest) -> RusotoFuture<GetGroupResult, GetGroupError>;
+
+    /// <p>Retrieves all active group details.</p>
+    fn get_groups(&self, input: GetGroupsRequest) -> RusotoFuture<GetGroupsResult, GetGroupsError>;
+
+    /// <p>Retrieves all sampling rules.</p>
+    fn get_sampling_rules(
+        &self,
+        input: GetSamplingRulesRequest,
+    ) -> RusotoFuture<GetSamplingRulesResult, GetSamplingRulesError>;
+
+    /// <p>Retrieves information about recent sampling results for all sampling rules.</p>
+    fn get_sampling_statistic_summaries(
+        &self,
+        input: GetSamplingStatisticSummariesRequest,
+    ) -> RusotoFuture<GetSamplingStatisticSummariesResult, GetSamplingStatisticSummariesError>;
+
+    /// <p>Requests a sampling quota for rules that the service is using to sample requests. </p>
+    fn get_sampling_targets(
+        &self,
+        input: GetSamplingTargetsRequest,
+    ) -> RusotoFuture<GetSamplingTargetsResult, GetSamplingTargetsError>;
 
     /// <p>Retrieves a document that describes services that process incoming requests, and downstream services that they call as a result. Root services process incoming requests and make calls to downstream services. Root services are applications that use the AWS X-Ray SDK. Downstream services can be other applications, AWS resources, HTTP web APIs, or SQL databases.</p>
     fn get_service_graph(
@@ -1558,6 +3458,18 @@ pub trait XRay {
         &self,
         input: PutTraceSegmentsRequest,
     ) -> RusotoFuture<PutTraceSegmentsResult, PutTraceSegmentsError>;
+
+    /// <p>Updates a group resource.</p>
+    fn update_group(
+        &self,
+        input: UpdateGroupRequest,
+    ) -> RusotoFuture<UpdateGroupResult, UpdateGroupError>;
+
+    /// <p>Modifies a sampling rule's configuration.</p>
+    fn update_sampling_rule(
+        &self,
+        input: UpdateSamplingRuleRequest,
+    ) -> RusotoFuture<UpdateSamplingRuleResult, UpdateSamplingRuleError>;
 }
 /// A client for the AWS X-Ray API.
 #[derive(Clone)]
@@ -1635,6 +3547,162 @@ impl XRay for XRayClient {
         })
     }
 
+    /// <p>Creates a group resource with a name and a filter expression. </p>
+    fn create_group(
+        &self,
+        input: CreateGroupRequest,
+    ) -> RusotoFuture<CreateGroupResult, CreateGroupError> {
+        let request_uri = "/CreateGroup";
+
+        let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<CreateGroupResult>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateGroupError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Creates a rule to control sampling behavior for instrumented applications. Services retrieve rules with <a>GetSamplingRules</a>, and evaluate each rule in ascending order of <i>priority</i> for each request. If a rule matches, the service records a trace, borrowing it from the reservoir size. After 10 seconds, the service reports back to X-Ray with <a>GetSamplingTargets</a> to get updated versions of each in-use rule. The updated rule contains a trace quota that the service can use instead of borrowing from the reservoir.</p>
+    fn create_sampling_rule(
+        &self,
+        input: CreateSamplingRuleRequest,
+    ) -> RusotoFuture<CreateSamplingRuleResult, CreateSamplingRuleError> {
+        let request_uri = "/CreateSamplingRule";
+
+        let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<CreateSamplingRuleResult>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateSamplingRuleError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Deletes a group resource.</p>
+    fn delete_group(
+        &self,
+        input: DeleteGroupRequest,
+    ) -> RusotoFuture<DeleteGroupResult, DeleteGroupError> {
+        let request_uri = "/DeleteGroup";
+
+        let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DeleteGroupResult>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteGroupError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Deletes a sampling rule.</p>
+    fn delete_sampling_rule(
+        &self,
+        input: DeleteSamplingRuleRequest,
+    ) -> RusotoFuture<DeleteSamplingRuleResult, DeleteSamplingRuleError> {
+        let request_uri = "/DeleteSamplingRule";
+
+        let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DeleteSamplingRuleResult>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteSamplingRuleError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Retrieves the current encryption configuration for X-Ray data.</p>
     fn get_encryption_config(
         &self,
@@ -1665,6 +3733,194 @@ impl XRay for XRayClient {
                     response.buffer().from_err().and_then(|response| {
                         Err(GetEncryptionConfigError::from_response(response))
                     }),
+                )
+            }
+        })
+    }
+
+    /// <p>Retrieves group resource details.</p>
+    fn get_group(&self, input: GetGroupRequest) -> RusotoFuture<GetGroupResult, GetGroupError> {
+        let request_uri = "/GetGroup";
+
+        let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GetGroupResult>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetGroupError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Retrieves all active group details.</p>
+    fn get_groups(&self, input: GetGroupsRequest) -> RusotoFuture<GetGroupsResult, GetGroupsError> {
+        let request_uri = "/Groups";
+
+        let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GetGroupsResult>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetGroupsError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Retrieves all sampling rules.</p>
+    fn get_sampling_rules(
+        &self,
+        input: GetSamplingRulesRequest,
+    ) -> RusotoFuture<GetSamplingRulesResult, GetSamplingRulesError> {
+        let request_uri = "/GetSamplingRules";
+
+        let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GetSamplingRulesResult>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetSamplingRulesError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Retrieves information about recent sampling results for all sampling rules.</p>
+    fn get_sampling_statistic_summaries(
+        &self,
+        input: GetSamplingStatisticSummariesRequest,
+    ) -> RusotoFuture<GetSamplingStatisticSummariesResult, GetSamplingStatisticSummariesError> {
+        let request_uri = "/SamplingStatisticSummaries";
+
+        let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetSamplingStatisticSummariesResult>(&body)
+                            .unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetSamplingStatisticSummariesError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Requests a sampling quota for rules that the service is using to sample requests. </p>
+    fn get_sampling_targets(
+        &self,
+        input: GetSamplingTargetsRequest,
+    ) -> RusotoFuture<GetSamplingTargetsResult, GetSamplingTargetsError> {
+        let request_uri = "/SamplingTargets";
+
+        let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GetSamplingTargetsResult>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetSamplingTargetsError::from_response(response))),
                 )
             }
         })
@@ -1899,6 +4155,84 @@ impl XRay for XRayClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(PutTraceSegmentsError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Updates a group resource.</p>
+    fn update_group(
+        &self,
+        input: UpdateGroupRequest,
+    ) -> RusotoFuture<UpdateGroupResult, UpdateGroupError> {
+        let request_uri = "/UpdateGroup";
+
+        let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<UpdateGroupResult>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateGroupError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Modifies a sampling rule's configuration.</p>
+    fn update_sampling_rule(
+        &self,
+        input: UpdateSamplingRuleRequest,
+    ) -> RusotoFuture<UpdateSamplingRuleResult, UpdateSamplingRuleError> {
+        let request_uri = "/UpdateSamplingRule";
+
+        let mut request = SignedRequest::new("POST", "xray", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<UpdateSamplingRuleResult>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateSamplingRuleError::from_response(response))),
                 )
             }
         })

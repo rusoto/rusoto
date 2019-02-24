@@ -29,6 +29,22 @@ use serde_json;
 use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct AcceptSharedDirectoryRequest {
+    /// <p>Identifier of the shared directory in the directory consumer account. This identifier is different for each directory owner account. </p>
+    #[serde(rename = "SharedDirectoryId")]
+    pub shared_directory_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AcceptSharedDirectoryResult {
+    /// <p>The shared directory in the directory consumer account.</p>
+    #[serde(rename = "SharedDirectory")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub shared_directory: Option<SharedDirectory>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AddIpRoutesRequest {
     /// <p>Identifier (ID) of the directory to which to add the address block.</p>
     #[serde(rename = "DirectoryId")]
@@ -133,7 +149,7 @@ pub struct ConnectDirectoryRequest {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The fully-qualified name of the on-premises directory, such as <code>corp.example.com</code>.</p>
+    /// <p>The fully qualified name of the on-premises directory, such as <code>corp.example.com</code>.</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>The password for the on-premises user account.</p>
@@ -146,6 +162,10 @@ pub struct ConnectDirectoryRequest {
     /// <p>The size of the directory.</p>
     #[serde(rename = "Size")]
     pub size: String,
+    /// <p>The tags to be assigned to AD Connector.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 /// <p>Contains the results of the <a>ConnectDirectory</a> operation.</p>
@@ -244,7 +264,7 @@ pub struct CreateDirectoryRequest {
     /// <p>The fully qualified name for the directory, such as <code>corp.example.com</code>.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The password for the directory administrator. The directory creation process creates a directory administrator account with the username <code>Administrator</code> and this password.</p>
+    /// <p>The password for the directory administrator. The directory creation process creates a directory administrator account with the user name <code>Administrator</code> and this password.</p>
     #[serde(rename = "Password")]
     pub password: String,
     /// <p>The short name of the directory, such as <code>CORP</code>.</p>
@@ -254,6 +274,10 @@ pub struct CreateDirectoryRequest {
     /// <p>The size of the directory.</p>
     #[serde(rename = "Size")]
     pub size: String,
+    /// <p>The tags to be assigned to the Simple AD directory.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>A <a>DirectoryVpcSettings</a> object that contains additional information for the operation.</p>
     #[serde(rename = "VpcSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -270,14 +294,28 @@ pub struct CreateDirectoryResult {
     pub directory_id: Option<String>,
 }
 
-/// <p>Creates a Microsoft AD in the AWS cloud.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateLogSubscriptionRequest {
+    /// <p>Identifier (ID) of the directory to which you want to subscribe and receive real-time logs to your specified CloudWatch log group.</p>
+    #[serde(rename = "DirectoryId")]
+    pub directory_id: String,
+    /// <p>The name of the CloudWatch log group where the real-time domain controller logs are forwarded.</p>
+    #[serde(rename = "LogGroupName")]
+    pub log_group_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateLogSubscriptionResult {}
+
+/// <p>Creates an AWS Managed Microsoft AD directory.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateMicrosoftADRequest {
     /// <p>A textual description for the directory. This label will appear on the AWS console <code>Directory Details</code> page after the directory is created.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>AWS Microsoft AD is available in two editions: Standard and Enterprise. Enterprise is the default.</p>
+    /// <p>AWS Managed Microsoft AD is available in two editions: Standard and Enterprise. Enterprise is the default.</p>
     #[serde(rename = "Edition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub edition: Option<String>,
@@ -291,6 +329,10 @@ pub struct CreateMicrosoftADRequest {
     #[serde(rename = "ShortName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub short_name: Option<String>,
+    /// <p>The tags to be assigned to the AWS Managed Microsoft AD directory.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>Contains VPC information for the <a>CreateDirectory</a> or <a>CreateMicrosoftAD</a> operation.</p>
     #[serde(rename = "VpcSettings")]
     pub vpc_settings: DirectoryVpcSettings,
@@ -328,26 +370,30 @@ pub struct CreateSnapshotResult {
     pub snapshot_id: Option<String>,
 }
 
-/// <p>AWS Directory Service for Microsoft Active Directory allows you to configure trust relationships. For example, you can establish a trust between your Microsoft AD in the AWS cloud, and your existing on-premises Microsoft Active Directory. This would allow you to provide users and groups access to resources in either domain, with a single set of credentials.</p> <p>This action initiates the creation of the AWS side of a trust relationship between a Microsoft AD in the AWS cloud and an external domain.</p>
+/// <p>AWS Directory Service for Microsoft Active Directory allows you to configure trust relationships. For example, you can establish a trust between your AWS Managed Microsoft AD directory, and your existing on-premises Microsoft Active Directory. This would allow you to provide users and groups access to resources in either domain, with a single set of credentials.</p> <p>This action initiates the creation of the AWS side of a trust relationship between an AWS Managed Microsoft AD directory and an external domain.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateTrustRequest {
     /// <p>The IP addresses of the remote DNS server associated with RemoteDomainName.</p>
     #[serde(rename = "ConditionalForwarderIpAddrs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub conditional_forwarder_ip_addrs: Option<Vec<String>>,
-    /// <p>The Directory ID of the Microsoft AD in the AWS cloud for which to establish the trust relationship.</p>
+    /// <p>The Directory ID of the AWS Managed Microsoft AD directory for which to establish the trust relationship.</p>
     #[serde(rename = "DirectoryId")]
     pub directory_id: String,
     /// <p>The Fully Qualified Domain Name (FQDN) of the external domain for which to create the trust relationship.</p>
     #[serde(rename = "RemoteDomainName")]
     pub remote_domain_name: String,
+    /// <p>Optional parameter to enable selective authentication for the trust.</p>
+    #[serde(rename = "SelectiveAuth")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub selective_auth: Option<String>,
     /// <p>The direction of the trust relationship.</p>
     #[serde(rename = "TrustDirection")]
     pub trust_direction: String,
     /// <p>The trust password. The must be the same password that was used when creating the trust relationship on the external domain.</p>
     #[serde(rename = "TrustPassword")]
     pub trust_password: String,
-    /// <p>The trust relationship type.</p>
+    /// <p>The trust relationship type. <code>Forest</code> is the default.</p>
     #[serde(rename = "TrustType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trust_type: Option<String>,
@@ -397,6 +443,17 @@ pub struct DeleteDirectoryResult {
     pub directory_id: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteLogSubscriptionRequest {
+    /// <p>Identifier (ID) of the directory whose log subscription you want to delete.</p>
+    #[serde(rename = "DirectoryId")]
+    pub directory_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteLogSubscriptionResult {}
+
 /// <p>Contains the inputs for the <a>DeleteSnapshot</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteSnapshotRequest {
@@ -415,7 +472,7 @@ pub struct DeleteSnapshotResult {
     pub snapshot_id: Option<String>,
 }
 
-/// <p>Deletes the local side of an existing trust relationship between the Microsoft AD in the AWS cloud and the external domain.</p>
+/// <p>Deletes the local side of an existing trust relationship between the AWS Managed Microsoft AD directory and the external domain.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteTrustRequest {
     /// <p>Delete a conditional forwarder as part of a DeleteTrustRequest.</p>
@@ -486,7 +543,7 @@ pub struct DescribeDirectoriesRequest {
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    /// <p>The <i>DescribeDirectoriesResult.NextToken</i> value from a previous call to <a>DescribeDirectories</a>. Pass null if this is the first call.</p>
+    /// <p>The <code>DescribeDirectoriesResult.NextToken</code> value from a previous call to <a>DescribeDirectories</a>. Pass null if this is the first call.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -496,11 +553,11 @@ pub struct DescribeDirectoriesRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeDirectoriesResult {
-    /// <p>The list of <a>DirectoryDescription</a> objects that were retrieved.</p> <p>It is possible that this list contains less than the number of items specified in the <i>Limit</i> member of the request. This occurs if there are less than the requested number of items left to retrieve, or if the limitations of the operation have been exceeded.</p>
+    /// <p>The list of <a>DirectoryDescription</a> objects that were retrieved.</p> <p>It is possible that this list contains less than the number of items specified in the <code>Limit</code> member of the request. This occurs if there are less than the requested number of items left to retrieve, or if the limitations of the operation have been exceeded.</p>
     #[serde(rename = "DirectoryDescriptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub directory_descriptions: Option<Vec<DirectoryDescription>>,
-    /// <p>If not null, more results are available. Pass this value for the <i>NextToken</i> parameter in a subsequent call to <a>DescribeDirectories</a> to retrieve the next set of items.</p>
+    /// <p>If not null, more results are available. Pass this value for the <code>NextToken</code> parameter in a subsequent call to <a>DescribeDirectories</a> to retrieve the next set of items.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -561,6 +618,38 @@ pub struct DescribeEventTopicsResult {
     pub event_topics: Option<Vec<EventTopic>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeSharedDirectoriesRequest {
+    /// <p>The number of shared directories to return in the response object.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The <code>DescribeSharedDirectoriesResult.NextToken</code> value from a previous call to <a>DescribeSharedDirectories</a>. Pass null if this is the first call. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Returns the identifier of the directory in the directory owner account. </p>
+    #[serde(rename = "OwnerDirectoryId")]
+    pub owner_directory_id: String,
+    /// <p>A list of identifiers of all shared directories in your account. </p>
+    #[serde(rename = "SharedDirectoryIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub shared_directory_ids: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeSharedDirectoriesResult {
+    /// <p>If not null, token that indicates that more results are available. Pass this value for the <code>NextToken</code> parameter in a subsequent call to <a>DescribeSharedDirectories</a> to retrieve the next set of items.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of all shared directories in your account.</p>
+    #[serde(rename = "SharedDirectories")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub shared_directories: Option<Vec<SharedDirectory>>,
+}
+
 /// <p>Contains the inputs for the <a>DescribeSnapshots</a> operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeSnapshotsRequest {
@@ -596,7 +685,7 @@ pub struct DescribeSnapshotsResult {
     pub snapshots: Option<Vec<Snapshot>>,
 }
 
-/// <p>Describes the trust relationships for a particular Microsoft AD in the AWS cloud. If no input parameters are are provided, such as directory ID or trust ID, this request describes all the trust relationships.</p>
+/// <p>Describes the trust relationships for a particular AWS Managed Microsoft AD directory. If no input parameters are are provided, such as directory ID or trust ID, this request describes all the trust relationships.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeTrustsRequest {
     /// <p>The Directory ID of the AWS directory that is a part of the requested trust relationship.</p>
@@ -637,7 +726,7 @@ pub struct DirectoryConnectSettings {
     /// <p>A list of one or more IP addresses of DNS servers or domain controllers in the on-premises directory.</p>
     #[serde(rename = "CustomerDnsIps")]
     pub customer_dns_ips: Vec<String>,
-    /// <p><p>The username of an account in the on-premises directory that is used to connect to the directory. This account must have the following privileges:</p> <ul> <li> <p>Read users and groups</p> </li> <li> <p>Create computer objects</p> </li> <li> <p>Join computers to the domain</p> </li> </ul></p>
+    /// <p><p>The user name of an account in the on-premises directory that is used to connect to the directory. This account must have the following permissions:</p> <ul> <li> <p>Read users and groups</p> </li> <li> <p>Create computer objects</p> </li> <li> <p>Join computers to the domain</p> </li> </ul></p>
     #[serde(rename = "CustomerUserName")]
     pub customer_user_name: String,
     /// <p>A list of subnet identifiers in the VPC in which the AD Connector is created.</p>
@@ -660,7 +749,7 @@ pub struct DirectoryConnectSettingsDescription {
     #[serde(rename = "ConnectIps")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connect_ips: Option<Vec<String>>,
-    /// <p>The username of the service account in the on-premises directory.</p>
+    /// <p>The user name of the service account in the on-premises directory.</p>
     #[serde(rename = "CustomerUserName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_user_name: Option<String>,
@@ -718,10 +807,14 @@ pub struct DirectoryDescription {
     #[serde(rename = "LaunchTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub launch_time: Option<f64>,
-    /// <p>The fully-qualified name of the directory.</p>
+    /// <p>The fully qualified name of the directory.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>Describes the AWS Managed Microsoft AD directory in the directory owner account.</p>
+    #[serde(rename = "OwnerDirectoryDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner_directory_description: Option<OwnerDirectoryDescription>,
     /// <p>A <a>RadiusSettings</a> object that contains information about the RADIUS server configured for this directory.</p>
     #[serde(rename = "RadiusSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -730,6 +823,18 @@ pub struct DirectoryDescription {
     #[serde(rename = "RadiusStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub radius_status: Option<String>,
+    /// <p>The method used when sharing a directory to determine whether the directory should be shared within your AWS organization (<code>ORGANIZATIONS</code>) or with any AWS account by sending a shared directory request (<code>HANDSHAKE</code>).</p>
+    #[serde(rename = "ShareMethod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub share_method: Option<String>,
+    /// <p>A directory share request that is sent by the directory owner to the directory consumer. The request includes a typed message to help the directory consumer administrator determine whether to approve or reject the share invitation.</p>
+    #[serde(rename = "ShareNotes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub share_notes: Option<String>,
+    /// <p>Current directory status of the shared AWS Managed Microsoft AD directory.</p>
+    #[serde(rename = "ShareStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub share_status: Option<String>,
     /// <p>The short name of the directory.</p>
     #[serde(rename = "ShortName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -738,7 +843,7 @@ pub struct DirectoryDescription {
     #[serde(rename = "Size")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub size: Option<String>,
-    /// <p>Indicates if single-sign on is enabled for the directory. For more information, see <a>EnableSso</a> and <a>DisableSso</a>.</p>
+    /// <p>Indicates if single sign-on is enabled for the directory. For more information, see <a>EnableSso</a> and <a>DisableSso</a>.</p>
     #[serde(rename = "SsoEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sso_enabled: Option<bool>,
@@ -780,15 +885,15 @@ pub struct DirectoryLimits {
     #[serde(rename = "CloudOnlyDirectoriesLimitReached")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_only_directories_limit_reached: Option<bool>,
-    /// <p>The current number of Microsoft AD directories in the region.</p>
+    /// <p>The current number of AWS Managed Microsoft AD directories in the region.</p>
     #[serde(rename = "CloudOnlyMicrosoftADCurrentCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_only_microsoft_ad_current_count: Option<i64>,
-    /// <p>The maximum number of Microsoft AD directories allowed in the region.</p>
+    /// <p>The maximum number of AWS Managed Microsoft AD directories allowed in the region.</p>
     #[serde(rename = "CloudOnlyMicrosoftADLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_only_microsoft_ad_limit: Option<i64>,
-    /// <p>Indicates if the Microsoft AD directory limit has been reached.</p>
+    /// <p>Indicates if the AWS Managed Microsoft AD directory limit has been reached.</p>
     #[serde(rename = "CloudOnlyMicrosoftADLimitReached")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_only_microsoft_ad_limit_reached: Option<bool>,
@@ -1086,6 +1191,35 @@ pub struct ListIpRoutesResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListLogSubscriptionsRequest {
+    /// <p>If a <i>DirectoryID</i> is provided, lists only the log subscription associated with that directory. If no <i>DirectoryId</i> is provided, lists all log subscriptions associated with your AWS account. If there are no log subscriptions for the AWS account or the directory, an empty list will be returned.</p>
+    #[serde(rename = "DirectoryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub directory_id: Option<String>,
+    /// <p>The maximum number of items returned.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The token for the next set of items to return.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListLogSubscriptionsResult {
+    /// <p>A list of active <a>LogSubscription</a> objects for calling the AWS account.</p>
+    #[serde(rename = "LogSubscriptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_subscriptions: Option<Vec<LogSubscription>>,
+    /// <p>The token for the next set of items to return.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListSchemaExtensionsRequest {
     /// <p>The identifier of the directory from which to retrieve the schema extension information.</p>
     #[serde(rename = "DirectoryId")]
@@ -1141,6 +1275,54 @@ pub struct ListTagsForResourceResult {
     pub tags: Option<Vec<Tag>>,
 }
 
+/// <p>Represents a log subscription, which tracks real-time data from a chosen log group to a specified destination.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct LogSubscription {
+    /// <p>Identifier (ID) of the directory that you want to associate with the log subscription.</p>
+    #[serde(rename = "DirectoryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub directory_id: Option<String>,
+    /// <p>The name of the log group.</p>
+    #[serde(rename = "LogGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_group_name: Option<String>,
+    /// <p>The date and time that the log subscription was created.</p>
+    #[serde(rename = "SubscriptionCreatedDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subscription_created_date_time: Option<f64>,
+}
+
+/// <p>Describes the directory owner account details that have been shared to the directory consumer account.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct OwnerDirectoryDescription {
+    /// <p>Identifier of the directory owner account.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// <p>Identifier of the AWS Managed Microsoft AD directory in the directory owner account.</p>
+    #[serde(rename = "DirectoryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub directory_id: Option<String>,
+    /// <p>IP address of the directory’s domain controllers.</p>
+    #[serde(rename = "DnsIpAddrs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dns_ip_addrs: Option<Vec<String>>,
+    /// <p>A <a>RadiusSettings</a> object that contains information about the RADIUS server.</p>
+    #[serde(rename = "RadiusSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub radius_settings: Option<RadiusSettings>,
+    /// <p>Information about the status of the RADIUS server.</p>
+    #[serde(rename = "RadiusStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub radius_status: Option<String>,
+    /// <p>Information about the VPC settings for the directory.</p>
+    #[serde(rename = "VpcSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc_settings: Option<DirectoryVpcSettingsDescription>,
+}
+
 /// <p>Contains information about a Remote Authentication Dial In User Service (RADIUS) server.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RadiusSettings {
@@ -1168,7 +1350,7 @@ pub struct RadiusSettings {
     #[serde(rename = "RadiusTimeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub radius_timeout: Option<i64>,
-    /// <p>Not currently used.</p>
+    /// <p>Required for enabling RADIUS on the directory.</p>
     #[serde(rename = "SharedSecret")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub shared_secret: Option<String>,
@@ -1193,6 +1375,22 @@ pub struct RegisterEventTopicRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct RegisterEventTopicResult {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct RejectSharedDirectoryRequest {
+    /// <p>Identifier of the shared directory in the directory consumer account. This identifier is different for each directory owner account.</p>
+    #[serde(rename = "SharedDirectoryId")]
+    pub shared_directory_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RejectSharedDirectoryResult {
+    /// <p>Identifier of the shared directory in the directory consumer account.</p>
+    #[serde(rename = "SharedDirectoryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub shared_directory_id: Option<String>,
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RemoveIpRoutesRequest {
@@ -1230,7 +1428,7 @@ pub struct ResetUserPasswordRequest {
     /// <p>The new password that will be reset.</p>
     #[serde(rename = "NewPassword")]
     pub new_password: String,
-    /// <p>The username of the user whose password will be reset.</p>
+    /// <p>The user name of the user whose password will be reset.</p>
     #[serde(rename = "UserName")]
     pub user_name: String,
 }
@@ -1284,6 +1482,85 @@ pub struct SchemaExtensionInfo {
     #[serde(rename = "StartDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_date_time: Option<f64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ShareDirectoryRequest {
+    /// <p>Identifier of the AWS Managed Microsoft AD directory that you want to share with other AWS accounts.</p>
+    #[serde(rename = "DirectoryId")]
+    pub directory_id: String,
+    /// <p>The method used when sharing a directory to determine whether the directory should be shared within your AWS organization (<code>ORGANIZATIONS</code>) or with any AWS account by sending a directory sharing request (<code>HANDSHAKE</code>).</p>
+    #[serde(rename = "ShareMethod")]
+    pub share_method: String,
+    /// <p>A directory share request that is sent by the directory owner to the directory consumer. The request includes a typed message to help the directory consumer administrator determine whether to approve or reject the share invitation.</p>
+    #[serde(rename = "ShareNotes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub share_notes: Option<String>,
+    /// <p>Identifier for the directory consumer account with whom the directory is to be shared.</p>
+    #[serde(rename = "ShareTarget")]
+    pub share_target: ShareTarget,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ShareDirectoryResult {
+    /// <p>Identifier of the directory that is stored in the directory consumer account that is shared from the specified directory (<code>DirectoryId</code>).</p>
+    #[serde(rename = "SharedDirectoryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub shared_directory_id: Option<String>,
+}
+
+/// <p>Identifier that contains details about the directory consumer account.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ShareTarget {
+    /// <p>Identifier of the directory consumer account.</p>
+    #[serde(rename = "Id")]
+    pub id: String,
+    /// <p>Type of identifier to be used in the <code>Id</code> field.</p>
+    #[serde(rename = "Type")]
+    pub type_: String,
+}
+
+/// <p>Details about the shared directory in the directory owner account for which the share request in the directory consumer account has been accepted.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SharedDirectory {
+    /// <p>The date and time that the shared directory was created.</p>
+    #[serde(rename = "CreatedDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_date_time: Option<f64>,
+    /// <p>The date and time that the shared directory was last updated.</p>
+    #[serde(rename = "LastUpdatedDateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_date_time: Option<f64>,
+    /// <p>Identifier of the directory owner account, which contains the directory that has been shared to the consumer account.</p>
+    #[serde(rename = "OwnerAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner_account_id: Option<String>,
+    /// <p>Identifier of the directory in the directory owner account. </p>
+    #[serde(rename = "OwnerDirectoryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner_directory_id: Option<String>,
+    /// <p>The method used when sharing a directory to determine whether the directory should be shared within your AWS organization (<code>ORGANIZATIONS</code>) or with any AWS account by sending a shared directory request (<code>HANDSHAKE</code>).</p>
+    #[serde(rename = "ShareMethod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub share_method: Option<String>,
+    /// <p>A directory share request that is sent by the directory owner to the directory consumer. The request includes a typed message to help the directory consumer administrator determine whether to approve or reject the share invitation.</p>
+    #[serde(rename = "ShareNotes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub share_notes: Option<String>,
+    /// <p>Current directory status of the shared AWS Managed Microsoft AD directory.</p>
+    #[serde(rename = "ShareStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub share_status: Option<String>,
+    /// <p>Identifier of the directory consumer account that has access to the shared directory (<code>OwnerDirectoryId</code>) in the directory owner account.</p>
+    #[serde(rename = "SharedAccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub shared_account_id: Option<String>,
+    /// <p>Identifier of the shared directory in the directory consumer account. This identifier is different for each directory owner account.</p>
+    #[serde(rename = "SharedDirectoryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub shared_directory_id: Option<String>,
 }
 
 /// <p>Describes a directory snapshot.</p>
@@ -1370,7 +1647,7 @@ pub struct Tag {
     pub value: String,
 }
 
-/// <p>Describes a trust relationship between an Microsoft AD in the AWS cloud and an external domain.</p>
+/// <p>Describes a trust relationship between an AWS Managed Microsoft AD directory and an external domain.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Trust {
@@ -1390,6 +1667,10 @@ pub struct Trust {
     #[serde(rename = "RemoteDomainName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub remote_domain_name: Option<String>,
+    /// <p>Current state of selective authentication for the trust.</p>
+    #[serde(rename = "SelectiveAuth")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub selective_auth: Option<String>,
     /// <p>The date and time that the TrustState was last updated.</p>
     #[serde(rename = "StateLastUpdatedDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1410,10 +1691,40 @@ pub struct Trust {
     #[serde(rename = "TrustStateReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trust_state_reason: Option<String>,
-    /// <p>The trust relationship type.</p>
+    /// <p>The trust relationship type. <code>Forest</code> is the default.</p>
     #[serde(rename = "TrustType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub trust_type: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UnshareDirectoryRequest {
+    /// <p>The identifier of the AWS Managed Microsoft AD directory that you want to stop sharing.</p>
+    #[serde(rename = "DirectoryId")]
+    pub directory_id: String,
+    /// <p>Identifier for the directory consumer account with whom the directory has to be unshared.</p>
+    #[serde(rename = "UnshareTarget")]
+    pub unshare_target: UnshareTarget,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UnshareDirectoryResult {
+    /// <p>Identifier of the directory stored in the directory consumer account that is to be unshared from the specified directory (<code>DirectoryId</code>).</p>
+    #[serde(rename = "SharedDirectoryId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub shared_directory_id: Option<String>,
+}
+
+/// <p>Identifier that contains details about the directory consumer account with whom the directory is being unshared.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UnshareTarget {
+    /// <p>Identifier of the directory consumer account.</p>
+    #[serde(rename = "Id")]
+    pub id: String,
+    /// <p>Type of identifier to be used in the <i>Id</i> field.</p>
+    #[serde(rename = "Type")]
+    pub type_: String,
 }
 
 /// <p>Updates a conditional forwarder.</p>
@@ -1465,7 +1776,30 @@ pub struct UpdateRadiusRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct UpdateRadiusResult {}
 
-/// <p>Initiates the verification of an existing trust relationship between a Microsoft AD in the AWS cloud and an external domain.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateTrustRequest {
+    /// <p>Updates selective authentication for the trust.</p>
+    #[serde(rename = "SelectiveAuth")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub selective_auth: Option<String>,
+    /// <p>Identifier of the trust relationship.</p>
+    #[serde(rename = "TrustId")]
+    pub trust_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateTrustResult {
+    #[serde(rename = "RequestId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_id: Option<String>,
+    /// <p>Identifier of the trust relationship.</p>
+    #[serde(rename = "TrustId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trust_id: Option<String>,
+}
+
+/// <p>Initiates the verification of an existing trust relationship between an AWS Managed Microsoft AD directory and an external domain.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct VerifyTrustRequest {
     /// <p>The unique Trust ID of the trust relationship to verify.</p>
@@ -1483,6 +1817,116 @@ pub struct VerifyTrustResult {
     pub trust_id: Option<String>,
 }
 
+/// Errors returned by AcceptSharedDirectory
+#[derive(Debug, PartialEq)]
+pub enum AcceptSharedDirectoryError {
+    /// <p>A client exception has occurred.</p>
+    Client(String),
+    /// <p>The specified directory has already been shared with this AWS account.</p>
+    DirectoryAlreadyShared(String),
+    /// <p>The specified entity could not be found.</p>
+    EntityDoesNotExist(String),
+    /// <p>One or more parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>An exception has occurred in AWS Directory Service.</p>
+    Service(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl AcceptSharedDirectoryError {
+    pub fn from_response(res: BufferedHttpResponse) -> AcceptSharedDirectoryError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ClientException" => {
+                    return AcceptSharedDirectoryError::Client(String::from(error_message));
+                }
+                "DirectoryAlreadySharedException" => {
+                    return AcceptSharedDirectoryError::DirectoryAlreadyShared(String::from(
+                        error_message,
+                    ));
+                }
+                "EntityDoesNotExistException" => {
+                    return AcceptSharedDirectoryError::EntityDoesNotExist(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidParameterException" => {
+                    return AcceptSharedDirectoryError::InvalidParameter(String::from(error_message));
+                }
+                "ServiceException" => {
+                    return AcceptSharedDirectoryError::Service(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return AcceptSharedDirectoryError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return AcceptSharedDirectoryError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for AcceptSharedDirectoryError {
+    fn from(err: serde_json::error::Error) -> AcceptSharedDirectoryError {
+        AcceptSharedDirectoryError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AcceptSharedDirectoryError {
+    fn from(err: CredentialsError) -> AcceptSharedDirectoryError {
+        AcceptSharedDirectoryError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AcceptSharedDirectoryError {
+    fn from(err: HttpDispatchError) -> AcceptSharedDirectoryError {
+        AcceptSharedDirectoryError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AcceptSharedDirectoryError {
+    fn from(err: io::Error) -> AcceptSharedDirectoryError {
+        AcceptSharedDirectoryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AcceptSharedDirectoryError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AcceptSharedDirectoryError {
+    fn description(&self) -> &str {
+        match *self {
+            AcceptSharedDirectoryError::Client(ref cause) => cause,
+            AcceptSharedDirectoryError::DirectoryAlreadyShared(ref cause) => cause,
+            AcceptSharedDirectoryError::EntityDoesNotExist(ref cause) => cause,
+            AcceptSharedDirectoryError::InvalidParameter(ref cause) => cause,
+            AcceptSharedDirectoryError::Service(ref cause) => cause,
+            AcceptSharedDirectoryError::Validation(ref cause) => cause,
+            AcceptSharedDirectoryError::Credentials(ref err) => err.description(),
+            AcceptSharedDirectoryError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            AcceptSharedDirectoryError::ParseError(ref cause) => cause,
+            AcceptSharedDirectoryError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by AddIpRoutes
 #[derive(Debug, PartialEq)]
 pub enum AddIpRoutesError {
@@ -2345,6 +2789,126 @@ impl Error for CreateDirectoryError {
         }
     }
 }
+/// Errors returned by CreateLogSubscription
+#[derive(Debug, PartialEq)]
+pub enum CreateLogSubscriptionError {
+    /// <p>A client exception has occurred.</p>
+    Client(String),
+    /// <p>The specified entity already exists.</p>
+    EntityAlreadyExists(String),
+    /// <p>The specified entity could not be found.</p>
+    EntityDoesNotExist(String),
+    /// <p>The account does not have sufficient permission to perform the operation.</p>
+    InsufficientPermissions(String),
+    /// <p>An exception has occurred in AWS Directory Service.</p>
+    Service(String),
+    /// <p>The operation is not supported.</p>
+    UnsupportedOperation(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl CreateLogSubscriptionError {
+    pub fn from_response(res: BufferedHttpResponse) -> CreateLogSubscriptionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ClientException" => {
+                    return CreateLogSubscriptionError::Client(String::from(error_message));
+                }
+                "EntityAlreadyExistsException" => {
+                    return CreateLogSubscriptionError::EntityAlreadyExists(String::from(
+                        error_message,
+                    ));
+                }
+                "EntityDoesNotExistException" => {
+                    return CreateLogSubscriptionError::EntityDoesNotExist(String::from(
+                        error_message,
+                    ));
+                }
+                "InsufficientPermissionsException" => {
+                    return CreateLogSubscriptionError::InsufficientPermissions(String::from(
+                        error_message,
+                    ));
+                }
+                "ServiceException" => {
+                    return CreateLogSubscriptionError::Service(String::from(error_message));
+                }
+                "UnsupportedOperationException" => {
+                    return CreateLogSubscriptionError::UnsupportedOperation(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return CreateLogSubscriptionError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return CreateLogSubscriptionError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for CreateLogSubscriptionError {
+    fn from(err: serde_json::error::Error) -> CreateLogSubscriptionError {
+        CreateLogSubscriptionError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateLogSubscriptionError {
+    fn from(err: CredentialsError) -> CreateLogSubscriptionError {
+        CreateLogSubscriptionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateLogSubscriptionError {
+    fn from(err: HttpDispatchError) -> CreateLogSubscriptionError {
+        CreateLogSubscriptionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateLogSubscriptionError {
+    fn from(err: io::Error) -> CreateLogSubscriptionError {
+        CreateLogSubscriptionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateLogSubscriptionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateLogSubscriptionError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateLogSubscriptionError::Client(ref cause) => cause,
+            CreateLogSubscriptionError::EntityAlreadyExists(ref cause) => cause,
+            CreateLogSubscriptionError::EntityDoesNotExist(ref cause) => cause,
+            CreateLogSubscriptionError::InsufficientPermissions(ref cause) => cause,
+            CreateLogSubscriptionError::Service(ref cause) => cause,
+            CreateLogSubscriptionError::UnsupportedOperation(ref cause) => cause,
+            CreateLogSubscriptionError::Validation(ref cause) => cause,
+            CreateLogSubscriptionError::Credentials(ref err) => err.description(),
+            CreateLogSubscriptionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateLogSubscriptionError::ParseError(ref cause) => cause,
+            CreateLogSubscriptionError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by CreateMicrosoftAD
 #[derive(Debug, PartialEq)]
 pub enum CreateMicrosoftADError {
@@ -2875,6 +3439,110 @@ impl Error for DeleteDirectoryError {
         }
     }
 }
+/// Errors returned by DeleteLogSubscription
+#[derive(Debug, PartialEq)]
+pub enum DeleteLogSubscriptionError {
+    /// <p>A client exception has occurred.</p>
+    Client(String),
+    /// <p>The specified entity could not be found.</p>
+    EntityDoesNotExist(String),
+    /// <p>An exception has occurred in AWS Directory Service.</p>
+    Service(String),
+    /// <p>The operation is not supported.</p>
+    UnsupportedOperation(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DeleteLogSubscriptionError {
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteLogSubscriptionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ClientException" => {
+                    return DeleteLogSubscriptionError::Client(String::from(error_message));
+                }
+                "EntityDoesNotExistException" => {
+                    return DeleteLogSubscriptionError::EntityDoesNotExist(String::from(
+                        error_message,
+                    ));
+                }
+                "ServiceException" => {
+                    return DeleteLogSubscriptionError::Service(String::from(error_message));
+                }
+                "UnsupportedOperationException" => {
+                    return DeleteLogSubscriptionError::UnsupportedOperation(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return DeleteLogSubscriptionError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DeleteLogSubscriptionError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteLogSubscriptionError {
+    fn from(err: serde_json::error::Error) -> DeleteLogSubscriptionError {
+        DeleteLogSubscriptionError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteLogSubscriptionError {
+    fn from(err: CredentialsError) -> DeleteLogSubscriptionError {
+        DeleteLogSubscriptionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteLogSubscriptionError {
+    fn from(err: HttpDispatchError) -> DeleteLogSubscriptionError {
+        DeleteLogSubscriptionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteLogSubscriptionError {
+    fn from(err: io::Error) -> DeleteLogSubscriptionError {
+        DeleteLogSubscriptionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteLogSubscriptionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteLogSubscriptionError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteLogSubscriptionError::Client(ref cause) => cause,
+            DeleteLogSubscriptionError::EntityDoesNotExist(ref cause) => cause,
+            DeleteLogSubscriptionError::Service(ref cause) => cause,
+            DeleteLogSubscriptionError::UnsupportedOperation(ref cause) => cause,
+            DeleteLogSubscriptionError::Validation(ref cause) => cause,
+            DeleteLogSubscriptionError::Credentials(ref err) => err.description(),
+            DeleteLogSubscriptionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteLogSubscriptionError::ParseError(ref cause) => cause,
+            DeleteLogSubscriptionError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by DeleteSnapshot
 #[derive(Debug, PartialEq)]
 pub enum DeleteSnapshotError {
@@ -3302,7 +3970,7 @@ pub enum DescribeDirectoriesError {
     Client(String),
     /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    /// <p>The <i>NextToken</i> value is not valid.</p>
+    /// <p>The <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
     /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
@@ -3408,7 +4076,7 @@ pub enum DescribeDomainControllersError {
     Client(String),
     /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    /// <p>The <i>NextToken</i> value is not valid.</p>
+    /// <p>The <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
     /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
@@ -3621,6 +4289,126 @@ impl Error for DescribeEventTopicsError {
         }
     }
 }
+/// Errors returned by DescribeSharedDirectories
+#[derive(Debug, PartialEq)]
+pub enum DescribeSharedDirectoriesError {
+    /// <p>A client exception has occurred.</p>
+    Client(String),
+    /// <p>The specified entity could not be found.</p>
+    EntityDoesNotExist(String),
+    /// <p>The <code>NextToken</code> value is not valid.</p>
+    InvalidNextToken(String),
+    /// <p>One or more parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>An exception has occurred in AWS Directory Service.</p>
+    Service(String),
+    /// <p>The operation is not supported.</p>
+    UnsupportedOperation(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DescribeSharedDirectoriesError {
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeSharedDirectoriesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ClientException" => {
+                    return DescribeSharedDirectoriesError::Client(String::from(error_message));
+                }
+                "EntityDoesNotExistException" => {
+                    return DescribeSharedDirectoriesError::EntityDoesNotExist(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidNextTokenException" => {
+                    return DescribeSharedDirectoriesError::InvalidNextToken(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidParameterException" => {
+                    return DescribeSharedDirectoriesError::InvalidParameter(String::from(
+                        error_message,
+                    ));
+                }
+                "ServiceException" => {
+                    return DescribeSharedDirectoriesError::Service(String::from(error_message));
+                }
+                "UnsupportedOperationException" => {
+                    return DescribeSharedDirectoriesError::UnsupportedOperation(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return DescribeSharedDirectoriesError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DescribeSharedDirectoriesError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeSharedDirectoriesError {
+    fn from(err: serde_json::error::Error) -> DescribeSharedDirectoriesError {
+        DescribeSharedDirectoriesError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeSharedDirectoriesError {
+    fn from(err: CredentialsError) -> DescribeSharedDirectoriesError {
+        DescribeSharedDirectoriesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeSharedDirectoriesError {
+    fn from(err: HttpDispatchError) -> DescribeSharedDirectoriesError {
+        DescribeSharedDirectoriesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeSharedDirectoriesError {
+    fn from(err: io::Error) -> DescribeSharedDirectoriesError {
+        DescribeSharedDirectoriesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeSharedDirectoriesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeSharedDirectoriesError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeSharedDirectoriesError::Client(ref cause) => cause,
+            DescribeSharedDirectoriesError::EntityDoesNotExist(ref cause) => cause,
+            DescribeSharedDirectoriesError::InvalidNextToken(ref cause) => cause,
+            DescribeSharedDirectoriesError::InvalidParameter(ref cause) => cause,
+            DescribeSharedDirectoriesError::Service(ref cause) => cause,
+            DescribeSharedDirectoriesError::UnsupportedOperation(ref cause) => cause,
+            DescribeSharedDirectoriesError::Validation(ref cause) => cause,
+            DescribeSharedDirectoriesError::Credentials(ref err) => err.description(),
+            DescribeSharedDirectoriesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeSharedDirectoriesError::ParseError(ref cause) => cause,
+            DescribeSharedDirectoriesError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by DescribeSnapshots
 #[derive(Debug, PartialEq)]
 pub enum DescribeSnapshotsError {
@@ -3628,7 +4416,7 @@ pub enum DescribeSnapshotsError {
     Client(String),
     /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    /// <p>The <i>NextToken</i> value is not valid.</p>
+    /// <p>The <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
     /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
@@ -3734,7 +4522,7 @@ pub enum DescribeTrustsError {
     Client(String),
     /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    /// <p>The <i>NextToken</i> value is not valid.</p>
+    /// <p>The <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
     /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
@@ -4424,7 +5212,7 @@ pub enum ListIpRoutesError {
     Client(String),
     /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    /// <p>The <i>NextToken</i> value is not valid.</p>
+    /// <p>The <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
     /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
@@ -4519,6 +5307,108 @@ impl Error for ListIpRoutesError {
         }
     }
 }
+/// Errors returned by ListLogSubscriptions
+#[derive(Debug, PartialEq)]
+pub enum ListLogSubscriptionsError {
+    /// <p>A client exception has occurred.</p>
+    Client(String),
+    /// <p>The specified entity could not be found.</p>
+    EntityDoesNotExist(String),
+    /// <p>The <code>NextToken</code> value is not valid.</p>
+    InvalidNextToken(String),
+    /// <p>An exception has occurred in AWS Directory Service.</p>
+    Service(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListLogSubscriptionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> ListLogSubscriptionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ClientException" => {
+                    return ListLogSubscriptionsError::Client(String::from(error_message));
+                }
+                "EntityDoesNotExistException" => {
+                    return ListLogSubscriptionsError::EntityDoesNotExist(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidNextTokenException" => {
+                    return ListLogSubscriptionsError::InvalidNextToken(String::from(error_message));
+                }
+                "ServiceException" => {
+                    return ListLogSubscriptionsError::Service(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return ListLogSubscriptionsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ListLogSubscriptionsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListLogSubscriptionsError {
+    fn from(err: serde_json::error::Error) -> ListLogSubscriptionsError {
+        ListLogSubscriptionsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListLogSubscriptionsError {
+    fn from(err: CredentialsError) -> ListLogSubscriptionsError {
+        ListLogSubscriptionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListLogSubscriptionsError {
+    fn from(err: HttpDispatchError) -> ListLogSubscriptionsError {
+        ListLogSubscriptionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListLogSubscriptionsError {
+    fn from(err: io::Error) -> ListLogSubscriptionsError {
+        ListLogSubscriptionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListLogSubscriptionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListLogSubscriptionsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListLogSubscriptionsError::Client(ref cause) => cause,
+            ListLogSubscriptionsError::EntityDoesNotExist(ref cause) => cause,
+            ListLogSubscriptionsError::InvalidNextToken(ref cause) => cause,
+            ListLogSubscriptionsError::Service(ref cause) => cause,
+            ListLogSubscriptionsError::Validation(ref cause) => cause,
+            ListLogSubscriptionsError::Credentials(ref err) => err.description(),
+            ListLogSubscriptionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListLogSubscriptionsError::ParseError(ref cause) => cause,
+            ListLogSubscriptionsError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by ListSchemaExtensions
 #[derive(Debug, PartialEq)]
 pub enum ListSchemaExtensionsError {
@@ -4526,7 +5416,7 @@ pub enum ListSchemaExtensionsError {
     Client(String),
     /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    /// <p>The <i>NextToken</i> value is not valid.</p>
+    /// <p>The <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
     /// <p>An exception has occurred in AWS Directory Service.</p>
     Service(String),
@@ -4628,7 +5518,7 @@ pub enum ListTagsForResourceError {
     Client(String),
     /// <p>The specified entity could not be found.</p>
     EntityDoesNotExist(String),
-    /// <p>The <i>NextToken</i> value is not valid.</p>
+    /// <p>The <code>NextToken</code> value is not valid.</p>
     InvalidNextToken(String),
     /// <p>One or more parameters are not valid.</p>
     InvalidParameter(String),
@@ -4824,6 +5714,116 @@ impl Error for RegisterEventTopicError {
             }
             RegisterEventTopicError::ParseError(ref cause) => cause,
             RegisterEventTopicError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by RejectSharedDirectory
+#[derive(Debug, PartialEq)]
+pub enum RejectSharedDirectoryError {
+    /// <p>A client exception has occurred.</p>
+    Client(String),
+    /// <p>The specified directory has already been shared with this AWS account.</p>
+    DirectoryAlreadyShared(String),
+    /// <p>The specified entity could not be found.</p>
+    EntityDoesNotExist(String),
+    /// <p>One or more parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>An exception has occurred in AWS Directory Service.</p>
+    Service(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl RejectSharedDirectoryError {
+    pub fn from_response(res: BufferedHttpResponse) -> RejectSharedDirectoryError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ClientException" => {
+                    return RejectSharedDirectoryError::Client(String::from(error_message));
+                }
+                "DirectoryAlreadySharedException" => {
+                    return RejectSharedDirectoryError::DirectoryAlreadyShared(String::from(
+                        error_message,
+                    ));
+                }
+                "EntityDoesNotExistException" => {
+                    return RejectSharedDirectoryError::EntityDoesNotExist(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidParameterException" => {
+                    return RejectSharedDirectoryError::InvalidParameter(String::from(error_message));
+                }
+                "ServiceException" => {
+                    return RejectSharedDirectoryError::Service(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return RejectSharedDirectoryError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return RejectSharedDirectoryError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for RejectSharedDirectoryError {
+    fn from(err: serde_json::error::Error) -> RejectSharedDirectoryError {
+        RejectSharedDirectoryError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for RejectSharedDirectoryError {
+    fn from(err: CredentialsError) -> RejectSharedDirectoryError {
+        RejectSharedDirectoryError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for RejectSharedDirectoryError {
+    fn from(err: HttpDispatchError) -> RejectSharedDirectoryError {
+        RejectSharedDirectoryError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RejectSharedDirectoryError {
+    fn from(err: io::Error) -> RejectSharedDirectoryError {
+        RejectSharedDirectoryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for RejectSharedDirectoryError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for RejectSharedDirectoryError {
+    fn description(&self) -> &str {
+        match *self {
+            RejectSharedDirectoryError::Client(ref cause) => cause,
+            RejectSharedDirectoryError::DirectoryAlreadyShared(ref cause) => cause,
+            RejectSharedDirectoryError::EntityDoesNotExist(ref cause) => cause,
+            RejectSharedDirectoryError::InvalidParameter(ref cause) => cause,
+            RejectSharedDirectoryError::Service(ref cause) => cause,
+            RejectSharedDirectoryError::Validation(ref cause) => cause,
+            RejectSharedDirectoryError::Credentials(ref err) => err.description(),
+            RejectSharedDirectoryError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            RejectSharedDirectoryError::ParseError(ref cause) => cause,
+            RejectSharedDirectoryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5253,6 +6253,140 @@ impl Error for RestoreFromSnapshotError {
         }
     }
 }
+/// Errors returned by ShareDirectory
+#[derive(Debug, PartialEq)]
+pub enum ShareDirectoryError {
+    /// <p>You do not have sufficient access to perform this action.</p>
+    AccessDenied(String),
+    /// <p>A client exception has occurred.</p>
+    Client(String),
+    /// <p>The specified directory has already been shared with this AWS account.</p>
+    DirectoryAlreadyShared(String),
+    /// <p>The specified entity could not be found.</p>
+    EntityDoesNotExist(String),
+    /// <p>One or more parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The specified shared target is not valid.</p>
+    InvalidTarget(String),
+    /// <p>Exception encountered while trying to access your AWS organization.</p>
+    Organizations(String),
+    /// <p>An exception has occurred in AWS Directory Service.</p>
+    Service(String),
+    /// <p>The maximum number of AWS accounts that you can share with this directory has been reached.</p>
+    ShareLimitExceeded(String),
+    /// <p>The operation is not supported.</p>
+    UnsupportedOperation(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ShareDirectoryError {
+    pub fn from_response(res: BufferedHttpResponse) -> ShareDirectoryError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ShareDirectoryError::AccessDenied(String::from(error_message));
+                }
+                "ClientException" => {
+                    return ShareDirectoryError::Client(String::from(error_message));
+                }
+                "DirectoryAlreadySharedException" => {
+                    return ShareDirectoryError::DirectoryAlreadyShared(String::from(error_message));
+                }
+                "EntityDoesNotExistException" => {
+                    return ShareDirectoryError::EntityDoesNotExist(String::from(error_message));
+                }
+                "InvalidParameterException" => {
+                    return ShareDirectoryError::InvalidParameter(String::from(error_message));
+                }
+                "InvalidTargetException" => {
+                    return ShareDirectoryError::InvalidTarget(String::from(error_message));
+                }
+                "OrganizationsException" => {
+                    return ShareDirectoryError::Organizations(String::from(error_message));
+                }
+                "ServiceException" => {
+                    return ShareDirectoryError::Service(String::from(error_message));
+                }
+                "ShareLimitExceededException" => {
+                    return ShareDirectoryError::ShareLimitExceeded(String::from(error_message));
+                }
+                "UnsupportedOperationException" => {
+                    return ShareDirectoryError::UnsupportedOperation(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return ShareDirectoryError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ShareDirectoryError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ShareDirectoryError {
+    fn from(err: serde_json::error::Error) -> ShareDirectoryError {
+        ShareDirectoryError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ShareDirectoryError {
+    fn from(err: CredentialsError) -> ShareDirectoryError {
+        ShareDirectoryError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ShareDirectoryError {
+    fn from(err: HttpDispatchError) -> ShareDirectoryError {
+        ShareDirectoryError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ShareDirectoryError {
+    fn from(err: io::Error) -> ShareDirectoryError {
+        ShareDirectoryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ShareDirectoryError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ShareDirectoryError {
+    fn description(&self) -> &str {
+        match *self {
+            ShareDirectoryError::AccessDenied(ref cause) => cause,
+            ShareDirectoryError::Client(ref cause) => cause,
+            ShareDirectoryError::DirectoryAlreadyShared(ref cause) => cause,
+            ShareDirectoryError::EntityDoesNotExist(ref cause) => cause,
+            ShareDirectoryError::InvalidParameter(ref cause) => cause,
+            ShareDirectoryError::InvalidTarget(ref cause) => cause,
+            ShareDirectoryError::Organizations(ref cause) => cause,
+            ShareDirectoryError::Service(ref cause) => cause,
+            ShareDirectoryError::ShareLimitExceeded(ref cause) => cause,
+            ShareDirectoryError::UnsupportedOperation(ref cause) => cause,
+            ShareDirectoryError::Validation(ref cause) => cause,
+            ShareDirectoryError::Credentials(ref err) => err.description(),
+            ShareDirectoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ShareDirectoryError::ParseError(ref cause) => cause,
+            ShareDirectoryError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by StartSchemaExtension
 #[derive(Debug, PartialEq)]
 pub enum StartSchemaExtensionError {
@@ -5368,6 +6502,110 @@ impl Error for StartSchemaExtensionError {
             }
             StartSchemaExtensionError::ParseError(ref cause) => cause,
             StartSchemaExtensionError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by UnshareDirectory
+#[derive(Debug, PartialEq)]
+pub enum UnshareDirectoryError {
+    /// <p>A client exception has occurred.</p>
+    Client(String),
+    /// <p>The specified directory has not been shared with this AWS account.</p>
+    DirectoryNotShared(String),
+    /// <p>The specified entity could not be found.</p>
+    EntityDoesNotExist(String),
+    /// <p>The specified shared target is not valid.</p>
+    InvalidTarget(String),
+    /// <p>An exception has occurred in AWS Directory Service.</p>
+    Service(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl UnshareDirectoryError {
+    pub fn from_response(res: BufferedHttpResponse) -> UnshareDirectoryError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ClientException" => {
+                    return UnshareDirectoryError::Client(String::from(error_message));
+                }
+                "DirectoryNotSharedException" => {
+                    return UnshareDirectoryError::DirectoryNotShared(String::from(error_message));
+                }
+                "EntityDoesNotExistException" => {
+                    return UnshareDirectoryError::EntityDoesNotExist(String::from(error_message));
+                }
+                "InvalidTargetException" => {
+                    return UnshareDirectoryError::InvalidTarget(String::from(error_message));
+                }
+                "ServiceException" => {
+                    return UnshareDirectoryError::Service(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return UnshareDirectoryError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return UnshareDirectoryError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for UnshareDirectoryError {
+    fn from(err: serde_json::error::Error) -> UnshareDirectoryError {
+        UnshareDirectoryError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UnshareDirectoryError {
+    fn from(err: CredentialsError) -> UnshareDirectoryError {
+        UnshareDirectoryError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UnshareDirectoryError {
+    fn from(err: HttpDispatchError) -> UnshareDirectoryError {
+        UnshareDirectoryError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UnshareDirectoryError {
+    fn from(err: io::Error) -> UnshareDirectoryError {
+        UnshareDirectoryError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UnshareDirectoryError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UnshareDirectoryError {
+    fn description(&self) -> &str {
+        match *self {
+            UnshareDirectoryError::Client(ref cause) => cause,
+            UnshareDirectoryError::DirectoryNotShared(ref cause) => cause,
+            UnshareDirectoryError::EntityDoesNotExist(ref cause) => cause,
+            UnshareDirectoryError::InvalidTarget(ref cause) => cause,
+            UnshareDirectoryError::Service(ref cause) => cause,
+            UnshareDirectoryError::Validation(ref cause) => cause,
+            UnshareDirectoryError::Credentials(ref err) => err.description(),
+            UnshareDirectoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UnshareDirectoryError::ParseError(ref cause) => cause,
+            UnshareDirectoryError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5719,6 +6957,100 @@ impl Error for UpdateRadiusError {
         }
     }
 }
+/// Errors returned by UpdateTrust
+#[derive(Debug, PartialEq)]
+pub enum UpdateTrustError {
+    /// <p>A client exception has occurred.</p>
+    Client(String),
+    /// <p>The specified entity could not be found.</p>
+    EntityDoesNotExist(String),
+    /// <p>One or more parameters are not valid.</p>
+    InvalidParameter(String),
+    /// <p>An exception has occurred in AWS Directory Service.</p>
+    Service(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl UpdateTrustError {
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateTrustError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ClientException" => return UpdateTrustError::Client(String::from(error_message)),
+                "EntityDoesNotExistException" => {
+                    return UpdateTrustError::EntityDoesNotExist(String::from(error_message));
+                }
+                "InvalidParameterException" => {
+                    return UpdateTrustError::InvalidParameter(String::from(error_message));
+                }
+                "ServiceException" => return UpdateTrustError::Service(String::from(error_message)),
+                "ValidationException" => {
+                    return UpdateTrustError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return UpdateTrustError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateTrustError {
+    fn from(err: serde_json::error::Error) -> UpdateTrustError {
+        UpdateTrustError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateTrustError {
+    fn from(err: CredentialsError) -> UpdateTrustError {
+        UpdateTrustError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateTrustError {
+    fn from(err: HttpDispatchError) -> UpdateTrustError {
+        UpdateTrustError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateTrustError {
+    fn from(err: io::Error) -> UpdateTrustError {
+        UpdateTrustError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateTrustError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateTrustError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateTrustError::Client(ref cause) => cause,
+            UpdateTrustError::EntityDoesNotExist(ref cause) => cause,
+            UpdateTrustError::InvalidParameter(ref cause) => cause,
+            UpdateTrustError::Service(ref cause) => cause,
+            UpdateTrustError::Validation(ref cause) => cause,
+            UpdateTrustError::Credentials(ref err) => err.description(),
+            UpdateTrustError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UpdateTrustError::ParseError(ref cause) => cause,
+            UpdateTrustError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by VerifyTrust
 #[derive(Debug, PartialEq)]
 pub enum VerifyTrustError {
@@ -5821,6 +7153,12 @@ impl Error for VerifyTrustError {
 }
 /// Trait representing the capabilities of the Directory Service API. Directory Service clients implement this trait.
 pub trait DirectoryService {
+    /// <p>Accepts a directory sharing request that was sent from the directory owner account.</p>
+    fn accept_shared_directory(
+        &self,
+        input: AcceptSharedDirectoryRequest,
+    ) -> RusotoFuture<AcceptSharedDirectoryResult, AcceptSharedDirectoryError>;
+
     /// <p>If the DNS server for your on-premises domain uses a publicly addressable IP address, you must add a CIDR address block to correctly route traffic to and from your Microsoft AD on Amazon Web Services. <i>AddIpRoutes</i> adds this address block. You can also use <i>AddIpRoutes</i> to facilitate routing traffic that uses public IP ranges from your Microsoft AD on AWS to a peer VPC. </p> <p>Before you call <i>AddIpRoutes</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>AddIpRoutes</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn add_ip_routes(
         &self,
@@ -5839,7 +7177,7 @@ pub trait DirectoryService {
         input: CancelSchemaExtensionRequest,
     ) -> RusotoFuture<CancelSchemaExtensionResult, CancelSchemaExtensionError>;
 
-    /// <p>Creates an AD Connector to connect to an on-premises directory.</p> <p>Before you call <i>ConnectDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>ConnectDirectory</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
+    /// <p>Creates an AD Connector to connect to an on-premises directory.</p> <p>Before you call <code>ConnectDirectory</code>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <code>ConnectDirectory</code> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn connect_directory(
         &self,
         input: ConnectDirectoryRequest,
@@ -5863,13 +7201,19 @@ pub trait DirectoryService {
         input: CreateConditionalForwarderRequest,
     ) -> RusotoFuture<CreateConditionalForwarderResult, CreateConditionalForwarderError>;
 
-    /// <p>Creates a Simple AD directory.</p> <p>Before you call <i>CreateDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateDirectory</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
+    /// <p>Creates a Simple AD directory.</p> <p>Before you call <code>CreateDirectory</code>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <code>CreateDirectory</code> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn create_directory(
         &self,
         input: CreateDirectoryRequest,
     ) -> RusotoFuture<CreateDirectoryResult, CreateDirectoryError>;
 
-    /// <p>Creates a Microsoft AD in the AWS cloud.</p> <p>Before you call <i>CreateMicrosoftAD</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateMicrosoftAD</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
+    /// <p>Creates a subscription to forward real time Directory Service domain controller security logs to the specified CloudWatch log group in your AWS account.</p>
+    fn create_log_subscription(
+        &self,
+        input: CreateLogSubscriptionRequest,
+    ) -> RusotoFuture<CreateLogSubscriptionResult, CreateLogSubscriptionError>;
+
+    /// <p>Creates an AWS Managed Microsoft AD directory.</p> <p>Before you call <i>CreateMicrosoftAD</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateMicrosoftAD</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn create_microsoft_ad(
         &self,
         input: CreateMicrosoftADRequest,
@@ -5881,7 +7225,7 @@ pub trait DirectoryService {
         input: CreateSnapshotRequest,
     ) -> RusotoFuture<CreateSnapshotResult, CreateSnapshotError>;
 
-    /// <p>AWS Directory Service for Microsoft Active Directory allows you to configure trust relationships. For example, you can establish a trust between your Microsoft AD in the AWS cloud, and your existing on-premises Microsoft Active Directory. This would allow you to provide users and groups access to resources in either domain, with a single set of credentials.</p> <p>This action initiates the creation of the AWS side of a trust relationship between a Microsoft AD in the AWS cloud and an external domain.</p>
+    /// <p>AWS Directory Service for Microsoft Active Directory allows you to configure trust relationships. For example, you can establish a trust between your AWS Managed Microsoft AD directory, and your existing on-premises Microsoft Active Directory. This would allow you to provide users and groups access to resources in either domain, with a single set of credentials.</p> <p>This action initiates the creation of the AWS side of a trust relationship between an AWS Managed Microsoft AD directory and an external domain. You can create either a forest trust or an external trust.</p>
     fn create_trust(
         &self,
         input: CreateTrustRequest,
@@ -5893,11 +7237,17 @@ pub trait DirectoryService {
         input: DeleteConditionalForwarderRequest,
     ) -> RusotoFuture<DeleteConditionalForwarderResult, DeleteConditionalForwarderError>;
 
-    /// <p>Deletes an AWS Directory Service directory.</p> <p>Before you call <i>DeleteDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>DeleteDirectory</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
+    /// <p>Deletes an AWS Directory Service directory.</p> <p>Before you call <code>DeleteDirectory</code>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <code>DeleteDirectory</code> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn delete_directory(
         &self,
         input: DeleteDirectoryRequest,
     ) -> RusotoFuture<DeleteDirectoryResult, DeleteDirectoryError>;
+
+    /// <p>Deletes the specified log subscription.</p>
+    fn delete_log_subscription(
+        &self,
+        input: DeleteLogSubscriptionRequest,
+    ) -> RusotoFuture<DeleteLogSubscriptionResult, DeleteLogSubscriptionError>;
 
     /// <p>Deletes a directory snapshot.</p>
     fn delete_snapshot(
@@ -5905,7 +7255,7 @@ pub trait DirectoryService {
         input: DeleteSnapshotRequest,
     ) -> RusotoFuture<DeleteSnapshotResult, DeleteSnapshotError>;
 
-    /// <p>Deletes an existing trust relationship between your Microsoft AD in the AWS cloud and an external domain.</p>
+    /// <p>Deletes an existing trust relationship between your AWS Managed Microsoft AD directory and an external domain.</p>
     fn delete_trust(
         &self,
         input: DeleteTrustRequest,
@@ -5923,7 +7273,7 @@ pub trait DirectoryService {
         input: DescribeConditionalForwardersRequest,
     ) -> RusotoFuture<DescribeConditionalForwardersResult, DescribeConditionalForwardersError>;
 
-    /// <p>Obtains information about the directories that belong to this account.</p> <p>You can retrieve information about specific directories by passing the directory identifiers in the <i>DirectoryIds</i> parameter. Otherwise, all directories that belong to the current account are returned.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> request and response parameters. If more results are available, the <i>DescribeDirectoriesResult.NextToken</i> member contains a token that you pass in the next call to <a>DescribeDirectories</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <i>Limit</i> parameter.</p>
+    /// <p>Obtains information about the directories that belong to this account.</p> <p>You can retrieve information about specific directories by passing the directory identifiers in the <code>DirectoryIds</code> parameter. Otherwise, all directories that belong to the current account are returned.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>DescribeDirectoriesResult.NextToken</code> member contains a token that you pass in the next call to <a>DescribeDirectories</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <code>Limit</code> parameter.</p>
     fn describe_directories(
         &self,
         input: DescribeDirectoriesRequest,
@@ -5941,6 +7291,12 @@ pub trait DirectoryService {
         input: DescribeEventTopicsRequest,
     ) -> RusotoFuture<DescribeEventTopicsResult, DescribeEventTopicsError>;
 
+    /// <p>Returns the shared directories in your account. </p>
+    fn describe_shared_directories(
+        &self,
+        input: DescribeSharedDirectoriesRequest,
+    ) -> RusotoFuture<DescribeSharedDirectoriesResult, DescribeSharedDirectoriesError>;
+
     /// <p>Obtains information about the directory snapshots that belong to this account.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> request and response parameters. If more results are available, the <i>DescribeSnapshots.NextToken</i> member contains a token that you pass in the next call to <a>DescribeSnapshots</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <i>Limit</i> parameter.</p>
     fn describe_snapshots(
         &self,
@@ -5953,7 +7309,7 @@ pub trait DirectoryService {
         input: DescribeTrustsRequest,
     ) -> RusotoFuture<DescribeTrustsResult, DescribeTrustsError>;
 
-    /// <p>Disables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector directory.</p>
+    /// <p>Disables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector or Microsoft AD directory.</p>
     fn disable_radius(
         &self,
         input: DisableRadiusRequest,
@@ -5965,7 +7321,7 @@ pub trait DirectoryService {
         input: DisableSsoRequest,
     ) -> RusotoFuture<DisableSsoResult, DisableSsoError>;
 
-    /// <p>Enables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector directory.</p>
+    /// <p>Enables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector or Microsoft AD directory.</p>
     fn enable_radius(
         &self,
         input: EnableRadiusRequest,
@@ -5991,6 +7347,12 @@ pub trait DirectoryService {
         input: ListIpRoutesRequest,
     ) -> RusotoFuture<ListIpRoutesResult, ListIpRoutesError>;
 
+    /// <p>Lists the active log subscriptions for the AWS account.</p>
+    fn list_log_subscriptions(
+        &self,
+        input: ListLogSubscriptionsRequest,
+    ) -> RusotoFuture<ListLogSubscriptionsResult, ListLogSubscriptionsError>;
+
     /// <p>Lists all schema extensions applied to a Microsoft AD Directory.</p>
     fn list_schema_extensions(
         &self,
@@ -6008,6 +7370,12 @@ pub trait DirectoryService {
         &self,
         input: RegisterEventTopicRequest,
     ) -> RusotoFuture<RegisterEventTopicResult, RegisterEventTopicError>;
+
+    /// <p>Rejects a directory sharing request that was sent from the directory owner account.</p>
+    fn reject_shared_directory(
+        &self,
+        input: RejectSharedDirectoryRequest,
+    ) -> RusotoFuture<RejectSharedDirectoryResult, RejectSharedDirectoryError>;
 
     /// <p>Removes IP address blocks from a directory.</p>
     fn remove_ip_routes(
@@ -6033,11 +7401,23 @@ pub trait DirectoryService {
         input: RestoreFromSnapshotRequest,
     ) -> RusotoFuture<RestoreFromSnapshotResult, RestoreFromSnapshotError>;
 
+    /// <p>Shares a specified directory (<code>DirectoryId</code>) in your AWS account (directory owner) with another AWS account (directory consumer). With this operation you can use your directory from any AWS account and from any Amazon VPC within an AWS Region.</p> <p>When you share your AWS Managed Microsoft AD directory, AWS Directory Service creates a shared directory in the directory consumer account. This shared directory contains the metadata to provide access to the directory within the directory owner account. The shared directory is visible in all VPCs in the directory consumer account.</p> <p>The <code>ShareMethod</code> parameter determines whether the specified directory can be shared between AWS accounts inside the same AWS organization (<code>ORGANIZATIONS</code>). It also determines whether you can share the directory with any other AWS account either inside or outside of the organization (<code>HANDSHAKE</code>).</p> <p>The <code>ShareNotes</code> parameter is only used when <code>HANDSHAKE</code> is called, which sends a directory sharing request to the directory consumer. </p>
+    fn share_directory(
+        &self,
+        input: ShareDirectoryRequest,
+    ) -> RusotoFuture<ShareDirectoryResult, ShareDirectoryError>;
+
     /// <p>Applies a schema extension to a Microsoft AD directory.</p>
     fn start_schema_extension(
         &self,
         input: StartSchemaExtensionRequest,
     ) -> RusotoFuture<StartSchemaExtensionResult, StartSchemaExtensionError>;
+
+    /// <p>Stops the directory sharing between the directory owner and consumer accounts. </p>
+    fn unshare_directory(
+        &self,
+        input: UnshareDirectoryRequest,
+    ) -> RusotoFuture<UnshareDirectoryResult, UnshareDirectoryError>;
 
     /// <p>Updates a conditional forwarder that has been set up for your AWS directory.</p>
     fn update_conditional_forwarder(
@@ -6051,13 +7431,19 @@ pub trait DirectoryService {
         input: UpdateNumberOfDomainControllersRequest,
     ) -> RusotoFuture<UpdateNumberOfDomainControllersResult, UpdateNumberOfDomainControllersError>;
 
-    /// <p>Updates the Remote Authentication Dial In User Service (RADIUS) server information for an AD Connector directory.</p>
+    /// <p>Updates the Remote Authentication Dial In User Service (RADIUS) server information for an AD Connector or Microsoft AD directory.</p>
     fn update_radius(
         &self,
         input: UpdateRadiusRequest,
     ) -> RusotoFuture<UpdateRadiusResult, UpdateRadiusError>;
 
-    /// <p>AWS Directory Service for Microsoft Active Directory allows you to configure and verify trust relationships.</p> <p>This action verifies a trust relationship between your Microsoft AD in the AWS cloud and an external domain.</p>
+    /// <p>Updates the trust that has been set up between your AWS Managed Microsoft AD directory and an on-premises Active Directory.</p>
+    fn update_trust(
+        &self,
+        input: UpdateTrustRequest,
+    ) -> RusotoFuture<UpdateTrustResult, UpdateTrustError>;
+
+    /// <p>AWS Directory Service for Microsoft Active Directory allows you to configure and verify trust relationships.</p> <p>This action verifies a trust relationship between your AWS Managed Microsoft AD directory and an external domain.</p>
     fn verify_trust(
         &self,
         input: VerifyTrustRequest,
@@ -6100,6 +7486,45 @@ impl DirectoryServiceClient {
 }
 
 impl DirectoryService for DirectoryServiceClient {
+    /// <p>Accepts a directory sharing request that was sent from the directory owner account.</p>
+    fn accept_shared_directory(
+        &self,
+        input: AcceptSharedDirectoryRequest,
+    ) -> RusotoFuture<AcceptSharedDirectoryResult, AcceptSharedDirectoryError> {
+        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "DirectoryService_20150416.AcceptSharedDirectory",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<AcceptSharedDirectoryResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(AcceptSharedDirectoryError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>If the DNS server for your on-premises domain uses a publicly addressable IP address, you must add a CIDR address block to correctly route traffic to and from your Microsoft AD on Amazon Web Services. <i>AddIpRoutes</i> adds this address block. You can also use <i>AddIpRoutes</i> to facilitate routing traffic that uses public IP ranges from your Microsoft AD on AWS to a peer VPC. </p> <p>Before you call <i>AddIpRoutes</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>AddIpRoutes</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn add_ip_routes(
         &self,
@@ -6216,7 +7641,7 @@ impl DirectoryService for DirectoryServiceClient {
         })
     }
 
-    /// <p>Creates an AD Connector to connect to an on-premises directory.</p> <p>Before you call <i>ConnectDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>ConnectDirectory</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
+    /// <p>Creates an AD Connector to connect to an on-premises directory.</p> <p>Before you call <code>ConnectDirectory</code>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <code>ConnectDirectory</code> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn connect_directory(
         &self,
         input: ConnectDirectoryRequest,
@@ -6364,7 +7789,7 @@ impl DirectoryService for DirectoryServiceClient {
         })
     }
 
-    /// <p>Creates a Simple AD directory.</p> <p>Before you call <i>CreateDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateDirectory</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
+    /// <p>Creates a Simple AD directory.</p> <p>Before you call <code>CreateDirectory</code>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <code>CreateDirectory</code> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn create_directory(
         &self,
         input: CreateDirectoryRequest,
@@ -6401,7 +7826,46 @@ impl DirectoryService for DirectoryServiceClient {
         })
     }
 
-    /// <p>Creates a Microsoft AD in the AWS cloud.</p> <p>Before you call <i>CreateMicrosoftAD</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateMicrosoftAD</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
+    /// <p>Creates a subscription to forward real time Directory Service domain controller security logs to the specified CloudWatch log group in your AWS account.</p>
+    fn create_log_subscription(
+        &self,
+        input: CreateLogSubscriptionRequest,
+    ) -> RusotoFuture<CreateLogSubscriptionResult, CreateLogSubscriptionError> {
+        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "DirectoryService_20150416.CreateLogSubscription",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<CreateLogSubscriptionResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateLogSubscriptionError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Creates an AWS Managed Microsoft AD directory.</p> <p>Before you call <i>CreateMicrosoftAD</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>CreateMicrosoftAD</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn create_microsoft_ad(
         &self,
         input: CreateMicrosoftADRequest,
@@ -6478,7 +7942,7 @@ impl DirectoryService for DirectoryServiceClient {
         })
     }
 
-    /// <p>AWS Directory Service for Microsoft Active Directory allows you to configure trust relationships. For example, you can establish a trust between your Microsoft AD in the AWS cloud, and your existing on-premises Microsoft Active Directory. This would allow you to provide users and groups access to resources in either domain, with a single set of credentials.</p> <p>This action initiates the creation of the AWS side of a trust relationship between a Microsoft AD in the AWS cloud and an external domain.</p>
+    /// <p>AWS Directory Service for Microsoft Active Directory allows you to configure trust relationships. For example, you can establish a trust between your AWS Managed Microsoft AD directory, and your existing on-premises Microsoft Active Directory. This would allow you to provide users and groups access to resources in either domain, with a single set of credentials.</p> <p>This action initiates the creation of the AWS side of a trust relationship between an AWS Managed Microsoft AD directory and an external domain. You can create either a forest trust or an external trust.</p>
     fn create_trust(
         &self,
         input: CreateTrustRequest,
@@ -6552,7 +8016,7 @@ impl DirectoryService for DirectoryServiceClient {
         })
     }
 
-    /// <p>Deletes an AWS Directory Service directory.</p> <p>Before you call <i>DeleteDirectory</i>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <i>DeleteDirectory</i> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
+    /// <p>Deletes an AWS Directory Service directory.</p> <p>Before you call <code>DeleteDirectory</code>, ensure that all of the required permissions have been explicitly granted through a policy. For details about what permissions are required to run the <code>DeleteDirectory</code> operation, see <a href="http://docs.aws.amazon.com/directoryservice/latest/admin-guide/UsingWithDS_IAM_ResourcePermissions.html">AWS Directory Service API Permissions: Actions, Resources, and Conditions Reference</a>.</p>
     fn delete_directory(
         &self,
         input: DeleteDirectoryRequest,
@@ -6584,6 +8048,45 @@ impl DirectoryService for DirectoryServiceClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(DeleteDirectoryError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Deletes the specified log subscription.</p>
+    fn delete_log_subscription(
+        &self,
+        input: DeleteLogSubscriptionRequest,
+    ) -> RusotoFuture<DeleteLogSubscriptionResult, DeleteLogSubscriptionError> {
+        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "DirectoryService_20150416.DeleteLogSubscription",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DeleteLogSubscriptionResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteLogSubscriptionError::from_response(response))
+                    }),
                 )
             }
         })
@@ -6626,7 +8129,7 @@ impl DirectoryService for DirectoryServiceClient {
         })
     }
 
-    /// <p>Deletes an existing trust relationship between your Microsoft AD in the AWS cloud and an external domain.</p>
+    /// <p>Deletes an existing trust relationship between your AWS Managed Microsoft AD directory and an external domain.</p>
     fn delete_trust(
         &self,
         input: DeleteTrustRequest,
@@ -6739,7 +8242,7 @@ impl DirectoryService for DirectoryServiceClient {
         })
     }
 
-    /// <p>Obtains information about the directories that belong to this account.</p> <p>You can retrieve information about specific directories by passing the directory identifiers in the <i>DirectoryIds</i> parameter. Otherwise, all directories that belong to the current account are returned.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> request and response parameters. If more results are available, the <i>DescribeDirectoriesResult.NextToken</i> member contains a token that you pass in the next call to <a>DescribeDirectories</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <i>Limit</i> parameter.</p>
+    /// <p>Obtains information about the directories that belong to this account.</p> <p>You can retrieve information about specific directories by passing the directory identifiers in the <code>DirectoryIds</code> parameter. Otherwise, all directories that belong to the current account are returned.</p> <p>This operation supports pagination with the use of the <code>NextToken</code> request and response parameters. If more results are available, the <code>DescribeDirectoriesResult.NextToken</code> member contains a token that you pass in the next call to <a>DescribeDirectories</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <code>Limit</code> parameter.</p>
     fn describe_directories(
         &self,
         input: DescribeDirectoriesRequest,
@@ -6854,6 +8357,43 @@ impl DirectoryService for DirectoryServiceClient {
         })
     }
 
+    /// <p>Returns the shared directories in your account. </p>
+    fn describe_shared_directories(
+        &self,
+        input: DescribeSharedDirectoriesRequest,
+    ) -> RusotoFuture<DescribeSharedDirectoriesResult, DescribeSharedDirectoriesError> {
+        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "DirectoryService_20150416.DescribeSharedDirectories",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeSharedDirectoriesResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeSharedDirectoriesError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Obtains information about the directory snapshots that belong to this account.</p> <p>This operation supports pagination with the use of the <i>NextToken</i> request and response parameters. If more results are available, the <i>DescribeSnapshots.NextToken</i> member contains a token that you pass in the next call to <a>DescribeSnapshots</a> to retrieve the next set of items.</p> <p>You can also specify a maximum number of return results with the <i>Limit</i> parameter.</p>
     fn describe_snapshots(
         &self,
@@ -6931,7 +8471,7 @@ impl DirectoryService for DirectoryServiceClient {
         })
     }
 
-    /// <p>Disables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector directory.</p>
+    /// <p>Disables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector or Microsoft AD directory.</p>
     fn disable_radius(
         &self,
         input: DisableRadiusRequest,
@@ -7005,7 +8545,7 @@ impl DirectoryService for DirectoryServiceClient {
         })
     }
 
-    /// <p>Enables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector directory.</p>
+    /// <p>Enables multi-factor authentication (MFA) with the Remote Authentication Dial In User Service (RADIUS) server for an AD Connector or Microsoft AD directory.</p>
     fn enable_radius(
         &self,
         input: EnableRadiusRequest,
@@ -7191,6 +8731,45 @@ impl DirectoryService for DirectoryServiceClient {
         })
     }
 
+    /// <p>Lists the active log subscriptions for the AWS account.</p>
+    fn list_log_subscriptions(
+        &self,
+        input: ListLogSubscriptionsRequest,
+    ) -> RusotoFuture<ListLogSubscriptionsResult, ListLogSubscriptionsError> {
+        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "DirectoryService_20150416.ListLogSubscriptions",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ListLogSubscriptionsResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListLogSubscriptionsError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>Lists all schema extensions applied to a Microsoft AD Directory.</p>
     fn list_schema_extensions(
         &self,
@@ -7304,6 +8883,45 @@ impl DirectoryService for DirectoryServiceClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(RegisterEventTopicError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Rejects a directory sharing request that was sent from the directory owner account.</p>
+    fn reject_shared_directory(
+        &self,
+        input: RejectSharedDirectoryRequest,
+    ) -> RusotoFuture<RejectSharedDirectoryResult, RejectSharedDirectoryError> {
+        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "DirectoryService_20150416.RejectSharedDirectory",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<RejectSharedDirectoryResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(RejectSharedDirectoryError::from_response(response))
+                    }),
                 )
             }
         })
@@ -7464,6 +9082,43 @@ impl DirectoryService for DirectoryServiceClient {
         })
     }
 
+    /// <p>Shares a specified directory (<code>DirectoryId</code>) in your AWS account (directory owner) with another AWS account (directory consumer). With this operation you can use your directory from any AWS account and from any Amazon VPC within an AWS Region.</p> <p>When you share your AWS Managed Microsoft AD directory, AWS Directory Service creates a shared directory in the directory consumer account. This shared directory contains the metadata to provide access to the directory within the directory owner account. The shared directory is visible in all VPCs in the directory consumer account.</p> <p>The <code>ShareMethod</code> parameter determines whether the specified directory can be shared between AWS accounts inside the same AWS organization (<code>ORGANIZATIONS</code>). It also determines whether you can share the directory with any other AWS account either inside or outside of the organization (<code>HANDSHAKE</code>).</p> <p>The <code>ShareNotes</code> parameter is only used when <code>HANDSHAKE</code> is called, which sends a directory sharing request to the directory consumer. </p>
+    fn share_directory(
+        &self,
+        input: ShareDirectoryRequest,
+    ) -> RusotoFuture<ShareDirectoryResult, ShareDirectoryError> {
+        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "DirectoryService_20150416.ShareDirectory");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ShareDirectoryResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ShareDirectoryError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Applies a schema extension to a Microsoft AD directory.</p>
     fn start_schema_extension(
         &self,
@@ -7498,6 +9153,43 @@ impl DirectoryService for DirectoryServiceClient {
                     response.buffer().from_err().and_then(|response| {
                         Err(StartSchemaExtensionError::from_response(response))
                     }),
+                )
+            }
+        })
+    }
+
+    /// <p>Stops the directory sharing between the directory owner and consumer accounts. </p>
+    fn unshare_directory(
+        &self,
+        input: UnshareDirectoryRequest,
+    ) -> RusotoFuture<UnshareDirectoryResult, UnshareDirectoryError> {
+        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "DirectoryService_20150416.UnshareDirectory");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<UnshareDirectoryResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UnshareDirectoryError::from_response(response))),
                 )
             }
         })
@@ -7580,7 +9272,7 @@ impl DirectoryService for DirectoryServiceClient {
         })
     }
 
-    /// <p>Updates the Remote Authentication Dial In User Service (RADIUS) server information for an AD Connector directory.</p>
+    /// <p>Updates the Remote Authentication Dial In User Service (RADIUS) server information for an AD Connector or Microsoft AD directory.</p>
     fn update_radius(
         &self,
         input: UpdateRadiusRequest,
@@ -7617,7 +9309,44 @@ impl DirectoryService for DirectoryServiceClient {
         })
     }
 
-    /// <p>AWS Directory Service for Microsoft Active Directory allows you to configure and verify trust relationships.</p> <p>This action verifies a trust relationship between your Microsoft AD in the AWS cloud and an external domain.</p>
+    /// <p>Updates the trust that has been set up between your AWS Managed Microsoft AD directory and an on-premises Active Directory.</p>
+    fn update_trust(
+        &self,
+        input: UpdateTrustRequest,
+    ) -> RusotoFuture<UpdateTrustResult, UpdateTrustError> {
+        let mut request = SignedRequest::new("POST", "ds", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "DirectoryService_20150416.UpdateTrust");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<UpdateTrustResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateTrustError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>AWS Directory Service for Microsoft Active Directory allows you to configure and verify trust relationships.</p> <p>This action verifies a trust relationship between your AWS Managed Microsoft AD directory and an external domain.</p>
     fn verify_trust(
         &self,
         input: VerifyTrustRequest,

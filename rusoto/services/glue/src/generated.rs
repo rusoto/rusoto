@@ -31,7 +31,7 @@ use serde_json::Value as SerdeJsonValue;
 /// <p>Defines an action to be initiated by a trigger.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Action {
-    /// <p>Arguments to be passed to the job.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
+    /// <p>Arguments to be passed to the job run.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
     #[serde(rename = "Arguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arguments: Option<::std::collections::HashMap<String, String>>,
@@ -43,7 +43,11 @@ pub struct Action {
     #[serde(rename = "NotificationProperty")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_property: Option<NotificationProperty>,
-    /// <p>The job run timeout in minutes. It overrides the timeout value of the job.</p>
+    /// <p>The name of the SecurityConfiguration structure to be used with this action.</p>
+    #[serde(rename = "SecurityConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_configuration: Option<String>,
+    /// <p>The JobRun timeout in minutes. This is the maximum time that a job run can consume resources before it is terminated and enters <code>TIMEOUT</code> status. The default is 2,880 minutes (48 hours). This overrides the timeout value set in the parent job.</p>
     #[serde(rename = "Timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout: Option<i64>,
@@ -160,7 +164,7 @@ pub struct BatchDeleteTableVersionRequest {
     /// <p>The name of the table. For Hive compatibility, this name is entirely lowercase.</p>
     #[serde(rename = "TableName")]
     pub table_name: String,
-    /// <p>A list of the IDs of versions to be deleted.</p>
+    /// <p>A list of the IDs of versions to be deleted. A <code>VersionId</code> is a string representation of an integer. Each version is incremented by 1.</p>
     #[serde(rename = "VersionIds")]
     pub version_ids: Vec<String>,
 }
@@ -306,6 +310,19 @@ pub struct Classifier {
     pub xml_classifier: Option<XMLClassifier>,
 }
 
+/// <p>Specifies how CloudWatch data should be encrypted.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CloudWatchEncryption {
+    /// <p>The encryption mode to use for CloudWatch data.</p>
+    #[serde(rename = "CloudWatchEncryptionMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_watch_encryption_mode: Option<String>,
+    /// <p>The AWS ARN of the KMS key to be used to encrypt the data.</p>
+    #[serde(rename = "KmsKeyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_arn: Option<String>,
+}
+
 /// <p>Represents a directional edge in a directed acyclic graph (DAG).</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CodeGenEdge {
@@ -391,7 +408,7 @@ pub struct Condition {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Connection {
-    /// <p>A list of key-value pairs used as parameters for this connection.</p>
+    /// <p><p>These key-value pairs define parameters for the connection:</p> <ul> <li> <p> <code>HOST</code> - The host URI: either the fully qualified domain name (FQDN) or the IPv4 address of the database host.</p> </li> <li> <p> <code>PORT</code> - The port number, between 1024 and 65535, of the port on which the database host is listening for database connections.</p> </li> <li> <p> <code>USER<em>NAME</code> - The name under which to log in to the database. The value string for <code>USER</em>NAME</code> is &quot;<code>USERNAME</code>&quot;.</p> </li> <li> <p> <code>PASSWORD</code> - A password, if one is used, for the user name.</p> </li> <li> <p> <code>ENCRYPTED<em>PASSWORD</code> - When you enable connection password protection by setting <code>ConnectionPasswordEncryption</code> in the Data Catalog encryption settings, this field stores the key you designate to encrypt the password.</p> </li> <li> <p> <code>JDBC</em>DRIVER<em>JAR</em>URI</code> - The S3 path of the a jar file that contains the JDBC driver to use.</p> </li> <li> <p> <code>JDBC<em>DRIVER</em>CLASS<em>NAME</code> - The class name of the JDBC driver to use.</p> </li> <li> <p> <code>JDBC</em>ENGINE</code> - The name of the JDBC engine to use.</p> </li> <li> <p> <code>JDBC<em>ENGINE</em>VERSION</code> - The version of the JDBC engine to use.</p> </li> <li> <p> <code>CONFIG<em>FILES</code> - (Reserved for future use).</p> </li> <li> <p> <code>INSTANCE</em>ID</code> - The instance ID to use.</p> </li> <li> <p> <code>JDBC<em>CONNECTION</em>URL</code> - The URL for the JDBC connection.</p> </li> <li> <p> <code>JDBC<em>ENFORCE</em>SSL</code> - A Boolean string (true, false) specifying whether SSL with hostname matching will be enforced for the JDBC connection on the client. The default is false.</p> </li> </ul></p>
     #[serde(rename = "ConnectionProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_properties: Option<::std::collections::HashMap<String, String>>,
@@ -432,7 +449,7 @@ pub struct Connection {
 /// <p>A structure used to specify a connection to create or update.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ConnectionInput {
-    /// <p>A list of key-value pairs used as parameters for this connection.</p>
+    /// <p>These key-value pairs define parameters for the connection.</p>
     #[serde(rename = "ConnectionProperties")]
     pub connection_properties: ::std::collections::HashMap<String, String>,
     /// <p>The type of the connection. Currently, only JDBC is supported; SFTP is not supported.</p>
@@ -453,6 +470,18 @@ pub struct ConnectionInput {
     #[serde(rename = "PhysicalConnectionRequirements")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub physical_connection_requirements: Option<PhysicalConnectionRequirements>,
+}
+
+/// <p>The data structure used by the Data Catalog to encrypt the password as part of <code>CreateConnection</code> or <code>UpdateConnection</code> and store it in the <code>ENCRYPTED_PASSWORD</code> field in the connection properties. You can enable catalog encryption or only password encryption.</p> <p>When a <code>CreationConnection</code> request arrives containing a password, the Data Catalog first encrypts the password using your KMS key, and then encrypts the whole connection object again if catalog encryption is also enabled.</p> <p>This encryption requires that you set KMS key permissions to enable or restrict access on the password key according to your security requirements. For example, you may want only admin users to have decrypt permission on the password key.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ConnectionPasswordEncryption {
+    /// <p>A KMS key used to protect access to the JDBC source. </p> <p>All users in your account should be granted the <code>kms:encrypt</code> permission to encrypt passwords before storing them in the Data Catalog (through the AWS Glue <code>CreateConnection</code> operation).</p> <p>The decrypt permission should be granted only to KMS key admins and IAM roles designated for AWS Glue crawlers.</p>
+    #[serde(rename = "AwsKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_kms_key_id: Option<String>,
+    /// <p>When the <code>ReturnConnectionPasswordEncrypted</code> flag is set to "true", passwords remain encrypted in the responses of <code>GetConnection</code> and <code>GetConnections</code>. This encryption takes effect independently from catalog encryption. </p>
+    #[serde(rename = "ReturnConnectionPasswordEncrypted")]
+    pub return_connection_password_encrypted: bool,
 }
 
 /// <p>Specifies the connections used by a job.</p>
@@ -480,6 +509,10 @@ pub struct Crawler {
     #[serde(rename = "CrawlElapsedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub crawl_elapsed_time: Option<i64>,
+    /// <p>The name of the SecurityConfiguration structure to be used by this Crawler.</p>
+    #[serde(rename = "CrawlerSecurityConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub crawler_security_configuration: Option<String>,
     /// <p>The time when the crawler was created.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -634,6 +667,10 @@ pub struct CreateCrawlerRequest {
     #[serde(rename = "Configuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration: Option<String>,
+    /// <p>The name of the SecurityConfiguration structure to be used by this Crawler.</p>
+    #[serde(rename = "CrawlerSecurityConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub crawler_security_configuration: Option<String>,
     /// <p>The AWS Glue database where results are written, such as: <code>arn:aws:daylight:us-east-1::database/sometable/*</code>.</p>
     #[serde(rename = "DatabaseName")]
     pub database_name: String,
@@ -711,6 +748,10 @@ pub struct CreateDevEndpointRequest {
     /// <p>The IAM role for the DevEndpoint.</p>
     #[serde(rename = "RoleArn")]
     pub role_arn: String,
+    /// <p>The name of the SecurityConfiguration structure to be used with this DevEndpoint.</p>
+    #[serde(rename = "SecurityConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_configuration: Option<String>,
     /// <p>Security group IDs for the security groups to be used by the new DevEndpoint.</p>
     #[serde(rename = "SecurityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -756,6 +797,10 @@ pub struct CreateDevEndpointResponse {
     #[serde(rename = "RoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
+    /// <p>The name of the SecurityConfiguration structure being used with this DevEndpoint.</p>
+    #[serde(rename = "SecurityConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_configuration: Option<String>,
     /// <p>The security groups assigned to the new DevEndpoint.</p>
     #[serde(rename = "SecurityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -802,10 +847,6 @@ pub struct CreateGrokClassifierRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateJobRequest {
-    /// <p>The number of AWS Glue data processing units (DPUs) to allocate to this Job. From 2 to 100 DPUs can be allocated; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p>
-    #[serde(rename = "AllocatedCapacity")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub allocated_capacity: Option<i64>,
     /// <p>The JobCommand that executes this job.</p>
     #[serde(rename = "Command")]
     pub command: JobCommand,
@@ -829,6 +870,10 @@ pub struct CreateJobRequest {
     #[serde(rename = "LogUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_uri: Option<String>,
+    /// <p>AWS Glue supports running jobs on a <code>JobCommand.Name</code>="pythonshell" with allocated processing as low as 0.0625 DPU, which can be specified using <code>MaxCapacity</code>. Glue ETL jobs running in any other way cannot have fractional DPU allocations.</p>
+    #[serde(rename = "MaxCapacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_capacity: Option<f64>,
     /// <p>The maximum number of times to retry this job if it fails.</p>
     #[serde(rename = "MaxRetries")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -843,7 +888,11 @@ pub struct CreateJobRequest {
     /// <p>The name or ARN of the IAM role associated with this job.</p>
     #[serde(rename = "Role")]
     pub role: String,
-    /// <p>The job timeout in minutes. The default is 2880 minutes (48 hours).</p>
+    /// <p>The name of the SecurityConfiguration structure to be used with this job.</p>
+    #[serde(rename = "SecurityConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_configuration: Option<String>,
+    /// <p>The job timeout in minutes. This is the maximum time that a job run can consume resources before it is terminated and enters <code>TIMEOUT</code> status. The default is 2,880 minutes (48 hours).</p>
     #[serde(rename = "Timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout: Option<i64>,
@@ -917,6 +966,29 @@ pub struct CreateScriptResponse {
     #[serde(rename = "ScalaCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scala_code: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateSecurityConfigurationRequest {
+    /// <p>The encryption configuration for the new security configuration.</p>
+    #[serde(rename = "EncryptionConfiguration")]
+    pub encryption_configuration: EncryptionConfiguration,
+    /// <p>The name for the new security configuration.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateSecurityConfigurationResponse {
+    /// <p>The time at which the new security configuration was created.</p>
+    #[serde(rename = "CreatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_timestamp: Option<f64>,
+    /// <p>The name assigned to the new security configuration.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1008,6 +1080,19 @@ pub struct CreateXMLClassifierRequest {
     pub row_tag: Option<String>,
 }
 
+/// <p>Contains configuration information for maintaining Data Catalog security.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DataCatalogEncryptionSettings {
+    /// <p>When password protection is enabled, the Data Catalog uses a customer-provided key to encrypt the password as part of <code>CreateConnection</code> or <code>UpdateConnection</code> and store it in the <code>ENCRYPTED_PASSWORD</code> field in the connection properties. You can enable catalog encryption or only password encryption.</p>
+    #[serde(rename = "ConnectionPasswordEncryption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_password_encryption: Option<ConnectionPasswordEncryption>,
+    /// <p>Specifies encryption-at-rest configuration for the Data Catalog.</p>
+    #[serde(rename = "EncryptionAtRest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_at_rest: Option<EncryptionAtRest>,
+}
+
 /// <p>The <code>Database</code> object represents a logical grouping of tables that may reside in a Hive metastore or an RDBMS.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -1027,7 +1112,7 @@ pub struct Database {
     /// <p>Name of the database. For Hive compatibility, this is folded to lowercase when it is stored.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>A list of key-value pairs that define parameters and properties of the database.</p>
+    /// <p>These key-value pairs define parameters and properties of the database.</p>
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
@@ -1047,7 +1132,7 @@ pub struct DatabaseInput {
     /// <p>Name of the database. For Hive compatibility, this is folded to lowercase when it is stored.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>A list of key-value pairs that define parameters and properties of the database.</p>
+    /// <p>Thes key-value pairs define parameters and properties of the database.</p>
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
@@ -1154,6 +1239,29 @@ pub struct DeletePartitionRequest {
 pub struct DeletePartitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteResourcePolicyRequest {
+    /// <p>The hash value returned when this policy was set.</p>
+    #[serde(rename = "PolicyHashCondition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_hash_condition: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteResourcePolicyResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteSecurityConfigurationRequest {
+    /// <p>The name of the security configuration to delete.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteSecurityConfigurationResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteTableRequest {
     /// <p>The ID of the Data Catalog where the table resides. If none is supplied, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -1183,7 +1291,7 @@ pub struct DeleteTableVersionRequest {
     /// <p>The name of the table. For Hive compatibility, this name is entirely lowercase.</p>
     #[serde(rename = "TableName")]
     pub table_name: String,
-    /// <p>The ID of the table version to be deleted.</p>
+    /// <p>The ID of the table version to be deleted. A <code>VersionID</code> is a string representation of an integer. Each version is incremented by 1.</p>
     #[serde(rename = "VersionId")]
     pub version_id: String,
 }
@@ -1266,11 +1374,11 @@ pub struct DevEndpoint {
     #[serde(rename = "NumberOfNodes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_nodes: Option<i64>,
-    /// <p>A private DNS to access the DevEndpoint within a VPC, if the DevEndpoint is created within one.</p>
+    /// <p>A private IP address to access the DevEndpoint within a VPC, if the DevEndpoint is created within one. The PrivateAddress field is present only when you create the DevEndpoint within your virtual private cloud (VPC).</p>
     #[serde(rename = "PrivateAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub private_address: Option<String>,
-    /// <p>The public VPC address used by this DevEndpoint.</p>
+    /// <p>The public IP address used by this DevEndpoint. The PublicAddress field is present only when you create a non-VPC (virtual private cloud) DevEndpoint.</p>
     #[serde(rename = "PublicAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub public_address: Option<String>,
@@ -1286,6 +1394,10 @@ pub struct DevEndpoint {
     #[serde(rename = "RoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
+    /// <p>The name of the SecurityConfiguration structure to be used with this DevEndpoint.</p>
+    #[serde(rename = "SecurityConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_configuration: Option<String>,
     /// <p>A list of security group identifiers used in this DevEndpoint.</p>
     #[serde(rename = "SecurityGroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1332,6 +1444,35 @@ pub struct DynamoDBTarget {
     #[serde(rename = "Path")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub path: Option<String>,
+}
+
+/// <p>Specifies encryption-at-rest configuration for the Data Catalog.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EncryptionAtRest {
+    /// <p>The encryption-at-rest mode for encrypting Data Catalog data.</p>
+    #[serde(rename = "CatalogEncryptionMode")]
+    pub catalog_encryption_mode: String,
+    /// <p>The ID of the AWS KMS key to use for encryption at rest.</p>
+    #[serde(rename = "SseAwsKmsKeyId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sse_aws_kms_key_id: Option<String>,
+}
+
+/// <p>Specifies an encryption configuration.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EncryptionConfiguration {
+    /// <p>The encryption configuration for CloudWatch.</p>
+    #[serde(rename = "CloudWatchEncryption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_watch_encryption: Option<CloudWatchEncryption>,
+    /// <p>The encryption configuration for Job Bookmarks.</p>
+    #[serde(rename = "JobBookmarksEncryption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_bookmarks_encryption: Option<JobBookmarksEncryption>,
+    /// <p>The encryption configuration for S3 data.</p>
+    #[serde(rename = "S3Encryption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_encryption: Option<Vec<S3Encryption>>,
 }
 
 /// <p>Contains details about an error.</p>
@@ -1421,6 +1562,10 @@ pub struct GetConnectionRequest {
     #[serde(rename = "CatalogId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub catalog_id: Option<String>,
+    /// <p>Allow you to retrieve the connection metadata without displaying the password. For instance, the AWS Glue console uses this flag to retrieve connections, since the console does not display passwords. Set this parameter where the caller may not have permission to use the KMS key to decrypt the password, but does have permission to access the rest of the connection metadata (that is, the other connection properties).</p>
+    #[serde(rename = "HidePassword")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hide_password: Option<bool>,
     /// <p>The name of the connection definition to retrieve.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -1458,6 +1603,10 @@ pub struct GetConnectionsRequest {
     #[serde(rename = "Filter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<GetConnectionsFilter>,
+    /// <p>Allow you to retrieve the connection metadata without displaying the password. For instance, the AWS Glue console uses this flag to retrieve connections, since the console does not display passwords. Set this parameter where the caller may not have permission to use the KMS key to decrypt the password, but does have permission to access the rest of the connection metadata (that is, the other connection properties).</p>
+    #[serde(rename = "HidePassword")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hide_password: Option<bool>,
     /// <p>The maximum number of connections to return in one response.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1549,6 +1698,23 @@ pub struct GetCrawlersResponse {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetDataCatalogEncryptionSettingsRequest {
+    /// <p>The ID of the Data Catalog for which to retrieve the security configuration. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetDataCatalogEncryptionSettingsResponse {
+    /// <p>The requested security configuration.</p>
+    #[serde(rename = "DataCatalogEncryptionSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_catalog_encryption_settings: Option<DataCatalogEncryptionSettings>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1811,7 +1977,7 @@ pub struct GetPartitionsRequest {
     /// <p>The name of the catalog database where the partitions reside.</p>
     #[serde(rename = "DatabaseName")]
     pub database_name: String,
-    /// <p>An expression filtering the partitions to be returned.</p>
+    /// <p>An expression filtering the partitions to be returned.</p> <p>The expression uses SQL syntax similar to the SQL <code>WHERE</code> filter clause. The SQL statement parser <a href="http://jsqlparser.sourceforge.net/home.php">JSQLParser</a> parses the expression. </p> <p> <i>Operators</i>: The following are the operators that you can use in the <code>Expression</code> API call:</p> <dl> <dt>=</dt> <dd> <p>Checks if the values of the two operands are equal or not; if yes, then the condition becomes true.</p> <p>Example: Assume 'variable a' holds 10 and 'variable b' holds 20. </p> <p>(a = b) is not true.</p> </dd> <dt>&lt; &gt;</dt> <dd> <p>Checks if the values of two operands are equal or not; if the values are not equal, then the condition becomes true.</p> <p>Example: (a &lt; &gt; b) is true.</p> </dd> <dt>&gt;</dt> <dd> <p>Checks if the value of the left operand is greater than the value of the right operand; if yes, then the condition becomes true.</p> <p>Example: (a &gt; b) is not true.</p> </dd> <dt>&lt;</dt> <dd> <p>Checks if the value of the left operand is less than the value of the right operand; if yes, then the condition becomes true.</p> <p>Example: (a &lt; b) is true.</p> </dd> <dt>&gt;=</dt> <dd> <p>Checks if the value of the left operand is greater than or equal to the value of the right operand; if yes, then the condition becomes true.</p> <p>Example: (a &gt;= b) is not true.</p> </dd> <dt>&lt;=</dt> <dd> <p>Checks if the value of the left operand is less than or equal to the value of the right operand; if yes, then the condition becomes true.</p> <p>Example: (a &lt;= b) is true.</p> </dd> <dt>AND, OR, IN, BETWEEN, LIKE, NOT, IS NULL</dt> <dd> <p>Logical operators.</p> </dd> </dl> <p> <i>Supported Partition Key Types</i>: The following are the the supported partition keys.</p> <ul> <li> <p> <code>string</code> </p> </li> <li> <p> <code>date</code> </p> </li> <li> <p> <code>timestamp</code> </p> </li> <li> <p> <code>int</code> </p> </li> <li> <p> <code>bigint</code> </p> </li> <li> <p> <code>long</code> </p> </li> <li> <p> <code>tinyint</code> </p> </li> <li> <p> <code>smallint</code> </p> </li> <li> <p> <code>decimal</code> </p> </li> </ul> <p>If an invalid type is encountered, an exception is thrown. </p> <p>The following list shows the valid operators on each type. When you define a crawler, the <code>partitionKey</code> type is created as a <code>STRING</code>, to be compatible with the catalog partitions. </p> <p> <i>Sample API Call</i>: </p>
     #[serde(rename = "Expression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expression: Option<String>,
@@ -1881,6 +2047,71 @@ pub struct GetPlanResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetResourcePolicyRequest {}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetResourcePolicyResponse {
+    /// <p>The date and time at which the policy was created.</p>
+    #[serde(rename = "CreateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub create_time: Option<f64>,
+    /// <p>Contains the hash value associated with this policy.</p>
+    #[serde(rename = "PolicyHash")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_hash: Option<String>,
+    /// <p>Contains the requested policy document, in JSON format.</p>
+    #[serde(rename = "PolicyInJson")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_in_json: Option<String>,
+    /// <p>The date and time at which the policy was last updated.</p>
+    #[serde(rename = "UpdateTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update_time: Option<f64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetSecurityConfigurationRequest {
+    /// <p>The name of the security configuration to retrieve.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetSecurityConfigurationResponse {
+    /// <p>The requested security configuration</p>
+    #[serde(rename = "SecurityConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_configuration: Option<SecurityConfiguration>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetSecurityConfigurationsRequest {
+    /// <p>The maximum number of results to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A continuation token, if this is a continuation call.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetSecurityConfigurationsResponse {
+    /// <p>A continuation token, if there are more security configurations to return.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of security configurations.</p>
+    #[serde(rename = "SecurityConfigurations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_configurations: Option<Vec<SecurityConfiguration>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetTableRequest {
     /// <p>The ID of the Data Catalog where the table resides. If none is supplied, the AWS account ID is used by default.</p>
     #[serde(rename = "CatalogId")]
@@ -1915,7 +2146,7 @@ pub struct GetTableVersionRequest {
     /// <p>The name of the table. For Hive compatibility, this name is entirely lowercase.</p>
     #[serde(rename = "TableName")]
     pub table_name: String,
-    /// <p>The ID value of the table version to be retrieved.</p>
+    /// <p>The ID value of the table version to be retrieved. A <code>VersionID</code> is a string representation of an integer. Each version is incremented by 1. </p>
     #[serde(rename = "VersionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version_id: Option<String>,
@@ -2168,10 +2399,6 @@ pub struct JdbcTarget {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Job {
-    /// <p>The number of AWS Glue data processing units (DPUs) allocated to runs of this job. From 2 to 100 DPUs can be allocated; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p>
-    #[serde(rename = "AllocatedCapacity")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub allocated_capacity: Option<i64>,
     /// <p>The JobCommand that executes this job.</p>
     #[serde(rename = "Command")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2204,6 +2431,10 @@ pub struct Job {
     #[serde(rename = "LogUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_uri: Option<String>,
+    /// <p>AWS Glue supports running jobs on a <code>JobCommand.Name</code>="pythonshell" with allocated processing as low as 0.0625 DPU, which can be specified using <code>MaxCapacity</code>. Glue ETL jobs running in any other way cannot have fractional DPU allocations.</p>
+    #[serde(rename = "MaxCapacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_capacity: Option<f64>,
     /// <p>The maximum number of times to retry this job after a JobRun fails.</p>
     #[serde(rename = "MaxRetries")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2220,7 +2451,11 @@ pub struct Job {
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
-    /// <p>The job timeout in minutes.</p>
+    /// <p>The name of the SecurityConfiguration structure to be used with this job.</p>
+    #[serde(rename = "SecurityConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_configuration: Option<String>,
+    /// <p>The job timeout in minutes. This is the maximum time that a job run can consume resources before it is terminated and enters <code>TIMEOUT</code> status. The default is 2,880 minutes (48 hours).</p>
     #[serde(rename = "Timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout: Option<i64>,
@@ -2252,10 +2487,23 @@ pub struct JobBookmarkEntry {
     pub version: Option<i64>,
 }
 
+/// <p>Specifies how Job bookmark data should be encrypted.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct JobBookmarksEncryption {
+    /// <p>The encryption mode to use for Job bookmarks data.</p>
+    #[serde(rename = "JobBookmarksEncryptionMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_bookmarks_encryption_mode: Option<String>,
+    /// <p>The AWS ARN of the KMS key to be used to encrypt the data.</p>
+    #[serde(rename = "KmsKeyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_arn: Option<String>,
+}
+
 /// <p>Specifies code executed when a job is run.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct JobCommand {
-    /// <p>The name of the job command: this must be <code>glueetl</code>.</p>
+    /// <p>The name of the job command: this must be <code>glueetl</code>, for an Apache Spark ETL job, or <code>pythonshell</code>, for a Python shell job.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -2269,10 +2517,6 @@ pub struct JobCommand {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct JobRun {
-    /// <p>The number of AWS Glue data processing units (DPUs) allocated to this JobRun. From 2 to 100 DPUs can be allocated; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p>
-    #[serde(rename = "AllocatedCapacity")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub allocated_capacity: Option<i64>,
     /// <p>The job arguments associated with this run. These override equivalent default arguments set for the job.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
     #[serde(rename = "Arguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2309,6 +2553,14 @@ pub struct JobRun {
     #[serde(rename = "LastModifiedOn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_modified_on: Option<f64>,
+    /// <p>The name of the log group for secure logging, that can be server-side encrypted in CloudWatch using KMS. This name can be <code>/aws-glue/jobs/</code>, in which case the default encryption is <code>NONE</code>. If you add a role name and SecurityConfiguration name (in other words, <code>/aws-glue/jobs-yourRoleName-yourSecurityConfigurationName/</code>), then that security configuration will be used to encrypt the log group.</p>
+    #[serde(rename = "LogGroupName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_group_name: Option<String>,
+    /// <p>AWS Glue supports running jobs on a <code>JobCommand.Name</code>="pythonshell" with allocated processing as low as 0.0625 DPU, which can be specified using <code>MaxCapacity</code>. Glue ETL jobs running in any other way cannot have fractional DPU allocations.</p>
+    #[serde(rename = "MaxCapacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_capacity: Option<f64>,
     /// <p>Specifies configuration properties of a job run notification.</p>
     #[serde(rename = "NotificationProperty")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2321,11 +2573,15 @@ pub struct JobRun {
     #[serde(rename = "PreviousRunId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub previous_run_id: Option<String>,
+    /// <p>The name of the SecurityConfiguration structure to be used with this job run.</p>
+    #[serde(rename = "SecurityConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_configuration: Option<String>,
     /// <p>The date and time at which this job run was started.</p>
     #[serde(rename = "StartedOn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub started_on: Option<f64>,
-    /// <p>The job run timeout in minutes.</p>
+    /// <p>The JobRun timeout in minutes. This is the maximum time that a job run can consume resources before it is terminated and enters <code>TIMEOUT</code> status. The default is 2,880 minutes (48 hours). This overrides the timeout value set in the parent job.</p>
     #[serde(rename = "Timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout: Option<i64>,
@@ -2338,10 +2594,6 @@ pub struct JobRun {
 /// <p>Specifies information used to update an existing job definition. Note that the previous job definition will be completely overwritten by this information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct JobUpdate {
-    /// <p>The number of AWS Glue data processing units (DPUs) to allocate to this Job. From 2 to 100 DPUs can be allocated; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p>
-    #[serde(rename = "AllocatedCapacity")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub allocated_capacity: Option<i64>,
     /// <p>The JobCommand that executes this job (required).</p>
     #[serde(rename = "Command")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2366,6 +2618,10 @@ pub struct JobUpdate {
     #[serde(rename = "LogUri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_uri: Option<String>,
+    /// <p>AWS Glue supports running jobs on a <code>JobCommand.Name</code>="pythonshell" with allocated processing as low as 0.0625 DPU, which can be specified using <code>MaxCapacity</code>. Glue ETL jobs running in any other way cannot have fractional DPU allocations.</p>
+    #[serde(rename = "MaxCapacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_capacity: Option<f64>,
     /// <p>The maximum number of times to retry this job if it fails.</p>
     #[serde(rename = "MaxRetries")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2378,7 +2634,11 @@ pub struct JobUpdate {
     #[serde(rename = "Role")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role: Option<String>,
-    /// <p>The job timeout in minutes. The default is 2880 minutes (48 hours).</p>
+    /// <p>The name of the SecurityConfiguration structure to be used with this job.</p>
+    #[serde(rename = "SecurityConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_configuration: Option<String>,
+    /// <p>The job timeout in minutes. This is the maximum time that a job run can consume resources before it is terminated and enters <code>TIMEOUT</code> status. The default is 2,880 minutes (48 hours).</p>
     #[serde(rename = "Timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout: Option<i64>,
@@ -2524,7 +2784,7 @@ pub struct Partition {
     #[serde(rename = "LastAnalyzedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_analyzed_time: Option<f64>,
-    /// <p>Partition parameters, in the form of a list of key-value pairs.</p>
+    /// <p>These key-value pairs define partition parameters.</p>
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
@@ -2567,7 +2827,7 @@ pub struct PartitionInput {
     #[serde(rename = "LastAnalyzedTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_analyzed_time: Option<f64>,
-    /// <p>Partition parameters, in the form of a list of key-value pairs.</p>
+    /// <p>These key-value pairs define partition parameters.</p>
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
@@ -2592,7 +2852,7 @@ pub struct PartitionValueList {
 /// <p>Specifies the physical requirements for a connection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PhysicalConnectionRequirements {
-    /// <p>The connection's availability zone. This field is deprecated and has no effect.</p>
+    /// <p>The connection's availability zone. This field is redundant, since the specified subnet implies the availability zone to be used. The field must be populated now, but will be deprecated in the future.</p>
     #[serde(rename = "AvailabilityZone")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zone: Option<String>,
@@ -2634,6 +2894,45 @@ pub struct Predicate {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct PutDataCatalogEncryptionSettingsRequest {
+    /// <p>The ID of the Data Catalog for which to set the security configuration. If none is supplied, the AWS account ID is used by default.</p>
+    #[serde(rename = "CatalogId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub catalog_id: Option<String>,
+    /// <p>The security configuration to set.</p>
+    #[serde(rename = "DataCatalogEncryptionSettings")]
+    pub data_catalog_encryption_settings: DataCatalogEncryptionSettings,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PutDataCatalogEncryptionSettingsResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct PutResourcePolicyRequest {
+    /// <p>A value of <code>MUST_EXIST</code> is used to update a policy. A value of <code>NOT_EXIST</code> is used to create a new policy. If a value of <code>NONE</code> or a null value is used, the call will not depend on the existence of a policy.</p>
+    #[serde(rename = "PolicyExistsCondition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_exists_condition: Option<String>,
+    /// <p>This is the hash value returned when the previous policy was set using PutResourcePolicy. Its purpose is to prevent concurrent modifications of a policy. Do not use this parameter if no previous policy has been set.</p>
+    #[serde(rename = "PolicyHashCondition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_hash_condition: Option<String>,
+    /// <p>Contains the policy document to set, in JSON format.</p>
+    #[serde(rename = "PolicyInJson")]
+    pub policy_in_json: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PutResourcePolicyResponse {
+    /// <p>A hash of the policy that has just been set. This must be included in a subsequent call that overwrites or updates this policy.</p>
+    #[serde(rename = "PolicyHash")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub policy_hash: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ResetJobBookmarkRequest {
     /// <p>The name of the job in question.</p>
     #[serde(rename = "JobName")]
@@ -2660,6 +2959,19 @@ pub struct ResourceUri {
     #[serde(rename = "Uri")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub uri: Option<String>,
+}
+
+/// <p>Specifies how S3 data should be encrypted.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct S3Encryption {
+    /// <p>The AWS ARN of the KMS key to be used to encrypt the data.</p>
+    #[serde(rename = "KmsKeyArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kms_key_arn: Option<String>,
+    /// <p>The encryption mode to use for S3 data.</p>
+    #[serde(rename = "S3EncryptionMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_encryption_mode: Option<String>,
 }
 
 /// <p>Specifies a data store in Amazon S3.</p>
@@ -2702,6 +3014,24 @@ pub struct SchemaChangePolicy {
     pub update_behavior: Option<String>,
 }
 
+/// <p>Specifies a security configuration.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SecurityConfiguration {
+    /// <p>The time at which this security configuration was created.</p>
+    #[serde(rename = "CreatedTimeStamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_time_stamp: Option<f64>,
+    /// <p>The encryption configuration associated with this security configuration.</p>
+    #[serde(rename = "EncryptionConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_configuration: Option<EncryptionConfiguration>,
+    /// <p>The name of the security configuration.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
 /// <p>Defines a non-overlapping region of a table's partitions, allowing multiple requests to be executed in parallel.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct Segment {
@@ -2720,7 +3050,7 @@ pub struct SerDeInfo {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>A list of initialization parameters for the SerDe, in key-value form.</p>
+    /// <p>These key-value pairs define initialization parameters for the SerDe.</p>
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
@@ -2771,10 +3101,6 @@ pub struct StartCrawlerScheduleResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartJobRunRequest {
-    /// <p>The number of AWS Glue data processing units (DPUs) to allocate to this JobRun. From 2 to 100 DPUs can be allocated; the default is 10. A DPU is a relative measure of processing power that consists of 4 vCPUs of compute capacity and 16 GB of memory. For more information, see the <a href="https://aws.amazon.com/glue/pricing/">AWS Glue pricing page</a>.</p>
-    #[serde(rename = "AllocatedCapacity")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub allocated_capacity: Option<i64>,
     /// <p>The job arguments specifically for this run. They override the equivalent default arguments set for in the job definition itself.</p> <p>You can specify arguments here that your own job-execution script consumes, as well as arguments that AWS Glue itself consumes.</p> <p>For information about how to specify and consume your own Job arguments, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-python-calling.html">Calling AWS Glue APIs in Python</a> topic in the developer guide.</p> <p>For information about the key-value pairs that AWS Glue consumes to set up your job, see the <a href="http://docs.aws.amazon.com/glue/latest/dg/aws-glue-programming-etl-glue-arguments.html">Special Parameters Used by AWS Glue</a> topic in the developer guide.</p>
     #[serde(rename = "Arguments")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2786,11 +3112,19 @@ pub struct StartJobRunRequest {
     #[serde(rename = "JobRunId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_run_id: Option<String>,
+    /// <p>AWS Glue supports running jobs on a <code>JobCommand.Name</code>="pythonshell" with allocated processing as low as 0.0625 DPU, which can be specified using <code>MaxCapacity</code>. Glue ETL jobs running in any other way cannot have fractional DPU allocations.</p>
+    #[serde(rename = "MaxCapacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_capacity: Option<f64>,
     /// <p>Specifies configuration properties of a job run notification.</p>
     #[serde(rename = "NotificationProperty")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub notification_property: Option<NotificationProperty>,
-    /// <p>The job run timeout in minutes. It overrides the timeout value of the job.</p>
+    /// <p>The name of the SecurityConfiguration structure to be used with this job run.</p>
+    #[serde(rename = "SecurityConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_configuration: Option<String>,
+    /// <p>The JobRun timeout in minutes. This is the maximum time that a job run can consume resources before it is terminated and enters <code>TIMEOUT</code> status. The default is 2,880 minutes (48 hours). This overrides the timeout value set in the parent job.</p>
     #[serde(rename = "Timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout: Option<i64>,
@@ -2947,11 +3281,11 @@ pub struct Table {
     #[serde(rename = "Owner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
-    /// <p>Properties associated with this table, as a list of key-value pairs.</p>
+    /// <p>These key-value pairs define properties associated with the table.</p>
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>A list of columns by which the table is partitioned. Only primitive types are supported as partition keys.</p>
+    /// <p>A list of columns by which the table is partitioned. Only primitive types are supported as partition keys.</p> <p>When creating a table used by Athena, and you do not specify any <code>partitionKeys</code>, you must at least set the value of <code>partitionKeys</code> to an empty list. For example:</p> <p> <code>"PartitionKeys": []</code> </p>
     #[serde(rename = "PartitionKeys")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub partition_keys: Option<Vec<Column>>,
@@ -3017,11 +3351,11 @@ pub struct TableInput {
     #[serde(rename = "Owner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
-    /// <p>Properties associated with this table, as a list of key-value pairs.</p>
+    /// <p>These key-value pairs define properties associated with the table.</p>
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, String>>,
-    /// <p>A list of columns by which the table is partitioned. Only primitive types are supported as partition keys.</p>
+    /// <p>A list of columns by which the table is partitioned. Only primitive types are supported as partition keys.</p> <p>When creating a table used by Athena, and you do not specify any <code>partitionKeys</code>, you must at least set the value of <code>partitionKeys</code> to an empty list. For example:</p> <p> <code>"PartitionKeys": []</code> </p>
     #[serde(rename = "PartitionKeys")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub partition_keys: Option<Vec<Column>>,
@@ -3055,7 +3389,7 @@ pub struct TableVersion {
     #[serde(rename = "Table")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table: Option<Table>,
-    /// <p>The ID value that identifies this table version.</p>
+    /// <p>The ID value that identifies this table version. A <code>VersionId</code> is a string representation of an integer. Each version is incremented by 1.</p>
     #[serde(rename = "VersionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version_id: Option<String>,
@@ -3073,7 +3407,7 @@ pub struct TableVersionError {
     #[serde(rename = "TableName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub table_name: Option<String>,
-    /// <p>The ID value of the version in question.</p>
+    /// <p>The ID value of the version in question. A <code>VersionID</code> is a string representation of an integer. Each version is incremented by 1.</p>
     #[serde(rename = "VersionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version_id: Option<String>,
@@ -3190,6 +3524,10 @@ pub struct UpdateCrawlerRequest {
     #[serde(rename = "Configuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration: Option<String>,
+    /// <p>The name of the SecurityConfiguration structure to be used by this Crawler.</p>
+    #[serde(rename = "CrawlerSecurityConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub crawler_security_configuration: Option<String>,
     /// <p>The AWS Glue database where results are stored, such as: <code>arn:aws:daylight:us-east-1::database/sometable/*</code>.</p>
     #[serde(rename = "DatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3270,7 +3608,7 @@ pub struct UpdateDevEndpointRequest {
     #[serde(rename = "CustomLibraries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub custom_libraries: Option<DevEndpointCustomLibraries>,
-    /// <p>The list of public keys to be deleted from the DevEndpoint. </p>
+    /// <p>The list of public keys to be deleted from the DevEndpoint.</p>
     #[serde(rename = "DeletePublicKeys")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub delete_public_keys: Option<Vec<String>>,
@@ -3534,6 +3872,8 @@ pub enum BatchCreatePartitionError {
     AlreadyExists(String),
     /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
     /// <p>An internal service error occurred.</p>
     InternalService(String),
     /// <p>The input provided was not valid.</p>
@@ -3572,6 +3912,9 @@ impl BatchCreatePartitionError {
                 }
                 "EntityNotFoundException" => {
                     return BatchCreatePartitionError::EntityNotFound(String::from(error_message));
+                }
+                "GlueEncryptionException" => {
+                    return BatchCreatePartitionError::GlueEncryption(String::from(error_message));
                 }
                 "InternalServiceException" => {
                     return BatchCreatePartitionError::InternalService(String::from(error_message));
@@ -3627,6 +3970,7 @@ impl Error for BatchCreatePartitionError {
         match *self {
             BatchCreatePartitionError::AlreadyExists(ref cause) => cause,
             BatchCreatePartitionError::EntityNotFound(ref cause) => cause,
+            BatchCreatePartitionError::GlueEncryption(ref cause) => cause,
             BatchCreatePartitionError::InternalService(ref cause) => cause,
             BatchCreatePartitionError::InvalidInput(ref cause) => cause,
             BatchCreatePartitionError::OperationTimeout(ref cause) => cause,
@@ -4036,6 +4380,8 @@ impl Error for BatchDeleteTableVersionError {
 pub enum BatchGetPartitionError {
     /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
     /// <p>An internal service error occurred.</p>
     InternalService(String),
     /// <p>The input provided was not valid.</p>
@@ -4069,6 +4415,9 @@ impl BatchGetPartitionError {
             match *error_type {
                 "EntityNotFoundException" => {
                     return BatchGetPartitionError::EntityNotFound(String::from(error_message));
+                }
+                "GlueEncryptionException" => {
+                    return BatchGetPartitionError::GlueEncryption(String::from(error_message));
                 }
                 "InternalServiceException" => {
                     return BatchGetPartitionError::InternalService(String::from(error_message));
@@ -4118,6 +4467,7 @@ impl Error for BatchGetPartitionError {
     fn description(&self) -> &str {
         match *self {
             BatchGetPartitionError::EntityNotFound(ref cause) => cause,
+            BatchGetPartitionError::GlueEncryption(ref cause) => cause,
             BatchGetPartitionError::InternalService(ref cause) => cause,
             BatchGetPartitionError::InvalidInput(ref cause) => cause,
             BatchGetPartitionError::OperationTimeout(ref cause) => cause,
@@ -4322,6 +4672,8 @@ impl Error for CreateClassifierError {
 pub enum CreateConnectionError {
     /// <p>A resource to be created or added already exists.</p>
     AlreadyExists(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
     /// <p>The input provided was not valid.</p>
     InvalidInput(String),
     /// <p>The operation timed out.</p>
@@ -4355,6 +4707,9 @@ impl CreateConnectionError {
             match *error_type {
                 "AlreadyExistsException" => {
                     return CreateConnectionError::AlreadyExists(String::from(error_message));
+                }
+                "GlueEncryptionException" => {
+                    return CreateConnectionError::GlueEncryption(String::from(error_message));
                 }
                 "InvalidInputException" => {
                     return CreateConnectionError::InvalidInput(String::from(error_message));
@@ -4406,6 +4761,7 @@ impl Error for CreateConnectionError {
     fn description(&self) -> &str {
         match *self {
             CreateConnectionError::AlreadyExists(ref cause) => cause,
+            CreateConnectionError::GlueEncryption(ref cause) => cause,
             CreateConnectionError::InvalidInput(ref cause) => cause,
             CreateConnectionError::OperationTimeout(ref cause) => cause,
             CreateConnectionError::ResourceNumberLimitExceeded(ref cause) => cause,
@@ -4522,6 +4878,8 @@ impl Error for CreateCrawlerError {
 pub enum CreateDatabaseError {
     /// <p>A resource to be created or added already exists.</p>
     AlreadyExists(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
     /// <p>An internal service error occurred.</p>
     InternalService(String),
     /// <p>The input provided was not valid.</p>
@@ -4557,6 +4915,9 @@ impl CreateDatabaseError {
             match *error_type {
                 "AlreadyExistsException" => {
                     return CreateDatabaseError::AlreadyExists(String::from(error_message));
+                }
+                "GlueEncryptionException" => {
+                    return CreateDatabaseError::GlueEncryption(String::from(error_message));
                 }
                 "InternalServiceException" => {
                     return CreateDatabaseError::InternalService(String::from(error_message));
@@ -4611,6 +4972,7 @@ impl Error for CreateDatabaseError {
     fn description(&self) -> &str {
         match *self {
             CreateDatabaseError::AlreadyExists(ref cause) => cause,
+            CreateDatabaseError::GlueEncryption(ref cause) => cause,
             CreateDatabaseError::InternalService(ref cause) => cause,
             CreateDatabaseError::InvalidInput(ref cause) => cause,
             CreateDatabaseError::OperationTimeout(ref cause) => cause,
@@ -4868,6 +5230,8 @@ pub enum CreatePartitionError {
     AlreadyExists(String),
     /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
     /// <p>An internal service error occurred.</p>
     InternalService(String),
     /// <p>The input provided was not valid.</p>
@@ -4906,6 +5270,9 @@ impl CreatePartitionError {
                 }
                 "EntityNotFoundException" => {
                     return CreatePartitionError::EntityNotFound(String::from(error_message));
+                }
+                "GlueEncryptionException" => {
+                    return CreatePartitionError::GlueEncryption(String::from(error_message));
                 }
                 "InternalServiceException" => {
                     return CreatePartitionError::InternalService(String::from(error_message));
@@ -4961,6 +5328,7 @@ impl Error for CreatePartitionError {
         match *self {
             CreatePartitionError::AlreadyExists(ref cause) => cause,
             CreatePartitionError::EntityNotFound(ref cause) => cause,
+            CreatePartitionError::GlueEncryption(ref cause) => cause,
             CreatePartitionError::InternalService(ref cause) => cause,
             CreatePartitionError::InvalidInput(ref cause) => cause,
             CreatePartitionError::OperationTimeout(ref cause) => cause,
@@ -5065,6 +5433,122 @@ impl Error for CreateScriptError {
         }
     }
 }
+/// Errors returned by CreateSecurityConfiguration
+#[derive(Debug, PartialEq)]
+pub enum CreateSecurityConfigurationError {
+    /// <p>A resource to be created or added already exists.</p>
+    AlreadyExists(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+    /// <p>A resource numerical limit was exceeded.</p>
+    ResourceNumberLimitExceeded(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl CreateSecurityConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> CreateSecurityConfigurationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AlreadyExistsException" => {
+                    return CreateSecurityConfigurationError::AlreadyExists(String::from(
+                        error_message,
+                    ));
+                }
+                "InternalServiceException" => {
+                    return CreateSecurityConfigurationError::InternalService(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidInputException" => {
+                    return CreateSecurityConfigurationError::InvalidInput(String::from(
+                        error_message,
+                    ));
+                }
+                "OperationTimeoutException" => {
+                    return CreateSecurityConfigurationError::OperationTimeout(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceNumberLimitExceededException" => {
+                    return CreateSecurityConfigurationError::ResourceNumberLimitExceeded(
+                        String::from(error_message),
+                    );
+                }
+                "ValidationException" => {
+                    return CreateSecurityConfigurationError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return CreateSecurityConfigurationError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for CreateSecurityConfigurationError {
+    fn from(err: serde_json::error::Error) -> CreateSecurityConfigurationError {
+        CreateSecurityConfigurationError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateSecurityConfigurationError {
+    fn from(err: CredentialsError) -> CreateSecurityConfigurationError {
+        CreateSecurityConfigurationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateSecurityConfigurationError {
+    fn from(err: HttpDispatchError) -> CreateSecurityConfigurationError {
+        CreateSecurityConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateSecurityConfigurationError {
+    fn from(err: io::Error) -> CreateSecurityConfigurationError {
+        CreateSecurityConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateSecurityConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateSecurityConfigurationError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateSecurityConfigurationError::AlreadyExists(ref cause) => cause,
+            CreateSecurityConfigurationError::InternalService(ref cause) => cause,
+            CreateSecurityConfigurationError::InvalidInput(ref cause) => cause,
+            CreateSecurityConfigurationError::OperationTimeout(ref cause) => cause,
+            CreateSecurityConfigurationError::ResourceNumberLimitExceeded(ref cause) => cause,
+            CreateSecurityConfigurationError::Validation(ref cause) => cause,
+            CreateSecurityConfigurationError::Credentials(ref err) => err.description(),
+            CreateSecurityConfigurationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateSecurityConfigurationError::ParseError(ref cause) => cause,
+            CreateSecurityConfigurationError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by CreateTable
 #[derive(Debug, PartialEq)]
 pub enum CreateTableError {
@@ -5072,6 +5556,8 @@ pub enum CreateTableError {
     AlreadyExists(String),
     /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
     /// <p>An internal service error occurred.</p>
     InternalService(String),
     /// <p>The input provided was not valid.</p>
@@ -5110,6 +5596,9 @@ impl CreateTableError {
                 }
                 "EntityNotFoundException" => {
                     return CreateTableError::EntityNotFound(String::from(error_message));
+                }
+                "GlueEncryptionException" => {
+                    return CreateTableError::GlueEncryption(String::from(error_message));
                 }
                 "InternalServiceException" => {
                     return CreateTableError::InternalService(String::from(error_message));
@@ -5165,6 +5654,7 @@ impl Error for CreateTableError {
         match *self {
             CreateTableError::AlreadyExists(ref cause) => cause,
             CreateTableError::EntityNotFound(ref cause) => cause,
+            CreateTableError::GlueEncryption(ref cause) => cause,
             CreateTableError::InternalService(ref cause) => cause,
             CreateTableError::InvalidInput(ref cause) => cause,
             CreateTableError::OperationTimeout(ref cause) => cause,
@@ -5304,6 +5794,8 @@ pub enum CreateUserDefinedFunctionError {
     AlreadyExists(String),
     /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
     /// <p>An internal service error occurred.</p>
     InternalService(String),
     /// <p>The input provided was not valid.</p>
@@ -5344,6 +5836,11 @@ impl CreateUserDefinedFunctionError {
                 }
                 "EntityNotFoundException" => {
                     return CreateUserDefinedFunctionError::EntityNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "GlueEncryptionException" => {
+                    return CreateUserDefinedFunctionError::GlueEncryption(String::from(
                         error_message,
                     ));
                 }
@@ -5405,6 +5902,7 @@ impl Error for CreateUserDefinedFunctionError {
         match *self {
             CreateUserDefinedFunctionError::AlreadyExists(ref cause) => cause,
             CreateUserDefinedFunctionError::EntityNotFound(ref cause) => cause,
+            CreateUserDefinedFunctionError::GlueEncryption(ref cause) => cause,
             CreateUserDefinedFunctionError::InternalService(ref cause) => cause,
             CreateUserDefinedFunctionError::InvalidInput(ref cause) => cause,
             CreateUserDefinedFunctionError::OperationTimeout(ref cause) => cause,
@@ -6077,6 +6575,222 @@ impl Error for DeletePartitionError {
         }
     }
 }
+/// Errors returned by DeleteResourcePolicy
+#[derive(Debug, PartialEq)]
+pub enum DeleteResourcePolicyError {
+    /// <p>A specified condition was not satisfied.</p>
+    ConditionCheckFailure(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DeleteResourcePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteResourcePolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ConditionCheckFailureException" => {
+                    return DeleteResourcePolicyError::ConditionCheckFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "EntityNotFoundException" => {
+                    return DeleteResourcePolicyError::EntityNotFound(String::from(error_message));
+                }
+                "InternalServiceException" => {
+                    return DeleteResourcePolicyError::InternalService(String::from(error_message));
+                }
+                "InvalidInputException" => {
+                    return DeleteResourcePolicyError::InvalidInput(String::from(error_message));
+                }
+                "OperationTimeoutException" => {
+                    return DeleteResourcePolicyError::OperationTimeout(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return DeleteResourcePolicyError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DeleteResourcePolicyError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteResourcePolicyError {
+    fn from(err: serde_json::error::Error) -> DeleteResourcePolicyError {
+        DeleteResourcePolicyError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteResourcePolicyError {
+    fn from(err: CredentialsError) -> DeleteResourcePolicyError {
+        DeleteResourcePolicyError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteResourcePolicyError {
+    fn from(err: HttpDispatchError) -> DeleteResourcePolicyError {
+        DeleteResourcePolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteResourcePolicyError {
+    fn from(err: io::Error) -> DeleteResourcePolicyError {
+        DeleteResourcePolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteResourcePolicyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteResourcePolicyError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteResourcePolicyError::ConditionCheckFailure(ref cause) => cause,
+            DeleteResourcePolicyError::EntityNotFound(ref cause) => cause,
+            DeleteResourcePolicyError::InternalService(ref cause) => cause,
+            DeleteResourcePolicyError::InvalidInput(ref cause) => cause,
+            DeleteResourcePolicyError::OperationTimeout(ref cause) => cause,
+            DeleteResourcePolicyError::Validation(ref cause) => cause,
+            DeleteResourcePolicyError::Credentials(ref err) => err.description(),
+            DeleteResourcePolicyError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteResourcePolicyError::ParseError(ref cause) => cause,
+            DeleteResourcePolicyError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DeleteSecurityConfiguration
+#[derive(Debug, PartialEq)]
+pub enum DeleteSecurityConfigurationError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DeleteSecurityConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteSecurityConfigurationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "EntityNotFoundException" => {
+                    return DeleteSecurityConfigurationError::EntityNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "InternalServiceException" => {
+                    return DeleteSecurityConfigurationError::InternalService(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidInputException" => {
+                    return DeleteSecurityConfigurationError::InvalidInput(String::from(
+                        error_message,
+                    ));
+                }
+                "OperationTimeoutException" => {
+                    return DeleteSecurityConfigurationError::OperationTimeout(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return DeleteSecurityConfigurationError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DeleteSecurityConfigurationError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteSecurityConfigurationError {
+    fn from(err: serde_json::error::Error) -> DeleteSecurityConfigurationError {
+        DeleteSecurityConfigurationError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteSecurityConfigurationError {
+    fn from(err: CredentialsError) -> DeleteSecurityConfigurationError {
+        DeleteSecurityConfigurationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteSecurityConfigurationError {
+    fn from(err: HttpDispatchError) -> DeleteSecurityConfigurationError {
+        DeleteSecurityConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteSecurityConfigurationError {
+    fn from(err: io::Error) -> DeleteSecurityConfigurationError {
+        DeleteSecurityConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteSecurityConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteSecurityConfigurationError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteSecurityConfigurationError::EntityNotFound(ref cause) => cause,
+            DeleteSecurityConfigurationError::InternalService(ref cause) => cause,
+            DeleteSecurityConfigurationError::InvalidInput(ref cause) => cause,
+            DeleteSecurityConfigurationError::OperationTimeout(ref cause) => cause,
+            DeleteSecurityConfigurationError::Validation(ref cause) => cause,
+            DeleteSecurityConfigurationError::Credentials(ref err) => err.description(),
+            DeleteSecurityConfigurationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteSecurityConfigurationError::ParseError(ref cause) => cause,
+            DeleteSecurityConfigurationError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by DeleteTable
 #[derive(Debug, PartialEq)]
 pub enum DeleteTableError {
@@ -6740,6 +7454,10 @@ impl Error for GetClassifiersError {
 pub enum GetConnectionError {
     /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
@@ -6769,6 +7487,12 @@ impl GetConnectionError {
             match *error_type {
                 "EntityNotFoundException" => {
                     return GetConnectionError::EntityNotFound(String::from(error_message));
+                }
+                "GlueEncryptionException" => {
+                    return GetConnectionError::GlueEncryption(String::from(error_message));
+                }
+                "InvalidInputException" => {
+                    return GetConnectionError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
                     return GetConnectionError::OperationTimeout(String::from(error_message));
@@ -6812,6 +7536,8 @@ impl Error for GetConnectionError {
     fn description(&self) -> &str {
         match *self {
             GetConnectionError::EntityNotFound(ref cause) => cause,
+            GetConnectionError::GlueEncryption(ref cause) => cause,
+            GetConnectionError::InvalidInput(ref cause) => cause,
             GetConnectionError::OperationTimeout(ref cause) => cause,
             GetConnectionError::Validation(ref cause) => cause,
             GetConnectionError::Credentials(ref err) => err.description(),
@@ -6826,6 +7552,10 @@ impl Error for GetConnectionError {
 pub enum GetConnectionsError {
     /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
     /// <p>The operation timed out.</p>
     OperationTimeout(String),
     /// An error occurred dispatching the HTTP request
@@ -6855,6 +7585,12 @@ impl GetConnectionsError {
             match *error_type {
                 "EntityNotFoundException" => {
                     return GetConnectionsError::EntityNotFound(String::from(error_message));
+                }
+                "GlueEncryptionException" => {
+                    return GetConnectionsError::GlueEncryption(String::from(error_message));
+                }
+                "InvalidInputException" => {
+                    return GetConnectionsError::InvalidInput(String::from(error_message));
                 }
                 "OperationTimeoutException" => {
                     return GetConnectionsError::OperationTimeout(String::from(error_message));
@@ -6898,6 +7634,8 @@ impl Error for GetConnectionsError {
     fn description(&self) -> &str {
         match *self {
             GetConnectionsError::EntityNotFound(ref cause) => cause,
+            GetConnectionsError::GlueEncryption(ref cause) => cause,
+            GetConnectionsError::InvalidInput(ref cause) => cause,
             GetConnectionsError::OperationTimeout(ref cause) => cause,
             GetConnectionsError::Validation(ref cause) => cause,
             GetConnectionsError::Credentials(ref err) => err.description(),
@@ -7155,11 +7893,115 @@ impl Error for GetCrawlersError {
         }
     }
 }
+/// Errors returned by GetDataCatalogEncryptionSettings
+#[derive(Debug, PartialEq)]
+pub enum GetDataCatalogEncryptionSettingsError {
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetDataCatalogEncryptionSettingsError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetDataCatalogEncryptionSettingsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalServiceException" => {
+                    return GetDataCatalogEncryptionSettingsError::InternalService(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidInputException" => {
+                    return GetDataCatalogEncryptionSettingsError::InvalidInput(String::from(
+                        error_message,
+                    ));
+                }
+                "OperationTimeoutException" => {
+                    return GetDataCatalogEncryptionSettingsError::OperationTimeout(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return GetDataCatalogEncryptionSettingsError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return GetDataCatalogEncryptionSettingsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetDataCatalogEncryptionSettingsError {
+    fn from(err: serde_json::error::Error) -> GetDataCatalogEncryptionSettingsError {
+        GetDataCatalogEncryptionSettingsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetDataCatalogEncryptionSettingsError {
+    fn from(err: CredentialsError) -> GetDataCatalogEncryptionSettingsError {
+        GetDataCatalogEncryptionSettingsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetDataCatalogEncryptionSettingsError {
+    fn from(err: HttpDispatchError) -> GetDataCatalogEncryptionSettingsError {
+        GetDataCatalogEncryptionSettingsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetDataCatalogEncryptionSettingsError {
+    fn from(err: io::Error) -> GetDataCatalogEncryptionSettingsError {
+        GetDataCatalogEncryptionSettingsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetDataCatalogEncryptionSettingsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetDataCatalogEncryptionSettingsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetDataCatalogEncryptionSettingsError::InternalService(ref cause) => cause,
+            GetDataCatalogEncryptionSettingsError::InvalidInput(ref cause) => cause,
+            GetDataCatalogEncryptionSettingsError::OperationTimeout(ref cause) => cause,
+            GetDataCatalogEncryptionSettingsError::Validation(ref cause) => cause,
+            GetDataCatalogEncryptionSettingsError::Credentials(ref err) => err.description(),
+            GetDataCatalogEncryptionSettingsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetDataCatalogEncryptionSettingsError::ParseError(ref cause) => cause,
+            GetDataCatalogEncryptionSettingsError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by GetDatabase
 #[derive(Debug, PartialEq)]
 pub enum GetDatabaseError {
     /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
     /// <p>An internal service error occurred.</p>
     InternalService(String),
     /// <p>The input provided was not valid.</p>
@@ -7193,6 +8035,9 @@ impl GetDatabaseError {
             match *error_type {
                 "EntityNotFoundException" => {
                     return GetDatabaseError::EntityNotFound(String::from(error_message));
+                }
+                "GlueEncryptionException" => {
+                    return GetDatabaseError::GlueEncryption(String::from(error_message));
                 }
                 "InternalServiceException" => {
                     return GetDatabaseError::InternalService(String::from(error_message));
@@ -7242,6 +8087,7 @@ impl Error for GetDatabaseError {
     fn description(&self) -> &str {
         match *self {
             GetDatabaseError::EntityNotFound(ref cause) => cause,
+            GetDatabaseError::GlueEncryption(ref cause) => cause,
             GetDatabaseError::InternalService(ref cause) => cause,
             GetDatabaseError::InvalidInput(ref cause) => cause,
             GetDatabaseError::OperationTimeout(ref cause) => cause,
@@ -7256,6 +8102,8 @@ impl Error for GetDatabaseError {
 /// Errors returned by GetDatabases
 #[derive(Debug, PartialEq)]
 pub enum GetDatabasesError {
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
     /// <p>An internal service error occurred.</p>
     InternalService(String),
     /// <p>The input provided was not valid.</p>
@@ -7287,6 +8135,9 @@ impl GetDatabasesError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "GlueEncryptionException" => {
+                    return GetDatabasesError::GlueEncryption(String::from(error_message));
+                }
                 "InternalServiceException" => {
                     return GetDatabasesError::InternalService(String::from(error_message));
                 }
@@ -7334,6 +8185,7 @@ impl fmt::Display for GetDatabasesError {
 impl Error for GetDatabasesError {
     fn description(&self) -> &str {
         match *self {
+            GetDatabasesError::GlueEncryption(ref cause) => cause,
             GetDatabasesError::InternalService(ref cause) => cause,
             GetDatabasesError::InvalidInput(ref cause) => cause,
             GetDatabasesError::OperationTimeout(ref cause) => cause,
@@ -8124,6 +8976,8 @@ impl Error for GetMappingError {
 pub enum GetPartitionError {
     /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
     /// <p>An internal service error occurred.</p>
     InternalService(String),
     /// <p>The input provided was not valid.</p>
@@ -8157,6 +9011,9 @@ impl GetPartitionError {
             match *error_type {
                 "EntityNotFoundException" => {
                     return GetPartitionError::EntityNotFound(String::from(error_message));
+                }
+                "GlueEncryptionException" => {
+                    return GetPartitionError::GlueEncryption(String::from(error_message));
                 }
                 "InternalServiceException" => {
                     return GetPartitionError::InternalService(String::from(error_message));
@@ -8206,6 +9063,7 @@ impl Error for GetPartitionError {
     fn description(&self) -> &str {
         match *self {
             GetPartitionError::EntityNotFound(ref cause) => cause,
+            GetPartitionError::GlueEncryption(ref cause) => cause,
             GetPartitionError::InternalService(ref cause) => cause,
             GetPartitionError::InvalidInput(ref cause) => cause,
             GetPartitionError::OperationTimeout(ref cause) => cause,
@@ -8222,6 +9080,8 @@ impl Error for GetPartitionError {
 pub enum GetPartitionsError {
     /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
     /// <p>An internal service error occurred.</p>
     InternalService(String),
     /// <p>The input provided was not valid.</p>
@@ -8255,6 +9115,9 @@ impl GetPartitionsError {
             match *error_type {
                 "EntityNotFoundException" => {
                     return GetPartitionsError::EntityNotFound(String::from(error_message));
+                }
+                "GlueEncryptionException" => {
+                    return GetPartitionsError::GlueEncryption(String::from(error_message));
                 }
                 "InternalServiceException" => {
                     return GetPartitionsError::InternalService(String::from(error_message));
@@ -8304,6 +9167,7 @@ impl Error for GetPartitionsError {
     fn description(&self) -> &str {
         match *self {
             GetPartitionsError::EntityNotFound(ref cause) => cause,
+            GetPartitionsError::GlueEncryption(ref cause) => cause,
             GetPartitionsError::InternalService(ref cause) => cause,
             GetPartitionsError::InvalidInput(ref cause) => cause,
             GetPartitionsError::OperationTimeout(ref cause) => cause,
@@ -8405,11 +9269,325 @@ impl Error for GetPlanError {
         }
     }
 }
+/// Errors returned by GetResourcePolicy
+#[derive(Debug, PartialEq)]
+pub enum GetResourcePolicyError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetResourcePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetResourcePolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "EntityNotFoundException" => {
+                    return GetResourcePolicyError::EntityNotFound(String::from(error_message));
+                }
+                "InternalServiceException" => {
+                    return GetResourcePolicyError::InternalService(String::from(error_message));
+                }
+                "InvalidInputException" => {
+                    return GetResourcePolicyError::InvalidInput(String::from(error_message));
+                }
+                "OperationTimeoutException" => {
+                    return GetResourcePolicyError::OperationTimeout(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return GetResourcePolicyError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetResourcePolicyError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetResourcePolicyError {
+    fn from(err: serde_json::error::Error) -> GetResourcePolicyError {
+        GetResourcePolicyError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetResourcePolicyError {
+    fn from(err: CredentialsError) -> GetResourcePolicyError {
+        GetResourcePolicyError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetResourcePolicyError {
+    fn from(err: HttpDispatchError) -> GetResourcePolicyError {
+        GetResourcePolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetResourcePolicyError {
+    fn from(err: io::Error) -> GetResourcePolicyError {
+        GetResourcePolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetResourcePolicyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetResourcePolicyError {
+    fn description(&self) -> &str {
+        match *self {
+            GetResourcePolicyError::EntityNotFound(ref cause) => cause,
+            GetResourcePolicyError::InternalService(ref cause) => cause,
+            GetResourcePolicyError::InvalidInput(ref cause) => cause,
+            GetResourcePolicyError::OperationTimeout(ref cause) => cause,
+            GetResourcePolicyError::Validation(ref cause) => cause,
+            GetResourcePolicyError::Credentials(ref err) => err.description(),
+            GetResourcePolicyError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetResourcePolicyError::ParseError(ref cause) => cause,
+            GetResourcePolicyError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetSecurityConfiguration
+#[derive(Debug, PartialEq)]
+pub enum GetSecurityConfigurationError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetSecurityConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetSecurityConfigurationError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "EntityNotFoundException" => {
+                    return GetSecurityConfigurationError::EntityNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "InternalServiceException" => {
+                    return GetSecurityConfigurationError::InternalService(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidInputException" => {
+                    return GetSecurityConfigurationError::InvalidInput(String::from(error_message));
+                }
+                "OperationTimeoutException" => {
+                    return GetSecurityConfigurationError::OperationTimeout(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return GetSecurityConfigurationError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetSecurityConfigurationError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetSecurityConfigurationError {
+    fn from(err: serde_json::error::Error) -> GetSecurityConfigurationError {
+        GetSecurityConfigurationError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetSecurityConfigurationError {
+    fn from(err: CredentialsError) -> GetSecurityConfigurationError {
+        GetSecurityConfigurationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetSecurityConfigurationError {
+    fn from(err: HttpDispatchError) -> GetSecurityConfigurationError {
+        GetSecurityConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetSecurityConfigurationError {
+    fn from(err: io::Error) -> GetSecurityConfigurationError {
+        GetSecurityConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetSecurityConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetSecurityConfigurationError {
+    fn description(&self) -> &str {
+        match *self {
+            GetSecurityConfigurationError::EntityNotFound(ref cause) => cause,
+            GetSecurityConfigurationError::InternalService(ref cause) => cause,
+            GetSecurityConfigurationError::InvalidInput(ref cause) => cause,
+            GetSecurityConfigurationError::OperationTimeout(ref cause) => cause,
+            GetSecurityConfigurationError::Validation(ref cause) => cause,
+            GetSecurityConfigurationError::Credentials(ref err) => err.description(),
+            GetSecurityConfigurationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetSecurityConfigurationError::ParseError(ref cause) => cause,
+            GetSecurityConfigurationError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetSecurityConfigurations
+#[derive(Debug, PartialEq)]
+pub enum GetSecurityConfigurationsError {
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetSecurityConfigurationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetSecurityConfigurationsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "EntityNotFoundException" => {
+                    return GetSecurityConfigurationsError::EntityNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "InternalServiceException" => {
+                    return GetSecurityConfigurationsError::InternalService(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidInputException" => {
+                    return GetSecurityConfigurationsError::InvalidInput(String::from(error_message));
+                }
+                "OperationTimeoutException" => {
+                    return GetSecurityConfigurationsError::OperationTimeout(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return GetSecurityConfigurationsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetSecurityConfigurationsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetSecurityConfigurationsError {
+    fn from(err: serde_json::error::Error) -> GetSecurityConfigurationsError {
+        GetSecurityConfigurationsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetSecurityConfigurationsError {
+    fn from(err: CredentialsError) -> GetSecurityConfigurationsError {
+        GetSecurityConfigurationsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetSecurityConfigurationsError {
+    fn from(err: HttpDispatchError) -> GetSecurityConfigurationsError {
+        GetSecurityConfigurationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetSecurityConfigurationsError {
+    fn from(err: io::Error) -> GetSecurityConfigurationsError {
+        GetSecurityConfigurationsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetSecurityConfigurationsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetSecurityConfigurationsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetSecurityConfigurationsError::EntityNotFound(ref cause) => cause,
+            GetSecurityConfigurationsError::InternalService(ref cause) => cause,
+            GetSecurityConfigurationsError::InvalidInput(ref cause) => cause,
+            GetSecurityConfigurationsError::OperationTimeout(ref cause) => cause,
+            GetSecurityConfigurationsError::Validation(ref cause) => cause,
+            GetSecurityConfigurationsError::Credentials(ref err) => err.description(),
+            GetSecurityConfigurationsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetSecurityConfigurationsError::ParseError(ref cause) => cause,
+            GetSecurityConfigurationsError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by GetTable
 #[derive(Debug, PartialEq)]
 pub enum GetTableError {
     /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
     /// <p>An internal service error occurred.</p>
     InternalService(String),
     /// <p>The input provided was not valid.</p>
@@ -8443,6 +9621,9 @@ impl GetTableError {
             match *error_type {
                 "EntityNotFoundException" => {
                     return GetTableError::EntityNotFound(String::from(error_message));
+                }
+                "GlueEncryptionException" => {
+                    return GetTableError::GlueEncryption(String::from(error_message));
                 }
                 "InternalServiceException" => {
                     return GetTableError::InternalService(String::from(error_message));
@@ -8492,6 +9673,7 @@ impl Error for GetTableError {
     fn description(&self) -> &str {
         match *self {
             GetTableError::EntityNotFound(ref cause) => cause,
+            GetTableError::GlueEncryption(ref cause) => cause,
             GetTableError::InternalService(ref cause) => cause,
             GetTableError::InvalidInput(ref cause) => cause,
             GetTableError::OperationTimeout(ref cause) => cause,
@@ -8508,6 +9690,8 @@ impl Error for GetTableError {
 pub enum GetTableVersionError {
     /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
     /// <p>An internal service error occurred.</p>
     InternalService(String),
     /// <p>The input provided was not valid.</p>
@@ -8541,6 +9725,9 @@ impl GetTableVersionError {
             match *error_type {
                 "EntityNotFoundException" => {
                     return GetTableVersionError::EntityNotFound(String::from(error_message));
+                }
+                "GlueEncryptionException" => {
+                    return GetTableVersionError::GlueEncryption(String::from(error_message));
                 }
                 "InternalServiceException" => {
                     return GetTableVersionError::InternalService(String::from(error_message));
@@ -8590,6 +9777,7 @@ impl Error for GetTableVersionError {
     fn description(&self) -> &str {
         match *self {
             GetTableVersionError::EntityNotFound(ref cause) => cause,
+            GetTableVersionError::GlueEncryption(ref cause) => cause,
             GetTableVersionError::InternalService(ref cause) => cause,
             GetTableVersionError::InvalidInput(ref cause) => cause,
             GetTableVersionError::OperationTimeout(ref cause) => cause,
@@ -8606,6 +9794,8 @@ impl Error for GetTableVersionError {
 pub enum GetTableVersionsError {
     /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
     /// <p>An internal service error occurred.</p>
     InternalService(String),
     /// <p>The input provided was not valid.</p>
@@ -8639,6 +9829,9 @@ impl GetTableVersionsError {
             match *error_type {
                 "EntityNotFoundException" => {
                     return GetTableVersionsError::EntityNotFound(String::from(error_message));
+                }
+                "GlueEncryptionException" => {
+                    return GetTableVersionsError::GlueEncryption(String::from(error_message));
                 }
                 "InternalServiceException" => {
                     return GetTableVersionsError::InternalService(String::from(error_message));
@@ -8688,6 +9881,7 @@ impl Error for GetTableVersionsError {
     fn description(&self) -> &str {
         match *self {
             GetTableVersionsError::EntityNotFound(ref cause) => cause,
+            GetTableVersionsError::GlueEncryption(ref cause) => cause,
             GetTableVersionsError::InternalService(ref cause) => cause,
             GetTableVersionsError::InvalidInput(ref cause) => cause,
             GetTableVersionsError::OperationTimeout(ref cause) => cause,
@@ -8704,6 +9898,8 @@ impl Error for GetTableVersionsError {
 pub enum GetTablesError {
     /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
     /// <p>An internal service error occurred.</p>
     InternalService(String),
     /// <p>The input provided was not valid.</p>
@@ -8737,6 +9933,9 @@ impl GetTablesError {
             match *error_type {
                 "EntityNotFoundException" => {
                     return GetTablesError::EntityNotFound(String::from(error_message));
+                }
+                "GlueEncryptionException" => {
+                    return GetTablesError::GlueEncryption(String::from(error_message));
                 }
                 "InternalServiceException" => {
                     return GetTablesError::InternalService(String::from(error_message));
@@ -8786,6 +9985,7 @@ impl Error for GetTablesError {
     fn description(&self) -> &str {
         match *self {
             GetTablesError::EntityNotFound(ref cause) => cause,
+            GetTablesError::GlueEncryption(ref cause) => cause,
             GetTablesError::InternalService(ref cause) => cause,
             GetTablesError::InvalidInput(ref cause) => cause,
             GetTablesError::OperationTimeout(ref cause) => cause,
@@ -8998,6 +10198,8 @@ impl Error for GetTriggersError {
 pub enum GetUserDefinedFunctionError {
     /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
     /// <p>An internal service error occurred.</p>
     InternalService(String),
     /// <p>The input provided was not valid.</p>
@@ -9031,6 +10233,9 @@ impl GetUserDefinedFunctionError {
             match *error_type {
                 "EntityNotFoundException" => {
                     return GetUserDefinedFunctionError::EntityNotFound(String::from(error_message));
+                }
+                "GlueEncryptionException" => {
+                    return GetUserDefinedFunctionError::GlueEncryption(String::from(error_message));
                 }
                 "InternalServiceException" => {
                     return GetUserDefinedFunctionError::InternalService(String::from(error_message));
@@ -9082,6 +10287,7 @@ impl Error for GetUserDefinedFunctionError {
     fn description(&self) -> &str {
         match *self {
             GetUserDefinedFunctionError::EntityNotFound(ref cause) => cause,
+            GetUserDefinedFunctionError::GlueEncryption(ref cause) => cause,
             GetUserDefinedFunctionError::InternalService(ref cause) => cause,
             GetUserDefinedFunctionError::InvalidInput(ref cause) => cause,
             GetUserDefinedFunctionError::OperationTimeout(ref cause) => cause,
@@ -9100,6 +10306,8 @@ impl Error for GetUserDefinedFunctionError {
 pub enum GetUserDefinedFunctionsError {
     /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
     /// <p>An internal service error occurred.</p>
     InternalService(String),
     /// <p>The input provided was not valid.</p>
@@ -9133,6 +10341,9 @@ impl GetUserDefinedFunctionsError {
             match *error_type {
                 "EntityNotFoundException" => {
                     return GetUserDefinedFunctionsError::EntityNotFound(String::from(error_message));
+                }
+                "GlueEncryptionException" => {
+                    return GetUserDefinedFunctionsError::GlueEncryption(String::from(error_message));
                 }
                 "InternalServiceException" => {
                     return GetUserDefinedFunctionsError::InternalService(String::from(
@@ -9186,6 +10397,7 @@ impl Error for GetUserDefinedFunctionsError {
     fn description(&self) -> &str {
         match *self {
             GetUserDefinedFunctionsError::EntityNotFound(ref cause) => cause,
+            GetUserDefinedFunctionsError::GlueEncryption(ref cause) => cause,
             GetUserDefinedFunctionsError::InternalService(ref cause) => cause,
             GetUserDefinedFunctionsError::InvalidInput(ref cause) => cause,
             GetUserDefinedFunctionsError::OperationTimeout(ref cause) => cause,
@@ -9284,6 +10496,216 @@ impl Error for ImportCatalogToGlueError {
             }
             ImportCatalogToGlueError::ParseError(ref cause) => cause,
             ImportCatalogToGlueError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by PutDataCatalogEncryptionSettings
+#[derive(Debug, PartialEq)]
+pub enum PutDataCatalogEncryptionSettingsError {
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl PutDataCatalogEncryptionSettingsError {
+    pub fn from_response(res: BufferedHttpResponse) -> PutDataCatalogEncryptionSettingsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalServiceException" => {
+                    return PutDataCatalogEncryptionSettingsError::InternalService(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidInputException" => {
+                    return PutDataCatalogEncryptionSettingsError::InvalidInput(String::from(
+                        error_message,
+                    ));
+                }
+                "OperationTimeoutException" => {
+                    return PutDataCatalogEncryptionSettingsError::OperationTimeout(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return PutDataCatalogEncryptionSettingsError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return PutDataCatalogEncryptionSettingsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for PutDataCatalogEncryptionSettingsError {
+    fn from(err: serde_json::error::Error) -> PutDataCatalogEncryptionSettingsError {
+        PutDataCatalogEncryptionSettingsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for PutDataCatalogEncryptionSettingsError {
+    fn from(err: CredentialsError) -> PutDataCatalogEncryptionSettingsError {
+        PutDataCatalogEncryptionSettingsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for PutDataCatalogEncryptionSettingsError {
+    fn from(err: HttpDispatchError) -> PutDataCatalogEncryptionSettingsError {
+        PutDataCatalogEncryptionSettingsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutDataCatalogEncryptionSettingsError {
+    fn from(err: io::Error) -> PutDataCatalogEncryptionSettingsError {
+        PutDataCatalogEncryptionSettingsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for PutDataCatalogEncryptionSettingsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutDataCatalogEncryptionSettingsError {
+    fn description(&self) -> &str {
+        match *self {
+            PutDataCatalogEncryptionSettingsError::InternalService(ref cause) => cause,
+            PutDataCatalogEncryptionSettingsError::InvalidInput(ref cause) => cause,
+            PutDataCatalogEncryptionSettingsError::OperationTimeout(ref cause) => cause,
+            PutDataCatalogEncryptionSettingsError::Validation(ref cause) => cause,
+            PutDataCatalogEncryptionSettingsError::Credentials(ref err) => err.description(),
+            PutDataCatalogEncryptionSettingsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            PutDataCatalogEncryptionSettingsError::ParseError(ref cause) => cause,
+            PutDataCatalogEncryptionSettingsError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by PutResourcePolicy
+#[derive(Debug, PartialEq)]
+pub enum PutResourcePolicyError {
+    /// <p>A specified condition was not satisfied.</p>
+    ConditionCheckFailure(String),
+    /// <p>A specified entity does not exist</p>
+    EntityNotFound(String),
+    /// <p>An internal service error occurred.</p>
+    InternalService(String),
+    /// <p>The input provided was not valid.</p>
+    InvalidInput(String),
+    /// <p>The operation timed out.</p>
+    OperationTimeout(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl PutResourcePolicyError {
+    pub fn from_response(res: BufferedHttpResponse) -> PutResourcePolicyError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ConditionCheckFailureException" => {
+                    return PutResourcePolicyError::ConditionCheckFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "EntityNotFoundException" => {
+                    return PutResourcePolicyError::EntityNotFound(String::from(error_message));
+                }
+                "InternalServiceException" => {
+                    return PutResourcePolicyError::InternalService(String::from(error_message));
+                }
+                "InvalidInputException" => {
+                    return PutResourcePolicyError::InvalidInput(String::from(error_message));
+                }
+                "OperationTimeoutException" => {
+                    return PutResourcePolicyError::OperationTimeout(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return PutResourcePolicyError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return PutResourcePolicyError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for PutResourcePolicyError {
+    fn from(err: serde_json::error::Error) -> PutResourcePolicyError {
+        PutResourcePolicyError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for PutResourcePolicyError {
+    fn from(err: CredentialsError) -> PutResourcePolicyError {
+        PutResourcePolicyError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for PutResourcePolicyError {
+    fn from(err: HttpDispatchError) -> PutResourcePolicyError {
+        PutResourcePolicyError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutResourcePolicyError {
+    fn from(err: io::Error) -> PutResourcePolicyError {
+        PutResourcePolicyError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for PutResourcePolicyError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutResourcePolicyError {
+    fn description(&self) -> &str {
+        match *self {
+            PutResourcePolicyError::ConditionCheckFailure(ref cause) => cause,
+            PutResourcePolicyError::EntityNotFound(ref cause) => cause,
+            PutResourcePolicyError::InternalService(ref cause) => cause,
+            PutResourcePolicyError::InvalidInput(ref cause) => cause,
+            PutResourcePolicyError::OperationTimeout(ref cause) => cause,
+            PutResourcePolicyError::Validation(ref cause) => cause,
+            PutResourcePolicyError::Credentials(ref err) => err.description(),
+            PutResourcePolicyError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            PutResourcePolicyError::ParseError(ref cause) => cause,
+            PutResourcePolicyError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10218,6 +11640,8 @@ impl Error for UpdateClassifierError {
 pub enum UpdateConnectionError {
     /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
     /// <p>The input provided was not valid.</p>
     InvalidInput(String),
     /// <p>The operation timed out.</p>
@@ -10249,6 +11673,9 @@ impl UpdateConnectionError {
             match *error_type {
                 "EntityNotFoundException" => {
                     return UpdateConnectionError::EntityNotFound(String::from(error_message));
+                }
+                "GlueEncryptionException" => {
+                    return UpdateConnectionError::GlueEncryption(String::from(error_message));
                 }
                 "InvalidInputException" => {
                     return UpdateConnectionError::InvalidInput(String::from(error_message));
@@ -10295,6 +11722,7 @@ impl Error for UpdateConnectionError {
     fn description(&self) -> &str {
         match *self {
             UpdateConnectionError::EntityNotFound(ref cause) => cause,
+            UpdateConnectionError::GlueEncryption(ref cause) => cause,
             UpdateConnectionError::InvalidInput(ref cause) => cause,
             UpdateConnectionError::OperationTimeout(ref cause) => cause,
             UpdateConnectionError::Validation(ref cause) => cause,
@@ -10522,6 +11950,8 @@ impl Error for UpdateCrawlerScheduleError {
 pub enum UpdateDatabaseError {
     /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
     /// <p>An internal service error occurred.</p>
     InternalService(String),
     /// <p>The input provided was not valid.</p>
@@ -10555,6 +11985,9 @@ impl UpdateDatabaseError {
             match *error_type {
                 "EntityNotFoundException" => {
                     return UpdateDatabaseError::EntityNotFound(String::from(error_message));
+                }
+                "GlueEncryptionException" => {
+                    return UpdateDatabaseError::GlueEncryption(String::from(error_message));
                 }
                 "InternalServiceException" => {
                     return UpdateDatabaseError::InternalService(String::from(error_message));
@@ -10604,6 +12037,7 @@ impl Error for UpdateDatabaseError {
     fn description(&self) -> &str {
         match *self {
             UpdateDatabaseError::EntityNotFound(ref cause) => cause,
+            UpdateDatabaseError::GlueEncryption(ref cause) => cause,
             UpdateDatabaseError::InternalService(ref cause) => cause,
             UpdateDatabaseError::InvalidInput(ref cause) => cause,
             UpdateDatabaseError::OperationTimeout(ref cause) => cause,
@@ -10824,6 +12258,8 @@ impl Error for UpdateJobError {
 pub enum UpdatePartitionError {
     /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
     /// <p>An internal service error occurred.</p>
     InternalService(String),
     /// <p>The input provided was not valid.</p>
@@ -10857,6 +12293,9 @@ impl UpdatePartitionError {
             match *error_type {
                 "EntityNotFoundException" => {
                     return UpdatePartitionError::EntityNotFound(String::from(error_message));
+                }
+                "GlueEncryptionException" => {
+                    return UpdatePartitionError::GlueEncryption(String::from(error_message));
                 }
                 "InternalServiceException" => {
                     return UpdatePartitionError::InternalService(String::from(error_message));
@@ -10906,6 +12345,7 @@ impl Error for UpdatePartitionError {
     fn description(&self) -> &str {
         match *self {
             UpdatePartitionError::EntityNotFound(ref cause) => cause,
+            UpdatePartitionError::GlueEncryption(ref cause) => cause,
             UpdatePartitionError::InternalService(ref cause) => cause,
             UpdatePartitionError::InvalidInput(ref cause) => cause,
             UpdatePartitionError::OperationTimeout(ref cause) => cause,
@@ -10924,6 +12364,8 @@ pub enum UpdateTableError {
     ConcurrentModification(String),
     /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
     /// <p>An internal service error occurred.</p>
     InternalService(String),
     /// <p>The input provided was not valid.</p>
@@ -10962,6 +12404,9 @@ impl UpdateTableError {
                 }
                 "EntityNotFoundException" => {
                     return UpdateTableError::EntityNotFound(String::from(error_message));
+                }
+                "GlueEncryptionException" => {
+                    return UpdateTableError::GlueEncryption(String::from(error_message));
                 }
                 "InternalServiceException" => {
                     return UpdateTableError::InternalService(String::from(error_message));
@@ -11017,6 +12462,7 @@ impl Error for UpdateTableError {
         match *self {
             UpdateTableError::ConcurrentModification(ref cause) => cause,
             UpdateTableError::EntityNotFound(ref cause) => cause,
+            UpdateTableError::GlueEncryption(ref cause) => cause,
             UpdateTableError::InternalService(ref cause) => cause,
             UpdateTableError::InvalidInput(ref cause) => cause,
             UpdateTableError::OperationTimeout(ref cause) => cause,
@@ -11138,6 +12584,8 @@ impl Error for UpdateTriggerError {
 pub enum UpdateUserDefinedFunctionError {
     /// <p>A specified entity does not exist</p>
     EntityNotFound(String),
+    /// <p>An encryption operation failed.</p>
+    GlueEncryption(String),
     /// <p>An internal service error occurred.</p>
     InternalService(String),
     /// <p>The input provided was not valid.</p>
@@ -11171,6 +12619,11 @@ impl UpdateUserDefinedFunctionError {
             match *error_type {
                 "EntityNotFoundException" => {
                     return UpdateUserDefinedFunctionError::EntityNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "GlueEncryptionException" => {
+                    return UpdateUserDefinedFunctionError::GlueEncryption(String::from(
                         error_message,
                     ));
                 }
@@ -11226,6 +12679,7 @@ impl Error for UpdateUserDefinedFunctionError {
     fn description(&self) -> &str {
         match *self {
             UpdateUserDefinedFunctionError::EntityNotFound(ref cause) => cause,
+            UpdateUserDefinedFunctionError::GlueEncryption(ref cause) => cause,
             UpdateUserDefinedFunctionError::InternalService(ref cause) => cause,
             UpdateUserDefinedFunctionError::InvalidInput(ref cause) => cause,
             UpdateUserDefinedFunctionError::OperationTimeout(ref cause) => cause,
@@ -11259,7 +12713,7 @@ pub trait Glue {
         input: BatchDeletePartitionRequest,
     ) -> RusotoFuture<BatchDeletePartitionResponse, BatchDeletePartitionError>;
 
-    /// <p>Deletes multiple tables at once.</p>
+    /// <p><p>Deletes multiple tables at once.</p> <note> <p>After completing this operation, you will no longer have access to the table versions and partitions that belong to the deleted table. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure immediate deletion of all related resources, before calling <code>BatchDeleteTable</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, and <code>DeletePartition</code> or <code>BatchDeletePartition</code>, to delete any resources that belong to the table.</p> </note></p>
     fn batch_delete_table(
         &self,
         input: BatchDeleteTableRequest,
@@ -11331,6 +12785,12 @@ pub trait Glue {
         input: CreateScriptRequest,
     ) -> RusotoFuture<CreateScriptResponse, CreateScriptError>;
 
+    /// <p>Creates a new security configuration.</p>
+    fn create_security_configuration(
+        &self,
+        input: CreateSecurityConfigurationRequest,
+    ) -> RusotoFuture<CreateSecurityConfigurationResponse, CreateSecurityConfigurationError>;
+
     /// <p>Creates a new table definition in the Data Catalog.</p>
     fn create_table(
         &self,
@@ -11367,7 +12827,7 @@ pub trait Glue {
         input: DeleteCrawlerRequest,
     ) -> RusotoFuture<DeleteCrawlerResponse, DeleteCrawlerError>;
 
-    /// <p>Removes a specified Database from a Data Catalog.</p>
+    /// <p><p>Removes a specified Database from a Data Catalog.</p> <note> <p>After completing this operation, you will no longer have access to the tables (and all table versions and partitions that might belong to the tables) and the user-defined functions in the deleted database. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure immediate deletion of all related resources, before calling <code>DeleteDatabase</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, <code>DeletePartition</code> or <code>BatchDeletePartition</code>, <code>DeleteUserDefinedFunction</code>, and <code>DeleteTable</code> or <code>BatchDeleteTable</code>, to delete any resources that belong to the database.</p> </note></p>
     fn delete_database(
         &self,
         input: DeleteDatabaseRequest,
@@ -11391,7 +12851,19 @@ pub trait Glue {
         input: DeletePartitionRequest,
     ) -> RusotoFuture<DeletePartitionResponse, DeletePartitionError>;
 
-    /// <p>Removes a table definition from the Data Catalog.</p>
+    /// <p>Deletes a specified policy.</p>
+    fn delete_resource_policy(
+        &self,
+        input: DeleteResourcePolicyRequest,
+    ) -> RusotoFuture<DeleteResourcePolicyResponse, DeleteResourcePolicyError>;
+
+    /// <p>Deletes a specified security configuration.</p>
+    fn delete_security_configuration(
+        &self,
+        input: DeleteSecurityConfigurationRequest,
+    ) -> RusotoFuture<DeleteSecurityConfigurationResponse, DeleteSecurityConfigurationError>;
+
+    /// <p><p>Removes a table definition from the Data Catalog.</p> <note> <p>After completing this operation, you will no longer have access to the table versions and partitions that belong to the deleted table. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure immediate deletion of all related resources, before calling <code>DeleteTable</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, and <code>DeletePartition</code> or <code>BatchDeletePartition</code>, to delete any resources that belong to the table.</p> </note></p>
     fn delete_table(
         &self,
         input: DeleteTableRequest,
@@ -11463,6 +12935,12 @@ pub trait Glue {
         input: GetCrawlersRequest,
     ) -> RusotoFuture<GetCrawlersResponse, GetCrawlersError>;
 
+    /// <p>Retrieves the security configuration for a specified catalog.</p>
+    fn get_data_catalog_encryption_settings(
+        &self,
+        input: GetDataCatalogEncryptionSettingsRequest,
+    ) -> RusotoFuture<GetDataCatalogEncryptionSettingsResponse, GetDataCatalogEncryptionSettingsError>;
+
     /// <p>Retrieves the definition of a specified database.</p>
     fn get_database(
         &self,
@@ -11481,13 +12959,13 @@ pub trait Glue {
         input: GetDataflowGraphRequest,
     ) -> RusotoFuture<GetDataflowGraphResponse, GetDataflowGraphError>;
 
-    /// <p>Retrieves information about a specified DevEndpoint.</p>
+    /// <p><p>Retrieves information about a specified DevEndpoint.</p> <note> <p>When you create a development endpoint in a virtual private cloud (VPC), AWS Glue returns only a private IP address, and the public IP address field is not populated. When you create a non-VPC development endpoint, AWS Glue returns only a public IP address.</p> </note></p>
     fn get_dev_endpoint(
         &self,
         input: GetDevEndpointRequest,
     ) -> RusotoFuture<GetDevEndpointResponse, GetDevEndpointError>;
 
-    /// <p>Retrieves all the DevEndpoints in this AWS account.</p>
+    /// <p><p>Retrieves all the DevEndpoints in this AWS account.</p> <note> <p>When you create a development endpoint in a virtual private cloud (VPC), AWS Glue returns only a private IP address and the public IP address field is not populated. When you create a non-VPC development endpoint, AWS Glue returns only a public IP address.</p> </note></p>
     fn get_dev_endpoints(
         &self,
         input: GetDevEndpointsRequest,
@@ -11531,6 +13009,23 @@ pub trait Glue {
 
     /// <p>Gets code to perform a specified mapping.</p>
     fn get_plan(&self, input: GetPlanRequest) -> RusotoFuture<GetPlanResponse, GetPlanError>;
+
+    /// <p>Retrieves a specified resource policy.</p>
+    fn get_resource_policy(
+        &self,
+    ) -> RusotoFuture<GetResourcePolicyResponse, GetResourcePolicyError>;
+
+    /// <p>Retrieves a specified security configuration.</p>
+    fn get_security_configuration(
+        &self,
+        input: GetSecurityConfigurationRequest,
+    ) -> RusotoFuture<GetSecurityConfigurationResponse, GetSecurityConfigurationError>;
+
+    /// <p>Retrieves a list of all security configurations.</p>
+    fn get_security_configurations(
+        &self,
+        input: GetSecurityConfigurationsRequest,
+    ) -> RusotoFuture<GetSecurityConfigurationsResponse, GetSecurityConfigurationsError>;
 
     /// <p>Retrieves the <code>Table</code> definition in a Data Catalog for a specified table.</p>
     fn get_table(&self, input: GetTableRequest) -> RusotoFuture<GetTableResponse, GetTableError>;
@@ -11582,6 +13077,18 @@ pub trait Glue {
         &self,
         input: ImportCatalogToGlueRequest,
     ) -> RusotoFuture<ImportCatalogToGlueResponse, ImportCatalogToGlueError>;
+
+    /// <p>Sets the security configuration for a specified catalog. Once the configuration has been set, the specified encryption is applied to every catalog write thereafter.</p>
+    fn put_data_catalog_encryption_settings(
+        &self,
+        input: PutDataCatalogEncryptionSettingsRequest,
+    ) -> RusotoFuture<PutDataCatalogEncryptionSettingsResponse, PutDataCatalogEncryptionSettingsError>;
+
+    /// <p>Sets the Data Catalog resource policy for access control.</p>
+    fn put_resource_policy(
+        &self,
+        input: PutResourcePolicyRequest,
+    ) -> RusotoFuture<PutResourcePolicyResponse, PutResourcePolicyError>;
 
     /// <p>Resets a bookmark entry.</p>
     fn reset_job_bookmark(
@@ -11842,7 +13349,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Deletes multiple tables at once.</p>
+    /// <p><p>Deletes multiple tables at once.</p> <note> <p>After completing this operation, you will no longer have access to the table versions and partitions that belong to the deleted table. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure immediate deletion of all related resources, before calling <code>BatchDeleteTable</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, and <code>DeletePartition</code> or <code>BatchDeletePartition</code>, to delete any resources that belong to the table.</p> </note></p>
     fn batch_delete_table(
         &self,
         input: BatchDeleteTableRequest,
@@ -12282,6 +13789,40 @@ impl Glue for GlueClient {
         })
     }
 
+    /// <p>Creates a new security configuration.</p>
+    fn create_security_configuration(
+        &self,
+        input: CreateSecurityConfigurationRequest,
+    ) -> RusotoFuture<CreateSecurityConfigurationResponse, CreateSecurityConfigurationError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.CreateSecurityConfiguration");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<CreateSecurityConfigurationResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateSecurityConfigurationError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Creates a new table definition in the Data Catalog.</p>
     fn create_table(
         &self,
@@ -12501,7 +14042,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Removes a specified Database from a Data Catalog.</p>
+    /// <p><p>Removes a specified Database from a Data Catalog.</p> <note> <p>After completing this operation, you will no longer have access to the tables (and all table versions and partitions that might belong to the tables) and the user-defined functions in the deleted database. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure immediate deletion of all related resources, before calling <code>DeleteDatabase</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, <code>DeletePartition</code> or <code>BatchDeletePartition</code>, <code>DeleteUserDefinedFunction</code>, and <code>DeleteTable</code> or <code>BatchDeleteTable</code>, to delete any resources that belong to the database.</p> </note></p>
     fn delete_database(
         &self,
         input: DeleteDatabaseRequest,
@@ -12649,7 +14190,77 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Removes a table definition from the Data Catalog.</p>
+    /// <p>Deletes a specified policy.</p>
+    fn delete_resource_policy(
+        &self,
+        input: DeleteResourcePolicyRequest,
+    ) -> RusotoFuture<DeleteResourcePolicyResponse, DeleteResourcePolicyError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.DeleteResourcePolicy");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DeleteResourcePolicyResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteResourcePolicyError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Deletes a specified security configuration.</p>
+    fn delete_security_configuration(
+        &self,
+        input: DeleteSecurityConfigurationRequest,
+    ) -> RusotoFuture<DeleteSecurityConfigurationResponse, DeleteSecurityConfigurationError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.DeleteSecurityConfiguration");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DeleteSecurityConfigurationResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteSecurityConfigurationError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p><p>Removes a table definition from the Data Catalog.</p> <note> <p>After completing this operation, you will no longer have access to the table versions and partitions that belong to the deleted table. AWS Glue deletes these &quot;orphaned&quot; resources asynchronously in a timely manner, at the discretion of the service.</p> <p>To ensure immediate deletion of all related resources, before calling <code>DeleteTable</code>, use <code>DeleteTableVersion</code> or <code>BatchDeleteTableVersion</code>, and <code>DeletePartition</code> or <code>BatchDeletePartition</code>, to delete any resources that belong to the table.</p> </note></p>
     fn delete_table(
         &self,
         input: DeleteTableRequest,
@@ -13089,6 +14700,43 @@ impl Glue for GlueClient {
         })
     }
 
+    /// <p>Retrieves the security configuration for a specified catalog.</p>
+    fn get_data_catalog_encryption_settings(
+        &self,
+        input: GetDataCatalogEncryptionSettingsRequest,
+    ) -> RusotoFuture<GetDataCatalogEncryptionSettingsResponse, GetDataCatalogEncryptionSettingsError>
+    {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.GetDataCatalogEncryptionSettings");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetDataCatalogEncryptionSettingsResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetDataCatalogEncryptionSettingsError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Retrieves the definition of a specified database.</p>
     fn get_database(
         &self,
@@ -13200,7 +14848,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Retrieves information about a specified DevEndpoint.</p>
+    /// <p><p>Retrieves information about a specified DevEndpoint.</p> <note> <p>When you create a development endpoint in a virtual private cloud (VPC), AWS Glue returns only a private IP address, and the public IP address field is not populated. When you create a non-VPC development endpoint, AWS Glue returns only a public IP address.</p> </note></p>
     fn get_dev_endpoint(
         &self,
         input: GetDevEndpointRequest,
@@ -13237,7 +14885,7 @@ impl Glue for GlueClient {
         })
     }
 
-    /// <p>Retrieves all the DevEndpoints in this AWS account.</p>
+    /// <p><p>Retrieves all the DevEndpoints in this AWS account.</p> <note> <p>When you create a development endpoint in a virtual private cloud (VPC), AWS Glue returns only a private IP address and the public IP address field is not populated. When you create a non-VPC development endpoint, AWS Glue returns only a public IP address.</p> </note></p>
     fn get_dev_endpoints(
         &self,
         input: GetDevEndpointsRequest,
@@ -13557,6 +15205,109 @@ impl Glue for GlueClient {
                         .from_err()
                         .and_then(|response| Err(GetPlanError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p>Retrieves a specified resource policy.</p>
+    fn get_resource_policy(
+        &self,
+    ) -> RusotoFuture<GetResourcePolicyResponse, GetResourcePolicyError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.GetResourcePolicy");
+        request.set_payload(Some(b"{}".to_vec()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetResourcePolicyResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetResourcePolicyError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Retrieves a specified security configuration.</p>
+    fn get_security_configuration(
+        &self,
+        input: GetSecurityConfigurationRequest,
+    ) -> RusotoFuture<GetSecurityConfigurationResponse, GetSecurityConfigurationError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.GetSecurityConfiguration");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetSecurityConfigurationResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetSecurityConfigurationError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Retrieves a list of all security configurations.</p>
+    fn get_security_configurations(
+        &self,
+        input: GetSecurityConfigurationsRequest,
+    ) -> RusotoFuture<GetSecurityConfigurationsResponse, GetSecurityConfigurationsError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.GetSecurityConfigurations");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetSecurityConfigurationsResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetSecurityConfigurationsError::from_response(response))
+                }))
             }
         })
     }
@@ -13881,6 +15632,80 @@ impl Glue for GlueClient {
                     response.buffer().from_err().and_then(|response| {
                         Err(ImportCatalogToGlueError::from_response(response))
                     }),
+                )
+            }
+        })
+    }
+
+    /// <p>Sets the security configuration for a specified catalog. Once the configuration has been set, the specified encryption is applied to every catalog write thereafter.</p>
+    fn put_data_catalog_encryption_settings(
+        &self,
+        input: PutDataCatalogEncryptionSettingsRequest,
+    ) -> RusotoFuture<PutDataCatalogEncryptionSettingsResponse, PutDataCatalogEncryptionSettingsError>
+    {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.PutDataCatalogEncryptionSettings");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<PutDataCatalogEncryptionSettingsResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(PutDataCatalogEncryptionSettingsError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Sets the Data Catalog resource policy for access control.</p>
+    fn put_resource_policy(
+        &self,
+        input: PutResourcePolicyRequest,
+    ) -> RusotoFuture<PutResourcePolicyResponse, PutResourcePolicyError> {
+        let mut request = SignedRequest::new("POST", "glue", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSGlue.PutResourcePolicy");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<PutResourcePolicyResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutResourcePolicyError::from_response(response))),
                 )
             }
         })

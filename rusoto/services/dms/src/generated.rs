@@ -164,21 +164,25 @@ pub struct CreateEndpointMessage {
     #[serde(rename = "DatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
-    /// <p> The settings in JSON format for the DMS Transfer type source endpoint. </p> <p>Attributes include:</p> <ul> <li> <p>serviceAccessRoleArn - The IAM role that has permission to access the Amazon S3 bucket.</p> </li> <li> <p>bucketName - The name of the S3 bucket to use.</p> </li> <li> <p>compressionType - An optional parameter to use GZIP to compress the target files. Set to NONE (the default) or do not use to leave the files uncompressed.</p> </li> </ul> <p>Shorthand syntax: ServiceAccessRoleArn=string ,BucketName=string,CompressionType=string</p> <p>JSON syntax:</p> <p> { "ServiceAccessRoleArn": "string", "BucketName": "string", "CompressionType": "none"|"gzip" } </p>
+    /// <p>The settings in JSON format for the DMS transfer type of source endpoint. </p> <p>Possible attributes include the following:</p> <ul> <li> <p> <code>serviceAccessRoleArn</code> - The IAM role that has permission to access the Amazon S3 bucket.</p> </li> <li> <p> <code>bucketName</code> - The name of the S3 bucket to use.</p> </li> <li> <p> <code>compressionType</code> - An optional parameter to use GZIP to compress the target files. To use GZIP, set this value to <code>NONE</code> (the default). To keep the files uncompressed, don't use this value. </p> </li> </ul> <p>Shorthand syntax for these attributes is as follows: <code>ServiceAccessRoleArn=string,BucketName=string,CompressionType=string</code> </p> <p>JSON syntax for these attributes is as follows: <code>{ "ServiceAccessRoleArn": "string", "BucketName": "string", "CompressionType": "none"|"gzip" } </code> </p>
     #[serde(rename = "DmsTransferSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dms_transfer_settings: Option<DmsTransferSettings>,
-    /// <p>Settings in JSON format for the target Amazon DynamoDB endpoint. For more information about the available settings, see the <b>Using Object Mapping to Migrate Data to DynamoDB</b> section at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.DynamoDB.html"> Using an Amazon DynamoDB Database as a Target for AWS Database Migration Service</a>. </p>
+    /// <p>Settings in JSON format for the target Amazon DynamoDB endpoint. For more information about the available settings, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.DynamoDB.html">Using Object Mapping to Migrate Data to DynamoDB</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     #[serde(rename = "DynamoDbSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dynamo_db_settings: Option<DynamoDbSettings>,
+    /// <p>Settings in JSON format for the target Elasticsearch endpoint. For more information about the available settings, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Elasticsearch.html#CHAP_Target.Elasticsearch.Configuration">Extra Connection Attributes When Using Elasticsearch as a Target for AWS DMS</a> in the <i>AWS Database Migration User Guide.</i> </p>
+    #[serde(rename = "ElasticsearchSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub elasticsearch_settings: Option<ElasticsearchSettings>,
     /// <p>The database endpoint identifier. Identifiers must begin with a letter; must contain only ASCII letters, digits, and hyphens; and must not end with a hyphen or contain two consecutive hyphens.</p>
     #[serde(rename = "EndpointIdentifier")]
     pub endpoint_identifier: String,
     /// <p>The type of endpoint.</p>
     #[serde(rename = "EndpointType")]
     pub endpoint_type: String,
-    /// <p>The type of engine for the endpoint. Valid values, depending on the EndPointType, include mysql, oracle, postgres, mariadb, aurora, aurora-postgresql, redshift, s3, db2, azuredb, sybase, dynamodb, mongodb, and sqlserver.</p>
+    /// <p>The type of engine for the endpoint. Valid values, depending on the <code>EndPointType</code> value, include <code>mysql</code>, <code>oracle</code>, <code>postgres</code>, <code>mariadb</code>, <code>aurora</code>, <code>aurora-postgresql</code>, <code>redshift</code>, <code>s3</code>, <code>db2</code>, <code>azuredb</code>, <code>sybase</code>, <code>dynamodb</code>, <code>mongodb</code>, and <code>sqlserver</code>.</p>
     #[serde(rename = "EngineName")]
     pub engine_name: String,
     /// <p>The external table definition. </p>
@@ -189,15 +193,19 @@ pub struct CreateEndpointMessage {
     #[serde(rename = "ExtraConnectionAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_connection_attributes: Option<String>,
-    /// <p>The KMS key identifier that will be used to encrypt the connection parameters. If you do not specify a value for the KmsKeyId parameter, then AWS DMS will use your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS region.</p>
+    /// <p>Settings in JSON format for the target Amazon Kinesis Data Streams endpoint. For more information about the available settings, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kinesis.html#CHAP_Target.Kinesis.ObjectMapping ">Using Object Mapping to Migrate Data to a Kinesis Data Stream</a> in the <i>AWS Database Migration User Guide.</i> </p>
+    #[serde(rename = "KinesisSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kinesis_settings: Option<KinesisSettings>,
+    /// <p>The AWS KMS key identifier to use to encrypt the connection parameters. If you don't specify a value for the <code>KmsKeyId</code> parameter, then AWS DMS uses your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
-    /// <p>Settings in JSON format for the source MongoDB endpoint. For more information about the available settings, see the <b>Configuration Properties When Using MongoDB as a Source for AWS Database Migration Service</b> section at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MongoDB.html"> Using MongoDB as a Target for AWS Database Migration Service</a>. </p>
+    /// <p>Settings in JSON format for the source MongoDB endpoint. For more information about the available settings, see the configuration properties section in <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MongoDB.html"> Using MongoDB as a Target for AWS Database Migration Service</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     #[serde(rename = "MongoDbSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mongo_db_settings: Option<MongoDbSettings>,
-    /// <p>The password to be used to login to the endpoint database.</p>
+    /// <p>The password to be used to log in to the endpoint database.</p>
     #[serde(rename = "Password")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub password: Option<String>,
@@ -205,7 +213,7 @@ pub struct CreateEndpointMessage {
     #[serde(rename = "Port")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub port: Option<i64>,
-    /// <p>Settings in JSON format for the target Amazon S3 endpoint. For more information about the available settings, see the <b>Extra Connection Attributes</b> section at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html"> Using Amazon S3 as a Target for AWS Database Migration Service</a>. </p>
+    /// <p>Settings in JSON format for the target Amazon S3 endpoint. For more information about the available settings, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html#CHAP_Target.S3.Configuring">Extra Connection Attributes When Using Amazon S3 as a Target for AWS DMS</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     #[serde(rename = "S3Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_settings: Option<S3Settings>,
@@ -213,11 +221,11 @@ pub struct CreateEndpointMessage {
     #[serde(rename = "ServerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub server_name: Option<String>,
-    /// <p> The Amazon Resource Name (ARN) for the service access role you want to use to create the endpoint. </p>
+    /// <p> The Amazon Resource Name (ARN) for the service access role that you want to use to create the endpoint. </p>
     #[serde(rename = "ServiceAccessRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_access_role_arn: Option<String>,
-    /// <p>The SSL mode to use for the SSL connection.</p> <p>SSL mode can be one of four values: none, require, verify-ca, verify-full. </p> <p>The default value is none.</p>
+    /// <p>The Secure Sockets Layer (SSL) mode to use for the SSL connection. The SSL mode can be one of four values: <code>none</code>, <code>require</code>, <code>verify-ca</code>, <code>verify-full</code>. The default value is <code>none</code>.</p>
     #[serde(rename = "SslMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ssl_mode: Option<String>,
@@ -225,7 +233,7 @@ pub struct CreateEndpointMessage {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>The user name to be used to login to the endpoint database.</p>
+    /// <p>The user name to be used to log in to the endpoint database.</p>
     #[serde(rename = "Username")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
@@ -244,11 +252,11 @@ pub struct CreateEndpointResponse {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateEventSubscriptionMessage {
-    /// <p> A Boolean value; set to <b>true</b> to activate the subscription, or set to <b>false</b> to create the subscription but not activate it. </p>
+    /// <p> A Boolean value; set to <code>true</code> to activate the subscription, or set to <code>false</code> to create the subscription but not activate it. </p>
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    /// <p> A list of event categories for a source type that you want to subscribe to. You can see a list of the categories for a given source type by calling the <b>DescribeEventCategories</b> action or in the topic <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html"> Working with Events and Notifications</a> in the AWS Database Migration Service User Guide. </p>
+    /// <p> A list of event categories for a source type that you want to subscribe to. You can see a list of the categories for a given source type by calling the <code>DescribeEventCategories</code> action or in the topic <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     #[serde(rename = "EventCategories")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_categories: Option<Vec<String>>,
@@ -297,11 +305,15 @@ pub struct CreateReplicationInstanceMessage {
     #[serde(rename = "AvailabilityZone")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zone: Option<String>,
+    /// <p>A list of DNS name servers supported for the replication instance.</p>
+    #[serde(rename = "DnsNameServers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dns_name_servers: Option<String>,
     /// <p>The engine version number of the replication instance.</p>
     #[serde(rename = "EngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_version: Option<String>,
-    /// <p>The KMS key identifier that will be used to encrypt the content on the replication instance. If you do not specify a value for the KmsKeyId parameter, then AWS DMS will use your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS region.</p>
+    /// <p>The AWS KMS key identifier that is used to encrypt the content on the replication instance. If you don't specify a value for the <code>KmsKeyId</code> parameter, then AWS DMS uses your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
@@ -399,7 +411,7 @@ pub struct CreateReplicationTaskMessage {
     /// <p><p>The replication task identifier.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
     #[serde(rename = "ReplicationTaskIdentifier")]
     pub replication_task_identifier: String,
-    /// <p>Settings for the task, such as target metadata settings. For a complete list of task settings, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TaskSettings.html">Task Settings for AWS Database Migration Service Tasks</a>.</p>
+    /// <p>Settings for the task, such as target metadata settings. For a complete list of task settings, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.CustomizingTasks.TaskSettings.html">Task Settings for AWS Database Migration Service Tasks</a> in the <i>AWS Database Migration User Guide.</i> </p>
     #[serde(rename = "ReplicationTaskSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replication_task_settings: Option<String>,
@@ -1073,6 +1085,25 @@ pub struct DynamoDbSettings {
 }
 
 /// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ElasticsearchSettings {
+    /// <p>The endpoint for the ElasticSearch cluster.</p>
+    #[serde(rename = "EndpointUri")]
+    pub endpoint_uri: String,
+    /// <p>The maximum number of seconds that DMS retries failed API requests to the Elasticsearch cluster.</p>
+    #[serde(rename = "ErrorRetryDuration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_retry_duration: Option<i64>,
+    /// <p>The maximum percentage of records that can fail to be written before a full load operation stops. </p>
+    #[serde(rename = "FullLoadErrorPercentage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub full_load_error_percentage: Option<i64>,
+    /// <p>The Amazon Resource Name (ARN) used by service to access the IAM role.</p>
+    #[serde(rename = "ServiceAccessRoleArn")]
+    pub service_access_role_arn: String,
+}
+
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Endpoint {
@@ -1084,7 +1115,7 @@ pub struct Endpoint {
     #[serde(rename = "DatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
-    /// <p> The settings in JSON format for the DMS Transfer type source endpoint. </p> <p>Attributes include:</p> <ul> <li> <p>serviceAccessRoleArn - The IAM role that has permission to access the Amazon S3 bucket.</p> </li> <li> <p>bucketName - The name of the S3 bucket to use.</p> </li> <li> <p>compressionType - An optional parameter to use GZIP to compress the target files. Set to NONE (the default) or do not use to leave the files uncompressed.</p> </li> </ul> <p>Shorthand syntax: ServiceAccessRoleArn=string ,BucketName=string,CompressionType=string</p> <p>JSON syntax:</p> <p> { "ServiceAccessRoleArn": "string", "BucketName": "string", "CompressionType": "none"|"gzip" } </p>
+    /// <p>The settings in JSON format for the DMS transfer type of source endpoint. </p> <p>Possible attributes include the following:</p> <ul> <li> <p> <code>serviceAccessRoleArn</code> - The IAM role that has permission to access the Amazon S3 bucket.</p> </li> <li> <p> <code>bucketName</code> - The name of the S3 bucket to use.</p> </li> <li> <p> <code>compressionType</code> - An optional parameter to use GZIP to compress the target files. To use GZIP, set this value to <code>NONE</code> (the default). To keep the files uncompressed, don't use this value. </p> </li> </ul> <p>Shorthand syntax for these attributes is as follows: <code>ServiceAccessRoleArn=string,BucketName=string,CompressionType=string</code> </p> <p>JSON syntax for these attributes is as follows: <code>{ "ServiceAccessRoleArn": "string", "BucketName": "string", "CompressionType": "none"|"gzip" } </code> </p>
     #[serde(rename = "DmsTransferSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dms_transfer_settings: Option<DmsTransferSettings>,
@@ -1092,6 +1123,10 @@ pub struct Endpoint {
     #[serde(rename = "DynamoDbSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dynamo_db_settings: Option<DynamoDbSettings>,
+    /// <p>The settings for the Elasticsearch source endpoint. For more information, see the <code>ElasticsearchSettings</code> structure.</p>
+    #[serde(rename = "ElasticsearchSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub elasticsearch_settings: Option<ElasticsearchSettings>,
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
     #[serde(rename = "EndpointArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1124,7 +1159,11 @@ pub struct Endpoint {
     #[serde(rename = "ExtraConnectionAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_connection_attributes: Option<String>,
-    /// <p>The KMS key identifier that will be used to encrypt the connection parameters. If you do not specify a value for the KmsKeyId parameter, then AWS DMS will use your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS region.</p>
+    /// <p>The settings for the Amazon Kinesis source endpoint. For more information, see the <code>KinesisSettings</code> structure.</p>
+    #[serde(rename = "KinesisSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kinesis_settings: Option<KinesisSettings>,
+    /// <p>The AWS KMS key identifier that is used to encrypt the content on the replication instance. If you don't specify a value for the <code>KmsKeyId</code> parameter, then AWS DMS uses your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
@@ -1289,6 +1328,23 @@ pub struct ImportCertificateResponse {
 }
 
 /// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct KinesisSettings {
+    /// <p>The output format for the records created on the endpoint. The message format is <code>JSON</code>.</p>
+    #[serde(rename = "MessageFormat")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message_format: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) for the IAM role that DMS uses to write to the Amazon Kinesis data stream.</p>
+    #[serde(rename = "ServiceAccessRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_access_role_arn: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) for the Amazon Kinesis Data Streams endpoint.</p>
+    #[serde(rename = "StreamArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_arn: Option<String>,
+}
+
+/// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTagsForResourceMessage {
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the AWS DMS resource.</p>
@@ -1317,14 +1373,18 @@ pub struct ModifyEndpointMessage {
     #[serde(rename = "DatabaseName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub database_name: Option<String>,
-    /// <p> The settings in JSON format for the DMS Transfer type source endpoint. </p> <p>Attributes include:</p> <ul> <li> <p>serviceAccessRoleArn - The IAM role that has permission to access the Amazon S3 bucket.</p> </li> <li> <p>BucketName - The name of the S3 bucket to use.</p> </li> <li> <p>compressionType - An optional parameter to use GZIP to compress the target files. Set to NONE (the default) or do not use to leave the files uncompressed.</p> </li> </ul> <p>Shorthand syntax: ServiceAccessRoleArn=string ,BucketName=string,CompressionType=string</p> <p>JSON syntax:</p> <p> { "ServiceAccessRoleArn": "string", "BucketName": "string", "CompressionType": "none"|"gzip" } </p>
+    /// <p>The settings in JSON format for the DMS transfer type of source endpoint. </p> <p>Attributes include the following:</p> <ul> <li> <p>serviceAccessRoleArn - The IAM role that has permission to access the Amazon S3 bucket.</p> </li> <li> <p>BucketName - The name of the S3 bucket to use.</p> </li> <li> <p>compressionType - An optional parameter to use GZIP to compress the target files. Set to NONE (the default) or do not use to leave the files uncompressed.</p> </li> </ul> <p>Shorthand syntax: ServiceAccessRoleArn=string ,BucketName=string,CompressionType=string</p> <p>JSON syntax:</p> <p> { "ServiceAccessRoleArn": "string", "BucketName": "string", "CompressionType": "none"|"gzip" } </p>
     #[serde(rename = "DmsTransferSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dms_transfer_settings: Option<DmsTransferSettings>,
-    /// <p>Settings in JSON format for the target Amazon DynamoDB endpoint. For more information about the available settings, see the <b>Using Object Mapping to Migrate Data to DynamoDB</b> section at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.DynamoDB.html"> Using an Amazon DynamoDB Database as a Target for AWS Database Migration Service</a>. </p>
+    /// <p>Settings in JSON format for the target Amazon DynamoDB endpoint. For more information about the available settings, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.DynamoDB.html">Using Object Mapping to Migrate Data to DynamoDB</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     #[serde(rename = "DynamoDbSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dynamo_db_settings: Option<DynamoDbSettings>,
+    /// <p>Settings in JSON format for the target Elasticsearch endpoint. For more information about the available settings, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Elasticsearch.html#CHAP_Target.Elasticsearch.Configuration">Extra Connection Attributes When Using Elasticsearch as a Target for AWS DMS</a> in the <i>AWS Database Migration User Guide.</i> </p>
+    #[serde(rename = "ElasticsearchSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub elasticsearch_settings: Option<ElasticsearchSettings>,
     /// <p>The Amazon Resource Name (ARN) string that uniquely identifies the endpoint.</p>
     #[serde(rename = "EndpointArn")]
     pub endpoint_arn: String,
@@ -1348,7 +1408,11 @@ pub struct ModifyEndpointMessage {
     #[serde(rename = "ExtraConnectionAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extra_connection_attributes: Option<String>,
-    /// <p>Settings in JSON format for the source MongoDB endpoint. For more information about the available settings, see the <b>Configuration Properties When Using MongoDB as a Source for AWS Database Migration Service</b> section at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MongoDB.html"> Using Amazon S3 as a Target for AWS Database Migration Service</a>. </p>
+    /// <p>Settings in JSON format for the target Amazon Kinesis Data Streams endpoint. For more information about the available settings, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.Kinesis.html#CHAP_Target.Kinesis.ObjectMapping ">Using Object Mapping to Migrate Data to a Kinesis Data Stream</a> in the <i>AWS Database Migration User Guide.</i> </p>
+    #[serde(rename = "KinesisSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kinesis_settings: Option<KinesisSettings>,
+    /// <p>Settings in JSON format for the source MongoDB endpoint. For more information about the available settings, see the configuration properties section in <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Source.MongoDB.html"> Using MongoDB as a Target for AWS Database Migration Service</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     #[serde(rename = "MongoDbSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mongo_db_settings: Option<MongoDbSettings>,
@@ -1360,7 +1424,7 @@ pub struct ModifyEndpointMessage {
     #[serde(rename = "Port")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub port: Option<i64>,
-    /// <p>Settings in JSON format for the target S3 endpoint. For more information about the available settings, see the <b>Extra Connection Attributes</b> section at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html"> Using Amazon S3 as a Target for AWS Database Migration Service</a>. </p>
+    /// <p>Settings in JSON format for the target Amazon S3 endpoint. For more information about the available settings, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Target.S3.html#CHAP_Target.S3.Configuring">Extra Connection Attributes When Using Amazon S3 as a Target for AWS DMS</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     #[serde(rename = "S3Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_settings: Option<S3Settings>,
@@ -1582,7 +1646,7 @@ pub struct MongoDbSettings {
     #[serde(rename = "ExtractDocId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub extract_doc_id: Option<String>,
-    /// <p> The KMS key identifier that will be used to encrypt the connection parameters. If you do not specify a value for the KmsKeyId parameter, then AWS DMS will use your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS region. </p>
+    /// <p>The AWS KMS key identifier that is used to encrypt the content on the replication instance. If you don't specify a value for the <code>KmsKeyId</code> parameter, then AWS DMS uses your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
@@ -1764,6 +1828,10 @@ pub struct ReplicationInstance {
     #[serde(rename = "AvailabilityZone")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub availability_zone: Option<String>,
+    /// <p>The DNS name servers for the replication instance.</p>
+    #[serde(rename = "DnsNameServers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dns_name_servers: Option<String>,
     /// <p>The engine version number of the replication instance.</p>
     #[serde(rename = "EngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1776,7 +1844,7 @@ pub struct ReplicationInstance {
     #[serde(rename = "InstanceCreateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_create_time: Option<f64>,
-    /// <p>The KMS key identifier that is used to encrypt the content on the replication instance. If you do not specify a value for the KmsKeyId parameter, then AWS DMS will use your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS region.</p>
+    /// <p>The AWS KMS key identifier that is used to encrypt the content on the replication instance. If you don't specify a value for the <code>KmsKeyId</code> parameter, then AWS DMS uses your default encryption key. AWS KMS creates the default encryption key for your AWS account. Your AWS account has a different default encryption key for each AWS Region.</p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
@@ -6447,7 +6515,7 @@ pub trait DatabaseMigrationService {
         input: CreateEndpointMessage,
     ) -> RusotoFuture<CreateEndpointResponse, CreateEndpointError>;
 
-    /// <p> Creates an AWS DMS event notification subscription. </p> <p>You can specify the type of source (<code>SourceType</code>) you want to be notified of, provide a list of AWS DMS source IDs (<code>SourceIds</code>) that triggers the events, and provide a list of event categories (<code>EventCategories</code>) for events you want to be notified of. If you specify both the <code>SourceType</code> and <code>SourceIds</code>, such as <code>SourceType = replication-instance</code> and <code>SourceIdentifier = my-replinstance</code>, you will be notified of all the replication instance events for the specified source. If you specify a <code>SourceType</code> but don't specify a <code>SourceIdentifier</code>, you receive notice of the events for that source type for all your AWS DMS sources. If you don't specify either <code>SourceType</code> nor <code>SourceIdentifier</code>, you will be notified of events generated from all AWS DMS sources belonging to your customer account.</p> <p>For more information about AWS DMS events, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html"> Working with Events and Notifications </a> in the AWS Database MIgration Service User Guide.</p>
+    /// <p> Creates an AWS DMS event notification subscription. </p> <p>You can specify the type of source (<code>SourceType</code>) you want to be notified of, provide a list of AWS DMS source IDs (<code>SourceIds</code>) that triggers the events, and provide a list of event categories (<code>EventCategories</code>) for events you want to be notified of. If you specify both the <code>SourceType</code> and <code>SourceIds</code>, such as <code>SourceType = replication-instance</code> and <code>SourceIdentifier = my-replinstance</code>, you will be notified of all the replication instance events for the specified source. If you specify a <code>SourceType</code> but don't specify a <code>SourceIdentifier</code>, you receive notice of the events for that source type for all your AWS DMS sources. If you don't specify either <code>SourceType</code> nor <code>SourceIdentifier</code>, you will be notified of events generated from all AWS DMS sources belonging to your customer account.</p> <p>For more information about AWS DMS events, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     fn create_event_subscription(
         &self,
         input: CreateEventSubscriptionMessage,
@@ -6536,7 +6604,7 @@ pub trait DatabaseMigrationService {
         input: DescribeEndpointsMessage,
     ) -> RusotoFuture<DescribeEndpointsResponse, DescribeEndpointsError>;
 
-    /// <p>Lists categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html"> Working with Events and Notifications </a> in the AWS Database Migration Service User Guide. </p>
+    /// <p>Lists categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     fn describe_event_categories(
         &self,
         input: DescribeEventCategoriesMessage,
@@ -6548,7 +6616,7 @@ pub trait DatabaseMigrationService {
         input: DescribeEventSubscriptionsMessage,
     ) -> RusotoFuture<DescribeEventSubscriptionsResponse, DescribeEventSubscriptionsError>;
 
-    /// <p> Lists events for a given source identifier and source type. You can also specify a start and end time. For more information on AWS DMS events, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html"> Working with Events and Notifications </a>. </p>
+    /// <p> Lists events for a given source identifier and source type. You can also specify a start and end time. For more information on AWS DMS events, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration User Guide.</i> </p>
     fn describe_events(
         &self,
         input: DescribeEventsMessage,
@@ -6653,7 +6721,7 @@ pub trait DatabaseMigrationService {
         input: ModifyReplicationSubnetGroupMessage,
     ) -> RusotoFuture<ModifyReplicationSubnetGroupResponse, ModifyReplicationSubnetGroupError>;
 
-    /// <p>Modifies the specified replication task.</p> <p>You can't modify the task endpoints. The task must be stopped before you can modify it. </p> <p>For more information about AWS DMS tasks, see the AWS DMS user guide at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html"> Working with Migration Tasks </a> </p>
+    /// <p>Modifies the specified replication task.</p> <p>You can't modify the task endpoints. The task must be stopped before you can modify it. </p> <p>For more information about AWS DMS tasks, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html">Working with Migration Tasks</a> in the <i>AWS Database Migration Service User Guide</i>.</p>
     fn modify_replication_task(
         &self,
         input: ModifyReplicationTaskMessage,
@@ -6683,7 +6751,7 @@ pub trait DatabaseMigrationService {
         input: RemoveTagsFromResourceMessage,
     ) -> RusotoFuture<RemoveTagsFromResourceResponse, RemoveTagsFromResourceError>;
 
-    /// <p>Starts the replication task.</p> <p>For more information about AWS DMS tasks, see the AWS DMS user guide at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html"> Working with Migration Tasks </a> </p>
+    /// <p>Starts the replication task.</p> <p>For more information about AWS DMS tasks, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html">Working with Migration Tasks </a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     fn start_replication_task(
         &self,
         input: StartReplicationTaskMessage,
@@ -6818,7 +6886,7 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         })
     }
 
-    /// <p> Creates an AWS DMS event notification subscription. </p> <p>You can specify the type of source (<code>SourceType</code>) you want to be notified of, provide a list of AWS DMS source IDs (<code>SourceIds</code>) that triggers the events, and provide a list of event categories (<code>EventCategories</code>) for events you want to be notified of. If you specify both the <code>SourceType</code> and <code>SourceIds</code>, such as <code>SourceType = replication-instance</code> and <code>SourceIdentifier = my-replinstance</code>, you will be notified of all the replication instance events for the specified source. If you specify a <code>SourceType</code> but don't specify a <code>SourceIdentifier</code>, you receive notice of the events for that source type for all your AWS DMS sources. If you don't specify either <code>SourceType</code> nor <code>SourceIdentifier</code>, you will be notified of events generated from all AWS DMS sources belonging to your customer account.</p> <p>For more information about AWS DMS events, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html"> Working with Events and Notifications </a> in the AWS Database MIgration Service User Guide.</p>
+    /// <p> Creates an AWS DMS event notification subscription. </p> <p>You can specify the type of source (<code>SourceType</code>) you want to be notified of, provide a list of AWS DMS source IDs (<code>SourceIds</code>) that triggers the events, and provide a list of event categories (<code>EventCategories</code>) for events you want to be notified of. If you specify both the <code>SourceType</code> and <code>SourceIds</code>, such as <code>SourceType = replication-instance</code> and <code>SourceIdentifier = my-replinstance</code>, you will be notified of all the replication instance events for the specified source. If you specify a <code>SourceType</code> but don't specify a <code>SourceIdentifier</code>, you receive notice of the events for that source type for all your AWS DMS sources. If you don't specify either <code>SourceType</code> nor <code>SourceIdentifier</code>, you will be notified of events generated from all AWS DMS sources belonging to your customer account.</p> <p>For more information about AWS DMS events, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     fn create_event_subscription(
         &self,
         input: CreateEventSubscriptionMessage,
@@ -7360,7 +7428,7 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         })
     }
 
-    /// <p>Lists categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html"> Working with Events and Notifications </a> in the AWS Database Migration Service User Guide. </p>
+    /// <p>Lists categories for all event source types, or, if specified, for a specified source type. You can see a list of the event categories and source types in <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     fn describe_event_categories(
         &self,
         input: DescribeEventCategoriesMessage,
@@ -7431,7 +7499,7 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         })
     }
 
-    /// <p> Lists events for a given source identifier and source type. You can also specify a start and end time. For more information on AWS DMS events, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html"> Working with Events and Notifications </a>. </p>
+    /// <p> Lists events for a given source identifier and source type. You can also specify a start and end time. For more information on AWS DMS events, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Events.html">Working with Events and Notifications</a> in the <i>AWS Database Migration User Guide.</i> </p>
     fn describe_events(
         &self,
         input: DescribeEventsMessage,
@@ -8032,7 +8100,7 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         })
     }
 
-    /// <p>Modifies the specified replication task.</p> <p>You can't modify the task endpoints. The task must be stopped before you can modify it. </p> <p>For more information about AWS DMS tasks, see the AWS DMS user guide at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html"> Working with Migration Tasks </a> </p>
+    /// <p>Modifies the specified replication task.</p> <p>You can't modify the task endpoints. The task must be stopped before you can modify it. </p> <p>For more information about AWS DMS tasks, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html">Working with Migration Tasks</a> in the <i>AWS Database Migration Service User Guide</i>.</p>
     fn modify_replication_task(
         &self,
         input: ModifyReplicationTaskMessage,
@@ -8215,7 +8283,7 @@ impl DatabaseMigrationService for DatabaseMigrationServiceClient {
         })
     }
 
-    /// <p>Starts the replication task.</p> <p>For more information about AWS DMS tasks, see the AWS DMS user guide at <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html"> Working with Migration Tasks </a> </p>
+    /// <p>Starts the replication task.</p> <p>For more information about AWS DMS tasks, see <a href="http://docs.aws.amazon.com/dms/latest/userguide/CHAP_Tasks.html">Working with Migration Tasks </a> in the <i>AWS Database Migration Service User Guide.</i> </p>
     fn start_replication_task(
         &self,
         input: StartReplicationTaskMessage,

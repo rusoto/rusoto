@@ -6889,7 +6889,7 @@ pub struct SendRawEmailRequest {
     pub destinations: Option<Vec<String>>,
     /// <p><p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to specify a particular &quot;From&quot; address in the header of the raw email.</p> <p>Instead of using this parameter, you can use the X-header <code>X-SES-FROM-ARN</code> in the raw message of the email. If you use both the <code>FromArn</code> parameter and the corresponding X-header, Amazon SES uses the value of the <code>FromArn</code> parameter.</p> <note> <p>For information about when to use this parameter, see the description of <code>SendRawEmail</code> in this guide, or see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-delegate-sender-tasks-email.html">Amazon SES Developer Guide</a>.</p> </note></p>
     pub from_arn: Option<String>,
-    /// <p><p>The raw text of the message. The client is responsible for ensuring the following:</p> <ul> <li> <p>Message must contain a header and a body, separated by a blank line.</p> </li> <li> <p>All required header fields must be present.</p> </li> <li> <p>Each part of a multipart MIME message must be formatted properly.</p> </li> <li> <p>MIME content types must be among those supported by Amazon SES. For more information, go to the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mime-types.html">Amazon SES Developer Guide</a>.</p> </li> <li> <p>Must be base64-encoded.</p> </li> <li> <p>Per <a href="https://tools.ietf.org/html/rfc5321#section-4.5.3.1.6">RFC 5321</a>, the maximum length of each line of text, including the &lt;CRLF&gt;, must not exceed 1,000 characters.</p> </li> </ul></p>
+    /// <p><p>The raw email message itself. The message has to meet the following criteria:</p> <ul> <li> <p>The message has to contain a header and a body, separated by a blank line.</p> </li> <li> <p>All of the required header fields must be present in the message.</p> </li> <li> <p>Each part of a multipart MIME message must be formatted properly.</p> </li> <li> <p>Attachments must be of a content type that Amazon SES supports. For a list on unsupported content types, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mime-types.html">Unsupported Attachment Types</a> in the <i>Amazon SES Developer Guide</i>.</p> </li> <li> <p>The entire message must be base64-encoded.</p> </li> <li> <p>If any of the MIME parts in your message contain content that is outside of the 7-bit ASCII character range, we highly recommend that you encode that content. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-raw.html">Sending Raw Email</a> in the <i>Amazon SES Developer Guide</i>.</p> </li> <li> <p>Per <a href="https://tools.ietf.org/html/rfc5321#section-4.5.3.1.6">RFC 5321</a>, the maximum length of each line of text, including the &lt;CRLF&gt;, must not exceed 1,000 characters.</p> </li> </ul></p>
     pub raw_message: RawMessage,
     /// <p><p>This parameter is used only for sending authorization. It is the ARN of the identity that is associated with the sending authorization policy that permits you to use the email address specified in the <code>ReturnPath</code> parameter.</p> <p>For example, if the owner of <code>example.com</code> (which has ARN <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>) attaches a policy to it that authorizes you to use <code>feedback@example.com</code>, then you would specify the <code>ReturnPathArn</code> to be <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>, and the <code>ReturnPath</code> to be <code>feedback@example.com</code>.</p> <p>Instead of using this parameter, you can use the X-header <code>X-SES-RETURN-PATH-ARN</code> in the raw message of the email. If you use both the <code>ReturnPathArn</code> parameter and the corresponding X-header, Amazon SES uses the value of the <code>ReturnPathArn</code> parameter.</p> <note> <p>For information about when to use this parameter, see the description of <code>SendRawEmail</code> in this guide, or see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-delegate-sender-tasks-email.html">Amazon SES Developer Guide</a>.</p> </note></p>
     pub return_path_arn: Option<String>,
@@ -7384,7 +7384,7 @@ impl SetIdentityMailFromDomainResponseDeserializer {
 /// <p>Represents a request to specify the Amazon SNS topic to which Amazon SES will publish bounce, complaint, or delivery notifications for emails sent with that identity as the Source. For information about Amazon SES notifications, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications-via-sns.html">Amazon SES Developer Guide</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SetIdentityNotificationTopicRequest {
-    /// <p>The identity for which the Amazon SNS topic will be set. You can specify an identity by using its name or by using its Amazon Resource Name (ARN). Examples: <code>user@example.com</code>, <code>example.com</code>, <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>.</p>
+    /// <p>The identity (email address or domain) that you want to set the Amazon SNS topic for.</p> <important> <p>You can only specify a verified identity for this parameter.</p> </important> <p>You can specify an identity by using its name or by using its Amazon Resource Name (ARN). The following examples are all valid identities: <code>sender@example.com</code>, <code>example.com</code>, <code>arn:aws:ses:us-east-1:123456789012:identity/example.com</code>.</p>
     pub identity: String,
     /// <p>The type of notifications that will be published to the specified Amazon SNS topic.</p>
     pub notification_type: String,
@@ -15110,7 +15110,7 @@ pub trait Ses {
         input: SendBounceRequest,
     ) -> RusotoFuture<SendBounceResponse, SendBounceError>;
 
-    /// <p><p>Composes an email message to multiple destinations. The message body is created using an email template.</p> <p>In order to send email using the <code>SendBulkTemplatedEmail</code> operation, your call to the API must meet the following requirements:</p> <ul> <li> <p>The call must refer to an existing email template. You can create email templates using the <a>CreateTemplate</a> operation.</p> </li> <li> <p>The message must be sent from a verified email address or domain.</p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The total size of the message, including attachments, must be less than 10 MB.</p> </li> <li> <p>Each <code>Destination</code> parameter must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> </ul></p>
+    /// <p><p>Composes an email message to multiple destinations. The message body is created using an email template.</p> <p>In order to send email using the <code>SendBulkTemplatedEmail</code> operation, your call to the API must meet the following requirements:</p> <ul> <li> <p>The call must refer to an existing email template. You can create email templates using the <a>CreateTemplate</a> operation.</p> </li> <li> <p>The message must be sent from a verified email address or domain.</p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The maximum message size is 10 MB.</p> </li> <li> <p>Each <code>Destination</code> parameter must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> <li> <p>The message may not include more than 50 recipients, across the To:, CC: and BCC: fields. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call the <code>SendBulkTemplatedEmail</code> operation several times to send the message to each group.</p> </li> <li> <p>The number of destinations you can contact in a single call to the API may be limited by your account&#39;s maximum sending rate.</p> </li> </ul></p>
     fn send_bulk_templated_email(
         &self,
         input: SendBulkTemplatedEmailRequest,
@@ -15122,19 +15122,19 @@ pub trait Ses {
         input: SendCustomVerificationEmailRequest,
     ) -> RusotoFuture<SendCustomVerificationEmailResponse, SendCustomVerificationEmailError>;
 
-    /// <p><p>Composes an email message and immediately queues it for sending. In order to send email using the <code>SendEmail</code> operation, your message must meet the following requirements:</p> <ul> <li> <p>The message must be sent from a verified email address or domain. If you attempt to send email using a non-verified address or domain, the operation will result in an &quot;Email address not verified&quot; error. </p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The total size of the message, including attachments, must be smaller than 10 MB.</p> </li> <li> <p>The message must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> <li> <p>The message may not include more than 50 recipients, across the To:, CC: and BCC: fields. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call the <code>SendEmail</code> operation several times to send the message to each group.</p> </li> </ul> <important> <p>For every message that you send, the total number of recipients (including each recipient in the To:, CC: and BCC: fields) is counted against the maximum number of emails you can send in a 24-hour period (your <i>sending quota</i>). For more information about sending quotas in Amazon SES, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Managing Your Amazon SES Sending Limits</a> in the <i>Amazon SES Developer Guide.</i> </p> </important></p>
+    /// <p><p>Composes an email message and immediately queues it for sending. In order to send email using the <code>SendEmail</code> operation, your message must meet the following requirements:</p> <ul> <li> <p>The message must be sent from a verified email address or domain. If you attempt to send email using a non-verified address or domain, the operation will result in an &quot;Email address not verified&quot; error. </p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The maximum message size is 10 MB.</p> </li> <li> <p>The message must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> <li> <p>The message may not include more than 50 recipients, across the To:, CC: and BCC: fields. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call the <code>SendEmail</code> operation several times to send the message to each group.</p> </li> </ul> <important> <p>For every message that you send, the total number of recipients (including each recipient in the To:, CC: and BCC: fields) is counted against the maximum number of emails you can send in a 24-hour period (your <i>sending quota</i>). For more information about sending quotas in Amazon SES, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Managing Your Amazon SES Sending Limits</a> in the <i>Amazon SES Developer Guide.</i> </p> </important></p>
     fn send_email(
         &self,
         input: SendEmailRequest,
     ) -> RusotoFuture<SendEmailResponse, SendEmailError>;
 
-    /// <p><p>Composes an email message and immediately queues it for sending. When calling this operation, you may specify the message headers as well as the content. The <code>SendRawEmail</code> operation is particularly useful for sending multipart MIME emails (such as those that contain both a plain-text and an HTML version). </p> <p>In order to send email using the <code>SendRawEmail</code> operation, your message must meet the following requirements:</p> <ul> <li> <p>The message must be sent from a verified email address or domain. If you attempt to send email using a non-verified address or domain, the operation will result in an &quot;Email address not verified&quot; error. </p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The total size of the message, including attachments, must be smaller than 10 MB.</p> </li> <li> <p>The message must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> <li> <p>The message may not include more than 50 recipients, across the To:, CC: and BCC: fields. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call the <code>SendRawEmail</code> operation several times to send the message to each group.</p> </li> </ul> <important> <p>For every message that you send, the total number of recipients (including each recipient in the To:, CC: and BCC: fields) is counted against the maximum number of emails you can send in a 24-hour period (your <i>sending quota</i>). For more information about sending quotas in Amazon SES, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Managing Your Amazon SES Sending Limits</a> in the <i>Amazon SES Developer Guide.</i> </p> </important> <p>Additionally, keep the following considerations in mind when using the <code>SendRawEmail</code> operation:</p> <ul> <li> <p>Although you can customize the message headers when using the <code>SendRawEmail</code> operation, Amazon SES will automatically apply its own <code>Message-ID</code> and <code>Date</code> headers; if you passed these headers when creating the message, they will be overwritten by the values that Amazon SES provides.</p> </li> <li> <p>If you are using sending authorization to send on behalf of another user, <code>SendRawEmail</code> enables you to specify the cross-account identity for the email&#39;s Source, From, and Return-Path parameters in one of two ways: you can pass optional parameters <code>SourceArn</code>, <code>FromArn</code>, and/or <code>ReturnPathArn</code> to the API, or you can include the following X-headers in the header of your raw email:</p> <ul> <li> <p> <code>X-SES-SOURCE-ARN</code> </p> </li> <li> <p> <code>X-SES-FROM-ARN</code> </p> </li> <li> <p> <code>X-SES-RETURN-PATH-ARN</code> </p> </li> </ul> <important> <p>Do not include these X-headers in the DKIM signature; Amazon SES will remove them before sending the email.</p> </important> <p>For most common sending authorization scenarios, we recommend that you specify the <code>SourceIdentityArn</code> parameter and not the <code>FromIdentityArn</code> or <code>ReturnPathIdentityArn</code> parameters. If you only specify the <code>SourceIdentityArn</code> parameter, Amazon SES will set the From and Return Path addresses to the identity specified in <code>SourceIdentityArn</code>. For more information about sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Using Sending Authorization with Amazon SES</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> </ul></p>
+    /// <p><p>Composes an email message and immediately queues it for sending.</p> <p>This operation is more flexible than the <code>SendEmail</code> API operation. When you use the <code>SendRawEmail</code> operation, you can specify the headers of the message as well as its content. This flexibility is useful, for example, when you want to send a multipart MIME email (such a message that contains both a text and an HTML version). You can also use this operation to send messages that include attachments.</p> <p>The <code>SendRawEmail</code> operation has the following requirements:</p> <ul> <li> <p>You can only send email from <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">verified email addresses or domains</a>. If you try to send email from an address that isn&#39;t verified, the operation results in an &quot;Email address not verified&quot; error.</p> </li> <li> <p>If your account is still in the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html">Amazon SES sandbox</a>, you can only send email to other verified addresses in your account, or to addresses that are associated with the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mailbox-simulator.html">Amazon SES mailbox simulator</a>.</p> </li> <li> <p>The maximum message size, including attachments, is 10 MB.</p> </li> <li> <p>Each message has to include at least one recipient address. A recipient address includes any address on the To:, CC:, or BCC: lines.</p> </li> <li> <p>If you send a single message to more than one recipient address, and one of the recipient addresses isn&#39;t in a valid format (that is, it&#39;s not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), Amazon SES rejects the entire message, even if the other addresses are valid.</p> </li> <li> <p>Each message can include up to 50 recipient addresses across the To:, CC:, or BCC: lines. If you need to send a single message to more than 50 recipients, you have to split the list of recipient addresses into groups of less than 50 recipients, and send separate messages to each group.</p> </li> <li> <p>Amazon SES allows you to specify 8-bit Content-Transfer-Encoding for MIME message parts. However, if Amazon SES has to modify the contents of your message (for example, if you use open and click tracking), 8-bit content isn&#39;t preserved. For this reason, we highly recommend that you encode all content that isn&#39;t 7-bit ASCII. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-raw.html#send-email-mime-encoding">MIME Encoding</a> in the <i>Amazon SES Developer Guide</i>.</p> </li> </ul> <p>Additionally, keep the following considerations in mind when using the <code>SendRawEmail</code> operation:</p> <ul> <li> <p>Although you can customize the message headers when using the <code>SendRawEmail</code> operation, Amazon SES will automatically apply its own <code>Message-ID</code> and <code>Date</code> headers; if you passed these headers when creating the message, they will be overwritten by the values that Amazon SES provides.</p> </li> <li> <p>If you are using sending authorization to send on behalf of another user, <code>SendRawEmail</code> enables you to specify the cross-account identity for the email&#39;s Source, From, and Return-Path parameters in one of two ways: you can pass optional parameters <code>SourceArn</code>, <code>FromArn</code>, and/or <code>ReturnPathArn</code> to the API, or you can include the following X-headers in the header of your raw email:</p> <ul> <li> <p> <code>X-SES-SOURCE-ARN</code> </p> </li> <li> <p> <code>X-SES-FROM-ARN</code> </p> </li> <li> <p> <code>X-SES-RETURN-PATH-ARN</code> </p> </li> </ul> <important> <p>Do not include these X-headers in the DKIM signature; Amazon SES will remove them before sending the email.</p> </important> <p>For most common sending authorization scenarios, we recommend that you specify the <code>SourceIdentityArn</code> parameter and not the <code>FromIdentityArn</code> or <code>ReturnPathIdentityArn</code> parameters. If you only specify the <code>SourceIdentityArn</code> parameter, Amazon SES will set the From and Return Path addresses to the identity specified in <code>SourceIdentityArn</code>. For more information about sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Using Sending Authorization with Amazon SES</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>For every message that you send, the total number of recipients (including each recipient in the To:, CC: and BCC: fields) is counted against the maximum number of emails you can send in a 24-hour period (your <i>sending quota</i>). For more information about sending quotas in Amazon SES, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Managing Your Amazon SES Sending Limits</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> </ul></p>
     fn send_raw_email(
         &self,
         input: SendRawEmailRequest,
     ) -> RusotoFuture<SendRawEmailResponse, SendRawEmailError>;
 
-    /// <p><p>Composes an email message using an email template and immediately queues it for sending.</p> <p>In order to send email using the <code>SendTemplatedEmail</code> operation, your call to the API must meet the following requirements:</p> <ul> <li> <p>The call must refer to an existing email template. You can create email templates using the <a>CreateTemplate</a> operation.</p> </li> <li> <p>The message must be sent from a verified email address or domain.</p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The total size of the message, including attachments, must be less than 10 MB.</p> </li> <li> <p>Calls to the <code>SendTemplatedEmail</code> operation may only include one <code>Destination</code> parameter. A destination is a set of recipients who will receive the same version of the email. The <code>Destination</code> parameter can include up to 50 recipients, across the To:, CC: and BCC: fields.</p> </li> <li> <p>The <code>Destination</code> parameter must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> </ul> <important> <p>If your call to the <code>SendTemplatedEmail</code> operation includes all of the required parameters, Amazon SES accepts it and returns a Message ID. However, if Amazon SES can&#39;t render the email because the template contains errors, it doesn&#39;t send the email. Additionally, because it already accepted the message, Amazon SES doesn&#39;t return a message stating that it was unable to send the email.</p> <p>For these reasons, we highly recommend that you set up Amazon SES to send you notifications when Rendering Failure events occur. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Sending Personalized Email Using the Amazon SES API</a> in the <i>Amazon Simple Email Service Developer Guide</i>.</p> </important></p>
+    /// <p><p>Composes an email message using an email template and immediately queues it for sending.</p> <p>In order to send email using the <code>SendTemplatedEmail</code> operation, your call to the API must meet the following requirements:</p> <ul> <li> <p>The call must refer to an existing email template. You can create email templates using the <a>CreateTemplate</a> operation.</p> </li> <li> <p>The message must be sent from a verified email address or domain.</p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The maximum message size is 10 MB.</p> </li> <li> <p>Calls to the <code>SendTemplatedEmail</code> operation may only include one <code>Destination</code> parameter. A destination is a set of recipients who will receive the same version of the email. The <code>Destination</code> parameter can include up to 50 recipients, across the To:, CC: and BCC: fields.</p> </li> <li> <p>The <code>Destination</code> parameter must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> </ul> <important> <p>If your call to the <code>SendTemplatedEmail</code> operation includes all of the required parameters, Amazon SES accepts it and returns a Message ID. However, if Amazon SES can&#39;t render the email because the template contains errors, it doesn&#39;t send the email. Additionally, because it already accepted the message, Amazon SES doesn&#39;t return a message stating that it was unable to send the email.</p> <p>For these reasons, we highly recommend that you set up Amazon SES to send you notifications when Rendering Failure events occur. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Sending Personalized Email Using the Amazon SES API</a> in the <i>Amazon Simple Email Service Developer Guide</i>.</p> </important></p>
     fn send_templated_email(
         &self,
         input: SendTemplatedEmailRequest,
@@ -15176,7 +15176,7 @@ pub trait Ses {
         input: SetIdentityMailFromDomainRequest,
     ) -> RusotoFuture<SetIdentityMailFromDomainResponse, SetIdentityMailFromDomainError>;
 
-    /// <p>Given an identity (an email address or a domain), sets the Amazon Simple Notification Service (Amazon SNS) topic to which Amazon SES will publish bounce, complaint, and/or delivery notifications for emails sent with that identity as the <code>Source</code>.</p> <note> <p>Unless feedback forwarding is enabled, you must specify Amazon SNS topics for bounce and complaint notifications. For more information, see <code>SetIdentityFeedbackForwardingEnabled</code>.</p> </note> <p>You can execute this operation no more than once per second.</p> <p>For more information about feedback notification, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Sets an Amazon Simple Notification Service (Amazon SNS) topic to use when delivering notifications. When you use this operation, you specify a verified identity, such as an email address or domain. When you send an email that uses the chosen identity in the Source field, Amazon SES sends notifications to the topic you specified. You can send bounce, complaint, or delivery notifications (or any combination of the three) to the Amazon SNS topic that you specify.</p> <p>You can execute this operation no more than once per second.</p> <p>For more information about feedback notification, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
     fn set_identity_notification_topic(
         &self,
         input: SetIdentityNotificationTopicRequest,
@@ -15355,7 +15355,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -15405,7 +15405,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -15461,7 +15461,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -15517,7 +15517,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -15598,7 +15598,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -15651,7 +15651,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -15703,7 +15703,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -15756,7 +15756,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -15806,7 +15806,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -15862,7 +15862,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -15918,7 +15918,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -16000,7 +16000,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -16052,7 +16052,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -16104,7 +16104,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -16157,7 +16157,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -16209,7 +16209,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -16262,7 +16262,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -16339,7 +16339,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -16389,7 +16389,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -16441,7 +16441,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -16491,7 +16491,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -16540,7 +16540,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -16595,7 +16595,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -16645,7 +16645,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -16700,7 +16700,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -16755,7 +16755,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -16807,7 +16807,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -16862,7 +16862,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -16912,7 +16912,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -16964,7 +16964,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -17017,7 +17017,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -17069,7 +17069,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -17124,7 +17124,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -17177,7 +17177,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -17229,7 +17229,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -17282,7 +17282,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -17334,7 +17334,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -17387,7 +17387,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -17436,7 +17436,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -17489,7 +17489,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -17541,7 +17541,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -17594,13 +17594,13 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
     }
 
-    /// <p><p>Composes an email message to multiple destinations. The message body is created using an email template.</p> <p>In order to send email using the <code>SendBulkTemplatedEmail</code> operation, your call to the API must meet the following requirements:</p> <ul> <li> <p>The call must refer to an existing email template. You can create email templates using the <a>CreateTemplate</a> operation.</p> </li> <li> <p>The message must be sent from a verified email address or domain.</p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The total size of the message, including attachments, must be less than 10 MB.</p> </li> <li> <p>Each <code>Destination</code> parameter must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> </ul></p>
+    /// <p><p>Composes an email message to multiple destinations. The message body is created using an email template.</p> <p>In order to send email using the <code>SendBulkTemplatedEmail</code> operation, your call to the API must meet the following requirements:</p> <ul> <li> <p>The call must refer to an existing email template. You can create email templates using the <a>CreateTemplate</a> operation.</p> </li> <li> <p>The message must be sent from a verified email address or domain.</p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The maximum message size is 10 MB.</p> </li> <li> <p>Each <code>Destination</code> parameter must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> <li> <p>The message may not include more than 50 recipients, across the To:, CC: and BCC: fields. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call the <code>SendBulkTemplatedEmail</code> operation several times to send the message to each group.</p> </li> <li> <p>The number of destinations you can contact in a single call to the API may be limited by your account&#39;s maximum sending rate.</p> </li> </ul></p>
     fn send_bulk_templated_email(
         &self,
         input: SendBulkTemplatedEmailRequest,
@@ -17644,7 +17644,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -17694,13 +17694,13 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
     }
 
-    /// <p><p>Composes an email message and immediately queues it for sending. In order to send email using the <code>SendEmail</code> operation, your message must meet the following requirements:</p> <ul> <li> <p>The message must be sent from a verified email address or domain. If you attempt to send email using a non-verified address or domain, the operation will result in an &quot;Email address not verified&quot; error. </p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The total size of the message, including attachments, must be smaller than 10 MB.</p> </li> <li> <p>The message must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> <li> <p>The message may not include more than 50 recipients, across the To:, CC: and BCC: fields. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call the <code>SendEmail</code> operation several times to send the message to each group.</p> </li> </ul> <important> <p>For every message that you send, the total number of recipients (including each recipient in the To:, CC: and BCC: fields) is counted against the maximum number of emails you can send in a 24-hour period (your <i>sending quota</i>). For more information about sending quotas in Amazon SES, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Managing Your Amazon SES Sending Limits</a> in the <i>Amazon SES Developer Guide.</i> </p> </important></p>
+    /// <p><p>Composes an email message and immediately queues it for sending. In order to send email using the <code>SendEmail</code> operation, your message must meet the following requirements:</p> <ul> <li> <p>The message must be sent from a verified email address or domain. If you attempt to send email using a non-verified address or domain, the operation will result in an &quot;Email address not verified&quot; error. </p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The maximum message size is 10 MB.</p> </li> <li> <p>The message must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> <li> <p>The message may not include more than 50 recipients, across the To:, CC: and BCC: fields. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call the <code>SendEmail</code> operation several times to send the message to each group.</p> </li> </ul> <important> <p>For every message that you send, the total number of recipients (including each recipient in the To:, CC: and BCC: fields) is counted against the maximum number of emails you can send in a 24-hour period (your <i>sending quota</i>). For more information about sending quotas in Amazon SES, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Managing Your Amazon SES Sending Limits</a> in the <i>Amazon SES Developer Guide.</i> </p> </important></p>
     fn send_email(
         &self,
         input: SendEmailRequest,
@@ -17745,13 +17745,13 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
     }
 
-    /// <p><p>Composes an email message and immediately queues it for sending. When calling this operation, you may specify the message headers as well as the content. The <code>SendRawEmail</code> operation is particularly useful for sending multipart MIME emails (such as those that contain both a plain-text and an HTML version). </p> <p>In order to send email using the <code>SendRawEmail</code> operation, your message must meet the following requirements:</p> <ul> <li> <p>The message must be sent from a verified email address or domain. If you attempt to send email using a non-verified address or domain, the operation will result in an &quot;Email address not verified&quot; error. </p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The total size of the message, including attachments, must be smaller than 10 MB.</p> </li> <li> <p>The message must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> <li> <p>The message may not include more than 50 recipients, across the To:, CC: and BCC: fields. If you need to send an email message to a larger audience, you can divide your recipient list into groups of 50 or fewer, and then call the <code>SendRawEmail</code> operation several times to send the message to each group.</p> </li> </ul> <important> <p>For every message that you send, the total number of recipients (including each recipient in the To:, CC: and BCC: fields) is counted against the maximum number of emails you can send in a 24-hour period (your <i>sending quota</i>). For more information about sending quotas in Amazon SES, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Managing Your Amazon SES Sending Limits</a> in the <i>Amazon SES Developer Guide.</i> </p> </important> <p>Additionally, keep the following considerations in mind when using the <code>SendRawEmail</code> operation:</p> <ul> <li> <p>Although you can customize the message headers when using the <code>SendRawEmail</code> operation, Amazon SES will automatically apply its own <code>Message-ID</code> and <code>Date</code> headers; if you passed these headers when creating the message, they will be overwritten by the values that Amazon SES provides.</p> </li> <li> <p>If you are using sending authorization to send on behalf of another user, <code>SendRawEmail</code> enables you to specify the cross-account identity for the email&#39;s Source, From, and Return-Path parameters in one of two ways: you can pass optional parameters <code>SourceArn</code>, <code>FromArn</code>, and/or <code>ReturnPathArn</code> to the API, or you can include the following X-headers in the header of your raw email:</p> <ul> <li> <p> <code>X-SES-SOURCE-ARN</code> </p> </li> <li> <p> <code>X-SES-FROM-ARN</code> </p> </li> <li> <p> <code>X-SES-RETURN-PATH-ARN</code> </p> </li> </ul> <important> <p>Do not include these X-headers in the DKIM signature; Amazon SES will remove them before sending the email.</p> </important> <p>For most common sending authorization scenarios, we recommend that you specify the <code>SourceIdentityArn</code> parameter and not the <code>FromIdentityArn</code> or <code>ReturnPathIdentityArn</code> parameters. If you only specify the <code>SourceIdentityArn</code> parameter, Amazon SES will set the From and Return Path addresses to the identity specified in <code>SourceIdentityArn</code>. For more information about sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Using Sending Authorization with Amazon SES</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> </ul></p>
+    /// <p><p>Composes an email message and immediately queues it for sending.</p> <p>This operation is more flexible than the <code>SendEmail</code> API operation. When you use the <code>SendRawEmail</code> operation, you can specify the headers of the message as well as its content. This flexibility is useful, for example, when you want to send a multipart MIME email (such a message that contains both a text and an HTML version). You can also use this operation to send messages that include attachments.</p> <p>The <code>SendRawEmail</code> operation has the following requirements:</p> <ul> <li> <p>You can only send email from <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">verified email addresses or domains</a>. If you try to send email from an address that isn&#39;t verified, the operation results in an &quot;Email address not verified&quot; error.</p> </li> <li> <p>If your account is still in the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/request-production-access.html">Amazon SES sandbox</a>, you can only send email to other verified addresses in your account, or to addresses that are associated with the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/mailbox-simulator.html">Amazon SES mailbox simulator</a>.</p> </li> <li> <p>The maximum message size, including attachments, is 10 MB.</p> </li> <li> <p>Each message has to include at least one recipient address. A recipient address includes any address on the To:, CC:, or BCC: lines.</p> </li> <li> <p>If you send a single message to more than one recipient address, and one of the recipient addresses isn&#39;t in a valid format (that is, it&#39;s not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), Amazon SES rejects the entire message, even if the other addresses are valid.</p> </li> <li> <p>Each message can include up to 50 recipient addresses across the To:, CC:, or BCC: lines. If you need to send a single message to more than 50 recipients, you have to split the list of recipient addresses into groups of less than 50 recipients, and send separate messages to each group.</p> </li> <li> <p>Amazon SES allows you to specify 8-bit Content-Transfer-Encoding for MIME message parts. However, if Amazon SES has to modify the contents of your message (for example, if you use open and click tracking), 8-bit content isn&#39;t preserved. For this reason, we highly recommend that you encode all content that isn&#39;t 7-bit ASCII. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-raw.html#send-email-mime-encoding">MIME Encoding</a> in the <i>Amazon SES Developer Guide</i>.</p> </li> </ul> <p>Additionally, keep the following considerations in mind when using the <code>SendRawEmail</code> operation:</p> <ul> <li> <p>Although you can customize the message headers when using the <code>SendRawEmail</code> operation, Amazon SES will automatically apply its own <code>Message-ID</code> and <code>Date</code> headers; if you passed these headers when creating the message, they will be overwritten by the values that Amazon SES provides.</p> </li> <li> <p>If you are using sending authorization to send on behalf of another user, <code>SendRawEmail</code> enables you to specify the cross-account identity for the email&#39;s Source, From, and Return-Path parameters in one of two ways: you can pass optional parameters <code>SourceArn</code>, <code>FromArn</code>, and/or <code>ReturnPathArn</code> to the API, or you can include the following X-headers in the header of your raw email:</p> <ul> <li> <p> <code>X-SES-SOURCE-ARN</code> </p> </li> <li> <p> <code>X-SES-FROM-ARN</code> </p> </li> <li> <p> <code>X-SES-RETURN-PATH-ARN</code> </p> </li> </ul> <important> <p>Do not include these X-headers in the DKIM signature; Amazon SES will remove them before sending the email.</p> </important> <p>For most common sending authorization scenarios, we recommend that you specify the <code>SourceIdentityArn</code> parameter and not the <code>FromIdentityArn</code> or <code>ReturnPathIdentityArn</code> parameters. If you only specify the <code>SourceIdentityArn</code> parameter, Amazon SES will set the From and Return Path addresses to the identity specified in <code>SourceIdentityArn</code>. For more information about sending authorization, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html">Using Sending Authorization with Amazon SES</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>For every message that you send, the total number of recipients (including each recipient in the To:, CC: and BCC: fields) is counted against the maximum number of emails you can send in a 24-hour period (your <i>sending quota</i>). For more information about sending quotas in Amazon SES, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/manage-sending-limits.html">Managing Your Amazon SES Sending Limits</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> </ul></p>
     fn send_raw_email(
         &self,
         input: SendRawEmailRequest,
@@ -17798,13 +17798,13 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
     }
 
-    /// <p><p>Composes an email message using an email template and immediately queues it for sending.</p> <p>In order to send email using the <code>SendTemplatedEmail</code> operation, your call to the API must meet the following requirements:</p> <ul> <li> <p>The call must refer to an existing email template. You can create email templates using the <a>CreateTemplate</a> operation.</p> </li> <li> <p>The message must be sent from a verified email address or domain.</p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The total size of the message, including attachments, must be less than 10 MB.</p> </li> <li> <p>Calls to the <code>SendTemplatedEmail</code> operation may only include one <code>Destination</code> parameter. A destination is a set of recipients who will receive the same version of the email. The <code>Destination</code> parameter can include up to 50 recipients, across the To:, CC: and BCC: fields.</p> </li> <li> <p>The <code>Destination</code> parameter must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> </ul> <important> <p>If your call to the <code>SendTemplatedEmail</code> operation includes all of the required parameters, Amazon SES accepts it and returns a Message ID. However, if Amazon SES can&#39;t render the email because the template contains errors, it doesn&#39;t send the email. Additionally, because it already accepted the message, Amazon SES doesn&#39;t return a message stating that it was unable to send the email.</p> <p>For these reasons, we highly recommend that you set up Amazon SES to send you notifications when Rendering Failure events occur. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Sending Personalized Email Using the Amazon SES API</a> in the <i>Amazon Simple Email Service Developer Guide</i>.</p> </important></p>
+    /// <p><p>Composes an email message using an email template and immediately queues it for sending.</p> <p>In order to send email using the <code>SendTemplatedEmail</code> operation, your call to the API must meet the following requirements:</p> <ul> <li> <p>The call must refer to an existing email template. You can create email templates using the <a>CreateTemplate</a> operation.</p> </li> <li> <p>The message must be sent from a verified email address or domain.</p> </li> <li> <p>If your account is still in the Amazon SES sandbox, you may only send to verified addresses or domains, or to email addresses associated with the Amazon SES Mailbox Simulator. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/verify-addresses-and-domains.html">Verifying Email Addresses and Domains</a> in the <i>Amazon SES Developer Guide.</i> </p> </li> <li> <p>The maximum message size is 10 MB.</p> </li> <li> <p>Calls to the <code>SendTemplatedEmail</code> operation may only include one <code>Destination</code> parameter. A destination is a set of recipients who will receive the same version of the email. The <code>Destination</code> parameter can include up to 50 recipients, across the To:, CC: and BCC: fields.</p> </li> <li> <p>The <code>Destination</code> parameter must include at least one recipient email address. The recipient address can be a To: address, a CC: address, or a BCC: address. If a recipient email address is invalid (that is, it is not in the format <i>UserName@[SubDomain.]Domain.TopLevelDomain</i>), the entire message will be rejected, even if the message contains other recipients that are valid.</p> </li> </ul> <important> <p>If your call to the <code>SendTemplatedEmail</code> operation includes all of the required parameters, Amazon SES accepts it and returns a Message ID. However, if Amazon SES can&#39;t render the email because the template contains errors, it doesn&#39;t send the email. Additionally, because it already accepted the message, Amazon SES doesn&#39;t return a message stating that it was unable to send the email.</p> <p>For these reasons, we highly recommend that you set up Amazon SES to send you notifications when Rendering Failure events occur. For more information, see <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html">Sending Personalized Email Using the Amazon SES API</a> in the <i>Amazon Simple Email Service Developer Guide</i>.</p> </important></p>
     fn send_templated_email(
         &self,
         input: SendTemplatedEmailRequest,
@@ -17851,7 +17851,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -17901,7 +17901,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -17951,7 +17951,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -18006,7 +18006,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -18064,7 +18064,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -18114,13 +18114,13 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
     }
 
-    /// <p>Given an identity (an email address or a domain), sets the Amazon Simple Notification Service (Amazon SNS) topic to which Amazon SES will publish bounce, complaint, and/or delivery notifications for emails sent with that identity as the <code>Source</code>.</p> <note> <p>Unless feedback forwarding is enabled, you must specify Amazon SNS topics for bounce and complaint notifications. For more information, see <code>SetIdentityFeedbackForwardingEnabled</code>.</p> </note> <p>You can execute this operation no more than once per second.</p> <p>For more information about feedback notification, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
+    /// <p>Sets an Amazon Simple Notification Service (Amazon SNS) topic to use when delivering notifications. When you use this operation, you specify a verified identity, such as an email address or domain. When you send an email that uses the chosen identity in the Source field, Amazon SES sends notifications to the topic you specified. You can send bounce, complaint, or delivery notifications (or any combination of the three) to the Amazon SNS topic that you specify.</p> <p>You can execute this operation no more than once per second.</p> <p>For more information about feedback notification, see the <a href="http://docs.aws.amazon.com/ses/latest/DeveloperGuide/notifications.html">Amazon SES Developer Guide</a>.</p>
     fn set_identity_notification_topic(
         &self,
         input: SetIdentityNotificationTopicRequest,
@@ -18164,7 +18164,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -18214,7 +18214,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -18267,7 +18267,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -18350,7 +18350,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -18470,7 +18470,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -18552,7 +18552,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -18605,7 +18605,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -18658,7 +18658,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -18710,7 +18710,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -18792,7 +18792,7 @@ impl Ses for SesClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })

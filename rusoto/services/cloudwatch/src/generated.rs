@@ -239,6 +239,18 @@ impl ComparisonOperatorDeserializer {
         Ok(obj)
     }
 }
+
+/// Serialize `Counts` contents to a `SignedRequest`.
+struct CountsSerializer;
+impl CountsSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<f64>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            params.put(&key, &obj.to_string());
+        }
+    }
+}
+
 struct DashboardArnDeserializer;
 impl DashboardArnDeserializer {
     #[allow(unused_variables)]
@@ -1503,7 +1515,7 @@ impl GetDashboardOutputDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetMetricDataInput {
-    /// <p>The time stamp indicating the latest data to be returned.</p>
+    /// <p>The time stamp indicating the latest data to be returned.</p> <p>For better performance, specify <code>StartTime</code> and <code>EndTime</code> values that align with the value of the metric's <code>Period</code> and sync up with the beginning and end of an hour. For example, if the <code>Period</code> of a metric is 5 minutes, specifying 12:05 or 12:30 as <code>EndTime</code> can get a faster response from CloudWatch than setting 12:07 or 12:29 as the <code>EndTime</code>.</p>
     pub end_time: String,
     /// <p>The maximum number of data points the request should return before paginating. If you omit this, the default of 100,800 is used.</p>
     pub max_datapoints: Option<i64>,
@@ -1513,7 +1525,7 @@ pub struct GetMetricDataInput {
     pub next_token: Option<String>,
     /// <p>The order in which data points should be returned. <code>TimestampDescending</code> returns the newest data first and paginates when the <code>MaxDatapoints</code> limit is reached. <code>TimestampAscending</code> returns the oldest data first and paginates when the <code>MaxDatapoints</code> limit is reached.</p>
     pub scan_by: Option<String>,
-    /// <p>The time stamp indicating the earliest data to be returned.</p>
+    /// <p>The time stamp indicating the earliest data to be returned.</p> <p>For better performance, specify <code>StartTime</code> and <code>EndTime</code> values that align with the value of the metric's <code>Period</code> and sync up with the beginning and end of an hour. For example, if the <code>Period</code> of a metric is 5 minutes, specifying 12:05 or 12:30 as <code>StartTime</code> can get a faster response from CloudWatch than setting 12:07 or 12:29 as the <code>StartTime</code>.</p>
     pub start_time: String,
 }
 
@@ -1613,11 +1625,11 @@ impl GetMetricDataOutputDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetMetricStatisticsInput {
-    /// <p>The dimensions. If the metric contains multiple dimensions, you must include a value for each dimension. CloudWatch treats each unique combination of dimensions as a separate metric. If a specific combination of dimensions was not published, you can't retrieve statistics for it. You must specify the same dimensions that were used when the metrics were created. For an example, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html#dimension-combinations">Dimension Combinations</a> in the <i>Amazon CloudWatch User Guide</i>. For more information about specifying dimensions, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html">Publishing Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p>
+    /// <p>The dimensions. If the metric contains multiple dimensions, you must include a value for each dimension. CloudWatch treats each unique combination of dimensions as a separate metric. If a specific combination of dimensions was not published, you can't retrieve statistics for it. You must specify the same dimensions that were used when the metrics were created. For an example, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html#dimension-combinations">Dimension Combinations</a> in the <i>Amazon CloudWatch User Guide</i>. For more information about specifying dimensions, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html">Publishing Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p>
     pub dimensions: Option<Vec<Dimension>>,
     /// <p>The time stamp that determines the last data point to return.</p> <p>The value specified is exclusive; results include data points up to the specified time stamp. The time stamp must be in ISO 8601 UTC format (for example, 2016-10-10T23:00:00Z).</p>
     pub end_time: String,
-    /// <p>The percentile statistics. Specify values between p0.0 and p100. When calling <code>GetMetricStatistics</code>, you must specify either <code>Statistics</code> or <code>ExtendedStatistics</code>, but not both.</p>
+    /// <p>The percentile statistics. Specify values between p0.0 and p100. When calling <code>GetMetricStatistics</code>, you must specify either <code>Statistics</code> or <code>ExtendedStatistics</code>, but not both. Percentile statistics are not available for metrics when any of the metric values are negative numbers.</p>
     pub extended_statistics: Option<Vec<String>>,
     /// <p>The name of the metric, with or without spaces.</p>
     pub metric_name: String,
@@ -1718,6 +1730,78 @@ impl GetMetricStatisticsOutputDeserializer {
                     }
                     "Label" => {
                         obj.label = Some(MetricLabelDeserializer::deserialize("Label", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetMetricWidgetImageInput {
+    /// <p>A JSON string that defines the bitmap graph to be retrieved. The string includes the metrics to include in the graph, statistics, annotations, title, axis limits, and so on. You can include only one <code>MetricWidget</code> parameter in each <code>GetMetricWidgetImage</code> call.</p> <p>For more information about the syntax of <code>MetricWidget</code> see <a>CloudWatch-Metric-Widget-Structure</a>.</p> <p>If any metric on the graph could not load all the requested data points, an orange triangle with an exclamation point appears next to the graph legend.</p>
+    pub metric_widget: String,
+    /// <p>The format of the resulting image. Only PNG images are supported.</p> <p>The default is <code>png</code>. If you specify <code>png</code>, the API returns an HTTP response with the content-type set to <code>text/xml</code>. The image data is in a <code>MetricWidgetImage</code> field. For example:</p> <p> <code> &lt;GetMetricWidgetImageResponse xmlns=&lt;URLstring&gt;&gt;</code> </p> <p> <code> &lt;GetMetricWidgetImageResult&gt;</code> </p> <p> <code> &lt;MetricWidgetImage&gt;</code> </p> <p> <code> iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQEAYAAAAip...</code> </p> <p> <code> &lt;/MetricWidgetImage&gt;</code> </p> <p> <code> &lt;/GetMetricWidgetImageResult&gt;</code> </p> <p> <code> &lt;ResponseMetadata&gt;</code> </p> <p> <code> &lt;RequestId&gt;6f0d4192-4d42-11e8-82c1-f539a07e0e3b&lt;/RequestId&gt;</code> </p> <p> <code> &lt;/ResponseMetadata&gt;</code> </p> <p> <code>&lt;/GetMetricWidgetImageResponse&gt;</code> </p> <p>The <code>image/png</code> setting is intended only for custom HTTP requests. For most use cases, and all actions using an AWS SDK, you should use <code>png</code>. If you specify <code>image/png</code>, the HTTP response has a content-type set to <code>image/png</code>, and the body of the response is a PNG image. </p>
+    pub output_format: Option<String>,
+}
+
+/// Serialize `GetMetricWidgetImageInput` contents to a `SignedRequest`.
+struct GetMetricWidgetImageInputSerializer;
+impl GetMetricWidgetImageInputSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &GetMetricWidgetImageInput) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "MetricWidget"), &obj.metric_widget);
+        if let Some(ref field_value) = obj.output_format {
+            params.put(&format!("{}{}", prefix, "OutputFormat"), &field_value);
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetMetricWidgetImageOutput {
+    /// <p>The image of the graph, in the output format specified.</p>
+    pub metric_widget_image: Option<Vec<u8>>,
+}
+
+struct GetMetricWidgetImageOutputDeserializer;
+impl GetMetricWidgetImageOutputDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetMetricWidgetImageOutput, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = GetMetricWidgetImageOutput::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "MetricWidgetImage" => {
+                        obj.metric_widget_image = Some(MetricWidgetImageDeserializer::deserialize(
+                            "MetricWidgetImage",
+                            stack,
+                        )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -2078,7 +2162,7 @@ impl MessageDataValueDeserializer {
 pub struct Metric {
     /// <p>The dimensions for the metric.</p>
     pub dimensions: Option<Vec<Dimension>>,
-    /// <p>The name of the metric.</p>
+    /// <p>The name of the metric. This is a required field.</p>
     pub metric_name: Option<String>,
     /// <p>The namespace of the metric.</p>
     pub namespace: Option<String>,
@@ -2197,6 +2281,8 @@ pub struct MetricAlarm {
     pub insufficient_data_actions: Option<Vec<String>>,
     /// <p>The name of the metric associated with the alarm.</p>
     pub metric_name: Option<String>,
+    /// <p><p/></p>
+    pub metrics: Option<Vec<MetricDataQuery>>,
     /// <p>The namespace of the metric associated with the alarm.</p>
     pub namespace: Option<String>,
     /// <p>The actions to execute when this alarm transitions to the <code>OK</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p>
@@ -2347,6 +2433,19 @@ impl MetricAlarmDeserializer {
                         obj.metric_name =
                             Some(MetricNameDeserializer::deserialize("MetricName", stack)?);
                     }
+                    "Metrics" => {
+                        obj.metrics = match obj.metrics {
+                            Some(ref mut existing) => {
+                                existing.extend(MetricDataQueriesDeserializer::deserialize(
+                                    "Metrics", stack,
+                                )?);
+                                Some(existing.to_vec())
+                            }
+                            None => Some(MetricDataQueriesDeserializer::deserialize(
+                                "Metrics", stack,
+                            )?),
+                        };
+                    }
                     "Namespace" => {
                         obj.namespace =
                             Some(NamespaceDeserializer::deserialize("Namespace", stack)?);
@@ -2471,6 +2570,47 @@ impl MetricDataSerializer {
     }
 }
 
+struct MetricDataQueriesDeserializer;
+impl MetricDataQueriesDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<MetricDataQuery>, XmlParseError> {
+        let mut obj = vec![];
+        start_element(tag_name, stack)?;
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "member" {
+                        obj.push(MetricDataQueryDeserializer::deserialize("member", stack)?);
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    end_element(tag_name, stack)?;
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+
 /// Serialize `MetricDataQueries` contents to a `SignedRequest`.
 struct MetricDataQueriesSerializer;
 impl MetricDataQueriesSerializer {
@@ -2482,19 +2622,76 @@ impl MetricDataQueriesSerializer {
     }
 }
 
-/// <p>This structure indicates the metric data to return, and whether this call is just retrieving a batch set of data for one metric, or is performing a math expression on metric data. A single <code>GetMetricData</code> call can include up to 100 <code>MetricDataQuery</code> structures.</p>
+/// <p>This structure is used in both <code>GetMetricData</code> and <code>PutMetricAlarm</code>. The supported use of this structure is different for those two operations.</p> <p>When used in <code>GetMetricData</code>, it indicates the metric data to return, and whether this call is just retrieving a batch set of data for one metric, or is performing a math expression on metric data. A single <code>GetMetricData</code> call can include up to 100 <code>MetricDataQuery</code> structures.</p> <p>When used in <code>PutMetricAlarm</code>, it enables you to create an alarm based on a metric math expression. Each <code>MetricDataQuery</code> in the array specifies either a metric to retrieve, or a math expression to be performed on retrieved metrics. A single <code>PutMetricAlarm</code> call can include up to 20 <code>MetricDataQuery</code> structures in the array. The 20 structures can include as many as 10 structures that contain a <code>MetricStat</code> parameter to retrieve a metric, and as many as 10 structures that contain the <code>Expression</code> parameter to perform a math expression. Of those <code>Expression</code> structures, one must have <code>True</code> as the value for <code>ReturnData</code>. The result of this expression is the value the alarm watches.</p> <p>Any expression used in a <code>PutMetricAlarm</code> operation must return a single time series. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html#metric-math-syntax">Metric Math Syntax and Functions</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Some of the parameters of this structure also have different uses whether you are using this structure in a <code>GetMetricData</code> operation or a <code>PutMetricAlarm</code> operation. These differences are explained in the following parameter list.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct MetricDataQuery {
-    /// <p>The math expression to be performed on the returned data, if this structure is performing a math expression. For more information about metric math expressions, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html#metric-math-syntax">Metric Math Syntax and Functions</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Within one MetricDataQuery structure, you must specify either <code>Expression</code> or <code>MetricStat</code> but not both.</p>
+    /// <p>The math expression to be performed on the returned data, if this object is performing a math expression. This expression can use the <code>Id</code> of the other metrics to refer to those metrics, and can also use the <code>Id</code> of other expressions to use the result of those expressions. For more information about metric math expressions, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html#metric-math-syntax">Metric Math Syntax and Functions</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Within each MetricDataQuery object, you must specify either <code>Expression</code> or <code>MetricStat</code> but not both.</p>
     pub expression: Option<String>,
-    /// <p>A short name used to tie this structure to the results in the response. This name must be unique within a single call to <code>GetMetricData</code>. If you are performing math expressions on this set of data, this name represents that data and can serve as a variable in the mathematical expression. The valid characters are letters, numbers, and underscore. The first character must be a lowercase letter.</p>
+    /// <p>A short name used to tie this object to the results in the response. This name must be unique within a single call to <code>GetMetricData</code>. If you are performing math expressions on this set of data, this name represents that data and can serve as a variable in the mathematical expression. The valid characters are letters, numbers, and underscore. The first character must be a lowercase letter.</p>
     pub id: String,
     /// <p>A human-readable label for this metric or expression. This is especially useful if this is an expression, so that you know what the value represents. If the metric or expression is shown in a CloudWatch dashboard widget, the label is shown. If Label is omitted, CloudWatch generates a default.</p>
     pub label: Option<String>,
-    /// <p>The metric to be returned, along with statistics, period, and units. Use this parameter only if this structure is performing a data retrieval and not performing a math expression on the returned data.</p> <p>Within one MetricDataQuery structure, you must specify either <code>Expression</code> or <code>MetricStat</code> but not both.</p>
+    /// <p>The metric to be returned, along with statistics, period, and units. Use this parameter only if this object is retrieving a metric and not performing a math expression on returned data.</p> <p>Within one MetricDataQuery object, you must specify either <code>Expression</code> or <code>MetricStat</code> but not both.</p>
     pub metric_stat: Option<MetricStat>,
-    /// <p>Indicates whether to return the time stamps and raw data values of this metric. If you are performing this call just to do math expressions and do not also need the raw data returned, you can specify <code>False</code>. If you omit this, the default of <code>True</code> is used.</p>
+    /// <p>When used in <code>GetMetricData</code>, this option indicates whether to return the timestamps and raw data values of this metric. If you are performing this call just to do math expressions and do not also need the raw data returned, you can specify <code>False</code>. If you omit this, the default of <code>True</code> is used.</p> <p>When used in <code>PutMetricAlarm</code>, specify <code>True</code> for the one expression result to use as the alarm. For all other metrics and expressions in the same <code>PutMetricAlarm</code> operation, specify <code>ReturnData</code> as False.</p>
     pub return_data: Option<bool>,
+}
+
+struct MetricDataQueryDeserializer;
+impl MetricDataQueryDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<MetricDataQuery, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = MetricDataQuery::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Expression" => {
+                        obj.expression = Some(MetricExpressionDeserializer::deserialize(
+                            "Expression",
+                            stack,
+                        )?);
+                    }
+                    "Id" => {
+                        obj.id = MetricIdDeserializer::deserialize("Id", stack)?;
+                    }
+                    "Label" => {
+                        obj.label = Some(MetricLabelDeserializer::deserialize("Label", stack)?);
+                    }
+                    "MetricStat" => {
+                        obj.metric_stat =
+                            Some(MetricStatDeserializer::deserialize("MetricStat", stack)?);
+                    }
+                    "ReturnData" => {
+                        obj.return_data =
+                            Some(ReturnDataDeserializer::deserialize("ReturnData", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
 }
 
 /// Serialize `MetricDataQuery` contents to a `SignedRequest`.
@@ -2529,7 +2726,7 @@ impl MetricDataQuerySerializer {
     }
 }
 
-/// <p>A <code>GetMetricData</code> call returns an array of <code>MetricDataResult</code> structures. Each of these structures includes the data points for that metric, along with the time stamps of those data points and other identifying information.</p>
+/// <p>A <code>GetMetricData</code> call returns an array of <code>MetricDataResult</code> structures. Each of these structures includes the data points for that metric, along with the timestamps of those data points and other identifying information.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct MetricDataResult {
     /// <p>The short name you specified to represent this metric.</p>
@@ -2540,9 +2737,9 @@ pub struct MetricDataResult {
     pub messages: Option<Vec<MessageData>>,
     /// <p>The status of the returned data. <code>Complete</code> indicates that all data points in the requested time range were returned. <code>PartialData</code> means that an incomplete set of data points were returned. You can use the <code>NextToken</code> value that was returned and repeat your request to get more data points. <code>NextToken</code> is not returned if you are performing a math expression. <code>InternalError</code> indicates that an error occurred. Retry your request using <code>NextToken</code>, if present.</p>
     pub status_code: Option<String>,
-    /// <p>The time stamps for the data points, formatted in Unix timestamp format. The number of time stamps always matches the number of values and the value for Timestamps[x] is Values[x].</p>
+    /// <p>The timestamps for the data points, formatted in Unix timestamp format. The number of timestamps always matches the number of values and the value for Timestamps[x] is Values[x].</p>
     pub timestamps: Option<Vec<String>>,
-    /// <p>The data points for the metric corresponding to <code>Timestamps</code>. The number of values always matches the number of time stamps and the time stamp for Values[x] is Timestamps[x].</p>
+    /// <p>The data points for the metric corresponding to <code>Timestamps</code>. The number of values always matches the number of timestamps and the timestamp for Values[x] is Timestamps[x].</p>
     pub values: Option<Vec<f64>>,
 }
 
@@ -2713,13 +2910,15 @@ impl MetricDataResultsDeserializer {
 /// <p>Encapsulates the information sent to either create a metric or add new values to be aggregated into an existing metric.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct MetricDatum {
+    /// <p>Array of numbers that is used along with the <code>Values</code> array. Each number in the <code>Count</code> array is the number of times the corresponding value in the <code>Values</code> array occurred during the period. </p> <p>If you omit the <code>Counts</code> array, the default of 1 is used as the value for each count. If you include a <code>Counts</code> array, it must include the same amount of values as the <code>Values</code> array.</p>
+    pub counts: Option<Vec<f64>>,
     /// <p>The dimensions associated with the metric.</p>
     pub dimensions: Option<Vec<Dimension>>,
     /// <p>The name of the metric.</p>
     pub metric_name: String,
     /// <p>The statistical values for the metric.</p>
     pub statistic_values: Option<StatisticSet>,
-    /// <p>Valid values are 1 and 60. Setting this to 1 specifies this metric as a high-resolution metric, so that CloudWatch stores the metric with sub-minute resolution down to one second. Setting this to 60 specifies this metric as a regular-resolution metric, which CloudWatch stores at 1-minute resolution. Currently, high resolution is available only for custom metrics. For more information about high-resolution metrics, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html#high-resolution-metrics">High-Resolution Metrics</a> in the <i>Amazon CloudWatch User Guide</i>. </p> <p>This field is optional, if you do not specify it the default of 60 is used.</p>
+    /// <p>Valid values are 1 and 60. Setting this to 1 specifies this metric as a high-resolution metric, so that CloudWatch stores the metric with sub-minute resolution down to one second. Setting this to 60 specifies this metric as a regular-resolution metric, which CloudWatch stores at 1-minute resolution. Currently, high resolution is available only for custom metrics. For more information about high-resolution metrics, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html#high-resolution-metrics">High-Resolution Metrics</a> in the <i>Amazon CloudWatch User Guide</i>. </p> <p>This field is optional, if you do not specify it the default of 60 is used.</p>
     pub storage_resolution: Option<i64>,
     /// <p>The time the metric data was received, expressed as the number of milliseconds since Jan 1, 1970 00:00:00 UTC.</p>
     pub timestamp: Option<String>,
@@ -2727,6 +2926,8 @@ pub struct MetricDatum {
     pub unit: Option<String>,
     /// <p>The value for the metric.</p> <p>Although the parameter accepts numbers of type Double, CloudWatch rejects values that are either too small or too large. Values must be in the range of 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2). In addition, special values (for example, NaN, +Infinity, -Infinity) are not supported.</p>
     pub value: Option<f64>,
+    /// <p>Array of numbers representing the values for the metric during the period. Each unique value is listed just once in this array, and the corresponding number in the <code>Counts</code> array specifies the number of times that value occurred during the period. You can include up to 150 unique values in each <code>PutMetricData</code> action that specifies a <code>Values</code> array.</p> <p>Although the <code>Values</code> array accepts numbers of type <code>Double</code>, CloudWatch rejects values that are either too small or too large. Values must be in the range of 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2). In addition, special values (for example, NaN, +Infinity, -Infinity) are not supported.</p>
+    pub values: Option<Vec<f64>>,
 }
 
 /// Serialize `MetricDatum` contents to a `SignedRequest`.
@@ -2738,6 +2939,9 @@ impl MetricDatumSerializer {
             prefix.push_str(".");
         }
 
+        if let Some(ref field_value) = obj.counts {
+            CountsSerializer::serialize(params, &format!("{}{}", prefix, "Counts"), field_value);
+        }
         if let Some(ref field_value) = obj.dimensions {
             DimensionsSerializer::serialize(
                 params,
@@ -2768,9 +2972,26 @@ impl MetricDatumSerializer {
         if let Some(ref field_value) = obj.value {
             params.put(&format!("{}{}", prefix, "Value"), &field_value.to_string());
         }
+        if let Some(ref field_value) = obj.values {
+            ValuesSerializer::serialize(params, &format!("{}{}", prefix, "Values"), field_value);
+        }
     }
 }
 
+struct MetricExpressionDeserializer;
+impl MetricExpressionDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 struct MetricIdDeserializer;
 impl MetricIdDeserializer {
     #[allow(unused_variables)]
@@ -2818,12 +3039,61 @@ impl MetricNameDeserializer {
 pub struct MetricStat {
     /// <p>The metric to return, including the metric name, namespace, and dimensions.</p>
     pub metric: Metric,
-    /// <p>The period to use when retrieving the metric.</p>
+    /// <p>The period, in seconds, to use when retrieving the metric.</p>
     pub period: i64,
     /// <p>The statistic to return. It can include any CloudWatch statistic or extended statistic.</p>
     pub stat: String,
     /// <p>The unit to use for the returned data points.</p>
     pub unit: Option<String>,
+}
+
+struct MetricStatDeserializer;
+impl MetricStatDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<MetricStat, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = MetricStat::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Metric" => {
+                        obj.metric = MetricDeserializer::deserialize("Metric", stack)?;
+                    }
+                    "Period" => {
+                        obj.period = PeriodDeserializer::deserialize("Period", stack)?;
+                    }
+                    "Stat" => {
+                        obj.stat = StatDeserializer::deserialize("Stat", stack)?;
+                    }
+                    "Unit" => {
+                        obj.unit = Some(StandardUnitDeserializer::deserialize("Unit", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
 }
 
 /// Serialize `MetricStat` contents to a `SignedRequest`.
@@ -2844,6 +3114,20 @@ impl MetricStatSerializer {
     }
 }
 
+struct MetricWidgetImageDeserializer;
+impl MetricWidgetImageDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<u8>, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?.into_bytes();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 struct MetricsDeserializer;
 impl MetricsDeserializer {
     #[allow(unused_variables)]
@@ -3016,41 +3300,43 @@ impl PutDashboardOutputDeserializer {
 }
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutMetricAlarmInput {
-    /// <p>Indicates whether actions should be executed during any changes to the alarm state.</p>
+    /// <p>Indicates whether actions should be executed during any changes to the alarm state. The default is TRUE.</p>
     pub actions_enabled: Option<bool>,
-    /// <p>The actions to execute when this alarm transitions to the <code>ALARM</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p> <p>Valid Values: arn:aws:automate:<i>region</i>:ec2:stop | arn:aws:automate:<i>region</i>:ec2:terminate | arn:aws:automate:<i>region</i>:ec2:recover | arn:aws:sns:<i>region</i>:<i>account-id</i>:<i>sns-topic-name</i> | arn:aws:autoscaling:<i>region</i>:<i>account-id</i>:scalingPolicy:<i>policy-id</i> autoScalingGroupName/<i>group-friendly-name</i>:policyName/<i>policy-friendly-name</i> </p> <p>Valid Values (for use with IAM roles): arn:aws:swf:<i>region</i>:{<i>account-id</i>}:action/actions/AWS_EC2.InstanceId.Stop/1.0 | arn:aws:swf:<i>region</i>:{<i>account-id</i>}:action/actions/AWS_EC2.InstanceId.Terminate/1.0 | arn:aws:swf:<i>region</i>:{<i>account-id</i>}:action/actions/AWS_EC2.InstanceId.Reboot/1.0</p>
+    /// <p>The actions to execute when this alarm transitions to the <code>ALARM</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p> <p>Valid Values: <code>arn:aws:automate:<i>region</i>:ec2:stop</code> | <code>arn:aws:automate:<i>region</i>:ec2:terminate</code> | <code>arn:aws:automate:<i>region</i>:ec2:recover</code> | <code>arn:aws:automate:<i>region</i>:ec2:reboot</code> | <code>arn:aws:sns:<i>region</i>:<i>account-id</i>:<i>sns-topic-name</i> </code> | <code>arn:aws:autoscaling:<i>region</i>:<i>account-id</i>:scalingPolicy:<i>policy-id</i>autoScalingGroupName/<i>group-friendly-name</i>:policyName/<i>policy-friendly-name</i> </code> </p> <p>Valid Values (for use with IAM roles): <code>arn:aws:swf:<i>region</i>:<i>account-id</i>:action/actions/AWS_EC2.InstanceId.Stop/1.0</code> | <code>arn:aws:swf:<i>region</i>:<i>account-id</i>:action/actions/AWS_EC2.InstanceId.Terminate/1.0</code> | <code>arn:aws:swf:<i>region</i>:<i>account-id</i>:action/actions/AWS_EC2.InstanceId.Reboot/1.0</code> </p>
     pub alarm_actions: Option<Vec<String>>,
     /// <p>The description for the alarm.</p>
     pub alarm_description: Option<String>,
-    /// <p>The name for the alarm. This name must be unique within the AWS account.</p>
+    /// <p>The name for the alarm. This name must be unique within your AWS account.</p>
     pub alarm_name: String,
     /// <p> The arithmetic operation to use when comparing the specified statistic and threshold. The specified statistic value is used as the first operand.</p>
     pub comparison_operator: String,
-    /// <p>The number of datapoints that must be breaching to trigger the alarm. This is used only if you are setting an "M out of N" alarm. In that case, this value is the M. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html#alarm-evaluation">Evaluating an Alarm</a> in the <i>Amazon CloudWatch User Guide</i>.</p>
+    /// <p>The number of datapoints that must be breaching to trigger the alarm. This is used only if you are setting an "M out of N" alarm. In that case, this value is the M. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html#alarm-evaluation">Evaluating an Alarm</a> in the <i>Amazon CloudWatch User Guide</i>.</p>
     pub datapoints_to_alarm: Option<i64>,
-    /// <p>The dimensions for the metric associated with the alarm.</p>
+    /// <p>The dimensions for the metric specified in <code>MetricName</code>.</p>
     pub dimensions: Option<Vec<Dimension>>,
-    /// <p> Used only for alarms based on percentiles. If you specify <code>ignore</code>, the alarm state does not change during periods with too few data points to be statistically significant. If you specify <code>evaluate</code> or omit this parameter, the alarm is always evaluated and possibly changes state no matter how many data points are available. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html#percentiles-with-low-samples">Percentile-Based CloudWatch Alarms and Low Data Samples</a>.</p> <p>Valid Values: <code>evaluate | ignore</code> </p>
+    /// <p> Used only for alarms based on percentiles. If you specify <code>ignore</code>, the alarm state does not change during periods with too few data points to be statistically significant. If you specify <code>evaluate</code> or omit this parameter, the alarm is always evaluated and possibly changes state no matter how many data points are available. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html#percentiles-with-low-samples">Percentile-Based CloudWatch Alarms and Low Data Samples</a>.</p> <p>Valid Values: <code>evaluate | ignore</code> </p>
     pub evaluate_low_sample_count_percentile: Option<String>,
-    /// <p>The number of periods over which data is compared to the specified threshold. If you are setting an alarm which requires that a number of consecutive data points be breaching to trigger the alarm, this value specifies that number. If you are setting an "M out of N" alarm, this value is the N.</p> <p>An alarm's total current evaluation period can be no longer than one day, so this number multiplied by <code>Period</code> cannot be more than 86,400 seconds.</p>
+    /// <p>The number of periods over which data is compared to the specified threshold. If you are setting an alarm that requires that a number of consecutive data points be breaching to trigger the alarm, this value specifies that number. If you are setting an "M out of N" alarm, this value is the N.</p> <p>An alarm's total current evaluation period can be no longer than one day, so this number multiplied by <code>Period</code> cannot be more than 86,400 seconds.</p>
     pub evaluation_periods: i64,
-    /// <p>The percentile statistic for the metric associated with the alarm. Specify a value between p0.0 and p100. When you call <code>PutMetricAlarm</code>, you must specify either <code>Statistic</code> or <code>ExtendedStatistic,</code> but not both.</p>
+    /// <p>The percentile statistic for the metric specified in <code>MetricName</code>. Specify a value between p0.0 and p100. When you call <code>PutMetricAlarm</code> and specify a <code>MetricName</code>, you must specify either <code>Statistic</code> or <code>ExtendedStatistic,</code> but not both.</p>
     pub extended_statistic: Option<String>,
-    /// <p>The actions to execute when this alarm transitions to the <code>INSUFFICIENT_DATA</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p> <p>Valid Values: arn:aws:automate:<i>region</i>:ec2:stop | arn:aws:automate:<i>region</i>:ec2:terminate | arn:aws:automate:<i>region</i>:ec2:recover | arn:aws:sns:<i>region</i>:<i>account-id</i>:<i>sns-topic-name</i> | arn:aws:autoscaling:<i>region</i>:<i>account-id</i>:scalingPolicy:<i>policy-id</i> autoScalingGroupName/<i>group-friendly-name</i>:policyName/<i>policy-friendly-name</i> </p> <p>Valid Values (for use with IAM roles): arn:aws:swf:<i>region</i>:{<i>account-id</i>}:action/actions/AWS_EC2.InstanceId.Stop/1.0 | arn:aws:swf:<i>region</i>:{<i>account-id</i>}:action/actions/AWS_EC2.InstanceId.Terminate/1.0 | arn:aws:swf:<i>region</i>:{<i>account-id</i>}:action/actions/AWS_EC2.InstanceId.Reboot/1.0</p>
+    /// <p>The actions to execute when this alarm transitions to the <code>INSUFFICIENT_DATA</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p> <p>Valid Values: <code>arn:aws:automate:<i>region</i>:ec2:stop</code> | <code>arn:aws:automate:<i>region</i>:ec2:terminate</code> | <code>arn:aws:automate:<i>region</i>:ec2:recover</code> | <code>arn:aws:automate:<i>region</i>:ec2:reboot</code> | <code>arn:aws:sns:<i>region</i>:<i>account-id</i>:<i>sns-topic-name</i> </code> | <code>arn:aws:autoscaling:<i>region</i>:<i>account-id</i>:scalingPolicy:<i>policy-id</i>autoScalingGroupName/<i>group-friendly-name</i>:policyName/<i>policy-friendly-name</i> </code> </p> <p>Valid Values (for use with IAM roles): <code>&gt;arn:aws:swf:<i>region</i>:<i>account-id</i>:action/actions/AWS_EC2.InstanceId.Stop/1.0</code> | <code>arn:aws:swf:<i>region</i>:<i>account-id</i>:action/actions/AWS_EC2.InstanceId.Terminate/1.0</code> | <code>arn:aws:swf:<i>region</i>:<i>account-id</i>:action/actions/AWS_EC2.InstanceId.Reboot/1.0</code> </p>
     pub insufficient_data_actions: Option<Vec<String>>,
-    /// <p>The name for the metric associated with the alarm.</p>
-    pub metric_name: String,
-    /// <p>The namespace for the metric associated with the alarm.</p>
-    pub namespace: String,
-    /// <p>The actions to execute when this alarm transitions to an <code>OK</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p> <p>Valid Values: arn:aws:automate:<i>region</i>:ec2:stop | arn:aws:automate:<i>region</i>:ec2:terminate | arn:aws:automate:<i>region</i>:ec2:recover | arn:aws:sns:<i>region</i>:<i>account-id</i>:<i>sns-topic-name</i> | arn:aws:autoscaling:<i>region</i>:<i>account-id</i>:scalingPolicy:<i>policy-id</i> autoScalingGroupName/<i>group-friendly-name</i>:policyName/<i>policy-friendly-name</i> </p> <p>Valid Values (for use with IAM roles): arn:aws:swf:<i>region</i>:{<i>account-id</i>}:action/actions/AWS_EC2.InstanceId.Stop/1.0 | arn:aws:swf:<i>region</i>:{<i>account-id</i>}:action/actions/AWS_EC2.InstanceId.Terminate/1.0 | arn:aws:swf:<i>region</i>:{<i>account-id</i>}:action/actions/AWS_EC2.InstanceId.Reboot/1.0</p>
+    /// <p>The name for the metric associated with the alarm.</p> <p>If you are creating an alarm based on a math expression, you cannot specify this parameter, or any of the <code>Dimensions</code>, <code>Period</code>, <code>Namespace</code>, <code>Statistic</code>, or <code>ExtendedStatistic</code> parameters. Instead, you specify all this information in the <code>Metrics</code> array.</p>
+    pub metric_name: Option<String>,
+    /// <p>An array of <code>MetricDataQuery</code> structures that enable you to create an alarm based on the result of a metric math expression. Each item in the <code>Metrics</code> array either retrieves a metric or performs a math expression.</p> <p>One item in the <code>Metrics</code> array is the expression that the alarm watches. You designate this expression by setting <code>ReturnValue</code> to true for this object in the array. For more information, see <a>MetricDataQuery</a>.</p> <p>If you use the <code>Metrics</code> parameter, you cannot include the <code>MetricName</code>, <code>Dimensions</code>, <code>Period</code>, <code>Namespace</code>, <code>Statistic</code>, or <code>ExtendedStatistic</code> parameters of <code>PutMetricAlarm</code> in the same operation. Instead, you retrieve the metrics you are using in your math expression as part of the <code>Metrics</code> array.</p>
+    pub metrics: Option<Vec<MetricDataQuery>>,
+    /// <p>The namespace for the metric associated specified in <code>MetricName</code>.</p>
+    pub namespace: Option<String>,
+    /// <p>The actions to execute when this alarm transitions to an <code>OK</code> state from any other state. Each action is specified as an Amazon Resource Name (ARN).</p> <p>Valid Values: <code>arn:aws:automate:<i>region</i>:ec2:stop</code> | <code>arn:aws:automate:<i>region</i>:ec2:terminate</code> | <code>arn:aws:automate:<i>region</i>:ec2:recover</code> | <code>arn:aws:automate:<i>region</i>:ec2:reboot</code> | <code>arn:aws:sns:<i>region</i>:<i>account-id</i>:<i>sns-topic-name</i> </code> | <code>arn:aws:autoscaling:<i>region</i>:<i>account-id</i>:scalingPolicy:<i>policy-id</i>autoScalingGroupName/<i>group-friendly-name</i>:policyName/<i>policy-friendly-name</i> </code> </p> <p>Valid Values (for use with IAM roles): <code>arn:aws:swf:<i>region</i>:<i>account-id</i>:action/actions/AWS_EC2.InstanceId.Stop/1.0</code> | <code>arn:aws:swf:<i>region</i>:<i>account-id</i>:action/actions/AWS_EC2.InstanceId.Terminate/1.0</code> | <code>arn:aws:swf:<i>region</i>:<i>account-id</i>:action/actions/AWS_EC2.InstanceId.Reboot/1.0</code> </p>
     pub ok_actions: Option<Vec<String>>,
-    /// <p>The period, in seconds, over which the specified statistic is applied. Valid values are 10, 30, and any multiple of 60.</p> <p>Be sure to specify 10 or 30 only for metrics that are stored by a <code>PutMetricData</code> call with a <code>StorageResolution</code> of 1. If you specify a period of 10 or 30 for a metric that does not have sub-minute resolution, the alarm still attempts to gather data at the period rate that you specify. In this case, it does not receive data for the attempts that do not correspond to a one-minute data resolution, and the alarm may often lapse into INSUFFICENT_DATA status. Specifying 10 or 30 also sets this alarm as a high-resolution alarm, which has a higher charge than other alarms. For more information about pricing, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> <p>An alarm's total current evaluation period can be no longer than one day, so <code>Period</code> multiplied by <code>EvaluationPeriods</code> cannot be more than 86,400 seconds.</p>
-    pub period: i64,
-    /// <p>The statistic for the metric associated with the alarm, other than percentile. For percentile statistics, use <code>ExtendedStatistic</code>. When you call <code>PutMetricAlarm</code>, you must specify either <code>Statistic</code> or <code>ExtendedStatistic,</code> but not both.</p>
+    /// <p>The length, in seconds, used each time the metric specified in <code>MetricName</code> is evaluated. Valid values are 10, 30, and any multiple of 60.</p> <p>Be sure to specify 10 or 30 only for metrics that are stored by a <code>PutMetricData</code> call with a <code>StorageResolution</code> of 1. If you specify a period of 10 or 30 for a metric that does not have sub-minute resolution, the alarm still attempts to gather data at the period rate that you specify. In this case, it does not receive data for the attempts that do not correspond to a one-minute data resolution, and the alarm may often lapse into INSUFFICENT_DATA status. Specifying 10 or 30 also sets this alarm as a high-resolution alarm, which has a higher charge than other alarms. For more information about pricing, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> <p>An alarm's total current evaluation period can be no longer than one day, so <code>Period</code> multiplied by <code>EvaluationPeriods</code> cannot be more than 86,400 seconds.</p>
+    pub period: Option<i64>,
+    /// <p>The statistic for the metric specified in <code>MetricName</code>, other than percentile. For percentile statistics, use <code>ExtendedStatistic</code>. When you call <code>PutMetricAlarm</code> and specify a <code>MetricName</code>, you must specify either <code>Statistic</code> or <code>ExtendedStatistic,</code> but not both.</p>
     pub statistic: Option<String>,
     /// <p>The value against which the specified statistic is compared.</p>
     pub threshold: f64,
-    /// <p> Sets how this alarm is to handle missing data points. If <code>TreatMissingData</code> is omitted, the default behavior of <code>missing</code> is used. For more information, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html#alarms-and-missing-data">Configuring How CloudWatch Alarms Treats Missing Data</a>.</p> <p>Valid Values: <code>breaching | notBreaching | ignore | missing</code> </p>
+    /// <p> Sets how this alarm is to handle missing data points. If <code>TreatMissingData</code> is omitted, the default behavior of <code>missing</code> is used. For more information, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html#alarms-and-missing-data">Configuring How CloudWatch Alarms Treats Missing Data</a>.</p> <p>Valid Values: <code>breaching | notBreaching | ignore | missing</code> </p>
     pub treat_missing_data: Option<String>,
     /// <p>The unit of measure for the statistic. For example, the units for the Amazon EC2 NetworkIn metric are Bytes because NetworkIn tracks the number of bytes that an instance receives on all network interfaces. You can also specify a unit when you create a custom metric. Units help provide conceptual meaning to your data. Metric data points that specify a unit of measure, such as Percent, are aggregated separately.</p> <p>If you specify a unit, you must use a unit that is appropriate for the metric. Otherwise, the CloudWatch alarm can get stuck in the <code>INSUFFICIENT DATA</code> state. </p>
     pub unit: Option<String>,
@@ -3119,8 +3405,19 @@ impl PutMetricAlarmInputSerializer {
                 field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "MetricName"), &obj.metric_name);
-        params.put(&format!("{}{}", prefix, "Namespace"), &obj.namespace);
+        if let Some(ref field_value) = obj.metric_name {
+            params.put(&format!("{}{}", prefix, "MetricName"), &field_value);
+        }
+        if let Some(ref field_value) = obj.metrics {
+            MetricDataQueriesSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Metrics"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.namespace {
+            params.put(&format!("{}{}", prefix, "Namespace"), &field_value);
+        }
         if let Some(ref field_value) = obj.ok_actions {
             ResourceListSerializer::serialize(
                 params,
@@ -3128,7 +3425,9 @@ impl PutMetricAlarmInputSerializer {
                 field_value,
             );
         }
-        params.put(&format!("{}{}", prefix, "Period"), &obj.period.to_string());
+        if let Some(ref field_value) = obj.period {
+            params.put(&format!("{}{}", prefix, "Period"), &field_value.to_string());
+        }
         if let Some(ref field_value) = obj.statistic {
             params.put(&format!("{}{}", prefix, "Statistic"), &field_value);
         }
@@ -3147,7 +3446,7 @@ impl PutMetricAlarmInputSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutMetricDataInput {
-    /// <p>The data for the metric.</p>
+    /// <p>The data for the metric. The array can include no more than 20 metrics per call.</p>
     pub metric_data: Vec<MetricDatum>,
     /// <p>The namespace for the metric data.</p> <p>You cannot specify a namespace that begins with "AWS/". Namespaces that begin with "AWS/" are reserved for use by Amazon Web Services products.</p>
     pub namespace: String,
@@ -3237,6 +3536,20 @@ impl ResourceNameDeserializer {
         Ok(obj)
     }
 }
+struct ReturnDataDeserializer;
+impl ReturnDataDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<bool, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SetAlarmStateInput {
     /// <p>The name for the alarm. This name must be unique within the AWS account. The maximum length is 255 characters.</p>
@@ -3283,6 +3596,20 @@ impl SizeDeserializer {
 }
 struct StandardUnitDeserializer;
 impl StandardUnitDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct StatDeserializer;
+impl StatDeserializer {
     #[allow(unused_variables)]
     fn deserialize<'a, T: Peek + Next>(
         tag_name: &str,
@@ -3496,6 +3823,18 @@ impl TreatMissingDataDeserializer {
         Ok(obj)
     }
 }
+
+/// Serialize `Values` contents to a `SignedRequest`.
+struct ValuesSerializer;
+impl ValuesSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<f64>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            params.put(&key, &obj.to_string());
+        }
+    }
+}
+
 /// Errors returned by DeleteAlarms
 #[derive(Debug, PartialEq)]
 pub enum DeleteAlarmsError {
@@ -4378,6 +4717,84 @@ impl Error for GetMetricStatisticsError {
         }
     }
 }
+/// Errors returned by GetMetricWidgetImage
+#[derive(Debug, PartialEq)]
+pub enum GetMetricWidgetImageError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetMetricWidgetImageError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetMetricWidgetImageError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        GetMetricWidgetImageError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for GetMetricWidgetImageError {
+    fn from(err: XmlParseError) -> GetMetricWidgetImageError {
+        let XmlParseError(message) = err;
+        GetMetricWidgetImageError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for GetMetricWidgetImageError {
+    fn from(err: CredentialsError) -> GetMetricWidgetImageError {
+        GetMetricWidgetImageError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetMetricWidgetImageError {
+    fn from(err: HttpDispatchError) -> GetMetricWidgetImageError {
+        GetMetricWidgetImageError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetMetricWidgetImageError {
+    fn from(err: io::Error) -> GetMetricWidgetImageError {
+        GetMetricWidgetImageError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetMetricWidgetImageError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetMetricWidgetImageError {
+    fn description(&self) -> &str {
+        match *self {
+            GetMetricWidgetImageError::Validation(ref cause) => cause,
+            GetMetricWidgetImageError::Credentials(ref err) => err.description(),
+            GetMetricWidgetImageError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetMetricWidgetImageError::ParseError(ref cause) => cause,
+            GetMetricWidgetImageError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by ListDashboards
 #[derive(Debug, PartialEq)]
 pub enum ListDashboardsError {
@@ -4985,41 +5402,47 @@ pub trait CloudWatch {
         input: GetDashboardInput,
     ) -> RusotoFuture<GetDashboardOutput, GetDashboardError>;
 
-    /// <p>You can use the <code>GetMetricData</code> API to retrieve as many as 100 different metrics in a single request, with a total of as many as 100,800 datapoints. You can also optionally perform math expressions on the values of the returned statistics, to create new time series that represent new insights into your data. For example, using Lambda metrics, you could divide the Errors metric by the Invocations metric to get an error rate time series. For more information about metric math expressions, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html#metric-math-syntax">Metric Math Syntax and Functions</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Calls to the <code>GetMetricData</code> API have a different pricing structure than calls to <code>GetMetricStatistics</code>. For more information about pricing, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p>
+    /// <p>You can use the <code>GetMetricData</code> API to retrieve as many as 100 different metrics in a single request, with a total of as many as 100,800 datapoints. You can also optionally perform math expressions on the values of the returned statistics, to create new time series that represent new insights into your data. For example, using Lambda metrics, you could divide the Errors metric by the Invocations metric to get an error rate time series. For more information about metric math expressions, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html#metric-math-syntax">Metric Math Syntax and Functions</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Calls to the <code>GetMetricData</code> API have a different pricing structure than calls to <code>GetMetricStatistics</code>. For more information about pricing, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of less than 60 seconds are available for 3 hours. These data points are high-resolution metrics and are available only for custom metrics that have been defined with a <code>StorageResolution</code> of 1.</p> </li> <li> <p>Data points with a period of 60 seconds (1-minute) are available for 15 days.</p> </li> <li> <p>Data points with a period of 300 seconds (5-minute) are available for 63 days.</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months).</p> </li> </ul> <p>Data points that are initially published with a shorter period are aggregated together for long-term storage. For example, if you collect data using a period of 1 minute, the data remains available for 15 days with 1-minute resolution. After 15 days, this data is still available, but is aggregated and retrievable only with a resolution of 5 minutes. After 63 days, the data is further aggregated and is available with a resolution of 1 hour.</p>
     fn get_metric_data(
         &self,
         input: GetMetricDataInput,
     ) -> RusotoFuture<GetMetricDataOutput, GetMetricDataError>;
 
-    /// <p>Gets statistics for the specified metric.</p> <p>The maximum number of data points returned from a single call is 1,440. If you request more than 1,440 data points, CloudWatch returns an error. To reduce the number of data points, you can narrow the specified time range and make multiple requests across adjacent time ranges, or you can increase the specified period. Data points are not returned in chronological order.</p> <p>CloudWatch aggregates data points based on the length of the period that you specify. For example, if you request statistics with a one-hour period, CloudWatch aggregates all data points with time stamps that fall within each one-hour period. Therefore, the number of values aggregated by CloudWatch is larger than the number of data points returned.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you can only retrieve percentile statistics for this data if one of the following conditions is true:</p> <ul> <li> <p>The SampleCount value of the statistic set is 1.</p> </li> <li> <p>The Min and the Max values of the statistic set are equal.</p> </li> </ul> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of less than 60 seconds are available for 3 hours. These data points are high-resolution metrics and are available only for custom metrics that have been defined with a <code>StorageResolution</code> of 1.</p> </li> <li> <p>Data points with a period of 60 seconds (1-minute) are available for 15 days.</p> </li> <li> <p>Data points with a period of 300 seconds (5-minute) are available for 63 days.</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months).</p> </li> </ul> <p>Data points that are initially published with a shorter period are aggregated together for long-term storage. For example, if you collect data using a period of 1 minute, the data remains available for 15 days with 1-minute resolution. After 15 days, this data is still available, but is aggregated and retrievable only with a resolution of 5 minutes. After 63 days, the data is further aggregated and is available with a resolution of 1 hour.</p> <p>CloudWatch started retaining 5-minute and 1-hour metric data as of July 9, 2016.</p> <p>For information about metrics and dimensions supported by AWS services, see the <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CW_Support_For_AWS.html">Amazon CloudWatch Metrics and Dimensions Reference</a> in the <i>Amazon CloudWatch User Guide</i>.</p>
+    /// <p>Gets statistics for the specified metric.</p> <p>The maximum number of data points returned from a single call is 1,440. If you request more than 1,440 data points, CloudWatch returns an error. To reduce the number of data points, you can narrow the specified time range and make multiple requests across adjacent time ranges, or you can increase the specified period. Data points are not returned in chronological order.</p> <p>CloudWatch aggregates data points based on the length of the period that you specify. For example, if you request statistics with a one-hour period, CloudWatch aggregates all data points with time stamps that fall within each one-hour period. Therefore, the number of values aggregated by CloudWatch is larger than the number of data points returned.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you can only retrieve percentile statistics for this data if one of the following conditions is true:</p> <ul> <li> <p>The SampleCount value of the statistic set is 1.</p> </li> <li> <p>The Min and the Max values of the statistic set are equal.</p> </li> </ul> <p>Percentile statistics are not available for metrics when any of the metric values are negative numbers.</p> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of less than 60 seconds are available for 3 hours. These data points are high-resolution metrics and are available only for custom metrics that have been defined with a <code>StorageResolution</code> of 1.</p> </li> <li> <p>Data points with a period of 60 seconds (1-minute) are available for 15 days.</p> </li> <li> <p>Data points with a period of 300 seconds (5-minute) are available for 63 days.</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months).</p> </li> </ul> <p>Data points that are initially published with a shorter period are aggregated together for long-term storage. For example, if you collect data using a period of 1 minute, the data remains available for 15 days with 1-minute resolution. After 15 days, this data is still available, but is aggregated and retrievable only with a resolution of 5 minutes. After 63 days, the data is further aggregated and is available with a resolution of 1 hour.</p> <p>CloudWatch started retaining 5-minute and 1-hour metric data as of July 9, 2016.</p> <p>For information about metrics and dimensions supported by AWS services, see the <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CW_Support_For_AWS.html">Amazon CloudWatch Metrics and Dimensions Reference</a> in the <i>Amazon CloudWatch User Guide</i>.</p>
     fn get_metric_statistics(
         &self,
         input: GetMetricStatisticsInput,
     ) -> RusotoFuture<GetMetricStatisticsOutput, GetMetricStatisticsError>;
 
-    /// <p>Returns a list of the dashboards for your account. If you include <code>DashboardNamePrefix</code>, only those dashboards with names starting with the prefix are listed. Otherwise, all dashboards in your account are listed. </p>
+    /// <p><p>You can use the <code>GetMetricWidgetImage</code> API to retrieve a snapshot graph of one or more Amazon CloudWatch metrics as a bitmap image. You can then embed this image into your services and products, such as wiki pages, reports, and documents. You could also retrieve images regularly, such as every minute, and create your own custom live dashboard.</p> <p>The graph you retrieve can include all CloudWatch metric graph features, including metric math and horizontal and vertical annotations.</p> <p>There is a limit of 20 transactions per second for this API. Each <code>GetMetricWidgetImage</code> action has the following limits:</p> <ul> <li> <p>As many as 100 metrics in the graph.</p> </li> <li> <p>Up to 100 KB uncompressed payload.</p> </li> </ul></p>
+    fn get_metric_widget_image(
+        &self,
+        input: GetMetricWidgetImageInput,
+    ) -> RusotoFuture<GetMetricWidgetImageOutput, GetMetricWidgetImageError>;
+
+    /// <p>Returns a list of the dashboards for your account. If you include <code>DashboardNamePrefix</code>, only those dashboards with names starting with the prefix are listed. Otherwise, all dashboards in your account are listed. </p> <p> <code>ListDashboards</code> returns up to 1000 results on one page. If there are more than 1000 dashboards, you can call <code>ListDashboards</code> again and include the value you received for <code>NextToken</code> in the first call, to receive the next 1000 results.</p>
     fn list_dashboards(
         &self,
         input: ListDashboardsInput,
     ) -> RusotoFuture<ListDashboardsOutput, ListDashboardsError>;
 
-    /// <p>List the specified metrics. You can use the returned metrics with <a>GetMetricStatistics</a> to obtain statistical data.</p> <p>Up to 500 results are returned for any one call. To retrieve additional results, use the returned token with subsequent calls.</p> <p>After you create a metric, allow up to fifteen minutes before the metric appears. Statistics about the metric, however, are available sooner using <a>GetMetricStatistics</a>.</p>
+    /// <p>List the specified metrics. You can use the returned metrics with <a>GetMetricData</a> or <a>GetMetricStatistics</a> to obtain statistical data.</p> <p>Up to 500 results are returned for any one call. To retrieve additional results, use the returned token with subsequent calls.</p> <p>After you create a metric, allow up to fifteen minutes before the metric appears. Statistics about the metric, however, are available sooner using <a>GetMetricData</a> or <a>GetMetricStatistics</a>.</p>
     fn list_metrics(
         &self,
         input: ListMetricsInput,
     ) -> RusotoFuture<ListMetricsOutput, ListMetricsError>;
 
-    /// <p>Creates a dashboard if it does not already exist, or updates an existing dashboard. If you update a dashboard, the entire contents are replaced with what you specify here.</p> <p>You can have up to 500 dashboards per account. All dashboards in your account are global, not region-specific.</p> <p>A simple way to create a dashboard using <code>PutDashboard</code> is to copy an existing dashboard. To copy an existing dashboard using the console, you can load the dashboard and then use the View/edit source command in the Actions menu to display the JSON block for that dashboard. Another way to copy a dashboard is to use <code>GetDashboard</code>, and then use the data returned within <code>DashboardBody</code> as the template for the new dashboard when you call <code>PutDashboard</code>.</p> <p>When you create a dashboard with <code>PutDashboard</code>, a good practice is to add a text widget at the top of the dashboard with a message that the dashboard was created by script and should not be changed in the console. This message could also point console users to the location of the <code>DashboardBody</code> script or the CloudFormation template used to create the dashboard.</p>
+    /// <p>Creates a dashboard if it does not already exist, or updates an existing dashboard. If you update a dashboard, the entire contents are replaced with what you specify here.</p> <p>There is no limit to the number of dashboards in your account. All dashboards in your account are global, not region-specific.</p> <p>A simple way to create a dashboard using <code>PutDashboard</code> is to copy an existing dashboard. To copy an existing dashboard using the console, you can load the dashboard and then use the View/edit source command in the Actions menu to display the JSON block for that dashboard. Another way to copy a dashboard is to use <code>GetDashboard</code>, and then use the data returned within <code>DashboardBody</code> as the template for the new dashboard when you call <code>PutDashboard</code>.</p> <p>When you create a dashboard with <code>PutDashboard</code>, a good practice is to add a text widget at the top of the dashboard with a message that the dashboard was created by script and should not be changed in the console. This message could also point console users to the location of the <code>DashboardBody</code> script or the CloudFormation template used to create the dashboard.</p>
     fn put_dashboard(
         &self,
         input: PutDashboardInput,
     ) -> RusotoFuture<PutDashboardOutput, PutDashboardError>;
 
-    /// <p>Creates or updates an alarm and associates it with the specified metric. Optionally, this operation can associate one or more Amazon SNS resources with the alarm.</p> <p>When this operation creates an alarm, the alarm state is immediately set to <code>INSUFFICIENT_DATA</code>. The alarm is evaluated and its state is set appropriately. Any actions associated with the state are then executed.</p> <p>When you update an existing alarm, its state is left unchanged, but the update completely overwrites the previous configuration of the alarm.</p> <p>If you are an IAM user, you must have Amazon EC2 permissions for some operations:</p> <ul> <li> <p> <code>iam:CreateServiceLinkedRole</code> for all alarms with EC2 actions</p> </li> <li> <p> <code>ec2:DescribeInstanceStatus</code> and <code>ec2:DescribeInstances</code> for all alarms on EC2 instance status metrics</p> </li> <li> <p> <code>ec2:StopInstances</code> for alarms with stop actions</p> </li> <li> <p> <code>ec2:TerminateInstances</code> for alarms with terminate actions</p> </li> <li> <p> <code>ec2:DescribeInstanceRecoveryAttribute</code> and <code>ec2:RecoverInstances</code> for alarms with recover actions</p> </li> </ul> <p>If you have read/write permissions for Amazon CloudWatch but not for Amazon EC2, you can still create an alarm, but the stop or terminate actions are not performed. However, if you are later granted the required permissions, the alarm actions that you created earlier are performed.</p> <p>If you are using an IAM role (for example, an EC2 instance profile), you cannot stop or terminate the instance using alarm actions. However, you can still see the alarm state and perform any other actions such as Amazon SNS notifications or Auto Scaling policies.</p> <p>If you are using temporary security credentials granted using AWS STS, you cannot stop or terminate an EC2 instance using alarm actions.</p> <p>You must create at least one stop, terminate, or reboot alarm using either the Amazon EC2 or CloudWatch consoles to create the <b>EC2ActionsAccess</b> IAM role. After this IAM role is created, you can create stop, terminate, or reboot alarms using a command-line interface or API.</p>
+    /// <p>Creates or updates an alarm and associates it with the specified metric or metric math expression.</p> <p>When this operation creates an alarm, the alarm state is immediately set to <code>INSUFFICIENT_DATA</code>. The alarm is then evaluated and its state is set appropriately. Any actions associated with the new state are then executed.</p> <p>When you update an existing alarm, its state is left unchanged, but the update completely overwrites the previous configuration of the alarm.</p> <p>If you are an IAM user, you must have Amazon EC2 permissions for some alarm operations:</p> <ul> <li> <p> <code>iam:CreateServiceLinkedRole</code> for all alarms with EC2 actions</p> </li> <li> <p> <code>ec2:DescribeInstanceStatus</code> and <code>ec2:DescribeInstances</code> for all alarms on EC2 instance status metrics</p> </li> <li> <p> <code>ec2:StopInstances</code> for alarms with stop actions</p> </li> <li> <p> <code>ec2:TerminateInstances</code> for alarms with terminate actions</p> </li> <li> <p> <code>ec2:DescribeInstanceRecoveryAttribute</code> and <code>ec2:RecoverInstances</code> for alarms with recover actions</p> </li> </ul> <p>If you have read/write permissions for Amazon CloudWatch but not for Amazon EC2, you can still create an alarm, but the stop or terminate actions are not performed. However, if you are later granted the required permissions, the alarm actions that you created earlier are performed.</p> <p>If you are using an IAM role (for example, an EC2 instance profile), you cannot stop or terminate the instance using alarm actions. However, you can still see the alarm state and perform any other actions such as Amazon SNS notifications or Auto Scaling policies.</p> <p>If you are using temporary security credentials granted using AWS STS, you cannot stop or terminate an EC2 instance using alarm actions.</p> <p>The first time you create an alarm in the AWS Management Console, the CLI, or by using the PutMetricAlarm API, CloudWatch creates the necessary service-linked role for you. The service-linked role is called <code>AWSServiceRoleForCloudWatchEvents</code>. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html#iam-term-service-linked-role">AWS service-linked role</a>.</p>
     fn put_metric_alarm(&self, input: PutMetricAlarmInput)
         -> RusotoFuture<(), PutMetricAlarmError>;
 
-    /// <p><p>Publishes metric data points to Amazon CloudWatch. CloudWatch associates the data points with the specified metric. If the specified metric does not exist, CloudWatch creates the metric. When CloudWatch creates a metric, it can take up to fifteen minutes for the metric to appear in calls to <a>ListMetrics</a>.</p> <p>Each <code>PutMetricData</code> request is limited to 40 KB in size for HTTP POST requests.</p> <p>Although the <code>Value</code> parameter accepts numbers of type <code>Double</code>, CloudWatch rejects values that are either too small or too large. Values must be in the range of 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2). In addition, special values (for example, NaN, +Infinity, -Infinity) are not supported.</p> <p>You can use up to 10 dimensions per metric to further clarify what data the metric collects. For more information about specifying dimensions, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html">Publishing Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Data points with time stamps from 24 hours ago or longer can take at least 48 hours to become available for <a>GetMetricStatistics</a> from the time they are submitted.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you can only retrieve percentile statistics for this data if one of the following conditions is true:</p> <ul> <li> <p>The SampleCount value of the statistic set is 1</p> </li> <li> <p>The Min and the Max values of the statistic set are equal</p> </li> </ul></p>
+    /// <p><p>Publishes metric data points to Amazon CloudWatch. CloudWatch associates the data points with the specified metric. If the specified metric does not exist, CloudWatch creates the metric. When CloudWatch creates a metric, it can take up to fifteen minutes for the metric to appear in calls to <a>ListMetrics</a>.</p> <p>You can publish either individual data points in the <code>Value</code> field, or arrays of values and the number of times each value occurred during the period by using the <code>Values</code> and <code>Counts</code> fields in the <code>MetricDatum</code> structure. Using the <code>Values</code> and <code>Counts</code> method enables you to publish up to 150 values per metric with one <code>PutMetricData</code> request, and supports retrieving percentile statistics on this data.</p> <p>Each <code>PutMetricData</code> request is limited to 40 KB in size for HTTP POST requests. You can send a payload compressed by gzip. Each request is also limited to no more than 20 different metrics.</p> <p>Although the <code>Value</code> parameter accepts numbers of type <code>Double</code>, CloudWatch rejects values that are either too small or too large. Values must be in the range of 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2). In addition, special values (for example, NaN, +Infinity, -Infinity) are not supported.</p> <p>You can use up to 10 dimensions per metric to further clarify what data the metric collects. Each dimension consists of a Name and Value pair. For more information about specifying dimensions, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html">Publishing Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Data points with time stamps from 24 hours ago or longer can take at least 48 hours to become available for <a>GetMetricData</a> or <a>GetMetricStatistics</a> from the time they are submitted.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you can only retrieve percentile statistics for this data if one of the following conditions is true:</p> <ul> <li> <p>The <code>SampleCount</code> value of the statistic set is 1 and <code>Min</code>, <code>Max</code>, and <code>Sum</code> are all equal.</p> </li> <li> <p>The <code>Min</code> and <code>Max</code> are equal, and <code>Sum</code> is equal to <code>Min</code> multiplied by <code>SampleCount</code>.</p> </li> </ul></p>
     fn put_metric_data(&self, input: PutMetricDataInput) -> RusotoFuture<(), PutMetricDataError>;
 
     /// <p>Temporarily sets the state of an alarm for testing purposes. When the updated state differs from the previous value, the action configured for the appropriate state is invoked. For example, if your alarm is configured to send an Amazon SNS message when an alarm is triggered, temporarily changing the alarm state to <code>ALARM</code> sends an SNS message. The alarm returns to its actual state (often within seconds). Because the alarm state change happens quickly, it is typically only visible in the alarm's <b>History</b> tab in the Amazon CloudWatch console or through <a>DescribeAlarmHistory</a>.</p>
@@ -5136,7 +5559,7 @@ impl CloudWatch for CloudWatchClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -5188,7 +5611,7 @@ impl CloudWatch for CloudWatchClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -5241,7 +5664,7 @@ impl CloudWatch for CloudWatchClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -5291,7 +5714,7 @@ impl CloudWatch for CloudWatchClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -5403,13 +5826,13 @@ impl CloudWatch for CloudWatchClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
     }
 
-    /// <p>You can use the <code>GetMetricData</code> API to retrieve as many as 100 different metrics in a single request, with a total of as many as 100,800 datapoints. You can also optionally perform math expressions on the values of the returned statistics, to create new time series that represent new insights into your data. For example, using Lambda metrics, you could divide the Errors metric by the Invocations metric to get an error rate time series. For more information about metric math expressions, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html#metric-math-syntax">Metric Math Syntax and Functions</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Calls to the <code>GetMetricData</code> API have a different pricing structure than calls to <code>GetMetricStatistics</code>. For more information about pricing, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p>
+    /// <p>You can use the <code>GetMetricData</code> API to retrieve as many as 100 different metrics in a single request, with a total of as many as 100,800 datapoints. You can also optionally perform math expressions on the values of the returned statistics, to create new time series that represent new insights into your data. For example, using Lambda metrics, you could divide the Errors metric by the Invocations metric to get an error rate time series. For more information about metric math expressions, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/using-metric-math.html#metric-math-syntax">Metric Math Syntax and Functions</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Calls to the <code>GetMetricData</code> API have a different pricing structure than calls to <code>GetMetricStatistics</code>. For more information about pricing, see <a href="https://aws.amazon.com/cloudwatch/pricing/">Amazon CloudWatch Pricing</a>.</p> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of less than 60 seconds are available for 3 hours. These data points are high-resolution metrics and are available only for custom metrics that have been defined with a <code>StorageResolution</code> of 1.</p> </li> <li> <p>Data points with a period of 60 seconds (1-minute) are available for 15 days.</p> </li> <li> <p>Data points with a period of 300 seconds (5-minute) are available for 63 days.</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months).</p> </li> </ul> <p>Data points that are initially published with a shorter period are aggregated together for long-term storage. For example, if you collect data using a period of 1 minute, the data remains available for 15 days with 1-minute resolution. After 15 days, this data is still available, but is aggregated and retrievable only with a resolution of 5 minutes. After 63 days, the data is further aggregated and is available with a resolution of 1 hour.</p>
     fn get_metric_data(
         &self,
         input: GetMetricDataInput,
@@ -5456,13 +5879,13 @@ impl CloudWatch for CloudWatchClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
     }
 
-    /// <p>Gets statistics for the specified metric.</p> <p>The maximum number of data points returned from a single call is 1,440. If you request more than 1,440 data points, CloudWatch returns an error. To reduce the number of data points, you can narrow the specified time range and make multiple requests across adjacent time ranges, or you can increase the specified period. Data points are not returned in chronological order.</p> <p>CloudWatch aggregates data points based on the length of the period that you specify. For example, if you request statistics with a one-hour period, CloudWatch aggregates all data points with time stamps that fall within each one-hour period. Therefore, the number of values aggregated by CloudWatch is larger than the number of data points returned.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you can only retrieve percentile statistics for this data if one of the following conditions is true:</p> <ul> <li> <p>The SampleCount value of the statistic set is 1.</p> </li> <li> <p>The Min and the Max values of the statistic set are equal.</p> </li> </ul> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of less than 60 seconds are available for 3 hours. These data points are high-resolution metrics and are available only for custom metrics that have been defined with a <code>StorageResolution</code> of 1.</p> </li> <li> <p>Data points with a period of 60 seconds (1-minute) are available for 15 days.</p> </li> <li> <p>Data points with a period of 300 seconds (5-minute) are available for 63 days.</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months).</p> </li> </ul> <p>Data points that are initially published with a shorter period are aggregated together for long-term storage. For example, if you collect data using a period of 1 minute, the data remains available for 15 days with 1-minute resolution. After 15 days, this data is still available, but is aggregated and retrievable only with a resolution of 5 minutes. After 63 days, the data is further aggregated and is available with a resolution of 1 hour.</p> <p>CloudWatch started retaining 5-minute and 1-hour metric data as of July 9, 2016.</p> <p>For information about metrics and dimensions supported by AWS services, see the <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CW_Support_For_AWS.html">Amazon CloudWatch Metrics and Dimensions Reference</a> in the <i>Amazon CloudWatch User Guide</i>.</p>
+    /// <p>Gets statistics for the specified metric.</p> <p>The maximum number of data points returned from a single call is 1,440. If you request more than 1,440 data points, CloudWatch returns an error. To reduce the number of data points, you can narrow the specified time range and make multiple requests across adjacent time ranges, or you can increase the specified period. Data points are not returned in chronological order.</p> <p>CloudWatch aggregates data points based on the length of the period that you specify. For example, if you request statistics with a one-hour period, CloudWatch aggregates all data points with time stamps that fall within each one-hour period. Therefore, the number of values aggregated by CloudWatch is larger than the number of data points returned.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you can only retrieve percentile statistics for this data if one of the following conditions is true:</p> <ul> <li> <p>The SampleCount value of the statistic set is 1.</p> </li> <li> <p>The Min and the Max values of the statistic set are equal.</p> </li> </ul> <p>Percentile statistics are not available for metrics when any of the metric values are negative numbers.</p> <p>Amazon CloudWatch retains metric data as follows:</p> <ul> <li> <p>Data points with a period of less than 60 seconds are available for 3 hours. These data points are high-resolution metrics and are available only for custom metrics that have been defined with a <code>StorageResolution</code> of 1.</p> </li> <li> <p>Data points with a period of 60 seconds (1-minute) are available for 15 days.</p> </li> <li> <p>Data points with a period of 300 seconds (5-minute) are available for 63 days.</p> </li> <li> <p>Data points with a period of 3600 seconds (1 hour) are available for 455 days (15 months).</p> </li> </ul> <p>Data points that are initially published with a shorter period are aggregated together for long-term storage. For example, if you collect data using a period of 1 minute, the data remains available for 15 days with 1-minute resolution. After 15 days, this data is still available, but is aggregated and retrievable only with a resolution of 5 minutes. After 63 days, the data is further aggregated and is available with a resolution of 1 hour.</p> <p>CloudWatch started retaining 5-minute and 1-hour metric data as of July 9, 2016.</p> <p>For information about metrics and dimensions supported by AWS services, see the <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CW_Support_For_AWS.html">Amazon CloudWatch Metrics and Dimensions Reference</a> in the <i>Amazon CloudWatch User Guide</i>.</p>
     fn get_metric_statistics(
         &self,
         input: GetMetricStatisticsInput,
@@ -5508,13 +5931,65 @@ impl CloudWatch for CloudWatchClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
     }
 
-    /// <p>Returns a list of the dashboards for your account. If you include <code>DashboardNamePrefix</code>, only those dashboards with names starting with the prefix are listed. Otherwise, all dashboards in your account are listed. </p>
+    /// <p><p>You can use the <code>GetMetricWidgetImage</code> API to retrieve a snapshot graph of one or more Amazon CloudWatch metrics as a bitmap image. You can then embed this image into your services and products, such as wiki pages, reports, and documents. You could also retrieve images regularly, such as every minute, and create your own custom live dashboard.</p> <p>The graph you retrieve can include all CloudWatch metric graph features, including metric math and horizontal and vertical annotations.</p> <p>There is a limit of 20 transactions per second for this API. Each <code>GetMetricWidgetImage</code> action has the following limits:</p> <ul> <li> <p>As many as 100 metrics in the graph.</p> </li> <li> <p>Up to 100 KB uncompressed payload.</p> </li> </ul></p>
+    fn get_metric_widget_image(
+        &self,
+        input: GetMetricWidgetImageInput,
+    ) -> RusotoFuture<GetMetricWidgetImageOutput, GetMetricWidgetImageError> {
+        let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "GetMetricWidgetImage");
+        params.put("Version", "2010-08-01");
+        GetMetricWidgetImageInputSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetMetricWidgetImageError::from_response(response))
+                    }),
+                );
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = GetMetricWidgetImageOutput::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = GetMetricWidgetImageOutputDeserializer::deserialize(
+                        "GetMetricWidgetImageResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Returns a list of the dashboards for your account. If you include <code>DashboardNamePrefix</code>, only those dashboards with names starting with the prefix are listed. Otherwise, all dashboards in your account are listed. </p> <p> <code>ListDashboards</code> returns up to 1000 results on one page. If there are more than 1000 dashboards, you can call <code>ListDashboards</code> again and include the value you received for <code>NextToken</code> in the first call, to receive the next 1000 results.</p>
     fn list_dashboards(
         &self,
         input: ListDashboardsInput,
@@ -5561,13 +6036,13 @@ impl CloudWatch for CloudWatchClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
     }
 
-    /// <p>List the specified metrics. You can use the returned metrics with <a>GetMetricStatistics</a> to obtain statistical data.</p> <p>Up to 500 results are returned for any one call. To retrieve additional results, use the returned token with subsequent calls.</p> <p>After you create a metric, allow up to fifteen minutes before the metric appears. Statistics about the metric, however, are available sooner using <a>GetMetricStatistics</a>.</p>
+    /// <p>List the specified metrics. You can use the returned metrics with <a>GetMetricData</a> or <a>GetMetricStatistics</a> to obtain statistical data.</p> <p>Up to 500 results are returned for any one call. To retrieve additional results, use the returned token with subsequent calls.</p> <p>After you create a metric, allow up to fifteen minutes before the metric appears. Statistics about the metric, however, are available sooner using <a>GetMetricData</a> or <a>GetMetricStatistics</a>.</p>
     fn list_metrics(
         &self,
         input: ListMetricsInput,
@@ -5614,13 +6089,13 @@ impl CloudWatch for CloudWatchClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
     }
 
-    /// <p>Creates a dashboard if it does not already exist, or updates an existing dashboard. If you update a dashboard, the entire contents are replaced with what you specify here.</p> <p>You can have up to 500 dashboards per account. All dashboards in your account are global, not region-specific.</p> <p>A simple way to create a dashboard using <code>PutDashboard</code> is to copy an existing dashboard. To copy an existing dashboard using the console, you can load the dashboard and then use the View/edit source command in the Actions menu to display the JSON block for that dashboard. Another way to copy a dashboard is to use <code>GetDashboard</code>, and then use the data returned within <code>DashboardBody</code> as the template for the new dashboard when you call <code>PutDashboard</code>.</p> <p>When you create a dashboard with <code>PutDashboard</code>, a good practice is to add a text widget at the top of the dashboard with a message that the dashboard was created by script and should not be changed in the console. This message could also point console users to the location of the <code>DashboardBody</code> script or the CloudFormation template used to create the dashboard.</p>
+    /// <p>Creates a dashboard if it does not already exist, or updates an existing dashboard. If you update a dashboard, the entire contents are replaced with what you specify here.</p> <p>There is no limit to the number of dashboards in your account. All dashboards in your account are global, not region-specific.</p> <p>A simple way to create a dashboard using <code>PutDashboard</code> is to copy an existing dashboard. To copy an existing dashboard using the console, you can load the dashboard and then use the View/edit source command in the Actions menu to display the JSON block for that dashboard. Another way to copy a dashboard is to use <code>GetDashboard</code>, and then use the data returned within <code>DashboardBody</code> as the template for the new dashboard when you call <code>PutDashboard</code>.</p> <p>When you create a dashboard with <code>PutDashboard</code>, a good practice is to add a text widget at the top of the dashboard with a message that the dashboard was created by script and should not be changed in the console. This message could also point console users to the location of the <code>DashboardBody</code> script or the CloudFormation template used to create the dashboard.</p>
     fn put_dashboard(
         &self,
         input: PutDashboardInput,
@@ -5667,13 +6142,13 @@ impl CloudWatch for CloudWatchClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
     }
 
-    /// <p>Creates or updates an alarm and associates it with the specified metric. Optionally, this operation can associate one or more Amazon SNS resources with the alarm.</p> <p>When this operation creates an alarm, the alarm state is immediately set to <code>INSUFFICIENT_DATA</code>. The alarm is evaluated and its state is set appropriately. Any actions associated with the state are then executed.</p> <p>When you update an existing alarm, its state is left unchanged, but the update completely overwrites the previous configuration of the alarm.</p> <p>If you are an IAM user, you must have Amazon EC2 permissions for some operations:</p> <ul> <li> <p> <code>iam:CreateServiceLinkedRole</code> for all alarms with EC2 actions</p> </li> <li> <p> <code>ec2:DescribeInstanceStatus</code> and <code>ec2:DescribeInstances</code> for all alarms on EC2 instance status metrics</p> </li> <li> <p> <code>ec2:StopInstances</code> for alarms with stop actions</p> </li> <li> <p> <code>ec2:TerminateInstances</code> for alarms with terminate actions</p> </li> <li> <p> <code>ec2:DescribeInstanceRecoveryAttribute</code> and <code>ec2:RecoverInstances</code> for alarms with recover actions</p> </li> </ul> <p>If you have read/write permissions for Amazon CloudWatch but not for Amazon EC2, you can still create an alarm, but the stop or terminate actions are not performed. However, if you are later granted the required permissions, the alarm actions that you created earlier are performed.</p> <p>If you are using an IAM role (for example, an EC2 instance profile), you cannot stop or terminate the instance using alarm actions. However, you can still see the alarm state and perform any other actions such as Amazon SNS notifications or Auto Scaling policies.</p> <p>If you are using temporary security credentials granted using AWS STS, you cannot stop or terminate an EC2 instance using alarm actions.</p> <p>You must create at least one stop, terminate, or reboot alarm using either the Amazon EC2 or CloudWatch consoles to create the <b>EC2ActionsAccess</b> IAM role. After this IAM role is created, you can create stop, terminate, or reboot alarms using a command-line interface or API.</p>
+    /// <p>Creates or updates an alarm and associates it with the specified metric or metric math expression.</p> <p>When this operation creates an alarm, the alarm state is immediately set to <code>INSUFFICIENT_DATA</code>. The alarm is then evaluated and its state is set appropriately. Any actions associated with the new state are then executed.</p> <p>When you update an existing alarm, its state is left unchanged, but the update completely overwrites the previous configuration of the alarm.</p> <p>If you are an IAM user, you must have Amazon EC2 permissions for some alarm operations:</p> <ul> <li> <p> <code>iam:CreateServiceLinkedRole</code> for all alarms with EC2 actions</p> </li> <li> <p> <code>ec2:DescribeInstanceStatus</code> and <code>ec2:DescribeInstances</code> for all alarms on EC2 instance status metrics</p> </li> <li> <p> <code>ec2:StopInstances</code> for alarms with stop actions</p> </li> <li> <p> <code>ec2:TerminateInstances</code> for alarms with terminate actions</p> </li> <li> <p> <code>ec2:DescribeInstanceRecoveryAttribute</code> and <code>ec2:RecoverInstances</code> for alarms with recover actions</p> </li> </ul> <p>If you have read/write permissions for Amazon CloudWatch but not for Amazon EC2, you can still create an alarm, but the stop or terminate actions are not performed. However, if you are later granted the required permissions, the alarm actions that you created earlier are performed.</p> <p>If you are using an IAM role (for example, an EC2 instance profile), you cannot stop or terminate the instance using alarm actions. However, you can still see the alarm state and perform any other actions such as Amazon SNS notifications or Auto Scaling policies.</p> <p>If you are using temporary security credentials granted using AWS STS, you cannot stop or terminate an EC2 instance using alarm actions.</p> <p>The first time you create an alarm in the AWS Management Console, the CLI, or by using the PutMetricAlarm API, CloudWatch creates the necessary service-linked role for you. The service-linked role is called <code>AWSServiceRoleForCloudWatchEvents</code>. For more information, see <a href="https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_terms-and-concepts.html#iam-term-service-linked-role">AWS service-linked role</a>.</p>
     fn put_metric_alarm(
         &self,
         input: PutMetricAlarmInput,
@@ -5703,7 +6178,7 @@ impl CloudWatch for CloudWatchClient {
         })
     }
 
-    /// <p><p>Publishes metric data points to Amazon CloudWatch. CloudWatch associates the data points with the specified metric. If the specified metric does not exist, CloudWatch creates the metric. When CloudWatch creates a metric, it can take up to fifteen minutes for the metric to appear in calls to <a>ListMetrics</a>.</p> <p>Each <code>PutMetricData</code> request is limited to 40 KB in size for HTTP POST requests.</p> <p>Although the <code>Value</code> parameter accepts numbers of type <code>Double</code>, CloudWatch rejects values that are either too small or too large. Values must be in the range of 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2). In addition, special values (for example, NaN, +Infinity, -Infinity) are not supported.</p> <p>You can use up to 10 dimensions per metric to further clarify what data the metric collects. For more information about specifying dimensions, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html">Publishing Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Data points with time stamps from 24 hours ago or longer can take at least 48 hours to become available for <a>GetMetricStatistics</a> from the time they are submitted.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you can only retrieve percentile statistics for this data if one of the following conditions is true:</p> <ul> <li> <p>The SampleCount value of the statistic set is 1</p> </li> <li> <p>The Min and the Max values of the statistic set are equal</p> </li> </ul></p>
+    /// <p><p>Publishes metric data points to Amazon CloudWatch. CloudWatch associates the data points with the specified metric. If the specified metric does not exist, CloudWatch creates the metric. When CloudWatch creates a metric, it can take up to fifteen minutes for the metric to appear in calls to <a>ListMetrics</a>.</p> <p>You can publish either individual data points in the <code>Value</code> field, or arrays of values and the number of times each value occurred during the period by using the <code>Values</code> and <code>Counts</code> fields in the <code>MetricDatum</code> structure. Using the <code>Values</code> and <code>Counts</code> method enables you to publish up to 150 values per metric with one <code>PutMetricData</code> request, and supports retrieving percentile statistics on this data.</p> <p>Each <code>PutMetricData</code> request is limited to 40 KB in size for HTTP POST requests. You can send a payload compressed by gzip. Each request is also limited to no more than 20 different metrics.</p> <p>Although the <code>Value</code> parameter accepts numbers of type <code>Double</code>, CloudWatch rejects values that are either too small or too large. Values must be in the range of 8.515920e-109 to 1.174271e+108 (Base 10) or 2e-360 to 2e360 (Base 2). In addition, special values (for example, NaN, +Infinity, -Infinity) are not supported.</p> <p>You can use up to 10 dimensions per metric to further clarify what data the metric collects. Each dimension consists of a Name and Value pair. For more information about specifying dimensions, see <a href="https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/publishingMetrics.html">Publishing Metrics</a> in the <i>Amazon CloudWatch User Guide</i>.</p> <p>Data points with time stamps from 24 hours ago or longer can take at least 48 hours to become available for <a>GetMetricData</a> or <a>GetMetricStatistics</a> from the time they are submitted.</p> <p>CloudWatch needs raw data points to calculate percentile statistics. If you publish data using a statistic set instead, you can only retrieve percentile statistics for this data if one of the following conditions is true:</p> <ul> <li> <p>The <code>SampleCount</code> value of the statistic set is 1 and <code>Min</code>, <code>Max</code>, and <code>Sum</code> are all equal.</p> </li> <li> <p>The <code>Min</code> and <code>Max</code> are equal, and <code>Sum</code> is equal to <code>Min</code> multiplied by <code>SampleCount</code>.</p> </li> </ul></p>
     fn put_metric_data(&self, input: PutMetricDataInput) -> RusotoFuture<(), PutMetricDataError> {
         let mut request = SignedRequest::new("POST", "monitoring", &self.region, "/");
         let mut params = Params::new();

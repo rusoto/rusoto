@@ -28,7 +28,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
-/// <p>Contains details about an activity which failed during an execution.</p>
+/// <p>Contains details about an activity that failed during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ActivityFailedEventDetails {
@@ -57,7 +57,7 @@ pub struct ActivityListItem {
     pub name: String,
 }
 
-/// <p>Contains details about an activity schedule failure which occurred during an execution.</p>
+/// <p>Contains details about an activity schedule failure that occurred during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ActivityScheduleFailedEventDetails {
@@ -102,7 +102,7 @@ pub struct ActivityStartedEventDetails {
     pub worker_name: Option<String>,
 }
 
-/// <p>Contains details about an activity which successfully terminated during an execution.</p>
+/// <p>Contains details about an activity that successfully terminated during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ActivitySucceededEventDetails {
@@ -112,7 +112,7 @@ pub struct ActivitySucceededEventDetails {
     pub output: Option<String>,
 }
 
-/// <p>Contains details about an activity timeout which occurred during an execution.</p>
+/// <p>Contains details about an activity timeout that occurred during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ActivityTimedOutEventDetails {
@@ -146,10 +146,10 @@ pub struct CreateActivityOutput {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateStateMachineInput {
-    /// <p>The Amazon States Language definition of the state machine.</p>
+    /// <p>The Amazon States Language definition of the state machine. See <a href="http://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html">Amazon States Language</a>.</p>
     #[serde(rename = "definition")]
     pub definition: String,
-    /// <p><p>The name of the state machine. This name must be unique for your AWS account and region for 90 days. For more information, see <a href="http://docs.aws.amazon.com/step-functions/latest/dg/limits.html#service-limits-state-machine-executions"> Limits Related to State Machine Executions</a> in the <i>AWS Step Functions Developer Guide</i>.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
+    /// <p><p>The name of the state machine. </p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
     pub name: String,
     /// <p>The Amazon Resource Name (ARN) of the IAM role to use for this state machine.</p>
@@ -260,7 +260,7 @@ pub struct DescribeStateMachineForExecutionInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeStateMachineForExecutionOutput {
-    /// <p>The Amazon States Language definition of the state machine.</p>
+    /// <p>The Amazon States Language definition of the state machine. See <a href="http://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html">Amazon States Language</a>.</p>
     #[serde(rename = "definition")]
     pub definition: String,
     /// <p>The name of the state machine associated with the execution.</p>
@@ -290,7 +290,7 @@ pub struct DescribeStateMachineOutput {
     /// <p>The date the state machine is created.</p>
     #[serde(rename = "creationDate")]
     pub creation_date: f64,
-    /// <p>The Amazon States Language definition of the state machine.</p>
+    /// <p>The Amazon States Language definition of the state machine. See <a href="http://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html">Amazon States Language</a>.</p>
     #[serde(rename = "definition")]
     pub definition: String,
     /// <p><p>The name of the state machine.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
@@ -385,7 +385,7 @@ pub struct ExecutionSucceededEventDetails {
     pub output: Option<String>,
 }
 
-/// <p>Contains details about the execution timeout which occurred during the execution.</p>
+/// <p>Contains details about the execution timeout that occurred during the execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ExecutionTimedOutEventDetails {
@@ -428,11 +428,11 @@ pub struct GetExecutionHistoryInput {
     /// <p>The Amazon Resource Name (ARN) of the execution.</p>
     #[serde(rename = "executionArn")]
     pub execution_arn: String,
-    /// <p>The maximum number of results that are returned per call. You can use <code>nextToken</code> to obtain further pages of results. The default is 100 and the maximum allowed page size is 100. A value of 0 uses the default.</p> <p>This is only an upper limit. The actual number of results returned per call might be fewer than the specified maximum.</p>
+    /// <p>The maximum number of results that are returned per call. You can use <code>nextToken</code> to obtain further pages of results. The default is 100 and the maximum allowed page size is 1000. A value of 0 uses the default.</p> <p>This is only an upper limit. The actual number of results returned per call might be fewer than the specified maximum.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>If a <code>nextToken</code> is returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maxResults</code> determines how many results can be returned in a single call.</p>
+    /// <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -448,7 +448,7 @@ pub struct GetExecutionHistoryOutput {
     /// <p>The list of events that occurred in the execution.</p>
     #[serde(rename = "events")]
     pub events: Vec<HistoryEvent>,
-    /// <p>If a <code>nextToken</code> is returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maxResults</code> determines how many results can be returned in a single call.</p>
+    /// <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -461,7 +461,7 @@ pub struct HistoryEvent {
     #[serde(rename = "activityFailedEventDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub activity_failed_event_details: Option<ActivityFailedEventDetails>,
-    /// <p>Contains details about an activity schedule event which failed during an execution.</p>
+    /// <p>Contains details about an activity schedule event that failed during an execution.</p>
     #[serde(rename = "activityScheduleFailedEventDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub activity_schedule_failed_event_details: Option<ActivityScheduleFailedEventDetails>,
@@ -505,11 +505,11 @@ pub struct HistoryEvent {
     #[serde(rename = "lambdaFunctionScheduledEventDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lambda_function_scheduled_event_details: Option<LambdaFunctionScheduledEventDetails>,
-    /// <p>Contains details about a lambda function which failed to start during an execution.</p>
+    /// <p>Contains details about a lambda function that failed to start during an execution.</p>
     #[serde(rename = "lambdaFunctionStartFailedEventDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lambda_function_start_failed_event_details: Option<LambdaFunctionStartFailedEventDetails>,
-    /// <p>Contains details about a lambda function which terminated successfully during an execution.</p>
+    /// <p>Contains details about a lambda function that terminated successfully during an execution.</p>
     #[serde(rename = "lambdaFunctionSucceededEventDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lambda_function_succeeded_event_details: Option<LambdaFunctionSucceededEventDetails>,
@@ -526,7 +526,31 @@ pub struct HistoryEvent {
     #[serde(rename = "stateExitedEventDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state_exited_event_details: Option<StateExitedEventDetails>,
-    /// <p>The date the event occurred.</p>
+    #[serde(rename = "taskFailedEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_failed_event_details: Option<TaskFailedEventDetails>,
+    #[serde(rename = "taskScheduledEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_scheduled_event_details: Option<TaskScheduledEventDetails>,
+    #[serde(rename = "taskStartFailedEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_start_failed_event_details: Option<TaskStartFailedEventDetails>,
+    #[serde(rename = "taskStartedEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_started_event_details: Option<TaskStartedEventDetails>,
+    #[serde(rename = "taskSubmitFailedEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_submit_failed_event_details: Option<TaskSubmitFailedEventDetails>,
+    #[serde(rename = "taskSubmittedEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_submitted_event_details: Option<TaskSubmittedEventDetails>,
+    #[serde(rename = "taskSucceededEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_succeeded_event_details: Option<TaskSucceededEventDetails>,
+    #[serde(rename = "taskTimedOutEventDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_timed_out_event_details: Option<TaskTimedOutEventDetails>,
+    /// <p>The date and time the event occurred.</p>
     #[serde(rename = "timestamp")]
     pub timestamp: f64,
     /// <p>The type of the event.</p>
@@ -534,7 +558,7 @@ pub struct HistoryEvent {
     pub type_: String,
 }
 
-/// <p>Contains details about a lambda function which failed during an execution.</p>
+/// <p>Contains details about a lambda function that failed during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct LambdaFunctionFailedEventDetails {
@@ -548,7 +572,7 @@ pub struct LambdaFunctionFailedEventDetails {
     pub error: Option<String>,
 }
 
-/// <p>Contains details about a failed lambda function schedule event which occurred during an execution.</p>
+/// <p>Contains details about a failed lambda function schedule event that occurred during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct LambdaFunctionScheduleFailedEventDetails {
@@ -579,7 +603,7 @@ pub struct LambdaFunctionScheduledEventDetails {
     pub timeout_in_seconds: Option<i64>,
 }
 
-/// <p>Contains details about a lambda function which failed to start during an execution.</p>
+/// <p>Contains details about a lambda function that failed to start during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct LambdaFunctionStartFailedEventDetails {
@@ -593,7 +617,7 @@ pub struct LambdaFunctionStartFailedEventDetails {
     pub error: Option<String>,
 }
 
-/// <p>Contains details about a lambda function which successfully terminated during an execution.</p>
+/// <p>Contains details about a lambda function that successfully terminated during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct LambdaFunctionSucceededEventDetails {
@@ -603,7 +627,7 @@ pub struct LambdaFunctionSucceededEventDetails {
     pub output: Option<String>,
 }
 
-/// <p>Contains details about a lambda function timeout which occurred during an execution.</p>
+/// <p>Contains details about a lambda function timeout that occurred during an execution.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct LambdaFunctionTimedOutEventDetails {
@@ -619,11 +643,11 @@ pub struct LambdaFunctionTimedOutEventDetails {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListActivitiesInput {
-    /// <p>The maximum number of results that are returned per call. You can use <code>nextToken</code> to obtain further pages of results. The default is 100 and the maximum allowed page size is 100. A value of 0 uses the default.</p> <p>This is only an upper limit. The actual number of results returned per call might be fewer than the specified maximum.</p>
+    /// <p>The maximum number of results that are returned per call. You can use <code>nextToken</code> to obtain further pages of results. The default is 100 and the maximum allowed page size is 1000. A value of 0 uses the default.</p> <p>This is only an upper limit. The actual number of results returned per call might be fewer than the specified maximum.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>If a <code>nextToken</code> is returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maxResults</code> determines how many results can be returned in a single call.</p>
+    /// <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -635,7 +659,7 @@ pub struct ListActivitiesOutput {
     /// <p>The list of activities.</p>
     #[serde(rename = "activities")]
     pub activities: Vec<ActivityListItem>,
-    /// <p>If a <code>nextToken</code> is returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maxResults</code> determines how many results can be returned in a single call.</p>
+    /// <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -643,11 +667,11 @@ pub struct ListActivitiesOutput {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListExecutionsInput {
-    /// <p>The maximum number of results that are returned per call. You can use <code>nextToken</code> to obtain further pages of results. The default is 100 and the maximum allowed page size is 100. A value of 0 uses the default.</p> <p>This is only an upper limit. The actual number of results returned per call might be fewer than the specified maximum.</p>
+    /// <p>The maximum number of results that are returned per call. You can use <code>nextToken</code> to obtain further pages of results. The default is 100 and the maximum allowed page size is 1000. A value of 0 uses the default.</p> <p>This is only an upper limit. The actual number of results returned per call might be fewer than the specified maximum.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>If a <code>nextToken</code> is returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maxResults</code> determines how many results can be returned in a single call.</p>
+    /// <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -666,7 +690,7 @@ pub struct ListExecutionsOutput {
     /// <p>The list of matching executions.</p>
     #[serde(rename = "executions")]
     pub executions: Vec<ExecutionListItem>,
-    /// <p>If a <code>nextToken</code> is returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maxResults</code> determines how many results can be returned in a single call.</p>
+    /// <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -674,11 +698,11 @@ pub struct ListExecutionsOutput {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListStateMachinesInput {
-    /// <p>The maximum number of results that are returned per call. You can use <code>nextToken</code> to obtain further pages of results. The default is 100 and the maximum allowed page size is 100. A value of 0 uses the default.</p> <p>This is only an upper limit. The actual number of results returned per call might be fewer than the specified maximum.</p>
+    /// <p>The maximum number of results that are returned per call. You can use <code>nextToken</code> to obtain further pages of results. The default is 100 and the maximum allowed page size is 1000. A value of 0 uses the default.</p> <p>This is only an upper limit. The actual number of results returned per call might be fewer than the specified maximum.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>If a <code>nextToken</code> is returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maxResults</code> determines how many results can be returned in a single call.</p>
+    /// <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -687,7 +711,7 @@ pub struct ListStateMachinesInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ListStateMachinesOutput {
-    /// <p>If a <code>nextToken</code> is returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p> <p>The configured <code>maxResults</code> determines how many results can be returned in a single call.</p>
+    /// <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -696,12 +720,28 @@ pub struct ListStateMachinesOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListTagsForResourceInput {
+    /// <p>The Amazon Resource Name (ARN) for the Step Functions state machine or activity.</p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListTagsForResourceOutput {
+    /// <p>An array of tags associated with the resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SendTaskFailureInput {
     /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cause: Option<String>,
-    /// <p>An arbitrary error code that identifies the cause of the failure.</p>
+    /// <p>The error code of the failure.</p>
     #[serde(rename = "error")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<String>,
@@ -745,7 +785,7 @@ pub struct StartExecutionInput {
     #[serde(rename = "input")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input: Option<String>,
-    /// <p><p>The name of the execution. This name must be unique for your AWS account and region for 90 days. For more information, see <a href="http://docs.aws.amazon.com/step-functions/latest/dg/limits.html#service-limits-state-machine-executions"> Limits Related to State Machine Executions</a> in the <i>AWS Step Functions Developer Guide</i>.</p> <important> <p>An execution can&#39;t use the name of another execution for 90 days.</p> <p>When you make multiple <code>StartExecution</code> calls with the same name, the new execution doesn&#39;t run and the following rules apply:</p> <ul> <li> <p>When the original execution is open and the execution input from the new call is <i>different</i>, the <code>ExecutionAlreadyExists</code> message is returned.</p> </li> <li> <p>When the original execution is open and the execution input from the new call is <i>identical</i>, the <code>Success</code> message is returned.</p> </li> <li> <p>When the original execution is closed, the <code>ExecutionAlreadyExists</code> message is returned regardless of input.</p> </li> </ul> </important> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
+    /// <p><p>The name of the execution. This name must be unique for your AWS account and region for 90 days. For more information, see <a href="http://docs.aws.amazon.com/step-functions/latest/dg/limits.html#service-limits-state-machine-executions"> Limits Related to State Machine Executions</a> in the <i>AWS Step Functions Developer Guide</i>.</p> <p>A name must <i>not</i> contain:</p> <ul> <li> <p>whitespace</p> </li> <li> <p>brackets <code>&lt; &gt; { } [ ]</code> </p> </li> <li> <p>wildcard characters <code>? *</code> </p> </li> <li> <p>special characters <code>&quot; # % \ ^ | ~ ` $ &amp; , ; : /</code> </p> </li> <li> <p>control characters (<code>U+0000-001F</code>, <code>U+007F-009F</code>)</p> </li> </ul></p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -808,11 +848,11 @@ pub struct StateMachineListItem {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StopExecutionInput {
-    /// <p>A more detailed explanation of the cause of the termination.</p>
+    /// <p>A more detailed explanation of the cause of the failure.</p>
     #[serde(rename = "cause")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cause: Option<String>,
-    /// <p>An arbitrary error code that identifies the cause of the termination.</p>
+    /// <p>The error code of the failure.</p>
     #[serde(rename = "error")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error: Option<String>,
@@ -829,9 +869,196 @@ pub struct StopExecutionOutput {
     pub stop_date: f64,
 }
 
+/// <p>Tags are key-value pairs that can be associated with Step Functions state machines and activities.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Tag {
+    /// <p>The key of a tag.</p>
+    #[serde(rename = "key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    /// <p>The value of a tag.</p>
+    #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TagResourceInput {
+    /// <p>The Amazon Resource Name (ARN) for the Step Functions state machine or activity.</p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+    /// <p>The list of tags to add to a resource.</p> <p>Tags may only contain unicode letters, digits, whitespace, or these symbols: <code>_ . : / = + - @</code>.</p>
+    #[serde(rename = "tags")]
+    pub tags: Vec<Tag>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TagResourceOutput {}
+
+/// <p>Contains details about a task failure event.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TaskFailedEventDetails {
+    /// <p>A more detailed explanation of the cause of the failure.</p>
+    #[serde(rename = "cause")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cause: Option<String>,
+    /// <p>The error code of the failure.</p>
+    #[serde(rename = "error")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error: Option<String>,
+    /// <p>The service name of the resource in a task state.</p>
+    #[serde(rename = "resource")]
+    pub resource: String,
+    /// <p>The action of the resource called by a task state.</p>
+    #[serde(rename = "resourceType")]
+    pub resource_type: String,
+}
+
+/// <p>Contains details about a task scheduled during an execution.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TaskScheduledEventDetails {
+    /// <p>The JSON data passed to the resource referenced in a task state.</p>
+    #[serde(rename = "parameters")]
+    pub parameters: String,
+    /// <p>The region of the scheduled task</p>
+    #[serde(rename = "region")]
+    pub region: String,
+    /// <p>The service name of the resource in a task state.</p>
+    #[serde(rename = "resource")]
+    pub resource: String,
+    /// <p>The action of the resource called by a task state.</p>
+    #[serde(rename = "resourceType")]
+    pub resource_type: String,
+    /// <p>The maximum allowed duration of the task.</p>
+    #[serde(rename = "timeoutInSeconds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timeout_in_seconds: Option<i64>,
+}
+
+/// <p>Contains details about a task that failed to start during an execution.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TaskStartFailedEventDetails {
+    /// <p>A more detailed explanation of the cause of the failure.</p>
+    #[serde(rename = "cause")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cause: Option<String>,
+    /// <p>The error code of the failure.</p>
+    #[serde(rename = "error")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error: Option<String>,
+    /// <p>The service name of the resource in a task state.</p>
+    #[serde(rename = "resource")]
+    pub resource: String,
+    /// <p>The action of the resource called by a task state.</p>
+    #[serde(rename = "resourceType")]
+    pub resource_type: String,
+}
+
+/// <p>Contains details about the start of a task during an execution.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TaskStartedEventDetails {
+    /// <p>The service name of the resource in a task state.</p>
+    #[serde(rename = "resource")]
+    pub resource: String,
+    /// <p>The action of the resource called by a task state.</p>
+    #[serde(rename = "resourceType")]
+    pub resource_type: String,
+}
+
+/// <p>Contains details about a task that failed to submit during an execution.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TaskSubmitFailedEventDetails {
+    /// <p>A more detailed explanation of the cause of the failure.</p>
+    #[serde(rename = "cause")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cause: Option<String>,
+    /// <p>The error code of the failure.</p>
+    #[serde(rename = "error")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error: Option<String>,
+    /// <p>The service name of the resource in a task state.</p>
+    #[serde(rename = "resource")]
+    pub resource: String,
+    /// <p>The action of the resource called by a task state.</p>
+    #[serde(rename = "resourceType")]
+    pub resource_type: String,
+}
+
+/// <p>Contains details about a task submitted to a resource .</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TaskSubmittedEventDetails {
+    /// <p>The response from a resource when a task has started.</p>
+    #[serde(rename = "output")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output: Option<String>,
+    /// <p>The service name of the resource in a task state.</p>
+    #[serde(rename = "resource")]
+    pub resource: String,
+    /// <p>The action of the resource called by a task state.</p>
+    #[serde(rename = "resourceType")]
+    pub resource_type: String,
+}
+
+/// <p>Contains details about the successful completion of a task state.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TaskSucceededEventDetails {
+    /// <p>The full JSON response from a resource when a task has succeeded. This response becomes the output of the related task.</p>
+    #[serde(rename = "output")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output: Option<String>,
+    /// <p>The service name of the resource in a task state.</p>
+    #[serde(rename = "resource")]
+    pub resource: String,
+    /// <p>The action of the resource called by a task state.</p>
+    #[serde(rename = "resourceType")]
+    pub resource_type: String,
+}
+
+/// <p>Contains details about a resource timeout that occurred during an execution.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TaskTimedOutEventDetails {
+    /// <p>A more detailed explanation of the cause of the failure.</p>
+    #[serde(rename = "cause")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cause: Option<String>,
+    /// <p>The error code of the failure.</p>
+    #[serde(rename = "error")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error: Option<String>,
+    /// <p>The service name of the resource in a task state.</p>
+    #[serde(rename = "resource")]
+    pub resource: String,
+    /// <p>The action of the resource called by a task state.</p>
+    #[serde(rename = "resourceType")]
+    pub resource_type: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UntagResourceInput {
+    /// <p>The Amazon Resource Name (ARN) for the Step Functions state machine or activity.</p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+    /// <p>The list of tags to remove from the resource.</p>
+    #[serde(rename = "tagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UntagResourceOutput {}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateStateMachineInput {
-    /// <p>The Amazon States Language definition of the state machine.</p>
+    /// <p>The Amazon States Language definition of the state machine. See <a href="http://docs.aws.amazon.com/step-functions/latest/dg/concepts-amazon-states-language.html">Amazon States Language</a>.</p>
     #[serde(rename = "definition")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub definition: Option<String>,
@@ -2020,6 +2247,94 @@ impl Error for ListStateMachinesError {
         }
     }
 }
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>The provided Amazon Resource Name (ARN) is invalid.</p>
+    InvalidArn(String),
+    /// <p>Could not fine the referenced resource. Only state machine and activity ARNs are supported.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InvalidArn" => {
+                    return ListTagsForResourceError::InvalidArn(String::from(error_message));
+                }
+                "ResourceNotFound" => {
+                    return ListTagsForResourceError::ResourceNotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return ListTagsForResourceError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ListTagsForResourceError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListTagsForResourceError {
+    fn from(err: serde_json::error::Error) -> ListTagsForResourceError {
+        ListTagsForResourceError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListTagsForResourceError {
+    fn from(err: CredentialsError) -> ListTagsForResourceError {
+        ListTagsForResourceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListTagsForResourceError {
+    fn from(err: HttpDispatchError) -> ListTagsForResourceError {
+        ListTagsForResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTagsForResourceError {
+    fn from(err: io::Error) -> ListTagsForResourceError {
+        ListTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTagsForResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTagsForResourceError::InvalidArn(ref cause) => cause,
+            ListTagsForResourceError::ResourceNotFound(ref cause) => cause,
+            ListTagsForResourceError::Validation(ref cause) => cause,
+            ListTagsForResourceError::Credentials(ref err) => err.description(),
+            ListTagsForResourceError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListTagsForResourceError::ParseError(ref cause) => cause,
+            ListTagsForResourceError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by SendTaskFailure
 #[derive(Debug, PartialEq)]
 pub enum SendTaskFailureError {
@@ -2504,6 +2819,178 @@ impl Error for StopExecutionError {
         }
     }
 }
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>The provided Amazon Resource Name (ARN) is invalid.</p>
+    InvalidArn(String),
+    /// <p>Could not fine the referenced resource. Only state machine and activity ARNs are supported.</p>
+    ResourceNotFound(String),
+    /// <p>You've exceeded the number of tags allowed for a resource. See the <a href="http://docs.aws.amazon.com/step-functions/latest/dg/limits.html"> Limits Topic</a> in the AWS Step Functions Developer Guide.</p>
+    TooManyTags(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> TagResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InvalidArn" => return TagResourceError::InvalidArn(String::from(error_message)),
+                "ResourceNotFound" => {
+                    return TagResourceError::ResourceNotFound(String::from(error_message));
+                }
+                "TooManyTags" => return TagResourceError::TooManyTags(String::from(error_message)),
+                "ValidationException" => {
+                    return TagResourceError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return TagResourceError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for TagResourceError {
+    fn from(err: serde_json::error::Error) -> TagResourceError {
+        TagResourceError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for TagResourceError {
+    fn from(err: CredentialsError) -> TagResourceError {
+        TagResourceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for TagResourceError {
+    fn from(err: HttpDispatchError) -> TagResourceError {
+        TagResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for TagResourceError {
+    fn from(err: io::Error) -> TagResourceError {
+        TagResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for TagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            TagResourceError::InvalidArn(ref cause) => cause,
+            TagResourceError::ResourceNotFound(ref cause) => cause,
+            TagResourceError::TooManyTags(ref cause) => cause,
+            TagResourceError::Validation(ref cause) => cause,
+            TagResourceError::Credentials(ref err) => err.description(),
+            TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            TagResourceError::ParseError(ref cause) => cause,
+            TagResourceError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>The provided Amazon Resource Name (ARN) is invalid.</p>
+    InvalidArn(String),
+    /// <p>Could not fine the referenced resource. Only state machine and activity ARNs are supported.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> UntagResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InvalidArn" => return UntagResourceError::InvalidArn(String::from(error_message)),
+                "ResourceNotFound" => {
+                    return UntagResourceError::ResourceNotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return UntagResourceError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return UntagResourceError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for UntagResourceError {
+    fn from(err: serde_json::error::Error) -> UntagResourceError {
+        UntagResourceError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UntagResourceError {
+    fn from(err: CredentialsError) -> UntagResourceError {
+        UntagResourceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UntagResourceError {
+    fn from(err: HttpDispatchError) -> UntagResourceError {
+        UntagResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UntagResourceError {
+    fn from(err: io::Error) -> UntagResourceError {
+        UntagResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UntagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UntagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            UntagResourceError::InvalidArn(ref cause) => cause,
+            UntagResourceError::ResourceNotFound(ref cause) => cause,
+            UntagResourceError::Validation(ref cause) => cause,
+            UntagResourceError::Credentials(ref err) => err.description(),
+            UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UntagResourceError::ParseError(ref cause) => cause,
+            UntagResourceError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by UpdateStateMachine
 #[derive(Debug, PartialEq)]
 pub enum UpdateStateMachineError {
@@ -2618,7 +3105,7 @@ impl Error for UpdateStateMachineError {
 }
 /// Trait representing the capabilities of the AWS SFN API. AWS SFN clients implement this trait.
 pub trait StepFunctions {
-    /// <p>Creates an activity. An activity is a task which you write in any programming language and host on any machine which has access to AWS Step Functions. Activities must poll Step Functions using the <code>GetActivityTask</code> API action and respond using <code>SendTask*</code> API actions. This function lets Step Functions know the existence of your activity and returns an identifier for use in a state machine and when polling from the activity.</p>
+    /// <p>Creates an activity. An activity is a task that you write in any programming language and host on any machine that has access to AWS Step Functions. Activities must poll Step Functions using the <code>GetActivityTask</code> API action and respond using <code>SendTask*</code> API actions. This function lets Step Functions know the existence of your activity and returns an identifier for use in a state machine and when polling from the activity.</p>
     fn create_activity(
         &self,
         input: CreateActivityInput,
@@ -2642,59 +3129,65 @@ pub trait StepFunctions {
         input: DeleteStateMachineInput,
     ) -> RusotoFuture<DeleteStateMachineOutput, DeleteStateMachineError>;
 
-    /// <p>Describes an activity.</p>
+    /// <p><p>Describes an activity.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
     fn describe_activity(
         &self,
         input: DescribeActivityInput,
     ) -> RusotoFuture<DescribeActivityOutput, DescribeActivityError>;
 
-    /// <p>Describes an execution.</p>
+    /// <p><p>Describes an execution.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
     fn describe_execution(
         &self,
         input: DescribeExecutionInput,
     ) -> RusotoFuture<DescribeExecutionOutput, DescribeExecutionError>;
 
-    /// <p>Describes a state machine.</p>
+    /// <p><p>Describes a state machine.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
     fn describe_state_machine(
         &self,
         input: DescribeStateMachineInput,
     ) -> RusotoFuture<DescribeStateMachineOutput, DescribeStateMachineError>;
 
-    /// <p>Describes the state machine associated with a specific execution.</p>
+    /// <p><p>Describes the state machine associated with a specific execution.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
     fn describe_state_machine_for_execution(
         &self,
         input: DescribeStateMachineForExecutionInput,
     ) -> RusotoFuture<DescribeStateMachineForExecutionOutput, DescribeStateMachineForExecutionError>;
 
-    /// <p><p>Used by workers to retrieve a task (with the specified activity ARN) which has been scheduled for execution by a running state machine. This initiates a long poll, where the service holds the HTTP connection open and responds as soon as a task becomes available (i.e. an execution of a task of this type is needed.) The maximum time the service holds on to the request before responding is 60 seconds. If no task is available within 60 seconds, the poll returns a <code>taskToken</code> with a null string.</p> <important> <p>Workers should set their client side socket timeout to at least 65 seconds (5 seconds higher than the maximum time the service may hold the poll request).</p> </important></p>
+    /// <p><p>Used by workers to retrieve a task (with the specified activity ARN) which has been scheduled for execution by a running state machine. This initiates a long poll, where the service holds the HTTP connection open and responds as soon as a task becomes available (i.e. an execution of a task of this type is needed.) The maximum time the service holds on to the request before responding is 60 seconds. If no task is available within 60 seconds, the poll returns a <code>taskToken</code> with a null string.</p> <important> <p>Workers should set their client side socket timeout to at least 65 seconds (5 seconds higher than the maximum time the service may hold the poll request).</p> <p>Polling with <code>GetActivityTask</code> can cause latency in some implementations. See <a href="http://docs.aws.amazon.com/step-functions/latest/dg/bp-activity-pollers.html">Avoid Latency When Polling for Activity Tasks</a> in the Step Functions Developer Guide.</p> </important></p>
     fn get_activity_task(
         &self,
         input: GetActivityTaskInput,
     ) -> RusotoFuture<GetActivityTaskOutput, GetActivityTaskError>;
 
-    /// <p>Returns the history of the specified execution as a list of events. By default, the results are returned in ascending order of the <code>timeStamp</code> of the events. Use the <code>reverseOrder</code> parameter to get the latest events first.</p> <p>If a <code>nextToken</code> is returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p>
+    /// <p>Returns the history of the specified execution as a list of events. By default, the results are returned in ascending order of the <code>timeStamp</code> of the events. Use the <code>reverseOrder</code> parameter to get the latest events first.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p>
     fn get_execution_history(
         &self,
         input: GetExecutionHistoryInput,
     ) -> RusotoFuture<GetExecutionHistoryOutput, GetExecutionHistoryError>;
 
-    /// <p>Lists the existing activities.</p> <p>If a <code>nextToken</code> is returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p>
+    /// <p><p>Lists the existing activities.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
     fn list_activities(
         &self,
         input: ListActivitiesInput,
     ) -> RusotoFuture<ListActivitiesOutput, ListActivitiesError>;
 
-    /// <p>Lists the executions of a state machine that meet the filtering criteria.</p> <p>If a <code>nextToken</code> is returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p>
+    /// <p><p>Lists the executions of a state machine that meet the filtering criteria. Results are sorted by time, with the most recent execution first.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
     fn list_executions(
         &self,
         input: ListExecutionsInput,
     ) -> RusotoFuture<ListExecutionsOutput, ListExecutionsError>;
 
-    /// <p>Lists the existing state machines.</p> <p>If a <code>nextToken</code> is returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p>
+    /// <p><p>Lists the existing state machines.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
     fn list_state_machines(
         &self,
         input: ListStateMachinesInput,
     ) -> RusotoFuture<ListStateMachinesOutput, ListStateMachinesError>;
+
+    /// <p>List tags for a given resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceInput,
+    ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError>;
 
     /// <p>Used by workers to report that the task identified by the <code>taskToken</code> failed.</p>
     fn send_task_failure(
@@ -2714,7 +3207,7 @@ pub trait StepFunctions {
         input: SendTaskSuccessInput,
     ) -> RusotoFuture<SendTaskSuccessOutput, SendTaskSuccessError>;
 
-    /// <p>Starts a state machine execution.</p>
+    /// <p><p>Starts a state machine execution.</p> <note> <p> <code>StartExecution</code> is idempotent. If <code>StartExecution</code> is called with the same name and input as a running execution, the call will succeed and return the same response as the original request. If the execution is closed or if the input is different, it will return a 400 <code>ExecutionAlreadyExists</code> error. Names can be reused after 90 days. </p> </note></p>
     fn start_execution(
         &self,
         input: StartExecutionInput,
@@ -2726,7 +3219,19 @@ pub trait StepFunctions {
         input: StopExecutionInput,
     ) -> RusotoFuture<StopExecutionOutput, StopExecutionError>;
 
-    /// <p><p>Updates an existing state machine by modifying its <code>definition</code> and/or <code>roleArn</code>. Running executions will continue to use the previous <code>definition</code> and <code>roleArn</code>.</p> <note> <p>All <code>StartExecution</code> calls within a few seconds will use the updated <code>definition</code> and <code>roleArn</code>. Executions started immediately after calling <code>UpdateStateMachine</code> may use the previous state machine <code>definition</code> and <code>roleArn</code>. You must include at least one of <code>definition</code> or <code>roleArn</code> or you will receive a <code>MissingRequiredParameter</code> error.</p> </note></p>
+    /// <p>Add a tag to a Step Functions resource.</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceInput,
+    ) -> RusotoFuture<TagResourceOutput, TagResourceError>;
+
+    /// <p>Remove a tag from a Step Functions resource</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceInput,
+    ) -> RusotoFuture<UntagResourceOutput, UntagResourceError>;
+
+    /// <p><p>Updates an existing state machine by modifying its <code>definition</code> and/or <code>roleArn</code>. Running executions will continue to use the previous <code>definition</code> and <code>roleArn</code>. You must include at least one of <code>definition</code> or <code>roleArn</code> or you will receive a <code>MissingRequiredParameter</code> error.</p> <note> <p>All <code>StartExecution</code> calls within a few seconds will use the updated <code>definition</code> and <code>roleArn</code>. Executions started immediately after calling <code>UpdateStateMachine</code> may use the previous state machine <code>definition</code> and <code>roleArn</code>. </p> </note></p>
     fn update_state_machine(
         &self,
         input: UpdateStateMachineInput,
@@ -2769,7 +3274,7 @@ impl StepFunctionsClient {
 }
 
 impl StepFunctions for StepFunctionsClient {
-    /// <p>Creates an activity. An activity is a task which you write in any programming language and host on any machine which has access to AWS Step Functions. Activities must poll Step Functions using the <code>GetActivityTask</code> API action and respond using <code>SendTask*</code> API actions. This function lets Step Functions know the existence of your activity and returns an identifier for use in a state machine and when polling from the activity.</p>
+    /// <p>Creates an activity. An activity is a task that you write in any programming language and host on any machine that has access to AWS Step Functions. Activities must poll Step Functions using the <code>GetActivityTask</code> API action and respond using <code>SendTask*</code> API actions. This function lets Step Functions know the existence of your activity and returns an identifier for use in a state machine and when polling from the activity.</p>
     fn create_activity(
         &self,
         input: CreateActivityInput,
@@ -2917,7 +3422,7 @@ impl StepFunctions for StepFunctionsClient {
         })
     }
 
-    /// <p>Describes an activity.</p>
+    /// <p><p>Describes an activity.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
     fn describe_activity(
         &self,
         input: DescribeActivityInput,
@@ -2954,7 +3459,7 @@ impl StepFunctions for StepFunctionsClient {
         })
     }
 
-    /// <p>Describes an execution.</p>
+    /// <p><p>Describes an execution.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
     fn describe_execution(
         &self,
         input: DescribeExecutionInput,
@@ -2991,7 +3496,7 @@ impl StepFunctions for StepFunctionsClient {
         })
     }
 
-    /// <p>Describes a state machine.</p>
+    /// <p><p>Describes a state machine.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
     fn describe_state_machine(
         &self,
         input: DescribeStateMachineInput,
@@ -3027,7 +3532,7 @@ impl StepFunctions for StepFunctionsClient {
         })
     }
 
-    /// <p>Describes the state machine associated with a specific execution.</p>
+    /// <p><p>Describes the state machine associated with a specific execution.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
     fn describe_state_machine_for_execution(
         &self,
         input: DescribeStateMachineForExecutionInput,
@@ -3067,7 +3572,7 @@ impl StepFunctions for StepFunctionsClient {
         })
     }
 
-    /// <p><p>Used by workers to retrieve a task (with the specified activity ARN) which has been scheduled for execution by a running state machine. This initiates a long poll, where the service holds the HTTP connection open and responds as soon as a task becomes available (i.e. an execution of a task of this type is needed.) The maximum time the service holds on to the request before responding is 60 seconds. If no task is available within 60 seconds, the poll returns a <code>taskToken</code> with a null string.</p> <important> <p>Workers should set their client side socket timeout to at least 65 seconds (5 seconds higher than the maximum time the service may hold the poll request).</p> </important></p>
+    /// <p><p>Used by workers to retrieve a task (with the specified activity ARN) which has been scheduled for execution by a running state machine. This initiates a long poll, where the service holds the HTTP connection open and responds as soon as a task becomes available (i.e. an execution of a task of this type is needed.) The maximum time the service holds on to the request before responding is 60 seconds. If no task is available within 60 seconds, the poll returns a <code>taskToken</code> with a null string.</p> <important> <p>Workers should set their client side socket timeout to at least 65 seconds (5 seconds higher than the maximum time the service may hold the poll request).</p> <p>Polling with <code>GetActivityTask</code> can cause latency in some implementations. See <a href="http://docs.aws.amazon.com/step-functions/latest/dg/bp-activity-pollers.html">Avoid Latency When Polling for Activity Tasks</a> in the Step Functions Developer Guide.</p> </important></p>
     fn get_activity_task(
         &self,
         input: GetActivityTaskInput,
@@ -3104,7 +3609,7 @@ impl StepFunctions for StepFunctionsClient {
         })
     }
 
-    /// <p>Returns the history of the specified execution as a list of events. By default, the results are returned in ascending order of the <code>timeStamp</code> of the events. Use the <code>reverseOrder</code> parameter to get the latest events first.</p> <p>If a <code>nextToken</code> is returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p>
+    /// <p>Returns the history of the specified execution as a list of events. By default, the results are returned in ascending order of the <code>timeStamp</code> of the events. Use the <code>reverseOrder</code> parameter to get the latest events first.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p>
     fn get_execution_history(
         &self,
         input: GetExecutionHistoryInput,
@@ -3140,7 +3645,7 @@ impl StepFunctions for StepFunctionsClient {
         })
     }
 
-    /// <p>Lists the existing activities.</p> <p>If a <code>nextToken</code> is returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p>
+    /// <p><p>Lists the existing activities.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
     fn list_activities(
         &self,
         input: ListActivitiesInput,
@@ -3177,7 +3682,7 @@ impl StepFunctions for StepFunctionsClient {
         })
     }
 
-    /// <p>Lists the executions of a state machine that meet the filtering criteria.</p> <p>If a <code>nextToken</code> is returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p>
+    /// <p><p>Lists the executions of a state machine that meet the filtering criteria. Results are sorted by time, with the most recent execution first.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
     fn list_executions(
         &self,
         input: ListExecutionsInput,
@@ -3214,7 +3719,7 @@ impl StepFunctions for StepFunctionsClient {
         })
     }
 
-    /// <p>Lists the existing state machines.</p> <p>If a <code>nextToken</code> is returned by a previous call, there are more results available. To retrieve the next page of results, make the call again using the returned token in <code>nextToken</code>. Keep all other arguments unchanged.</p>
+    /// <p><p>Lists the existing state machines.</p> <p>If <code>nextToken</code> is returned, there are more results available. The value of <code>nextToken</code> is a unique pagination token for each page. Make the call again using the returned token to retrieve the next page. Keep all other arguments unchanged. Each pagination token expires after 24 hours. Using an expired pagination token will return an <i>HTTP 400 InvalidToken</i> error.</p> <note> <p>This operation is eventually consistent. The results are best effort and may not reflect very recent updates and changes.</p> </note></p>
     fn list_state_machines(
         &self,
         input: ListStateMachinesInput,
@@ -3246,6 +3751,42 @@ impl StepFunctions for StepFunctionsClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(ListStateMachinesError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>List tags for a given resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceInput,
+    ) -> RusotoFuture<ListTagsForResourceOutput, ListTagsForResourceError> {
+        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        request.add_header("x-amz-target", "AWSStepFunctions.ListTagsForResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ListTagsForResourceOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTagsForResourceError::from_response(response))
+                    }),
                 )
             }
         })
@@ -3362,7 +3903,7 @@ impl StepFunctions for StepFunctionsClient {
         })
     }
 
-    /// <p>Starts a state machine execution.</p>
+    /// <p><p>Starts a state machine execution.</p> <note> <p> <code>StartExecution</code> is idempotent. If <code>StartExecution</code> is called with the same name and input as a running execution, the call will succeed and return the same response as the original request. If the execution is closed or if the input is different, it will return a 400 <code>ExecutionAlreadyExists</code> error. Names can be reused after 90 days. </p> </note></p>
     fn start_execution(
         &self,
         input: StartExecutionInput,
@@ -3436,7 +3977,81 @@ impl StepFunctions for StepFunctionsClient {
         })
     }
 
-    /// <p><p>Updates an existing state machine by modifying its <code>definition</code> and/or <code>roleArn</code>. Running executions will continue to use the previous <code>definition</code> and <code>roleArn</code>.</p> <note> <p>All <code>StartExecution</code> calls within a few seconds will use the updated <code>definition</code> and <code>roleArn</code>. Executions started immediately after calling <code>UpdateStateMachine</code> may use the previous state machine <code>definition</code> and <code>roleArn</code>. You must include at least one of <code>definition</code> or <code>roleArn</code> or you will receive a <code>MissingRequiredParameter</code> error.</p> </note></p>
+    /// <p>Add a tag to a Step Functions resource.</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceInput,
+    ) -> RusotoFuture<TagResourceOutput, TagResourceError> {
+        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        request.add_header("x-amz-target", "AWSStepFunctions.TagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<TagResourceOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Remove a tag from a Step Functions resource</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceInput,
+    ) -> RusotoFuture<UntagResourceOutput, UntagResourceError> {
+        let mut request = SignedRequest::new("POST", "states", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.0".to_owned());
+        request.add_header("x-amz-target", "AWSStepFunctions.UntagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<UntagResourceOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p><p>Updates an existing state machine by modifying its <code>definition</code> and/or <code>roleArn</code>. Running executions will continue to use the previous <code>definition</code> and <code>roleArn</code>. You must include at least one of <code>definition</code> or <code>roleArn</code> or you will receive a <code>MissingRequiredParameter</code> error.</p> <note> <p>All <code>StartExecution</code> calls within a few seconds will use the updated <code>definition</code> and <code>roleArn</code>. Executions started immediately after calling <code>UpdateStateMachine</code> may use the previous state machine <code>definition</code> and <code>roleArn</code>. </p> </note></p>
     fn update_state_machine(
         &self,
         input: UpdateStateMachineInput,

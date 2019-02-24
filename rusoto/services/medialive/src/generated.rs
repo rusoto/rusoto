@@ -122,7 +122,7 @@ pub struct ArchiveContainerSettings {
 /// <p>Placeholder documentation for ArchiveGroupSettings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ArchiveGroupSettings {
-    /// <p>A directory and base filename where archive files should be written.  If the base filename portion of the URI is left blank, the base filename of the first input will be automatically inserted.</p>
+    /// <p>A directory and base filename where archive files should be written.</p>
     #[serde(rename = "Destination")]
     pub destination: OutputLocationRef,
     /// <p>Number of seconds to write to archive file before closing and starting a new one.</p>
@@ -352,6 +352,79 @@ pub struct AvailSettings {
     #[serde(rename = "Scte35TimeSignalApos")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scte_35_time_signal_apos: Option<Scte35TimeSignalApos>,
+}
+
+/// <p>A list of schedule actions to create (in a request) or that have been created (in a response).</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct BatchScheduleActionCreateRequest {
+    /// <p>A list of schedule actions to create.</p>
+    #[serde(rename = "ScheduleActions")]
+    pub schedule_actions: Vec<ScheduleAction>,
+}
+
+/// <p>List of actions that have been created in the schedule.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct BatchScheduleActionCreateResult {
+    /// <p>List of actions that have been created in the schedule.</p>
+    #[serde(rename = "ScheduleActions")]
+    pub schedule_actions: Vec<ScheduleAction>,
+}
+
+/// <p>A list of schedule actions to delete.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct BatchScheduleActionDeleteRequest {
+    /// <p>A list of schedule actions to delete.</p>
+    #[serde(rename = "ActionNames")]
+    pub action_names: Vec<String>,
+}
+
+/// <p>List of actions that have been deleted from the schedule.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct BatchScheduleActionDeleteResult {
+    /// <p>List of actions that have been deleted from the schedule.</p>
+    #[serde(rename = "ScheduleActions")]
+    pub schedule_actions: Vec<ScheduleAction>,
+}
+
+/// <p>List of actions to create and list of actions to delete.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct BatchUpdateScheduleRequest {
+    /// <p>Id of the channel whose schedule is being updated.</p>
+    #[serde(rename = "ChannelId")]
+    pub channel_id: String,
+    /// <p>Schedule actions to create in the schedule.</p>
+    #[serde(rename = "Creates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creates: Option<BatchScheduleActionCreateRequest>,
+    /// <p>Schedule actions to delete from the schedule.</p>
+    #[serde(rename = "Deletes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deletes: Option<BatchScheduleActionDeleteRequest>,
+}
+
+/// <p>Placeholder documentation for BatchUpdateScheduleResponse</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct BatchUpdateScheduleResponse {
+    /// <p>Schedule actions created in the schedule.</p>
+    #[serde(rename = "Creates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creates: Option<BatchScheduleActionCreateResult>,
+    /// <p>Schedule actions deleted from the schedule.</p>
+    #[serde(rename = "Deletes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deletes: Option<BatchScheduleActionDeleteResult>,
+}
+
+/// <p>Results of a batch schedule update.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct BatchUpdateScheduleResult {
+    /// <p>Schedule actions created in the schedule.</p>
+    pub creates: Option<BatchScheduleActionCreateResult>,
+    /// <p>Schedule actions deleted from the schedule.</p>
+    pub deletes: Option<BatchScheduleActionDeleteResult>,
 }
 
 /// <p>Placeholder documentation for BlackoutSlate</p>
@@ -620,13 +693,17 @@ pub struct Channel {
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
+    /// <p>A collection of key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>Placeholder documentation for ChannelConfigurationValidationError</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ChannelConfigurationValidationError {
     pub message: Option<String>,
-    /// <p>A collection of validation error responses from attempting to create a channel with a bouquet of settings.</p>
+    /// <p>A collection of validation error responses.</p>
     pub validation_errors: Option<Vec<ValidationError>>,
 }
 
@@ -708,6 +785,8 @@ pub struct CreateChannel {
     pub request_id: Option<String>,
     /// <p>An optional Amazon Resource Name (ARN) of the role to assume when running the Channel.</p>
     pub role_arn: Option<String>,
+    /// <p>A collection of key-value pairs.</p>
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>A request to create a channel</p>
@@ -744,6 +823,10 @@ pub struct CreateChannelRequest {
     #[serde(rename = "RoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
+    /// <p>A collection of key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>Placeholder documentation for CreateChannelResponse</p>
@@ -768,16 +851,25 @@ pub struct CreateInput {
     pub destinations: Option<Vec<InputDestinationRequest>>,
     /// <p>A list of security groups referenced by IDs to attach to the input.</p>
     pub input_security_groups: Option<Vec<String>>,
+    /// <p>A list of the MediaConnect Flows that you want to use in this input. You can specify as few as one
+    /// Flow and presently, as many as two. The only requirement is when you have more than one is that each Flow is in a
+    /// separate Availability Zone as this ensures your EML input is redundant to AZ issues.</p>
+    pub media_connect_flows: Option<Vec<MediaConnectFlowRequest>>,
     /// <p>Name of the input.</p>
     pub name: Option<String>,
     /// <p>Unique identifier of the request to ensure the request is handled
     /// exactly once in case of retries.</p>
     pub request_id: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the role this input assumes during and after creation.</p>
+    pub role_arn: Option<String>,
     /// <p>The source URLs for a PULL-type input. Every PULL type input needs
     /// exactly two source URLs for redundancy.
     /// Only specify sources for PULL type Inputs. Leave Destinations empty.</p>
     pub sources: Option<Vec<InputSourceRequest>>,
+    /// <p>A collection of key-value pairs.</p>
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     pub type_: Option<String>,
+    pub vpc: Option<InputVpcRequest>,
 }
 
 /// <p>The name of the input</p>
@@ -791,6 +883,12 @@ pub struct CreateInputRequest {
     #[serde(rename = "InputSecurityGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_security_groups: Option<Vec<String>>,
+    /// <p>A list of the MediaConnect Flows that you want to use in this input. You can specify as few as one
+    /// Flow and presently, as many as two. The only requirement is when you have more than one is that each Flow is in a
+    /// separate Availability Zone as this ensures your EML input is redundant to AZ issues.</p>
+    #[serde(rename = "MediaConnectFlows")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub media_connect_flows: Option<Vec<MediaConnectFlowRequest>>,
     /// <p>Name of the input.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -800,15 +898,26 @@ pub struct CreateInputRequest {
     #[serde(rename = "RequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the role this input assumes during and after creation.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
     /// <p>The source URLs for a PULL-type input. Every PULL type input needs
     /// exactly two source URLs for redundancy.
     /// Only specify sources for PULL type Inputs. Leave Destinations empty.</p>
     #[serde(rename = "Sources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sources: Option<Vec<InputSourceRequest>>,
+    /// <p>A collection of key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
+    #[serde(rename = "Vpc")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc: Option<InputVpcRequest>,
 }
 
 /// <p>Placeholder documentation for CreateInputResponse</p>
@@ -829,6 +938,10 @@ pub struct CreateInputResultModel {
 /// <p>The IPv4 CIDRs to whitelist for this Input Security Group</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateInputSecurityGroupRequest {
+    /// <p>A collection of key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>List of IPv4 CIDR addresses to whitelist</p>
     #[serde(rename = "WhitelistRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -848,6 +961,16 @@ pub struct CreateInputSecurityGroupResponse {
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateInputSecurityGroupResultModel {
     pub security_group: Option<InputSecurityGroup>,
+}
+
+/// <p>Placeholder documentation for CreateTagsRequest</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateTagsRequest {
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>Placeholder documentation for DeleteChannelRequest</p>
@@ -909,6 +1032,10 @@ pub struct DeleteChannelResponse {
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
+    /// <p>A collection of key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>Placeholder documentation for DeleteInputRequest</p>
@@ -1019,6 +1146,16 @@ pub struct DeleteReservationResponse {
     pub usage_price: Option<f64>,
 }
 
+/// <p>Placeholder documentation for DeleteTagsRequest</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteTagsRequest {
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>An array of tag keys to delete</p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
 /// <p>Placeholder documentation for DescribeChannelRequest</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeChannelRequest {
@@ -1078,6 +1215,10 @@ pub struct DescribeChannelResponse {
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
+    /// <p>A collection of key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>Placeholder documentation for DescribeInputRequest</p>
@@ -1108,11 +1249,19 @@ pub struct DescribeInputResponse {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// <p>A list of MediaConnect Flows for this input.</p>
+    #[serde(rename = "MediaConnectFlows")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub media_connect_flows: Option<Vec<MediaConnectFlow>>,
     /// <p>The user-assigned name (This is a mutable value).</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>A list of IDs for all the security groups attached to the input.</p>
+    /// <p>The Amazon Resource Name (ARN) of the role this input assumes during and after creation.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+    /// <p>A list of IDs for all the Input Security Groups attached to the input.</p>
     #[serde(rename = "SecurityGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_groups: Option<Vec<String>>,
@@ -1123,6 +1272,10 @@ pub struct DescribeInputResponse {
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
+    /// <p>A collection of key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -1156,6 +1309,10 @@ pub struct DescribeInputSecurityGroupResponse {
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
+    /// <p>A collection of key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>Whitelist rules and their sync status</p>
     #[serde(rename = "WhitelistRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1300,6 +1457,34 @@ pub struct DescribeReservationResponse {
     #[serde(rename = "UsagePrice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub usage_price: Option<f64>,
+}
+
+/// <p>Placeholder documentation for DescribeScheduleRequest</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeScheduleRequest {
+    /// <p>Id of the channel whose schedule is being updated.</p>
+    #[serde(rename = "ChannelId")]
+    pub channel_id: String,
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p>Placeholder documentation for DescribeScheduleResponse</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeScheduleResponse {
+    /// <p>The next token; for use in pagination.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The list of actions in the schedule.</p>
+    #[serde(rename = "ScheduleActions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schedule_actions: Option<Vec<ScheduleAction>>,
 }
 
 /// <p>DVB Network Information Table (NIT)</p>
@@ -1598,6 +1783,50 @@ pub struct FecOutputSettings {
     pub row_length: Option<i64>,
 }
 
+/// <p>Start time for the action.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct FixedModeScheduleActionStartSettings {
+    /// <p>Start time for the action to start in the channel. (Not the time for the action to be added to the schedule: actions are always added to the schedule immediately.) UTC format: yyyy-mm-ddThh:mm:ss.nnnZ. All the letters are digits (for example, mm might be 01) except for the two constants &quot;T&quot; for time and &quot;Z&quot; for &quot;UTC format&quot;.</p>
+    #[serde(rename = "Time")]
+    pub time: String,
+}
+
+/// <p>Settings to specify if an action follows another.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct FollowModeScheduleActionStartSettings {
+    /// <p>Identifies whether this action starts relative to the start or relative to the end of the reference action.</p>
+    #[serde(rename = "FollowPoint")]
+    pub follow_point: String,
+    /// <p>The action name of another action that this one refers to.</p>
+    #[serde(rename = "ReferenceActionName")]
+    pub reference_action_name: String,
+}
+
+/// <p>Frame Capture Group Settings</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct FrameCaptureGroupSettings {
+    /// <p>The destination for the frame capture files. Either the URI for an Amazon S3 bucket and object, plus a file name prefix (for example, s3ssl://sportsDelivery/highlights/20180820/curling<em>) or the URI for a MediaStore container, plus a file name prefix (for example, mediastoressl://sportsDelivery/20180820/curling</em>). The final file names consist of the prefix from the destination field (for example, &quot;curling_&quot;) + name modifier + the counter (5 digits, starting from 00001) + extension (which is always .jpg).  For example, curlingLow.00001.jpg</p>
+    #[serde(rename = "Destination")]
+    pub destination: OutputLocationRef,
+}
+
+/// <p>Frame Capture Output Settings</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct FrameCaptureOutputSettings {
+    /// <p>Required if the output group contains more than one output. This modifier forms part of the output file name.</p>
+    #[serde(rename = "NameModifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name_modifier: Option<String>,
+}
+
+/// <p>Frame Capture Settings</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct FrameCaptureSettings {
+    /// <p>The frequency, in seconds, for capturing frames for inclusion in the output.  For example, &quot;10&quot; means capture a frame every 10 seconds.</p>
+    #[serde(rename = "CaptureInterval")]
+    pub capture_interval: i64,
+}
+
 /// <p>Placeholder documentation for GlobalConfiguration</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GlobalConfiguration {
@@ -1605,7 +1834,7 @@ pub struct GlobalConfiguration {
     #[serde(rename = "InitialAudioGain")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub initial_audio_gain: Option<i64>,
-    /// <p>Indicates the action to take when an input completes (e.g. end-of-file.) Options include immediately switching to the next sequential input (via &quot;switchInput&quot;), switching to the next input and looping back to the first input when last input ends (via &quot;switchAndLoopInputs&quot;) or not switching inputs and instead transcoding black / color / slate images per the &quot;Input Loss Behavior&quot; configuration until an activateInput REST command is received (via &quot;none&quot;).</p>
+    /// <p>Indicates the action to take when the current input completes (e.g. end-of-file). When switchAndLoopInputs is configured the encoder will restart at the beginning of the first input.  When &quot;none&quot; is configured the encoder will transcode either black, a solid color, or a user specified slate images per the &quot;Input Loss Behavior&quot; configuration until the next input switch occurs (which is controlled through the Channel Schedule API).</p>
     #[serde(rename = "InputEndAction")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_end_action: Option<String>,
@@ -1634,7 +1863,7 @@ pub struct H264Settings {
     #[serde(rename = "AfdSignaling")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub afd_signaling: Option<String>,
-    /// <p>Average bitrate in bits/second. Required for VBR, CBR, and ABR. For MS Smooth outputs, bitrates must be unique when rounded down to the nearest multiple of 1000.</p>
+    /// <p>Average bitrate in bits/second. Required when the rate control mode is VBR or CBR. Not used for QVBR. In an MS Smooth output group, each output must have a unique value when its bitrate is rounded down to the nearest multiple of 1000.</p>
     #[serde(rename = "Bitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bitrate: Option<i64>,
@@ -1702,7 +1931,9 @@ pub struct H264Settings {
     #[serde(rename = "LookAheadRateControl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub look_ahead_rate_control: Option<String>,
-    /// <p>Maximum bitrate in bits/second (for VBR mode only).</p>
+    /// <p>For QVBR: See the tooltip for Quality level </p>
+    ///
+    /// <p>For VBR: Set the maximum bitrate in order to accommodate expected spikes in the complexity of the video.</p>
     #[serde(rename = "MaxBitrate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_bitrate: Option<i64>,
@@ -1730,7 +1961,23 @@ pub struct H264Settings {
     #[serde(rename = "Profile")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub profile: Option<String>,
-    /// <p>Rate control mode.</p>
+    /// <p>Controls the target quality for the video encode. Applies only when the rate control mode is QVBR. Set values for the QVBR quality level field and Max bitrate field that suit your most important viewing devices. Recommended values are:
+    /// - Primary screen: Quality level: 8 to 10. Max bitrate: 4M
+    /// - PC or tablet: Quality level: 7. Max bitrate: 1.5M to 3M
+    /// - Smartphone: Quality level: 6. Max bitrate: 1M to 1.5M</p>
+    #[serde(rename = "QvbrQualityLevel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub qvbr_quality_level: Option<i64>,
+    /// <p>Rate control mode. </p>
+    ///
+    /// <p>QVBR: Quality will match the specified quality level except when it is constrained by the
+    /// maximum bitrate.  Recommended if you or your viewers pay for bandwidth.</p>
+    ///
+    /// <p>VBR: Quality and bitrate vary, depending on the video complexity. Recommended instead of QVBR
+    /// if you want to maintain a specific average bitrate over the duration of the channel.</p>
+    ///
+    /// <p>CBR: Quality varies, depending on the video complexity. Recommended only if you distribute
+    /// your assets to devices that cannot handle variable bitrates.</p>
     #[serde(rename = "RateControlMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rate_control_mode: Option<String>,
@@ -1738,7 +1985,12 @@ pub struct H264Settings {
     #[serde(rename = "ScanType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scan_type: Option<String>,
-    /// <p>Scene change detection.  Inserts I-frames on scene changes when enabled.</p>
+    /// <p>Scene change detection.</p>
+    ///
+    /// <ul>
+    /// <li>On: inserts I-frames when scene change is detected.</li>
+    /// <li>Off: does not force an I-frame when scene change is detected.</li>
+    /// </ul>
     #[serde(rename = "SceneChangeDetect")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scene_change_detect: Option<String>,
@@ -1755,6 +2007,10 @@ pub struct H264Settings {
     #[serde(rename = "SpatialAq")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub spatial_aq: Option<String>,
+    /// <p>If set to fixed, use gopNumBFrames B-frames per sub-GOP. If set to dynamic, optimize the number of B-frames used for each sub-GOP to improve visual quality.</p>
+    #[serde(rename = "SubgopLength")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub subgop_length: Option<String>,
     /// <p>Produces a bitstream compliant with SMPTE RP-2027.</p>
     #[serde(rename = "Syntax")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1895,6 +2151,10 @@ pub struct HlsGroupSettings {
     #[serde(rename = "HlsCdnSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hls_cdn_settings: Option<HlsCdnSettings>,
+    /// <p>If enabled, writes out I-Frame only playlists in addition to media playlists.</p>
+    #[serde(rename = "IFrameOnlyPlaylists")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub i_frame_only_playlists: Option<String>,
     /// <p>If mode is &quot;live&quot;, the number of segments to retain in the manifest (.m3u8) file. This number must be less than or equal to keepSegments. If mode is &quot;vod&quot;, this parameter has no effect.</p>
     #[serde(rename = "IndexNSegments")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1957,11 +2217,15 @@ pub struct HlsGroupSettings {
     #[serde(rename = "ProgramDateTimePeriod")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub program_date_time_period: Option<i64>,
+    /// <p>When set to &quot;enabled&quot;, includes the media playlists from both pipelines in the master manifest (.m3u8) file.</p>
+    #[serde(rename = "RedundantManifest")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub redundant_manifest: Option<String>,
     /// <p>Length of MPEG-2 Transport Stream segments to create (in seconds). Note that segments will end on the next keyframe after this number of seconds, so actual segment length may be longer.</p>
     #[serde(rename = "SegmentLength")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub segment_length: Option<i64>,
-    /// <p>When set to useInputSegmentation, the output segment or fragment points are set by the RAI markers from the input streams.</p>
+    /// <p>useInputSegmentation has been deprecated. The configured segment size is always used.</p>
     #[serde(rename = "SegmentationMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub segmentation_mode: Option<String>,
@@ -2064,6 +2328,14 @@ pub struct HlsSettings {
     pub standard_hls_settings: Option<StandardHlsSettings>,
 }
 
+/// <p>Settings for the action to emit HLS metadata</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct HlsTimedMetadataScheduleActionSettings {
+    /// <p>Base64 string formatted according to the ID3 specification: http://id3.org/id3v2.4.0-structure</p>
+    #[serde(rename = "Id3")]
+    pub id_3: String,
+}
+
 /// <p>Placeholder documentation for HlsWebdavSettings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HlsWebdavSettings {
@@ -2109,11 +2381,19 @@ pub struct Input {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// <p>A list of MediaConnect Flows for this input.</p>
+    #[serde(rename = "MediaConnectFlows")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub media_connect_flows: Option<Vec<MediaConnectFlow>>,
     /// <p>The user-assigned name (This is a mutable value).</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>A list of IDs for all the security groups attached to the input.</p>
+    /// <p>The Amazon Resource Name (ARN) of the role this input assumes during and after creation.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+    /// <p>A list of IDs for all the Input Security Groups attached to the input.</p>
     #[serde(rename = "SecurityGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub security_groups: Option<Vec<String>>,
@@ -2124,6 +2404,10 @@ pub struct Input {
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
+    /// <p>A collection of key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -2132,6 +2416,10 @@ pub struct Input {
 /// <p>Placeholder documentation for InputAttachment</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct InputAttachment {
+    /// <p>User-specified name for the attachment. This is required if the user wants to use this input in an input switch action.</p>
+    #[serde(rename = "InputAttachmentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_attachment_name: Option<String>,
     /// <p>The ID of the input</p>
     #[serde(rename = "InputId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2171,6 +2459,9 @@ pub struct InputDestination {
     #[serde(rename = "Url")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub url: Option<String>,
+    #[serde(rename = "Vpc")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vpc: Option<InputDestinationVpc>,
 }
 
 /// <p>Endpoint settings for a PUSH type input.</p>
@@ -2181,6 +2472,20 @@ pub struct InputDestinationRequest {
     #[serde(rename = "StreamName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stream_name: Option<String>,
+}
+
+/// <p>The properties for a VPC type input destination.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct InputDestinationVpc {
+    /// <p>The availability zone of the Input destination.</p>
+    #[serde(rename = "AvailabilityZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zone: Option<String>,
+    /// <p>The network interface ID of the Input destination in the VPC.</p>
+    #[serde(rename = "NetworkInterfaceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_interface_id: Option<String>,
 }
 
 /// <p>Placeholder documentation for InputLocation</p>
@@ -2244,6 +2549,10 @@ pub struct InputSecurityGroup {
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
+    /// <p>A collection of key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>Whitelist rules and their sync status</p>
     #[serde(rename = "WhitelistRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2253,6 +2562,8 @@ pub struct InputSecurityGroup {
 /// <p>Request of IPv4 CIDR addresses to whitelist in a security group.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct InputSecurityGroupWhitelistRequest {
+    /// <p>A collection of key-value pairs.</p>
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>List of IPv4 CIDR addresses to whitelist</p>
     pub whitelist_rules: Option<Vec<InputWhitelistRuleCidr>>,
 }
@@ -2353,6 +2664,31 @@ pub struct InputSpecification {
     #[serde(rename = "Resolution")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resolution: Option<String>,
+}
+
+/// <p>Settings for the action to switch an input.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct InputSwitchScheduleActionSettings {
+    /// <p>The name of the input attachment that should be switched to by this action.</p>
+    #[serde(rename = "InputAttachmentNameReference")]
+    pub input_attachment_name_reference: String,
+}
+
+/// <p>Settings for a private VPC Input.
+/// When this property is specified, the input destination addresses will be created in a VPC rather than with public Internet addresses.
+/// This property requires setting the roleArn property on Input creation.
+/// Not compatible with the inputSecurityGroups property.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct InputVpcRequest {
+    /// <p>A list of up to 5 EC2 VPC security group IDs to attach to the Input VPC network interfaces.
+    /// Requires subnetIds. If none are specified then the VPC default security group will be used.</p>
+    #[serde(rename = "SecurityGroupIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_group_ids: Option<Vec<String>>,
+    /// <p>A list of 2 VPC subnet IDs from the same VPC.
+    /// Subnet IDs must be mapped to two unique availability zones (AZ).</p>
+    #[serde(rename = "SubnetIds")]
+    pub subnet_ids: Vec<String>,
 }
 
 /// <p>Whitelist rule</p>
@@ -2620,6 +2956,22 @@ pub struct ListReservationsResultModel {
     pub reservations: Option<Vec<Reservation>>,
 }
 
+/// <p>Placeholder documentation for ListTagsForResourceRequest</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListTagsForResourceRequest {
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+}
+
+/// <p>Placeholder documentation for ListTagsForResourceResponse</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
 /// <p>Placeholder documentation for M2tsSettings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct M2tsSettings {
@@ -2882,6 +3234,25 @@ pub struct M3u8Settings {
     pub video_pid: Option<String>,
 }
 
+/// <p>The settings for a MediaConnect Flow.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct MediaConnectFlow {
+    /// <p>The unique ARN of the MediaConnect Flow being used as a source.</p>
+    #[serde(rename = "FlowArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub flow_arn: Option<String>,
+}
+
+/// <p>The settings for a MediaConnect Flow.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct MediaConnectFlowRequest {
+    /// <p>The ARN of the MediaConnect Flow that you want to use as a source.</p>
+    #[serde(rename = "FlowArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub flow_arn: Option<String>,
+}
+
 /// <p>Placeholder documentation for Mp2Settings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Mp2Settings {
@@ -2960,11 +3331,11 @@ pub struct MsSmoothGroupSettings {
     #[serde(rename = "RestartDelay")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub restart_delay: Option<i64>,
-    /// <p>When set to useInputSegmentation, the output segment or fragment points are set by the RAI markers from the input streams.</p>
+    /// <p>useInputSegmentation has been deprecated. The configured segment size is always used.</p>
     #[serde(rename = "SegmentationMode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub segmentation_mode: Option<String>,
-    /// <p>Outputs that are &quot;output locked&quot; can use this delay. Assign a delay to the output that is &quot;secondary&quot;.  Do not assign a delay to the &quot;primary&quot; output. The delay means that the primary output will always reach the downstream system before the secondary, which helps ensure that the downstream system always uses the primary output. (If there were no delay, the downstream system might flip-flop between whichever output happens to arrive first.) If the primary fails, the downstream system will switch to the secondary output. When the primary is restarted, the downstream system will switch back to the primary (because once again it is always arriving first)</p>
+    /// <p>Number of milliseconds to delay the output from the second pipeline.</p>
     #[serde(rename = "SendDelayMs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub send_delay_ms: Option<i64>,
@@ -3138,6 +3509,9 @@ pub struct OutputGroupSettings {
     #[serde(rename = "ArchiveGroupSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub archive_group_settings: Option<ArchiveGroupSettings>,
+    #[serde(rename = "FrameCaptureGroupSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub frame_capture_group_settings: Option<FrameCaptureGroupSettings>,
     #[serde(rename = "HlsGroupSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hls_group_settings: Option<HlsGroupSettings>,
@@ -3166,6 +3540,9 @@ pub struct OutputSettings {
     #[serde(rename = "ArchiveOutputSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub archive_output_settings: Option<ArchiveOutputSettings>,
+    #[serde(rename = "FrameCaptureOutputSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub frame_capture_output_settings: Option<FrameCaptureOutputSettings>,
     #[serde(rename = "HlsOutputSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hls_output_settings: Option<HlsOutputSettings>,
@@ -3188,11 +3565,13 @@ pub struct PassThroughSettings {}
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PurchaseOffering {
     /// <p>Number of resources</p>
-    pub count: Option<i64>,
+    pub count: i64,
     /// <p>Name for the new reservation</p>
     pub name: Option<String>,
     /// <p>Unique request ID to be specified. This is needed to prevent retries from creating multiple resources.</p>
     pub request_id: Option<String>,
+    /// <p>Requested reservation start time (UTC) in ISO-8601 format. The specified time must be between the first day of the current month and one year from now. If no value is given, the default is now.</p>
+    pub start: Option<String>,
 }
 
 /// <p>Placeholder documentation for PurchaseOfferingRequest</p>
@@ -3200,8 +3579,7 @@ pub struct PurchaseOffering {
 pub struct PurchaseOfferingRequest {
     /// <p>Number of resources</p>
     #[serde(rename = "Count")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub count: Option<i64>,
+    pub count: i64,
     /// <p>Name for the new reservation</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3213,6 +3591,10 @@ pub struct PurchaseOfferingRequest {
     #[serde(rename = "RequestId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub request_id: Option<String>,
+    /// <p>Requested reservation start time (UTC) in ISO-8601 format. The specified time must be between the first day of the current month and one year from now. If no value is given, the default is now.</p>
+    #[serde(rename = "Start")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start: Option<String>,
 }
 
 /// <p>Placeholder documentation for PurchaseOfferingResponse</p>
@@ -3390,6 +3772,15 @@ pub struct RtmpGroupSettings {
     #[serde(rename = "CaptionData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub caption_data: Option<String>,
+    /// <p>Controls the behavior of this RTMP group if input becomes unavailable.</p>
+    ///
+    /// <ul>
+    /// <li>emitOutput: Emit a slate until input returns.</li>
+    /// <li>pauseOutput: Stop transmitting data until input returns. This does not close the underlying RTMP connection.</li>
+    /// </ul>
+    #[serde(rename = "InputLossAction")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_loss_action: Option<String>,
     /// <p>If a streaming output fails, number of seconds to wait until a restart is initiated. A value of 0 means never restart.</p>
     #[serde(rename = "RestartDelay")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3414,6 +3805,75 @@ pub struct RtmpOutputSettings {
     #[serde(rename = "NumRetries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub num_retries: Option<i64>,
+}
+
+/// <p>Contains information on a single schedule action.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ScheduleAction {
+    /// <p>The name of the action, must be unique within the schedule. This name provides the main reference to an action once it is added to the schedule. A name is unique if it is no longer in the schedule. The schedule is automatically cleaned up to remove actions with a start time of more than 1 hour ago (approximately) so at that point a name can be reused.</p>
+    #[serde(rename = "ActionName")]
+    pub action_name: String,
+    /// <p>Settings for this schedule action.</p>
+    #[serde(rename = "ScheduleActionSettings")]
+    pub schedule_action_settings: ScheduleActionSettings,
+    /// <p>The time for the action to start in the channel.</p>
+    #[serde(rename = "ScheduleActionStartSettings")]
+    pub schedule_action_start_settings: ScheduleActionStartSettings,
+}
+
+/// <p>Holds the settings for a single schedule action.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ScheduleActionSettings {
+    /// <p>Settings to emit HLS metadata</p>
+    #[serde(rename = "HlsTimedMetadataSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hls_timed_metadata_settings: Option<HlsTimedMetadataScheduleActionSettings>,
+    /// <p>Settings to switch an input</p>
+    #[serde(rename = "InputSwitchSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_switch_settings: Option<InputSwitchScheduleActionSettings>,
+    /// <p>Settings for SCTE-35 return<em>to</em>network message</p>
+    #[serde(rename = "Scte35ReturnToNetworkSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scte_35_return_to_network_settings: Option<Scte35ReturnToNetworkScheduleActionSettings>,
+    /// <p>Settings for SCTE-35 splice_insert message</p>
+    #[serde(rename = "Scte35SpliceInsertSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scte_35_splice_insert_settings: Option<Scte35SpliceInsertScheduleActionSettings>,
+    /// <p>Settings for SCTE-35 time_signal message</p>
+    #[serde(rename = "Scte35TimeSignalSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scte_35_time_signal_settings: Option<Scte35TimeSignalScheduleActionSettings>,
+    /// <p>Settings to activate a static image overlay</p>
+    #[serde(rename = "StaticImageActivateSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub static_image_activate_settings: Option<StaticImageActivateScheduleActionSettings>,
+    /// <p>Settings to deactivate a static image overlay</p>
+    #[serde(rename = "StaticImageDeactivateSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub static_image_deactivate_settings: Option<StaticImageDeactivateScheduleActionSettings>,
+}
+
+/// <p>Settings to specify the start time for an action.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ScheduleActionStartSettings {
+    /// <p>Holds the start time for the action.</p>
+    #[serde(rename = "FixedModeScheduleActionStartSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fixed_mode_schedule_action_start_settings: Option<FixedModeScheduleActionStartSettings>,
+    /// <p>Specifies an action to follow for scheduling this action.</p>
+    #[serde(rename = "FollowModeScheduleActionStartSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub follow_mode_schedule_action_start_settings: Option<FollowModeScheduleActionStartSettings>,
+}
+
+/// <p>Results of a schedule describe.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ScheduleDescribeResultModel {
+    /// <p>The next token; for use in pagination.</p>
+    pub next_token: Option<String>,
+    /// <p>The list of actions in the schedule.</p>
+    pub schedule_actions: Vec<ScheduleAction>,
 }
 
 /// <p>Placeholder documentation for Scte20PlusEmbeddedDestinationSettings</p>
@@ -3450,6 +3910,94 @@ pub struct Scte27SourceSettings {
     pub pid: Option<i64>,
 }
 
+/// <p>Corresponds to SCTE-35 delivery<em>not</em>restricted_flag parameter. To declare delivery restrictions, include this element and its four &quot;restriction&quot; flags. To declare that there are no restrictions, omit this element.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Scte35DeliveryRestrictions {
+    /// <p>Corresponds to SCTE-35 archive<em>allowed</em>flag.</p>
+    #[serde(rename = "ArchiveAllowedFlag")]
+    pub archive_allowed_flag: String,
+    /// <p>Corresponds to SCTE-35 device_restrictions parameter.</p>
+    #[serde(rename = "DeviceRestrictions")]
+    pub device_restrictions: String,
+    /// <p>Corresponds to SCTE-35 no<em>regional</em>blackout_flag parameter.</p>
+    #[serde(rename = "NoRegionalBlackoutFlag")]
+    pub no_regional_blackout_flag: String,
+    /// <p>Corresponds to SCTE-35 web<em>delivery</em>allowed_flag parameter.</p>
+    #[serde(rename = "WebDeliveryAllowedFlag")]
+    pub web_delivery_allowed_flag: String,
+}
+
+/// <p>Holds one set of SCTE-35 Descriptor Settings.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Scte35Descriptor {
+    /// <p>SCTE-35 Descriptor Settings.</p>
+    #[serde(rename = "Scte35DescriptorSettings")]
+    pub scte_35_descriptor_settings: Scte35DescriptorSettings,
+}
+
+/// <p>SCTE-35 Descriptor settings.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Scte35DescriptorSettings {
+    /// <p>SCTE-35 Segmentation Descriptor.</p>
+    #[serde(rename = "SegmentationDescriptorScte35DescriptorSettings")]
+    pub segmentation_descriptor_scte_35_descriptor_settings: Scte35SegmentationDescriptor,
+}
+
+/// <p>Settings for a SCTE-35 return<em>to</em>network message.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Scte35ReturnToNetworkScheduleActionSettings {
+    /// <p>The splice<em>event</em>id for the SCTE-35 splice_insert, as defined in SCTE-35.</p>
+    #[serde(rename = "SpliceEventId")]
+    pub splice_event_id: i64,
+}
+
+/// <p>Corresponds to SCTE-35 segmentation_descriptor.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Scte35SegmentationDescriptor {
+    /// <p>Holds the four SCTE-35 delivery restriction parameters.</p>
+    #[serde(rename = "DeliveryRestrictions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delivery_restrictions: Option<Scte35DeliveryRestrictions>,
+    /// <p>Corresponds to SCTE-35 segment<em>num. A value that is valid for the specified segmentation</em>type_id.</p>
+    #[serde(rename = "SegmentNum")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub segment_num: Option<i64>,
+    /// <p>Corresponds to SCTE-35 segmentation<em>event</em>cancel_indicator.</p>
+    #[serde(rename = "SegmentationCancelIndicator")]
+    pub segmentation_cancel_indicator: String,
+    /// <p>Corresponds to SCTE-35 segmentation<em>duration. Optional. The duration for the time</em>signal, in 90 KHz ticks. To convert seconds to ticks, multiple the seconds by 90,000. Enter time in 90 KHz clock ticks. If you do not enter a duration, the time_signal will continue until you insert a cancellation message.</p>
+    #[serde(rename = "SegmentationDuration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub segmentation_duration: Option<i64>,
+    /// <p>Corresponds to SCTE-35 segmentation<em>event</em>id. </p>
+    #[serde(rename = "SegmentationEventId")]
+    pub segmentation_event_id: i64,
+    /// <p>Corresponds to SCTE-35 segmentation<em>type</em>id. One of the segmentation<em>type</em>id values listed in the SCTE-35 specification. On the console, enter the ID in decimal (for example, &quot;52&quot;). In the CLI, API, or an SDK, enter the ID in hex (for example, &quot;0x34&quot;) or decimal (for example, &quot;52&quot;).</p>
+    #[serde(rename = "SegmentationTypeId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub segmentation_type_id: Option<i64>,
+    /// <p>Corresponds to SCTE-35 segmentation<em>upid. Enter a string containing the hexadecimal representation of the characters that make up the SCTE-35 segmentation</em>upid value. Must contain an even number of hex characters. Do not include spaces between each hex pair. For example, the ASCII &quot;ADS Information&quot; becomes hex &quot;41445320496e666f726d6174696f6e.</p>
+    #[serde(rename = "SegmentationUpid")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub segmentation_upid: Option<String>,
+    /// <p>Corresponds to SCTE-35 segmentation<em>upid</em>type. On the console, enter one of the types listed in the SCTE-35 specification, converted to a decimal. For example, &quot;0x0C&quot; hex from the specification is &quot;12&quot; in decimal. In the CLI, API, or an SDK, enter one of the types listed in the SCTE-35 specification, in either hex (for example, &quot;0x0C&quot; ) or in decimal (for example, &quot;12&quot;).</p>
+    #[serde(rename = "SegmentationUpidType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub segmentation_upid_type: Option<i64>,
+    /// <p>Corresponds to SCTE-35 segments<em>expected. A value that is valid for the specified segmentation</em>type_id.</p>
+    #[serde(rename = "SegmentsExpected")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub segments_expected: Option<i64>,
+    /// <p>Corresponds to SCTE-35 sub<em>segment</em>num. A value that is valid for the specified segmentation<em>type</em>id.</p>
+    #[serde(rename = "SubSegmentNum")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sub_segment_num: Option<i64>,
+    /// <p>Corresponds to SCTE-35 sub<em>segments</em>expected. A value that is valid for the specified segmentation<em>type</em>id.</p>
+    #[serde(rename = "SubSegmentsExpected")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sub_segments_expected: Option<i64>,
+}
+
 /// <p>Placeholder documentation for Scte35SpliceInsert</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Scte35SpliceInsert {
@@ -3467,6 +4015,18 @@ pub struct Scte35SpliceInsert {
     pub web_delivery_allowed_flag: Option<String>,
 }
 
+/// <p>Settings for a SCTE-35 splice_insert message.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Scte35SpliceInsertScheduleActionSettings {
+    /// <p>Optional, the duration for the splice<em>insert, in 90 KHz ticks. To convert seconds to ticks, multiple the seconds by 90,000. If you enter a duration, there is an expectation that the downstream system can read the duration and cue in at that time. If you do not enter a duration, the splice</em>insert will continue indefinitely and there is an expectation that you will enter a return<em>to</em>network to end the splice_insert at the appropriate time.</p>
+    #[serde(rename = "Duration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub duration: Option<i64>,
+    /// <p>The splice<em>event</em>id for the SCTE-35 splice_insert, as defined in SCTE-35.</p>
+    #[serde(rename = "SpliceEventId")]
+    pub splice_event_id: i64,
+}
+
 /// <p>Placeholder documentation for Scte35TimeSignalApos</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Scte35TimeSignalApos {
@@ -3482,6 +4042,14 @@ pub struct Scte35TimeSignalApos {
     #[serde(rename = "WebDeliveryAllowedFlag")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub web_delivery_allowed_flag: Option<String>,
+}
+
+/// <p>Settings for a SCTE-35 time_signal.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Scte35TimeSignalScheduleActionSettings {
+    /// <p>The list of SCTE-35 descriptors accompanying the SCTE-35 time_signal.</p>
+    #[serde(rename = "Scte35Descriptors")]
+    pub scte_35_descriptors: Vec<Scte35Descriptor>,
 }
 
 /// <p>Placeholder documentation for SmpteTtDestinationSettings</p>
@@ -3558,6 +4126,67 @@ pub struct StartChannelResponse {
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
+    /// <p>A collection of key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>Settings for the action to activate a static image.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct StaticImageActivateScheduleActionSettings {
+    /// <p>The duration in milliseconds for the image to remain on the video. If omitted or set to 0 the duration is unlimited and the image will remain until it is explicitly deactivated.</p>
+    #[serde(rename = "Duration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub duration: Option<i64>,
+    /// <p>The time in milliseconds for the image to fade in. The fade-in starts at the start time of the overlay. Default is 0 (no fade-in).</p>
+    #[serde(rename = "FadeIn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fade_in: Option<i64>,
+    /// <p>Applies only if a duration is specified. The time in milliseconds for the image to fade out. The fade-out starts when the duration time is hit, so it effectively extends the duration. Default is 0 (no fade-out).</p>
+    #[serde(rename = "FadeOut")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fade_out: Option<i64>,
+    /// <p>The height of the image when inserted into the video, in pixels. The overlay will be scaled up or down to the specified height. Leave blank to use the native height of the overlay.</p>
+    #[serde(rename = "Height")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub height: Option<i64>,
+    /// <p>The location and filename of the image file to overlay on the video. The file must be a 32-bit BMP, PNG, or TGA file, and must not be larger (in pixels) than the input video.</p>
+    #[serde(rename = "Image")]
+    pub image: InputLocation,
+    /// <p>Placement of the left edge of the overlay relative to the left edge of the video frame, in pixels. 0 (the default) is the left edge of the frame. If the placement causes the overlay to extend beyond the right edge of the underlying video, then the overlay is cropped on the right.</p>
+    #[serde(rename = "ImageX")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_x: Option<i64>,
+    /// <p>Placement of the top edge of the overlay relative to the top edge of the video frame, in pixels. 0 (the default) is the top edge of the frame. If the placement causes the overlay to extend beyond the bottom edge of the underlying video, then the overlay is cropped on the bottom.</p>
+    #[serde(rename = "ImageY")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_y: Option<i64>,
+    /// <p>The number of the layer, 0 to 7. There are 8 layers that can be overlaid on the video, each layer with a different image. The layers are in Z order, which means that overlays with higher values of layer are inserted on top of overlays with lower values of layer. Default is 0.</p>
+    #[serde(rename = "Layer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub layer: Option<i64>,
+    /// <p>Opacity of image where 0 is transparent and 100 is fully opaque. Default is 100.</p>
+    #[serde(rename = "Opacity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub opacity: Option<i64>,
+    /// <p>The width of the image when inserted into the video, in pixels. The overlay will be scaled up or down to the specified width. Leave blank to use the native width of the overlay.</p>
+    #[serde(rename = "Width")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub width: Option<i64>,
+}
+
+/// <p>Settings for the action to deactivate the image in a specific layer.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct StaticImageDeactivateScheduleActionSettings {
+    /// <p>The time in milliseconds for the image to fade out. Default is 0 (no fade-out).</p>
+    #[serde(rename = "FadeOut")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub fade_out: Option<i64>,
+    /// <p>The image overlay layer to deactivate, 0 to 7. Default is 0.</p>
+    #[serde(rename = "Layer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub layer: Option<i64>,
 }
 
 /// <p>Placeholder documentation for StaticKeySettings</p>
@@ -3631,6 +4260,16 @@ pub struct StopChannelResponse {
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
+    /// <p>A collection of key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>Placeholder documentation for TagsModel</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TagsModel {
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>Placeholder documentation for TeletextDestinationSettings</p>
@@ -3788,8 +4427,14 @@ pub struct UpdateInput {
     pub destinations: Option<Vec<InputDestinationRequest>>,
     /// <p>A list of security groups referenced by IDs to attach to the input.</p>
     pub input_security_groups: Option<Vec<String>>,
+    /// <p>A list of the MediaConnect Flow ARNs that you want to use as the source of the input. You can specify as few as one
+    /// Flow and presently, as many as two. The only requirement is when you have more than one is that each Flow is in a
+    /// separate Availability Zone as this ensures your EML input is redundant to AZ issues.</p>
+    pub media_connect_flows: Option<Vec<MediaConnectFlowRequest>>,
     /// <p>Name of the input.</p>
     pub name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the role this input assumes during and after creation.</p>
+    pub role_arn: Option<String>,
     /// <p>The source URLs for a PULL-type input. Every PULL type input needs
     /// exactly two source URLs for redundancy.
     /// Only specify sources for PULL type Inputs. Leave Destinations empty.</p>
@@ -3810,10 +4455,20 @@ pub struct UpdateInputRequest {
     #[serde(rename = "InputSecurityGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub input_security_groups: Option<Vec<String>>,
+    /// <p>A list of the MediaConnect Flow ARNs that you want to use as the source of the input. You can specify as few as one
+    /// Flow and presently, as many as two. The only requirement is when you have more than one is that each Flow is in a
+    /// separate Availability Zone as this ensures your EML input is redundant to AZ issues.</p>
+    #[serde(rename = "MediaConnectFlows")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub media_connect_flows: Option<Vec<MediaConnectFlowRequest>>,
     /// <p>Name of the input.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the role this input assumes during and after creation.</p>
+    #[serde(rename = "RoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
     /// <p>The source URLs for a PULL-type input. Every PULL type input needs
     /// exactly two source URLs for redundancy.
     /// Only specify sources for PULL type Inputs. Leave Destinations empty.</p>
@@ -3843,6 +4498,10 @@ pub struct UpdateInputSecurityGroupRequest {
     /// <p>The id of the Input Security Group to update.</p>
     #[serde(rename = "InputSecurityGroupId")]
     pub input_security_group_id: String,
+    /// <p>A collection of key-value pairs.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>List of IPv4 CIDR addresses to whitelist</p>
     #[serde(rename = "WhitelistRules")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3874,6 +4533,9 @@ pub struct ValidationError {
 /// <p>Placeholder documentation for VideoCodecSettings</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct VideoCodecSettings {
+    #[serde(rename = "FrameCaptureSettings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub frame_capture_settings: Option<FrameCaptureSettings>,
     #[serde(rename = "H264Settings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub h264_settings: Option<H264Settings>,
@@ -3886,26 +4548,26 @@ pub struct VideoDescription {
     #[serde(rename = "CodecSettings")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub codec_settings: Option<VideoCodecSettings>,
-    /// <p>Output video height (in pixels). Leave blank to use source video height. If left blank, width must also be unspecified.</p>
+    /// <p>Output video height, in pixels. Must be an even number. For most codecs, you can leave this field and width blank in order to use the height and width (resolution) from the source. Note, however, that leaving blank is not recommended. For the Frame Capture codec, height and width are required.</p>
     #[serde(rename = "Height")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub height: Option<i64>,
     /// <p>The name of this VideoDescription. Outputs will use this name to uniquely identify this Description.  Description names should be unique within this Live Event.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>Indicates how to respond to the AFD values in the input stream. Setting to &quot;respond&quot; causes input video to be clipped, depending on AFD value, input display aspect ratio and output display aspect ratio.</p>
+    /// <p>Indicates how to respond to the AFD values in the input stream. RESPOND causes input video to be clipped, depending on the AFD value, input display aspect ratio, and output display aspect ratio, and (except for FRAMECAPTURE codec) includes the values in the output. PASSTHROUGH (does not apply to FRAMECAPTURE codec) ignores the AFD values and includes the values in the output, so input video is not clipped. NONE ignores the AFD values and does not include the values through to the output, so input video is not clipped.</p>
     #[serde(rename = "RespondToAfd")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub respond_to_afd: Option<String>,
-    /// <p>When set to &quot;stretchToOutput&quot;, automatically configures the output position to stretch the video to the specified output resolution. This option will override any position value.</p>
+    /// <p>STRETCHTOOUTPUT configures the output position to stretch the video to the specified output resolution (height and width). This option will override any position value. DEFAULT may insert black boxes (pillar boxes or letter boxes) around the video to provide the specified output resolution.</p>
     #[serde(rename = "ScalingBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scaling_behavior: Option<String>,
-    /// <p>Changes the width of the anti-alias filter kernel used for scaling. Only applies if scaling is being performed and antiAlias is set to true. 0 is the softest setting, 100 the sharpest, and 50 recommended for most content.</p>
+    /// <p>Changes the strength of the anti-alias filter used for scaling. 0 is the softest setting, 100 is the sharpest. A setting of 50 is recommended for most content.</p>
     #[serde(rename = "Sharpness")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sharpness: Option<i64>,
-    /// <p>Output video width (in pixels). Leave out to use source video width.  If left out, height must also be left out. Display aspect ratio is always preserved by letterboxing or pillarboxing when necessary.</p>
+    /// <p>Output video width, in pixels. Must be an even number. For most codecs, you can leave this field and height blank in order to use the height and width (resolution) from the source. Note, however, that leaving blank is not recommended. For the Frame Capture codec, height and width are required.</p>
     #[serde(rename = "Width")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub width: Option<i64>,
@@ -3961,6 +4623,148 @@ pub struct VideoSelectorSettings {
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WebvttDestinationSettings {}
 
+/// Errors returned by BatchUpdateSchedule
+#[derive(Debug, PartialEq)]
+pub enum BatchUpdateScheduleError {
+    /// <p>Placeholder documentation for BadGatewayException</p>
+    BadGateway(String),
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for GatewayTimeoutException</p>
+    GatewayTimeout(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for NotFoundException</p>
+    NotFound(String),
+    /// <p>Placeholder documentation for TooManyRequestsException</p>
+    TooManyRequests(String),
+    /// <p>Placeholder documentation for UnprocessableEntityException</p>
+    UnprocessableEntity(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl BatchUpdateScheduleError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> BatchUpdateScheduleError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "BadGatewayException" => {
+                    return BatchUpdateScheduleError::BadGateway(String::from(error_message));
+                }
+                "BadRequestException" => {
+                    return BatchUpdateScheduleError::BadRequest(String::from(error_message));
+                }
+                "ForbiddenException" => {
+                    return BatchUpdateScheduleError::Forbidden(String::from(error_message));
+                }
+                "GatewayTimeoutException" => {
+                    return BatchUpdateScheduleError::GatewayTimeout(String::from(error_message));
+                }
+                "InternalServerErrorException" => {
+                    return BatchUpdateScheduleError::InternalServerError(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return BatchUpdateScheduleError::NotFound(String::from(error_message));
+                }
+                "TooManyRequestsException" => {
+                    return BatchUpdateScheduleError::TooManyRequests(String::from(error_message));
+                }
+                "UnprocessableEntityException" => {
+                    return BatchUpdateScheduleError::UnprocessableEntity(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return BatchUpdateScheduleError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return BatchUpdateScheduleError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for BatchUpdateScheduleError {
+    fn from(err: serde_json::error::Error) -> BatchUpdateScheduleError {
+        BatchUpdateScheduleError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for BatchUpdateScheduleError {
+    fn from(err: CredentialsError) -> BatchUpdateScheduleError {
+        BatchUpdateScheduleError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for BatchUpdateScheduleError {
+    fn from(err: HttpDispatchError) -> BatchUpdateScheduleError {
+        BatchUpdateScheduleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for BatchUpdateScheduleError {
+    fn from(err: io::Error) -> BatchUpdateScheduleError {
+        BatchUpdateScheduleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for BatchUpdateScheduleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for BatchUpdateScheduleError {
+    fn description(&self) -> &str {
+        match *self {
+            BatchUpdateScheduleError::BadGateway(ref cause) => cause,
+            BatchUpdateScheduleError::BadRequest(ref cause) => cause,
+            BatchUpdateScheduleError::Forbidden(ref cause) => cause,
+            BatchUpdateScheduleError::GatewayTimeout(ref cause) => cause,
+            BatchUpdateScheduleError::InternalServerError(ref cause) => cause,
+            BatchUpdateScheduleError::NotFound(ref cause) => cause,
+            BatchUpdateScheduleError::TooManyRequests(ref cause) => cause,
+            BatchUpdateScheduleError::UnprocessableEntity(ref cause) => cause,
+            BatchUpdateScheduleError::Validation(ref cause) => cause,
+            BatchUpdateScheduleError::Credentials(ref err) => err.description(),
+            BatchUpdateScheduleError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            BatchUpdateScheduleError::ParseError(ref cause) => cause,
+            BatchUpdateScheduleError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by CreateChannel
 #[derive(Debug, PartialEq)]
 pub enum CreateChannelError {
@@ -4350,6 +5154,118 @@ impl Error for CreateInputSecurityGroupError {
             }
             CreateInputSecurityGroupError::ParseError(ref cause) => cause,
             CreateInputSecurityGroupError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by CreateTags
+#[derive(Debug, PartialEq)]
+pub enum CreateTagsError {
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for NotFoundException</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl CreateTagsError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> CreateTagsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "BadRequestException" => {
+                    return CreateTagsError::BadRequest(String::from(error_message));
+                }
+                "ForbiddenException" => {
+                    return CreateTagsError::Forbidden(String::from(error_message));
+                }
+                "InternalServerErrorException" => {
+                    return CreateTagsError::InternalServerError(String::from(error_message));
+                }
+                "NotFoundException" => {
+                    return CreateTagsError::NotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return CreateTagsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return CreateTagsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for CreateTagsError {
+    fn from(err: serde_json::error::Error) -> CreateTagsError {
+        CreateTagsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateTagsError {
+    fn from(err: CredentialsError) -> CreateTagsError {
+        CreateTagsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateTagsError {
+    fn from(err: HttpDispatchError) -> CreateTagsError {
+        CreateTagsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateTagsError {
+    fn from(err: io::Error) -> CreateTagsError {
+        CreateTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateTagsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateTagsError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateTagsError::BadRequest(ref cause) => cause,
+            CreateTagsError::Forbidden(ref cause) => cause,
+            CreateTagsError::InternalServerError(ref cause) => cause,
+            CreateTagsError::NotFound(ref cause) => cause,
+            CreateTagsError::Validation(ref cause) => cause,
+            CreateTagsError::Credentials(ref err) => err.description(),
+            CreateTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CreateTagsError::ParseError(ref cause) => cause,
+            CreateTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4898,6 +5814,118 @@ impl Error for DeleteReservationError {
             }
             DeleteReservationError::ParseError(ref cause) => cause,
             DeleteReservationError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DeleteTags
+#[derive(Debug, PartialEq)]
+pub enum DeleteTagsError {
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for NotFoundException</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DeleteTagsError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteTagsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "BadRequestException" => {
+                    return DeleteTagsError::BadRequest(String::from(error_message));
+                }
+                "ForbiddenException" => {
+                    return DeleteTagsError::Forbidden(String::from(error_message));
+                }
+                "InternalServerErrorException" => {
+                    return DeleteTagsError::InternalServerError(String::from(error_message));
+                }
+                "NotFoundException" => {
+                    return DeleteTagsError::NotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return DeleteTagsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DeleteTagsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteTagsError {
+    fn from(err: serde_json::error::Error) -> DeleteTagsError {
+        DeleteTagsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteTagsError {
+    fn from(err: CredentialsError) -> DeleteTagsError {
+        DeleteTagsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteTagsError {
+    fn from(err: HttpDispatchError) -> DeleteTagsError {
+        DeleteTagsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteTagsError {
+    fn from(err: io::Error) -> DeleteTagsError {
+        DeleteTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteTagsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteTagsError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteTagsError::BadRequest(ref cause) => cause,
+            DeleteTagsError::Forbidden(ref cause) => cause,
+            DeleteTagsError::InternalServerError(ref cause) => cause,
+            DeleteTagsError::NotFound(ref cause) => cause,
+            DeleteTagsError::Validation(ref cause) => cause,
+            DeleteTagsError::Credentials(ref err) => err.description(),
+            DeleteTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteTagsError::ParseError(ref cause) => cause,
+            DeleteTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5563,6 +6591,136 @@ impl Error for DescribeReservationError {
         }
     }
 }
+/// Errors returned by DescribeSchedule
+#[derive(Debug, PartialEq)]
+pub enum DescribeScheduleError {
+    /// <p>Placeholder documentation for BadGatewayException</p>
+    BadGateway(String),
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for GatewayTimeoutException</p>
+    GatewayTimeout(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for NotFoundException</p>
+    NotFound(String),
+    /// <p>Placeholder documentation for TooManyRequestsException</p>
+    TooManyRequests(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DescribeScheduleError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeScheduleError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "BadGatewayException" => {
+                    return DescribeScheduleError::BadGateway(String::from(error_message));
+                }
+                "BadRequestException" => {
+                    return DescribeScheduleError::BadRequest(String::from(error_message));
+                }
+                "ForbiddenException" => {
+                    return DescribeScheduleError::Forbidden(String::from(error_message));
+                }
+                "GatewayTimeoutException" => {
+                    return DescribeScheduleError::GatewayTimeout(String::from(error_message));
+                }
+                "InternalServerErrorException" => {
+                    return DescribeScheduleError::InternalServerError(String::from(error_message));
+                }
+                "NotFoundException" => {
+                    return DescribeScheduleError::NotFound(String::from(error_message));
+                }
+                "TooManyRequestsException" => {
+                    return DescribeScheduleError::TooManyRequests(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return DescribeScheduleError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DescribeScheduleError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeScheduleError {
+    fn from(err: serde_json::error::Error) -> DescribeScheduleError {
+        DescribeScheduleError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeScheduleError {
+    fn from(err: CredentialsError) -> DescribeScheduleError {
+        DescribeScheduleError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeScheduleError {
+    fn from(err: HttpDispatchError) -> DescribeScheduleError {
+        DescribeScheduleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeScheduleError {
+    fn from(err: io::Error) -> DescribeScheduleError {
+        DescribeScheduleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeScheduleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeScheduleError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeScheduleError::BadGateway(ref cause) => cause,
+            DescribeScheduleError::BadRequest(ref cause) => cause,
+            DescribeScheduleError::Forbidden(ref cause) => cause,
+            DescribeScheduleError::GatewayTimeout(ref cause) => cause,
+            DescribeScheduleError::InternalServerError(ref cause) => cause,
+            DescribeScheduleError::NotFound(ref cause) => cause,
+            DescribeScheduleError::TooManyRequests(ref cause) => cause,
+            DescribeScheduleError::Validation(ref cause) => cause,
+            DescribeScheduleError::Credentials(ref err) => err.description(),
+            DescribeScheduleError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DescribeScheduleError::ParseError(ref cause) => cause,
+            DescribeScheduleError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by ListChannels
 #[derive(Debug, PartialEq)]
 pub enum ListChannelsError {
@@ -6186,6 +7344,122 @@ impl Error for ListReservationsError {
             ListReservationsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             ListReservationsError::ParseError(ref cause) => cause,
             ListReservationsError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>Placeholder documentation for BadRequestException</p>
+    BadRequest(String),
+    /// <p>Placeholder documentation for ForbiddenException</p>
+    Forbidden(String),
+    /// <p>Placeholder documentation for InternalServerErrorException</p>
+    InternalServerError(String),
+    /// <p>Placeholder documentation for NotFoundException</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListTagsForResourceError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "BadRequestException" => {
+                    return ListTagsForResourceError::BadRequest(String::from(error_message));
+                }
+                "ForbiddenException" => {
+                    return ListTagsForResourceError::Forbidden(String::from(error_message));
+                }
+                "InternalServerErrorException" => {
+                    return ListTagsForResourceError::InternalServerError(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return ListTagsForResourceError::NotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return ListTagsForResourceError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ListTagsForResourceError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListTagsForResourceError {
+    fn from(err: serde_json::error::Error) -> ListTagsForResourceError {
+        ListTagsForResourceError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListTagsForResourceError {
+    fn from(err: CredentialsError) -> ListTagsForResourceError {
+        ListTagsForResourceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListTagsForResourceError {
+    fn from(err: HttpDispatchError) -> ListTagsForResourceError {
+        ListTagsForResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTagsForResourceError {
+    fn from(err: io::Error) -> ListTagsForResourceError {
+        ListTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTagsForResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTagsForResourceError::BadRequest(ref cause) => cause,
+            ListTagsForResourceError::Forbidden(ref cause) => cause,
+            ListTagsForResourceError::InternalServerError(ref cause) => cause,
+            ListTagsForResourceError::NotFound(ref cause) => cause,
+            ListTagsForResourceError::Validation(ref cause) => cause,
+            ListTagsForResourceError::Credentials(ref err) => err.description(),
+            ListTagsForResourceError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListTagsForResourceError::ParseError(ref cause) => cause,
+            ListTagsForResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6995,6 +8269,12 @@ impl Error for UpdateInputSecurityGroupError {
 }
 /// Trait representing the capabilities of the MediaLive API. MediaLive clients implement this trait.
 pub trait MediaLive {
+    /// <p>Update a channel schedule</p>
+    fn batch_update_schedule(
+        &self,
+        input: BatchUpdateScheduleRequest,
+    ) -> RusotoFuture<BatchUpdateScheduleResponse, BatchUpdateScheduleError>;
+
     /// <p>Creates a new channel</p>
     fn create_channel(
         &self,
@@ -7012,6 +8292,9 @@ pub trait MediaLive {
         &self,
         input: CreateInputSecurityGroupRequest,
     ) -> RusotoFuture<CreateInputSecurityGroupResponse, CreateInputSecurityGroupError>;
+
+    /// <p>Create tags for a resource</p>
+    fn create_tags(&self, input: CreateTagsRequest) -> RusotoFuture<(), CreateTagsError>;
 
     /// <p>Starts deletion of channel. The associated outputs are also deleted.</p>
     fn delete_channel(
@@ -7036,6 +8319,9 @@ pub trait MediaLive {
         &self,
         input: DeleteReservationRequest,
     ) -> RusotoFuture<DeleteReservationResponse, DeleteReservationError>;
+
+    /// <p>Removes tags for a resource</p>
+    fn delete_tags(&self, input: DeleteTagsRequest) -> RusotoFuture<(), DeleteTagsError>;
 
     /// <p>Gets details about a channel</p>
     fn describe_channel(
@@ -7067,6 +8353,12 @@ pub trait MediaLive {
         input: DescribeReservationRequest,
     ) -> RusotoFuture<DescribeReservationResponse, DescribeReservationError>;
 
+    /// <p>Get a channel schedule</p>
+    fn describe_schedule(
+        &self,
+        input: DescribeScheduleRequest,
+    ) -> RusotoFuture<DescribeScheduleResponse, DescribeScheduleError>;
+
     /// <p>Produces list of channels that have been created</p>
     fn list_channels(
         &self,
@@ -7096,6 +8388,12 @@ pub trait MediaLive {
         &self,
         input: ListReservationsRequest,
     ) -> RusotoFuture<ListReservationsResponse, ListReservationsError>;
+
+    /// <p>Produces list of tags that have been created for a resource</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
 
     /// <p>Purchase an offering and create a reservation.</p>
     fn purchase_offering(
@@ -7170,6 +8468,48 @@ impl MediaLiveClient {
 }
 
 impl MediaLive for MediaLiveClient {
+    /// <p>Update a channel schedule</p>
+    fn batch_update_schedule(
+        &self,
+        input: BatchUpdateScheduleRequest,
+    ) -> RusotoFuture<BatchUpdateScheduleResponse, BatchUpdateScheduleError> {
+        let request_uri = format!(
+            "/prod/channels/{channel_id}/schedule",
+            channel_id = input.channel_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<BatchUpdateScheduleResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(BatchUpdateScheduleError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>Creates a new channel</p>
     fn create_channel(
         &self,
@@ -7281,6 +8621,37 @@ impl MediaLive for MediaLiveClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(CreateInputSecurityGroupError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p>Create tags for a resource</p>
+    fn create_tags(&self, input: CreateTagsRequest) -> RusotoFuture<(), CreateTagsError> {
+        let request_uri = format!(
+            "/prod/tags/{resource_arn}",
+            resource_arn = input.resource_arn
+        );
+
+        let mut request = SignedRequest::new("POST", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 204 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateTagsError::from_response(response))),
+                )
             }
         })
     }
@@ -7429,6 +8800,40 @@ impl MediaLive for MediaLiveClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(DeleteReservationError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Removes tags for a resource</p>
+    fn delete_tags(&self, input: DeleteTagsRequest) -> RusotoFuture<(), DeleteTagsError> {
+        let request_uri = format!(
+            "/prod/tags/{resource_arn}",
+            resource_arn = input.resource_arn
+        );
+
+        let mut request = SignedRequest::new("DELETE", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        for item in input.tag_keys.iter() {
+            params.put("tagKeys", item);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 204 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteTagsError::from_response(response))),
                 )
             }
         })
@@ -7617,6 +9022,54 @@ impl MediaLive for MediaLiveClient {
                     response.buffer().from_err().and_then(|response| {
                         Err(DescribeReservationError::from_response(response))
                     }),
+                )
+            }
+        })
+    }
+
+    /// <p>Get a channel schedule</p>
+    fn describe_schedule(
+        &self,
+        input: DescribeScheduleRequest,
+    ) -> RusotoFuture<DescribeScheduleResponse, DescribeScheduleError> {
+        let request_uri = format!(
+            "/prod/channels/{channel_id}/schedule",
+            channel_id = input.channel_id
+        );
+
+        let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DescribeScheduleResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeScheduleError::from_response(response))),
                 )
             }
         })
@@ -7885,6 +9338,45 @@ impl MediaLive for MediaLiveClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(ListReservationsError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Produces list of tags that have been created for a resource</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+        let request_uri = format!(
+            "/prod/tags/{resource_arn}",
+            resource_arn = input.resource_arn
+        );
+
+        let mut request = SignedRequest::new("GET", "medialive", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListTagsForResourceResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTagsForResourceError::from_response(response))
+                    }),
                 )
             }
         })

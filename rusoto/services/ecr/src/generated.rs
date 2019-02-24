@@ -175,6 +175,10 @@ pub struct CreateRepositoryRequest {
     /// <p>The name to use for the repository. The repository name may be specified on its own (such as <code>nginx-web-app</code>) or it can be prepended with a namespace to group the repository into a category (such as <code>project-a/nginx-web-app</code>).</p>
     #[serde(rename = "repositoryName")]
     pub repository_name: String,
+    /// <p><p/></p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -289,7 +293,7 @@ pub struct DescribeImagesRequest {
     #[serde(rename = "imageIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_ids: Option<Vec<ImageIdentifier>>,
-    /// <p>The maximum number of repository results returned by <code>DescribeImages</code> in paginated output. When this parameter is used, <code>DescribeImages</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeImages</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>DescribeImages</code> returns up to 100 results and a <code>nextToken</code> value, if applicable. This option cannot be used when you specify images with <code>imageIds</code>.</p>
+    /// <p>The maximum number of repository results returned by <code>DescribeImages</code> in paginated output. When this parameter is used, <code>DescribeImages</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeImages</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 1000. If this parameter is not used, then <code>DescribeImages</code> returns up to 100 results and a <code>nextToken</code> value, if applicable. This option cannot be used when you specify images with <code>imageIds</code>.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -301,7 +305,7 @@ pub struct DescribeImagesRequest {
     #[serde(rename = "registryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub registry_id: Option<String>,
-    /// <p>A list of repositories to describe. If this parameter is omitted, then all repositories in a registry are described.</p>
+    /// <p>A list of repositories to describe.</p>
     #[serde(rename = "repositoryName")]
     pub repository_name: String,
 }
@@ -321,7 +325,7 @@ pub struct DescribeImagesResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeRepositoriesRequest {
-    /// <p>The maximum number of repository results returned by <code>DescribeRepositories</code> in paginated output. When this parameter is used, <code>DescribeRepositories</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeRepositories</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>DescribeRepositories</code> returns up to 100 results and a <code>nextToken</code> value, if applicable. This option cannot be used when you specify repositories with <code>repositoryNames</code>.</p>
+    /// <p>The maximum number of repository results returned by <code>DescribeRepositories</code> in paginated output. When this parameter is used, <code>DescribeRepositories</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>DescribeRepositories</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 1000. If this parameter is not used, then <code>DescribeRepositories</code> returns up to 100 results and a <code>nextToken</code> value, if applicable. This option cannot be used when you specify repositories with <code>repositoryNames</code>.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -406,7 +410,7 @@ pub struct GetLifecyclePolicyPreviewRequest {
     #[serde(rename = "imageIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image_ids: Option<Vec<ImageIdentifier>>,
-    /// <p>The maximum number of repository results returned by <code>GetLifecyclePolicyPreviewRequest</code> in&#x2028; paginated output. When this parameter is used, <code>GetLifecyclePolicyPreviewRequest</code> only returns&#x2028; <code>maxResults</code> results in a single page along with a <code>nextToken</code>&#x2028; response element. The remaining results of the initial request can be seen by sending&#x2028; another <code>GetLifecyclePolicyPreviewRequest</code> request with the returned <code>nextToken</code>&#x2028; value. This value can be between 1 and 100. If this&#x2028; parameter is not used, then <code>GetLifecyclePolicyPreviewRequest</code> returns up to&#x2028; 100 results and a <code>nextToken</code> value, if&#x2028; applicable. This option cannot be used when you specify images with <code>imageIds</code>.</p>
+    /// <p>The maximum number of repository results returned by <code>GetLifecyclePolicyPreviewRequest</code> in&#x2028; paginated output. When this parameter is used, <code>GetLifecyclePolicyPreviewRequest</code> only returns&#x2028; <code>maxResults</code> results in a single page along with a <code>nextToken</code>&#x2028; response element. The remaining results of the initial request can be seen by sending&#x2028; another <code>GetLifecyclePolicyPreviewRequest</code> request with the returned <code>nextToken</code>&#x2028; value. This value can be between 1 and 1000. If this&#x2028; parameter is not used, then <code>GetLifecyclePolicyPreviewRequest</code> returns up to&#x2028; 100 results and a <code>nextToken</code> value, if&#x2028; applicable. This option cannot be used when you specify images with <code>imageIds</code>.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -733,7 +737,7 @@ pub struct ListImagesRequest {
     #[serde(rename = "filter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<ListImagesFilter>,
-    /// <p>The maximum number of image results returned by <code>ListImages</code> in paginated output. When this parameter is used, <code>ListImages</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListImages</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 100. If this parameter is not used, then <code>ListImages</code> returns up to 100 results and a <code>nextToken</code> value, if applicable.</p>
+    /// <p>The maximum number of image results returned by <code>ListImages</code> in paginated output. When this parameter is used, <code>ListImages</code> only returns <code>maxResults</code> results in a single page along with a <code>nextToken</code> response element. The remaining results of the initial request can be seen by sending another <code>ListImages</code> request with the returned <code>nextToken</code> value. This value can be between 1 and 1000. If this parameter is not used, then <code>ListImages</code> returns up to 100 results and a <code>nextToken</code> value, if applicable.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -761,6 +765,22 @@ pub struct ListImagesResponse {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListTagsForResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) that identifies the resource for which to list the tags. Currently, the only supported resource is an Amazon ECR repository.</p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListTagsForResourceResponse {
+    /// <p>The tags for the resource.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -917,6 +937,47 @@ pub struct StartLifecyclePolicyPreviewResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
 }
+
+/// <p>The metadata that you apply to a resource to help you categorize and organize them. Each tag consists of a key and an optional value, both of which you define. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Tag {
+    /// <p>One part of a key-value pair that make up a tag. A <code>key</code> is a general label that acts like a category for more specific tag values.</p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    /// <p>The optional part of a key-value pair that make up a tag. A <code>value</code> acts as a descriptor within a tag category (key).</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the the resource to which to add tags. Currently, the only supported resource is an Amazon ECR repository.</p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+    /// <p>The tags to add to the resource. A tag is an array of key-value pairs. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
+    #[serde(rename = "tags")]
+    pub tags: Vec<Tag>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TagResourceResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UntagResourceRequest {
+    /// <p>The Amazon Resource Name (ARN) of the resource from which to remove tags. Currently, the only supported resource is an Amazon ECR repository.</p>
+    #[serde(rename = "resourceArn")]
+    pub resource_arn: String,
+    /// <p>The keys of the tags to be removed.</p>
+    #[serde(rename = "tagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UntagResourceResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UploadLayerPartRequest {
@@ -1376,12 +1437,16 @@ impl Error for CompleteLayerUploadError {
 pub enum CreateRepositoryError {
     /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
     InvalidParameter(String),
+    /// <p>An invalid parameter has been specified. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
+    InvalidTagParameter(String),
     /// <p>The operation did not succeed because it would have exceeded a service limit for your account. For more information, see <a href="http://docs.aws.amazon.com/AmazonECR/latest/userguide/service_limits.html">Amazon ECR Default Service Limits</a> in the Amazon Elastic Container Registry User Guide.</p>
     LimitExceeded(String),
     /// <p>The specified repository already exists in the specified registry.</p>
     RepositoryAlreadyExists(String),
     /// <p>These errors are usually caused by a server-side issue.</p>
     Server(String),
+    /// <p>The list of tags on the repository is over the limit. The maximum number of tags that can be applied to a repository is 50.</p>
+    TooManyTags(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1410,6 +1475,9 @@ impl CreateRepositoryError {
                 "InvalidParameterException" => {
                     return CreateRepositoryError::InvalidParameter(String::from(error_message));
                 }
+                "InvalidTagParameterException" => {
+                    return CreateRepositoryError::InvalidTagParameter(String::from(error_message));
+                }
                 "LimitExceededException" => {
                     return CreateRepositoryError::LimitExceeded(String::from(error_message));
                 }
@@ -1420,6 +1488,9 @@ impl CreateRepositoryError {
                 }
                 "ServerException" => {
                     return CreateRepositoryError::Server(String::from(error_message));
+                }
+                "TooManyTagsException" => {
+                    return CreateRepositoryError::TooManyTags(String::from(error_message));
                 }
                 "ValidationException" => {
                     return CreateRepositoryError::Validation(error_message.to_string());
@@ -1460,9 +1531,11 @@ impl Error for CreateRepositoryError {
     fn description(&self) -> &str {
         match *self {
             CreateRepositoryError::InvalidParameter(ref cause) => cause,
+            CreateRepositoryError::InvalidTagParameter(ref cause) => cause,
             CreateRepositoryError::LimitExceeded(ref cause) => cause,
             CreateRepositoryError::RepositoryAlreadyExists(ref cause) => cause,
             CreateRepositoryError::Server(ref cause) => cause,
+            CreateRepositoryError::TooManyTags(ref cause) => cause,
             CreateRepositoryError::Validation(ref cause) => cause,
             CreateRepositoryError::Credentials(ref err) => err.description(),
             CreateRepositoryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -2667,6 +2740,100 @@ impl Error for ListImagesError {
         }
     }
 }
+/// Errors returned by ListTagsForResource
+#[derive(Debug, PartialEq)]
+pub enum ListTagsForResourceError {
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
+    RepositoryNotFound(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListTagsForResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> ListTagsForResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InvalidParameterException" => {
+                    return ListTagsForResourceError::InvalidParameter(String::from(error_message));
+                }
+                "RepositoryNotFoundException" => {
+                    return ListTagsForResourceError::RepositoryNotFound(String::from(error_message));
+                }
+                "ServerException" => {
+                    return ListTagsForResourceError::Server(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return ListTagsForResourceError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ListTagsForResourceError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListTagsForResourceError {
+    fn from(err: serde_json::error::Error) -> ListTagsForResourceError {
+        ListTagsForResourceError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListTagsForResourceError {
+    fn from(err: CredentialsError) -> ListTagsForResourceError {
+        ListTagsForResourceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListTagsForResourceError {
+    fn from(err: HttpDispatchError) -> ListTagsForResourceError {
+        ListTagsForResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTagsForResourceError {
+    fn from(err: io::Error) -> ListTagsForResourceError {
+        ListTagsForResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListTagsForResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTagsForResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTagsForResourceError::InvalidParameter(ref cause) => cause,
+            ListTagsForResourceError::RepositoryNotFound(ref cause) => cause,
+            ListTagsForResourceError::Server(ref cause) => cause,
+            ListTagsForResourceError::Validation(ref cause) => cause,
+            ListTagsForResourceError::Credentials(ref err) => err.description(),
+            ListTagsForResourceError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListTagsForResourceError::ParseError(ref cause) => cause,
+            ListTagsForResourceError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by PutImage
 #[derive(Debug, PartialEq)]
 pub enum PutImageError {
@@ -3077,6 +3244,210 @@ impl Error for StartLifecyclePolicyPreviewError {
         }
     }
 }
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>An invalid parameter has been specified. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
+    InvalidTagParameter(String),
+    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
+    RepositoryNotFound(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+    /// <p>The list of tags on the repository is over the limit. The maximum number of tags that can be applied to a repository is 50.</p>
+    TooManyTags(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> TagResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InvalidParameterException" => {
+                    return TagResourceError::InvalidParameter(String::from(error_message));
+                }
+                "InvalidTagParameterException" => {
+                    return TagResourceError::InvalidTagParameter(String::from(error_message));
+                }
+                "RepositoryNotFoundException" => {
+                    return TagResourceError::RepositoryNotFound(String::from(error_message));
+                }
+                "ServerException" => return TagResourceError::Server(String::from(error_message)),
+                "TooManyTagsException" => {
+                    return TagResourceError::TooManyTags(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return TagResourceError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return TagResourceError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for TagResourceError {
+    fn from(err: serde_json::error::Error) -> TagResourceError {
+        TagResourceError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for TagResourceError {
+    fn from(err: CredentialsError) -> TagResourceError {
+        TagResourceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for TagResourceError {
+    fn from(err: HttpDispatchError) -> TagResourceError {
+        TagResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for TagResourceError {
+    fn from(err: io::Error) -> TagResourceError {
+        TagResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for TagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            TagResourceError::InvalidParameter(ref cause) => cause,
+            TagResourceError::InvalidTagParameter(ref cause) => cause,
+            TagResourceError::RepositoryNotFound(ref cause) => cause,
+            TagResourceError::Server(ref cause) => cause,
+            TagResourceError::TooManyTags(ref cause) => cause,
+            TagResourceError::Validation(ref cause) => cause,
+            TagResourceError::Credentials(ref err) => err.description(),
+            TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            TagResourceError::ParseError(ref cause) => cause,
+            TagResourceError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>The specified parameter is invalid. Review the available parameters for the API request.</p>
+    InvalidParameter(String),
+    /// <p>An invalid parameter has been specified. Tag keys can have a maximum character length of 128 characters, and tag values can have a maximum length of 256 characters.</p>
+    InvalidTagParameter(String),
+    /// <p>The specified repository could not be found. Check the spelling of the specified repository and ensure that you are performing operations on the correct registry.</p>
+    RepositoryNotFound(String),
+    /// <p>These errors are usually caused by a server-side issue.</p>
+    Server(String),
+    /// <p>The list of tags on the repository is over the limit. The maximum number of tags that can be applied to a repository is 50.</p>
+    TooManyTags(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> UntagResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InvalidParameterException" => {
+                    return UntagResourceError::InvalidParameter(String::from(error_message));
+                }
+                "InvalidTagParameterException" => {
+                    return UntagResourceError::InvalidTagParameter(String::from(error_message));
+                }
+                "RepositoryNotFoundException" => {
+                    return UntagResourceError::RepositoryNotFound(String::from(error_message));
+                }
+                "ServerException" => return UntagResourceError::Server(String::from(error_message)),
+                "TooManyTagsException" => {
+                    return UntagResourceError::TooManyTags(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return UntagResourceError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return UntagResourceError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for UntagResourceError {
+    fn from(err: serde_json::error::Error) -> UntagResourceError {
+        UntagResourceError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UntagResourceError {
+    fn from(err: CredentialsError) -> UntagResourceError {
+        UntagResourceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UntagResourceError {
+    fn from(err: HttpDispatchError) -> UntagResourceError {
+        UntagResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UntagResourceError {
+    fn from(err: io::Error) -> UntagResourceError {
+        UntagResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UntagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UntagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            UntagResourceError::InvalidParameter(ref cause) => cause,
+            UntagResourceError::InvalidTagParameter(ref cause) => cause,
+            UntagResourceError::RepositoryNotFound(ref cause) => cause,
+            UntagResourceError::Server(ref cause) => cause,
+            UntagResourceError::TooManyTags(ref cause) => cause,
+            UntagResourceError::Validation(ref cause) => cause,
+            UntagResourceError::Credentials(ref err) => err.description(),
+            UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UntagResourceError::ParseError(ref cause) => cause,
+            UntagResourceError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by UploadLayerPart
 #[derive(Debug, PartialEq)]
 pub enum UploadLayerPartError {
@@ -3291,6 +3662,12 @@ pub trait Ecr {
         input: ListImagesRequest,
     ) -> RusotoFuture<ListImagesResponse, ListImagesError>;
 
+    /// <p>List the tags for an Amazon ECR resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError>;
+
     /// <p><p>Creates or updates the image manifest and tags associated with an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn put_image(&self, input: PutImageRequest) -> RusotoFuture<PutImageResponse, PutImageError>;
 
@@ -3311,6 +3688,18 @@ pub trait Ecr {
         &self,
         input: StartLifecyclePolicyPreviewRequest,
     ) -> RusotoFuture<StartLifecyclePolicyPreviewResponse, StartLifecyclePolicyPreviewError>;
+
+    /// <p>Adds specified tags to a resource with the specified ARN. Existing tags on a resource are not changed if they are not specified in the request parameters.</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
+
+    /// <p>Deletes specified tags from a resource.</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
 
     /// <p><p>Uploads an image layer part to Amazon ECR.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn upload_layer_part(
@@ -3361,7 +3750,7 @@ impl Ecr for EcrClient {
         input: BatchCheckLayerAvailabilityRequest,
     ) -> RusotoFuture<BatchCheckLayerAvailabilityResponse, BatchCheckLayerAvailabilityError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-
+        request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -3398,7 +3787,7 @@ impl Ecr for EcrClient {
         input: BatchDeleteImageRequest,
     ) -> RusotoFuture<BatchDeleteImageResponse, BatchDeleteImageError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-
+        request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -3438,7 +3827,7 @@ impl Ecr for EcrClient {
         input: BatchGetImageRequest,
     ) -> RusotoFuture<BatchGetImageResponse, BatchGetImageError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-
+        request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -3478,7 +3867,7 @@ impl Ecr for EcrClient {
         input: CompleteLayerUploadRequest,
     ) -> RusotoFuture<CompleteLayerUploadResponse, CompleteLayerUploadError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-
+        request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -3517,7 +3906,7 @@ impl Ecr for EcrClient {
         input: CreateRepositoryRequest,
     ) -> RusotoFuture<CreateRepositoryResponse, CreateRepositoryError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-
+        request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -3557,7 +3946,7 @@ impl Ecr for EcrClient {
         input: DeleteLifecyclePolicyRequest,
     ) -> RusotoFuture<DeleteLifecyclePolicyResponse, DeleteLifecyclePolicyError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-
+        request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -3596,7 +3985,7 @@ impl Ecr for EcrClient {
         input: DeleteRepositoryRequest,
     ) -> RusotoFuture<DeleteRepositoryResponse, DeleteRepositoryError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-
+        request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -3636,7 +4025,7 @@ impl Ecr for EcrClient {
         input: DeleteRepositoryPolicyRequest,
     ) -> RusotoFuture<DeleteRepositoryPolicyResponse, DeleteRepositoryPolicyError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-
+        request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -3675,7 +4064,7 @@ impl Ecr for EcrClient {
         input: DescribeImagesRequest,
     ) -> RusotoFuture<DescribeImagesResponse, DescribeImagesError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-
+        request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -3715,7 +4104,7 @@ impl Ecr for EcrClient {
         input: DescribeRepositoriesRequest,
     ) -> RusotoFuture<DescribeRepositoriesResponse, DescribeRepositoriesError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-
+        request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -3754,7 +4143,7 @@ impl Ecr for EcrClient {
         input: GetAuthorizationTokenRequest,
     ) -> RusotoFuture<GetAuthorizationTokenResponse, GetAuthorizationTokenError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-
+        request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -3793,7 +4182,7 @@ impl Ecr for EcrClient {
         input: GetDownloadUrlForLayerRequest,
     ) -> RusotoFuture<GetDownloadUrlForLayerResponse, GetDownloadUrlForLayerError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-
+        request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -3832,7 +4221,7 @@ impl Ecr for EcrClient {
         input: GetLifecyclePolicyRequest,
     ) -> RusotoFuture<GetLifecyclePolicyResponse, GetLifecyclePolicyError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-
+        request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -3872,7 +4261,7 @@ impl Ecr for EcrClient {
         input: GetLifecyclePolicyPreviewRequest,
     ) -> RusotoFuture<GetLifecyclePolicyPreviewResponse, GetLifecyclePolicyPreviewError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-
+        request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -3909,7 +4298,7 @@ impl Ecr for EcrClient {
         input: GetRepositoryPolicyRequest,
     ) -> RusotoFuture<GetRepositoryPolicyResponse, GetRepositoryPolicyError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-
+        request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -3948,7 +4337,7 @@ impl Ecr for EcrClient {
         input: InitiateLayerUploadRequest,
     ) -> RusotoFuture<InitiateLayerUploadResponse, InitiateLayerUploadError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-
+        request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -3987,7 +4376,7 @@ impl Ecr for EcrClient {
         input: ListImagesRequest,
     ) -> RusotoFuture<ListImagesResponse, ListImagesError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-
+        request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -4021,10 +4410,49 @@ impl Ecr for EcrClient {
         })
     }
 
+    /// <p>List the tags for an Amazon ECR resource.</p>
+    fn list_tags_for_resource(
+        &self,
+        input: ListTagsForResourceRequest,
+    ) -> RusotoFuture<ListTagsForResourceResponse, ListTagsForResourceError> {
+        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        request.set_endpoint_prefix("api.ecr".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.ListTagsForResource",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ListTagsForResourceResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListTagsForResourceError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p><p>Creates or updates the image manifest and tags associated with an image.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn put_image(&self, input: PutImageRequest) -> RusotoFuture<PutImageResponse, PutImageError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-
+        request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -4064,7 +4492,7 @@ impl Ecr for EcrClient {
         input: PutLifecyclePolicyRequest,
     ) -> RusotoFuture<PutLifecyclePolicyResponse, PutLifecyclePolicyError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-
+        request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -4104,7 +4532,7 @@ impl Ecr for EcrClient {
         input: SetRepositoryPolicyRequest,
     ) -> RusotoFuture<SetRepositoryPolicyResponse, SetRepositoryPolicyError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-
+        request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -4143,7 +4571,7 @@ impl Ecr for EcrClient {
         input: StartLifecyclePolicyPreviewRequest,
     ) -> RusotoFuture<StartLifecyclePolicyPreviewResponse, StartLifecyclePolicyPreviewError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-
+        request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",
@@ -4174,13 +4602,93 @@ impl Ecr for EcrClient {
         })
     }
 
+    /// <p>Adds specified tags to a resource with the specified ARN. Existing tags on a resource are not changed if they are not specified in the request parameters.</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> RusotoFuture<TagResourceResponse, TagResourceError> {
+        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        request.set_endpoint_prefix("api.ecr".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.TagResource",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<TagResourceResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Deletes specified tags from a resource.</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> RusotoFuture<UntagResourceResponse, UntagResourceError> {
+        let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
+        request.set_endpoint_prefix("api.ecr".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AmazonEC2ContainerRegistry_V20150921.UntagResource",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<UntagResourceResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p><p>Uploads an image layer part to Amazon ECR.</p> <note> <p>This operation is used by the Amazon ECR proxy, and it is not intended for general use by customers for pulling and pushing images. In most cases, you should use the <code>docker</code> CLI to pull, tag, and push images.</p> </note></p>
     fn upload_layer_part(
         &self,
         input: UploadLayerPartRequest,
     ) -> RusotoFuture<UploadLayerPartResponse, UploadLayerPartError> {
         let mut request = SignedRequest::new("POST", "ecr", &self.region, "/");
-
+        request.set_endpoint_prefix("api.ecr".to_string());
         request.set_content_type("application/x-amz-json-1.1".to_owned());
         request.add_header(
             "x-amz-target",

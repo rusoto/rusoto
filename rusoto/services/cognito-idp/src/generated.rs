@@ -1157,14 +1157,14 @@ pub struct CreateUserPoolClientRequest {
     #[serde(rename = "AnalyticsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub analytics_configuration: Option<AnalyticsConfigurationType>,
-    /// <p>A list of allowed redirect (callback) URLs for the identity providers.</p> <p>A redirect URI must:</p> <ul> <li> <p>Be an absolute URI.</p> </li> <li> <p>Be registered with the authorization server.</p> </li> <li> <p>Not use HTTP without TLS (i.e. use HTTPS instead of HTTP).</p> </li> <li> <p>Not include a fragment component.</p> </li> </ul> <p>See <a href="https://tools.ietf.org/html/rfc6749#section-3.1.2">OAuth 2.0 - Redirection Endpoint</a>.</p>
+    /// <p>A list of allowed redirect (callback) URLs for the identity providers.</p> <p>A redirect URI must:</p> <ul> <li> <p>Be an absolute URI.</p> </li> <li> <p>Be registered with the authorization server.</p> </li> <li> <p>Not include a fragment component.</p> </li> </ul> <p>See <a href="https://tools.ietf.org/html/rfc6749#section-3.1.2">OAuth 2.0 - Redirection Endpoint</a>.</p> <p>Amazon Cognito requires HTTPS over HTTP except for http://localhost for testing purposes only.</p> <p>App callback URLs such as myapp://example are also supported.</p>
     #[serde(rename = "CallbackURLs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub callback_ur_ls: Option<Vec<String>>,
     /// <p>The client name for the user pool client you would like to create.</p>
     #[serde(rename = "ClientName")]
     pub client_name: String,
-    /// <p>The default redirect URI. Must be in the <code>CallbackURLs</code> list.</p> <p>A redirect URI must:</p> <ul> <li> <p>Be an absolute URI.</p> </li> <li> <p>Be registered with the authorization server.</p> </li> <li> <p>Not use HTTP without TLS (i.e. use HTTPS instead of HTTP).</p> </li> <li> <p>Not include a fragment component.</p> </li> </ul> <p>See <a href="https://tools.ietf.org/html/rfc6749#section-3.1.2">OAuth 2.0 - Redirection Endpoint</a>.</p>
+    /// <p>The default redirect URI. Must be in the <code>CallbackURLs</code> list.</p> <p>A redirect URI must:</p> <ul> <li> <p>Be an absolute URI.</p> </li> <li> <p>Be registered with the authorization server.</p> </li> <li> <p>Not include a fragment component.</p> </li> </ul> <p>See <a href="https://tools.ietf.org/html/rfc6749#section-3.1.2">OAuth 2.0 - Redirection Endpoint</a>.</p> <p>Amazon Cognito requires HTTPS over HTTP except for http://localhost for testing purposes only.</p> <p>App callback URLs such as myapp://example are also supported.</p>
     #[serde(rename = "DefaultRedirectURI")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_redirect_uri: Option<String>,
@@ -1195,7 +1195,7 @@ pub struct CreateUserPoolClientRequest {
     /// <p>The user pool ID for the user pool where you want to create a user pool client.</p>
     #[serde(rename = "UserPoolId")]
     pub user_pool_id: String,
-    /// <p>The write attributes.</p>
+    /// <p>The user pool attributes that the app client can write to.</p> <p>If your app client allows users to sign in through an identity provider, this array must include all attributes that are mapped to identity provider attributes. Amazon Cognito updates mapped attributes when users sign in to your application through an identity provider. If your app client lacks write access to a mapped attribute, Amazon Cognito throws an error when it attempts to update the attribute. For more information, see <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-specifying-attribute-mapping.html">Specifying Identity Provider Attribute Mappings for Your User Pool</a>.</p>
     #[serde(rename = "WriteAttributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub write_attributes: Option<Vec<String>>,
@@ -1213,6 +1213,10 @@ pub struct CreateUserPoolClientResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateUserPoolDomainRequest {
+    /// <p>The configuration for a custom domain that hosts the sign-up and sign-in webpages for your application.</p> <p>Provide this parameter only if you want to use a custom domain for your user pool. Otherwise, you can exclude this parameter and use the Amazon Cognito hosted domain instead.</p> <p>For more information about the hosted domain and custom domains, see <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-assign-domain.html">Configuring a User Pool Domain</a>.</p>
+    #[serde(rename = "CustomDomainConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_domain_config: Option<CustomDomainConfigType>,
     /// <p>The domain string.</p>
     #[serde(rename = "Domain")]
     pub domain: String,
@@ -1223,7 +1227,12 @@ pub struct CreateUserPoolDomainRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreateUserPoolDomainResponse {}
+pub struct CreateUserPoolDomainResponse {
+    /// <p>The Amazon CloudFront endpoint that you use as the target of the alias that you set up with your Domain Name Service (DNS) provider.</p>
+    #[serde(rename = "CloudFrontDomain")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_front_domain: Option<String>,
+}
 
 /// <p>Represents the request to create a user pool.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1313,6 +1322,14 @@ pub struct CreateUserPoolResponse {
     #[serde(rename = "UserPool")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool: Option<UserPoolType>,
+}
+
+/// <p>The configuration for a custom domain that hosts the sign-up and sign-in webpages for your application.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CustomDomainConfigType {
+    /// <p>The Amazon Resource Name (ARN) of an AWS Certificate Manager SSL certificate. You use this certificate for the subdomain of your custom domain.</p>
+    #[serde(rename = "CertificateArn")]
+    pub certificate_arn: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1597,6 +1614,9 @@ pub struct DomainDescriptionType {
     #[serde(rename = "CloudFrontDistribution")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_front_distribution: Option<String>,
+    #[serde(rename = "CustomDomainConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_domain_config: Option<CustomDomainConfigType>,
     /// <p>The domain string.</p>
     #[serde(rename = "Domain")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2354,7 +2374,7 @@ pub struct ListUsersRequest {
     #[serde(rename = "AttributesToGet")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes_to_get: Option<Vec<String>>,
-    /// <p>A filter string of the form "<i>AttributeName</i> <i>Filter-Type</i> "<i>AttributeValue</i>"". Quotation marks within the filter string must be escaped using the backslash (\) character. For example, "<code>family_name</code> = \"Reddy\"".</p> <ul> <li> <p> <i>AttributeName</i>: The name of the attribute to search for. You can only search for one attribute at a time.</p> </li> <li> <p> <i>Filter-Type</i>: For an exact match, use =, for example, "<code>given_name</code> = \"Jon\"". For a prefix ("starts with") match, use ^=, for example, "<code>given_name</code> ^= \"Jon\"". </p> </li> <li> <p> <i>AttributeValue</i>: The attribute value that must be matched for each user.</p> </li> </ul> <p>If the filter string is empty, <code>ListUsers</code> returns all users in the user pool.</p> <p>You can only search for the following standard attributes:</p> <ul> <li> <p> <code>username</code> (case-sensitive)</p> </li> <li> <p> <code>email</code> </p> </li> <li> <p> <code>phone_number</code> </p> </li> <li> <p> <code>name</code> </p> </li> <li> <p> <code>given_name</code> </p> </li> <li> <p> <code>family_name</code> </p> </li> <li> <p> <code>preferred_username</code> </p> </li> <li> <p> <code>cognito:user_status</code> (called <b>Enabled</b> in the Console) (case-sensitive)</p> </li> <li> <p> <code>status</code> (case-insensitive)</p> </li> <li> <p> <code>sub</code> </p> </li> </ul> <p>Custom attributes are not searchable.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/how-to-manage-user-accounts.html#cognito-user-pools-searching-for-users-using-listusers-api">Searching for Users Using the ListUsers API</a> and <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/how-to-manage-user-accounts.html#cognito-user-pools-searching-for-users-listusers-api-examples">Examples of Using the ListUsers API</a> in the <i>Amazon Cognito Developer Guide</i>.</p>
+    /// <p>A filter string of the form "<i>AttributeName</i> <i>Filter-Type</i> "<i>AttributeValue</i>"". Quotation marks within the filter string must be escaped using the backslash (\) character. For example, "<code>family_name</code> = \"Reddy\"".</p> <ul> <li> <p> <i>AttributeName</i>: The name of the attribute to search for. You can only search for one attribute at a time.</p> </li> <li> <p> <i>Filter-Type</i>: For an exact match, use =, for example, "<code>given_name</code> = \"Jon\"". For a prefix ("starts with") match, use ^=, for example, "<code>given_name</code> ^= \"Jon\"". </p> </li> <li> <p> <i>AttributeValue</i>: The attribute value that must be matched for each user.</p> </li> </ul> <p>If the filter string is empty, <code>ListUsers</code> returns all users in the user pool.</p> <p>You can only search for the following standard attributes:</p> <ul> <li> <p> <code>username</code> (case-sensitive)</p> </li> <li> <p> <code>email</code> </p> </li> <li> <p> <code>phone_number</code> </p> </li> <li> <p> <code>name</code> </p> </li> <li> <p> <code>given_name</code> </p> </li> <li> <p> <code>family_name</code> </p> </li> <li> <p> <code>preferred_username</code> </p> </li> <li> <p> <code>cognito:user_status</code> (called <b>Status</b> in the Console) (case-insensitive)</p> </li> <li> <p> <code>status (called <b>Enabled</b> in the Console) (case-sensitive)</code> </p> </li> <li> <p> <code>sub</code> </p> </li> </ul> <p>Custom attributes are not searchable.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/how-to-manage-user-accounts.html#cognito-user-pools-searching-for-users-using-listusers-api">Searching for Users Using the ListUsers API</a> and <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/how-to-manage-user-accounts.html#cognito-user-pools-searching-for-users-listusers-api-examples">Examples of Using the ListUsers API</a> in the <i>Amazon Cognito Developer Guide</i>.</p>
     #[serde(rename = "Filter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filter: Option<String>,
@@ -2733,7 +2753,7 @@ pub struct SchemaAttributeType {
     #[serde(rename = "DeveloperOnlyAttribute")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub developer_only_attribute: Option<bool>,
-    /// <p>Specifies whether the value of the attribute can be changed.</p>
+    /// <p>Specifies whether the value of the attribute can be changed.</p> <p>For any user pool attribute that's mapped to an identity provider attribute, you must set this parameter to <code>true</code>. Amazon Cognito updates mapped attributes when users sign in to your application through an identity provider. If an attribute is immutable, Amazon Cognito throws an error when it attempts to update the attribute. For more information, see <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-specifying-attribute-mapping.html">Specifying Identity Provider Attribute Mappings for Your User Pool</a>.</p>
     #[serde(rename = "Mutable")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mutable: Option<bool>,
@@ -3245,7 +3265,7 @@ pub struct UpdateUserPoolClientRequest {
     #[serde(rename = "AnalyticsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub analytics_configuration: Option<AnalyticsConfigurationType>,
-    /// <p>A list of allowed redirect (callback) URLs for the identity providers.</p> <p>A redirect URI must:</p> <ul> <li> <p>Be an absolute URI.</p> </li> <li> <p>Be registered with the authorization server.</p> </li> <li> <p>Not use HTTP without TLS (i.e. use HTTPS instead of HTTP).</p> </li> <li> <p>Not include a fragment component.</p> </li> </ul> <p>See <a href="https://tools.ietf.org/html/rfc6749#section-3.1.2">OAuth 2.0 - Redirection Endpoint</a>.</p>
+    /// <p>A list of allowed redirect (callback) URLs for the identity providers.</p> <p>A redirect URI must:</p> <ul> <li> <p>Be an absolute URI.</p> </li> <li> <p>Be registered with the authorization server.</p> </li> <li> <p>Not include a fragment component.</p> </li> </ul> <p>See <a href="https://tools.ietf.org/html/rfc6749#section-3.1.2">OAuth 2.0 - Redirection Endpoint</a>.</p> <p>Amazon Cognito requires HTTPS over HTTP except for http://localhost for testing purposes only.</p> <p>App callback URLs such as myapp://example are also supported.</p>
     #[serde(rename = "CallbackURLs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub callback_ur_ls: Option<Vec<String>>,
@@ -3256,7 +3276,7 @@ pub struct UpdateUserPoolClientRequest {
     #[serde(rename = "ClientName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_name: Option<String>,
-    /// <p>The default redirect URI. Must be in the <code>CallbackURLs</code> list.</p> <p>A redirect URI must:</p> <ul> <li> <p>Be an absolute URI.</p> </li> <li> <p>Be registered with the authorization server.</p> </li> <li> <p>Not use HTTP without TLS (i.e. use HTTPS instead of HTTP).</p> </li> <li> <p>Not include a fragment component.</p> </li> </ul> <p>See <a href="https://tools.ietf.org/html/rfc6749#section-3.1.2">OAuth 2.0 - Redirection Endpoint</a>.</p>
+    /// <p>The default redirect URI. Must be in the <code>CallbackURLs</code> list.</p> <p>A redirect URI must:</p> <ul> <li> <p>Be an absolute URI.</p> </li> <li> <p>Be registered with the authorization server.</p> </li> <li> <p>Not include a fragment component.</p> </li> </ul> <p>See <a href="https://tools.ietf.org/html/rfc6749#section-3.1.2">OAuth 2.0 - Redirection Endpoint</a>.</p> <p>Amazon Cognito requires HTTPS over HTTP except for http://localhost for testing purposes only.</p> <p>App callback URLs such as myapp://example are also supported.</p>
     #[serde(rename = "DefaultRedirectURI")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_redirect_uri: Option<String>,
@@ -3297,6 +3317,30 @@ pub struct UpdateUserPoolClientResponse {
     #[serde(rename = "UserPoolClient")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_client: Option<UserPoolClientType>,
+}
+
+/// <p>The UpdateUserPoolDomain request input.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateUserPoolDomainRequest {
+    /// <p>The configuration for a custom domain that hosts the sign-up and sign-in pages for your application. Use this object to specify an SSL certificate that is managed by ACM.</p>
+    #[serde(rename = "CustomDomainConfig")]
+    pub custom_domain_config: CustomDomainConfigType,
+    /// <p>The domain name for the custom domain that hosts the sign-up and sign-in pages for your application. For example: <code>auth.example.com</code>. </p> <p>This string can include only lowercase letters, numbers, and hyphens. Do not use a hyphen for the first or last character. Use periods to separate subdomain names.</p>
+    #[serde(rename = "Domain")]
+    pub domain: String,
+    /// <p>The ID of the user pool that is associated with the custom domain that you are updating the certificate for.</p>
+    #[serde(rename = "UserPoolId")]
+    pub user_pool_id: String,
+}
+
+/// <p>The UpdateUserPoolDomain response output.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateUserPoolDomainResponse {
+    /// <p>The Amazon CloudFront endpoint that Amazon Cognito set up when you added the custom domain to your user pool.</p>
+    #[serde(rename = "CloudFrontDomain")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_front_domain: Option<String>,
 }
 
 /// <p>Represents the request to update the user pool.</p>
@@ -3485,7 +3529,7 @@ pub struct UserPoolClientType {
     #[serde(rename = "AnalyticsConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub analytics_configuration: Option<AnalyticsConfigurationType>,
-    /// <p>A list of allowed redirect (callback) URLs for the identity providers.</p> <p>A redirect URI must:</p> <ul> <li> <p>Be an absolute URI.</p> </li> <li> <p>Be registered with the authorization server.</p> </li> <li> <p>Not use HTTP without TLS (i.e. use HTTPS instead of HTTP).</p> </li> <li> <p>Not include a fragment component.</p> </li> </ul> <p>See <a href="https://tools.ietf.org/html/rfc6749#section-3.1.2">OAuth 2.0 - Redirection Endpoint</a>.</p>
+    /// <p>A list of allowed redirect (callback) URLs for the identity providers.</p> <p>A redirect URI must:</p> <ul> <li> <p>Be an absolute URI.</p> </li> <li> <p>Be registered with the authorization server.</p> </li> <li> <p>Not include a fragment component.</p> </li> </ul> <p>See <a href="https://tools.ietf.org/html/rfc6749#section-3.1.2">OAuth 2.0 - Redirection Endpoint</a>.</p> <p>Amazon Cognito requires HTTPS over HTTP except for http://localhost for testing purposes only.</p> <p>App callback URLs such as myapp://example are also supported.</p>
     #[serde(rename = "CallbackURLs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub callback_ur_ls: Option<Vec<String>>,
@@ -3505,7 +3549,7 @@ pub struct UserPoolClientType {
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
-    /// <p>The default redirect URI. Must be in the <code>CallbackURLs</code> list.</p> <p>A redirect URI must:</p> <ul> <li> <p>Be an absolute URI.</p> </li> <li> <p>Be registered with the authorization server.</p> </li> <li> <p>Not use HTTP without TLS (i.e. use HTTPS instead of HTTP).</p> </li> <li> <p>Not include a fragment component.</p> </li> </ul> <p>See <a href="https://tools.ietf.org/html/rfc6749#section-3.1.2">OAuth 2.0 - Redirection Endpoint</a>.</p>
+    /// <p>The default redirect URI. Must be in the <code>CallbackURLs</code> list.</p> <p>A redirect URI must:</p> <ul> <li> <p>Be an absolute URI.</p> </li> <li> <p>Be registered with the authorization server.</p> </li> <li> <p>Not include a fragment component.</p> </li> </ul> <p>See <a href="https://tools.ietf.org/html/rfc6749#section-3.1.2">OAuth 2.0 - Redirection Endpoint</a>.</p> <p>Amazon Cognito requires HTTPS over HTTP except for http://localhost for testing purposes only.</p> <p>App callback URLs such as myapp://example are also supported.</p>
     #[serde(rename = "DefaultRedirectURI")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_redirect_uri: Option<String>,
@@ -3606,6 +3650,9 @@ pub struct UserPoolType {
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
+    #[serde(rename = "CustomDomain")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_domain: Option<String>,
     /// <p>The device configuration.</p>
     #[serde(rename = "DeviceConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -8687,6 +8734,8 @@ pub enum CreateUserPoolDomainError {
     InternalError(String),
     /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
     InvalidParameter(String),
+    /// <p>This exception is thrown when a user exceeds the limit for a requested AWS resource.</p>
+    LimitExceeded(String),
     /// <p>This exception is thrown when a user is not authorized.</p>
     NotAuthorized(String),
     /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
@@ -8721,6 +8770,9 @@ impl CreateUserPoolDomainError {
                 }
                 "InvalidParameterException" => {
                     return CreateUserPoolDomainError::InvalidParameter(String::from(error_message));
+                }
+                "LimitExceededException" => {
+                    return CreateUserPoolDomainError::LimitExceeded(String::from(error_message));
                 }
                 "NotAuthorizedException" => {
                     return CreateUserPoolDomainError::NotAuthorized(String::from(error_message));
@@ -8768,6 +8820,7 @@ impl Error for CreateUserPoolDomainError {
         match *self {
             CreateUserPoolDomainError::InternalError(ref cause) => cause,
             CreateUserPoolDomainError::InvalidParameter(ref cause) => cause,
+            CreateUserPoolDomainError::LimitExceeded(ref cause) => cause,
             CreateUserPoolDomainError::NotAuthorized(ref cause) => cause,
             CreateUserPoolDomainError::ResourceNotFound(ref cause) => cause,
             CreateUserPoolDomainError::Validation(ref cause) => cause,
@@ -15488,6 +15541,112 @@ impl Error for UpdateUserPoolClientError {
         }
     }
 }
+/// Errors returned by UpdateUserPoolDomain
+#[derive(Debug, PartialEq)]
+pub enum UpdateUserPoolDomainError {
+    /// <p>This exception is thrown when Amazon Cognito encounters an internal error.</p>
+    InternalError(String),
+    /// <p>This exception is thrown when the Amazon Cognito service encounters an invalid parameter.</p>
+    InvalidParameter(String),
+    /// <p>This exception is thrown when a user is not authorized.</p>
+    NotAuthorized(String),
+    /// <p>This exception is thrown when the Amazon Cognito service cannot find the requested resource.</p>
+    ResourceNotFound(String),
+    /// <p>This exception is thrown when the user has made too many requests for a given operation.</p>
+    TooManyRequests(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl UpdateUserPoolDomainError {
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateUserPoolDomainError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalErrorException" => {
+                    return UpdateUserPoolDomainError::InternalError(String::from(error_message));
+                }
+                "InvalidParameterException" => {
+                    return UpdateUserPoolDomainError::InvalidParameter(String::from(error_message));
+                }
+                "NotAuthorizedException" => {
+                    return UpdateUserPoolDomainError::NotAuthorized(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return UpdateUserPoolDomainError::ResourceNotFound(String::from(error_message));
+                }
+                "TooManyRequestsException" => {
+                    return UpdateUserPoolDomainError::TooManyRequests(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return UpdateUserPoolDomainError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return UpdateUserPoolDomainError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateUserPoolDomainError {
+    fn from(err: serde_json::error::Error) -> UpdateUserPoolDomainError {
+        UpdateUserPoolDomainError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateUserPoolDomainError {
+    fn from(err: CredentialsError) -> UpdateUserPoolDomainError {
+        UpdateUserPoolDomainError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateUserPoolDomainError {
+    fn from(err: HttpDispatchError) -> UpdateUserPoolDomainError {
+        UpdateUserPoolDomainError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateUserPoolDomainError {
+    fn from(err: io::Error) -> UpdateUserPoolDomainError {
+        UpdateUserPoolDomainError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateUserPoolDomainError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateUserPoolDomainError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateUserPoolDomainError::InternalError(ref cause) => cause,
+            UpdateUserPoolDomainError::InvalidParameter(ref cause) => cause,
+            UpdateUserPoolDomainError::NotAuthorized(ref cause) => cause,
+            UpdateUserPoolDomainError::ResourceNotFound(ref cause) => cause,
+            UpdateUserPoolDomainError::TooManyRequests(ref cause) => cause,
+            UpdateUserPoolDomainError::Validation(ref cause) => cause,
+            UpdateUserPoolDomainError::Credentials(ref err) => err.description(),
+            UpdateUserPoolDomainError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateUserPoolDomainError::ParseError(ref cause) => cause,
+            UpdateUserPoolDomainError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by VerifySoftwareToken
 #[derive(Debug, PartialEq)]
 pub enum VerifySoftwareTokenError {
@@ -16090,7 +16249,7 @@ pub trait CognitoIdentityProvider {
         input: DescribeUserPoolRequest,
     ) -> RusotoFuture<DescribeUserPoolResponse, DescribeUserPoolError>;
 
-    /// <p>Client method for returning the configuration information and metadata of the specified user pool client.</p>
+    /// <p>Client method for returning the configuration information and metadata of the specified user pool app client.</p>
     fn describe_user_pool_client(
         &self,
         input: DescribeUserPoolClientRequest,
@@ -16318,17 +16477,23 @@ pub trait CognitoIdentityProvider {
         input: UpdateUserAttributesRequest,
     ) -> RusotoFuture<UpdateUserAttributesResponse, UpdateUserAttributesError>;
 
-    /// <p>Updates the specified user pool with the specified attributes.</p>
+    /// <p>Updates the specified user pool with the specified attributes. If you don't provide a value for an attribute, it will be set to the default value. You can get a list of the current user pool settings with .</p>
     fn update_user_pool(
         &self,
         input: UpdateUserPoolRequest,
     ) -> RusotoFuture<UpdateUserPoolResponse, UpdateUserPoolError>;
 
-    /// <p>Allows the developer to update the specified user pool client and password policy.</p>
+    /// <p>Updates the specified user pool app client with the specified attributes. If you don't provide a value for an attribute, it will be set to the default value. You can get a list of the current user pool app client settings with .</p>
     fn update_user_pool_client(
         &self,
         input: UpdateUserPoolClientRequest,
     ) -> RusotoFuture<UpdateUserPoolClientResponse, UpdateUserPoolClientError>;
+
+    /// <p>Updates the Secure Sockets Layer (SSL) certificate for the custom domain for your user pool.</p> <p>You can use this operation to provide the Amazon Resource Name (ARN) of a new certificate to Amazon Cognito. You cannot use it to change the domain for a user pool.</p> <p>A custom domain is used to host the Amazon Cognito hosted UI, which provides sign-up and sign-in pages for your application. When you set up a custom domain, you provide a certificate that you manage with AWS Certificate Manager (ACM). When necessary, you can use this operation to change the certificate that you applied to your custom domain.</p> <p>Usually, this is unnecessary following routine certificate renewal with ACM. When you renew your existing certificate in ACM, the ARN for your certificate remains the same, and your custom domain uses the new certificate automatically.</p> <p>However, if you replace your existing certificate with a new one, ACM gives the new certificate a new ARN. To apply the new certificate to your custom domain, you must provide this ARN to Amazon Cognito.</p> <p>When you add your new certificate in ACM, you must choose US East (N. Virginia) as the AWS Region.</p> <p>After you submit your request, Amazon Cognito requires up to 1 hour to distribute your new certificate to your custom domain.</p> <p>For more information about adding a custom domain to your user pool, see <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-add-custom-domain.html">Using Your Own Domain for the Hosted UI</a>.</p>
+    fn update_user_pool_domain(
+        &self,
+        input: UpdateUserPoolDomainRequest,
+    ) -> RusotoFuture<UpdateUserPoolDomainResponse, UpdateUserPoolDomainError>;
 
     /// <p>Use this API to register a user's entered TOTP code and mark the user's software token MFA status as "verified" if successful. The request takes an access token or a session string, but not both.</p>
     fn verify_software_token(
@@ -18247,7 +18412,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Client method for returning the configuration information and metadata of the specified user pool client.</p>
+    /// <p>Client method for returning the configuration information and metadata of the specified user pool app client.</p>
     fn describe_user_pool_client(
         &self,
         input: DescribeUserPoolClientRequest,
@@ -19797,7 +19962,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Updates the specified user pool with the specified attributes.</p>
+    /// <p>Updates the specified user pool with the specified attributes. If you don't provide a value for an attribute, it will be set to the default value. You can get a list of the current user pool settings with .</p>
     fn update_user_pool(
         &self,
         input: UpdateUserPoolRequest,
@@ -19837,7 +20002,7 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
         })
     }
 
-    /// <p>Allows the developer to update the specified user pool client and password policy.</p>
+    /// <p>Updates the specified user pool app client with the specified attributes. If you don't provide a value for an attribute, it will be set to the default value. You can get a list of the current user pool app client settings with .</p>
     fn update_user_pool_client(
         &self,
         input: UpdateUserPoolClientRequest,
@@ -19870,6 +20035,45 @@ impl CognitoIdentityProvider for CognitoIdentityProviderClient {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
                         Err(UpdateUserPoolClientError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Updates the Secure Sockets Layer (SSL) certificate for the custom domain for your user pool.</p> <p>You can use this operation to provide the Amazon Resource Name (ARN) of a new certificate to Amazon Cognito. You cannot use it to change the domain for a user pool.</p> <p>A custom domain is used to host the Amazon Cognito hosted UI, which provides sign-up and sign-in pages for your application. When you set up a custom domain, you provide a certificate that you manage with AWS Certificate Manager (ACM). When necessary, you can use this operation to change the certificate that you applied to your custom domain.</p> <p>Usually, this is unnecessary following routine certificate renewal with ACM. When you renew your existing certificate in ACM, the ARN for your certificate remains the same, and your custom domain uses the new certificate automatically.</p> <p>However, if you replace your existing certificate with a new one, ACM gives the new certificate a new ARN. To apply the new certificate to your custom domain, you must provide this ARN to Amazon Cognito.</p> <p>When you add your new certificate in ACM, you must choose US East (N. Virginia) as the AWS Region.</p> <p>After you submit your request, Amazon Cognito requires up to 1 hour to distribute your new certificate to your custom domain.</p> <p>For more information about adding a custom domain to your user pool, see <a href="http://docs.aws.amazon.com/cognito/latest/developerguide/cognito-user-pools-add-custom-domain.html">Using Your Own Domain for the Hosted UI</a>.</p>
+    fn update_user_pool_domain(
+        &self,
+        input: UpdateUserPoolDomainRequest,
+    ) -> RusotoFuture<UpdateUserPoolDomainResponse, UpdateUserPoolDomainError> {
+        let mut request = SignedRequest::new("POST", "cognito-idp", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSCognitoIdentityProviderService.UpdateUserPoolDomain",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<UpdateUserPoolDomainResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateUserPoolDomainError::from_response(response))
                     }),
                 )
             }

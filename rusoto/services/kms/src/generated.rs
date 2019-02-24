@@ -63,13 +63,49 @@ pub struct CancelKeyDeletionResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ConnectCustomKeyStoreRequest {
+    /// <p>Enter the key store ID of the custom key store that you want to connect. To find the ID of a custom key store, use the <a>DescribeCustomKeyStores</a> operation.</p>
+    #[serde(rename = "CustomKeyStoreId")]
+    pub custom_key_store_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ConnectCustomKeyStoreResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateAliasRequest {
-    /// <p>Specifies the alias name. This value must begin with <code>alias/</code> followed by the alias name, such as <code>alias/ExampleAlias</code>. The alias name cannot begin with <code>aws/</code>. The <code>alias/aws/</code> prefix is reserved for AWS managed CMKs.</p>
+    /// <p>String that contains the display name. The name must start with the word "alias" followed by a forward slash (alias/). Aliases that begin with "alias/AWS" are reserved.</p>
     #[serde(rename = "AliasName")]
     pub alias_name: String,
     /// <p>Identifies the CMK for which you are creating the alias. This value cannot be an alias.</p> <p>Specify the key ID or the Amazon Resource Name (ARN) of the CMK.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>.</p>
     #[serde(rename = "TargetKeyId")]
     pub target_key_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateCustomKeyStoreRequest {
+    /// <p>Identifies the AWS CloudHSM cluster for the custom key store. Enter the cluster ID of any active AWS CloudHSM cluster that is not already associated with a custom key store. To find the cluster ID, use the <a href="http://docs.aws.amazon.com/cloudhsm/latest/APIReference/API_DescribeClusters.html">DescribeClusters</a> operation.</p>
+    #[serde(rename = "CloudHsmClusterId")]
+    pub cloud_hsm_cluster_id: String,
+    /// <p>Specifies a friendly name for the custom key store. The name must be unique in your AWS account.</p>
+    #[serde(rename = "CustomKeyStoreName")]
+    pub custom_key_store_name: String,
+    /// <p>Enter the password of the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-concepts.html#concept-kmsuser"> <code>kmsuser</code> crypto user (CU) account</a> in the specified AWS CloudHSM cluster. AWS KMS logs into the cluster as this user to manage key material on your behalf.</p> <p>This parameter tells AWS KMS the <code>kmsuser</code> account password; it does not change the password in the AWS CloudHSM cluster.</p>
+    #[serde(rename = "KeyStorePassword")]
+    pub key_store_password: String,
+    /// <p>Enter the content of the trust anchor certificate for the cluster. This is the content of the <code>customerCA.crt</code> file that you created when you <a href="http://docs.aws.amazon.com/cloudhsm/latest/userguide/initialize-cluster.html">initialized the cluster</a>.</p>
+    #[serde(rename = "TrustAnchorCertificate")]
+    pub trust_anchor_certificate: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateCustomKeyStoreResponse {
+    /// <p>A unique identifier for the new custom key store.</p>
+    #[serde(rename = "CustomKeyStoreId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_key_store_id: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -88,7 +124,7 @@ pub struct CreateGrantRequest {
     /// <p>The unique identifier for the customer master key (CMK) that the grant applies to.</p> <p>Specify the key ID or the Amazon Resource Name (ARN) of the CMK. To specify a CMK in a different AWS account, you must use the key ARN.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>.</p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
-    /// <p>A friendly name for identifying the grant. Use this value to prevent the unintended creation of duplicate grants when retrying this request.</p> <p>When this value is absent, all <code>CreateGrant</code> requests result in a new grant with a unique <code>GrantId</code> even if all the supplied parameters are identical. This can result in unintended duplicates when you retry the <code>CreateGrant</code> request.</p> <p>When this value is present, you can retry a <code>CreateGrant</code> request with identical parameters; if the grant already exists, the original <code>GrantId</code> is returned without creating a new grant. Note that the returned grant token is unique with every <code>CreateGrant</code> request, even when a duplicate <code>GrantId</code> is returned. All grant tokens obtained in this way can be used interchangeably.</p>
+    /// <p>A friendly name for identifying the grant. Use this value to prevent unintended creation of duplicate grants when retrying this request.</p> <p>When this value is absent, all <code>CreateGrant</code> requests result in a new grant with a unique <code>GrantId</code> even if all the supplied parameters are identical. This can result in unintended duplicates when you retry the <code>CreateGrant</code> request.</p> <p>When this value is present, you can retry a <code>CreateGrant</code> request with identical parameters; if the grant already exists, the original <code>GrantId</code> is returned without creating a new grant. Note that the returned grant token is unique with every <code>CreateGrant</code> request, even when a duplicate <code>GrantId</code> is returned. All grant tokens obtained in this way can be used interchangeably.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -120,6 +156,10 @@ pub struct CreateKeyRequest {
     #[serde(rename = "BypassPolicyLockoutSafetyCheck")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bypass_policy_lockout_safety_check: Option<bool>,
+    /// <p>Creates the CMK in the specified <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-overview.html">custom key store</a> and the key material in its associated AWS CloudHSM cluster. To create a CMK in a custom key store, you must also specify the <code>Origin</code> parameter with a value of <code>AWS_CLOUDHSM</code>. The AWS CloudHSM cluster that is associated with the custom key store must have at least two active HSMs, each in a different Availability Zone in the Region.</p> <p>To find the ID of a custom key store, use the <a>DescribeCustomKeyStores</a> operation.</p> <p>The response includes the custom key store ID and the ID of the AWS CloudHSM cluster.</p> <p>This operation is part of the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html">Custom Key Store feature</a> feature in AWS KMS, which combines the convenience and extensive integration of AWS KMS with the isolation and control of a single-tenant key store.</p>
+    #[serde(rename = "CustomKeyStoreId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_key_store_id: Option<String>,
     /// <p>A description of the CMK.</p> <p>Use a description that helps you decide whether the CMK is appropriate for a task.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -128,11 +168,11 @@ pub struct CreateKeyRequest {
     #[serde(rename = "KeyUsage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_usage: Option<String>,
-    /// <p>The source of the CMK's key material.</p> <p>The default is <code>AWS_KMS</code>, which means AWS KMS creates the key material. When this parameter is set to <code>EXTERNAL</code>, the request creates a CMK without key material so that you can import key material from your existing key management infrastructure. For more information about importing key material into AWS KMS, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html">Importing Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>The CMK's <code>Origin</code> is immutable and is set when the CMK is created.</p>
+    /// <p>The source of the CMK's key material. You cannot change the origin after you create the CMK.</p> <p>The default is <code>AWS_KMS</code>, which means AWS KMS creates the key material in its own key store.</p> <p>When the parameter value is <code>EXTERNAL</code>, AWS KMS creates a CMK without key material so that you can import key material from your existing key management infrastructure. For more information about importing key material into AWS KMS, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html">Importing Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>When the parameter value is <code>AWS_CLOUDHSM</code>, AWS KMS creates the CMK in a AWS KMS <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-overview.html">custom key store</a> and creates its key material in the associated AWS CloudHSM cluster. You must also use the <code>CustomKeyStoreId</code> parameter to identify the custom key store.</p>
     #[serde(rename = "Origin")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub origin: Option<String>,
-    /// <p>The key policy to attach to the CMK.</p> <p>If you provide a key policy, it must meet the following criteria:</p> <ul> <li> <p>If you don't set <code>BypassPolicyLockoutSafetyCheck</code> to true, the key policy must allow the principal that is making the <code>CreateKey</code> request to make a subsequent <a>PutKeyPolicy</a> request on the CMK. This reduces the risk that the CMK becomes unmanageable. For more information, refer to the scenario in the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-root-enable-iam">Default Key Policy</a> section of the <i>AWS Key Management Service Developer Guide</i>.</p> </li> <li> <p>Each statement in the key policy must contain one or more principals. The principals in the key policy must exist and be visible to AWS KMS. When you create a new AWS principal (for example, an IAM user or role), you might need to enforce a delay before including the new principal in a key policy. The reason for this is that the new principal might not be immediately visible to AWS KMS. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_general.html#troubleshoot_general_eventual-consistency">Changes that I make are not always immediately visible</a> in the <i>AWS Identity and Access Management User Guide</i>.</p> </li> </ul> <p>If you do not provide a key policy, AWS KMS attaches a default key policy to the CMK. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default">Default Key Policy</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>The key policy size limit is 32 kilobytes (32768 bytes).</p>
+    /// <p>The key policy to attach to the CMK.</p> <p>If you provide a key policy, it must meet the following criteria:</p> <ul> <li> <p>If you don't set <code>BypassPolicyLockoutSafetyCheck</code> to true, the key policy must allow the principal that is making the <code>CreateKey</code> request to make a subsequent <a>PutKeyPolicy</a> request on the CMK. This reduces the risk that the CMK becomes unmanageable. For more information, refer to the scenario in the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-root-enable-iam">Default Key Policy</a> section of the <i>AWS Key Management Service Developer Guide</i>.</p> </li> <li> <p>Each statement in the key policy must contain one or more principals. The principals in the key policy must exist and be visible to AWS KMS. When you create a new AWS principal (for example, an IAM user or role), you might need to enforce a delay before including the new principal in a key policy because the new principal might not be immediately visible to AWS KMS. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_general.html#troubleshoot_general_eventual-consistency">Changes that I make are not always immediately visible</a> in the <i>AWS Identity and Access Management User Guide</i>.</p> </li> </ul> <p>If you do not provide a key policy, AWS KMS attaches a default key policy to the CMK. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default">Default Key Policy</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>The key policy size limit is 32 kilobytes (32768 bytes).</p>
     #[serde(rename = "Policy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub policy: Option<String>,
@@ -149,6 +189,40 @@ pub struct CreateKeyResponse {
     #[serde(rename = "KeyMetadata")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_metadata: Option<KeyMetadata>,
+}
+
+/// <p>Contains information about each custom key store in the custom key store list.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CustomKeyStoresListEntry {
+    /// <p>A unique identifier for the AWS CloudHSM cluster that is associated with the custom key store.</p>
+    #[serde(rename = "CloudHsmClusterId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_hsm_cluster_id: Option<String>,
+    /// <p>Describes the connection error. Valid values are:</p> <ul> <li> <p> <code>CLUSTER_NOT_FOUND</code> - AWS KMS cannot find the AWS CloudHSM cluster with the specified cluster ID.</p> </li> <li> <p> <code>INSUFFICIENT_CLOUDHSM_HSMS</code> - The associated AWS CloudHSM cluster does not contain any active HSMs. To connect a custom key store to its AWS CloudHSM cluster, the cluster must contain at least one active HSM.</p> </li> <li> <p> <code>INVALID_CREDENTIALS</code> - AWS KMS does not have the correct password for the <code>kmsuser</code> crypto user in the AWS CloudHSM cluster.</p> </li> <li> <p> <code>NETWORK_ERRORS</code> - Network errors are preventing AWS KMS from connecting to the custom key store.</p> </li> <li> <p> <code>USER_LOCKED_OUT</code> - The <code>kmsuser</code> CU account is locked out of the associated AWS CloudHSM cluster due to too many failed password attempts. Before you can connect your custom key store to its AWS CloudHSM cluster, you must change the <code>kmsuser</code> account password and update the password value for the custom key store.</p> </li> </ul> <p>For help with connection failures, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/fix-keystore.html">Troubleshooting Custom Key Stores</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    #[serde(rename = "ConnectionErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_error_code: Option<String>,
+    /// <p>Indicates whether the custom key store is connected to its AWS CloudHSM cluster.</p> <p>You can create and use CMKs in your custom key stores only when its connection state is <code>CONNECTED</code>.</p> <p>The value is <code>DISCONNECTED</code> if the key store has never been connected or you use the <a>DisconnectCustomKeyStore</a> operation to disconnect it. If the value is <code>CONNECTED</code> but you are having trouble using the custom key store, make sure that its associated AWS CloudHSM cluster is active and contains at least one active HSM.</p> <p>A value of <code>FAILED</code> indicates that an attempt to connect was unsuccessful. For help resolving a connection failure, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/fix-keystore.html">Troubleshooting a Custom Key Store</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    #[serde(rename = "ConnectionState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connection_state: Option<String>,
+    /// <p>The date and time when the custom key store was created.</p>
+    #[serde(rename = "CreationDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_date: Option<f64>,
+    /// <p>A unique identifier for the custom key store.</p>
+    #[serde(rename = "CustomKeyStoreId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_key_store_id: Option<String>,
+    /// <p>The user-specified friendly name for the custom key store.</p>
+    #[serde(rename = "CustomKeyStoreName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_key_store_name: Option<String>,
+    /// <p>The trust anchor certificate of the associated AWS CloudHSM cluster. When you <a href="http://docs.aws.amazon.com/cloudhsm/latest/userguide/initialize-cluster.html#sign-csr">initialize the cluster</a>, you create this certificate and save it in the <code>customerCA.crt</code> file.</p>
+    #[serde(rename = "TrustAnchorCertificate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub trust_anchor_certificate: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -178,7 +252,7 @@ pub struct DecryptResponse {
     #[serde(rename = "KeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_id: Option<String>,
-    /// <p>Decrypted plaintext data. When you use the HTTP API or the AWS CLI, the value is Base64-encoded. Otherwise, it is not encoded.</p>
+    /// <p>Decrypted plaintext data. When you use the HTTP API or the AWS CLI, the value is Base64-encdoded. Otherwise, it is not encoded.</p>
     #[serde(rename = "Plaintext")]
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
@@ -197,10 +271,58 @@ pub struct DeleteAliasRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteCustomKeyStoreRequest {
+    /// <p>Enter the ID of the custom key store you want to delete. To find the ID of a custom key store, use the <a>DescribeCustomKeyStores</a> operation.</p>
+    #[serde(rename = "CustomKeyStoreId")]
+    pub custom_key_store_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteCustomKeyStoreResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteImportedKeyMaterialRequest {
     /// <p>The identifier of the CMK whose key material to delete. The CMK's <code>Origin</code> must be <code>EXTERNAL</code>.</p> <p>Specify the key ID or the Amazon Resource Name (ARN) of the CMK.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>.</p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeCustomKeyStoresRequest {
+    /// <p>Gets only information about the specified custom key store. Enter the key store ID.</p> <p>By default, this operation gets information about all custom key stores in the account and region. To limit the output to a particular custom key store, you can use either the <code>CustomKeyStoreId</code> or <code>CustomKeyStoreName</code> parameter, but not both.</p>
+    #[serde(rename = "CustomKeyStoreId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_key_store_id: Option<String>,
+    /// <p>Gets only information about the specified custom key store. Enter the friendly name of the custom key store.</p> <p>By default, this operation gets information about all custom key stores in the account and region. To limit the output to a particular custom key store, you can use either the <code>CustomKeyStoreId</code> or <code>CustomKeyStoreName</code> parameter, but not both.</p>
+    #[serde(rename = "CustomKeyStoreName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_key_store_name: Option<String>,
+    /// <p>Use this parameter to specify the maximum number of items to return. When this value is present, AWS KMS does not return more than the specified number of items, but it might return fewer.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>Use this parameter in a subsequent request after you receive a response with truncated results. Set it to the value of <code>NextMarker</code> from the truncated response you just received.</p>
+    #[serde(rename = "Marker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub marker: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeCustomKeyStoresResponse {
+    /// <p>Contains metadata about each custom key store.</p>
+    #[serde(rename = "CustomKeyStores")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_key_stores: Option<Vec<CustomKeyStoresListEntry>>,
+    /// <p>When <code>Truncated</code> is true, this element is present and contains the value to use for the <code>Marker</code> parameter in a subsequent request.</p>
+    #[serde(rename = "NextMarker")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_marker: Option<String>,
+    /// <p>A flag that indicates whether there are more items in the list. When this value is true, the list in this response is truncated. To get more items, pass the value of the <code>NextMarker</code> element in this response to the <code>Marker</code> parameter in a subsequent request.</p>
+    #[serde(rename = "Truncated")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub truncated: Option<bool>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -209,7 +331,7 @@ pub struct DescribeKeyRequest {
     #[serde(rename = "GrantTokens")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub grant_tokens: Option<Vec<String>>,
-    /// <p>Describes the specified customer master key (CMK). </p> <p>If you specify a predefined AWS alias (an AWS alias with no key ID), KMS associates the alias with an <a href="http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys">AWS managed CMK</a> and returns its <code>KeyId</code> and <code>Arn</code> in the response.</p> <p>To specify a CMK, use its key ID, Amazon Resource Name (ARN), alias name, or alias ARN. When using an alias name, prefix it with <code>"alias/"</code>. To specify a CMK in a different AWS account, you must use the key ARN or alias ARN.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Alias name: <code>alias/ExampleAlias</code> </p> </li> <li> <p>Alias ARN: <code>arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>. To get the alias name and alias ARN, use <a>ListAliases</a>.</p>
+    /// <p>Describes the specified customer master key (CMK). </p> <p>If you specify a predefined AWS alias (an AWS alias with no key ID), KMS associates the alias with an <a href="http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys">AWS managed CMK</a> and returns its <code>KeyId</code> and <code>Arn</code> in the response.</p> <p>To specify a CMK, use its key ID, Amazon Resource Name (ARN), alias name, or alias ARN. When using an alias name, prefix it with "alias/". To specify a CMK in a different AWS account, you must use the key ARN or alias ARN.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Alias name: <code>alias/ExampleAlias</code> </p> </li> <li> <p>Alias ARN: <code>arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>. To get the alias name and alias ARN, use <a>ListAliases</a>.</p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
 }
@@ -238,6 +360,17 @@ pub struct DisableKeyRotationRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DisconnectCustomKeyStoreRequest {
+    /// <p>Enter the ID of the custom key store you want to disconnect. To find the ID of a custom key store, use the <a>DescribeCustomKeyStores</a> operation.</p>
+    #[serde(rename = "CustomKeyStoreId")]
+    pub custom_key_store_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DisconnectCustomKeyStoreResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct EnableKeyRequest {
     /// <p>A unique identifier for the customer master key (CMK).</p> <p>Specify the key ID or the Amazon Resource Name (ARN) of the CMK.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>.</p>
     #[serde(rename = "KeyId")]
@@ -261,7 +394,7 @@ pub struct EncryptRequest {
     #[serde(rename = "GrantTokens")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub grant_tokens: Option<Vec<String>>,
-    /// <p>A unique identifier for the customer master key (CMK).</p> <p>To specify a CMK, use its key ID, Amazon Resource Name (ARN), alias name, or alias ARN. When using an alias name, prefix it with <code>"alias/"</code>. To specify a CMK in a different AWS account, you must use the key ARN or alias ARN.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Alias name: <code>alias/ExampleAlias</code> </p> </li> <li> <p>Alias ARN: <code>arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>. To get the alias name and alias ARN, use <a>ListAliases</a>.</p>
+    /// <p>A unique identifier for the customer master key (CMK).</p> <p>To specify a CMK, use its key ID, Amazon Resource Name (ARN), alias name, or alias ARN. When using an alias name, prefix it with "alias/". To specify a CMK in a different AWS account, you must use the key ARN or alias ARN.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Alias name: <code>alias/ExampleAlias</code> </p> </li> <li> <p>Alias ARN: <code>arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>. To get the alias name and alias ARN, use <a>ListAliases</a>.</p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
     /// <p>Data to be encrypted.</p>
@@ -277,7 +410,7 @@ pub struct EncryptRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct EncryptResponse {
-    /// <p>The encrypted plaintext. When you use the HTTP API or the AWS CLI, the value is Base64-encoded. Otherwise, it is not encoded.</p>
+    /// <p>The encrypted plaintext. When you use the HTTP API or the AWS CLI, the value is Base64-encdoded. Otherwise, it is not encoded.</p>
     #[serde(rename = "CiphertextBlob")]
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
@@ -302,7 +435,7 @@ pub struct GenerateDataKeyRequest {
     #[serde(rename = "GrantTokens")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub grant_tokens: Option<Vec<String>>,
-    /// <p>The identifier of the CMK under which to generate and encrypt the data encryption key.</p> <p>To specify a CMK, use its key ID, Amazon Resource Name (ARN), alias name, or alias ARN. When using an alias name, prefix it with <code>"alias/"</code>. To specify a CMK in a different AWS account, you must use the key ARN or alias ARN.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Alias name: <code>alias/ExampleAlias</code> </p> </li> <li> <p>Alias ARN: <code>arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>. To get the alias name and alias ARN, use <a>ListAliases</a>.</p>
+    /// <p>The identifier of the CMK under which to generate and encrypt the data encryption key.</p> <p>To specify a CMK, use its key ID, Amazon Resource Name (ARN), alias name, or alias ARN. When using an alias name, prefix it with "alias/". To specify a CMK in a different AWS account, you must use the key ARN or alias ARN.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Alias name: <code>alias/ExampleAlias</code> </p> </li> <li> <p>Alias ARN: <code>arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>. To get the alias name and alias ARN, use <a>ListAliases</a>.</p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
     /// <p>The length of the data encryption key. Use <code>AES_128</code> to generate a 128-bit symmetric key, or <code>AES_256</code> to generate a 256-bit symmetric key.</p>
@@ -318,7 +451,7 @@ pub struct GenerateDataKeyRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GenerateDataKeyResponse {
-    /// <p>The encrypted data encryption key. When you use the HTTP API or the AWS CLI, the value is Base64-encoded. Otherwise, it is not encoded.</p>
+    /// <p>The encrypted data encryption key. When you use the HTTP API or the AWS CLI, the value is Base64-encdoded. Otherwise, it is not encoded.</p>
     #[serde(rename = "CiphertextBlob")]
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
@@ -331,7 +464,7 @@ pub struct GenerateDataKeyResponse {
     #[serde(rename = "KeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_id: Option<String>,
-    /// <p>The data encryption key. When you use the HTTP API or the AWS CLI, the value is Base64-encoded. Otherwise, it is not encoded. Use this data key for local encryption and decryption, then remove it from memory as soon as possible.</p>
+    /// <p>The data encryption key. When you use the HTTP API or the AWS CLI, the value is Base64-encdoded. Otherwise, it is not encoded. Use this data key for local encryption and decryption, then remove it from memory as soon as possible.</p>
     #[serde(rename = "Plaintext")]
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
@@ -352,7 +485,7 @@ pub struct GenerateDataKeyWithoutPlaintextRequest {
     #[serde(rename = "GrantTokens")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub grant_tokens: Option<Vec<String>>,
-    /// <p>The identifier of the customer master key (CMK) under which to generate and encrypt the data encryption key.</p> <p>To specify a CMK, use its key ID, Amazon Resource Name (ARN), alias name, or alias ARN. When using an alias name, prefix it with <code>"alias/"</code>. To specify a CMK in a different AWS account, you must use the key ARN or alias ARN.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Alias name: <code>alias/ExampleAlias</code> </p> </li> <li> <p>Alias ARN: <code>arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>. To get the alias name and alias ARN, use <a>ListAliases</a>.</p>
+    /// <p>The identifier of the customer master key (CMK) under which to generate and encrypt the data encryption key.</p> <p>To specify a CMK, use its key ID, Amazon Resource Name (ARN), alias name, or alias ARN. When using an alias name, prefix it with "alias/". To specify a CMK in a different AWS account, you must use the key ARN or alias ARN.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Alias name: <code>alias/ExampleAlias</code> </p> </li> <li> <p>Alias ARN: <code>arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>. To get the alias name and alias ARN, use <a>ListAliases</a>.</p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
     /// <p>The length of the data encryption key. Use <code>AES_128</code> to generate a 128-bit symmetric key, or <code>AES_256</code> to generate a 256-bit symmetric key.</p>
@@ -368,7 +501,7 @@ pub struct GenerateDataKeyWithoutPlaintextRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GenerateDataKeyWithoutPlaintextResponse {
-    /// <p>The encrypted data encryption key. When you use the HTTP API or the AWS CLI, the value is Base64-encoded. Otherwise, it is not encoded.</p>
+    /// <p>The encrypted data encryption key. When you use the HTTP API or the AWS CLI, the value is Base64-encdoded. Otherwise, it is not encoded.</p>
     #[serde(rename = "CiphertextBlob")]
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
@@ -385,6 +518,10 @@ pub struct GenerateDataKeyWithoutPlaintextResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GenerateRandomRequest {
+    /// <p>Generates the random byte string in the AWS CloudHSM cluster that is associated with the specified <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-overview.html">custom key store</a>. To find the ID of a custom key store, use the <a>DescribeCustomKeyStores</a> operation.</p>
+    #[serde(rename = "CustomKeyStoreId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_key_store_id: Option<String>,
     /// <p>The length of the byte string.</p>
     #[serde(rename = "NumberOfBytes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -394,7 +531,7 @@ pub struct GenerateRandomRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GenerateRandomResponse {
-    /// <p>The random byte string. When you use the HTTP API or the AWS CLI, the value is Base64-encoded. Otherwise, it is not encoded.</p>
+    /// <p>The random byte string. When you use the HTTP API or the AWS CLI, the value is Base64-encdoded. Otherwise, it is not encoded.</p>
     #[serde(rename = "Plaintext")]
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
@@ -445,7 +582,7 @@ pub struct GetParametersForImportRequest {
     /// <p>The identifier of the CMK into which you will import key material. The CMK's <code>Origin</code> must be <code>EXTERNAL</code>.</p> <p>Specify the key ID or the Amazon Resource Name (ARN) of the CMK.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>.</p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
-    /// <p>The algorithm you use to encrypt the key material before importing it with <a>ImportKeyMaterial</a>. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys-encrypt-key-material.html">Encrypt the Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The algorithm you will use to encrypt the key material before importing it with <a>ImportKeyMaterial</a>. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys-encrypt-key-material.html">Encrypt the Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     #[serde(rename = "WrappingAlgorithm")]
     pub wrapping_algorithm: String,
     /// <p>The type of wrapping key (public key) to return in the response. Only 2048-bit RSA public keys are supported.</p>
@@ -484,7 +621,7 @@ pub struct GetParametersForImportResponse {
     pub public_key: Option<Vec<u8>>,
 }
 
-/// <p>A structure that you can use to allow certain operations in the grant only when the preferred encryption context is present. For more information about encryption context, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>Grant constraints apply only to operations that accept encryption context as input. For example, the <code> <a>DescribeKey</a> </code> operation does not accept encryption context as input. A grant that allows the <code>DescribeKey</code> operation does so regardless of the grant constraints. In contrast, the <code> <a>Encrypt</a> </code> operation accepts encryption context as input. A grant that allows the <code>Encrypt</code> operation does so only when the encryption context of the <code>Encrypt</code> operation satisfies the grant constraints.</p>
+/// <p>A structure that you can use to allow certain operations in the grant only when the desired encryption context is present. For more information about encryption context, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>Grant constraints apply only to operations that accept encryption context as input. For example, the <code> <a>DescribeKey</a> </code> operation does not accept encryption context as input. A grant that allows the <code>DescribeKey</code> operation does so regardless of the grant constraints. In constrast, the <code> <a>Encrypt</a> </code> operation accepts encryption context as input. A grant that allows the <code>Encrypt</code> operation does so only when the encryption context of the <code>Encrypt</code> operation satisfies the grant constraints.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GrantConstraints {
     /// <p>A list of key-value pairs that must be present in the encryption context of certain subsequent operations that the grant allows. When certain subsequent operations allowed by the grant include encryption context that matches this list, the grant allows the operation. Otherwise, the grant does not allow the operation.</p>
@@ -600,11 +737,19 @@ pub struct KeyMetadata {
     #[serde(rename = "Arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    /// <p>The cluster ID of the AWS CloudHSM cluster that contains the key material for the CMK. When you create a CMK in a <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-overview.html">custom key store</a>, AWS KMS creates the key material for the CMK in the associated AWS CloudHSM cluster. This value is present only when the CMK is created in a custom key store.</p>
+    #[serde(rename = "CloudHsmClusterId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_hsm_cluster_id: Option<String>,
     /// <p>The date and time when the CMK was created.</p>
     #[serde(rename = "CreationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_date: Option<f64>,
-    /// <p>The date and time after which AWS KMS deletes the CMK. This value is present only when <code>KeyState</code> is <code>PendingDeletion</code>, otherwise this value is omitted.</p>
+    /// <p>A unique identifier for the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-overview.html">custom key store</a> that contains the CMK. This value is present only when the CMK is created in a custom key store.</p>
+    #[serde(rename = "CustomKeyStoreId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_key_store_id: Option<String>,
+    /// <p>The date and time after which AWS KMS deletes the CMK. This value is present only when <code>KeyState</code> is <code>PendingDeletion</code>.</p>
     #[serde(rename = "DeletionDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deletion_date: Option<f64>,
@@ -623,7 +768,7 @@ pub struct KeyMetadata {
     /// <p>The globally unique identifier for the CMK.</p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
-    /// <p>The CMK's manager. CMKs are either customer managed or AWS managed. For more information about the difference, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys">Customer Master Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>The CMK's manager. CMKs are either customer-managed or AWS-managed. For more information about the difference, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys">Customer Master Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     #[serde(rename = "KeyManager")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_manager: Option<String>,
@@ -635,7 +780,7 @@ pub struct KeyMetadata {
     #[serde(rename = "KeyUsage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_usage: Option<String>,
-    /// <p>The source of the CMK's key material. When this value is <code>AWS_KMS</code>, AWS KMS created the key material. When this value is <code>EXTERNAL</code>, the key material was imported from your existing key management infrastructure or the CMK lacks key material.</p>
+    /// <p>The source of the CMK's key material. When this value is <code>AWS_KMS</code>, AWS KMS created the key material. When this value is <code>EXTERNAL</code>, the key material was imported from your existing key management infrastructure or the CMK lacks key material. When this value is <code>AWS_CLOUDHSM</code>, the key material was created in the AWS CloudHSM cluster associated with a custom key store.</p>
     #[serde(rename = "Origin")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub origin: Option<String>,
@@ -827,7 +972,7 @@ pub struct PutKeyPolicyRequest {
     /// <p>A unique identifier for the customer master key (CMK).</p> <p>Specify the key ID or the Amazon Resource Name (ARN) of the CMK.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>.</p>
     #[serde(rename = "KeyId")]
     pub key_id: String,
-    /// <p>The key policy to attach to the CMK.</p> <p>The key policy must meet the following criteria:</p> <ul> <li> <p>If you don't set <code>BypassPolicyLockoutSafetyCheck</code> to true, the key policy must allow the principal that is making the <code>PutKeyPolicy</code> request to make a subsequent <code>PutKeyPolicy</code> request on the CMK. This reduces the risk that the CMK becomes unmanageable. For more information, refer to the scenario in the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-root-enable-iam">Default Key Policy</a> section of the <i>AWS Key Management Service Developer Guide</i>.</p> </li> <li> <p>Each statement in the key policy must contain one or more principals. The principals in the key policy must exist and be visible to AWS KMS. When you create a new AWS principal (for example, an IAM user or role), you might need to enforce a delay before including the new principal in a key policy. The reason for this is that the new principal might not be immediately visible to AWS KMS. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_general.html#troubleshoot_general_eventual-consistency">Changes that I make are not always immediately visible</a> in the <i>AWS Identity and Access Management User Guide</i>.</p> </li> </ul> <p>The key policy size limit is 32 kilobytes (32768 bytes).</p>
+    /// <p>The key policy to attach to the CMK.</p> <p>The key policy must meet the following criteria:</p> <ul> <li> <p>If you don't set <code>BypassPolicyLockoutSafetyCheck</code> to true, the key policy must allow the principal that is making the <code>PutKeyPolicy</code> request to make a subsequent <code>PutKeyPolicy</code> request on the CMK. This reduces the risk that the CMK becomes unmanageable. For more information, refer to the scenario in the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html#key-policy-default-allow-root-enable-iam">Default Key Policy</a> section of the <i>AWS Key Management Service Developer Guide</i>.</p> </li> <li> <p>Each statement in the key policy must contain one or more principals. The principals in the key policy must exist and be visible to AWS KMS. When you create a new AWS principal (for example, an IAM user or role), you might need to enforce a delay before including the new principal in a key policy because the new principal might not be immediately visible to AWS KMS. For more information, see <a href="http://docs.aws.amazon.com/IAM/latest/UserGuide/troubleshoot_general.html#troubleshoot_general_eventual-consistency">Changes that I make are not always immediately visible</a> in the <i>AWS Identity and Access Management User Guide</i>.</p> </li> </ul> <p>The key policy size limit is 32 kilobytes (32768 bytes).</p>
     #[serde(rename = "Policy")]
     pub policy: String,
     /// <p>The name of the key policy. The only valid value is <code>default</code>.</p>
@@ -849,7 +994,7 @@ pub struct ReEncryptRequest {
     #[serde(rename = "DestinationEncryptionContext")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_encryption_context: Option<::std::collections::HashMap<String, String>>,
-    /// <p>A unique identifier for the CMK that is used to reencrypt the data.</p> <p>To specify a CMK, use its key ID, Amazon Resource Name (ARN), alias name, or alias ARN. When using an alias name, prefix it with <code>"alias/"</code>. To specify a CMK in a different AWS account, you must use the key ARN or alias ARN.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Alias name: <code>alias/ExampleAlias</code> </p> </li> <li> <p>Alias ARN: <code>arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>. To get the alias name and alias ARN, use <a>ListAliases</a>.</p>
+    /// <p>A unique identifier for the CMK that is used to reencrypt the data.</p> <p>To specify a CMK, use its key ID, Amazon Resource Name (ARN), alias name, or alias ARN. When using an alias name, prefix it with "alias/". To specify a CMK in a different AWS account, you must use the key ARN or alias ARN.</p> <p>For example:</p> <ul> <li> <p>Key ID: <code>1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Key ARN: <code>arn:aws:kms:us-east-2:111122223333:key/1234abcd-12ab-34cd-56ef-1234567890ab</code> </p> </li> <li> <p>Alias name: <code>alias/ExampleAlias</code> </p> </li> <li> <p>Alias ARN: <code>arn:aws:kms:us-east-2:111122223333:alias/ExampleAlias</code> </p> </li> </ul> <p>To get the key ID and key ARN for a CMK, use <a>ListKeys</a> or <a>DescribeKey</a>. To get the alias name and alias ARN, use <a>ListAliases</a>.</p>
     #[serde(rename = "DestinationKeyId")]
     pub destination_key_id: String,
     /// <p>A list of grant tokens.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#grant_token">Grant Tokens</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
@@ -865,7 +1010,7 @@ pub struct ReEncryptRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ReEncryptResponse {
-    /// <p>The reencrypted data. When you use the HTTP API or the AWS CLI, the value is Base64-encoded. Otherwise, it is not encoded.</p>
+    /// <p>The reencrypted data. When you use the HTTP API or the AWS CLI, the value is Base64-encdoded. Otherwise, it is not encoded.</p>
     #[serde(rename = "CiphertextBlob")]
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
@@ -974,6 +1119,29 @@ pub struct UpdateAliasRequest {
     #[serde(rename = "TargetKeyId")]
     pub target_key_id: String,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateCustomKeyStoreRequest {
+    /// <p>Associates the custom key store with a related AWS CloudHSM cluster. </p> <p>Enter the cluster ID of the cluster that you used to create the custom key store or a cluster that shares a backup history with the original cluster. You cannot use this parameter to associate a custom key store with a different cluster.</p> <p>Clusters that share a backup history have the same cluster certificate. To view the cluster certificate of a cluster, use the <a href="http://docs.aws.amazon.com/cloudhsm/latest/APIReference/API_DescribeClusters.html">DescribeClusters</a> operation.</p>
+    #[serde(rename = "CloudHsmClusterId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_hsm_cluster_id: Option<String>,
+    /// <p>Identifies the custom key store that you want to update. Enter the ID of the custom key store. To find the ID of a custom key store, use the <a>DescribeCustomKeyStores</a> operation.</p>
+    #[serde(rename = "CustomKeyStoreId")]
+    pub custom_key_store_id: String,
+    /// <p>Enter the current password of the <code>kmsuser</code> crypto user (CU) in the AWS CloudHSM cluster that is associated with the custom key store.</p> <p>This parameter tells AWS KMS the current password of the <code>kmsuser</code> crypto user (CU). It does not set or change the password of any users in the AWS CloudHSM cluster.</p>
+    #[serde(rename = "KeyStorePassword")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key_store_password: Option<String>,
+    /// <p>Changes the friendly name of the custom key store to the value that you specify. The custom key store name must be unique in the AWS account.</p>
+    #[serde(rename = "NewCustomKeyStoreName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub new_custom_key_store_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateCustomKeyStoreResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateKeyDescriptionRequest {
@@ -1091,6 +1259,120 @@ impl Error for CancelKeyDeletionError {
         }
     }
 }
+/// Errors returned by ConnectCustomKeyStore
+#[derive(Debug, PartialEq)]
+pub enum ConnectCustomKeyStoreError {
+    /// <p>The request was rejected because the associated AWS CloudHSM cluster did not meet the configuration requirements for a custom key store. The cluster must be configured with private subnets in at least two different Availability Zones in the Region. Also, it must contain at least as many HSMs as the operation requires.</p> <p>For the <a>CreateCustomKeyStore</a>, <a>UpdateCustomKeyStore</a>, and <a>CreateKey</a> operations, the AWS CloudHSM cluster must have at least two active HSMs, each in a different Availability Zone. For the <a>ConnectCustomKeyStore</a> operation, the AWS CloudHSM must contain at least one active HSM.</p> <p>For information about creating a private subnet for a AWS CloudHSM cluster, see <a href="http://docs.aws.amazon.com/cloudhsm/latest/userguide/create-subnets.html">Create a Private Subnet</a> in the <i>AWS CloudHSM User Guide</i>. To add HSMs, use the AWS CloudHSM <a href="http://docs.aws.amazon.com/cloudhsm/latest/APIReference/API_CreateHsm.html">CreateHsm</a> operation.</p>
+    CloudHsmClusterInvalidConfiguration(String),
+    /// <p>The request was rejected because the AWS CloudHSM cluster that is associated with the custom key store is not active. Initialize and activate the cluster and try the command again. For detailed instructions, see <a href="http://docs.aws.amazon.com/cloudhsm/latest/userguide/getting-started.html">Getting Started</a> in the <i>AWS CloudHSM User Guide</i>.</p>
+    CloudHsmClusterNotActive(String),
+    /// <p><p>The request was rejected because of the <code>ConnectionState</code> of the custom key store. To get the <code>ConnectionState</code> of a custom key store, use the <a>DescribeCustomKeyStores</a> operation.</p> <p>This exception is thrown under the following conditions:</p> <ul> <li> <p>You requested the <a>CreateKey</a> or <a>GenerateRandom</a> operation in a custom key store that is not connected. These operations are valid only when the custom key store <code>ConnectionState</code> is <code>CONNECTED</code>.</p> </li> <li> <p>You requested the <a>UpdateCustomKeyStore</a> or <a>DeleteCustomKeyStore</a> operation on a custom key store that is not disconnected. This operation is valid only when the custom key store <code>ConnectionState</code> is <code>DISCONNECTED</code>.</p> </li> <li> <p>You requested the <a>ConnectCustomKeyStore</a> operation on a custom key store with a <code>ConnectionState</code> of <code>DISCONNECTING</code> or <code>FAILED</code>. This operation is valid for all other <code>ConnectionState</code> values.</p> </li> </ul></p>
+    CustomKeyStoreInvalidState(String),
+    /// <p>The request was rejected because AWS KMS cannot find a custom key store with the specified key store name or ID.</p>
+    CustomKeyStoreNotFound(String),
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    KMSInternal(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ConnectCustomKeyStoreError {
+    pub fn from_response(res: BufferedHttpResponse) -> ConnectCustomKeyStoreError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "CloudHsmClusterInvalidConfigurationException" => {
+                    return ConnectCustomKeyStoreError::CloudHsmClusterInvalidConfiguration(
+                        String::from(error_message),
+                    );
+                }
+                "CloudHsmClusterNotActiveException" => {
+                    return ConnectCustomKeyStoreError::CloudHsmClusterNotActive(String::from(
+                        error_message,
+                    ));
+                }
+                "CustomKeyStoreInvalidStateException" => {
+                    return ConnectCustomKeyStoreError::CustomKeyStoreInvalidState(String::from(
+                        error_message,
+                    ));
+                }
+                "CustomKeyStoreNotFoundException" => {
+                    return ConnectCustomKeyStoreError::CustomKeyStoreNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "KMSInternalException" => {
+                    return ConnectCustomKeyStoreError::KMSInternal(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return ConnectCustomKeyStoreError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ConnectCustomKeyStoreError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ConnectCustomKeyStoreError {
+    fn from(err: serde_json::error::Error) -> ConnectCustomKeyStoreError {
+        ConnectCustomKeyStoreError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ConnectCustomKeyStoreError {
+    fn from(err: CredentialsError) -> ConnectCustomKeyStoreError {
+        ConnectCustomKeyStoreError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ConnectCustomKeyStoreError {
+    fn from(err: HttpDispatchError) -> ConnectCustomKeyStoreError {
+        ConnectCustomKeyStoreError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ConnectCustomKeyStoreError {
+    fn from(err: io::Error) -> ConnectCustomKeyStoreError {
+        ConnectCustomKeyStoreError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ConnectCustomKeyStoreError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ConnectCustomKeyStoreError {
+    fn description(&self) -> &str {
+        match *self {
+            ConnectCustomKeyStoreError::CloudHsmClusterInvalidConfiguration(ref cause) => cause,
+            ConnectCustomKeyStoreError::CloudHsmClusterNotActive(ref cause) => cause,
+            ConnectCustomKeyStoreError::CustomKeyStoreInvalidState(ref cause) => cause,
+            ConnectCustomKeyStoreError::CustomKeyStoreNotFound(ref cause) => cause,
+            ConnectCustomKeyStoreError::KMSInternal(ref cause) => cause,
+            ConnectCustomKeyStoreError::Validation(ref cause) => cause,
+            ConnectCustomKeyStoreError::Credentials(ref err) => err.description(),
+            ConnectCustomKeyStoreError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ConnectCustomKeyStoreError::ParseError(ref cause) => cause,
+            ConnectCustomKeyStoreError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by CreateAlias
 #[derive(Debug, PartialEq)]
 pub enum CreateAliasError {
@@ -1204,6 +1486,136 @@ impl Error for CreateAliasError {
             CreateAliasError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             CreateAliasError::ParseError(ref cause) => cause,
             CreateAliasError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by CreateCustomKeyStore
+#[derive(Debug, PartialEq)]
+pub enum CreateCustomKeyStoreError {
+    /// <p>The request was rejected because the specified AWS CloudHSM cluster is already associated with a custom key store or it shares a backup history with a cluster that is associated with a custom key store. Each custom key store must be associated with a different AWS CloudHSM cluster.</p> <p>Clusters that share a backup history have the same cluster certificate. To view the cluster certificate of a cluster, use the <a href="http://docs.aws.amazon.com/cloudhsm/latest/APIReference/API_DescribeClusters.html">DescribeClusters</a> operation.</p>
+    CloudHsmClusterInUse(String),
+    /// <p>The request was rejected because the associated AWS CloudHSM cluster did not meet the configuration requirements for a custom key store. The cluster must be configured with private subnets in at least two different Availability Zones in the Region. Also, it must contain at least as many HSMs as the operation requires.</p> <p>For the <a>CreateCustomKeyStore</a>, <a>UpdateCustomKeyStore</a>, and <a>CreateKey</a> operations, the AWS CloudHSM cluster must have at least two active HSMs, each in a different Availability Zone. For the <a>ConnectCustomKeyStore</a> operation, the AWS CloudHSM must contain at least one active HSM.</p> <p>For information about creating a private subnet for a AWS CloudHSM cluster, see <a href="http://docs.aws.amazon.com/cloudhsm/latest/userguide/create-subnets.html">Create a Private Subnet</a> in the <i>AWS CloudHSM User Guide</i>. To add HSMs, use the AWS CloudHSM <a href="http://docs.aws.amazon.com/cloudhsm/latest/APIReference/API_CreateHsm.html">CreateHsm</a> operation.</p>
+    CloudHsmClusterInvalidConfiguration(String),
+    /// <p>The request was rejected because the AWS CloudHSM cluster that is associated with the custom key store is not active. Initialize and activate the cluster and try the command again. For detailed instructions, see <a href="http://docs.aws.amazon.com/cloudhsm/latest/userguide/getting-started.html">Getting Started</a> in the <i>AWS CloudHSM User Guide</i>.</p>
+    CloudHsmClusterNotActive(String),
+    /// <p>The request was rejected because AWS KMS cannot find the AWS CloudHSM cluster with the specified cluster ID. Retry the request with a different cluster ID.</p>
+    CloudHsmClusterNotFound(String),
+    /// <p>The request was rejected because the specified custom key store name is already assigned to another custom key store in the account. Try again with a custom key store name that is unique in the account.</p>
+    CustomKeyStoreNameInUse(String),
+    /// <p>The request was rejected because the trust anchor certificate in the request is not the trust anchor certificate for the specified AWS CloudHSM cluster.</p> <p>When you <a href="http://docs.aws.amazon.com/cloudhsm/latest/userguide/initialize-cluster.html#sign-csr">initialize the cluster</a>, you create the trust anchor certificate and save it in the <code>customerCA.crt</code> file.</p>
+    IncorrectTrustAnchor(String),
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    KMSInternal(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl CreateCustomKeyStoreError {
+    pub fn from_response(res: BufferedHttpResponse) -> CreateCustomKeyStoreError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "CloudHsmClusterInUseException" => {
+                    return CreateCustomKeyStoreError::CloudHsmClusterInUse(String::from(
+                        error_message,
+                    ));
+                }
+                "CloudHsmClusterInvalidConfigurationException" => {
+                    return CreateCustomKeyStoreError::CloudHsmClusterInvalidConfiguration(
+                        String::from(error_message),
+                    );
+                }
+                "CloudHsmClusterNotActiveException" => {
+                    return CreateCustomKeyStoreError::CloudHsmClusterNotActive(String::from(
+                        error_message,
+                    ));
+                }
+                "CloudHsmClusterNotFoundException" => {
+                    return CreateCustomKeyStoreError::CloudHsmClusterNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "CustomKeyStoreNameInUseException" => {
+                    return CreateCustomKeyStoreError::CustomKeyStoreNameInUse(String::from(
+                        error_message,
+                    ));
+                }
+                "IncorrectTrustAnchorException" => {
+                    return CreateCustomKeyStoreError::IncorrectTrustAnchor(String::from(
+                        error_message,
+                    ));
+                }
+                "KMSInternalException" => {
+                    return CreateCustomKeyStoreError::KMSInternal(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return CreateCustomKeyStoreError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return CreateCustomKeyStoreError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for CreateCustomKeyStoreError {
+    fn from(err: serde_json::error::Error) -> CreateCustomKeyStoreError {
+        CreateCustomKeyStoreError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateCustomKeyStoreError {
+    fn from(err: CredentialsError) -> CreateCustomKeyStoreError {
+        CreateCustomKeyStoreError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateCustomKeyStoreError {
+    fn from(err: HttpDispatchError) -> CreateCustomKeyStoreError {
+        CreateCustomKeyStoreError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateCustomKeyStoreError {
+    fn from(err: io::Error) -> CreateCustomKeyStoreError {
+        CreateCustomKeyStoreError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateCustomKeyStoreError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateCustomKeyStoreError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateCustomKeyStoreError::CloudHsmClusterInUse(ref cause) => cause,
+            CreateCustomKeyStoreError::CloudHsmClusterInvalidConfiguration(ref cause) => cause,
+            CreateCustomKeyStoreError::CloudHsmClusterNotActive(ref cause) => cause,
+            CreateCustomKeyStoreError::CloudHsmClusterNotFound(ref cause) => cause,
+            CreateCustomKeyStoreError::CustomKeyStoreNameInUse(ref cause) => cause,
+            CreateCustomKeyStoreError::IncorrectTrustAnchor(ref cause) => cause,
+            CreateCustomKeyStoreError::KMSInternal(ref cause) => cause,
+            CreateCustomKeyStoreError::Validation(ref cause) => cause,
+            CreateCustomKeyStoreError::Credentials(ref err) => err.description(),
+            CreateCustomKeyStoreError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateCustomKeyStoreError::ParseError(ref cause) => cause,
+            CreateCustomKeyStoreError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1332,6 +1744,12 @@ impl Error for CreateGrantError {
 /// Errors returned by CreateKey
 #[derive(Debug, PartialEq)]
 pub enum CreateKeyError {
+    /// <p>The request was rejected because the associated AWS CloudHSM cluster did not meet the configuration requirements for a custom key store. The cluster must be configured with private subnets in at least two different Availability Zones in the Region. Also, it must contain at least as many HSMs as the operation requires.</p> <p>For the <a>CreateCustomKeyStore</a>, <a>UpdateCustomKeyStore</a>, and <a>CreateKey</a> operations, the AWS CloudHSM cluster must have at least two active HSMs, each in a different Availability Zone. For the <a>ConnectCustomKeyStore</a> operation, the AWS CloudHSM must contain at least one active HSM.</p> <p>For information about creating a private subnet for a AWS CloudHSM cluster, see <a href="http://docs.aws.amazon.com/cloudhsm/latest/userguide/create-subnets.html">Create a Private Subnet</a> in the <i>AWS CloudHSM User Guide</i>. To add HSMs, use the AWS CloudHSM <a href="http://docs.aws.amazon.com/cloudhsm/latest/APIReference/API_CreateHsm.html">CreateHsm</a> operation.</p>
+    CloudHsmClusterInvalidConfiguration(String),
+    /// <p><p>The request was rejected because of the <code>ConnectionState</code> of the custom key store. To get the <code>ConnectionState</code> of a custom key store, use the <a>DescribeCustomKeyStores</a> operation.</p> <p>This exception is thrown under the following conditions:</p> <ul> <li> <p>You requested the <a>CreateKey</a> or <a>GenerateRandom</a> operation in a custom key store that is not connected. These operations are valid only when the custom key store <code>ConnectionState</code> is <code>CONNECTED</code>.</p> </li> <li> <p>You requested the <a>UpdateCustomKeyStore</a> or <a>DeleteCustomKeyStore</a> operation on a custom key store that is not disconnected. This operation is valid only when the custom key store <code>ConnectionState</code> is <code>DISCONNECTED</code>.</p> </li> <li> <p>You requested the <a>ConnectCustomKeyStore</a> operation on a custom key store with a <code>ConnectionState</code> of <code>DISCONNECTING</code> or <code>FAILED</code>. This operation is valid for all other <code>ConnectionState</code> values.</p> </li> </ul></p>
+    CustomKeyStoreInvalidState(String),
+    /// <p>The request was rejected because AWS KMS cannot find a custom key store with the specified key store name or ID.</p>
+    CustomKeyStoreNotFound(String),
     /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
     /// <p>The request was rejected because a specified ARN was not valid.</p>
@@ -1371,6 +1789,17 @@ impl CreateKeyError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "CloudHsmClusterInvalidConfigurationException" => {
+                    return CreateKeyError::CloudHsmClusterInvalidConfiguration(String::from(
+                        error_message,
+                    ));
+                }
+                "CustomKeyStoreInvalidStateException" => {
+                    return CreateKeyError::CustomKeyStoreInvalidState(String::from(error_message));
+                }
+                "CustomKeyStoreNotFoundException" => {
+                    return CreateKeyError::CustomKeyStoreNotFound(String::from(error_message));
+                }
                 "DependencyTimeoutException" => {
                     return CreateKeyError::DependencyTimeout(String::from(error_message));
                 }
@@ -1428,6 +1857,9 @@ impl fmt::Display for CreateKeyError {
 impl Error for CreateKeyError {
     fn description(&self) -> &str {
         match *self {
+            CreateKeyError::CloudHsmClusterInvalidConfiguration(ref cause) => cause,
+            CreateKeyError::CustomKeyStoreInvalidState(ref cause) => cause,
+            CreateKeyError::CustomKeyStoreNotFound(ref cause) => cause,
             CreateKeyError::DependencyTimeout(ref cause) => cause,
             CreateKeyError::InvalidArn(ref cause) => cause,
             CreateKeyError::KMSInternal(ref cause) => cause,
@@ -1657,6 +2089,112 @@ impl Error for DeleteAliasError {
         }
     }
 }
+/// Errors returned by DeleteCustomKeyStore
+#[derive(Debug, PartialEq)]
+pub enum DeleteCustomKeyStoreError {
+    /// <p>The request was rejected because the custom key store contains AWS KMS customer master keys (CMKs). After verifying that you do not need to use the CMKs, use the <a>ScheduleKeyDeletion</a> operation to delete the CMKs. After they are deleted, you can delete the custom key store.</p>
+    CustomKeyStoreHasCMKs(String),
+    /// <p><p>The request was rejected because of the <code>ConnectionState</code> of the custom key store. To get the <code>ConnectionState</code> of a custom key store, use the <a>DescribeCustomKeyStores</a> operation.</p> <p>This exception is thrown under the following conditions:</p> <ul> <li> <p>You requested the <a>CreateKey</a> or <a>GenerateRandom</a> operation in a custom key store that is not connected. These operations are valid only when the custom key store <code>ConnectionState</code> is <code>CONNECTED</code>.</p> </li> <li> <p>You requested the <a>UpdateCustomKeyStore</a> or <a>DeleteCustomKeyStore</a> operation on a custom key store that is not disconnected. This operation is valid only when the custom key store <code>ConnectionState</code> is <code>DISCONNECTED</code>.</p> </li> <li> <p>You requested the <a>ConnectCustomKeyStore</a> operation on a custom key store with a <code>ConnectionState</code> of <code>DISCONNECTING</code> or <code>FAILED</code>. This operation is valid for all other <code>ConnectionState</code> values.</p> </li> </ul></p>
+    CustomKeyStoreInvalidState(String),
+    /// <p>The request was rejected because AWS KMS cannot find a custom key store with the specified key store name or ID.</p>
+    CustomKeyStoreNotFound(String),
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    KMSInternal(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DeleteCustomKeyStoreError {
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteCustomKeyStoreError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "CustomKeyStoreHasCMKsException" => {
+                    return DeleteCustomKeyStoreError::CustomKeyStoreHasCMKs(String::from(
+                        error_message,
+                    ));
+                }
+                "CustomKeyStoreInvalidStateException" => {
+                    return DeleteCustomKeyStoreError::CustomKeyStoreInvalidState(String::from(
+                        error_message,
+                    ));
+                }
+                "CustomKeyStoreNotFoundException" => {
+                    return DeleteCustomKeyStoreError::CustomKeyStoreNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "KMSInternalException" => {
+                    return DeleteCustomKeyStoreError::KMSInternal(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return DeleteCustomKeyStoreError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DeleteCustomKeyStoreError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteCustomKeyStoreError {
+    fn from(err: serde_json::error::Error) -> DeleteCustomKeyStoreError {
+        DeleteCustomKeyStoreError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteCustomKeyStoreError {
+    fn from(err: CredentialsError) -> DeleteCustomKeyStoreError {
+        DeleteCustomKeyStoreError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteCustomKeyStoreError {
+    fn from(err: HttpDispatchError) -> DeleteCustomKeyStoreError {
+        DeleteCustomKeyStoreError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteCustomKeyStoreError {
+    fn from(err: io::Error) -> DeleteCustomKeyStoreError {
+        DeleteCustomKeyStoreError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteCustomKeyStoreError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteCustomKeyStoreError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteCustomKeyStoreError::CustomKeyStoreHasCMKs(ref cause) => cause,
+            DeleteCustomKeyStoreError::CustomKeyStoreInvalidState(ref cause) => cause,
+            DeleteCustomKeyStoreError::CustomKeyStoreNotFound(ref cause) => cause,
+            DeleteCustomKeyStoreError::KMSInternal(ref cause) => cause,
+            DeleteCustomKeyStoreError::Validation(ref cause) => cause,
+            DeleteCustomKeyStoreError::Credentials(ref err) => err.description(),
+            DeleteCustomKeyStoreError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteCustomKeyStoreError::ParseError(ref cause) => cause,
+            DeleteCustomKeyStoreError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by DeleteImportedKeyMaterial
 #[derive(Debug, PartialEq)]
 pub enum DeleteImportedKeyMaterialError {
@@ -1772,6 +2310,96 @@ impl Error for DeleteImportedKeyMaterialError {
             }
             DeleteImportedKeyMaterialError::ParseError(ref cause) => cause,
             DeleteImportedKeyMaterialError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DescribeCustomKeyStores
+#[derive(Debug, PartialEq)]
+pub enum DescribeCustomKeyStoresError {
+    /// <p>The request was rejected because AWS KMS cannot find a custom key store with the specified key store name or ID.</p>
+    CustomKeyStoreNotFound(String),
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    KMSInternal(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DescribeCustomKeyStoresError {
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeCustomKeyStoresError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "CustomKeyStoreNotFoundException" => {
+                    return DescribeCustomKeyStoresError::CustomKeyStoreNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "KMSInternalException" => {
+                    return DescribeCustomKeyStoresError::KMSInternal(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return DescribeCustomKeyStoresError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DescribeCustomKeyStoresError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeCustomKeyStoresError {
+    fn from(err: serde_json::error::Error) -> DescribeCustomKeyStoresError {
+        DescribeCustomKeyStoresError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeCustomKeyStoresError {
+    fn from(err: CredentialsError) -> DescribeCustomKeyStoresError {
+        DescribeCustomKeyStoresError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeCustomKeyStoresError {
+    fn from(err: HttpDispatchError) -> DescribeCustomKeyStoresError {
+        DescribeCustomKeyStoresError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeCustomKeyStoresError {
+    fn from(err: io::Error) -> DescribeCustomKeyStoresError {
+        DescribeCustomKeyStoresError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeCustomKeyStoresError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeCustomKeyStoresError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeCustomKeyStoresError::CustomKeyStoreNotFound(ref cause) => cause,
+            DescribeCustomKeyStoresError::KMSInternal(ref cause) => cause,
+            DescribeCustomKeyStoresError::Validation(ref cause) => cause,
+            DescribeCustomKeyStoresError::Credentials(ref err) => err.description(),
+            DescribeCustomKeyStoresError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeCustomKeyStoresError::ParseError(ref cause) => cause,
+            DescribeCustomKeyStoresError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2094,6 +2722,104 @@ impl Error for DisableKeyRotationError {
             }
             DisableKeyRotationError::ParseError(ref cause) => cause,
             DisableKeyRotationError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DisconnectCustomKeyStore
+#[derive(Debug, PartialEq)]
+pub enum DisconnectCustomKeyStoreError {
+    /// <p><p>The request was rejected because of the <code>ConnectionState</code> of the custom key store. To get the <code>ConnectionState</code> of a custom key store, use the <a>DescribeCustomKeyStores</a> operation.</p> <p>This exception is thrown under the following conditions:</p> <ul> <li> <p>You requested the <a>CreateKey</a> or <a>GenerateRandom</a> operation in a custom key store that is not connected. These operations are valid only when the custom key store <code>ConnectionState</code> is <code>CONNECTED</code>.</p> </li> <li> <p>You requested the <a>UpdateCustomKeyStore</a> or <a>DeleteCustomKeyStore</a> operation on a custom key store that is not disconnected. This operation is valid only when the custom key store <code>ConnectionState</code> is <code>DISCONNECTED</code>.</p> </li> <li> <p>You requested the <a>ConnectCustomKeyStore</a> operation on a custom key store with a <code>ConnectionState</code> of <code>DISCONNECTING</code> or <code>FAILED</code>. This operation is valid for all other <code>ConnectionState</code> values.</p> </li> </ul></p>
+    CustomKeyStoreInvalidState(String),
+    /// <p>The request was rejected because AWS KMS cannot find a custom key store with the specified key store name or ID.</p>
+    CustomKeyStoreNotFound(String),
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    KMSInternal(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DisconnectCustomKeyStoreError {
+    pub fn from_response(res: BufferedHttpResponse) -> DisconnectCustomKeyStoreError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "CustomKeyStoreInvalidStateException" => {
+                    return DisconnectCustomKeyStoreError::CustomKeyStoreInvalidState(String::from(
+                        error_message,
+                    ));
+                }
+                "CustomKeyStoreNotFoundException" => {
+                    return DisconnectCustomKeyStoreError::CustomKeyStoreNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "KMSInternalException" => {
+                    return DisconnectCustomKeyStoreError::KMSInternal(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return DisconnectCustomKeyStoreError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DisconnectCustomKeyStoreError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DisconnectCustomKeyStoreError {
+    fn from(err: serde_json::error::Error) -> DisconnectCustomKeyStoreError {
+        DisconnectCustomKeyStoreError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DisconnectCustomKeyStoreError {
+    fn from(err: CredentialsError) -> DisconnectCustomKeyStoreError {
+        DisconnectCustomKeyStoreError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DisconnectCustomKeyStoreError {
+    fn from(err: HttpDispatchError) -> DisconnectCustomKeyStoreError {
+        DisconnectCustomKeyStoreError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DisconnectCustomKeyStoreError {
+    fn from(err: io::Error) -> DisconnectCustomKeyStoreError {
+        DisconnectCustomKeyStoreError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DisconnectCustomKeyStoreError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DisconnectCustomKeyStoreError {
+    fn description(&self) -> &str {
+        match *self {
+            DisconnectCustomKeyStoreError::CustomKeyStoreInvalidState(ref cause) => cause,
+            DisconnectCustomKeyStoreError::CustomKeyStoreNotFound(ref cause) => cause,
+            DisconnectCustomKeyStoreError::KMSInternal(ref cause) => cause,
+            DisconnectCustomKeyStoreError::Validation(ref cause) => cause,
+            DisconnectCustomKeyStoreError::Credentials(ref err) => err.description(),
+            DisconnectCustomKeyStoreError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DisconnectCustomKeyStoreError::ParseError(ref cause) => cause,
+            DisconnectCustomKeyStoreError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2706,6 +3432,10 @@ impl Error for GenerateDataKeyWithoutPlaintextError {
 /// Errors returned by GenerateRandom
 #[derive(Debug, PartialEq)]
 pub enum GenerateRandomError {
+    /// <p><p>The request was rejected because of the <code>ConnectionState</code> of the custom key store. To get the <code>ConnectionState</code> of a custom key store, use the <a>DescribeCustomKeyStores</a> operation.</p> <p>This exception is thrown under the following conditions:</p> <ul> <li> <p>You requested the <a>CreateKey</a> or <a>GenerateRandom</a> operation in a custom key store that is not connected. These operations are valid only when the custom key store <code>ConnectionState</code> is <code>CONNECTED</code>.</p> </li> <li> <p>You requested the <a>UpdateCustomKeyStore</a> or <a>DeleteCustomKeyStore</a> operation on a custom key store that is not disconnected. This operation is valid only when the custom key store <code>ConnectionState</code> is <code>DISCONNECTED</code>.</p> </li> <li> <p>You requested the <a>ConnectCustomKeyStore</a> operation on a custom key store with a <code>ConnectionState</code> of <code>DISCONNECTING</code> or <code>FAILED</code>. This operation is valid for all other <code>ConnectionState</code> values.</p> </li> </ul></p>
+    CustomKeyStoreInvalidState(String),
+    /// <p>The request was rejected because AWS KMS cannot find a custom key store with the specified key store name or ID.</p>
+    CustomKeyStoreNotFound(String),
     /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
     /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
@@ -2735,6 +3465,14 @@ impl GenerateRandomError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "CustomKeyStoreInvalidStateException" => {
+                    return GenerateRandomError::CustomKeyStoreInvalidState(String::from(
+                        error_message,
+                    ));
+                }
+                "CustomKeyStoreNotFoundException" => {
+                    return GenerateRandomError::CustomKeyStoreNotFound(String::from(error_message));
+                }
                 "DependencyTimeoutException" => {
                     return GenerateRandomError::DependencyTimeout(String::from(error_message));
                 }
@@ -2779,6 +3517,8 @@ impl fmt::Display for GenerateRandomError {
 impl Error for GenerateRandomError {
     fn description(&self) -> &str {
         match *self {
+            GenerateRandomError::CustomKeyStoreInvalidState(ref cause) => cause,
+            GenerateRandomError::CustomKeyStoreNotFound(ref cause) => cause,
             GenerateRandomError::DependencyTimeout(ref cause) => cause,
             GenerateRandomError::KMSInternal(ref cause) => cause,
             GenerateRandomError::Validation(ref cause) => cause,
@@ -3264,10 +4004,14 @@ impl Error for ImportKeyMaterialError {
 pub enum ListAliasesError {
     /// <p>The system timed out while trying to fulfill the request. The request can be retried.</p>
     DependencyTimeout(String),
+    /// <p>The request was rejected because a specified ARN was not valid.</p>
+    InvalidArn(String),
     /// <p>The request was rejected because the marker that specifies where pagination should next begin is not valid.</p>
     InvalidMarker(String),
     /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
     KMSInternal(String),
+    /// <p>The request was rejected because the specified entity or resource could not be found.</p>
+    NotFound(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -3296,11 +4040,17 @@ impl ListAliasesError {
                 "DependencyTimeoutException" => {
                     return ListAliasesError::DependencyTimeout(String::from(error_message));
                 }
+                "InvalidArnException" => {
+                    return ListAliasesError::InvalidArn(String::from(error_message));
+                }
                 "InvalidMarkerException" => {
                     return ListAliasesError::InvalidMarker(String::from(error_message));
                 }
                 "KMSInternalException" => {
                     return ListAliasesError::KMSInternal(String::from(error_message));
+                }
+                "NotFoundException" => {
+                    return ListAliasesError::NotFound(String::from(error_message));
                 }
                 "ValidationException" => {
                     return ListAliasesError::Validation(error_message.to_string());
@@ -3341,8 +4091,10 @@ impl Error for ListAliasesError {
     fn description(&self) -> &str {
         match *self {
             ListAliasesError::DependencyTimeout(ref cause) => cause,
+            ListAliasesError::InvalidArn(ref cause) => cause,
             ListAliasesError::InvalidMarker(ref cause) => cause,
             ListAliasesError::KMSInternal(ref cause) => cause,
+            ListAliasesError::NotFound(ref cause) => cause,
             ListAliasesError::Validation(ref cause) => cause,
             ListAliasesError::Credentials(ref err) => err.description(),
             ListAliasesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -4747,6 +5499,136 @@ impl Error for UpdateAliasError {
         }
     }
 }
+/// Errors returned by UpdateCustomKeyStore
+#[derive(Debug, PartialEq)]
+pub enum UpdateCustomKeyStoreError {
+    /// <p>The request was rejected because the associated AWS CloudHSM cluster did not meet the configuration requirements for a custom key store. The cluster must be configured with private subnets in at least two different Availability Zones in the Region. Also, it must contain at least as many HSMs as the operation requires.</p> <p>For the <a>CreateCustomKeyStore</a>, <a>UpdateCustomKeyStore</a>, and <a>CreateKey</a> operations, the AWS CloudHSM cluster must have at least two active HSMs, each in a different Availability Zone. For the <a>ConnectCustomKeyStore</a> operation, the AWS CloudHSM must contain at least one active HSM.</p> <p>For information about creating a private subnet for a AWS CloudHSM cluster, see <a href="http://docs.aws.amazon.com/cloudhsm/latest/userguide/create-subnets.html">Create a Private Subnet</a> in the <i>AWS CloudHSM User Guide</i>. To add HSMs, use the AWS CloudHSM <a href="http://docs.aws.amazon.com/cloudhsm/latest/APIReference/API_CreateHsm.html">CreateHsm</a> operation.</p>
+    CloudHsmClusterInvalidConfiguration(String),
+    /// <p>The request was rejected because the AWS CloudHSM cluster that is associated with the custom key store is not active. Initialize and activate the cluster and try the command again. For detailed instructions, see <a href="http://docs.aws.amazon.com/cloudhsm/latest/userguide/getting-started.html">Getting Started</a> in the <i>AWS CloudHSM User Guide</i>.</p>
+    CloudHsmClusterNotActive(String),
+    /// <p>The request was rejected because AWS KMS cannot find the AWS CloudHSM cluster with the specified cluster ID. Retry the request with a different cluster ID.</p>
+    CloudHsmClusterNotFound(String),
+    /// <p>The request was rejected because the specified AWS CloudHSM cluster has a different cluster certificate than the original cluster. You cannot use the operation to specify an unrelated cluster.</p> <p>Specify a cluster that shares a backup history with the original cluster. This includes clusters that were created from a backup of the current cluster, and clusters that were created from the same backup that produced the current cluster.</p> <p>Clusters that share a backup history have the same cluster certificate. To view the cluster certificate of a cluster, use the <a href="http://docs.aws.amazon.com/cloudhsm/latest/APIReference/API_DescribeClusters.html">DescribeClusters</a> operation.</p>
+    CloudHsmClusterNotRelated(String),
+    /// <p><p>The request was rejected because of the <code>ConnectionState</code> of the custom key store. To get the <code>ConnectionState</code> of a custom key store, use the <a>DescribeCustomKeyStores</a> operation.</p> <p>This exception is thrown under the following conditions:</p> <ul> <li> <p>You requested the <a>CreateKey</a> or <a>GenerateRandom</a> operation in a custom key store that is not connected. These operations are valid only when the custom key store <code>ConnectionState</code> is <code>CONNECTED</code>.</p> </li> <li> <p>You requested the <a>UpdateCustomKeyStore</a> or <a>DeleteCustomKeyStore</a> operation on a custom key store that is not disconnected. This operation is valid only when the custom key store <code>ConnectionState</code> is <code>DISCONNECTED</code>.</p> </li> <li> <p>You requested the <a>ConnectCustomKeyStore</a> operation on a custom key store with a <code>ConnectionState</code> of <code>DISCONNECTING</code> or <code>FAILED</code>. This operation is valid for all other <code>ConnectionState</code> values.</p> </li> </ul></p>
+    CustomKeyStoreInvalidState(String),
+    /// <p>The request was rejected because AWS KMS cannot find a custom key store with the specified key store name or ID.</p>
+    CustomKeyStoreNotFound(String),
+    /// <p>The request was rejected because an internal exception occurred. The request can be retried.</p>
+    KMSInternal(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl UpdateCustomKeyStoreError {
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateCustomKeyStoreError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "CloudHsmClusterInvalidConfigurationException" => {
+                    return UpdateCustomKeyStoreError::CloudHsmClusterInvalidConfiguration(
+                        String::from(error_message),
+                    );
+                }
+                "CloudHsmClusterNotActiveException" => {
+                    return UpdateCustomKeyStoreError::CloudHsmClusterNotActive(String::from(
+                        error_message,
+                    ));
+                }
+                "CloudHsmClusterNotFoundException" => {
+                    return UpdateCustomKeyStoreError::CloudHsmClusterNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "CloudHsmClusterNotRelatedException" => {
+                    return UpdateCustomKeyStoreError::CloudHsmClusterNotRelated(String::from(
+                        error_message,
+                    ));
+                }
+                "CustomKeyStoreInvalidStateException" => {
+                    return UpdateCustomKeyStoreError::CustomKeyStoreInvalidState(String::from(
+                        error_message,
+                    ));
+                }
+                "CustomKeyStoreNotFoundException" => {
+                    return UpdateCustomKeyStoreError::CustomKeyStoreNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "KMSInternalException" => {
+                    return UpdateCustomKeyStoreError::KMSInternal(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return UpdateCustomKeyStoreError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return UpdateCustomKeyStoreError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateCustomKeyStoreError {
+    fn from(err: serde_json::error::Error) -> UpdateCustomKeyStoreError {
+        UpdateCustomKeyStoreError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateCustomKeyStoreError {
+    fn from(err: CredentialsError) -> UpdateCustomKeyStoreError {
+        UpdateCustomKeyStoreError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateCustomKeyStoreError {
+    fn from(err: HttpDispatchError) -> UpdateCustomKeyStoreError {
+        UpdateCustomKeyStoreError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateCustomKeyStoreError {
+    fn from(err: io::Error) -> UpdateCustomKeyStoreError {
+        UpdateCustomKeyStoreError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateCustomKeyStoreError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateCustomKeyStoreError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateCustomKeyStoreError::CloudHsmClusterInvalidConfiguration(ref cause) => cause,
+            UpdateCustomKeyStoreError::CloudHsmClusterNotActive(ref cause) => cause,
+            UpdateCustomKeyStoreError::CloudHsmClusterNotFound(ref cause) => cause,
+            UpdateCustomKeyStoreError::CloudHsmClusterNotRelated(ref cause) => cause,
+            UpdateCustomKeyStoreError::CustomKeyStoreInvalidState(ref cause) => cause,
+            UpdateCustomKeyStoreError::CustomKeyStoreNotFound(ref cause) => cause,
+            UpdateCustomKeyStoreError::KMSInternal(ref cause) => cause,
+            UpdateCustomKeyStoreError::Validation(ref cause) => cause,
+            UpdateCustomKeyStoreError::Credentials(ref err) => err.description(),
+            UpdateCustomKeyStoreError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateCustomKeyStoreError::ParseError(ref cause) => cause,
+            UpdateCustomKeyStoreError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by UpdateKeyDescription
 #[derive(Debug, PartialEq)]
 pub enum UpdateKeyDescriptionError {
@@ -4861,8 +5743,20 @@ pub trait Kms {
         input: CancelKeyDeletionRequest,
     ) -> RusotoFuture<CancelKeyDeletionResponse, CancelKeyDeletionError>;
 
-    /// <p>Creates a display name for a customer-managed customer master key (CMK). You can use an alias to identify a CMK in selected operations, such as <a>Encrypt</a> and <a>GenerateDataKey</a>. </p> <p>Each CMK can have multiple aliases, but each alias points to only one CMK. The alias name must be unique in the AWS account and region. To simplify code that runs in multiple regions, use the same alias name, but point it to a different CMK in each region. </p> <p>Because an alias is not a property of a CMK, you can delete and change the aliases of a CMK without affecting the CMK. Also, aliases do not appear in the response from the <a>DescribeKey</a> operation. To get the aliases of all CMKs, use the <a>ListAliases</a> operation.</p> <p>The alias name can contain only alphanumeric characters, forward slashes (/), underscores (_), and dashes (-). Alias names cannot begin with <b>aws/</b>. That alias name prefix is reserved for AWS managed CMKs.</p> <p>The alias and the CMK it is mapped to must be in the same AWS account and the same region. You cannot perform this operation on an alias in a different AWS account.</p> <p>To map an existing alias to a different CMK, call <a>UpdateAlias</a>.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>Connects or reconnects a <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-overview.html">custom key store</a> to its associated AWS CloudHSM cluster.</p> <p>The custom key store must be connected before you can create customer master keys (CMKs) in the key store or use the CMKs it contains. You can disconnect and reconnect a custom key store at any time.</p> <p>To connect a custom key store, its associated AWS CloudHSM cluster must have at least one active HSM. To get the number of active HSMs in a cluster, use the <a href="http://docs.aws.amazon.com/cloudhsm/latest/APIReference/API_DescribeClusters">DescribeClusters</a> operation. To add HSMs to the cluster, use the <a href="http://docs.aws.amazon.com/cloudhsm/latest/APIReference/API_CreateHsm">CreateHsm</a> operation.</p> <p>The connection process can take an extended amount of time to complete; up to 20 minutes. This operation starts the connection process, but it does not wait for it to complete. When it succeeds, this operation quickly returns an HTTP 200 response and a JSON object with no properties. However, this response does not indicate that the custom key store is connected. To get the connection state of the custom key store, use the <a>DescribeCustomKeyStores</a> operation.</p> <p>During the connection process, AWS KMS finds the AWS CloudHSM cluster that is associated with the custom key store, creates the connection infrastructure, connects to the cluster, logs into the AWS CloudHSM client as the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-concepts.html#concept-kmsuser"> <code>kmsuser</code> crypto user</a> (CU), and rotates its password.</p> <p>The <code>ConnectCustomKeyStore</code> operation might fail for various reasons. To find the reason, use the <a>DescribeCustomKeyStores</a> operation and see the <code>ConnectionErrorCode</code> in the response. For help interpreting the <code>ConnectionErrorCode</code>, see <a>CustomKeyStoresListEntry</a>.</p> <p>To fix the failure, use the <a>DisconnectCustomKeyStore</a> operation to disconnect the custom key store, correct the error, use the <a>UpdateCustomKeyStore</a> operation if necessary, and then use <code>ConnectCustomKeyStore</code> again.</p> <p>If you are having trouble connecting or disconnecting a custom key store, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/fix-keystore.html">Troubleshooting a Custom Key Store</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    fn connect_custom_key_store(
+        &self,
+        input: ConnectCustomKeyStoreRequest,
+    ) -> RusotoFuture<ConnectCustomKeyStoreResponse, ConnectCustomKeyStoreError>;
+
+    /// <p>Creates a display name for a customer master key (CMK). You can use an alias to identify a CMK in selected operations, such as <a>Encrypt</a> and <a>GenerateDataKey</a>. </p> <p>Each CMK can have multiple aliases, but each alias points to only one CMK. The alias name must be unique in the AWS account and region. To simplify code that runs in multiple regions, use the same alias name, but point it to a different CMK in each region. </p> <p>Because an alias is not a property of a CMK, you can delete and change the aliases of a CMK without affecting the CMK. Also, aliases do not appear in the response from the <a>DescribeKey</a> operation. To get the aliases of all CMKs, use the <a>ListAliases</a> operation.</p> <p>An alias must start with the word <code>alias</code> followed by a forward slash (<code>alias/</code>). The alias name can contain only alphanumeric characters, forward slashes (/), underscores (_), and dashes (-). Alias names cannot begin with <code>aws</code>; that alias name prefix is reserved by Amazon Web Services (AWS).</p> <p>The alias and the CMK it is mapped to must be in the same AWS account and the same region. You cannot perform this operation on an alias in a different AWS account.</p> <p>To map an existing alias to a different CMK, call <a>UpdateAlias</a>.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn create_alias(&self, input: CreateAliasRequest) -> RusotoFuture<(), CreateAliasError>;
+
+    /// <p>Creates a <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-overview.html">custom key store</a> that is associated with an <a href="http://docs.aws.amazon.com/cloudhsm/latest/userguide/clusters.html">AWS CloudHSM cluster</a> that you own and manage.</p> <p>This operation is part of the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html">Custom Key Store feature</a> feature in AWS KMS, which combines the convenience and extensive integration of AWS KMS with the isolation and control of a single-tenant key store.</p> <p>When the operation completes successfully, it returns the ID of the new custom key store. Before you can use your new custom key store, you need to use the <a>ConnectCustomKeyStore</a> operation to connect the new key store to its AWS CloudHSM cluster.</p> <p>The <code>CreateCustomKeyStore</code> operation requires the following elements.</p> <ul> <li> <p>You must specify an active AWS CloudHSM cluster in the same account and AWS Region as the custom key store. You can use an existing cluster or <a href="http://docs.aws.amazon.com/cloudhsm/latest/userguide/create-cluster.html">create and activate a new AWS CloudHSM cluster</a> for the key store. AWS KMS does not require exclusive use of the cluster.</p> </li> <li> <p>You must include the content of the <i>trust anchor certificate</i> for the cluster. You created this certificate, and saved it in the <code>customerCA.crt</code> file, when you <a href="http://docs.aws.amazon.com/cloudhsm/latest/userguide/initialize-cluster.html#sign-csr">initialized the cluster</a>.</p> </li> <li> <p>You must provide the password of the dedicated <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-concepts.html#concept-kmsuser"> <code>kmsuser</code> crypto user</a> (CU) account in the cluster.</p> <p>Before you create the custom key store, use the <a href="http://docs.aws.amazon.com/cloudhsm/latest/userguide/cloudhsm_mgmt_util-createUser.html">createUser</a> command in <code>cloudhsm_mgmt_util</code> to create <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-concepts.html#concept-kmsuser">a crypto user (CU) named <code>kmsuser</code> </a>in specified AWS CloudHSM cluster. AWS KMS uses the <code>kmsuser</code> CU account to create and manage key material on your behalf. For instructions, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/create-keystore.html#before-keystore">Create the kmsuser Crypto User</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> </li> </ul> <p>The AWS CloudHSM cluster that you specify must meet the following requirements.</p> <ul> <li> <p>The cluster must be active and be in the same AWS account and Region as the custom key store.</p> </li> <li> <p>Each custom key store must be associated with a different AWS CloudHSM cluster. The cluster cannot be associated with another custom key store or have the same cluster certificate as a cluster that is associated with another custom key store. To view the cluster certificate, use the AWS CloudHSM <a href="http://docs.aws.amazon.com/cloudhsm/latest/APIReference/API_DescribeClusters.html">DescribeClusters</a> operation. Clusters that share a backup history have the same cluster certificate.</p> </li> <li> <p>The cluster must be configured with subnets in at least two different Availability Zones in the Region. Because AWS CloudHSM is not supported in all Availability Zones, we recommend that the cluster have subnets in all Availability Zones in the Region.</p> </li> <li> <p>The cluster must contain at least two active HSMs, each in a different Availability Zone.</p> </li> </ul> <p>New custom key stores are not automatically connected. After you create your custom key store, use the <a>ConnectCustomKeyStore</a> operation to connect the custom key store to its associated AWS CloudHSM cluster. Even if you are not going to use your custom key store immediately, you might want to connect it to verify that all settings are correct and then disconnect it until you are ready to use it.</p> <p>If this operation succeeds, it returns the ID of the new custom key store. For help with failures, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/fix-keystore.html">Troubleshoot a Custom Key Store</a> in the <i>AWS KMS Developer Guide</i>.</p>
+    fn create_custom_key_store(
+        &self,
+        input: CreateCustomKeyStoreRequest,
+    ) -> RusotoFuture<CreateCustomKeyStoreResponse, CreateCustomKeyStoreError>;
 
     /// <p>Adds a grant to a customer master key (CMK). The grant specifies who can use the CMK and under what conditions. When setting permissions, grants are an alternative to key policies. </p> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN in the value of the <code>KeyId</code> parameter. For more information about grants, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/grants.html">Grants</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn create_grant(
@@ -4870,17 +5764,23 @@ pub trait Kms {
         input: CreateGrantRequest,
     ) -> RusotoFuture<CreateGrantResponse, CreateGrantError>;
 
-    /// <p>Creates a customer master key (CMK) in the caller's AWS account.</p> <p>You can use a CMK to encrypt small amounts of data (4 KiB or less) directly. But CMKs are more commonly used to encrypt data encryption keys (DEKs), which are used to encrypt raw data. For more information about DEKs and the difference between CMKs and DEKs, see the following:</p> <ul> <li> <p>The <a>GenerateDataKey</a> operation</p> </li> <li> <p> <a href="http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html">AWS Key Management Service Concepts</a> in the <i>AWS Key Management Service Developer Guide</i> </p> </li> </ul> <p>You cannot use this operation to create a CMK in a different AWS account.</p>
+    /// <p>Creates a customer master key (CMK) in the caller's AWS account.</p> <p>You can use a CMK to encrypt small amounts of data (4 KiB or less) directly, but CMKs are more commonly used to encrypt data keys, which are used to encrypt raw data. For more information about data keys and the difference between CMKs and data keys, see the following:</p> <ul> <li> <p>The <a>GenerateDataKey</a> operation</p> </li> <li> <p> <a href="http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html">AWS Key Management Service Concepts</a> in the <i>AWS Key Management Service Developer Guide</i> </p> </li> </ul> <p>If you plan to <a href="http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html">import key material</a>, use the <code>Origin</code> parameter with a value of <code>EXTERNAL</code> to create a CMK with no key material.</p> <p>To create a CMK in a <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-overview.html">custom key store</a>, use <code>CustomKeyStoreId</code> parameter to specify the custom key store. You must also use the <code>Origin</code> parameter with a value of <code>AWS_CLOUDHSM</code>. The AWS CloudHSM cluster that is associated with the custom key store must have at least two active HSMs, each in a different Availability Zone in the Region.</p> <p>You cannot use this operation to create a CMK in a different AWS account.</p>
     fn create_key(
         &self,
         input: CreateKeyRequest,
     ) -> RusotoFuture<CreateKeyResponse, CreateKeyError>;
 
-    /// <p>Decrypts ciphertext. Ciphertext is plaintext that has been previously encrypted by using any of the following operations:</p> <ul> <li> <p> <a>GenerateDataKey</a> </p> </li> <li> <p> <a>GenerateDataKeyWithoutPlaintext</a> </p> </li> <li> <p> <a>Encrypt</a> </p> </li> </ul> <p>Whenever possible, use key policies to give users permission to call the Decrypt operation on the CMK, instead of IAM policies. Otherwise, you might create an IAM user policy that gives the user Decrypt permission on all CMKs. This user could decrypt ciphertext that was encrypted by CMKs in other accounts if the key policy for the cross-account CMK permits it. If you must use an IAM policy for <code>Decrypt</code> permissions, limit the user to particular CMKs or particular trusted accounts.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>Decrypts ciphertext. Ciphertext is plaintext that has been previously encrypted by using any of the following operations:</p> <ul> <li> <p> <a>GenerateDataKey</a> </p> </li> <li> <p> <a>GenerateDataKeyWithoutPlaintext</a> </p> </li> <li> <p> <a>Encrypt</a> </p> </li> </ul> <p>Note that if a caller has been granted access permissions to all keys (through, for example, IAM user policies that grant <code>Decrypt</code> permission on all resources), then ciphertext encrypted by using keys in other accounts where the key grants access to the caller can be decrypted. To remedy this, we recommend that you do not grant <code>Decrypt</code> access in an IAM user policy. Instead grant <code>Decrypt</code> access only in key policies. If you must grant <code>Decrypt</code> access in an IAM user policy, you should scope the resource to specific keys or to specific trusted accounts.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn decrypt(&self, input: DecryptRequest) -> RusotoFuture<DecryptResponse, DecryptError>;
 
     /// <p>Deletes the specified alias. You cannot perform this operation on an alias in a different AWS account. </p> <p>Because an alias is not a property of a CMK, you can delete and change the aliases of a CMK without affecting the CMK. Also, aliases do not appear in the response from the <a>DescribeKey</a> operation. To get the aliases of all CMKs, use the <a>ListAliases</a> operation. </p> <p>Each CMK can have multiple aliases. To change the alias of a CMK, use <a>DeleteAlias</a> to delete the current alias and <a>CreateAlias</a> to create a new alias. To associate an existing alias with a different customer master key (CMK), call <a>UpdateAlias</a>.</p>
     fn delete_alias(&self, input: DeleteAliasRequest) -> RusotoFuture<(), DeleteAliasError>;
+
+    /// <p>Deletes a <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-overview.html">custom key store</a>. This operation does not delete the AWS CloudHSM cluster that is associated with the custom key store, or affect any users or keys in the cluster.</p> <p>The custom key store that you delete cannot contain any AWS KMS <a href="http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys">customer master keys (CMKs)</a>. Before deleting the key store, verify that you will never need to use any of the CMKs in the key store for any cryptographic operations. Then, use <a>ScheduleKeyDeletion</a> to delete the AWS KMS customer master keys (CMKs) from the key store. When the scheduled waiting period expires, the <code>ScheduleKeyDeletion</code> operation deletes the CMKs. Then it makes a best effort to delete the key material from the associated cluster. However, you might need to manually <a href="http://docs.aws.amazon.com/kms/latest/developerguide/fix-keystore.html#fix-keystore-orphaned-key">delete the orphaned key material</a> from the cluster and its backups.</p> <p>After all CMKs are deleted from AWS KMS, use <a>DisconnectCustomKeyStore</a> to disconnect the key store from AWS KMS. Then, you can delete the custom key store.</p> <p>Instead of deleting the custom key store, consider using <a>DisconnectCustomKeyStore</a> to disconnect it from AWS KMS. While the key store is disconnected, you cannot create or use the CMKs in the key store. But, you do not need to delete CMKs and you can reconnect a disconnected custom key store at any time.</p> <p>If the operation succeeds, it returns a JSON object with no properties.</p> <p>This operation is part of the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html">Custom Key Store feature</a> feature in AWS KMS, which combines the convenience and extensive integration of AWS KMS with the isolation and control of a single-tenant key store.</p>
+    fn delete_custom_key_store(
+        &self,
+        input: DeleteCustomKeyStoreRequest,
+    ) -> RusotoFuture<DeleteCustomKeyStoreResponse, DeleteCustomKeyStoreError>;
 
     /// <p>Deletes key material that you previously imported. This operation makes the specified customer master key (CMK) unusable. For more information about importing key material into AWS KMS, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html">Importing Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>. You cannot perform this operation on a CMK in a different AWS account.</p> <p>When the specified CMK is in the <code>PendingDeletion</code> state, this operation does not change the CMK's state. Otherwise, it changes the CMK's state to <code>PendingImport</code>.</p> <p>After you delete key material, you can use <a>ImportKeyMaterial</a> to reimport the same key material into the CMK.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn delete_imported_key_material(
@@ -4888,7 +5788,13 @@ pub trait Kms {
         input: DeleteImportedKeyMaterialRequest,
     ) -> RusotoFuture<(), DeleteImportedKeyMaterialError>;
 
-    /// <p>Provides detailed information about the specified customer master key (CMK).</p> <p>You can use <code>DescribeKey</code> on a predefined AWS alias, that is, an AWS alias with no key ID. When you do, AWS KMS associates the alias with an <a href="http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys">AWS managed CMK</a> and returns its <code>KeyId</code> and <code>Arn</code> in the response.</p> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN or alias ARN in the value of the KeyId parameter.</p>
+    /// <p>Gets information about <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-overview.html">custom key stores</a> in the account and region.</p> <p>This operation is part of the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html">Custom Key Store feature</a> feature in AWS KMS, which combines the convenience and extensive integration of AWS KMS with the isolation and control of a single-tenant key store.</p> <p>By default, this operation returns information about all custom key stores in the account and region. To get only information about a particular custom key store, use either the <code>CustomKeyStoreName</code> or <code>CustomKeyStoreId</code> parameter (but not both).</p> <p>To determine whether the custom key store is connected to its AWS CloudHSM cluster, use the <code>ConnectionState</code> element in the response. If an attempt to connect the custom key store failed, the <code>ConnectionState</code> value is <code>FAILED</code> and the <code>ConnectionErrorCode</code> element in the response indicates the cause of the failure. For help interpreting the <code>ConnectionErrorCode</code>, see <a>CustomKeyStoresListEntry</a>.</p> <p>Custom key stores have a <code>DISCONNECTED</code> connection state if the key store has never been connected or you use the <a>DisconnectCustomKeyStore</a> operation to disconnect it. If your custom key store state is <code>CONNECTED</code> but you are having trouble using it, make sure that its associated AWS CloudHSM cluster is active and contains the minimum number of HSMs required for the operation, if any.</p> <p> For help repairing your custom key store, see the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/fix-keystore-html">Troubleshooting Custom Key Stores</a> topic in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    fn describe_custom_key_stores(
+        &self,
+        input: DescribeCustomKeyStoresRequest,
+    ) -> RusotoFuture<DescribeCustomKeyStoresResponse, DescribeCustomKeyStoresError>;
+
+    /// <p>Provides detailed information about the specified customer master key (CMK).</p> <p>If you use <code>DescribeKey</code> on a predefined AWS alias, that is, an AWS alias with no key ID, AWS KMS associates the alias with an <a href="http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys">AWS managed CMK</a> and returns its <code>KeyId</code> and <code>Arn</code> in the response.</p> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN or alias ARN in the value of the KeyId parameter.</p>
     fn describe_key(
         &self,
         input: DescribeKeyRequest,
@@ -4903,16 +5809,22 @@ pub trait Kms {
         input: DisableKeyRotationRequest,
     ) -> RusotoFuture<(), DisableKeyRotationError>;
 
-    /// <p>Sets the state of a customer master key (CMK) to enabled, thereby permitting its use for cryptographic operations. You cannot perform this operation on a CMK in a different AWS account.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>Disconnects the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-overview.html">custom key store</a> from its associated AWS CloudHSM cluster. While a custom key store is disconnected, you can manage the custom key store and its customer master keys (CMKs), but you cannot create or use CMKs in the custom key store. You can reconnect the custom key store at any time.</p> <note> <p>While a custom key store is disconnected, all attempts to create customer master keys (CMKs) in the custom key store or to use existing CMKs in cryptographic operations will fail. This action can prevent users from storing and accessing sensitive data.</p> </note> <p/> <p>To find the connection state of a custom key store, use the <a>DescribeCustomKeyStores</a> operation. To reconnect a custom key store, use the <a>ConnectCustomKeyStore</a> operation.</p> <p>If the operation succeeds, it returns a JSON object with no properties.</p> <p>This operation is part of the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html">Custom Key Store feature</a> feature in AWS KMS, which combines the convenience and extensive integration of AWS KMS with the isolation and control of a single-tenant key store.</p>
+    fn disconnect_custom_key_store(
+        &self,
+        input: DisconnectCustomKeyStoreRequest,
+    ) -> RusotoFuture<DisconnectCustomKeyStoreResponse, DisconnectCustomKeyStoreError>;
+
+    /// <p>Sets the key state of a customer master key (CMK) to enabled. This allows you to use the CMK for cryptographic operations. You cannot perform this operation on a CMK in a different AWS account.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn enable_key(&self, input: EnableKeyRequest) -> RusotoFuture<(), EnableKeyError>;
 
-    /// <p>Enables <a href="http://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html">automatic rotation of the key material</a> for the specified customer master key (CMK). You cannot perform this operation on a CMK in a different AWS account.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>Enables <a href="http://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html">automatic rotation of the key material</a> for the specified customer master key (CMK). You cannot perform this operation on a CMK in a different AWS account.</p> <p>You cannot enable automatic rotation of CMKs with imported key material or CMKs in a <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-overview.html">custom key store</a>.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn enable_key_rotation(
         &self,
         input: EnableKeyRotationRequest,
     ) -> RusotoFuture<(), EnableKeyRotationError>;
 
-    /// <p>Encrypts plaintext into ciphertext by using a customer master key (CMK). The <code>Encrypt</code> operation has two primary use cases:</p> <ul> <li> <p>You can encrypt up to 4 kilobytes (4096 bytes) of arbitrary data such as an RSA key, a database password, or other sensitive information.</p> </li> <li> <p>You can use the <code>Encrypt</code> operation to move encrypted data from one AWS region to another. In the first region, generate a data key and use the plaintext key to encrypt the data. Then, in the new region, call the <code>Encrypt</code> method on same plaintext data key. Now, you can safely move the encrypted data and encrypted data key to the new region, and decrypt in the new region when necessary.</p> </li> </ul> <p>You don't need use this operation to encrypt a data key within a region. The <a>GenerateDataKey</a> and <a>GenerateDataKeyWithoutPlaintext</a> operations return an encrypted data key.</p> <p>Also, you don't need to use this operation to encrypt data in your application. You can use the plaintext and encrypted data keys that the <code>GenerateDataKey</code> operation returns.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN or alias ARN in the value of the KeyId parameter.</p>
+    /// <p>Encrypts plaintext into ciphertext by using a customer master key (CMK). The <code>Encrypt</code> operation has two primary use cases:</p> <ul> <li> <p>You can encrypt up to 4 kilobytes (4096 bytes) of arbitrary data such as an RSA key, a database password, or other sensitive information.</p> </li> <li> <p>To move encrypted data from one AWS region to another, you can use this operation to encrypt in the new region the plaintext data key that was used to encrypt the data in the original region. This provides you with an encrypted copy of the data key that can be decrypted in the new region and used there to decrypt the encrypted data.</p> </li> </ul> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN or alias ARN in the value of the KeyId parameter.</p> <p>Unless you are moving encrypted data from one region to another, you don't use this operation to encrypt a generated data key within a region. To get data keys that are already encrypted, call the <a>GenerateDataKey</a> or <a>GenerateDataKeyWithoutPlaintext</a> operation. Data keys don't need to be encrypted again by calling <code>Encrypt</code>.</p> <p>To encrypt data locally in your application, use the <a>GenerateDataKey</a> operation to return a plaintext data encryption key and a copy of the key encrypted under the CMK of your choosing.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn encrypt(&self, input: EncryptRequest) -> RusotoFuture<EncryptResponse, EncryptError>;
 
     /// <p>Returns a data encryption key that you can use in your application to encrypt data locally. </p> <p>You must specify the customer master key (CMK) under which to generate the data key. You must also specify the length of the data key using either the <code>KeySpec</code> or <code>NumberOfBytes</code> field. You must specify one field or the other, but not both. For common key lengths (128-bit and 256-bit symmetric keys), we recommend that you use <code>KeySpec</code>. To perform this operation on a CMK in a different AWS account, specify the key ARN or alias ARN in the value of the KeyId parameter.</p> <p>This operation returns a plaintext copy of the data key in the <code>Plaintext</code> field of the response, and an encrypted copy of the data key in the <code>CiphertextBlob</code> field. The data key is encrypted under the CMK specified in the <code>KeyId</code> field of the request. </p> <p>We recommend that you use the following pattern to encrypt data locally in your application:</p> <ol> <li> <p>Use this operation (<code>GenerateDataKey</code>) to get a data encryption key.</p> </li> <li> <p>Use the plaintext data encryption key (returned in the <code>Plaintext</code> field of the response) to encrypt data locally, then erase the plaintext data key from memory.</p> </li> <li> <p>Store the encrypted data key (returned in the <code>CiphertextBlob</code> field of the response) alongside the locally encrypted data.</p> </li> </ol> <p>To decrypt data locally:</p> <ol> <li> <p>Use the <a>Decrypt</a> operation to decrypt the encrypted data key into a plaintext copy of the data key.</p> </li> <li> <p>Use the plaintext data key to decrypt data locally, then erase the plaintext data key from memory.</p> </li> </ol> <p>To return only an encrypted copy of the data key, use <a>GenerateDataKeyWithoutPlaintext</a>. To return a random byte string that is cryptographically secure, use <a>GenerateRandom</a>.</p> <p>If you use the optional <code>EncryptionContext</code> field, you must store at least enough information to be able to reconstruct the full encryption context when you later send the ciphertext to the <a>Decrypt</a> operation. It is a good practice to choose an encryption context that you can reconstruct on the fly to better secure the ciphertext. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/encryption-context.html">Encryption Context</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
@@ -4921,13 +5833,13 @@ pub trait Kms {
         input: GenerateDataKeyRequest,
     ) -> RusotoFuture<GenerateDataKeyResponse, GenerateDataKeyError>;
 
-    /// <p>Returns a data encryption key encrypted under a customer master key (CMK). This operation is identical to <a>GenerateDataKey</a> but returns only the encrypted copy of the data key. </p> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN or alias ARN in the value of the KeyId parameter.</p> <p>This operation is useful in a system that has multiple components with different degrees of trust. For example, consider a system that stores encrypted data in containers. Each container stores the encrypted data and an encrypted copy of the data key. One component of the system, called the <i>control plane</i>, creates new containers. When it creates a new container, it uses this operation (<code>GenerateDataKeyWithoutPlaintext</code>) to get an encrypted data key and then stores it in the container. Later, a different component of the system, called the <i>data plane</i>, puts encrypted data into the containers. To do this, it passes the encrypted data key to the <a>Decrypt</a> operation. It then uses the returned plaintext data key to encrypt data and finally stores the encrypted data in the container. In this system, the control plane never sees the plaintext data key.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>Returns a data encryption key encrypted under a customer master key (CMK). This operation is identical to <a>GenerateDataKey</a> but returns only the encrypted copy of the data key. </p> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN or alias ARN in the value of the KeyId parameter.</p> <p>This operation is useful in a system that has multiple components with different degrees of trust. For example, consider a system that stores encrypted data in containers. Each container stores the encrypted data and an encrypted copy of the data key. One component of the system, called the <i>control plane</i>, creates new containers. When it creates a new container, it uses this operation (<code>GenerateDataKeyWithoutPlaintext</code>) to get an encrypted data key and then stores it in the container. Later, a different component of the system, called the <i>data plane</i>, puts encrypted data into the containers. To do this, it passes the encrypted data key to the <a>Decrypt</a> operation, then uses the returned plaintext data key to encrypt data, and finally stores the encrypted data in the container. In this system, the control plane never sees the plaintext data key.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn generate_data_key_without_plaintext(
         &self,
         input: GenerateDataKeyWithoutPlaintextRequest,
     ) -> RusotoFuture<GenerateDataKeyWithoutPlaintextResponse, GenerateDataKeyWithoutPlaintextError>;
 
-    /// <p>Returns a random byte string that is cryptographically secure.</p> <p>For more information about entropy and random number generation, see the <a href="https://d0.awsstatic.com/whitepapers/KMS-Cryptographic-Details.pdf">AWS Key Management Service Cryptographic Details</a> whitepaper.</p>
+    /// <p>Returns a random byte string that is cryptographically secure.</p> <p>By default, the random byte string is generated in AWS KMS. To generate the byte string in the AWS CloudHSM cluster that is associated with a <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-overview.html">custom key store</a>, specify the custom key store ID.</p> <p>For more information about entropy and random number generation, see the <a href="https://d0.awsstatic.com/whitepapers/KMS-Cryptographic-Details.pdf">AWS Key Management Service Cryptographic Details</a> whitepaper.</p>
     fn generate_random(
         &self,
         input: GenerateRandomRequest,
@@ -4951,13 +5863,13 @@ pub trait Kms {
         input: GetParametersForImportRequest,
     ) -> RusotoFuture<GetParametersForImportResponse, GetParametersForImportError>;
 
-    /// <p>Imports key material into an existing AWS KMS customer master key (CMK) that was created without key material. You cannot perform this operation on a CMK in a different AWS account. For more information about creating CMKs with no key material and then importing key material, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html">Importing Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>Before using this operation, call <a>GetParametersForImport</a>. Its response includes a public key and an import token. Use the public key to encrypt the key material. Then, submit the import token from the same <code>GetParametersForImport</code> response.</p> <p>When calling this operation, you must specify the following values:</p> <ul> <li> <p>The key ID or key ARN of a CMK with no key material. Its <code>Origin</code> must be <code>EXTERNAL</code>.</p> <p>To create a CMK with no key material, call <a>CreateKey</a> and set the value of its <code>Origin</code> parameter to <code>EXTERNAL</code>. To get the <code>Origin</code> of a CMK, call <a>DescribeKey</a>.)</p> </li> <li> <p>The encrypted key material. To get the public key to encrypt the key material, call <a>GetParametersForImport</a>.</p> </li> <li> <p>The import token that <a>GetParametersForImport</a> returned. This token and the public key used to encrypt the key material must have come from the same response.</p> </li> <li> <p>Whether the key material expires and if so, when. If you set an expiration date, you can change it only by reimporting the same key material and specifying a new expiration date. If the key material expires, AWS KMS deletes the key material and the CMK becomes unusable. To use the CMK again, you must reimport the same key material.</p> </li> </ul> <p>When this operation is successful, the CMK's key state changes from <code>PendingImport</code> to <code>Enabled</code>, and you can use the CMK. After you successfully import key material into a CMK, you can reimport the same key material into that CMK, but you cannot import different key material.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>Imports key material into an existing AWS KMS customer master key (CMK) that was created without key material. You cannot perform this operation on a CMK in a different AWS account. For more information about creating CMKs with no key material and then importing key material, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html">Importing Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>Before using this operation, call <a>GetParametersForImport</a>. Its response includes a public key and an import token. Use the public key to encrypt the key material. Then, submit the import token from the same <code>GetParametersForImport</code> response.</p> <p>When calling this operation, you must specify the following values:</p> <ul> <li> <p>The key ID or key ARN of a CMK with no key material. Its <code>Origin</code> must be <code>EXTERNAL</code>.</p> <p>To create a CMK with no key material, call <a>CreateKey</a> and set the value of its <code>Origin</code> parameter to <code>EXTERNAL</code>. To get the <code>Origin</code> of a CMK, call <a>DescribeKey</a>.)</p> </li> <li> <p>The encrypted key material. To get the public key to encrypt the key material, call <a>GetParametersForImport</a>.</p> </li> <li> <p>The import token that <a>GetParametersForImport</a> returned. This token and the public key used to encrypt the key material must have come from the same response.</p> </li> <li> <p>Whether the key material expires and if so, when. If you set an expiration date, you can change it only by reimporting the same key material and specifying a new expiration date. If the key material expires, AWS KMS deletes the key material and the CMK becomes unusable. To use the CMK again, you must reimport the same key material.</p> </li> </ul> <p>When this operation is successful, the key state of the CMK changes from <code>PendingImport</code> to <code>Enabled</code>, and you can use the CMK. After you successfully import key material into a CMK, you can reimport the same key material into that CMK, but you cannot import different key material.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn import_key_material(
         &self,
         input: ImportKeyMaterialRequest,
     ) -> RusotoFuture<ImportKeyMaterialResponse, ImportKeyMaterialError>;
 
-    /// <p>Gets a list of aliases in the caller's AWS account and region. You cannot list aliases in other accounts. For more information about aliases, see <a>CreateAlias</a>.</p> <p>By default, the ListAliases command returns all aliases in the account and region. To get only the aliases that point to a particular customer master key (CMK), use the <code>KeyId</code> parameter.</p> <p>The <code>ListAliases</code> response can include aliases that you created and associated with your customer managed CMKs, and aliases that AWS created and associated with AWS managed CMKs in your account. You can recognize AWS aliases because their names have the format <code>aws/&lt;service-name&gt;</code>, such as <code>aws/dynamodb</code>.</p> <p>The response might also include aliases that have no <code>TargetKeyId</code> field. These are predefined aliases that AWS has created but has not yet associated with a CMK. Aliases that AWS creates in your account, including predefined aliases, do not count against your <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html#aliases-limit">AWS KMS aliases limit</a>.</p>
+    /// <p>Gets a list of all aliases in the caller's AWS account and region. You cannot list aliases in other accounts. For more information about aliases, see <a>CreateAlias</a>.</p> <p>By default, the <code>ListAliases</code> command returns all aliases in the account and region. To get only the aliases that point to a particular customer master key (CMK), use the <code>KeyId</code> parameter.</p> <p>The <code>ListAliases</code> response might include several aliases have no <code>TargetKeyId</code> field. These are predefined aliases that AWS has created but has not yet associated with a CMK. Aliases that AWS creates in your account, including predefined aliases, do not count against your <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html#aliases-limit">AWS KMS aliases limit</a>.</p>
     fn list_aliases(
         &self,
         input: ListAliasesRequest,
@@ -4993,7 +5905,7 @@ pub trait Kms {
     /// <p>Attaches a key policy to the specified customer master key (CMK). You cannot perform this operation on a CMK in a different AWS account.</p> <p>For more information about key policies, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html">Key Policies</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn put_key_policy(&self, input: PutKeyPolicyRequest) -> RusotoFuture<(), PutKeyPolicyError>;
 
-    /// <p>Encrypts data on the server side with a new customer master key (CMK) without exposing the plaintext of the data on the client side. The data is first decrypted and then reencrypted. You can also use this operation to change the encryption context of a ciphertext. </p> <p>You can reencrypt data using CMKs in different AWS accounts.</p> <p>Unlike other operations, <code>ReEncrypt</code> is authorized twice, once as <code>ReEncryptFrom</code> on the source CMK and once as <code>ReEncryptTo</code> on the destination CMK. We recommend that you include the <code>"kms:ReEncrypt*"</code> permission in your <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html">key policies</a> to permit reencryption from or to the CMK. This permission is automatically included in the key policy when you create a CMK through the console. But you must include it manually when you create a CMK programmatically or when you set a key policy with the <a>PutKeyPolicy</a> operation.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>Encrypts data on the server side with a new customer master key (CMK) without exposing the plaintext of the data on the client side. The data is first decrypted and then reencrypted. You can also use this operation to change the encryption context of a ciphertext. </p> <p>You can reencrypt data using CMKs in different AWS accounts.</p> <p>Unlike other operations, <code>ReEncrypt</code> is authorized twice, once as <code>ReEncryptFrom</code> on the source CMK and once as <code>ReEncryptTo</code> on the destination CMK. We recommend that you include the <code>"kms:ReEncrypt*"</code> permission in your <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html">key policies</a> to permit reencryption from or to the CMK. This permission is automatically included in the key policy when you create a CMK through the console, but you must include it manually when you create a CMK programmatically or when you set a key policy with the <a>PutKeyPolicy</a> operation.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn re_encrypt(
         &self,
         input: ReEncryptRequest,
@@ -5005,7 +5917,7 @@ pub trait Kms {
     /// <p>Revokes the specified grant for the specified customer master key (CMK). You can revoke a grant to actively deny operations that depend on it.</p> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN in the value of the <code>KeyId</code> parameter.</p>
     fn revoke_grant(&self, input: RevokeGrantRequest) -> RusotoFuture<(), RevokeGrantError>;
 
-    /// <p>Schedules the deletion of a customer master key (CMK). You may provide a waiting period, specified in days, before deletion occurs. If you do not provide a waiting period, the default period of 30 days is used. When this operation is successful, the state of the CMK changes to <code>PendingDeletion</code>. Before the waiting period ends, you can use <a>CancelKeyDeletion</a> to cancel the deletion of the CMK. After the waiting period ends, AWS KMS deletes the CMK and all AWS KMS data associated with it, including all aliases that refer to it.</p> <p>You cannot perform this operation on a CMK in a different AWS account.</p> <important> <p>Deleting a CMK is a destructive and potentially dangerous operation. When a CMK is deleted, all data that was encrypted under the CMK is rendered unrecoverable. To restrict the use of a CMK without deleting it, use <a>DisableKey</a>.</p> </important> <p>For more information about scheduling a CMK for deletion, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/deleting-keys.html">Deleting Customer Master Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>Schedules the deletion of a customer master key (CMK). You may provide a waiting period, specified in days, before deletion occurs. If you do not provide a waiting period, the default period of 30 days is used. When this operation is successful, the key state of the CMK changes to <code>PendingDeletion</code>. Before the waiting period ends, you can use <a>CancelKeyDeletion</a> to cancel the deletion of the CMK. After the waiting period ends, AWS KMS deletes the CMK and all AWS KMS data associated with it, including all aliases that refer to it.</p> <important> <p>Deleting a CMK is a destructive and potentially dangerous operation. When a CMK is deleted, all data that was encrypted under the CMK is unrecoverable. To prevent the use of a CMK without deleting it, use <a>DisableKey</a>.</p> </important> <p>If you schedule deletion of a CMK from a <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-overview.html">custom key store</a>, when the waiting period expires, <code>ScheduleKeyDeletion</code> deletes the CMK from AWS KMS. Then AWS KMS makes a best effort to delete the key material from the associated AWS CloudHSM cluster. However, you might need to manually <a href="http://docs.aws.amazon.com/kms/latest/developerguide/fix-keystore.html#fix-keystore-orphaned-key">delete the orphaned key material</a> from the cluster and its backups.</p> <p>You cannot perform this operation on a CMK in a different AWS account.</p> <p>For more information about scheduling a CMK for deletion, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/deleting-keys.html">Deleting Customer Master Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn schedule_key_deletion(
         &self,
         input: ScheduleKeyDeletionRequest,
@@ -5020,7 +5932,13 @@ pub trait Kms {
     /// <p>Associates an existing alias with a different customer master key (CMK). Each CMK can have multiple aliases, but the aliases must be unique within the account and region. You cannot perform this operation on an alias in a different AWS account.</p> <p>This operation works only on existing aliases. To change the alias of a CMK to a new value, use <a>CreateAlias</a> to create a new alias and <a>DeleteAlias</a> to delete the old alias.</p> <p>Because an alias is not a property of a CMK, you can create, update, and delete the aliases of a CMK without affecting the CMK. Also, aliases do not appear in the response from the <a>DescribeKey</a> operation. To get the aliases of all CMKs in the account, use the <a>ListAliases</a> operation. </p> <p>An alias name can contain only alphanumeric characters, forward slashes (/), underscores (_), and dashes (-). An alias must start with the word <code>alias</code> followed by a forward slash (<code>alias/</code>). The alias name can contain only alphanumeric characters, forward slashes (/), underscores (_), and dashes (-). Alias names cannot begin with <code>aws</code>; that alias name prefix is reserved by Amazon Web Services (AWS).</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn update_alias(&self, input: UpdateAliasRequest) -> RusotoFuture<(), UpdateAliasError>;
 
-    /// <p>Updates the description of a customer master key (CMK). To see the description of a CMK, use <a>DescribeKey</a>. </p> <p>You cannot perform this operation on a CMK in a different AWS account.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>Changes the properties of a custom key store. Use the <code>CustomKeyStoreId</code> parameter to identify the custom key store you want to edit. Use the remaining parameters to change the properties of the custom key store.</p> <p>You can only update a custom key store that is disconnected. To disconnect the custom key store, use <a>DisconnectCustomKeyStore</a>. To reconnect the custom key store after the update completes, use <a>ConnectCustomKeyStore</a>. To find the connection state of a custom key store, use the <a>DescribeCustomKeyStores</a> operation.</p> <p>Use the <code>NewCustomKeyStoreName</code> parameter to change the friendly name of the custom key store to the value that you specify.</p> <p>Use the <code>KeyStorePassword</code> parameter tell AWS KMS the current password of the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-concepts.html#concept-kmsuser"> <code>kmsuser</code> crypto user (CU)</a> in the associated AWS CloudHSM cluster. You can use this parameter to fix connection failures that occur when AWS KMS cannot log into the associated cluster because the <code>kmsuser</code> password has changed. This value does not change the password in the AWS CloudHSM cluster.</p> <p>Use the <code>CloudHsmClusterId</code> parameter to associate the custom key store with a related AWS CloudHSM cluster, that is, a cluster that shares a backup history with the original cluster. You can use this parameter to repair a custom key store if its AWS CloudHSM cluster becomes corrupted or is deleted, or when you need to create or restore a cluster from a backup.</p> <p>The cluster ID must identify a AWS CloudHSM cluster with the following requirements.</p> <ul> <li> <p>The cluster must be active and be in the same AWS account and Region as the custom key store.</p> </li> <li> <p>The cluster must have the same cluster certificate as the original cluster. You cannot use this parameter to associate the custom key store with an unrelated cluster. To view the cluster certificate, use the AWS CloudHSM <a href="http://docs.aws.amazon.com/cloudhsm/latest/APIReference/API_DescribeClusters.html">DescribeClusters</a> operation. Clusters that share a backup history have the same cluster certificate.</p> </li> <li> <p>The cluster must be configured with subnets in at least two different Availability Zones in the Region. Because AWS CloudHSM is not supported in all Availability Zones, we recommend that the cluster have subnets in all Availability Zones in the Region.</p> </li> <li> <p>The cluster must contain at least two active HSMs, each in a different Availability Zone.</p> </li> </ul> <p>If the operation succeeds, it returns a JSON object with no properties.</p> <p>This operation is part of the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html">Custom Key Store feature</a> feature in AWS KMS, which combines the convenience and extensive integration of AWS KMS with the isolation and control of a single-tenant key store.</p>
+    fn update_custom_key_store(
+        &self,
+        input: UpdateCustomKeyStoreRequest,
+    ) -> RusotoFuture<UpdateCustomKeyStoreResponse, UpdateCustomKeyStoreError>;
+
+    /// <p>Updates the description of a customer master key (CMK). To see the decription of a CMK, use <a>DescribeKey</a>. </p> <p>You cannot perform this operation on a CMK in a different AWS account.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn update_key_description(
         &self,
         input: UpdateKeyDescriptionRequest,
@@ -5100,7 +6018,43 @@ impl Kms for KmsClient {
         })
     }
 
-    /// <p>Creates a display name for a customer-managed customer master key (CMK). You can use an alias to identify a CMK in selected operations, such as <a>Encrypt</a> and <a>GenerateDataKey</a>. </p> <p>Each CMK can have multiple aliases, but each alias points to only one CMK. The alias name must be unique in the AWS account and region. To simplify code that runs in multiple regions, use the same alias name, but point it to a different CMK in each region. </p> <p>Because an alias is not a property of a CMK, you can delete and change the aliases of a CMK without affecting the CMK. Also, aliases do not appear in the response from the <a>DescribeKey</a> operation. To get the aliases of all CMKs, use the <a>ListAliases</a> operation.</p> <p>The alias name can contain only alphanumeric characters, forward slashes (/), underscores (_), and dashes (-). Alias names cannot begin with <b>aws/</b>. That alias name prefix is reserved for AWS managed CMKs.</p> <p>The alias and the CMK it is mapped to must be in the same AWS account and the same region. You cannot perform this operation on an alias in a different AWS account.</p> <p>To map an existing alias to a different CMK, call <a>UpdateAlias</a>.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>Connects or reconnects a <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-overview.html">custom key store</a> to its associated AWS CloudHSM cluster.</p> <p>The custom key store must be connected before you can create customer master keys (CMKs) in the key store or use the CMKs it contains. You can disconnect and reconnect a custom key store at any time.</p> <p>To connect a custom key store, its associated AWS CloudHSM cluster must have at least one active HSM. To get the number of active HSMs in a cluster, use the <a href="http://docs.aws.amazon.com/cloudhsm/latest/APIReference/API_DescribeClusters">DescribeClusters</a> operation. To add HSMs to the cluster, use the <a href="http://docs.aws.amazon.com/cloudhsm/latest/APIReference/API_CreateHsm">CreateHsm</a> operation.</p> <p>The connection process can take an extended amount of time to complete; up to 20 minutes. This operation starts the connection process, but it does not wait for it to complete. When it succeeds, this operation quickly returns an HTTP 200 response and a JSON object with no properties. However, this response does not indicate that the custom key store is connected. To get the connection state of the custom key store, use the <a>DescribeCustomKeyStores</a> operation.</p> <p>During the connection process, AWS KMS finds the AWS CloudHSM cluster that is associated with the custom key store, creates the connection infrastructure, connects to the cluster, logs into the AWS CloudHSM client as the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-concepts.html#concept-kmsuser"> <code>kmsuser</code> crypto user</a> (CU), and rotates its password.</p> <p>The <code>ConnectCustomKeyStore</code> operation might fail for various reasons. To find the reason, use the <a>DescribeCustomKeyStores</a> operation and see the <code>ConnectionErrorCode</code> in the response. For help interpreting the <code>ConnectionErrorCode</code>, see <a>CustomKeyStoresListEntry</a>.</p> <p>To fix the failure, use the <a>DisconnectCustomKeyStore</a> operation to disconnect the custom key store, correct the error, use the <a>UpdateCustomKeyStore</a> operation if necessary, and then use <code>ConnectCustomKeyStore</code> again.</p> <p>If you are having trouble connecting or disconnecting a custom key store, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/fix-keystore.html">Troubleshooting a Custom Key Store</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    fn connect_custom_key_store(
+        &self,
+        input: ConnectCustomKeyStoreRequest,
+    ) -> RusotoFuture<ConnectCustomKeyStoreResponse, ConnectCustomKeyStoreError> {
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "TrentService.ConnectCustomKeyStore");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ConnectCustomKeyStoreResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ConnectCustomKeyStoreError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Creates a display name for a customer master key (CMK). You can use an alias to identify a CMK in selected operations, such as <a>Encrypt</a> and <a>GenerateDataKey</a>. </p> <p>Each CMK can have multiple aliases, but each alias points to only one CMK. The alias name must be unique in the AWS account and region. To simplify code that runs in multiple regions, use the same alias name, but point it to a different CMK in each region. </p> <p>Because an alias is not a property of a CMK, you can delete and change the aliases of a CMK without affecting the CMK. Also, aliases do not appear in the response from the <a>DescribeKey</a> operation. To get the aliases of all CMKs, use the <a>ListAliases</a> operation.</p> <p>An alias must start with the word <code>alias</code> followed by a forward slash (<code>alias/</code>). The alias name can contain only alphanumeric characters, forward slashes (/), underscores (_), and dashes (-). Alias names cannot begin with <code>aws</code>; that alias name prefix is reserved by Amazon Web Services (AWS).</p> <p>The alias and the CMK it is mapped to must be in the same AWS account and the same region. You cannot perform this operation on an alias in a different AWS account.</p> <p>To map an existing alias to a different CMK, call <a>UpdateAlias</a>.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn create_alias(&self, input: CreateAliasRequest) -> RusotoFuture<(), CreateAliasError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
@@ -5118,6 +6072,42 @@ impl Kms for KmsClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(CreateAliasError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Creates a <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-overview.html">custom key store</a> that is associated with an <a href="http://docs.aws.amazon.com/cloudhsm/latest/userguide/clusters.html">AWS CloudHSM cluster</a> that you own and manage.</p> <p>This operation is part of the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html">Custom Key Store feature</a> feature in AWS KMS, which combines the convenience and extensive integration of AWS KMS with the isolation and control of a single-tenant key store.</p> <p>When the operation completes successfully, it returns the ID of the new custom key store. Before you can use your new custom key store, you need to use the <a>ConnectCustomKeyStore</a> operation to connect the new key store to its AWS CloudHSM cluster.</p> <p>The <code>CreateCustomKeyStore</code> operation requires the following elements.</p> <ul> <li> <p>You must specify an active AWS CloudHSM cluster in the same account and AWS Region as the custom key store. You can use an existing cluster or <a href="http://docs.aws.amazon.com/cloudhsm/latest/userguide/create-cluster.html">create and activate a new AWS CloudHSM cluster</a> for the key store. AWS KMS does not require exclusive use of the cluster.</p> </li> <li> <p>You must include the content of the <i>trust anchor certificate</i> for the cluster. You created this certificate, and saved it in the <code>customerCA.crt</code> file, when you <a href="http://docs.aws.amazon.com/cloudhsm/latest/userguide/initialize-cluster.html#sign-csr">initialized the cluster</a>.</p> </li> <li> <p>You must provide the password of the dedicated <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-concepts.html#concept-kmsuser"> <code>kmsuser</code> crypto user</a> (CU) account in the cluster.</p> <p>Before you create the custom key store, use the <a href="http://docs.aws.amazon.com/cloudhsm/latest/userguide/cloudhsm_mgmt_util-createUser.html">createUser</a> command in <code>cloudhsm_mgmt_util</code> to create <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-concepts.html#concept-kmsuser">a crypto user (CU) named <code>kmsuser</code> </a>in specified AWS CloudHSM cluster. AWS KMS uses the <code>kmsuser</code> CU account to create and manage key material on your behalf. For instructions, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/create-keystore.html#before-keystore">Create the kmsuser Crypto User</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> </li> </ul> <p>The AWS CloudHSM cluster that you specify must meet the following requirements.</p> <ul> <li> <p>The cluster must be active and be in the same AWS account and Region as the custom key store.</p> </li> <li> <p>Each custom key store must be associated with a different AWS CloudHSM cluster. The cluster cannot be associated with another custom key store or have the same cluster certificate as a cluster that is associated with another custom key store. To view the cluster certificate, use the AWS CloudHSM <a href="http://docs.aws.amazon.com/cloudhsm/latest/APIReference/API_DescribeClusters.html">DescribeClusters</a> operation. Clusters that share a backup history have the same cluster certificate.</p> </li> <li> <p>The cluster must be configured with subnets in at least two different Availability Zones in the Region. Because AWS CloudHSM is not supported in all Availability Zones, we recommend that the cluster have subnets in all Availability Zones in the Region.</p> </li> <li> <p>The cluster must contain at least two active HSMs, each in a different Availability Zone.</p> </li> </ul> <p>New custom key stores are not automatically connected. After you create your custom key store, use the <a>ConnectCustomKeyStore</a> operation to connect the custom key store to its associated AWS CloudHSM cluster. Even if you are not going to use your custom key store immediately, you might want to connect it to verify that all settings are correct and then disconnect it until you are ready to use it.</p> <p>If this operation succeeds, it returns the ID of the new custom key store. For help with failures, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/fix-keystore.html">Troubleshoot a Custom Key Store</a> in the <i>AWS KMS Developer Guide</i>.</p>
+    fn create_custom_key_store(
+        &self,
+        input: CreateCustomKeyStoreRequest,
+    ) -> RusotoFuture<CreateCustomKeyStoreResponse, CreateCustomKeyStoreError> {
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "TrentService.CreateCustomKeyStore");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<CreateCustomKeyStoreResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateCustomKeyStoreError::from_response(response))
+                    }),
                 )
             }
         })
@@ -5160,7 +6150,7 @@ impl Kms for KmsClient {
         })
     }
 
-    /// <p>Creates a customer master key (CMK) in the caller's AWS account.</p> <p>You can use a CMK to encrypt small amounts of data (4 KiB or less) directly. But CMKs are more commonly used to encrypt data encryption keys (DEKs), which are used to encrypt raw data. For more information about DEKs and the difference between CMKs and DEKs, see the following:</p> <ul> <li> <p>The <a>GenerateDataKey</a> operation</p> </li> <li> <p> <a href="http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html">AWS Key Management Service Concepts</a> in the <i>AWS Key Management Service Developer Guide</i> </p> </li> </ul> <p>You cannot use this operation to create a CMK in a different AWS account.</p>
+    /// <p>Creates a customer master key (CMK) in the caller's AWS account.</p> <p>You can use a CMK to encrypt small amounts of data (4 KiB or less) directly, but CMKs are more commonly used to encrypt data keys, which are used to encrypt raw data. For more information about data keys and the difference between CMKs and data keys, see the following:</p> <ul> <li> <p>The <a>GenerateDataKey</a> operation</p> </li> <li> <p> <a href="http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html">AWS Key Management Service Concepts</a> in the <i>AWS Key Management Service Developer Guide</i> </p> </li> </ul> <p>If you plan to <a href="http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html">import key material</a>, use the <code>Origin</code> parameter with a value of <code>EXTERNAL</code> to create a CMK with no key material.</p> <p>To create a CMK in a <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-overview.html">custom key store</a>, use <code>CustomKeyStoreId</code> parameter to specify the custom key store. You must also use the <code>Origin</code> parameter with a value of <code>AWS_CLOUDHSM</code>. The AWS CloudHSM cluster that is associated with the custom key store must have at least two active HSMs, each in a different Availability Zone in the Region.</p> <p>You cannot use this operation to create a CMK in a different AWS account.</p>
     fn create_key(
         &self,
         input: CreateKeyRequest,
@@ -5197,7 +6187,7 @@ impl Kms for KmsClient {
         })
     }
 
-    /// <p>Decrypts ciphertext. Ciphertext is plaintext that has been previously encrypted by using any of the following operations:</p> <ul> <li> <p> <a>GenerateDataKey</a> </p> </li> <li> <p> <a>GenerateDataKeyWithoutPlaintext</a> </p> </li> <li> <p> <a>Encrypt</a> </p> </li> </ul> <p>Whenever possible, use key policies to give users permission to call the Decrypt operation on the CMK, instead of IAM policies. Otherwise, you might create an IAM user policy that gives the user Decrypt permission on all CMKs. This user could decrypt ciphertext that was encrypted by CMKs in other accounts if the key policy for the cross-account CMK permits it. If you must use an IAM policy for <code>Decrypt</code> permissions, limit the user to particular CMKs or particular trusted accounts.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>Decrypts ciphertext. Ciphertext is plaintext that has been previously encrypted by using any of the following operations:</p> <ul> <li> <p> <a>GenerateDataKey</a> </p> </li> <li> <p> <a>GenerateDataKeyWithoutPlaintext</a> </p> </li> <li> <p> <a>Encrypt</a> </p> </li> </ul> <p>Note that if a caller has been granted access permissions to all keys (through, for example, IAM user policies that grant <code>Decrypt</code> permission on all resources), then ciphertext encrypted by using keys in other accounts where the key grants access to the caller can be decrypted. To remedy this, we recommend that you do not grant <code>Decrypt</code> access in an IAM user policy. Instead grant <code>Decrypt</code> access only in key policies. If you must grant <code>Decrypt</code> access in an IAM user policy, you should scope the resource to specific keys or to specific trusted accounts.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn decrypt(&self, input: DecryptRequest) -> RusotoFuture<DecryptResponse, DecryptError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
@@ -5254,6 +6244,42 @@ impl Kms for KmsClient {
         })
     }
 
+    /// <p>Deletes a <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-overview.html">custom key store</a>. This operation does not delete the AWS CloudHSM cluster that is associated with the custom key store, or affect any users or keys in the cluster.</p> <p>The custom key store that you delete cannot contain any AWS KMS <a href="http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys">customer master keys (CMKs)</a>. Before deleting the key store, verify that you will never need to use any of the CMKs in the key store for any cryptographic operations. Then, use <a>ScheduleKeyDeletion</a> to delete the AWS KMS customer master keys (CMKs) from the key store. When the scheduled waiting period expires, the <code>ScheduleKeyDeletion</code> operation deletes the CMKs. Then it makes a best effort to delete the key material from the associated cluster. However, you might need to manually <a href="http://docs.aws.amazon.com/kms/latest/developerguide/fix-keystore.html#fix-keystore-orphaned-key">delete the orphaned key material</a> from the cluster and its backups.</p> <p>After all CMKs are deleted from AWS KMS, use <a>DisconnectCustomKeyStore</a> to disconnect the key store from AWS KMS. Then, you can delete the custom key store.</p> <p>Instead of deleting the custom key store, consider using <a>DisconnectCustomKeyStore</a> to disconnect it from AWS KMS. While the key store is disconnected, you cannot create or use the CMKs in the key store. But, you do not need to delete CMKs and you can reconnect a disconnected custom key store at any time.</p> <p>If the operation succeeds, it returns a JSON object with no properties.</p> <p>This operation is part of the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html">Custom Key Store feature</a> feature in AWS KMS, which combines the convenience and extensive integration of AWS KMS with the isolation and control of a single-tenant key store.</p>
+    fn delete_custom_key_store(
+        &self,
+        input: DeleteCustomKeyStoreRequest,
+    ) -> RusotoFuture<DeleteCustomKeyStoreResponse, DeleteCustomKeyStoreError> {
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "TrentService.DeleteCustomKeyStore");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DeleteCustomKeyStoreResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteCustomKeyStoreError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>Deletes key material that you previously imported. This operation makes the specified customer master key (CMK) unusable. For more information about importing key material into AWS KMS, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html">Importing Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>. You cannot perform this operation on a CMK in a different AWS account.</p> <p>When the specified CMK is in the <code>PendingDeletion</code> state, this operation does not change the CMK's state. Otherwise, it changes the CMK's state to <code>PendingImport</code>.</p> <p>After you delete key material, you can use <a>ImportKeyMaterial</a> to reimport the same key material into the CMK.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn delete_imported_key_material(
         &self,
@@ -5277,7 +6303,41 @@ impl Kms for KmsClient {
         })
     }
 
-    /// <p>Provides detailed information about the specified customer master key (CMK).</p> <p>You can use <code>DescribeKey</code> on a predefined AWS alias, that is, an AWS alias with no key ID. When you do, AWS KMS associates the alias with an <a href="http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys">AWS managed CMK</a> and returns its <code>KeyId</code> and <code>Arn</code> in the response.</p> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN or alias ARN in the value of the KeyId parameter.</p>
+    /// <p>Gets information about <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-overview.html">custom key stores</a> in the account and region.</p> <p>This operation is part of the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html">Custom Key Store feature</a> feature in AWS KMS, which combines the convenience and extensive integration of AWS KMS with the isolation and control of a single-tenant key store.</p> <p>By default, this operation returns information about all custom key stores in the account and region. To get only information about a particular custom key store, use either the <code>CustomKeyStoreName</code> or <code>CustomKeyStoreId</code> parameter (but not both).</p> <p>To determine whether the custom key store is connected to its AWS CloudHSM cluster, use the <code>ConnectionState</code> element in the response. If an attempt to connect the custom key store failed, the <code>ConnectionState</code> value is <code>FAILED</code> and the <code>ConnectionErrorCode</code> element in the response indicates the cause of the failure. For help interpreting the <code>ConnectionErrorCode</code>, see <a>CustomKeyStoresListEntry</a>.</p> <p>Custom key stores have a <code>DISCONNECTED</code> connection state if the key store has never been connected or you use the <a>DisconnectCustomKeyStore</a> operation to disconnect it. If your custom key store state is <code>CONNECTED</code> but you are having trouble using it, make sure that its associated AWS CloudHSM cluster is active and contains the minimum number of HSMs required for the operation, if any.</p> <p> For help repairing your custom key store, see the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/fix-keystore-html">Troubleshooting Custom Key Stores</a> topic in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    fn describe_custom_key_stores(
+        &self,
+        input: DescribeCustomKeyStoresRequest,
+    ) -> RusotoFuture<DescribeCustomKeyStoresResponse, DescribeCustomKeyStoresError> {
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "TrentService.DescribeCustomKeyStores");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeCustomKeyStoresResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeCustomKeyStoresError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Provides detailed information about the specified customer master key (CMK).</p> <p>If you use <code>DescribeKey</code> on a predefined AWS alias, that is, an AWS alias with no key ID, AWS KMS associates the alias with an <a href="http://docs.aws.amazon.com/kms/latest/developerguide/concepts.html#master_keys">AWS managed CMK</a> and returns its <code>KeyId</code> and <code>Arn</code> in the response.</p> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN or alias ARN in the value of the KeyId parameter.</p>
     fn describe_key(
         &self,
         input: DescribeKeyRequest,
@@ -5363,7 +6423,41 @@ impl Kms for KmsClient {
         })
     }
 
-    /// <p>Sets the state of a customer master key (CMK) to enabled, thereby permitting its use for cryptographic operations. You cannot perform this operation on a CMK in a different AWS account.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>Disconnects the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-overview.html">custom key store</a> from its associated AWS CloudHSM cluster. While a custom key store is disconnected, you can manage the custom key store and its customer master keys (CMKs), but you cannot create or use CMKs in the custom key store. You can reconnect the custom key store at any time.</p> <note> <p>While a custom key store is disconnected, all attempts to create customer master keys (CMKs) in the custom key store or to use existing CMKs in cryptographic operations will fail. This action can prevent users from storing and accessing sensitive data.</p> </note> <p/> <p>To find the connection state of a custom key store, use the <a>DescribeCustomKeyStores</a> operation. To reconnect a custom key store, use the <a>ConnectCustomKeyStore</a> operation.</p> <p>If the operation succeeds, it returns a JSON object with no properties.</p> <p>This operation is part of the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html">Custom Key Store feature</a> feature in AWS KMS, which combines the convenience and extensive integration of AWS KMS with the isolation and control of a single-tenant key store.</p>
+    fn disconnect_custom_key_store(
+        &self,
+        input: DisconnectCustomKeyStoreRequest,
+    ) -> RusotoFuture<DisconnectCustomKeyStoreResponse, DisconnectCustomKeyStoreError> {
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "TrentService.DisconnectCustomKeyStore");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DisconnectCustomKeyStoreResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DisconnectCustomKeyStoreError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Sets the key state of a customer master key (CMK) to enabled. This allows you to use the CMK for cryptographic operations. You cannot perform this operation on a CMK in a different AWS account.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn enable_key(&self, input: EnableKeyRequest) -> RusotoFuture<(), EnableKeyError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
@@ -5386,7 +6480,7 @@ impl Kms for KmsClient {
         })
     }
 
-    /// <p>Enables <a href="http://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html">automatic rotation of the key material</a> for the specified customer master key (CMK). You cannot perform this operation on a CMK in a different AWS account.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>Enables <a href="http://docs.aws.amazon.com/kms/latest/developerguide/rotate-keys.html">automatic rotation of the key material</a> for the specified customer master key (CMK). You cannot perform this operation on a CMK in a different AWS account.</p> <p>You cannot enable automatic rotation of CMKs with imported key material or CMKs in a <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-overview.html">custom key store</a>.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn enable_key_rotation(
         &self,
         input: EnableKeyRotationRequest,
@@ -5412,7 +6506,7 @@ impl Kms for KmsClient {
         })
     }
 
-    /// <p>Encrypts plaintext into ciphertext by using a customer master key (CMK). The <code>Encrypt</code> operation has two primary use cases:</p> <ul> <li> <p>You can encrypt up to 4 kilobytes (4096 bytes) of arbitrary data such as an RSA key, a database password, or other sensitive information.</p> </li> <li> <p>You can use the <code>Encrypt</code> operation to move encrypted data from one AWS region to another. In the first region, generate a data key and use the plaintext key to encrypt the data. Then, in the new region, call the <code>Encrypt</code> method on same plaintext data key. Now, you can safely move the encrypted data and encrypted data key to the new region, and decrypt in the new region when necessary.</p> </li> </ul> <p>You don't need use this operation to encrypt a data key within a region. The <a>GenerateDataKey</a> and <a>GenerateDataKeyWithoutPlaintext</a> operations return an encrypted data key.</p> <p>Also, you don't need to use this operation to encrypt data in your application. You can use the plaintext and encrypted data keys that the <code>GenerateDataKey</code> operation returns.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN or alias ARN in the value of the KeyId parameter.</p>
+    /// <p>Encrypts plaintext into ciphertext by using a customer master key (CMK). The <code>Encrypt</code> operation has two primary use cases:</p> <ul> <li> <p>You can encrypt up to 4 kilobytes (4096 bytes) of arbitrary data such as an RSA key, a database password, or other sensitive information.</p> </li> <li> <p>To move encrypted data from one AWS region to another, you can use this operation to encrypt in the new region the plaintext data key that was used to encrypt the data in the original region. This provides you with an encrypted copy of the data key that can be decrypted in the new region and used there to decrypt the encrypted data.</p> </li> </ul> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN or alias ARN in the value of the KeyId parameter.</p> <p>Unless you are moving encrypted data from one region to another, you don't use this operation to encrypt a generated data key within a region. To get data keys that are already encrypted, call the <a>GenerateDataKey</a> or <a>GenerateDataKeyWithoutPlaintext</a> operation. Data keys don't need to be encrypted again by calling <code>Encrypt</code>.</p> <p>To encrypt data locally in your application, use the <a>GenerateDataKey</a> operation to return a plaintext data encryption key and a copy of the key encrypted under the CMK of your choosing.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn encrypt(&self, input: EncryptRequest) -> RusotoFuture<EncryptResponse, EncryptError> {
         let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
 
@@ -5483,7 +6577,7 @@ impl Kms for KmsClient {
         })
     }
 
-    /// <p>Returns a data encryption key encrypted under a customer master key (CMK). This operation is identical to <a>GenerateDataKey</a> but returns only the encrypted copy of the data key. </p> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN or alias ARN in the value of the KeyId parameter.</p> <p>This operation is useful in a system that has multiple components with different degrees of trust. For example, consider a system that stores encrypted data in containers. Each container stores the encrypted data and an encrypted copy of the data key. One component of the system, called the <i>control plane</i>, creates new containers. When it creates a new container, it uses this operation (<code>GenerateDataKeyWithoutPlaintext</code>) to get an encrypted data key and then stores it in the container. Later, a different component of the system, called the <i>data plane</i>, puts encrypted data into the containers. To do this, it passes the encrypted data key to the <a>Decrypt</a> operation. It then uses the returned plaintext data key to encrypt data and finally stores the encrypted data in the container. In this system, the control plane never sees the plaintext data key.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>Returns a data encryption key encrypted under a customer master key (CMK). This operation is identical to <a>GenerateDataKey</a> but returns only the encrypted copy of the data key. </p> <p>To perform this operation on a CMK in a different AWS account, specify the key ARN or alias ARN in the value of the KeyId parameter.</p> <p>This operation is useful in a system that has multiple components with different degrees of trust. For example, consider a system that stores encrypted data in containers. Each container stores the encrypted data and an encrypted copy of the data key. One component of the system, called the <i>control plane</i>, creates new containers. When it creates a new container, it uses this operation (<code>GenerateDataKeyWithoutPlaintext</code>) to get an encrypted data key and then stores it in the container. Later, a different component of the system, called the <i>data plane</i>, puts encrypted data into the containers. To do this, it passes the encrypted data key to the <a>Decrypt</a> operation, then uses the returned plaintext data key to encrypt data, and finally stores the encrypted data in the container. In this system, the control plane never sees the plaintext data key.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn generate_data_key_without_plaintext(
         &self,
         input: GenerateDataKeyWithoutPlaintextRequest,
@@ -5523,7 +6617,7 @@ impl Kms for KmsClient {
         })
     }
 
-    /// <p>Returns a random byte string that is cryptographically secure.</p> <p>For more information about entropy and random number generation, see the <a href="https://d0.awsstatic.com/whitepapers/KMS-Cryptographic-Details.pdf">AWS Key Management Service Cryptographic Details</a> whitepaper.</p>
+    /// <p>Returns a random byte string that is cryptographically secure.</p> <p>By default, the random byte string is generated in AWS KMS. To generate the byte string in the AWS CloudHSM cluster that is associated with a <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-overview.html">custom key store</a>, specify the custom key store ID.</p> <p>For more information about entropy and random number generation, see the <a href="https://d0.awsstatic.com/whitepapers/KMS-Cryptographic-Details.pdf">AWS Key Management Service Cryptographic Details</a> whitepaper.</p>
     fn generate_random(
         &self,
         input: GenerateRandomRequest,
@@ -5669,7 +6763,7 @@ impl Kms for KmsClient {
         })
     }
 
-    /// <p>Imports key material into an existing AWS KMS customer master key (CMK) that was created without key material. You cannot perform this operation on a CMK in a different AWS account. For more information about creating CMKs with no key material and then importing key material, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html">Importing Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>Before using this operation, call <a>GetParametersForImport</a>. Its response includes a public key and an import token. Use the public key to encrypt the key material. Then, submit the import token from the same <code>GetParametersForImport</code> response.</p> <p>When calling this operation, you must specify the following values:</p> <ul> <li> <p>The key ID or key ARN of a CMK with no key material. Its <code>Origin</code> must be <code>EXTERNAL</code>.</p> <p>To create a CMK with no key material, call <a>CreateKey</a> and set the value of its <code>Origin</code> parameter to <code>EXTERNAL</code>. To get the <code>Origin</code> of a CMK, call <a>DescribeKey</a>.)</p> </li> <li> <p>The encrypted key material. To get the public key to encrypt the key material, call <a>GetParametersForImport</a>.</p> </li> <li> <p>The import token that <a>GetParametersForImport</a> returned. This token and the public key used to encrypt the key material must have come from the same response.</p> </li> <li> <p>Whether the key material expires and if so, when. If you set an expiration date, you can change it only by reimporting the same key material and specifying a new expiration date. If the key material expires, AWS KMS deletes the key material and the CMK becomes unusable. To use the CMK again, you must reimport the same key material.</p> </li> </ul> <p>When this operation is successful, the CMK's key state changes from <code>PendingImport</code> to <code>Enabled</code>, and you can use the CMK. After you successfully import key material into a CMK, you can reimport the same key material into that CMK, but you cannot import different key material.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>Imports key material into an existing AWS KMS customer master key (CMK) that was created without key material. You cannot perform this operation on a CMK in a different AWS account. For more information about creating CMKs with no key material and then importing key material, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/importing-keys.html">Importing Key Material</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>Before using this operation, call <a>GetParametersForImport</a>. Its response includes a public key and an import token. Use the public key to encrypt the key material. Then, submit the import token from the same <code>GetParametersForImport</code> response.</p> <p>When calling this operation, you must specify the following values:</p> <ul> <li> <p>The key ID or key ARN of a CMK with no key material. Its <code>Origin</code> must be <code>EXTERNAL</code>.</p> <p>To create a CMK with no key material, call <a>CreateKey</a> and set the value of its <code>Origin</code> parameter to <code>EXTERNAL</code>. To get the <code>Origin</code> of a CMK, call <a>DescribeKey</a>.)</p> </li> <li> <p>The encrypted key material. To get the public key to encrypt the key material, call <a>GetParametersForImport</a>.</p> </li> <li> <p>The import token that <a>GetParametersForImport</a> returned. This token and the public key used to encrypt the key material must have come from the same response.</p> </li> <li> <p>Whether the key material expires and if so, when. If you set an expiration date, you can change it only by reimporting the same key material and specifying a new expiration date. If the key material expires, AWS KMS deletes the key material and the CMK becomes unusable. To use the CMK again, you must reimport the same key material.</p> </li> </ul> <p>When this operation is successful, the key state of the CMK changes from <code>PendingImport</code> to <code>Enabled</code>, and you can use the CMK. After you successfully import key material into a CMK, you can reimport the same key material into that CMK, but you cannot import different key material.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn import_key_material(
         &self,
         input: ImportKeyMaterialRequest,
@@ -5706,7 +6800,7 @@ impl Kms for KmsClient {
         })
     }
 
-    /// <p>Gets a list of aliases in the caller's AWS account and region. You cannot list aliases in other accounts. For more information about aliases, see <a>CreateAlias</a>.</p> <p>By default, the ListAliases command returns all aliases in the account and region. To get only the aliases that point to a particular customer master key (CMK), use the <code>KeyId</code> parameter.</p> <p>The <code>ListAliases</code> response can include aliases that you created and associated with your customer managed CMKs, and aliases that AWS created and associated with AWS managed CMKs in your account. You can recognize AWS aliases because their names have the format <code>aws/&lt;service-name&gt;</code>, such as <code>aws/dynamodb</code>.</p> <p>The response might also include aliases that have no <code>TargetKeyId</code> field. These are predefined aliases that AWS has created but has not yet associated with a CMK. Aliases that AWS creates in your account, including predefined aliases, do not count against your <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html#aliases-limit">AWS KMS aliases limit</a>.</p>
+    /// <p>Gets a list of all aliases in the caller's AWS account and region. You cannot list aliases in other accounts. For more information about aliases, see <a>CreateAlias</a>.</p> <p>By default, the <code>ListAliases</code> command returns all aliases in the account and region. To get only the aliases that point to a particular customer master key (CMK), use the <code>KeyId</code> parameter.</p> <p>The <code>ListAliases</code> response might include several aliases have no <code>TargetKeyId</code> field. These are predefined aliases that AWS has created but has not yet associated with a CMK. Aliases that AWS creates in your account, including predefined aliases, do not count against your <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html#aliases-limit">AWS KMS aliases limit</a>.</p>
     fn list_aliases(
         &self,
         input: ListAliasesRequest,
@@ -5947,7 +7041,7 @@ impl Kms for KmsClient {
         })
     }
 
-    /// <p>Encrypts data on the server side with a new customer master key (CMK) without exposing the plaintext of the data on the client side. The data is first decrypted and then reencrypted. You can also use this operation to change the encryption context of a ciphertext. </p> <p>You can reencrypt data using CMKs in different AWS accounts.</p> <p>Unlike other operations, <code>ReEncrypt</code> is authorized twice, once as <code>ReEncryptFrom</code> on the source CMK and once as <code>ReEncryptTo</code> on the destination CMK. We recommend that you include the <code>"kms:ReEncrypt*"</code> permission in your <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html">key policies</a> to permit reencryption from or to the CMK. This permission is automatically included in the key policy when you create a CMK through the console. But you must include it manually when you create a CMK programmatically or when you set a key policy with the <a>PutKeyPolicy</a> operation.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>Encrypts data on the server side with a new customer master key (CMK) without exposing the plaintext of the data on the client side. The data is first decrypted and then reencrypted. You can also use this operation to change the encryption context of a ciphertext. </p> <p>You can reencrypt data using CMKs in different AWS accounts.</p> <p>Unlike other operations, <code>ReEncrypt</code> is authorized twice, once as <code>ReEncryptFrom</code> on the source CMK and once as <code>ReEncryptTo</code> on the destination CMK. We recommend that you include the <code>"kms:ReEncrypt*"</code> permission in your <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-policies.html">key policies</a> to permit reencryption from or to the CMK. This permission is automatically included in the key policy when you create a CMK through the console, but you must include it manually when you create a CMK programmatically or when you set a key policy with the <a>PutKeyPolicy</a> operation.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn re_encrypt(
         &self,
         input: ReEncryptRequest,
@@ -6030,7 +7124,7 @@ impl Kms for KmsClient {
         })
     }
 
-    /// <p>Schedules the deletion of a customer master key (CMK). You may provide a waiting period, specified in days, before deletion occurs. If you do not provide a waiting period, the default period of 30 days is used. When this operation is successful, the state of the CMK changes to <code>PendingDeletion</code>. Before the waiting period ends, you can use <a>CancelKeyDeletion</a> to cancel the deletion of the CMK. After the waiting period ends, AWS KMS deletes the CMK and all AWS KMS data associated with it, including all aliases that refer to it.</p> <p>You cannot perform this operation on a CMK in a different AWS account.</p> <important> <p>Deleting a CMK is a destructive and potentially dangerous operation. When a CMK is deleted, all data that was encrypted under the CMK is rendered unrecoverable. To restrict the use of a CMK without deleting it, use <a>DisableKey</a>.</p> </important> <p>For more information about scheduling a CMK for deletion, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/deleting-keys.html">Deleting Customer Master Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>Schedules the deletion of a customer master key (CMK). You may provide a waiting period, specified in days, before deletion occurs. If you do not provide a waiting period, the default period of 30 days is used. When this operation is successful, the key state of the CMK changes to <code>PendingDeletion</code>. Before the waiting period ends, you can use <a>CancelKeyDeletion</a> to cancel the deletion of the CMK. After the waiting period ends, AWS KMS deletes the CMK and all AWS KMS data associated with it, including all aliases that refer to it.</p> <important> <p>Deleting a CMK is a destructive and potentially dangerous operation. When a CMK is deleted, all data that was encrypted under the CMK is unrecoverable. To prevent the use of a CMK without deleting it, use <a>DisableKey</a>.</p> </important> <p>If you schedule deletion of a CMK from a <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-overview.html">custom key store</a>, when the waiting period expires, <code>ScheduleKeyDeletion</code> deletes the CMK from AWS KMS. Then AWS KMS makes a best effort to delete the key material from the associated AWS CloudHSM cluster. However, you might need to manually <a href="http://docs.aws.amazon.com/kms/latest/developerguide/fix-keystore.html#fix-keystore-orphaned-key">delete the orphaned key material</a> from the cluster and its backups.</p> <p>You cannot perform this operation on a CMK in a different AWS account.</p> <p>For more information about scheduling a CMK for deletion, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/deleting-keys.html">Deleting Customer Master Keys</a> in the <i>AWS Key Management Service Developer Guide</i>.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn schedule_key_deletion(
         &self,
         input: ScheduleKeyDeletionRequest,
@@ -6135,7 +7229,43 @@ impl Kms for KmsClient {
         })
     }
 
-    /// <p>Updates the description of a customer master key (CMK). To see the description of a CMK, use <a>DescribeKey</a>. </p> <p>You cannot perform this operation on a CMK in a different AWS account.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    /// <p>Changes the properties of a custom key store. Use the <code>CustomKeyStoreId</code> parameter to identify the custom key store you want to edit. Use the remaining parameters to change the properties of the custom key store.</p> <p>You can only update a custom key store that is disconnected. To disconnect the custom key store, use <a>DisconnectCustomKeyStore</a>. To reconnect the custom key store after the update completes, use <a>ConnectCustomKeyStore</a>. To find the connection state of a custom key store, use the <a>DescribeCustomKeyStores</a> operation.</p> <p>Use the <code>NewCustomKeyStoreName</code> parameter to change the friendly name of the custom key store to the value that you specify.</p> <p>Use the <code>KeyStorePassword</code> parameter tell AWS KMS the current password of the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-store-concepts.html#concept-kmsuser"> <code>kmsuser</code> crypto user (CU)</a> in the associated AWS CloudHSM cluster. You can use this parameter to fix connection failures that occur when AWS KMS cannot log into the associated cluster because the <code>kmsuser</code> password has changed. This value does not change the password in the AWS CloudHSM cluster.</p> <p>Use the <code>CloudHsmClusterId</code> parameter to associate the custom key store with a related AWS CloudHSM cluster, that is, a cluster that shares a backup history with the original cluster. You can use this parameter to repair a custom key store if its AWS CloudHSM cluster becomes corrupted or is deleted, or when you need to create or restore a cluster from a backup.</p> <p>The cluster ID must identify a AWS CloudHSM cluster with the following requirements.</p> <ul> <li> <p>The cluster must be active and be in the same AWS account and Region as the custom key store.</p> </li> <li> <p>The cluster must have the same cluster certificate as the original cluster. You cannot use this parameter to associate the custom key store with an unrelated cluster. To view the cluster certificate, use the AWS CloudHSM <a href="http://docs.aws.amazon.com/cloudhsm/latest/APIReference/API_DescribeClusters.html">DescribeClusters</a> operation. Clusters that share a backup history have the same cluster certificate.</p> </li> <li> <p>The cluster must be configured with subnets in at least two different Availability Zones in the Region. Because AWS CloudHSM is not supported in all Availability Zones, we recommend that the cluster have subnets in all Availability Zones in the Region.</p> </li> <li> <p>The cluster must contain at least two active HSMs, each in a different Availability Zone.</p> </li> </ul> <p>If the operation succeeds, it returns a JSON object with no properties.</p> <p>This operation is part of the <a href="http://docs.aws.amazon.com/kms/latest/developerguide/custom-key-store-overview.html">Custom Key Store feature</a> feature in AWS KMS, which combines the convenience and extensive integration of AWS KMS with the isolation and control of a single-tenant key store.</p>
+    fn update_custom_key_store(
+        &self,
+        input: UpdateCustomKeyStoreRequest,
+    ) -> RusotoFuture<UpdateCustomKeyStoreResponse, UpdateCustomKeyStoreError> {
+        let mut request = SignedRequest::new("POST", "kms", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "TrentService.UpdateCustomKeyStore");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<UpdateCustomKeyStoreResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateCustomKeyStoreError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Updates the description of a customer master key (CMK). To see the decription of a CMK, use <a>DescribeKey</a>. </p> <p>You cannot perform this operation on a CMK in a different AWS account.</p> <p>The result of this operation varies with the key state of the CMK. For details, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
     fn update_key_description(
         &self,
         input: UpdateKeyDescriptionRequest,

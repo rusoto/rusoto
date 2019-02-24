@@ -222,6 +222,162 @@ pub struct BatchItemError {
     pub index: Option<i64>,
 }
 
+/// <p>Describes the result metrics for the test data associated with an documentation classifier.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ClassifierEvaluationMetrics {
+    /// <p>The fraction of the labels that were correct recognized. It is computed by dividing the number of labels in the test documents that were correctly recognized by the total number of labels in the test documents.</p>
+    #[serde(rename = "Accuracy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accuracy: Option<f64>,
+    /// <p>A measure of how accurate the classifier results are for the test data. It is derived from the <code>Precision</code> and <code>Recall</code> values. The <code>F1Score</code> is the harmonic average of the two scores. The highest score is 1, and the worst score is 0. </p>
+    #[serde(rename = "F1Score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub f1_score: Option<f64>,
+    /// <p>A measure of the usefulness of the classifier results in the test data. High precision means that the classifier returned substantially more relevant results than irrelevant ones.</p>
+    #[serde(rename = "Precision")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub precision: Option<f64>,
+    /// <p>A measure of how complete the classifier results are for the test data. High recall means that the classifier returned most of the relevant results. </p>
+    #[serde(rename = "Recall")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recall: Option<f64>,
+}
+
+/// <p>Provides information about a document classifier.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ClassifierMetadata {
+    /// <p> Describes the result metrics for the test data associated with an documentation classifier.</p>
+    #[serde(rename = "EvaluationMetrics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub evaluation_metrics: Option<ClassifierEvaluationMetrics>,
+    /// <p>The number of labels in the input data. </p>
+    #[serde(rename = "NumberOfLabels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_labels: Option<i64>,
+    /// <p>The number of documents in the input data that were used to test the classifier. Typically this is 10 to 20 percent of the input documents.</p>
+    #[serde(rename = "NumberOfTestDocuments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_test_documents: Option<i64>,
+    /// <p>The number of documents in the input data that were used to train the classifier. Typically this is 80 to 90 percent of the input documents.</p>
+    #[serde(rename = "NumberOfTrainedDocuments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_trained_documents: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateDocumentClassifierRequest {
+    /// <p>A unique identifier for the request. If you don't set the client request token, Amazon Comprehend generates one.</p>
+    #[serde(rename = "ClientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the AWS Identity and Management (IAM) role that grants Amazon Comprehend read access to your input data.</p>
+    #[serde(rename = "DataAccessRoleArn")]
+    pub data_access_role_arn: String,
+    /// <p>The name of the document classifier.</p>
+    #[serde(rename = "DocumentClassifierName")]
+    pub document_classifier_name: String,
+    /// <p>Specifies the format and location of the input data for the job.</p>
+    #[serde(rename = "InputDataConfig")]
+    pub input_data_config: DocumentClassifierInputDataConfig,
+    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    #[serde(rename = "LanguageCode")]
+    pub language_code: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateDocumentClassifierResponse {
+    /// <p>The Amazon Resource Name (ARN) that identifies the document classifier.</p>
+    #[serde(rename = "DocumentClassifierArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_classifier_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateEntityRecognizerRequest {
+    /// <p> A unique identifier for the request. If you don't set the client request token, Amazon Comprehend generates one.</p>
+    #[serde(rename = "ClientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the AWS Identity and Management (IAM) role that grants Amazon Comprehend read access to your input data.</p>
+    #[serde(rename = "DataAccessRoleArn")]
+    pub data_access_role_arn: String,
+    /// <p>Specifies the format and location of the input data. The S3 bucket containing the input data must be located in the same region as the entity recognizer being created. </p>
+    #[serde(rename = "InputDataConfig")]
+    pub input_data_config: EntityRecognizerInputDataConfig,
+    /// <p> The language of the input documents. All documents must be in the same language. Only English ("en") is currently supported. </p>
+    #[serde(rename = "LanguageCode")]
+    pub language_code: String,
+    /// <p>The name given to the newly created recognizer. Recognizer names can be a maximum of 256 characters. Alphanumeric characters, hyphens (-) and underscores (_) are allowed. The name must be unique in the account/region.</p>
+    #[serde(rename = "RecognizerName")]
+    pub recognizer_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateEntityRecognizerResponse {
+    /// <p>The Amazon Resource Name (ARN) that identifies the entity recognizer.</p>
+    #[serde(rename = "EntityRecognizerArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entity_recognizer_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteDocumentClassifierRequest {
+    /// <p>The Amazon Resource Name (ARN) that identifies the document classifier. </p>
+    #[serde(rename = "DocumentClassifierArn")]
+    pub document_classifier_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteDocumentClassifierResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteEntityRecognizerRequest {
+    /// <p>The Amazon Resource Name (ARN) that identifies the entity recognizer.</p>
+    #[serde(rename = "EntityRecognizerArn")]
+    pub entity_recognizer_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteEntityRecognizerResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeDocumentClassificationJobRequest {
+    /// <p>The identifier that Amazon Comprehend generated for the job. The operation returns this identifier in its response.</p>
+    #[serde(rename = "JobId")]
+    pub job_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeDocumentClassificationJobResponse {
+    /// <p>An object that describes the properties associated with the document classification job.</p>
+    #[serde(rename = "DocumentClassificationJobProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_classification_job_properties: Option<DocumentClassificationJobProperties>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeDocumentClassifierRequest {
+    /// <p>The Amazon Resource Name (ARN) that identifies the document classifier. The operation returns this identifier in its response.</p>
+    #[serde(rename = "DocumentClassifierArn")]
+    pub document_classifier_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeDocumentClassifierResponse {
+    /// <p>An object that contains the properties associated with a document classifier.</p>
+    #[serde(rename = "DocumentClassifierProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_classifier_properties: Option<DocumentClassifierProperties>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeDominantLanguageDetectionJobRequest {
     /// <p>The identifier that Amazon Comprehend generated for the job. The operation returns this identifier in its response.</p>
@@ -252,6 +408,22 @@ pub struct DescribeEntitiesDetectionJobResponse {
     #[serde(rename = "EntitiesDetectionJobProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entities_detection_job_properties: Option<EntitiesDetectionJobProperties>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeEntityRecognizerRequest {
+    /// <p>The Amazon Resource Name (ARN) that identifies the entity recognizer.</p>
+    #[serde(rename = "EntityRecognizerArn")]
+    pub entity_recognizer_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeEntityRecognizerResponse {
+    /// <p>Describes information associated with an entity recognizer.</p>
+    #[serde(rename = "EntityRecognizerProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entity_recognizer_properties: Option<EntityRecognizerProperties>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -398,6 +570,148 @@ pub struct DetectSyntaxResponse {
     pub syntax_tokens: Option<Vec<SyntaxToken>>,
 }
 
+/// <p>Provides information for filtering a list of document classification jobs. For more information, see the operation. You can provide only one filter parameter in each request.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DocumentClassificationJobFilter {
+    /// <p>Filters on the name of the job.</p>
+    #[serde(rename = "JobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_name: Option<String>,
+    /// <p>Filters the list based on job status. Returns only jobs with the specified status.</p>
+    #[serde(rename = "JobStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_status: Option<String>,
+    /// <p>Filters the list of jobs based on the time that the job was submitted for processing. Returns only jobs submitted before the specified time. Jobs are returned in descending order, newest to oldest.</p>
+    #[serde(rename = "SubmitTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub submit_time_after: Option<f64>,
+    /// <p>Filters the list of jobs based on the time that the job was submitted for processing. Returns only jobs submitted after the specified time. Jobs are returned in ascending order, oldest to newest.</p>
+    #[serde(rename = "SubmitTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub submit_time_before: Option<f64>,
+}
+
+/// <p>Provides information about a document classification job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DocumentClassificationJobProperties {
+    /// <p>The Amazon Resource Name (ARN) of the AWS identity and Access Management (IAM) role that grants Amazon Comprehend read access to your input data.</p>
+    #[serde(rename = "DataAccessRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_access_role_arn: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) that identifies the document classifier. </p>
+    #[serde(rename = "DocumentClassifierArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_classifier_arn: Option<String>,
+    /// <p>The time that the document classification job completed.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>The input data configuration that you supplied when you created the document classification job.</p>
+    #[serde(rename = "InputDataConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_data_config: Option<InputDataConfig>,
+    /// <p>The identifier assigned to the document classification job.</p>
+    #[serde(rename = "JobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    /// <p>The name that you assigned to the document classification job.</p>
+    #[serde(rename = "JobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_name: Option<String>,
+    /// <p>The current status of the document classification job. If the status is <code>FAILED</code>, the <code>Message</code> field shows the reason for the failure.</p>
+    #[serde(rename = "JobStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_status: Option<String>,
+    /// <p>A description of the status of the job.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p>The output data configuration that you supplied when you created the document classification job.</p>
+    #[serde(rename = "OutputDataConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_data_config: Option<OutputDataConfig>,
+    /// <p>The time that the document classification job was submitted for processing.</p>
+    #[serde(rename = "SubmitTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub submit_time: Option<f64>,
+}
+
+/// <p>Provides information for filtering a list of document classifiers. You can only specify one filtering parameter in a request. For more information, see the operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DocumentClassifierFilter {
+    /// <p>Filters the list of classifiers based on status. </p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>Filters the list of classifiers based on the time that the classifier was submitted for processing. Returns only classifiers submitted after the specified time. Classifiers are returned in descending order, newest to oldest.</p>
+    #[serde(rename = "SubmitTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub submit_time_after: Option<f64>,
+    /// <p>Filters the list of classifiers based on the time that the classifier was submitted for processing. Returns only classifiers submitted before the specified time. Classifiers are returned in ascending order, oldest to newest.</p>
+    #[serde(rename = "SubmitTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub submit_time_before: Option<f64>,
+}
+
+/// <p>The input properties for training a document classifier. </p> <p>For more information on how the input file is formatted, see <a>how-document-classification-training-data</a>. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DocumentClassifierInputDataConfig {
+    /// <p>The Amazon S3 URI for the input data. The S3 bucket must be in the same region as the API endpoint that you are calling. The URI can point to a single input file or it can provide the prefix for a collection of input files.</p> <p>For example, if you use the URI <code>S3://bucketName/prefix</code>, if the prefix is a single file, Amazon Comprehend uses that file as input. If more than one file begins with the prefix, Amazon Comprehend uses all of them as input.</p>
+    #[serde(rename = "S3Uri")]
+    pub s3_uri: String,
+}
+
+/// <p>Provides information about a document classifier.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DocumentClassifierProperties {
+    /// <p>Information about the document classifier, including the number of documents used for training the classifier, the number of documents used for test the classifier, and an accuracy rating.</p>
+    #[serde(rename = "ClassifierMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub classifier_metadata: Option<ClassifierMetadata>,
+    /// <p>The Amazon Resource Name (ARN) of the AWS Identity and Management (IAM) role that grants Amazon Comprehend read access to your input data.</p>
+    #[serde(rename = "DataAccessRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_access_role_arn: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) that identifies the document classifier.</p>
+    #[serde(rename = "DocumentClassifierArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_classifier_arn: Option<String>,
+    /// <p>The time that training the document classifier completed.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>The input data configuration that you supplied when you created the document classifier for training.</p>
+    #[serde(rename = "InputDataConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_data_config: Option<DocumentClassifierInputDataConfig>,
+    /// <p>The language code for the language of the documents that the classifier was trained on.</p>
+    #[serde(rename = "LanguageCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub language_code: Option<String>,
+    /// <p>Additional information about the status of the classifier.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p>The status of the document classifier. If the status is <code>TRAINED</code> the classifier is ready to use. If the status is <code>FAILED</code> you can see additional information about why the classifier wasn't trained in the <code>Message</code> field.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The time that the document classifier was submitted for training.</p>
+    #[serde(rename = "SubmitTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub submit_time: Option<f64>,
+    /// <p>The time that training of the document classifier was completed. Indicates the time when the training completes on documentation classifiers. You are billed for the time interval between this time and the value of TrainingStartTime.</p>
+    #[serde(rename = "TrainingEndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub training_end_time: Option<f64>,
+    /// <p>Indicates the time when the training starts on documentation classifiers. You are billed for the time interval between this time and the value of TrainingEndTime. </p>
+    #[serde(rename = "TrainingStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub training_start_time: Option<f64>,
+}
+
 /// <p>Returns the code for the dominant language in the input text and the level of confidence that Amazon Comprehend has in the accuracy of the detection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -508,6 +822,10 @@ pub struct EntitiesDetectionJobProperties {
     #[serde(rename = "EndTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) that identifies the entity recognizer.</p>
+    #[serde(rename = "EntityRecognizerArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entity_recognizer_arn: Option<String>,
     /// <p>The input data configuration that you supplied when you created the entities detection job.</p>
     #[serde(rename = "InputDataConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -566,6 +884,174 @@ pub struct Entity {
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
+}
+
+/// <p>Describes the annotations associated with a entity recognizer.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EntityRecognizerAnnotations {
+    /// <p> Specifies the Amazon S3 location where the annotations for an entity recognizer are located. The URI must be in the same region as the API endpoint that you are calling.</p>
+    #[serde(rename = "S3Uri")]
+    pub s3_uri: String,
+}
+
+/// <p>Describes the training documents submitted with an entity recognizer.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EntityRecognizerDocuments {
+    /// <p> Specifies the Amazon S3 location where the training documents for an entity recognizer are located. The URI must be in the same region as the API endpoint that you are calling.</p>
+    #[serde(rename = "S3Uri")]
+    pub s3_uri: String,
+}
+
+/// <p>Describes the entity recognizer submitted with an entity recognizer.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EntityRecognizerEntityList {
+    /// <p>Specifies the Amazon S3 location where the entity list is located. The URI must be in the same region as the API endpoint that you are calling.</p>
+    #[serde(rename = "S3Uri")]
+    pub s3_uri: String,
+}
+
+/// <p> Detailed information about the accuracy of an entity recognizer. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct EntityRecognizerEvaluationMetrics {
+    /// <p>A measure of how accurate the recognizer results are for the test data. It is derived from the <code>Precision</code> and <code>Recall</code> values. The <code>F1Score</code> is the harmonic average of the two scores. The highest score is 1, and the worst score is 0. </p>
+    #[serde(rename = "F1Score")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub f1_score: Option<f64>,
+    /// <p>A measure of the usefulness of the recognizer results in the test data. High precision means that the recognizer returned substantially more relevant results than irrelevant ones. </p>
+    #[serde(rename = "Precision")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub precision: Option<f64>,
+    /// <p>A measure of how complete the recognizer results are for the test data. High recall means that the recognizer returned most of the relevant results.</p>
+    #[serde(rename = "Recall")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recall: Option<f64>,
+}
+
+/// <p>Provides information for filtering a list of entity recognizers. You can only specify one filtering parameter in a request. For more information, see the operation./&gt;</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct EntityRecognizerFilter {
+    /// <p>The status of an entity recognizer.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>Filters the list of entities based on the time that the list was submitted for processing. Returns only jobs submitted after the specified time. Jobs are returned in ascending order, oldest to newest.</p>
+    #[serde(rename = "SubmitTimeAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub submit_time_after: Option<f64>,
+    /// <p>Filters the list of entities based on the time that the list was submitted for processing. Returns only jobs submitted before the specified time. Jobs are returned in descending order, newest to oldest.</p>
+    #[serde(rename = "SubmitTimeBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub submit_time_before: Option<f64>,
+}
+
+/// <p>Specifies the format and location of the input data.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EntityRecognizerInputDataConfig {
+    /// <p>S3 location of the annotations file for an entity recognizer.</p>
+    #[serde(rename = "Annotations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub annotations: Option<EntityRecognizerAnnotations>,
+    /// <p>S3 location of the documents folder for an entity recognizer</p>
+    #[serde(rename = "Documents")]
+    pub documents: EntityRecognizerDocuments,
+    /// <p>S3 location of the entity list for an entity recognizer.</p>
+    #[serde(rename = "EntityList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entity_list: Option<EntityRecognizerEntityList>,
+    /// <p>The entity types in the input data for an entity recognizer.</p>
+    #[serde(rename = "EntityTypes")]
+    pub entity_types: Vec<EntityTypesListItem>,
+}
+
+/// <p>Detailed information about an entity recognizer.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct EntityRecognizerMetadata {
+    /// <p>Entity types from the metadata of an entity recognizer.</p>
+    #[serde(rename = "EntityTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entity_types: Option<Vec<EntityRecognizerMetadataEntityTypesListItem>>,
+    /// <p> Detailed information about the accuracy of an entity recognizer.</p>
+    #[serde(rename = "EvaluationMetrics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub evaluation_metrics: Option<EntityRecognizerEvaluationMetrics>,
+    /// <p> The number of documents in the input data that were used to test the entity recognizer. Typically this is 10 to 20 percent of the input documents.</p>
+    #[serde(rename = "NumberOfTestDocuments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_test_documents: Option<i64>,
+    /// <p> The number of documents in the input data that were used to train the entity recognizer. Typically this is 80 to 90 percent of the input documents.</p>
+    #[serde(rename = "NumberOfTrainedDocuments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub number_of_trained_documents: Option<i64>,
+}
+
+/// <p>Individual item from the list of entity types in the metadata of an entity recognizer.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct EntityRecognizerMetadataEntityTypesListItem {
+    /// <p>Type of entity from the list of entity types in the metadata of an entity recognizer. </p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>Describes information about an entity recognizer.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct EntityRecognizerProperties {
+    /// <p> The Amazon Resource Name (ARN) of the AWS Identity and Management (IAM) role that grants Amazon Comprehend read access to your input data.</p>
+    #[serde(rename = "DataAccessRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_access_role_arn: Option<String>,
+    /// <p>The time that the recognizer creation completed.</p>
+    #[serde(rename = "EndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>The Amazon Resource Name (ARN) that identifies the entity recognizer.</p>
+    #[serde(rename = "EntityRecognizerArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entity_recognizer_arn: Option<String>,
+    /// <p>The input data properties of an entity recognizer.</p>
+    #[serde(rename = "InputDataConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_data_config: Option<EntityRecognizerInputDataConfig>,
+    /// <p> The language of the input documents. All documents must be in the same language. Only English ("en") is currently supported.</p>
+    #[serde(rename = "LanguageCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub language_code: Option<String>,
+    /// <p> A description of the status of the recognizer.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p> Provides information about an entity recognizer.</p>
+    #[serde(rename = "RecognizerMetadata")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recognizer_metadata: Option<EntityRecognizerMetadata>,
+    /// <p>Provides the status of the entity recognizer.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The time that the recognizer was submitted for processing.</p>
+    #[serde(rename = "SubmitTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub submit_time: Option<f64>,
+    /// <p>The time that training of the entity recognizer was completed.</p>
+    #[serde(rename = "TrainingEndTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub training_end_time: Option<f64>,
+    /// <p>The time that training of the entity recognizer started.</p>
+    #[serde(rename = "TrainingStartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub training_start_time: Option<f64>,
+}
+
+/// <p>Information about an individual item on a list of entity types.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct EntityTypesListItem {
+    /// <p>Entity type of an item on an entity type list.</p>
+    #[serde(rename = "Type")]
+    pub type_: String,
 }
 
 /// <p>The input properties for a topic detection job.</p>
@@ -670,6 +1156,65 @@ pub struct KeyPhrasesDetectionJobProperties {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListDocumentClassificationJobsRequest {
+    /// <p>Filters the jobs that are returned. You can filter jobs on their names, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
+    #[serde(rename = "Filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<DocumentClassificationJobFilter>,
+    /// <p>The maximum number of results to return in each page. The default is 100.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Identifies the next page of results to return.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListDocumentClassificationJobsResponse {
+    /// <p>A list containing the properties of each job returned.</p>
+    #[serde(rename = "DocumentClassificationJobPropertiesList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_classification_job_properties_list:
+        Option<Vec<DocumentClassificationJobProperties>>,
+    /// <p>Identifies the next page of results to return.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListDocumentClassifiersRequest {
+    /// <p>Filters the jobs that are returned. You can filter jobs on their name, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
+    #[serde(rename = "Filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<DocumentClassifierFilter>,
+    /// <p>The maximum number of results to return in each page. The default is 100.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Identifies the next page of results to return.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListDocumentClassifiersResponse {
+    /// <p>A list containing the properties of each job returned.</p>
+    #[serde(rename = "DocumentClassifierPropertiesList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_classifier_properties_list: Option<Vec<DocumentClassifierProperties>>,
+    /// <p>Identifies the next page of results to return.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListDominantLanguageDetectionJobsRequest {
     /// <p>Filters that jobs that are returned. You can filter jobs on their name, status, or the date and time that they were submitted. You can only set one filter at a time.</p>
     #[serde(rename = "Filter")]
@@ -722,6 +1267,35 @@ pub struct ListEntitiesDetectionJobsResponse {
     #[serde(rename = "EntitiesDetectionJobPropertiesList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entities_detection_job_properties_list: Option<Vec<EntitiesDetectionJobProperties>>,
+    /// <p>Identifies the next page of results to return.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListEntityRecognizersRequest {
+    /// <p>Filters the list of entities returned. You can filter on <code>Status</code>, <code>SubmitTimeBefore</code>, or <code>SubmitTimeAfter</code>. You can only set one filter at a time.</p>
+    #[serde(rename = "Filter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filter: Option<EntityRecognizerFilter>,
+    /// <p> The maximum number of results to return on each page. The default is 100.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>Identifies the next page of results to return.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListEntityRecognizersResponse {
+    /// <p>The list of properties of an entity recognizer.</p>
+    #[serde(rename = "EntityRecognizerPropertiesList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entity_recognizer_properties_list: Option<Vec<EntityRecognizerProperties>>,
     /// <p>Identifies the next page of results to return.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -927,6 +1501,43 @@ pub struct SentimentScore {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StartDocumentClassificationJobRequest {
+    /// <p>A unique identifier for the request. If you do not set the client request token, Amazon Comprehend generates one.</p>
+    #[serde(rename = "ClientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that grants Amazon Comprehend read access to your input data.</p>
+    #[serde(rename = "DataAccessRoleArn")]
+    pub data_access_role_arn: String,
+    /// <p>The Amazon Resource Name (ARN) of the document classifier to use to process the job.</p>
+    #[serde(rename = "DocumentClassifierArn")]
+    pub document_classifier_arn: String,
+    /// <p>Specifies the format and location of the input data for the job.</p>
+    #[serde(rename = "InputDataConfig")]
+    pub input_data_config: InputDataConfig,
+    /// <p>The identifier of the job.</p>
+    #[serde(rename = "JobName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_name: Option<String>,
+    /// <p>Specifies where to send the output files.</p>
+    #[serde(rename = "OutputDataConfig")]
+    pub output_data_config: OutputDataConfig,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StartDocumentClassificationJobResponse {
+    /// <p>The identifier generated for the job. To get the status of the job, use this identifier with the operation.</p>
+    #[serde(rename = "JobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_id: Option<String>,
+    /// <p><p>The status of the job:</p> <ul> <li> <p>SUBMITTED - The job has been received and queued for processing.</p> </li> <li> <p>IN<em>PROGRESS - Amazon Comprehend is processing the job.</p> </li> <li> <p>COMPLETED - The job was successfully completed and the output is available.</p> </li> <li> <p>FAILED - The job did not complete. For details, use the operation.</p> </li> <li> <p>STOP</em>REQUESTED - Amazon Comprehend has received a stop request for the job and is processing the request.</p> </li> <li> <p>STOPPED - The job was successfully stopped without completing.</p> </li> </ul></p>
+    #[serde(rename = "JobStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub job_status: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartDominantLanguageDetectionJobRequest {
     /// <p>A unique identifier for the request. If you do not set the client request token, Amazon Comprehend generates one.</p>
     #[serde(rename = "ClientRequestToken")]
@@ -969,6 +1580,10 @@ pub struct StartEntitiesDetectionJobRequest {
     /// <p>The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that grants Amazon Comprehend read access to your input data. For more information, see <a href="https://docs.aws.amazon.com/comprehend/latest/dg/access-control-managing-permissions.html#auth-role-permissions">https://docs.aws.amazon.com/comprehend/latest/dg/access-control-managing-permissions.html#auth-role-permissions</a>.</p>
     #[serde(rename = "DataAccessRoleArn")]
     pub data_access_role_arn: String,
+    /// <p>The Amazon Resource Name (ARN) that identifies the specific entity recognizer to be used by the <code>StartEntitiesDetectionJob</code>. This ARN is optional and is only used for a custom entity recognition job.</p>
+    #[serde(rename = "EntityRecognizerArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entity_recognizer_arn: Option<String>,
     /// <p>Specifies the format and location of the input data for the job.</p>
     #[serde(rename = "InputDataConfig")]
     pub input_data_config: InputDataConfig,
@@ -976,7 +1591,7 @@ pub struct StartEntitiesDetectionJobRequest {
     #[serde(rename = "JobName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_name: Option<String>,
-    /// <p>The language of the input documents. You can specify English ("en") or Spanish ("es"). All documents must be in the same language.</p>
+    /// <p>The language of the input documents. All documents must be in the same language. You can specify any of the languages supported by Amazon Comprehend: English ("en"), Spanish ("es"), French ("fr"), German ("de"), Italian ("it"), or Portuguese ("pt"). If custom entities recognition is used, this parameter is ignored and the language used for training the model is used instead.</p>
     #[serde(rename = "LanguageCode")]
     pub language_code: String,
     /// <p>Specifies where to send the output files.</p>
@@ -991,7 +1606,7 @@ pub struct StartEntitiesDetectionJobResponse {
     #[serde(rename = "JobId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_id: Option<String>,
-    /// <p><p>The status of the job. </p> <ul> <li> <p>SUBMITTED - The job has been received and is queued for processing.</p> </li> <li> <p>IN_PROGRESS - Amazon Comprehend is processing the job.</p> </li> <li> <p>COMPLETED - The job was successfully completed and the output is available.</p> </li> <li> <p>FAILED - The job did not complete. To get details, use the operation.</p> </li> </ul></p>
+    /// <p><p>The status of the job. </p> <ul> <li> <p>SUBMITTED - The job has been received and is queued for processing.</p> </li> <li> <p>IN<em>PROGRESS - Amazon Comprehend is processing the job.</p> </li> <li> <p>COMPLETED - The job was successfully completed and the output is available.</p> </li> <li> <p>FAILED - The job did not complete. To get details, use the operation.</p> </li> <li> <p>STOP</em>REQUESTED - Amazon Comprehend has received a stop request for the job and is processing the request.</p> </li> <li> <p>STOPPED - The job was successfully stopped without completing.</p> </li> </ul></p>
     #[serde(rename = "JobStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_status: Option<String>,
@@ -1188,6 +1803,28 @@ pub struct StopSentimentDetectionJobResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_status: Option<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StopTrainingDocumentClassifierRequest {
+    /// <p>The Amazon Resource Name (ARN) that identifies the document classifier currently being trained.</p>
+    #[serde(rename = "DocumentClassifierArn")]
+    pub document_classifier_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StopTrainingDocumentClassifierResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StopTrainingEntityRecognizerRequest {
+    /// <p>The Amazon Resource Name (ARN) that identifies the entity recognizer currently being trained.</p>
+    #[serde(rename = "EntityRecognizerArn")]
+    pub entity_recognizer_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StopTrainingEntityRecognizerResponse {}
 
 /// <p>Represents a work in the input text that was recognized and assigned a part of speech. There is one syntax token record for each word in the source text.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1397,7 +2034,7 @@ pub enum BatchDetectEntitiesError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all APIs except <code>DetectDominantLanguage</code>, Amazon Comprehend accepts only English or Spanish text. For the <code>DetectDominantLanguage</code> API, Amazon Comprehend detects 100 languages. For a list of languages, see <a>how-languages</a> </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
     UnsupportedLanguage(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1509,7 +2146,7 @@ pub enum BatchDetectKeyPhrasesError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all APIs except <code>DetectDominantLanguage</code>, Amazon Comprehend accepts only English or Spanish text. For the <code>DetectDominantLanguage</code> API, Amazon Comprehend detects 100 languages. For a list of languages, see <a>how-languages</a> </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
     UnsupportedLanguage(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1621,7 +2258,7 @@ pub enum BatchDetectSentimentError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all APIs except <code>DetectDominantLanguage</code>, Amazon Comprehend accepts only English or Spanish text. For the <code>DetectDominantLanguage</code> API, Amazon Comprehend detects 100 languages. For a list of languages, see <a>how-languages</a> </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
     UnsupportedLanguage(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1733,7 +2370,7 @@ pub enum BatchDetectSyntaxError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all APIs except <code>DetectDominantLanguage</code>, Amazon Comprehend accepts only English or Spanish text. For the <code>DetectDominantLanguage</code> API, Amazon Comprehend detects 100 languages. For a list of languages, see <a>how-languages</a> </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
     UnsupportedLanguage(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1829,6 +2466,700 @@ impl Error for BatchDetectSyntaxError {
             }
             BatchDetectSyntaxError::ParseError(ref cause) => cause,
             BatchDetectSyntaxError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by CreateDocumentClassifier
+#[derive(Debug, PartialEq)]
+pub enum CreateDocumentClassifierError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The specified name is already in use. Use a different name and try your request again.</p>
+    ResourceInUse(String),
+    /// <p>The maximum number of recognizers per account has been exceeded. Review the recognizers, perform cleanup, and then try your request again.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+    TooManyRequests(String),
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    UnsupportedLanguage(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl CreateDocumentClassifierError {
+    pub fn from_response(res: BufferedHttpResponse) -> CreateDocumentClassifierError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalServerException" => {
+                    return CreateDocumentClassifierError::InternalServer(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidRequestException" => {
+                    return CreateDocumentClassifierError::InvalidRequest(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceInUseException" => {
+                    return CreateDocumentClassifierError::ResourceInUse(String::from(error_message));
+                }
+                "ResourceLimitExceededException" => {
+                    return CreateDocumentClassifierError::ResourceLimitExceeded(String::from(
+                        error_message,
+                    ));
+                }
+                "TooManyRequestsException" => {
+                    return CreateDocumentClassifierError::TooManyRequests(String::from(
+                        error_message,
+                    ));
+                }
+                "UnsupportedLanguageException" => {
+                    return CreateDocumentClassifierError::UnsupportedLanguage(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return CreateDocumentClassifierError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return CreateDocumentClassifierError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for CreateDocumentClassifierError {
+    fn from(err: serde_json::error::Error) -> CreateDocumentClassifierError {
+        CreateDocumentClassifierError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateDocumentClassifierError {
+    fn from(err: CredentialsError) -> CreateDocumentClassifierError {
+        CreateDocumentClassifierError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateDocumentClassifierError {
+    fn from(err: HttpDispatchError) -> CreateDocumentClassifierError {
+        CreateDocumentClassifierError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateDocumentClassifierError {
+    fn from(err: io::Error) -> CreateDocumentClassifierError {
+        CreateDocumentClassifierError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateDocumentClassifierError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateDocumentClassifierError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateDocumentClassifierError::InternalServer(ref cause) => cause,
+            CreateDocumentClassifierError::InvalidRequest(ref cause) => cause,
+            CreateDocumentClassifierError::ResourceInUse(ref cause) => cause,
+            CreateDocumentClassifierError::ResourceLimitExceeded(ref cause) => cause,
+            CreateDocumentClassifierError::TooManyRequests(ref cause) => cause,
+            CreateDocumentClassifierError::UnsupportedLanguage(ref cause) => cause,
+            CreateDocumentClassifierError::Validation(ref cause) => cause,
+            CreateDocumentClassifierError::Credentials(ref err) => err.description(),
+            CreateDocumentClassifierError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateDocumentClassifierError::ParseError(ref cause) => cause,
+            CreateDocumentClassifierError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by CreateEntityRecognizer
+#[derive(Debug, PartialEq)]
+pub enum CreateEntityRecognizerError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The specified name is already in use. Use a different name and try your request again.</p>
+    ResourceInUse(String),
+    /// <p>The maximum number of recognizers per account has been exceeded. Review the recognizers, perform cleanup, and then try your request again.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+    TooManyRequests(String),
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
+    UnsupportedLanguage(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl CreateEntityRecognizerError {
+    pub fn from_response(res: BufferedHttpResponse) -> CreateEntityRecognizerError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalServerException" => {
+                    return CreateEntityRecognizerError::InternalServer(String::from(error_message));
+                }
+                "InvalidRequestException" => {
+                    return CreateEntityRecognizerError::InvalidRequest(String::from(error_message));
+                }
+                "ResourceInUseException" => {
+                    return CreateEntityRecognizerError::ResourceInUse(String::from(error_message));
+                }
+                "ResourceLimitExceededException" => {
+                    return CreateEntityRecognizerError::ResourceLimitExceeded(String::from(
+                        error_message,
+                    ));
+                }
+                "TooManyRequestsException" => {
+                    return CreateEntityRecognizerError::TooManyRequests(String::from(error_message));
+                }
+                "UnsupportedLanguageException" => {
+                    return CreateEntityRecognizerError::UnsupportedLanguage(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return CreateEntityRecognizerError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return CreateEntityRecognizerError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for CreateEntityRecognizerError {
+    fn from(err: serde_json::error::Error) -> CreateEntityRecognizerError {
+        CreateEntityRecognizerError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateEntityRecognizerError {
+    fn from(err: CredentialsError) -> CreateEntityRecognizerError {
+        CreateEntityRecognizerError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateEntityRecognizerError {
+    fn from(err: HttpDispatchError) -> CreateEntityRecognizerError {
+        CreateEntityRecognizerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateEntityRecognizerError {
+    fn from(err: io::Error) -> CreateEntityRecognizerError {
+        CreateEntityRecognizerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateEntityRecognizerError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateEntityRecognizerError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateEntityRecognizerError::InternalServer(ref cause) => cause,
+            CreateEntityRecognizerError::InvalidRequest(ref cause) => cause,
+            CreateEntityRecognizerError::ResourceInUse(ref cause) => cause,
+            CreateEntityRecognizerError::ResourceLimitExceeded(ref cause) => cause,
+            CreateEntityRecognizerError::TooManyRequests(ref cause) => cause,
+            CreateEntityRecognizerError::UnsupportedLanguage(ref cause) => cause,
+            CreateEntityRecognizerError::Validation(ref cause) => cause,
+            CreateEntityRecognizerError::Credentials(ref err) => err.description(),
+            CreateEntityRecognizerError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateEntityRecognizerError::ParseError(ref cause) => cause,
+            CreateEntityRecognizerError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DeleteDocumentClassifier
+#[derive(Debug, PartialEq)]
+pub enum DeleteDocumentClassifierError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The specified name is already in use. Use a different name and try your request again.</p>
+    ResourceInUse(String),
+    /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
+    ResourceNotFound(String),
+    /// <p>The specified resource is not available. Check to see if the resource is in the <code>TRAINED</code> state and try your request again.</p>
+    ResourceUnavailable(String),
+    /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+    TooManyRequests(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DeleteDocumentClassifierError {
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteDocumentClassifierError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalServerException" => {
+                    return DeleteDocumentClassifierError::InternalServer(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidRequestException" => {
+                    return DeleteDocumentClassifierError::InvalidRequest(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceInUseException" => {
+                    return DeleteDocumentClassifierError::ResourceInUse(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteDocumentClassifierError::ResourceNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceUnavailableException" => {
+                    return DeleteDocumentClassifierError::ResourceUnavailable(String::from(
+                        error_message,
+                    ));
+                }
+                "TooManyRequestsException" => {
+                    return DeleteDocumentClassifierError::TooManyRequests(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return DeleteDocumentClassifierError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DeleteDocumentClassifierError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteDocumentClassifierError {
+    fn from(err: serde_json::error::Error) -> DeleteDocumentClassifierError {
+        DeleteDocumentClassifierError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteDocumentClassifierError {
+    fn from(err: CredentialsError) -> DeleteDocumentClassifierError {
+        DeleteDocumentClassifierError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteDocumentClassifierError {
+    fn from(err: HttpDispatchError) -> DeleteDocumentClassifierError {
+        DeleteDocumentClassifierError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteDocumentClassifierError {
+    fn from(err: io::Error) -> DeleteDocumentClassifierError {
+        DeleteDocumentClassifierError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteDocumentClassifierError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteDocumentClassifierError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteDocumentClassifierError::InternalServer(ref cause) => cause,
+            DeleteDocumentClassifierError::InvalidRequest(ref cause) => cause,
+            DeleteDocumentClassifierError::ResourceInUse(ref cause) => cause,
+            DeleteDocumentClassifierError::ResourceNotFound(ref cause) => cause,
+            DeleteDocumentClassifierError::ResourceUnavailable(ref cause) => cause,
+            DeleteDocumentClassifierError::TooManyRequests(ref cause) => cause,
+            DeleteDocumentClassifierError::Validation(ref cause) => cause,
+            DeleteDocumentClassifierError::Credentials(ref err) => err.description(),
+            DeleteDocumentClassifierError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteDocumentClassifierError::ParseError(ref cause) => cause,
+            DeleteDocumentClassifierError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DeleteEntityRecognizer
+#[derive(Debug, PartialEq)]
+pub enum DeleteEntityRecognizerError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The specified name is already in use. Use a different name and try your request again.</p>
+    ResourceInUse(String),
+    /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
+    ResourceNotFound(String),
+    /// <p>The specified resource is not available. Check to see if the resource is in the <code>TRAINED</code> state and try your request again.</p>
+    ResourceUnavailable(String),
+    /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+    TooManyRequests(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DeleteEntityRecognizerError {
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteEntityRecognizerError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalServerException" => {
+                    return DeleteEntityRecognizerError::InternalServer(String::from(error_message));
+                }
+                "InvalidRequestException" => {
+                    return DeleteEntityRecognizerError::InvalidRequest(String::from(error_message));
+                }
+                "ResourceInUseException" => {
+                    return DeleteEntityRecognizerError::ResourceInUse(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteEntityRecognizerError::ResourceNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceUnavailableException" => {
+                    return DeleteEntityRecognizerError::ResourceUnavailable(String::from(
+                        error_message,
+                    ));
+                }
+                "TooManyRequestsException" => {
+                    return DeleteEntityRecognizerError::TooManyRequests(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return DeleteEntityRecognizerError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DeleteEntityRecognizerError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteEntityRecognizerError {
+    fn from(err: serde_json::error::Error) -> DeleteEntityRecognizerError {
+        DeleteEntityRecognizerError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteEntityRecognizerError {
+    fn from(err: CredentialsError) -> DeleteEntityRecognizerError {
+        DeleteEntityRecognizerError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteEntityRecognizerError {
+    fn from(err: HttpDispatchError) -> DeleteEntityRecognizerError {
+        DeleteEntityRecognizerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteEntityRecognizerError {
+    fn from(err: io::Error) -> DeleteEntityRecognizerError {
+        DeleteEntityRecognizerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteEntityRecognizerError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteEntityRecognizerError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteEntityRecognizerError::InternalServer(ref cause) => cause,
+            DeleteEntityRecognizerError::InvalidRequest(ref cause) => cause,
+            DeleteEntityRecognizerError::ResourceInUse(ref cause) => cause,
+            DeleteEntityRecognizerError::ResourceNotFound(ref cause) => cause,
+            DeleteEntityRecognizerError::ResourceUnavailable(ref cause) => cause,
+            DeleteEntityRecognizerError::TooManyRequests(ref cause) => cause,
+            DeleteEntityRecognizerError::Validation(ref cause) => cause,
+            DeleteEntityRecognizerError::Credentials(ref err) => err.description(),
+            DeleteEntityRecognizerError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteEntityRecognizerError::ParseError(ref cause) => cause,
+            DeleteEntityRecognizerError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DescribeDocumentClassificationJob
+#[derive(Debug, PartialEq)]
+pub enum DescribeDocumentClassificationJobError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The specified job was not found. Check the job ID and try again.</p>
+    JobNotFound(String),
+    /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+    TooManyRequests(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DescribeDocumentClassificationJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeDocumentClassificationJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalServerException" => {
+                    return DescribeDocumentClassificationJobError::InternalServer(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidRequestException" => {
+                    return DescribeDocumentClassificationJobError::InvalidRequest(String::from(
+                        error_message,
+                    ));
+                }
+                "JobNotFoundException" => {
+                    return DescribeDocumentClassificationJobError::JobNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "TooManyRequestsException" => {
+                    return DescribeDocumentClassificationJobError::TooManyRequests(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return DescribeDocumentClassificationJobError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return DescribeDocumentClassificationJobError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeDocumentClassificationJobError {
+    fn from(err: serde_json::error::Error) -> DescribeDocumentClassificationJobError {
+        DescribeDocumentClassificationJobError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeDocumentClassificationJobError {
+    fn from(err: CredentialsError) -> DescribeDocumentClassificationJobError {
+        DescribeDocumentClassificationJobError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeDocumentClassificationJobError {
+    fn from(err: HttpDispatchError) -> DescribeDocumentClassificationJobError {
+        DescribeDocumentClassificationJobError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeDocumentClassificationJobError {
+    fn from(err: io::Error) -> DescribeDocumentClassificationJobError {
+        DescribeDocumentClassificationJobError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeDocumentClassificationJobError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeDocumentClassificationJobError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeDocumentClassificationJobError::InternalServer(ref cause) => cause,
+            DescribeDocumentClassificationJobError::InvalidRequest(ref cause) => cause,
+            DescribeDocumentClassificationJobError::JobNotFound(ref cause) => cause,
+            DescribeDocumentClassificationJobError::TooManyRequests(ref cause) => cause,
+            DescribeDocumentClassificationJobError::Validation(ref cause) => cause,
+            DescribeDocumentClassificationJobError::Credentials(ref err) => err.description(),
+            DescribeDocumentClassificationJobError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeDocumentClassificationJobError::ParseError(ref cause) => cause,
+            DescribeDocumentClassificationJobError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DescribeDocumentClassifier
+#[derive(Debug, PartialEq)]
+pub enum DescribeDocumentClassifierError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
+    ResourceNotFound(String),
+    /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+    TooManyRequests(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DescribeDocumentClassifierError {
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeDocumentClassifierError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalServerException" => {
+                    return DescribeDocumentClassifierError::InternalServer(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidRequestException" => {
+                    return DescribeDocumentClassifierError::InvalidRequest(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceNotFoundException" => {
+                    return DescribeDocumentClassifierError::ResourceNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "TooManyRequestsException" => {
+                    return DescribeDocumentClassifierError::TooManyRequests(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return DescribeDocumentClassifierError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DescribeDocumentClassifierError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeDocumentClassifierError {
+    fn from(err: serde_json::error::Error) -> DescribeDocumentClassifierError {
+        DescribeDocumentClassifierError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeDocumentClassifierError {
+    fn from(err: CredentialsError) -> DescribeDocumentClassifierError {
+        DescribeDocumentClassifierError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeDocumentClassifierError {
+    fn from(err: HttpDispatchError) -> DescribeDocumentClassifierError {
+        DescribeDocumentClassifierError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeDocumentClassifierError {
+    fn from(err: io::Error) -> DescribeDocumentClassifierError {
+        DescribeDocumentClassifierError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeDocumentClassifierError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeDocumentClassifierError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeDocumentClassifierError::InternalServer(ref cause) => cause,
+            DescribeDocumentClassifierError::InvalidRequest(ref cause) => cause,
+            DescribeDocumentClassifierError::ResourceNotFound(ref cause) => cause,
+            DescribeDocumentClassifierError::TooManyRequests(ref cause) => cause,
+            DescribeDocumentClassifierError::Validation(ref cause) => cause,
+            DescribeDocumentClassifierError::Credentials(ref err) => err.description(),
+            DescribeDocumentClassifierError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeDocumentClassifierError::ParseError(ref cause) => cause,
+            DescribeDocumentClassifierError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2047,6 +3378,114 @@ impl Error for DescribeEntitiesDetectionJobError {
             }
             DescribeEntitiesDetectionJobError::ParseError(ref cause) => cause,
             DescribeEntitiesDetectionJobError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DescribeEntityRecognizer
+#[derive(Debug, PartialEq)]
+pub enum DescribeEntityRecognizerError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
+    ResourceNotFound(String),
+    /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+    TooManyRequests(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DescribeEntityRecognizerError {
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeEntityRecognizerError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalServerException" => {
+                    return DescribeEntityRecognizerError::InternalServer(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidRequestException" => {
+                    return DescribeEntityRecognizerError::InvalidRequest(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceNotFoundException" => {
+                    return DescribeEntityRecognizerError::ResourceNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "TooManyRequestsException" => {
+                    return DescribeEntityRecognizerError::TooManyRequests(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return DescribeEntityRecognizerError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DescribeEntityRecognizerError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeEntityRecognizerError {
+    fn from(err: serde_json::error::Error) -> DescribeEntityRecognizerError {
+        DescribeEntityRecognizerError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeEntityRecognizerError {
+    fn from(err: CredentialsError) -> DescribeEntityRecognizerError {
+        DescribeEntityRecognizerError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeEntityRecognizerError {
+    fn from(err: HttpDispatchError) -> DescribeEntityRecognizerError {
+        DescribeEntityRecognizerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeEntityRecognizerError {
+    fn from(err: io::Error) -> DescribeEntityRecognizerError {
+        DescribeEntityRecognizerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeEntityRecognizerError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeEntityRecognizerError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeEntityRecognizerError::InternalServer(ref cause) => cause,
+            DescribeEntityRecognizerError::InvalidRequest(ref cause) => cause,
+            DescribeEntityRecognizerError::ResourceNotFound(ref cause) => cause,
+            DescribeEntityRecognizerError::TooManyRequests(ref cause) => cause,
+            DescribeEntityRecognizerError::Validation(ref cause) => cause,
+            DescribeEntityRecognizerError::Credentials(ref err) => err.description(),
+            DescribeEntityRecognizerError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeEntityRecognizerError::ParseError(ref cause) => cause,
+            DescribeEntityRecognizerError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2479,7 +3918,7 @@ pub enum DetectEntitiesError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all APIs except <code>DetectDominantLanguage</code>, Amazon Comprehend accepts only English or Spanish text. For the <code>DetectDominantLanguage</code> API, Amazon Comprehend detects 100 languages. For a list of languages, see <a>how-languages</a> </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
     UnsupportedLanguage(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2577,7 +4016,7 @@ pub enum DetectKeyPhrasesError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all APIs except <code>DetectDominantLanguage</code>, Amazon Comprehend accepts only English or Spanish text. For the <code>DetectDominantLanguage</code> API, Amazon Comprehend detects 100 languages. For a list of languages, see <a>how-languages</a> </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
     UnsupportedLanguage(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2675,7 +4114,7 @@ pub enum DetectSentimentError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all APIs except <code>DetectDominantLanguage</code>, Amazon Comprehend accepts only English or Spanish text. For the <code>DetectDominantLanguage</code> API, Amazon Comprehend detects 100 languages. For a list of languages, see <a>how-languages</a> </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
     UnsupportedLanguage(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2773,7 +4212,7 @@ pub enum DetectSyntaxError {
     InvalidRequest(String),
     /// <p>The size of the input text exceeds the limit. Use a smaller document.</p>
     TextSizeLimitExceeded(String),
-    /// <p>Amazon Comprehend can't process the language of the input text. For all APIs except <code>DetectDominantLanguage</code>, Amazon Comprehend accepts only English or Spanish text. For the <code>DetectDominantLanguage</code> API, Amazon Comprehend detects 100 languages. For a list of languages, see <a>how-languages</a> </p>
+    /// <p>Amazon Comprehend can't process the language of the input text. For all custom entity recognition APIs (such as <code>CreateEntityRecognizer</code>), only English is accepted. For most other APIs, Amazon Comprehend accepts only English or Spanish text. </p>
     UnsupportedLanguage(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2862,12 +4301,224 @@ impl Error for DetectSyntaxError {
         }
     }
 }
+/// Errors returned by ListDocumentClassificationJobs
+#[derive(Debug, PartialEq)]
+pub enum ListDocumentClassificationJobsError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
+    InvalidFilter(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+    TooManyRequests(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListDocumentClassificationJobsError {
+    pub fn from_response(res: BufferedHttpResponse) -> ListDocumentClassificationJobsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalServerException" => {
+                    return ListDocumentClassificationJobsError::InternalServer(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidFilterException" => {
+                    return ListDocumentClassificationJobsError::InvalidFilter(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidRequestException" => {
+                    return ListDocumentClassificationJobsError::InvalidRequest(String::from(
+                        error_message,
+                    ));
+                }
+                "TooManyRequestsException" => {
+                    return ListDocumentClassificationJobsError::TooManyRequests(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return ListDocumentClassificationJobsError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return ListDocumentClassificationJobsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListDocumentClassificationJobsError {
+    fn from(err: serde_json::error::Error) -> ListDocumentClassificationJobsError {
+        ListDocumentClassificationJobsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListDocumentClassificationJobsError {
+    fn from(err: CredentialsError) -> ListDocumentClassificationJobsError {
+        ListDocumentClassificationJobsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListDocumentClassificationJobsError {
+    fn from(err: HttpDispatchError) -> ListDocumentClassificationJobsError {
+        ListDocumentClassificationJobsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListDocumentClassificationJobsError {
+    fn from(err: io::Error) -> ListDocumentClassificationJobsError {
+        ListDocumentClassificationJobsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListDocumentClassificationJobsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListDocumentClassificationJobsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListDocumentClassificationJobsError::InternalServer(ref cause) => cause,
+            ListDocumentClassificationJobsError::InvalidFilter(ref cause) => cause,
+            ListDocumentClassificationJobsError::InvalidRequest(ref cause) => cause,
+            ListDocumentClassificationJobsError::TooManyRequests(ref cause) => cause,
+            ListDocumentClassificationJobsError::Validation(ref cause) => cause,
+            ListDocumentClassificationJobsError::Credentials(ref err) => err.description(),
+            ListDocumentClassificationJobsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListDocumentClassificationJobsError::ParseError(ref cause) => cause,
+            ListDocumentClassificationJobsError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by ListDocumentClassifiers
+#[derive(Debug, PartialEq)]
+pub enum ListDocumentClassifiersError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
+    InvalidFilter(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+    TooManyRequests(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListDocumentClassifiersError {
+    pub fn from_response(res: BufferedHttpResponse) -> ListDocumentClassifiersError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalServerException" => {
+                    return ListDocumentClassifiersError::InternalServer(String::from(error_message));
+                }
+                "InvalidFilterException" => {
+                    return ListDocumentClassifiersError::InvalidFilter(String::from(error_message));
+                }
+                "InvalidRequestException" => {
+                    return ListDocumentClassifiersError::InvalidRequest(String::from(error_message));
+                }
+                "TooManyRequestsException" => {
+                    return ListDocumentClassifiersError::TooManyRequests(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return ListDocumentClassifiersError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ListDocumentClassifiersError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListDocumentClassifiersError {
+    fn from(err: serde_json::error::Error) -> ListDocumentClassifiersError {
+        ListDocumentClassifiersError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListDocumentClassifiersError {
+    fn from(err: CredentialsError) -> ListDocumentClassifiersError {
+        ListDocumentClassifiersError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListDocumentClassifiersError {
+    fn from(err: HttpDispatchError) -> ListDocumentClassifiersError {
+        ListDocumentClassifiersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListDocumentClassifiersError {
+    fn from(err: io::Error) -> ListDocumentClassifiersError {
+        ListDocumentClassifiersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListDocumentClassifiersError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListDocumentClassifiersError {
+    fn description(&self) -> &str {
+        match *self {
+            ListDocumentClassifiersError::InternalServer(ref cause) => cause,
+            ListDocumentClassifiersError::InvalidFilter(ref cause) => cause,
+            ListDocumentClassifiersError::InvalidRequest(ref cause) => cause,
+            ListDocumentClassifiersError::TooManyRequests(ref cause) => cause,
+            ListDocumentClassifiersError::Validation(ref cause) => cause,
+            ListDocumentClassifiersError::Credentials(ref err) => err.description(),
+            ListDocumentClassifiersError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListDocumentClassifiersError::ParseError(ref cause) => cause,
+            ListDocumentClassifiersError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by ListDominantLanguageDetectionJobs
 #[derive(Debug, PartialEq)]
 pub enum ListDominantLanguageDetectionJobsError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
-    /// <p>The filter specified for the <code>ListTopicDetectionJobs</code> operation is invalid. Specify a different filter.</p>
+    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
     InvalidFilter(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
@@ -2977,7 +4628,7 @@ impl Error for ListDominantLanguageDetectionJobsError {
 pub enum ListEntitiesDetectionJobsError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
-    /// <p>The filter specified for the <code>ListTopicDetectionJobs</code> operation is invalid. Specify a different filter.</p>
+    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
     InvalidFilter(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
@@ -3080,12 +4731,112 @@ impl Error for ListEntitiesDetectionJobsError {
         }
     }
 }
+/// Errors returned by ListEntityRecognizers
+#[derive(Debug, PartialEq)]
+pub enum ListEntityRecognizersError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
+    InvalidFilter(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+    TooManyRequests(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListEntityRecognizersError {
+    pub fn from_response(res: BufferedHttpResponse) -> ListEntityRecognizersError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalServerException" => {
+                    return ListEntityRecognizersError::InternalServer(String::from(error_message));
+                }
+                "InvalidFilterException" => {
+                    return ListEntityRecognizersError::InvalidFilter(String::from(error_message));
+                }
+                "InvalidRequestException" => {
+                    return ListEntityRecognizersError::InvalidRequest(String::from(error_message));
+                }
+                "TooManyRequestsException" => {
+                    return ListEntityRecognizersError::TooManyRequests(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return ListEntityRecognizersError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ListEntityRecognizersError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListEntityRecognizersError {
+    fn from(err: serde_json::error::Error) -> ListEntityRecognizersError {
+        ListEntityRecognizersError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListEntityRecognizersError {
+    fn from(err: CredentialsError) -> ListEntityRecognizersError {
+        ListEntityRecognizersError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListEntityRecognizersError {
+    fn from(err: HttpDispatchError) -> ListEntityRecognizersError {
+        ListEntityRecognizersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListEntityRecognizersError {
+    fn from(err: io::Error) -> ListEntityRecognizersError {
+        ListEntityRecognizersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListEntityRecognizersError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListEntityRecognizersError {
+    fn description(&self) -> &str {
+        match *self {
+            ListEntityRecognizersError::InternalServer(ref cause) => cause,
+            ListEntityRecognizersError::InvalidFilter(ref cause) => cause,
+            ListEntityRecognizersError::InvalidRequest(ref cause) => cause,
+            ListEntityRecognizersError::TooManyRequests(ref cause) => cause,
+            ListEntityRecognizersError::Validation(ref cause) => cause,
+            ListEntityRecognizersError::Credentials(ref err) => err.description(),
+            ListEntityRecognizersError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListEntityRecognizersError::ParseError(ref cause) => cause,
+            ListEntityRecognizersError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by ListKeyPhrasesDetectionJobs
 #[derive(Debug, PartialEq)]
 pub enum ListKeyPhrasesDetectionJobsError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
-    /// <p>The filter specified for the <code>ListTopicDetectionJobs</code> operation is invalid. Specify a different filter.</p>
+    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
     InvalidFilter(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
@@ -3193,7 +4944,7 @@ impl Error for ListKeyPhrasesDetectionJobsError {
 pub enum ListSentimentDetectionJobsError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
-    /// <p>The filter specified for the <code>ListTopicDetectionJobs</code> operation is invalid. Specify a different filter.</p>
+    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
     InvalidFilter(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
@@ -3301,7 +5052,7 @@ impl Error for ListSentimentDetectionJobsError {
 pub enum ListTopicsDetectionJobsError {
     /// <p>An internal server error occurred. Retry your request.</p>
     InternalServer(String),
-    /// <p>The filter specified for the <code>ListTopicDetectionJobs</code> operation is invalid. Specify a different filter.</p>
+    /// <p>The filter specified for the <code>ListDocumentClassificationJobs</code> operation is invalid. Specify a different filter.</p>
     InvalidFilter(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
@@ -3395,6 +5146,124 @@ impl Error for ListTopicsDetectionJobsError {
             }
             ListTopicsDetectionJobsError::ParseError(ref cause) => cause,
             ListTopicsDetectionJobsError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by StartDocumentClassificationJob
+#[derive(Debug, PartialEq)]
+pub enum StartDocumentClassificationJobError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
+    ResourceNotFound(String),
+    /// <p>The specified resource is not available. Check to see if the resource is in the <code>TRAINED</code> state and try your request again.</p>
+    ResourceUnavailable(String),
+    /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+    TooManyRequests(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl StartDocumentClassificationJobError {
+    pub fn from_response(res: BufferedHttpResponse) -> StartDocumentClassificationJobError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalServerException" => {
+                    return StartDocumentClassificationJobError::InternalServer(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidRequestException" => {
+                    return StartDocumentClassificationJobError::InvalidRequest(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceNotFoundException" => {
+                    return StartDocumentClassificationJobError::ResourceNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceUnavailableException" => {
+                    return StartDocumentClassificationJobError::ResourceUnavailable(String::from(
+                        error_message,
+                    ));
+                }
+                "TooManyRequestsException" => {
+                    return StartDocumentClassificationJobError::TooManyRequests(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return StartDocumentClassificationJobError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return StartDocumentClassificationJobError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for StartDocumentClassificationJobError {
+    fn from(err: serde_json::error::Error) -> StartDocumentClassificationJobError {
+        StartDocumentClassificationJobError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for StartDocumentClassificationJobError {
+    fn from(err: CredentialsError) -> StartDocumentClassificationJobError {
+        StartDocumentClassificationJobError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for StartDocumentClassificationJobError {
+    fn from(err: HttpDispatchError) -> StartDocumentClassificationJobError {
+        StartDocumentClassificationJobError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StartDocumentClassificationJobError {
+    fn from(err: io::Error) -> StartDocumentClassificationJobError {
+        StartDocumentClassificationJobError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for StartDocumentClassificationJobError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartDocumentClassificationJobError {
+    fn description(&self) -> &str {
+        match *self {
+            StartDocumentClassificationJobError::InternalServer(ref cause) => cause,
+            StartDocumentClassificationJobError::InvalidRequest(ref cause) => cause,
+            StartDocumentClassificationJobError::ResourceNotFound(ref cause) => cause,
+            StartDocumentClassificationJobError::ResourceUnavailable(ref cause) => cause,
+            StartDocumentClassificationJobError::TooManyRequests(ref cause) => cause,
+            StartDocumentClassificationJobError::Validation(ref cause) => cause,
+            StartDocumentClassificationJobError::Credentials(ref err) => err.description(),
+            StartDocumentClassificationJobError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            StartDocumentClassificationJobError::ParseError(ref cause) => cause,
+            StartDocumentClassificationJobError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3507,6 +5376,10 @@ pub enum StartEntitiesDetectionJobError {
     InternalServer(String),
     /// <p>The request is invalid.</p>
     InvalidRequest(String),
+    /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
+    ResourceNotFound(String),
+    /// <p>The specified resource is not available. Check to see if the resource is in the <code>TRAINED</code> state and try your request again.</p>
+    ResourceUnavailable(String),
     /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
     TooManyRequests(String),
     /// An error occurred dispatching the HTTP request
@@ -3541,6 +5414,16 @@ impl StartEntitiesDetectionJobError {
                 }
                 "InvalidRequestException" => {
                     return StartEntitiesDetectionJobError::InvalidRequest(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceNotFoundException" => {
+                    return StartEntitiesDetectionJobError::ResourceNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceUnavailableException" => {
+                    return StartEntitiesDetectionJobError::ResourceUnavailable(String::from(
                         error_message,
                     ));
                 }
@@ -3589,6 +5472,8 @@ impl Error for StartEntitiesDetectionJobError {
         match *self {
             StartEntitiesDetectionJobError::InternalServer(ref cause) => cause,
             StartEntitiesDetectionJobError::InvalidRequest(ref cause) => cause,
+            StartEntitiesDetectionJobError::ResourceNotFound(ref cause) => cause,
+            StartEntitiesDetectionJobError::ResourceUnavailable(ref cause) => cause,
             StartEntitiesDetectionJobError::TooManyRequests(ref cause) => cause,
             StartEntitiesDetectionJobError::Validation(ref cause) => cause,
             StartEntitiesDetectionJobError::Credentials(ref err) => err.description(),
@@ -4292,6 +6177,224 @@ impl Error for StopSentimentDetectionJobError {
         }
     }
 }
+/// Errors returned by StopTrainingDocumentClassifier
+#[derive(Debug, PartialEq)]
+pub enum StopTrainingDocumentClassifierError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
+    ResourceNotFound(String),
+    /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+    TooManyRequests(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl StopTrainingDocumentClassifierError {
+    pub fn from_response(res: BufferedHttpResponse) -> StopTrainingDocumentClassifierError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalServerException" => {
+                    return StopTrainingDocumentClassifierError::InternalServer(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidRequestException" => {
+                    return StopTrainingDocumentClassifierError::InvalidRequest(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceNotFoundException" => {
+                    return StopTrainingDocumentClassifierError::ResourceNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "TooManyRequestsException" => {
+                    return StopTrainingDocumentClassifierError::TooManyRequests(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return StopTrainingDocumentClassifierError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return StopTrainingDocumentClassifierError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for StopTrainingDocumentClassifierError {
+    fn from(err: serde_json::error::Error) -> StopTrainingDocumentClassifierError {
+        StopTrainingDocumentClassifierError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for StopTrainingDocumentClassifierError {
+    fn from(err: CredentialsError) -> StopTrainingDocumentClassifierError {
+        StopTrainingDocumentClassifierError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for StopTrainingDocumentClassifierError {
+    fn from(err: HttpDispatchError) -> StopTrainingDocumentClassifierError {
+        StopTrainingDocumentClassifierError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StopTrainingDocumentClassifierError {
+    fn from(err: io::Error) -> StopTrainingDocumentClassifierError {
+        StopTrainingDocumentClassifierError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for StopTrainingDocumentClassifierError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StopTrainingDocumentClassifierError {
+    fn description(&self) -> &str {
+        match *self {
+            StopTrainingDocumentClassifierError::InternalServer(ref cause) => cause,
+            StopTrainingDocumentClassifierError::InvalidRequest(ref cause) => cause,
+            StopTrainingDocumentClassifierError::ResourceNotFound(ref cause) => cause,
+            StopTrainingDocumentClassifierError::TooManyRequests(ref cause) => cause,
+            StopTrainingDocumentClassifierError::Validation(ref cause) => cause,
+            StopTrainingDocumentClassifierError::Credentials(ref err) => err.description(),
+            StopTrainingDocumentClassifierError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            StopTrainingDocumentClassifierError::ParseError(ref cause) => cause,
+            StopTrainingDocumentClassifierError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by StopTrainingEntityRecognizer
+#[derive(Debug, PartialEq)]
+pub enum StopTrainingEntityRecognizerError {
+    /// <p>An internal server error occurred. Retry your request.</p>
+    InternalServer(String),
+    /// <p>The request is invalid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource ARN was not found. Check the ARN and try your request again.</p>
+    ResourceNotFound(String),
+    /// <p>The number of requests exceeds the limit. Resubmit your request later.</p>
+    TooManyRequests(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl StopTrainingEntityRecognizerError {
+    pub fn from_response(res: BufferedHttpResponse) -> StopTrainingEntityRecognizerError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalServerException" => {
+                    return StopTrainingEntityRecognizerError::InternalServer(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidRequestException" => {
+                    return StopTrainingEntityRecognizerError::InvalidRequest(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceNotFoundException" => {
+                    return StopTrainingEntityRecognizerError::ResourceNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "TooManyRequestsException" => {
+                    return StopTrainingEntityRecognizerError::TooManyRequests(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return StopTrainingEntityRecognizerError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return StopTrainingEntityRecognizerError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for StopTrainingEntityRecognizerError {
+    fn from(err: serde_json::error::Error) -> StopTrainingEntityRecognizerError {
+        StopTrainingEntityRecognizerError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for StopTrainingEntityRecognizerError {
+    fn from(err: CredentialsError) -> StopTrainingEntityRecognizerError {
+        StopTrainingEntityRecognizerError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for StopTrainingEntityRecognizerError {
+    fn from(err: HttpDispatchError) -> StopTrainingEntityRecognizerError {
+        StopTrainingEntityRecognizerError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StopTrainingEntityRecognizerError {
+    fn from(err: io::Error) -> StopTrainingEntityRecognizerError {
+        StopTrainingEntityRecognizerError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for StopTrainingEntityRecognizerError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StopTrainingEntityRecognizerError {
+    fn description(&self) -> &str {
+        match *self {
+            StopTrainingEntityRecognizerError::InternalServer(ref cause) => cause,
+            StopTrainingEntityRecognizerError::InvalidRequest(ref cause) => cause,
+            StopTrainingEntityRecognizerError::ResourceNotFound(ref cause) => cause,
+            StopTrainingEntityRecognizerError::TooManyRequests(ref cause) => cause,
+            StopTrainingEntityRecognizerError::Validation(ref cause) => cause,
+            StopTrainingEntityRecognizerError::Credentials(ref err) => err.description(),
+            StopTrainingEntityRecognizerError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            StopTrainingEntityRecognizerError::ParseError(ref cause) => cause,
+            StopTrainingEntityRecognizerError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Trait representing the capabilities of the Amazon Comprehend API. Amazon Comprehend clients implement this trait.
 pub trait Comprehend {
     /// <p>Determines the dominant language of the input text for a batch of documents. For a list of languages that Amazon Comprehend can detect, see <a href="http://docs.aws.amazon.com/comprehend/latest/dg/how-languages.html">Amazon Comprehend Supported Languages</a>. </p>
@@ -4324,6 +6427,45 @@ pub trait Comprehend {
         input: BatchDetectSyntaxRequest,
     ) -> RusotoFuture<BatchDetectSyntaxResponse, BatchDetectSyntaxError>;
 
+    /// <p>Creates a new document classifier that you can use to categorize documents. To create a classifier you provide a set of training documents that labeled with the categories that you want to use. After the classifier is trained you can use it to categorize a set of labeled documents into the categories. For more information, see <a>how-document-classification</a>.</p>
+    fn create_document_classifier(
+        &self,
+        input: CreateDocumentClassifierRequest,
+    ) -> RusotoFuture<CreateDocumentClassifierResponse, CreateDocumentClassifierError>;
+
+    /// <p>Creates an entity recognizer using submitted files. After your <code>CreateEntityRecognizer</code> request is submitted, you can check job status using the API. </p>
+    fn create_entity_recognizer(
+        &self,
+        input: CreateEntityRecognizerRequest,
+    ) -> RusotoFuture<CreateEntityRecognizerResponse, CreateEntityRecognizerError>;
+
+    /// <p>Deletes a previously created document classifier</p> <p>Only those classifiers that are in terminated states (IN_ERROR, TRAINED) will be deleted. If an active inference job is using the model, a <code>ResourceInUseException</code> will be returned.</p> <p>This is an asynchronous action that puts the classifier into a DELETING state, and it is then removed by a background job. Once removed, the classifier disappears from your account and is no longer available for use. </p>
+    fn delete_document_classifier(
+        &self,
+        input: DeleteDocumentClassifierRequest,
+    ) -> RusotoFuture<DeleteDocumentClassifierResponse, DeleteDocumentClassifierError>;
+
+    /// <p>Deletes an entity recognizer.</p> <p>Only those recognizers that are in terminated states (IN_ERROR, TRAINED) will be deleted. If an active inference job is using the model, a <code>ResourceInUseException</code> will be returned.</p> <p>This is an asynchronous action that puts the recognizer into a DELETING state, and it is then removed by a background job. Once removed, the recognizer disappears from your account and is no longer available for use. </p>
+    fn delete_entity_recognizer(
+        &self,
+        input: DeleteEntityRecognizerRequest,
+    ) -> RusotoFuture<DeleteEntityRecognizerResponse, DeleteEntityRecognizerError>;
+
+    /// <p>Gets the properties associated with a document classification job. Use this operation to get the status of a classification job.</p>
+    fn describe_document_classification_job(
+        &self,
+        input: DescribeDocumentClassificationJobRequest,
+    ) -> RusotoFuture<
+        DescribeDocumentClassificationJobResponse,
+        DescribeDocumentClassificationJobError,
+    >;
+
+    /// <p>Gets the properties associated with a document classifier.</p>
+    fn describe_document_classifier(
+        &self,
+        input: DescribeDocumentClassifierRequest,
+    ) -> RusotoFuture<DescribeDocumentClassifierResponse, DescribeDocumentClassifierError>;
+
     /// <p>Gets the properties associated with a dominant language detection job. Use this operation to get the status of a detection job.</p>
     fn describe_dominant_language_detection_job(
         &self,
@@ -4338,6 +6480,12 @@ pub trait Comprehend {
         &self,
         input: DescribeEntitiesDetectionJobRequest,
     ) -> RusotoFuture<DescribeEntitiesDetectionJobResponse, DescribeEntitiesDetectionJobError>;
+
+    /// <p>Provides details about an entity recognizer including status, S3 buckets containing training data, recognizer metadata, metrics, and so on.</p>
+    fn describe_entity_recognizer(
+        &self,
+        input: DescribeEntityRecognizerRequest,
+    ) -> RusotoFuture<DescribeEntityRecognizerResponse, DescribeEntityRecognizerError>;
 
     /// <p>Gets the properties associated with a key phrases detection job. Use this operation to get the status of a detection job.</p>
     fn describe_key_phrases_detection_job(
@@ -4387,6 +6535,18 @@ pub trait Comprehend {
         input: DetectSyntaxRequest,
     ) -> RusotoFuture<DetectSyntaxResponse, DetectSyntaxError>;
 
+    /// <p>Gets a list of the documentation classification jobs that you have submitted.</p>
+    fn list_document_classification_jobs(
+        &self,
+        input: ListDocumentClassificationJobsRequest,
+    ) -> RusotoFuture<ListDocumentClassificationJobsResponse, ListDocumentClassificationJobsError>;
+
+    /// <p>Gets a list of the document classifiers that you have created.</p>
+    fn list_document_classifiers(
+        &self,
+        input: ListDocumentClassifiersRequest,
+    ) -> RusotoFuture<ListDocumentClassifiersResponse, ListDocumentClassifiersError>;
+
     /// <p>Gets a list of the dominant language detection jobs that you have submitted.</p>
     fn list_dominant_language_detection_jobs(
         &self,
@@ -4401,6 +6561,12 @@ pub trait Comprehend {
         &self,
         input: ListEntitiesDetectionJobsRequest,
     ) -> RusotoFuture<ListEntitiesDetectionJobsResponse, ListEntitiesDetectionJobsError>;
+
+    /// <p>Gets a list of the properties of all entity recognizers that you created, including recognizers currently in training. Allows you to filter the list of recognizers based on criteria such as status and submission time. This call returns up to 500 entity recognizers in the list, with a default number of 100 recognizers in the list.</p> <p>The results of this list are not in any particular order. Please get the list and sort locally if needed.</p>
+    fn list_entity_recognizers(
+        &self,
+        input: ListEntityRecognizersRequest,
+    ) -> RusotoFuture<ListEntityRecognizersResponse, ListEntityRecognizersError>;
 
     /// <p>Get a list of key phrase detection jobs that you have submitted.</p>
     fn list_key_phrases_detection_jobs(
@@ -4420,6 +6586,12 @@ pub trait Comprehend {
         input: ListTopicsDetectionJobsRequest,
     ) -> RusotoFuture<ListTopicsDetectionJobsResponse, ListTopicsDetectionJobsError>;
 
+    /// <p>Starts an asynchronous document classification job. Use the operation to track the progress of the job.</p>
+    fn start_document_classification_job(
+        &self,
+        input: StartDocumentClassificationJobRequest,
+    ) -> RusotoFuture<StartDocumentClassificationJobResponse, StartDocumentClassificationJobError>;
+
     /// <p>Starts an asynchronous dominant language detection job for a collection of documents. Use the operation to track the status of a job.</p>
     fn start_dominant_language_detection_job(
         &self,
@@ -4429,7 +6601,7 @@ pub trait Comprehend {
         StartDominantLanguageDetectionJobError,
     >;
 
-    /// <p>Starts an asynchronous entity detection job for a collection of documents. Use the operation to track the status of a job.</p>
+    /// <p>Starts an asynchronous entity detection job for a collection of documents. Use the operation to track the status of a job.</p> <p>This API can be used for either standard entity detection or custom entity recognition. In order to be used for custom entity recognition, the optional <code>EntityRecognizerArn</code> must be used in order to provide access to the recognizer being used to detect the custom entity.</p>
     fn start_entities_detection_job(
         &self,
         input: StartEntitiesDetectionJobRequest,
@@ -4476,6 +6648,18 @@ pub trait Comprehend {
         &self,
         input: StopSentimentDetectionJobRequest,
     ) -> RusotoFuture<StopSentimentDetectionJobResponse, StopSentimentDetectionJobError>;
+
+    /// <p>Stops a document classifier training job while in progress.</p> <p>If the training job state is <code>TRAINING</code>, the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the training job completes before it can be stopped, it is put into the <code>TRAINED</code>; otherwise the training job is stopped and put into the <code>STOPPED</code> state and the service sends back an HTTP 200 response with an empty HTTP body. </p>
+    fn stop_training_document_classifier(
+        &self,
+        input: StopTrainingDocumentClassifierRequest,
+    ) -> RusotoFuture<StopTrainingDocumentClassifierResponse, StopTrainingDocumentClassifierError>;
+
+    /// <p>Stops an entity recognizer training job while in progress.</p> <p>If the training job state is <code>TRAINING</code>, the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the training job completes before it can be stopped, it is put into the <code>TRAINED</code>; otherwise the training job is stopped and putted into the <code>STOPPED</code> state and the service sends back an HTTP 200 response with an empty HTTP body.</p>
+    fn stop_training_entity_recognizer(
+        &self,
+        input: StopTrainingEntityRecognizerRequest,
+    ) -> RusotoFuture<StopTrainingEntityRecognizerResponse, StopTrainingEntityRecognizerError>;
 }
 /// A client for the Amazon Comprehend API.
 #[derive(Clone)]
@@ -4696,6 +6880,231 @@ impl Comprehend for ComprehendClient {
         })
     }
 
+    /// <p>Creates a new document classifier that you can use to categorize documents. To create a classifier you provide a set of training documents that labeled with the categories that you want to use. After the classifier is trained you can use it to categorize a set of labeled documents into the categories. For more information, see <a>how-document-classification</a>.</p>
+    fn create_document_classifier(
+        &self,
+        input: CreateDocumentClassifierRequest,
+    ) -> RusotoFuture<CreateDocumentClassifierResponse, CreateDocumentClassifierError> {
+        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Comprehend_20171127.CreateDocumentClassifier",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<CreateDocumentClassifierResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateDocumentClassifierError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Creates an entity recognizer using submitted files. After your <code>CreateEntityRecognizer</code> request is submitted, you can check job status using the API. </p>
+    fn create_entity_recognizer(
+        &self,
+        input: CreateEntityRecognizerRequest,
+    ) -> RusotoFuture<CreateEntityRecognizerResponse, CreateEntityRecognizerError> {
+        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Comprehend_20171127.CreateEntityRecognizer");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<CreateEntityRecognizerResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateEntityRecognizerError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Deletes a previously created document classifier</p> <p>Only those classifiers that are in terminated states (IN_ERROR, TRAINED) will be deleted. If an active inference job is using the model, a <code>ResourceInUseException</code> will be returned.</p> <p>This is an asynchronous action that puts the classifier into a DELETING state, and it is then removed by a background job. Once removed, the classifier disappears from your account and is no longer available for use. </p>
+    fn delete_document_classifier(
+        &self,
+        input: DeleteDocumentClassifierRequest,
+    ) -> RusotoFuture<DeleteDocumentClassifierResponse, DeleteDocumentClassifierError> {
+        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Comprehend_20171127.DeleteDocumentClassifier",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DeleteDocumentClassifierResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteDocumentClassifierError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Deletes an entity recognizer.</p> <p>Only those recognizers that are in terminated states (IN_ERROR, TRAINED) will be deleted. If an active inference job is using the model, a <code>ResourceInUseException</code> will be returned.</p> <p>This is an asynchronous action that puts the recognizer into a DELETING state, and it is then removed by a background job. Once removed, the recognizer disappears from your account and is no longer available for use. </p>
+    fn delete_entity_recognizer(
+        &self,
+        input: DeleteEntityRecognizerRequest,
+    ) -> RusotoFuture<DeleteEntityRecognizerResponse, DeleteEntityRecognizerError> {
+        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Comprehend_20171127.DeleteEntityRecognizer");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DeleteEntityRecognizerResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteEntityRecognizerError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Gets the properties associated with a document classification job. Use this operation to get the status of a classification job.</p>
+    fn describe_document_classification_job(
+        &self,
+        input: DescribeDocumentClassificationJobRequest,
+    ) -> RusotoFuture<
+        DescribeDocumentClassificationJobResponse,
+        DescribeDocumentClassificationJobError,
+    > {
+        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Comprehend_20171127.DescribeDocumentClassificationJob",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeDocumentClassificationJobResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeDocumentClassificationJobError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Gets the properties associated with a document classifier.</p>
+    fn describe_document_classifier(
+        &self,
+        input: DescribeDocumentClassifierRequest,
+    ) -> RusotoFuture<DescribeDocumentClassifierResponse, DescribeDocumentClassifierError> {
+        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Comprehend_20171127.DescribeDocumentClassifier",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeDocumentClassifierResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeDocumentClassifierError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Gets the properties associated with a dominant language detection job. Use this operation to get the status of a detection job.</p>
     fn describe_dominant_language_detection_job(
         &self,
@@ -4770,6 +7179,43 @@ impl Comprehend for ComprehendClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeEntitiesDetectionJobError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Provides details about an entity recognizer including status, S3 buckets containing training data, recognizer metadata, metrics, and so on.</p>
+    fn describe_entity_recognizer(
+        &self,
+        input: DescribeEntityRecognizerRequest,
+    ) -> RusotoFuture<DescribeEntityRecognizerResponse, DescribeEntityRecognizerError> {
+        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Comprehend_20171127.DescribeEntityRecognizer",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeEntityRecognizerResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeEntityRecognizerError::from_response(response))
                 }))
             }
         })
@@ -5072,6 +7518,81 @@ impl Comprehend for ComprehendClient {
         })
     }
 
+    /// <p>Gets a list of the documentation classification jobs that you have submitted.</p>
+    fn list_document_classification_jobs(
+        &self,
+        input: ListDocumentClassificationJobsRequest,
+    ) -> RusotoFuture<ListDocumentClassificationJobsResponse, ListDocumentClassificationJobsError>
+    {
+        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Comprehend_20171127.ListDocumentClassificationJobs",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ListDocumentClassificationJobsResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListDocumentClassificationJobsError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Gets a list of the document classifiers that you have created.</p>
+    fn list_document_classifiers(
+        &self,
+        input: ListDocumentClassifiersRequest,
+    ) -> RusotoFuture<ListDocumentClassifiersResponse, ListDocumentClassifiersError> {
+        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Comprehend_20171127.ListDocumentClassifiers",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ListDocumentClassifiersResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListDocumentClassifiersError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Gets a list of the dominant language detection jobs that you have submitted.</p>
     fn list_dominant_language_detection_jobs(
         &self,
@@ -5147,6 +7668,42 @@ impl Comprehend for ComprehendClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListEntitiesDetectionJobsError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p>Gets a list of the properties of all entity recognizers that you created, including recognizers currently in training. Allows you to filter the list of recognizers based on criteria such as status and submission time. This call returns up to 500 entity recognizers in the list, with a default number of 100 recognizers in the list.</p> <p>The results of this list are not in any particular order. Please get the list and sort locally if needed.</p>
+    fn list_entity_recognizers(
+        &self,
+        input: ListEntityRecognizersRequest,
+    ) -> RusotoFuture<ListEntityRecognizersResponse, ListEntityRecognizersError> {
+        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Comprehend_20171127.ListEntityRecognizers");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ListEntityRecognizersResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListEntityRecognizersError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -5262,6 +7819,44 @@ impl Comprehend for ComprehendClient {
         })
     }
 
+    /// <p>Starts an asynchronous document classification job. Use the operation to track the progress of the job.</p>
+    fn start_document_classification_job(
+        &self,
+        input: StartDocumentClassificationJobRequest,
+    ) -> RusotoFuture<StartDocumentClassificationJobResponse, StartDocumentClassificationJobError>
+    {
+        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Comprehend_20171127.StartDocumentClassificationJob",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<StartDocumentClassificationJobResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(StartDocumentClassificationJobError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Starts an asynchronous dominant language detection job for a collection of documents. Use the operation to track the status of a job.</p>
     fn start_dominant_language_detection_job(
         &self,
@@ -5304,7 +7899,7 @@ impl Comprehend for ComprehendClient {
         })
     }
 
-    /// <p>Starts an asynchronous entity detection job for a collection of documents. Use the operation to track the status of a job.</p>
+    /// <p>Starts an asynchronous entity detection job for a collection of documents. Use the operation to track the status of a job.</p> <p>This API can be used for either standard entity detection or custom entity recognition. In order to be used for custom entity recognition, the optional <code>EntityRecognizerArn</code> must be used in order to provide access to the recognizer being used to detect the custom entity.</p>
     fn start_entities_detection_job(
         &self,
         input: StartEntitiesDetectionJobRequest,
@@ -5598,6 +8193,81 @@ impl Comprehend for ComprehendClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(StopSentimentDetectionJobError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Stops a document classifier training job while in progress.</p> <p>If the training job state is <code>TRAINING</code>, the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the training job completes before it can be stopped, it is put into the <code>TRAINED</code>; otherwise the training job is stopped and put into the <code>STOPPED</code> state and the service sends back an HTTP 200 response with an empty HTTP body. </p>
+    fn stop_training_document_classifier(
+        &self,
+        input: StopTrainingDocumentClassifierRequest,
+    ) -> RusotoFuture<StopTrainingDocumentClassifierResponse, StopTrainingDocumentClassifierError>
+    {
+        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Comprehend_20171127.StopTrainingDocumentClassifier",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<StopTrainingDocumentClassifierResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(StopTrainingDocumentClassifierError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Stops an entity recognizer training job while in progress.</p> <p>If the training job state is <code>TRAINING</code>, the job is marked for termination and put into the <code>STOP_REQUESTED</code> state. If the training job completes before it can be stopped, it is put into the <code>TRAINED</code>; otherwise the training job is stopped and putted into the <code>STOPPED</code> state and the service sends back an HTTP 200 response with an empty HTTP body.</p>
+    fn stop_training_entity_recognizer(
+        &self,
+        input: StopTrainingEntityRecognizerRequest,
+    ) -> RusotoFuture<StopTrainingEntityRecognizerResponse, StopTrainingEntityRecognizerError> {
+        let mut request = SignedRequest::new("POST", "comprehend", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Comprehend_20171127.StopTrainingEntityRecognizer",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<StopTrainingEntityRecognizerResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(StopTrainingEntityRecognizerError::from_response(response))
                 }))
             }
         })

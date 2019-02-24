@@ -42,6 +42,10 @@ pub struct DeleteLexiconOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeVoicesInput {
+    /// <p>Boolean value indicating whether to return any bilingual voices that use the specified language as an additional language. For instance, if you request all languages that use US English (es-US), and there is an Italian voice that speaks both Italian (it-IT) and US English, that voice will be included if you specify <code>yes</code> but not if you specify <code>no</code>.</p>
+    #[serde(rename = "IncludeAdditionalLanguageCodes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_additional_language_codes: Option<bool>,
     /// <p> The language identification tag (ISO 639 code for the language name-ISO 3166 country code) for filtering the list of voices returned. If you don't specify this optional parameter, all available voices are returned. </p>
     #[serde(rename = "LanguageCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -203,7 +207,7 @@ pub struct ListSpeechSynthesisTasksOutput {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>SynthesisTask object that provides information from the specified task in the list request, including output format, creation time, task status, and so on.</p>
+    /// <p>List of SynthesisTask objects that provides information from the specified task in the list request, including output format, creation time, task status, and so on.</p>
     #[serde(rename = "SynthesisTasks")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub synthesis_tasks: Option<Vec<SynthesisTask>>,
@@ -225,6 +229,10 @@ pub struct PutLexiconOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartSpeechSynthesisTaskInput {
+    /// <p>Optional language code for the Speech Synthesis request. This is only necessary if using a bilingual voice, such as Aditi, which can be used for either Indian English (en-IN) or Hindi (hi-IN). </p> <p>If a bilingual voice is used and no language code is specified, Amazon Polly will use the default language of the bilingual voice. The default language for any voice is the one returned by the <a href="https://docs.aws.amazon.com/polly/latest/dg/API_DescribeVoices.html">DescribeVoices</a> operation for the <code>LanguageCode</code> parameter. For example, if no language code is specified, Aditi will use Indian English rather than Hindi.</p>
+    #[serde(rename = "LanguageCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub language_code: Option<String>,
     /// <p>List of one or more pronunciation lexicon names you want the service to apply during synthesis. Lexicons are applied only if the language of the lexicon is the same as the language of the voice. </p>
     #[serde(rename = "LexiconNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -235,7 +243,7 @@ pub struct StartSpeechSynthesisTaskInput {
     /// <p>Amazon S3 bucket name to which the output file will be saved.</p>
     #[serde(rename = "OutputS3BucketName")]
     pub output_s3_bucket_name: String,
-    /// <p>The Amazon S3 Key prefix for the output speech file.</p>
+    /// <p>The Amazon S3 key prefix for the output speech file.</p>
     #[serde(rename = "OutputS3KeyPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output_s3_key_prefix: Option<String>,
@@ -280,6 +288,10 @@ pub struct SynthesisTask {
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
+    /// <p>Optional language code for a synthesis task. This is only necessary if using a bilingual voice, such as Aditi, which can be used for either Indian English (en-IN) or Hindi (hi-IN). </p> <p>If a bilingual voice is used and no language code is specified, Amazon Polly will use the default language of the bilingual voice. The default language for any voice is the one returned by the <a href="https://docs.aws.amazon.com/polly/latest/dg/API_DescribeVoices.html">DescribeVoices</a> operation for the <code>LanguageCode</code> parameter. For example, if no language code is specified, Aditi will use Indian English rather than Hindi.</p>
+    #[serde(rename = "LanguageCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub language_code: Option<String>,
     /// <p>List of one or more pronunciation lexicon names you want the service to apply during synthesis. Lexicons are applied only if the language of the lexicon is the same as the language of the voice. </p>
     #[serde(rename = "LexiconNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -332,11 +344,15 @@ pub struct SynthesisTask {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SynthesizeSpeechInput {
+    /// <p>Optional language code for the Synthesize Speech request. This is only necessary if using a bilingual voice, such as Aditi, which can be used for either Indian English (en-IN) or Hindi (hi-IN). </p> <p>If a bilingual voice is used and no language code is specified, Amazon Polly will use the default language of the bilingual voice. The default language for any voice is the one returned by the <a href="https://docs.aws.amazon.com/polly/latest/dg/API_DescribeVoices.html">DescribeVoices</a> operation for the <code>LanguageCode</code> parameter. For example, if no language code is specified, Aditi will use Indian English rather than Hindi.</p>
+    #[serde(rename = "LanguageCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub language_code: Option<String>,
     /// <p>List of one or more pronunciation lexicon names you want the service to apply during synthesis. Lexicons are applied only if the language of the lexicon is the same as the language of the voice. For information about storing lexicons, see <a href="http://docs.aws.amazon.com/polly/latest/dg/API_PutLexicon.html">PutLexicon</a>.</p>
     #[serde(rename = "LexiconNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lexicon_names: Option<Vec<String>>,
-    /// <p> The format in which the returned output will be encoded. For audio stream, this will be mp3, ogg_vorbis, or pcm. For speech marks, this will be json. </p>
+    /// <p> The format in which the returned output will be encoded. For audio stream, this will be mp3, ogg_vorbis, or pcm. For speech marks, this will be json. </p> <p>When pcm is used, the content returned is audio/pcm in a signed 16-bit, 1 channel (mono), little-endian format. </p>
     #[serde(rename = "OutputFormat")]
     pub output_format: String,
     /// <p> The audio frequency specified in Hz. </p> <p>The valid values for <code>mp3</code> and <code>ogg_vorbis</code> are "8000", "16000", and "22050". The default value is "22050". </p> <p> Valid values for <code>pcm</code> are "8000" and "16000" The default value is "16000". </p>
@@ -373,6 +389,10 @@ pub struct SynthesizeSpeechOutput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Voice {
+    /// <p>Additional codes for languages available for the specified voice in addition to its default language. </p> <p>For example, the default language for Aditi is Indian English (en-IN) because it was first used for that language. Since Aditi is bilingual and fluent in both Indian English and Hindi, this parameter would show the code <code>hi-IN</code>.</p>
+    #[serde(rename = "AdditionalLanguageCodes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub additional_language_codes: Option<Vec<String>>,
     /// <p>Gender of the voice.</p>
     #[serde(rename = "Gender")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1154,6 +1174,8 @@ pub enum StartSpeechSynthesisTaskError {
     InvalidSnsTopicArn(String),
     /// <p>The SSML you provided is invalid. Verify the SSML syntax, spelling of tags and values, and then try again.</p>
     InvalidSsml(String),
+    /// <p>The language specified is not currently supported by Amazon Polly in this capacity.</p>
+    LanguageNotSupported(String),
     /// <p>Amazon Polly can't find the specified lexicon. This could be caused by a lexicon that is missing, its name is misspelled or specifying a lexicon that is in a different region.</p> <p>Verify that the lexicon exists, is in the region (see <a>ListLexicons</a>) and that you spelled its name is spelled correctly. Then try again.</p>
     LexiconNotFound(String),
     /// <p>Speech marks are not supported for the <code>OutputFormat</code> selected. Speech marks are only available for content in <code>json</code> format.</p>
@@ -1162,7 +1184,7 @@ pub enum StartSpeechSynthesisTaskError {
     ServiceFailure(String),
     /// <p>SSML speech marks are not supported for plain text-type input.</p>
     SsmlMarksNotSupportedForTextType(String),
-    /// <p>The value of the "Text" parameter is longer than the accepted limits. For the <code>SynthesizeSpeech</code> API, the limit for input text is a maximum of 6000 characters total, of which no more than 3000 can be billed characters. For the <code>SetSpeechSynthesisTask</code> API, the maximum is 200,000 characters, of which no more than 100,000 can be billed characters. SSML tags are not counted as billed characters.</p>
+    /// <p>The value of the "Text" parameter is longer than the accepted limits. For the <code>SynthesizeSpeech</code> API, the limit for input text is a maximum of 6000 characters total, of which no more than 3000 can be billed characters. For the <code>StartSpeechSynthesisTask</code> API, the maximum is 200,000 characters, of which no more than 100,000 can be billed characters. SSML tags are not counted as billed characters.</p>
     TextLengthExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1223,6 +1245,11 @@ impl StartSpeechSynthesisTaskError {
                 }
                 "InvalidSsmlException" => {
                     return StartSpeechSynthesisTaskError::InvalidSsml(String::from(error_message));
+                }
+                "LanguageNotSupportedException" => {
+                    return StartSpeechSynthesisTaskError::LanguageNotSupported(String::from(
+                        error_message,
+                    ));
                 }
                 "LexiconNotFoundException" => {
                     return StartSpeechSynthesisTaskError::LexiconNotFound(String::from(
@@ -1292,6 +1319,7 @@ impl Error for StartSpeechSynthesisTaskError {
             StartSpeechSynthesisTaskError::InvalidSampleRate(ref cause) => cause,
             StartSpeechSynthesisTaskError::InvalidSnsTopicArn(ref cause) => cause,
             StartSpeechSynthesisTaskError::InvalidSsml(ref cause) => cause,
+            StartSpeechSynthesisTaskError::LanguageNotSupported(ref cause) => cause,
             StartSpeechSynthesisTaskError::LexiconNotFound(ref cause) => cause,
             StartSpeechSynthesisTaskError::MarksNotSupportedForFormat(ref cause) => cause,
             StartSpeechSynthesisTaskError::ServiceFailure(ref cause) => cause,
@@ -1314,6 +1342,8 @@ pub enum SynthesizeSpeechError {
     InvalidSampleRate(String),
     /// <p>The SSML you provided is invalid. Verify the SSML syntax, spelling of tags and values, and then try again.</p>
     InvalidSsml(String),
+    /// <p>The language specified is not currently supported by Amazon Polly in this capacity.</p>
+    LanguageNotSupported(String),
     /// <p>Amazon Polly can't find the specified lexicon. This could be caused by a lexicon that is missing, its name is misspelled or specifying a lexicon that is in a different region.</p> <p>Verify that the lexicon exists, is in the region (see <a>ListLexicons</a>) and that you spelled its name is spelled correctly. Then try again.</p>
     LexiconNotFound(String),
     /// <p>Speech marks are not supported for the <code>OutputFormat</code> selected. Speech marks are only available for content in <code>json</code> format.</p>
@@ -1322,7 +1352,7 @@ pub enum SynthesizeSpeechError {
     ServiceFailure(String),
     /// <p>SSML speech marks are not supported for plain text-type input.</p>
     SsmlMarksNotSupportedForTextType(String),
-    /// <p>The value of the "Text" parameter is longer than the accepted limits. For the <code>SynthesizeSpeech</code> API, the limit for input text is a maximum of 6000 characters total, of which no more than 3000 can be billed characters. For the <code>SetSpeechSynthesisTask</code> API, the maximum is 200,000 characters, of which no more than 100,000 can be billed characters. SSML tags are not counted as billed characters.</p>
+    /// <p>The value of the "Text" parameter is longer than the accepted limits. For the <code>SynthesizeSpeech</code> API, the limit for input text is a maximum of 6000 characters total, of which no more than 3000 can be billed characters. For the <code>StartSpeechSynthesisTask</code> API, the maximum is 200,000 characters, of which no more than 100,000 can be billed characters. SSML tags are not counted as billed characters.</p>
     TextLengthExceeded(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1368,6 +1398,9 @@ impl SynthesizeSpeechError {
                 }
                 "InvalidSsmlException" => {
                     return SynthesizeSpeechError::InvalidSsml(String::from(error_message));
+                }
+                "LanguageNotSupportedException" => {
+                    return SynthesizeSpeechError::LanguageNotSupported(String::from(error_message));
                 }
                 "LexiconNotFoundException" => {
                     return SynthesizeSpeechError::LexiconNotFound(String::from(error_message));
@@ -1428,6 +1461,7 @@ impl Error for SynthesizeSpeechError {
         match *self {
             SynthesizeSpeechError::InvalidSampleRate(ref cause) => cause,
             SynthesizeSpeechError::InvalidSsml(ref cause) => cause,
+            SynthesizeSpeechError::LanguageNotSupported(ref cause) => cause,
             SynthesizeSpeechError::LexiconNotFound(ref cause) => cause,
             SynthesizeSpeechError::MarksNotSupportedForFormat(ref cause) => cause,
             SynthesizeSpeechError::ServiceFailure(ref cause) => cause,
@@ -1581,6 +1615,9 @@ impl Polly for PollyClient {
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
         let mut params = Params::new();
+        if let Some(ref x) = input.include_additional_language_codes {
+            params.put("IncludeAdditionalLanguageCodes", x);
+        }
         if let Some(ref x) = input.language_code {
             params.put("LanguageCode", x);
         }

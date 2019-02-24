@@ -1412,17 +1412,19 @@ impl BuilderDeserializer {
 /// <p>CPU utilization metrics for an instance.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CPUUtilization {
-    /// <p>Percentage of time that the CPU has spent in the <code>I/O Wait</code> state over the last 10 seconds.</p>
+    /// <p>Available on Linux environments only.</p> <p>Percentage of time that the CPU has spent in the <code>I/O Wait</code> state over the last 10 seconds.</p>
     pub io_wait: Option<f64>,
-    /// <p>Percentage of time that the CPU has spent in the <code>IRQ</code> state over the last 10 seconds.</p>
+    /// <p>Available on Linux environments only.</p> <p>Percentage of time that the CPU has spent in the <code>IRQ</code> state over the last 10 seconds.</p>
     pub irq: Option<f64>,
     /// <p>Percentage of time that the CPU has spent in the <code>Idle</code> state over the last 10 seconds.</p>
     pub idle: Option<f64>,
-    /// <p>Percentage of time that the CPU has spent in the <code>Nice</code> state over the last 10 seconds.</p>
+    /// <p>Available on Linux environments only.</p> <p>Percentage of time that the CPU has spent in the <code>Nice</code> state over the last 10 seconds.</p>
     pub nice: Option<f64>,
-    /// <p>Percentage of time that the CPU has spent in the <code>SoftIRQ</code> state over the last 10 seconds.</p>
+    /// <p>Available on Windows environments only.</p> <p>Percentage of time that the CPU has spent in the <code>Privileged</code> state over the last 10 seconds.</p>
+    pub privileged: Option<f64>,
+    /// <p>Available on Linux environments only.</p> <p>Percentage of time that the CPU has spent in the <code>SoftIRQ</code> state over the last 10 seconds.</p>
     pub soft_irq: Option<f64>,
-    /// <p>Percentage of time that the CPU has spent in the <code>System</code> state over the last 10 seconds.</p>
+    /// <p>Available on Linux environments only.</p> <p>Percentage of time that the CPU has spent in the <code>System</code> state over the last 10 seconds.</p>
     pub system: Option<f64>,
     /// <p>Percentage of time that the CPU has spent in the <code>User</code> state over the last 10 seconds.</p>
     pub user: Option<f64>,
@@ -1462,6 +1464,12 @@ impl CPUUtilizationDeserializer {
                     }
                     "Nice" => {
                         obj.nice = Some(NullableDoubleDeserializer::deserialize("Nice", stack)?);
+                    }
+                    "Privileged" => {
+                        obj.privileged = Some(NullableDoubleDeserializer::deserialize(
+                            "Privileged",
+                            stack,
+                        )?);
                     }
                     "SoftIRQ" => {
                         obj.soft_irq =
@@ -4128,7 +4136,7 @@ impl DescribeInstancesHealthRequestSerializer {
 /// <p>Detailed health information about the Amazon EC2 instances in an AWS Elastic Beanstalk environment.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeInstancesHealthResult {
-    /// <p>Detailed health information about each instance.</p>
+    /// <p>Detailed health information about each instance.</p> <p>The output differs slightly between Linux and Windows environments. There is a difference in the members that are supported under the <code>&lt;CPUUtilization&gt;</code> type.</p>
     pub instance_health_list: Option<Vec<SingleInstanceHealth>>,
     /// <p>Pagination token for the next page of results, if available.</p>
     pub next_token: Option<String>,
@@ -4346,7 +4354,7 @@ pub struct EnvironmentDescription {
     pub environment_links: Option<Vec<EnvironmentLink>>,
     /// <p>The name of this environment.</p>
     pub environment_name: Option<String>,
-    /// <p>Describes the health status of the environment. AWS Elastic Beanstalk indicates the failure levels for a running environment:</p> <ul> <li> <p> <code>Red</code>: Indicates the environment is not responsive. Occurs when three or more consecutive failures occur for an environment.</p> </li> <li> <p> <code>Yellow</code>: Indicates that something is wrong. Occurs when two consecutive failures occur for an environment.</p> </li> <li> <p> <code>Green</code>: Indicates the environment is healthy and fully functional.</p> </li> <li> <p> <code>Grey</code>: Default health for a new environment. The environment is not fully launched and health checks have not started or health checks are suspended during an <code>UpdateEnvironment</code> or <code>RestartEnvironement</code> request.</p> </li> </ul> <p> Default: <code>Grey</code> </p>
+    /// <p>Describes the health status of the environment. AWS Elastic Beanstalk indicates the failure levels for a running environment:</p> <ul> <li> <p> <code>Red</code>: Indicates the environment is not responsive. Occurs when three or more consecutive failures occur for an environment.</p> </li> <li> <p> <code>Yellow</code>: Indicates that something is wrong. Occurs when two consecutive failures occur for an environment.</p> </li> <li> <p> <code>Green</code>: Indicates the environment is healthy and fully functional.</p> </li> <li> <p> <code>Grey</code>: Default health for a new environment. The environment is not fully launched and health checks have not started or health checks are suspended during an <code>UpdateEnvironment</code> or <code>RestartEnvironment</code> request.</p> </li> </ul> <p> Default: <code>Grey</code> </p>
     pub health: Option<String>,
     /// <p>Returns the health status of the application running in your environment. For more information, see <a href="http://docs.aws.amazon.com/elasticbeanstalk/latest/dg/health-enhanced-status.html">Health Colors and Statuses</a>.</p>
     pub health_status: Option<String>,
@@ -4694,7 +4702,7 @@ pub struct EnvironmentInfoDescription {
     pub ec_2_instance_id: Option<String>,
     /// <p>The type of information retrieved.</p>
     pub info_type: Option<String>,
-    /// <p>The retrieved information.</p>
+    /// <p>The retrieved information. Currently contains a presigned Amazon S3 URL. The files are deleted after 15 minutes.</p> <p>Anyone in possession of this URL can access the files before they are deleted. Make the URL available only to trusted parties.</p>
     pub message: Option<String>,
     /// <p>The time stamp when this information was retrieved.</p>
     pub sample_timestamp: Option<String>,
@@ -4941,6 +4949,8 @@ pub struct EnvironmentResourceDescription {
     pub instances: Option<Vec<Instance>>,
     /// <p>The Auto Scaling launch configurations in use by this environment.</p>
     pub launch_configurations: Option<Vec<LaunchConfiguration>>,
+    /// <p>The Amazon EC2 launch templates in use by this environment.</p>
+    pub launch_templates: Option<Vec<LaunchTemplate>>,
     /// <p>The LoadBalancers in use by this environment.</p>
     pub load_balancers: Option<Vec<LoadBalancer>>,
     /// <p>The queues used by this environment.</p>
@@ -5017,6 +5027,21 @@ impl EnvironmentResourceDescriptionDeserializer {
                             }
                             None => Some(LaunchConfigurationListDeserializer::deserialize(
                                 "LaunchConfigurations",
+                                stack,
+                            )?),
+                        };
+                    }
+                    "LaunchTemplates" => {
+                        obj.launch_templates = match obj.launch_templates {
+                            Some(ref mut existing) => {
+                                existing.extend(LaunchTemplateListDeserializer::deserialize(
+                                    "LaunchTemplates",
+                                    stack,
+                                )?);
+                                Some(existing.to_vec())
+                            }
+                            None => Some(LaunchTemplateListDeserializer::deserialize(
+                                "LaunchTemplates",
                                 stack,
                             )?),
                         };
@@ -5187,9 +5212,9 @@ impl EnvironmentStatusDeserializer {
 /// <p>Describes the properties of an environment tier</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct EnvironmentTier {
-    /// <p>The name of this environment tier.</p>
+    /// <p><p>The name of this environment tier.</p> <p>Valid values:</p> <ul> <li> <p>For <i>Web server tier</i> – <code>WebServer</code> </p> </li> <li> <p>For <i>Worker tier</i> – <code>Worker</code> </p> </li> </ul></p>
     pub name: Option<String>,
-    /// <p>The type of this environment tier.</p>
+    /// <p><p>The type of this environment tier.</p> <p>Valid values:</p> <ul> <li> <p>For <i>Web server tier</i> – <code>Standard</code> </p> </li> <li> <p>For <i>Worker tier</i> – <code>SQS/HTTP</code> </p> </li> </ul></p>
     pub type_: Option<String>,
     /// <p><p>The version of this environment tier. When you don&#39;t set a value to it, Elastic Beanstalk uses the latest compatible worker tier version.</p> <note> <p>This member is deprecated. Any specific version that you set may become out of date. We recommend leaving it unspecified.</p> </note></p>
     pub version: Option<String>,
@@ -5958,6 +5983,92 @@ impl LaunchConfigurationListDeserializer {
                         obj.push(LaunchConfigurationDeserializer::deserialize(
                             "member", stack,
                         )?);
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    end_element(tag_name, stack)?;
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+/// <p>Describes an Amazon EC2 launch template.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct LaunchTemplate {
+    /// <p>The ID of the launch template.</p>
+    pub id: Option<String>,
+}
+
+struct LaunchTemplateDeserializer;
+impl LaunchTemplateDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<LaunchTemplate, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = LaunchTemplate::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Id" => {
+                        obj.id = Some(ResourceIdDeserializer::deserialize("Id", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct LaunchTemplateListDeserializer;
+impl LaunchTemplateListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<LaunchTemplate>, XmlParseError> {
+        let mut obj = vec![];
+        start_element(tag_name, stack)?;
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "member" {
+                        obj.push(LaunchTemplateDeserializer::deserialize("member", stack)?);
                     } else {
                         skip_tree(stack);
                     }
@@ -14122,7 +14233,7 @@ pub trait ElasticBeanstalk {
         input: CreateApplicationVersionMessage,
     ) -> RusotoFuture<ApplicationVersionDescriptionMessage, CreateApplicationVersionError>;
 
-    /// <p><p>Creates a configuration template. Templates are associated with a specific application and are used to deploy different versions of the application with the same configuration settings.</p> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> <li> <p> <a>DescribeConfigurationSettings</a> </p> </li> <li> <p> <a>ListAvailableSolutionStacks</a> </p> </li> </ul></p>
+    /// <p><p>Creates a configuration template. Templates are associated with a specific application and are used to deploy different versions of the application with the same configuration settings.</p> <p>Templates aren&#39;t associated with any environment. The <code>EnvironmentName</code> response element is always <code>null</code>.</p> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> <li> <p> <a>DescribeConfigurationSettings</a> </p> </li> <li> <p> <a>ListAvailableSolutionStacks</a> </p> </li> </ul></p>
     fn create_configuration_template(
         &self,
         input: CreateConfigurationTemplateMessage,
@@ -14461,7 +14572,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -14513,7 +14624,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -14565,7 +14676,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -14618,7 +14729,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -14668,13 +14779,13 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
     }
 
-    /// <p><p>Creates a configuration template. Templates are associated with a specific application and are used to deploy different versions of the application with the same configuration settings.</p> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> <li> <p> <a>DescribeConfigurationSettings</a> </p> </li> <li> <p> <a>ListAvailableSolutionStacks</a> </p> </li> </ul></p>
+    /// <p><p>Creates a configuration template. Templates are associated with a specific application and are used to deploy different versions of the application with the same configuration settings.</p> <p>Templates aren&#39;t associated with any environment. The <code>EnvironmentName</code> response element is always <code>null</code>.</p> <p>Related Topics</p> <ul> <li> <p> <a>DescribeConfigurationOptions</a> </p> </li> <li> <p> <a>DescribeConfigurationSettings</a> </p> </li> <li> <p> <a>ListAvailableSolutionStacks</a> </p> </li> </ul></p>
     fn create_configuration_template(
         &self,
         input: CreateConfigurationTemplateMessage,
@@ -14718,7 +14829,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -14771,7 +14882,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -14823,7 +14934,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -14874,7 +14985,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -15037,7 +15148,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -15086,7 +15197,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -15136,7 +15247,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -15188,7 +15299,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -15238,7 +15349,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -15288,7 +15399,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -15338,7 +15449,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -15398,7 +15509,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -15451,7 +15562,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -15502,7 +15613,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -15554,7 +15665,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -15607,7 +15718,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -15657,7 +15768,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -15707,7 +15818,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -15757,7 +15868,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -15809,7 +15920,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -15861,7 +15972,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -15998,7 +16109,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -16079,7 +16190,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -16132,7 +16243,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -16188,7 +16299,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -16238,7 +16349,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -16288,7 +16399,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -16341,7 +16452,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -16421,7 +16532,7 @@ impl ElasticBeanstalk for ElasticBeanstalkClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })

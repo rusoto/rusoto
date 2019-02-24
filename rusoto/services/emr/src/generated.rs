@@ -113,7 +113,7 @@ pub struct AddTagsInput {
 #[cfg_attr(test, derive(Serialize))]
 pub struct AddTagsOutput {}
 
-/// <p><p>An application is any Amazon or third-party software that you can add to the cluster. This structure contains a list of strings that indicates the software to use with the cluster and accepts a user argument list. Amazon EMR accepts and forwards the argument list to the corresponding installation script as bootstrap action argument. For more information, see <a href="http://docs.aws.amazon.com/emr/latest/ManagementGuide/emr-mapr.html">Using the MapR Distribution for Hadoop</a>. Currently supported values are:</p> <ul> <li> <p>&quot;mapr-m3&quot; - launch the cluster using MapR M3 Edition.</p> </li> <li> <p>&quot;mapr-m5&quot; - launch the cluster using MapR M5 Edition.</p> </li> <li> <p>&quot;mapr&quot; with the user arguments specifying &quot;--edition,m3&quot; or &quot;--edition,m5&quot; - launch the cluster using MapR M3 or M5 Edition, respectively.</p> </li> </ul> <note> <p>In Amazon EMR releases 4.x and later, the only accepted parameter is the application name. To pass arguments to applications, you supply a configuration for each application.</p> </note></p>
+/// <p>With Amazon EMR release version 4.0 and later, the only accepted parameter is the application name. To pass arguments to applications, you use configuration classifications specified using configuration JSON objects. For more information, see <a href="http://docs.aws.amazon.com/emr/latest/ReleaseGuide/emr-configure-apps.html">Configuring Applications</a>.</p> <p>With earlier Amazon EMR releases, the application is any Amazon or third-party software that you can add to the cluster. This structure contains a list of strings that indicates the software to use with the cluster and accepts a user argument list. Amazon EMR accepts and forwards the argument list to the corresponding installation script as bootstrap action argument.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Application {
     /// <p>This option is for advanced users only. This is meta information about third-party applications that third-party vendors use for testing purposes.</p>
@@ -690,7 +690,7 @@ pub struct Ec2InstanceAttributes {
     #[serde(rename = "AdditionalMasterSecurityGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_master_security_groups: Option<Vec<String>>,
-    /// <p>A list of additional Amazon EC2 security group IDs for the slave nodes.</p>
+    /// <p>A list of additional Amazon EC2 security group IDs for the core and task nodes.</p>
     #[serde(rename = "AdditionalSlaveSecurityGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_slave_security_groups: Option<Vec<String>>,
@@ -710,7 +710,7 @@ pub struct Ec2InstanceAttributes {
     #[serde(rename = "EmrManagedMasterSecurityGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub emr_managed_master_security_group: Option<String>,
-    /// <p>The identifier of the Amazon EC2 security group for the slave nodes.</p>
+    /// <p>The identifier of the Amazon EC2 security group for the core and task nodes.</p>
     #[serde(rename = "EmrManagedSlaveSecurityGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub emr_managed_slave_security_group: Option<String>,
@@ -1441,7 +1441,7 @@ pub struct JobFlowInstancesConfig {
     #[serde(rename = "AdditionalMasterSecurityGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_master_security_groups: Option<Vec<String>>,
-    /// <p>A list of additional Amazon EC2 security group IDs for the slave nodes.</p>
+    /// <p>A list of additional Amazon EC2 security group IDs for the core and task nodes.</p>
     #[serde(rename = "AdditionalSlaveSecurityGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub additional_slave_security_groups: Option<Vec<String>>,
@@ -1461,7 +1461,7 @@ pub struct JobFlowInstancesConfig {
     #[serde(rename = "EmrManagedMasterSecurityGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub emr_managed_master_security_group: Option<String>,
-    /// <p>The identifier of the Amazon EC2 security group for the slave nodes.</p>
+    /// <p>The identifier of the Amazon EC2 security group for the core and task nodes.</p>
     #[serde(rename = "EmrManagedSlaveSecurityGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub emr_managed_slave_security_group: Option<String>,
@@ -1497,7 +1497,7 @@ pub struct JobFlowInstancesConfig {
     #[serde(rename = "ServiceAccessSecurityGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_access_security_group: Option<String>,
-    /// <p>The EC2 instance type of the slave nodes.</p>
+    /// <p>The EC2 instance type of the core and task nodes.</p>
     #[serde(rename = "SlaveInstanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub slave_instance_type: Option<String>,
@@ -1523,7 +1523,7 @@ pub struct JobFlowInstancesDetail {
     #[serde(rename = "HadoopVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hadoop_version: Option<String>,
-    /// <p>The number of Amazon EC2 instances in the cluster. If the value is 1, the same instance serves as both the master and slave node. If the value is greater than 1, one instance is the master node and all others are slave nodes.</p>
+    /// <p>The number of Amazon EC2 instances in the cluster. If the value is 1, the same instance serves as both the master and core and task node. If the value is greater than 1, one instance is the master node and all others are core and task nodes.</p>
     #[serde(rename = "InstanceCount")]
     pub instance_count: i64,
     /// <p>Details about the instance groups in a cluster.</p>
@@ -1553,7 +1553,7 @@ pub struct JobFlowInstancesDetail {
     #[serde(rename = "Placement")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub placement: Option<PlacementType>,
-    /// <p>The Amazon EC2 slave node instance type.</p>
+    /// <p>The Amazon EC2 core and task node instance type.</p>
     #[serde(rename = "SlaveInstanceType")]
     pub slave_instance_type: String,
     /// <p>Specifies whether the Amazon EC2 instances in the cluster are protected from termination by API calls, user intervention, or in the event of a job-flow error.</p>
@@ -1930,7 +1930,7 @@ pub struct RunJobFlowInput {
     #[serde(rename = "AmiVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ami_version: Option<String>,
-    /// <p>For Amazon EMR releases 4.0 and later. A list of applications for the cluster. Valid values are: "Hadoop", "Hive", "Mahout", "Pig", and "Spark." They are case insensitive.</p>
+    /// <p>Applies to Amazon EMR releases 4.0 and later. A case-insensitive list of applications for Amazon EMR to install and configure when launching the cluster. For a list of applications available for each Amazon EMR release version, see the <a href="http://docs.aws.amazon.com/emr/latest/ReleaseGuide/">Amazon EMR Release Guide</a>.</p>
     #[serde(rename = "Applications")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub applications: Option<Vec<Application>>,
@@ -2157,7 +2157,7 @@ pub struct SpotProvisioningSpecification {
     #[serde(rename = "BlockDurationMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub block_duration_minutes: Option<i64>,
-    /// <p>The action to take when <code>TargetSpotCapacity</code> has not been fulfilled when the <code>TimeoutDurationMinutes</code> has expired. Spot instances are not uprovisioned within the Spot provisioining timeout. Valid values are <code>TERMINATE_CLUSTER</code> and <code>SWITCH_TO_ON_DEMAND</code>. SWITCH_TO_ON_DEMAND specifies that if no Spot instances are available, On-Demand Instances should be provisioned to fulfill any remaining Spot capacity.</p>
+    /// <p>The action to take when <code>TargetSpotCapacity</code> has not been fulfilled when the <code>TimeoutDurationMinutes</code> has expired; that is, when all Spot instances could not be provisioned within the Spot provisioning timeout. Valid values are <code>TERMINATE_CLUSTER</code> and <code>SWITCH_TO_ON_DEMAND</code>. SWITCH_TO_ON_DEMAND specifies that if no Spot instances are available, On-Demand Instances should be provisioned to fulfill any remaining Spot capacity.</p>
     #[serde(rename = "TimeoutAction")]
     pub timeout_action: String,
     /// <p>The spot provisioning timeout period in minutes. If Spot instances are not provisioned within this time period, the <code>TimeOutAction</code> is taken. Minimum value is 5 and maximum value is 1440. The timeout applies only during initial provisioning, when the cluster is first created.</p>
@@ -2169,7 +2169,7 @@ pub struct SpotProvisioningSpecification {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Step {
-    /// <p>This specifies what action to take when the cluster step fails. Possible values are TERMINATE_CLUSTER, CANCEL_AND_WAIT, and CONTINUE.</p>
+    /// <p>The action to take when the cluster step fails. Possible values are TERMINATE_CLUSTER, CANCEL_AND_WAIT, and CONTINUE. TERMINATE_JOB_FLOW is provided for backward compatibility. We recommend using TERMINATE_CLUSTER instead.</p>
     #[serde(rename = "ActionOnFailure")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action_on_failure: Option<String>,
@@ -2194,7 +2194,7 @@ pub struct Step {
 /// <p>Specification of a cluster (job flow) step.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct StepConfig {
-    /// <p>The action to take if the step fails.</p>
+    /// <p>The action to take when the cluster step fails. Possible values are TERMINATE_CLUSTER, CANCEL_AND_WAIT, and CONTINUE. TERMINATE_JOB_FLOW is provided for backward compatibility. We recommend using TERMINATE_CLUSTER instead.</p>
     #[serde(rename = "ActionOnFailure")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action_on_failure: Option<String>,
@@ -2282,7 +2282,7 @@ pub struct StepStatus {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct StepSummary {
-    /// <p>This specifies what action to take when the cluster step fails. Possible values are TERMINATE_CLUSTER, CANCEL_AND_WAIT, and CONTINUE.</p>
+    /// <p>The action to take when the cluster step fails. Possible values are TERMINATE_CLUSTER, CANCEL_AND_WAIT, and CONTINUE. TERMINATE_JOB_FLOW is available for backward compatibility. We recommend using TERMINATE_CLUSTER instead.</p>
     #[serde(rename = "ActionOnFailure")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action_on_failure: Option<String>,

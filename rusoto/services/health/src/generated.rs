@@ -40,11 +40,14 @@ pub struct AffectedEntity {
     #[serde(rename = "entityArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entity_arn: Option<String>,
+    #[serde(rename = "entityUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entity_url: Option<String>,
     /// <p>The ID of the affected entity.</p>
     #[serde(rename = "entityValue")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entity_value: Option<String>,
-    /// <p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331</code> </p>
+    /// <p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>SERVICE</i>/<i>EVENT_TYPE_CODE</i>/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456</code> </p>
     #[serde(rename = "eventArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_arn: Option<String>,
@@ -109,7 +112,7 @@ pub struct DescribeAffectedEntitiesResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeEntityAggregatesRequest {
-    /// <p>A list of event ARNs (unique identifiers). For example: <code>"arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331", "arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz"</code> </p>
+    /// <p>A list of event ARNs (unique identifiers). For example: <code>"arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-CDE456", "arn:aws:health:us-west-1::event/EBS/AWS_EBS_LOST_VOLUME/AWS_EBS_LOST_VOLUME_CHI789_JKL101"</code> </p>
     #[serde(rename = "eventArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_arns: Option<Vec<String>>,
@@ -158,7 +161,7 @@ pub struct DescribeEventAggregatesResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeEventDetailsRequest {
-    /// <p>A list of event ARNs (unique identifiers). For example: <code>"arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331", "arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz"</code> </p>
+    /// <p>A list of event ARNs (unique identifiers). For example: <code>"arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-CDE456", "arn:aws:health:us-west-1::event/EBS/AWS_EBS_LOST_VOLUME/AWS_EBS_LOST_VOLUME_CHI789_JKL101"</code> </p>
     #[serde(rename = "eventArns")]
     pub event_arns: Vec<String>,
     /// <p>The locale (language) to return information in. English (en) is the default and the only supported value at this time.</p>
@@ -254,7 +257,7 @@ pub struct EntityAggregate {
     #[serde(rename = "count")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub count: Option<i64>,
-    /// <p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331</code> </p>
+    /// <p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>SERVICE</i>/<i>EVENT_TYPE_CODE</i>/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456</code> </p>
     #[serde(rename = "eventArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_arn: Option<String>,
@@ -271,7 +274,7 @@ pub struct EntityFilter {
     #[serde(rename = "entityValues")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entity_values: Option<Vec<String>>,
-    /// <p>A list of event ARNs (unique identifiers). For example: <code>"arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331", "arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz"</code> </p>
+    /// <p>A list of event ARNs (unique identifiers). For example: <code>"arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-CDE456", "arn:aws:health:us-west-1::event/EBS/AWS_EBS_LOST_VOLUME/AWS_EBS_LOST_VOLUME_CHI789_JKL101"</code> </p>
     #[serde(rename = "eventArns")]
     pub event_arns: Vec<String>,
     /// <p>A list of the most recent dates and times that the entity was updated.</p>
@@ -292,7 +295,7 @@ pub struct EntityFilter {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Event {
-    /// <p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331</code> </p>
+    /// <p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>SERVICE</i>/<i>EVENT_TYPE_CODE</i>/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456</code> </p>
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
@@ -304,7 +307,7 @@ pub struct Event {
     #[serde(rename = "endTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
-    /// <p>The </p>
+    /// <p>The category of the event. Possible values are <code>issue</code>, <code>scheduledChange</code>, and <code>accountNotification</code>.</p>
     #[serde(rename = "eventTypeCategory")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_type_category: Option<String>,
@@ -378,7 +381,7 @@ pub struct EventDetailsErrorItem {
     #[serde(rename = "errorName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_name: Option<String>,
-    /// <p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331</code> </p>
+    /// <p>The unique identifier for the event. Format: <code>arn:aws:health:<i>event-region</i>::event/<i>SERVICE</i>/<i>EVENT_TYPE_CODE</i>/<i>EVENT_TYPE_PLUS_ID</i> </code>. Example: <code>Example: arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-DEF456</code> </p>
     #[serde(rename = "eventArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_arn: Option<String>,
@@ -403,7 +406,7 @@ pub struct EventFilter {
     #[serde(rename = "entityValues")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub entity_values: Option<Vec<String>>,
-    /// <p>A list of event ARNs (unique identifiers). For example: <code>"arn:aws:health:us-east-1::event/AWS_EC2_MAINTENANCE_5331", "arn:aws:health:us-west-1::event/AWS_EBS_LOST_VOLUME_xyz"</code> </p>
+    /// <p>A list of event ARNs (unique identifiers). For example: <code>"arn:aws:health:us-east-1::event/EC2/EC2_INSTANCE_RETIREMENT_SCHEDULED/EC2_INSTANCE_RETIREMENT_SCHEDULED_ABC123-CDE456", "arn:aws:health:us-west-1::event/EBS/AWS_EBS_LOST_VOLUME/AWS_EBS_LOST_VOLUME_CHI789_JKL101"</code> </p>
     #[serde(rename = "eventArns")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub event_arns: Option<Vec<String>>,

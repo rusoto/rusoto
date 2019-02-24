@@ -29,7 +29,7 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
-/// <p><p>Describes an API key.</p> <p>Customers invoke AWS AppSync GraphQL APIs with API keys as an identity mechanism. There are two key versions:</p> <p> <b>da1</b>: This version was introduced at launch in November 2017. These keys always expire after 7 days. Key expiration is managed by DynamoDB TTL. The keys will cease to be valid after Feb 21, 2018 and should not be used after that date.</p> <ul> <li> <p> <code>ListApiKeys</code> returns the expiration time in milliseconds.</p> </li> <li> <p> <code>CreateApiKey</code> returns the expiration time in milliseconds.</p> </li> <li> <p> <code>UpdateApiKey</code> is not available for this key version.</p> </li> <li> <p> <code>DeleteApiKey</code> deletes the item from the table.</p> </li> <li> <p>Expiration is stored in DynamoDB as milliseconds. This results in a bug where keys are not automatically deleted because DynamoDB expects the TTL to be stored in seconds. As a one-time action, we will delete these keys from the table after Feb 21, 2018.</p> </li> </ul> <p> <b>da2</b>: This version was introduced in February 2018 when AppSync added support to extend key expiration.</p> <ul> <li> <p> <code>ListApiKeys</code> returns the expiration time in seconds.</p> </li> <li> <p> <code>CreateApiKey</code> returns the expiration time in seconds and accepts a user-provided expiration time in seconds.</p> </li> <li> <p> <code>UpdateApiKey</code> returns the expiration time in seconds and accepts a user-provided expiration time in seconds. Key expiration can only be updated while the key has not expired.</p> </li> <li> <p> <code>DeleteApiKey</code> deletes the item from the table.</p> </li> <li> <p>Expiration is stored in DynamoDB as seconds.</p> </li> </ul></p>
+/// <p><p>Describes an API key.</p> <p>Customers invoke AWS AppSync GraphQL API operations with API keys as an identity mechanism. There are two key versions:</p> <p> <b>da1</b>: This version was introduced at launch in November 2017. These keys always expire after 7 days. Key expiration is managed by Amazon DynamoDB TTL. The keys ceased to be valid after February 21, 2018 and should not be used after that date.</p> <ul> <li> <p> <code>ListApiKeys</code> returns the expiration time in milliseconds.</p> </li> <li> <p> <code>CreateApiKey</code> returns the expiration time in milliseconds.</p> </li> <li> <p> <code>UpdateApiKey</code> is not available for this key version.</p> </li> <li> <p> <code>DeleteApiKey</code> deletes the item from the table.</p> </li> <li> <p>Expiration is stored in Amazon DynamoDB as milliseconds. This results in a bug where keys are not automatically deleted because DynamoDB expects the TTL to be stored in seconds. As a one-time action, we will delete these keys from the table after February 21, 2018.</p> </li> </ul> <p> <b>da2</b>: This version was introduced in February 2018 when AppSync added support to extend key expiration.</p> <ul> <li> <p> <code>ListApiKeys</code> returns the expiration time in seconds.</p> </li> <li> <p> <code>CreateApiKey</code> returns the expiration time in seconds and accepts a user-provided expiration time in seconds.</p> </li> <li> <p> <code>UpdateApiKey</code> returns the expiration time in seconds and accepts a user-provided expiration time in seconds. Key expiration can only be updated while the key has not expired.</p> </li> <li> <p> <code>DeleteApiKey</code> deletes the item from the table.</p> </li> <li> <p>Expiration is stored in Amazon DynamoDB as seconds.</p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ApiKey {
@@ -45,6 +45,31 @@ pub struct ApiKey {
     #[serde(rename = "id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+}
+
+/// <p>The authorization config in case the HTTP endpoint requires authorization.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AuthorizationConfig {
+    /// <p><p>The authorization type required by the HTTP endpoint.</p> <ul> <li> <p> <b>AWS_IAM</b>: The authorization type is Sigv4.</p> </li> </ul></p>
+    #[serde(rename = "authorizationType")]
+    pub authorization_type: String,
+    /// <p>The AWS IAM settings.</p>
+    #[serde(rename = "awsIamConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_iam_config: Option<AwsIamConfig>,
+}
+
+/// <p>The AWS IAM configuration.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AwsIamConfig {
+    /// <p>The signing region for AWS IAM authorization.</p>
+    #[serde(rename = "signingRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub signing_region: Option<String>,
+    /// <p>The signing service name for AWS IAM authorization.</p>
+    #[serde(rename = "signingServiceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub signing_service_name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -80,15 +105,15 @@ pub struct CreateDataSourceRequest {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>DynamoDB settings.</p>
+    /// <p>Amazon DynamoDB settings.</p>
     #[serde(rename = "dynamodbConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dynamodb_config: Option<DynamodbDataSourceConfig>,
-    /// <p>Amazon Elasticsearch settings.</p>
+    /// <p>Amazon Elasticsearch Service settings.</p>
     #[serde(rename = "elasticsearchConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub elasticsearch_config: Option<ElasticsearchDataSourceConfig>,
-    /// <p>Http endpoint settings.</p>
+    /// <p>HTTP endpoint settings.</p>
     #[serde(rename = "httpConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub http_config: Option<HttpDataSourceConfig>,
@@ -99,7 +124,11 @@ pub struct CreateDataSourceRequest {
     /// <p>A user-supplied name for the <code>DataSource</code>.</p>
     #[serde(rename = "name")]
     pub name: String,
-    /// <p>The IAM service role ARN for the data source. The system assumes this role when accessing the data source.</p>
+    /// <p>Relational database settings.</p>
+    #[serde(rename = "relationalDatabaseConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub relational_database_config: Option<RelationalDatabaseDataSourceConfig>,
+    /// <p>The AWS IAM service role ARN for the data source. The system assumes this role when accessing the data source.</p>
     #[serde(rename = "serviceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
@@ -118,22 +147,58 @@ pub struct CreateDataSourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateFunctionRequest {
+    /// <p>The GraphQL API ID.</p>
+    #[serde(rename = "apiId")]
+    pub api_id: String,
+    /// <p>The <code>Function</code> <code>DataSource</code> name.</p>
+    #[serde(rename = "dataSourceName")]
+    pub data_source_name: String,
+    /// <p>The <code>Function</code> description.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The <code>version</code> of the request mapping template. Currently the supported value is 2018-05-29. </p>
+    #[serde(rename = "functionVersion")]
+    pub function_version: String,
+    /// <p>The <code>Function</code> name. The function name does not have to be unique.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+    /// <p>The <code>Function</code> request mapping template. Functions support only the 2018-05-29 version of the request mapping template.</p>
+    #[serde(rename = "requestMappingTemplate")]
+    pub request_mapping_template: String,
+    /// <p>The <code>Function</code> response mapping template. </p>
+    #[serde(rename = "responseMappingTemplate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_mapping_template: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateFunctionResponse {
+    /// <p>The <code>Function</code> object.</p>
+    #[serde(rename = "functionConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_configuration: Option<FunctionConfiguration>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateGraphqlApiRequest {
-    /// <p>The authentication type: API key, IAM, or Amazon Cognito User Pools.</p>
+    /// <p>The authentication type: API key, AWS IAM, or Amazon Cognito user pools.</p>
     #[serde(rename = "authenticationType")]
     pub authentication_type: String,
-    /// <p>The Amazon CloudWatch logs configuration.</p>
+    /// <p>The Amazon CloudWatch Logs configuration.</p>
     #[serde(rename = "logConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_config: Option<LogConfig>,
     /// <p>A user-supplied name for the <code>GraphqlApi</code>.</p>
     #[serde(rename = "name")]
     pub name: String,
-    /// <p>The Open Id Connect configuration configuration.</p>
+    /// <p>The OpenID Connect configuration.</p>
     #[serde(rename = "openIDConnectConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub open_id_connect_config: Option<OpenIDConnectConfig>,
-    /// <p>The Amazon Cognito User Pool configuration.</p>
+    /// <p>The Amazon Cognito user pool configuration.</p>
     #[serde(rename = "userPoolConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_config: Option<UserPoolConfig>,
@@ -155,10 +220,19 @@ pub struct CreateResolverRequest {
     pub api_id: String,
     /// <p>The name of the data source for which the resolver is being created.</p>
     #[serde(rename = "dataSourceName")]
-    pub data_source_name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_source_name: Option<String>,
     /// <p>The name of the field to attach the resolver to.</p>
     #[serde(rename = "fieldName")]
     pub field_name: String,
+    /// <p><p>The resolver type.</p> <ul> <li> <p> <b>UNIT</b>: A UNIT resolver type. A UNIT resolver is the default resolver type. A UNIT resolver enables you to execute a GraphQL query against a single data source.</p> </li> <li> <p> <b>PIPELINE</b>: A PIPELINE resolver type. A PIPELINE resolver enables you to execute a series of <code>Function</code> in a serial manner. You can use a pipeline resolver to execute a GraphQL query against multiple data sources.</p> </li> </ul></p>
+    #[serde(rename = "kind")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kind: Option<String>,
+    /// <p>The <code>PipelineConfig</code>.</p>
+    #[serde(rename = "pipelineConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_config: Option<PipelineConfig>,
     /// <p>The mapping template to be used for requests.</p> <p>A resolver uses a request mapping template to convert a GraphQL expression into a format that a data source can understand. Mapping templates are written in Apache Velocity Template Language (VTL).</p>
     #[serde(rename = "requestMappingTemplate")]
     pub request_mapping_template: String,
@@ -214,19 +288,19 @@ pub struct DataSource {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>DynamoDB settings.</p>
+    /// <p>Amazon DynamoDB settings.</p>
     #[serde(rename = "dynamodbConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dynamodb_config: Option<DynamodbDataSourceConfig>,
-    /// <p>Amazon Elasticsearch settings.</p>
+    /// <p>Amazon Elasticsearch Service settings.</p>
     #[serde(rename = "elasticsearchConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub elasticsearch_config: Option<ElasticsearchDataSourceConfig>,
-    /// <p>Http endpoint settings.</p>
+    /// <p>HTTP endpoint settings.</p>
     #[serde(rename = "httpConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub http_config: Option<HttpDataSourceConfig>,
-    /// <p>Lambda settings.</p>
+    /// <p>AWS Lambda settings.</p>
     #[serde(rename = "lambdaConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lambda_config: Option<LambdaDataSourceConfig>,
@@ -234,11 +308,15 @@ pub struct DataSource {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The IAM service role ARN for the data source. The system assumes this role when accessing the data source.</p>
+    /// <p>Relational database settings.</p>
+    #[serde(rename = "relationalDatabaseConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub relational_database_config: Option<RelationalDatabaseDataSourceConfig>,
+    /// <p>The AWS IAM service role ARN for the data source. The system assumes this role when accessing the data source.</p>
     #[serde(rename = "serviceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
-    /// <p><p>The type of the data source.</p> <ul> <li> <p> <b>AMAZON<em>DYNAMODB</b>: The data source is an Amazon DynamoDB table.</p> </li> <li> <p> <b>AMAZON</em>ELASTICSEARCH</b>: The data source is an Amazon Elasticsearch Service domain.</p> </li> <li> <p> <b>AWS_LAMBDA</b>: The data source is an AWS Lambda function.</p> </li> <li> <p> <b>NONE</b>: There is no data source. This type is used when when you wish to invoke a GraphQL operation without connecting to a data source, such as performing data transformation with resolvers or triggering a subscription to be invoked from a mutation.</p> </li> <li> <p> <b>HTTP</b>: The data source is an HTTP endpoint.</p> </li> </ul></p>
+    /// <p><p>The type of the data source.</p> <ul> <li> <p> <b>AMAZON<em>DYNAMODB</b>: The data source is an Amazon DynamoDB table.</p> </li> <li> <p> <b>AMAZON</em>ELASTICSEARCH</b>: The data source is an Amazon Elasticsearch Service domain.</p> </li> <li> <p> <b>AWS<em>LAMBDA</b>: The data source is an AWS Lambda function.</p> </li> <li> <p> <b>NONE</b>: There is no data source. This type is used when you wish to invoke a GraphQL operation without connecting to a data source, such as performing data transformation with resolvers or triggering a subscription to be invoked from a mutation.</p> </li> <li> <p> <b>HTTP</b>: The data source is an HTTP endpoint.</p> </li> <li> <p> <b>RELATIONAL</em>DATABASE</b>: The data source is a relational database.</p> </li> </ul></p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -271,6 +349,20 @@ pub struct DeleteDataSourceRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeleteDataSourceResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteFunctionRequest {
+    /// <p>The GraphQL API ID.</p>
+    #[serde(rename = "apiId")]
+    pub api_id: String,
+    /// <p>The <code>Function</code> ID.</p>
+    #[serde(rename = "functionId")]
+    pub function_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteFunctionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteGraphqlApiRequest {
@@ -314,10 +406,10 @@ pub struct DeleteTypeRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeleteTypeResponse {}
 
-/// <p>Describes a DynamoDB data source configuration.</p>
+/// <p>Describes an Amazon DynamoDB data source configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DynamodbDataSourceConfig {
-    /// <p>The AWS region.</p>
+    /// <p>The AWS Region.</p>
     #[serde(rename = "awsRegion")]
     pub aws_region: String,
     /// <p>The table name.</p>
@@ -332,12 +424,50 @@ pub struct DynamodbDataSourceConfig {
 /// <p>Describes an Elasticsearch data source configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ElasticsearchDataSourceConfig {
-    /// <p>The AWS region.</p>
+    /// <p>The AWS Region.</p>
     #[serde(rename = "awsRegion")]
     pub aws_region: String,
     /// <p>The endpoint.</p>
     #[serde(rename = "endpoint")]
     pub endpoint: String,
+}
+
+/// <p>A function is a reusable entity. Multiple functions can be used to compose the resolver logic.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct FunctionConfiguration {
+    /// <p>The name of the <code>DataSource</code>.</p>
+    #[serde(rename = "dataSourceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_source_name: Option<String>,
+    /// <p>The <code>Function</code> description.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The ARN of the <code>Function</code> object.</p>
+    #[serde(rename = "functionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_arn: Option<String>,
+    /// <p>A unique ID representing the <code>Function</code> object.</p>
+    #[serde(rename = "functionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_id: Option<String>,
+    /// <p>The version of the request mapping template. Currently only the 2018-05-29 version of the template is supported.</p>
+    #[serde(rename = "functionVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_version: Option<String>,
+    /// <p>The name of the <code>Function</code> object.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The <code>Function</code> request mapping template. Functions support only the 2018-05-29 version of the request mapping template.</p>
+    #[serde(rename = "requestMappingTemplate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub request_mapping_template: Option<String>,
+    /// <p>The <code>Function</code> response mapping template.</p>
+    #[serde(rename = "responseMappingTemplate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_mapping_template: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -357,6 +487,25 @@ pub struct GetDataSourceResponse {
     #[serde(rename = "dataSource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub data_source: Option<DataSource>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetFunctionRequest {
+    /// <p>The GraphQL API ID.</p>
+    #[serde(rename = "apiId")]
+    pub api_id: String,
+    /// <p>The <code>Function</code> ID.</p>
+    #[serde(rename = "functionId")]
+    pub function_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetFunctionResponse {
+    /// <p>The <code>Function</code> object.</p>
+    #[serde(rename = "functionConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_configuration: Option<FunctionConfiguration>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -479,7 +628,7 @@ pub struct GraphqlApi {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p>The Open Id Connect configuration.</p>
+    /// <p>The OpenID Connect configuration.</p>
     #[serde(rename = "openIDConnectConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub open_id_connect_config: Option<OpenIDConnectConfig>,
@@ -487,22 +636,26 @@ pub struct GraphqlApi {
     #[serde(rename = "uris")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub uris: Option<::std::collections::HashMap<String, String>>,
-    /// <p>The Amazon Cognito User Pool configuration.</p>
+    /// <p>The Amazon Cognito user pool configuration.</p>
     #[serde(rename = "userPoolConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_config: Option<UserPoolConfig>,
 }
 
-/// <p>Describes a Http data source configuration.</p>
+/// <p>Describes an HTTP data source configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct HttpDataSourceConfig {
-    /// <p>The Http url endpoint. You can either specify the domain name or ip and port combination and the url scheme must be http(s). If the port is not specified, AWS AppSync will use the default port 80 for http endpoint and port 443 for https endpoints.</p>
+    /// <p>The authorization config in case the HTTP endpoint requires authorization.</p>
+    #[serde(rename = "authorizationConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub authorization_config: Option<AuthorizationConfig>,
+    /// <p>The HTTP URL endpoint. You can either specify the domain name or IP, and port combination, and the URL scheme must be HTTP or HTTPS. If the port is not specified, AWS AppSync uses the default port 80 for the HTTP endpoint and port 443 for HTTPS endpoints.</p>
     #[serde(rename = "endpoint")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoint: Option<String>,
 }
 
-/// <p>Describes a Lambda data source configuration.</p>
+/// <p>Describes an AWS Lambda data source configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LambdaDataSourceConfig {
     /// <p>The ARN for the Lambda function.</p>
@@ -567,6 +720,34 @@ pub struct ListDataSourcesResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListFunctionsRequest {
+    /// <p>The GraphQL API ID.</p>
+    #[serde(rename = "apiId")]
+    pub api_id: String,
+    /// <p>The maximum number of results you want the request to return.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListFunctionsResponse {
+    /// <p>A list of <code>Function</code> objects.</p>
+    #[serde(rename = "functions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub functions: Option<Vec<FunctionConfiguration>>,
+    /// <p>An identifier that was returned from the previous call to this operation, which can be used to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListGraphqlApisRequest {
     /// <p>The maximum number of results you want the request to return.</p>
     #[serde(rename = "maxResults")]
@@ -589,6 +770,37 @@ pub struct ListGraphqlApisResponse {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListResolversByFunctionRequest {
+    /// <p>The API ID.</p>
+    #[serde(rename = "apiId")]
+    pub api_id: String,
+    /// <p>The Function ID.</p>
+    #[serde(rename = "functionId")]
+    pub function_id: String,
+    /// <p>The maximum number of results you want the request to return.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>An identifier that was returned from the previous call to this operation, which you can use to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListResolversByFunctionResponse {
+    /// <p>An identifier that can be used to return the next set of items in the list.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The list of resolvers.</p>
+    #[serde(rename = "resolvers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resolvers: Option<Vec<Resolver>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -659,19 +871,19 @@ pub struct LogConfig {
     /// <p>The service role that AWS AppSync will assume to publish to Amazon CloudWatch logs in your account. </p>
     #[serde(rename = "cloudWatchLogsRoleArn")]
     pub cloud_watch_logs_role_arn: String,
-    /// <p><p>The field logging level. Values can be NONE, ERROR, ALL. </p> <ul> <li> <p> <b>NONE</b>: No field-level logs are captured.</p> </li> <li> <p> <b>ERROR</b>: Logs the following information only for the fields that are in error:</p> <ul> <li> <p>The error section in the server response.</p> </li> <li> <p>Field-level errors.</p> </li> <li> <p>The generated request/response functions that got resolved for error fields.</p> </li> </ul> </li> <li> <p> <b>ALL</b>: The following information is logged for all fields in the query:</p> <ul> <li> <p>Field-level tracing information.</p> </li> <li> <p>The generated request/response functions that got resolved for each field.</p> </li> </ul> </li> </ul></p>
+    /// <p><p>The field logging level. Values can be NONE, ERROR, or ALL. </p> <ul> <li> <p> <b>NONE</b>: No field-level logs are captured.</p> </li> <li> <p> <b>ERROR</b>: Logs the following information only for the fields that are in error:</p> <ul> <li> <p>The error section in the server response.</p> </li> <li> <p>Field-level errors.</p> </li> <li> <p>The generated request/response functions that got resolved for error fields.</p> </li> </ul> </li> <li> <p> <b>ALL</b>: The following information is logged for all fields in the query:</p> <ul> <li> <p>Field-level tracing information.</p> </li> <li> <p>The generated request/response functions that got resolved for each field.</p> </li> </ul> </li> </ul></p>
     #[serde(rename = "fieldLogLevel")]
     pub field_log_level: String,
 }
 
-/// <p>Describes an Open Id Connect configuration.</p>
+/// <p>Describes an OpenID Connect configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct OpenIDConnectConfig {
     /// <p>The number of milliseconds a token is valid after being authenticated.</p>
     #[serde(rename = "authTTL")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_ttl: Option<i64>,
-    /// <p>The client identifier of the Relying party at the OpenID Provider. This identifier is typically obtained when the Relying party is registered with the OpenID Provider. You can specify a regular expression so the AWS AppSync can validate against multiple client identifiers at a time</p>
+    /// <p>The client identifier of the Relying party at the OpenID identity provider. This identifier is typically obtained when the Relying party is registered with the OpenID identity provider. You can specify a regular expression so the AWS AppSync can validate against multiple client identifiers at a time.</p>
     #[serde(rename = "clientId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_id: Option<String>,
@@ -679,9 +891,56 @@ pub struct OpenIDConnectConfig {
     #[serde(rename = "iatTTL")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub iat_ttl: Option<i64>,
-    /// <p>The issuer for the open id connect configuration. The issuer returned by discovery MUST exactly match the value of iss in the ID Token.</p>
+    /// <p>The issuer for the OpenID Connect configuration. The issuer returned by discovery must exactly match the value of <code>iss</code> in the ID token.</p>
     #[serde(rename = "issuer")]
     pub issuer: String,
+}
+
+/// <p>The pipeline configuration for a resolver of kind <code>PIPELINE</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct PipelineConfig {
+    /// <p>A list of <code>Function</code> objects.</p>
+    #[serde(rename = "functions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub functions: Option<Vec<String>>,
+}
+
+/// <p>The Amazon RDS HTTP endpoint configuration.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct RdsHttpEndpointConfig {
+    /// <p>AWS Region for RDS HTTP endpoint.</p>
+    #[serde(rename = "awsRegion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_region: Option<String>,
+    /// <p>AWS secret store ARN for database credentials.</p>
+    #[serde(rename = "awsSecretStoreArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub aws_secret_store_arn: Option<String>,
+    /// <p>Logical database name.</p>
+    #[serde(rename = "databaseName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub database_name: Option<String>,
+    /// <p>Amazon RDS cluster identifier.</p>
+    #[serde(rename = "dbClusterIdentifier")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub db_cluster_identifier: Option<String>,
+    /// <p>Logical schema name.</p>
+    #[serde(rename = "schema")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema: Option<String>,
+}
+
+/// <p>Describes a relational database data source configuration.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct RelationalDatabaseDataSourceConfig {
+    /// <p>Amazon RDS HTTP endpoint settings.</p>
+    #[serde(rename = "rdsHttpEndpointConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rds_http_endpoint_config: Option<RdsHttpEndpointConfig>,
+    /// <p><p>Source type for the relational database.</p> <ul> <li> <p> <b>RDS<em>HTTP</em>ENDPOINT</b>: The relational database source type is an Amazon RDS HTTP endpoint.</p> </li> </ul></p>
+    #[serde(rename = "relationalDatabaseSourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub relational_database_source_type: Option<String>,
 }
 
 /// <p>Describes a resolver.</p>
@@ -696,6 +955,14 @@ pub struct Resolver {
     #[serde(rename = "fieldName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub field_name: Option<String>,
+    /// <p><p>The resolver type.</p> <ul> <li> <p> <b>UNIT</b>: A UNIT resolver type. A UNIT resolver is the default resolver type. A UNIT resolver enables you to execute a GraphQL query against a single data source.</p> </li> <li> <p> <b>PIPELINE</b>: A PIPELINE resolver type. A PIPELINE resolver enables you to execute a series of <code>Function</code> in a serial manner. You can use a pipeline resolver to execute a GraphQL query against multiple data sources.</p> </li> </ul></p>
+    #[serde(rename = "kind")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kind: Option<String>,
+    /// <p>The <code>PipelineConfig</code>.</p>
+    #[serde(rename = "pipelineConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_config: Option<PipelineConfig>,
     /// <p>The request mapping template.</p>
     #[serde(rename = "requestMappingTemplate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -732,7 +999,7 @@ pub struct StartSchemaCreationRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct StartSchemaCreationResponse {
-    /// <p>The current state of the schema (PROCESSING, ACTIVE, or DELETING). Once the schema is in the ACTIVE state, you can add data.</p>
+    /// <p>The current state of the schema (PROCESSING, ACTIVE, or DELETING). When the schema is in the ACTIVE state, you can add data.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -766,7 +1033,7 @@ pub struct Type {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateApiKeyRequest {
-    /// <p>The ID for the GraphQL API</p>
+    /// <p>The ID for the GraphQL API.</p>
     #[serde(rename = "apiId")]
     pub api_id: String,
     /// <p>A description of the purpose of the API key.</p>
@@ -800,25 +1067,29 @@ pub struct UpdateDataSourceRequest {
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The new DynamoDB configuration.</p>
+    /// <p>The new Amazon DynamoDB configuration.</p>
     #[serde(rename = "dynamodbConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dynamodb_config: Option<DynamodbDataSourceConfig>,
-    /// <p>The new Elasticsearch configuration.</p>
+    /// <p>The new Elasticsearch Service configuration.</p>
     #[serde(rename = "elasticsearchConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub elasticsearch_config: Option<ElasticsearchDataSourceConfig>,
-    /// <p>The new http endpoint configuration</p>
+    /// <p>The new HTTP endpoint configuration.</p>
     #[serde(rename = "httpConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub http_config: Option<HttpDataSourceConfig>,
-    /// <p>The new Lambda configuration.</p>
+    /// <p>The new AWS Lambda configuration.</p>
     #[serde(rename = "lambdaConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lambda_config: Option<LambdaDataSourceConfig>,
     /// <p>The new name for the data source.</p>
     #[serde(rename = "name")]
     pub name: String,
+    /// <p>The new relational database configuration.</p>
+    #[serde(rename = "relationalDatabaseConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub relational_database_config: Option<RelationalDatabaseDataSourceConfig>,
     /// <p>The new service role ARN for the data source.</p>
     #[serde(rename = "serviceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -838,6 +1109,45 @@ pub struct UpdateDataSourceResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateFunctionRequest {
+    /// <p>The GraphQL API ID.</p>
+    #[serde(rename = "apiId")]
+    pub api_id: String,
+    /// <p>The <code>Function</code> <code>DataSource</code> name.</p>
+    #[serde(rename = "dataSourceName")]
+    pub data_source_name: String,
+    /// <p>The <code>Function</code> description.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The function ID.</p>
+    #[serde(rename = "functionId")]
+    pub function_id: String,
+    /// <p>The <code>version</code> of the request mapping template. Currently the supported value is 2018-05-29. </p>
+    #[serde(rename = "functionVersion")]
+    pub function_version: String,
+    /// <p>The <code>Function</code> name.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+    /// <p>The <code>Function</code> request mapping template. Functions support only the 2018-05-29 version of the request mapping template.</p>
+    #[serde(rename = "requestMappingTemplate")]
+    pub request_mapping_template: String,
+    /// <p>The <code>Function</code> request mapping template. </p>
+    #[serde(rename = "responseMappingTemplate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub response_mapping_template: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateFunctionResponse {
+    /// <p>The <code>Function</code> object.</p>
+    #[serde(rename = "functionConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub function_configuration: Option<FunctionConfiguration>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateGraphqlApiRequest {
     /// <p>The API ID.</p>
     #[serde(rename = "apiId")]
@@ -846,18 +1156,18 @@ pub struct UpdateGraphqlApiRequest {
     #[serde(rename = "authenticationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub authentication_type: Option<String>,
-    /// <p>The Amazon CloudWatch logs configuration for the <code>GraphqlApi</code> object.</p>
+    /// <p>The Amazon CloudWatch Logs configuration for the <code>GraphqlApi</code> object.</p>
     #[serde(rename = "logConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_config: Option<LogConfig>,
     /// <p>The new name for the <code>GraphqlApi</code> object.</p>
     #[serde(rename = "name")]
     pub name: String,
-    /// <p>The Open Id Connect configuration configuration for the <code>GraphqlApi</code> object.</p>
+    /// <p>The OpenID Connect configuration for the <code>GraphqlApi</code> object.</p>
     #[serde(rename = "openIDConnectConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub open_id_connect_config: Option<OpenIDConnectConfig>,
-    /// <p>The new Amazon Cognito User Pool configuration for the <code>GraphqlApi</code> object.</p>
+    /// <p>The new Amazon Cognito user pool configuration for the <code>GraphqlApi</code> object.</p>
     #[serde(rename = "userPoolConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_pool_config: Option<UserPoolConfig>,
@@ -879,10 +1189,19 @@ pub struct UpdateResolverRequest {
     pub api_id: String,
     /// <p>The new data source name.</p>
     #[serde(rename = "dataSourceName")]
-    pub data_source_name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_source_name: Option<String>,
     /// <p>The new field name.</p>
     #[serde(rename = "fieldName")]
     pub field_name: String,
+    /// <p><p>The resolver type.</p> <ul> <li> <p> <b>UNIT</b>: A UNIT resolver type. A UNIT resolver is the default resolver type. A UNIT resolver enables you to execute a GraphQL query against a single data source.</p> </li> <li> <p> <b>PIPELINE</b>: A PIPELINE resolver type. A PIPELINE resolver enables you to execute a series of <code>Function</code> in a serial manner. You can use a pipeline resolver to execute a GraphQL query against multiple data sources.</p> </li> </ul></p>
+    #[serde(rename = "kind")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub kind: Option<String>,
+    /// <p>The <code>PipelineConfig</code>.</p>
+    #[serde(rename = "pipelineConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pipeline_config: Option<PipelineConfig>,
     /// <p>The new request mapping template.</p>
     #[serde(rename = "requestMappingTemplate")]
     pub request_mapping_template: String,
@@ -930,17 +1249,17 @@ pub struct UpdateTypeResponse {
     pub type_: Option<Type>,
 }
 
-/// <p>Describes an Amazon Cognito User Pool configuration.</p>
+/// <p>Describes an Amazon Cognito user pool configuration.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct UserPoolConfig {
-    /// <p>A regular expression for validating the incoming Amazon Cognito User Pool app client ID.</p>
+    /// <p>A regular expression for validating the incoming Amazon Cognito user pool app client ID.</p>
     #[serde(rename = "appIdClientRegex")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub app_id_client_regex: Option<String>,
-    /// <p>The AWS region in which the user pool was created.</p>
+    /// <p>The AWS Region in which the user pool was created.</p>
     #[serde(rename = "awsRegion")]
     pub aws_region: String,
-    /// <p>The action that you want your GraphQL API to take when a request that uses Amazon Cognito User Pool authentication doesn't match the Amazon Cognito User Pool configuration.</p>
+    /// <p>The action that you want your GraphQL API to take when a request that uses Amazon Cognito user pool authentication doesn't match the Amazon Cognito user pool configuration.</p>
     #[serde(rename = "defaultAction")]
     pub default_action: String,
     /// <p>The user pool ID.</p>
@@ -955,13 +1274,13 @@ pub enum CreateApiKeyError {
     ApiKeyLimitExceeded(String),
     /// <p>The API key expiration must be set to a value between 1 and 365 days from creation (for <code>CreateApiKey</code>) or from update (for <code>UpdateApiKey</code>).</p>
     ApiKeyValidityOutOfBounds(String),
-    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and try again. </p>
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
     BadRequest(String),
     /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
     InternalFailure(String),
     /// <p>The request exceeded a limit. Try your request again.</p>
     LimitExceeded(String),
-    /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
     NotFound(String),
     /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
@@ -1081,13 +1400,13 @@ impl Error for CreateApiKeyError {
 /// Errors returned by CreateDataSource
 #[derive(Debug, PartialEq)]
 pub enum CreateDataSourceError {
-    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and try again. </p>
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
     BadRequest(String),
-    /// <p>Another modification is being made. That modification must complete before you can make your change. </p>
+    /// <p>Another modification is in progress at this time and it must complete before you can make your change. </p>
     ConcurrentModification(String),
     /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
     InternalFailure(String),
-    /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
     NotFound(String),
     /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
@@ -1198,14 +1517,126 @@ impl Error for CreateDataSourceError {
         }
     }
 }
+/// Errors returned by CreateFunction
+#[derive(Debug, PartialEq)]
+pub enum CreateFunctionError {
+    /// <p>Another modification is in progress at this time and it must complete before you can make your change. </p>
+    ConcurrentModification(String),
+    /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
+    InternalFailure(String),
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
+    NotFound(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl CreateFunctionError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> CreateFunctionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "ConcurrentModificationException" => {
+                    return CreateFunctionError::ConcurrentModification(String::from(error_message));
+                }
+                "InternalFailureException" => {
+                    return CreateFunctionError::InternalFailure(String::from(error_message));
+                }
+                "NotFoundException" => {
+                    return CreateFunctionError::NotFound(String::from(error_message));
+                }
+                "UnauthorizedException" => {
+                    return CreateFunctionError::Unauthorized(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return CreateFunctionError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return CreateFunctionError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for CreateFunctionError {
+    fn from(err: serde_json::error::Error) -> CreateFunctionError {
+        CreateFunctionError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateFunctionError {
+    fn from(err: CredentialsError) -> CreateFunctionError {
+        CreateFunctionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateFunctionError {
+    fn from(err: HttpDispatchError) -> CreateFunctionError {
+        CreateFunctionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateFunctionError {
+    fn from(err: io::Error) -> CreateFunctionError {
+        CreateFunctionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateFunctionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateFunctionError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateFunctionError::ConcurrentModification(ref cause) => cause,
+            CreateFunctionError::InternalFailure(ref cause) => cause,
+            CreateFunctionError::NotFound(ref cause) => cause,
+            CreateFunctionError::Unauthorized(ref cause) => cause,
+            CreateFunctionError::Validation(ref cause) => cause,
+            CreateFunctionError::Credentials(ref err) => err.description(),
+            CreateFunctionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CreateFunctionError::ParseError(ref cause) => cause,
+            CreateFunctionError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by CreateGraphqlApi
 #[derive(Debug, PartialEq)]
 pub enum CreateGraphqlApiError {
     /// <p>The GraphQL API exceeded a limit. Try your request again.</p>
     ApiLimitExceeded(String),
-    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and try again. </p>
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
     BadRequest(String),
-    /// <p>Another modification is being made. That modification must complete before you can make your change. </p>
+    /// <p>Another modification is in progress at this time and it must complete before you can make your change. </p>
     ConcurrentModification(String),
     /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
     InternalFailure(String),
@@ -1327,11 +1758,11 @@ impl Error for CreateGraphqlApiError {
 /// Errors returned by CreateResolver
 #[derive(Debug, PartialEq)]
 pub enum CreateResolverError {
-    /// <p>Another modification is being made. That modification must complete before you can make your change. </p>
+    /// <p>Another modification is in progress at this time and it must complete before you can make your change. </p>
     ConcurrentModification(String),
     /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
     InternalFailure(String),
-    /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
     NotFound(String),
     /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
@@ -1439,13 +1870,13 @@ impl Error for CreateResolverError {
 /// Errors returned by CreateType
 #[derive(Debug, PartialEq)]
 pub enum CreateTypeError {
-    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and try again. </p>
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
     BadRequest(String),
-    /// <p>Another modification is being made. That modification must complete before you can make your change. </p>
+    /// <p>Another modification is in progress at this time and it must complete before you can make your change. </p>
     ConcurrentModification(String),
     /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
     InternalFailure(String),
-    /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
     NotFound(String),
     /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
@@ -1557,11 +1988,11 @@ impl Error for CreateTypeError {
 /// Errors returned by DeleteApiKey
 #[derive(Debug, PartialEq)]
 pub enum DeleteApiKeyError {
-    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and try again. </p>
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
     BadRequest(String),
     /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
     InternalFailure(String),
-    /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
     NotFound(String),
     /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
@@ -1669,13 +2100,13 @@ impl Error for DeleteApiKeyError {
 /// Errors returned by DeleteDataSource
 #[derive(Debug, PartialEq)]
 pub enum DeleteDataSourceError {
-    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and try again. </p>
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
     BadRequest(String),
-    /// <p>Another modification is being made. That modification must complete before you can make your change. </p>
+    /// <p>Another modification is in progress at this time and it must complete before you can make your change. </p>
     ConcurrentModification(String),
     /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
     InternalFailure(String),
-    /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
     NotFound(String),
     /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
@@ -1786,16 +2217,128 @@ impl Error for DeleteDataSourceError {
         }
     }
 }
-/// Errors returned by DeleteGraphqlApi
+/// Errors returned by DeleteFunction
 #[derive(Debug, PartialEq)]
-pub enum DeleteGraphqlApiError {
-    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and try again. </p>
-    BadRequest(String),
-    /// <p>Another modification is being made. That modification must complete before you can make your change. </p>
+pub enum DeleteFunctionError {
+    /// <p>Another modification is in progress at this time and it must complete before you can make your change. </p>
     ConcurrentModification(String),
     /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
     InternalFailure(String),
-    /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
+    NotFound(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DeleteFunctionError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteFunctionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "ConcurrentModificationException" => {
+                    return DeleteFunctionError::ConcurrentModification(String::from(error_message));
+                }
+                "InternalFailureException" => {
+                    return DeleteFunctionError::InternalFailure(String::from(error_message));
+                }
+                "NotFoundException" => {
+                    return DeleteFunctionError::NotFound(String::from(error_message));
+                }
+                "UnauthorizedException" => {
+                    return DeleteFunctionError::Unauthorized(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return DeleteFunctionError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DeleteFunctionError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteFunctionError {
+    fn from(err: serde_json::error::Error) -> DeleteFunctionError {
+        DeleteFunctionError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteFunctionError {
+    fn from(err: CredentialsError) -> DeleteFunctionError {
+        DeleteFunctionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteFunctionError {
+    fn from(err: HttpDispatchError) -> DeleteFunctionError {
+        DeleteFunctionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteFunctionError {
+    fn from(err: io::Error) -> DeleteFunctionError {
+        DeleteFunctionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteFunctionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteFunctionError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteFunctionError::ConcurrentModification(ref cause) => cause,
+            DeleteFunctionError::InternalFailure(ref cause) => cause,
+            DeleteFunctionError::NotFound(ref cause) => cause,
+            DeleteFunctionError::Unauthorized(ref cause) => cause,
+            DeleteFunctionError::Validation(ref cause) => cause,
+            DeleteFunctionError::Credentials(ref err) => err.description(),
+            DeleteFunctionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteFunctionError::ParseError(ref cause) => cause,
+            DeleteFunctionError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DeleteGraphqlApi
+#[derive(Debug, PartialEq)]
+pub enum DeleteGraphqlApiError {
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
+    BadRequest(String),
+    /// <p>Another modification is in progress at this time and it must complete before you can make your change. </p>
+    ConcurrentModification(String),
+    /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
+    InternalFailure(String),
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
     NotFound(String),
     /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
@@ -1909,11 +2452,11 @@ impl Error for DeleteGraphqlApiError {
 /// Errors returned by DeleteResolver
 #[derive(Debug, PartialEq)]
 pub enum DeleteResolverError {
-    /// <p>Another modification is being made. That modification must complete before you can make your change. </p>
+    /// <p>Another modification is in progress at this time and it must complete before you can make your change. </p>
     ConcurrentModification(String),
     /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
     InternalFailure(String),
-    /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
     NotFound(String),
     /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
@@ -2021,13 +2564,13 @@ impl Error for DeleteResolverError {
 /// Errors returned by DeleteType
 #[derive(Debug, PartialEq)]
 pub enum DeleteTypeError {
-    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and try again. </p>
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
     BadRequest(String),
-    /// <p>Another modification is being made. That modification must complete before you can make your change. </p>
+    /// <p>Another modification is in progress at this time and it must complete before you can make your change. </p>
     ConcurrentModification(String),
     /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
     InternalFailure(String),
-    /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
     NotFound(String),
     /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
@@ -2139,13 +2682,13 @@ impl Error for DeleteTypeError {
 /// Errors returned by GetDataSource
 #[derive(Debug, PartialEq)]
 pub enum GetDataSourceError {
-    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and try again. </p>
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
     BadRequest(String),
-    /// <p>Another modification is being made. That modification must complete before you can make your change. </p>
+    /// <p>Another modification is in progress at this time and it must complete before you can make your change. </p>
     ConcurrentModification(String),
     /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
     InternalFailure(String),
-    /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
     NotFound(String),
     /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
@@ -2254,14 +2797,120 @@ impl Error for GetDataSourceError {
         }
     }
 }
+/// Errors returned by GetFunction
+#[derive(Debug, PartialEq)]
+pub enum GetFunctionError {
+    /// <p>Another modification is in progress at this time and it must complete before you can make your change. </p>
+    ConcurrentModification(String),
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
+    NotFound(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetFunctionError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> GetFunctionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "ConcurrentModificationException" => {
+                    return GetFunctionError::ConcurrentModification(String::from(error_message));
+                }
+                "NotFoundException" => {
+                    return GetFunctionError::NotFound(String::from(error_message));
+                }
+                "UnauthorizedException" => {
+                    return GetFunctionError::Unauthorized(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return GetFunctionError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetFunctionError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetFunctionError {
+    fn from(err: serde_json::error::Error) -> GetFunctionError {
+        GetFunctionError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetFunctionError {
+    fn from(err: CredentialsError) -> GetFunctionError {
+        GetFunctionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetFunctionError {
+    fn from(err: HttpDispatchError) -> GetFunctionError {
+        GetFunctionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetFunctionError {
+    fn from(err: io::Error) -> GetFunctionError {
+        GetFunctionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetFunctionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetFunctionError {
+    fn description(&self) -> &str {
+        match *self {
+            GetFunctionError::ConcurrentModification(ref cause) => cause,
+            GetFunctionError::NotFound(ref cause) => cause,
+            GetFunctionError::Unauthorized(ref cause) => cause,
+            GetFunctionError::Validation(ref cause) => cause,
+            GetFunctionError::Credentials(ref err) => err.description(),
+            GetFunctionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetFunctionError::ParseError(ref cause) => cause,
+            GetFunctionError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by GetGraphqlApi
 #[derive(Debug, PartialEq)]
 pub enum GetGraphqlApiError {
-    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and try again. </p>
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
     BadRequest(String),
     /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
     InternalFailure(String),
-    /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
     NotFound(String),
     /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
@@ -2373,7 +3022,7 @@ pub enum GetIntrospectionSchemaError {
     GraphQLSchema(String),
     /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
     InternalFailure(String),
-    /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
     NotFound(String),
     /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
@@ -2483,9 +3132,9 @@ impl Error for GetIntrospectionSchemaError {
 /// Errors returned by GetResolver
 #[derive(Debug, PartialEq)]
 pub enum GetResolverError {
-    /// <p>Another modification is being made. That modification must complete before you can make your change. </p>
+    /// <p>Another modification is in progress at this time and it must complete before you can make your change. </p>
     ConcurrentModification(String),
-    /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
     NotFound(String),
     /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
@@ -2589,11 +3238,11 @@ impl Error for GetResolverError {
 /// Errors returned by GetSchemaCreationStatus
 #[derive(Debug, PartialEq)]
 pub enum GetSchemaCreationStatusError {
-    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and try again. </p>
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
     BadRequest(String),
     /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
     InternalFailure(String),
-    /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
     NotFound(String),
     /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
@@ -2705,13 +3354,13 @@ impl Error for GetSchemaCreationStatusError {
 /// Errors returned by GetType
 #[derive(Debug, PartialEq)]
 pub enum GetTypeError {
-    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and try again. </p>
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
     BadRequest(String),
-    /// <p>Another modification is being made. That modification must complete before you can make your change. </p>
+    /// <p>Another modification is in progress at this time and it must complete before you can make your change. </p>
     ConcurrentModification(String),
     /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
     InternalFailure(String),
-    /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
     NotFound(String),
     /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
@@ -2819,11 +3468,11 @@ impl Error for GetTypeError {
 /// Errors returned by ListApiKeys
 #[derive(Debug, PartialEq)]
 pub enum ListApiKeysError {
-    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and try again. </p>
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
     BadRequest(String),
     /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
     InternalFailure(String),
-    /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
     NotFound(String),
     /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
@@ -2931,11 +3580,11 @@ impl Error for ListApiKeysError {
 /// Errors returned by ListDataSources
 #[derive(Debug, PartialEq)]
 pub enum ListDataSourcesError {
-    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and try again. </p>
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
     BadRequest(String),
     /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
     InternalFailure(String),
-    /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
     NotFound(String),
     /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
@@ -3040,10 +3689,122 @@ impl Error for ListDataSourcesError {
         }
     }
 }
+/// Errors returned by ListFunctions
+#[derive(Debug, PartialEq)]
+pub enum ListFunctionsError {
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
+    BadRequest(String),
+    /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
+    InternalFailure(String),
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
+    NotFound(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListFunctionsError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> ListFunctionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "BadRequestException" => {
+                    return ListFunctionsError::BadRequest(String::from(error_message));
+                }
+                "InternalFailureException" => {
+                    return ListFunctionsError::InternalFailure(String::from(error_message));
+                }
+                "NotFoundException" => {
+                    return ListFunctionsError::NotFound(String::from(error_message));
+                }
+                "UnauthorizedException" => {
+                    return ListFunctionsError::Unauthorized(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return ListFunctionsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ListFunctionsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListFunctionsError {
+    fn from(err: serde_json::error::Error) -> ListFunctionsError {
+        ListFunctionsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListFunctionsError {
+    fn from(err: CredentialsError) -> ListFunctionsError {
+        ListFunctionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListFunctionsError {
+    fn from(err: HttpDispatchError) -> ListFunctionsError {
+        ListFunctionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListFunctionsError {
+    fn from(err: io::Error) -> ListFunctionsError {
+        ListFunctionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListFunctionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListFunctionsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListFunctionsError::BadRequest(ref cause) => cause,
+            ListFunctionsError::InternalFailure(ref cause) => cause,
+            ListFunctionsError::NotFound(ref cause) => cause,
+            ListFunctionsError::Unauthorized(ref cause) => cause,
+            ListFunctionsError::Validation(ref cause) => cause,
+            ListFunctionsError::Credentials(ref err) => err.description(),
+            ListFunctionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ListFunctionsError::ParseError(ref cause) => cause,
+            ListFunctionsError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by ListGraphqlApis
 #[derive(Debug, PartialEq)]
 pub enum ListGraphqlApisError {
-    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and try again. </p>
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
     BadRequest(String),
     /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
     InternalFailure(String),
@@ -3149,11 +3910,11 @@ impl Error for ListGraphqlApisError {
 /// Errors returned by ListResolvers
 #[derive(Debug, PartialEq)]
 pub enum ListResolversError {
-    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and try again. </p>
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
     BadRequest(String),
     /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
     InternalFailure(String),
-    /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
     NotFound(String),
     /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
@@ -3258,16 +4019,132 @@ impl Error for ListResolversError {
         }
     }
 }
+/// Errors returned by ListResolversByFunction
+#[derive(Debug, PartialEq)]
+pub enum ListResolversByFunctionError {
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
+    BadRequest(String),
+    /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
+    InternalFailure(String),
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
+    NotFound(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListResolversByFunctionError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> ListResolversByFunctionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "BadRequestException" => {
+                    return ListResolversByFunctionError::BadRequest(String::from(error_message));
+                }
+                "InternalFailureException" => {
+                    return ListResolversByFunctionError::InternalFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return ListResolversByFunctionError::NotFound(String::from(error_message));
+                }
+                "UnauthorizedException" => {
+                    return ListResolversByFunctionError::Unauthorized(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return ListResolversByFunctionError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ListResolversByFunctionError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListResolversByFunctionError {
+    fn from(err: serde_json::error::Error) -> ListResolversByFunctionError {
+        ListResolversByFunctionError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListResolversByFunctionError {
+    fn from(err: CredentialsError) -> ListResolversByFunctionError {
+        ListResolversByFunctionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListResolversByFunctionError {
+    fn from(err: HttpDispatchError) -> ListResolversByFunctionError {
+        ListResolversByFunctionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListResolversByFunctionError {
+    fn from(err: io::Error) -> ListResolversByFunctionError {
+        ListResolversByFunctionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListResolversByFunctionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListResolversByFunctionError {
+    fn description(&self) -> &str {
+        match *self {
+            ListResolversByFunctionError::BadRequest(ref cause) => cause,
+            ListResolversByFunctionError::InternalFailure(ref cause) => cause,
+            ListResolversByFunctionError::NotFound(ref cause) => cause,
+            ListResolversByFunctionError::Unauthorized(ref cause) => cause,
+            ListResolversByFunctionError::Validation(ref cause) => cause,
+            ListResolversByFunctionError::Credentials(ref err) => err.description(),
+            ListResolversByFunctionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListResolversByFunctionError::ParseError(ref cause) => cause,
+            ListResolversByFunctionError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by ListTypes
 #[derive(Debug, PartialEq)]
 pub enum ListTypesError {
-    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and try again. </p>
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
     BadRequest(String),
-    /// <p>Another modification is being made. That modification must complete before you can make your change. </p>
+    /// <p>Another modification is in progress at this time and it must complete before you can make your change. </p>
     ConcurrentModification(String),
     /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
     InternalFailure(String),
-    /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
     NotFound(String),
     /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
@@ -3377,13 +4254,13 @@ impl Error for ListTypesError {
 /// Errors returned by StartSchemaCreation
 #[derive(Debug, PartialEq)]
 pub enum StartSchemaCreationError {
-    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and try again. </p>
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
     BadRequest(String),
-    /// <p>Another modification is being made. That modification must complete before you can make your change. </p>
+    /// <p>Another modification is in progress at this time and it must complete before you can make your change. </p>
     ConcurrentModification(String),
     /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
     InternalFailure(String),
-    /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
     NotFound(String),
     /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
@@ -3501,13 +4378,13 @@ impl Error for StartSchemaCreationError {
 pub enum UpdateApiKeyError {
     /// <p>The API key expiration must be set to a value between 1 and 365 days from creation (for <code>CreateApiKey</code>) or from update (for <code>UpdateApiKey</code>).</p>
     ApiKeyValidityOutOfBounds(String),
-    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and try again. </p>
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
     BadRequest(String),
     /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
     InternalFailure(String),
     /// <p>The request exceeded a limit. Try your request again.</p>
     LimitExceeded(String),
-    /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
     NotFound(String),
     /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
@@ -3623,13 +4500,13 @@ impl Error for UpdateApiKeyError {
 /// Errors returned by UpdateDataSource
 #[derive(Debug, PartialEq)]
 pub enum UpdateDataSourceError {
-    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and try again. </p>
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
     BadRequest(String),
-    /// <p>Another modification is being made. That modification must complete before you can make your change. </p>
+    /// <p>Another modification is in progress at this time and it must complete before you can make your change. </p>
     ConcurrentModification(String),
     /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
     InternalFailure(String),
-    /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
     NotFound(String),
     /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
@@ -3740,16 +4617,128 @@ impl Error for UpdateDataSourceError {
         }
     }
 }
-/// Errors returned by UpdateGraphqlApi
+/// Errors returned by UpdateFunction
 #[derive(Debug, PartialEq)]
-pub enum UpdateGraphqlApiError {
-    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and try again. </p>
-    BadRequest(String),
-    /// <p>Another modification is being made. That modification must complete before you can make your change. </p>
+pub enum UpdateFunctionError {
+    /// <p>Another modification is in progress at this time and it must complete before you can make your change. </p>
     ConcurrentModification(String),
     /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
     InternalFailure(String),
-    /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
+    NotFound(String),
+    /// <p>You are not authorized to perform this operation.</p>
+    Unauthorized(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl UpdateFunctionError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateFunctionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "ConcurrentModificationException" => {
+                    return UpdateFunctionError::ConcurrentModification(String::from(error_message));
+                }
+                "InternalFailureException" => {
+                    return UpdateFunctionError::InternalFailure(String::from(error_message));
+                }
+                "NotFoundException" => {
+                    return UpdateFunctionError::NotFound(String::from(error_message));
+                }
+                "UnauthorizedException" => {
+                    return UpdateFunctionError::Unauthorized(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return UpdateFunctionError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return UpdateFunctionError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateFunctionError {
+    fn from(err: serde_json::error::Error) -> UpdateFunctionError {
+        UpdateFunctionError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateFunctionError {
+    fn from(err: CredentialsError) -> UpdateFunctionError {
+        UpdateFunctionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateFunctionError {
+    fn from(err: HttpDispatchError) -> UpdateFunctionError {
+        UpdateFunctionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateFunctionError {
+    fn from(err: io::Error) -> UpdateFunctionError {
+        UpdateFunctionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateFunctionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateFunctionError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateFunctionError::ConcurrentModification(ref cause) => cause,
+            UpdateFunctionError::InternalFailure(ref cause) => cause,
+            UpdateFunctionError::NotFound(ref cause) => cause,
+            UpdateFunctionError::Unauthorized(ref cause) => cause,
+            UpdateFunctionError::Validation(ref cause) => cause,
+            UpdateFunctionError::Credentials(ref err) => err.description(),
+            UpdateFunctionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UpdateFunctionError::ParseError(ref cause) => cause,
+            UpdateFunctionError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by UpdateGraphqlApi
+#[derive(Debug, PartialEq)]
+pub enum UpdateGraphqlApiError {
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
+    BadRequest(String),
+    /// <p>Another modification is in progress at this time and it must complete before you can make your change. </p>
+    ConcurrentModification(String),
+    /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
+    InternalFailure(String),
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
     NotFound(String),
     /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
@@ -3863,11 +4852,11 @@ impl Error for UpdateGraphqlApiError {
 /// Errors returned by UpdateResolver
 #[derive(Debug, PartialEq)]
 pub enum UpdateResolverError {
-    /// <p>Another modification is being made. That modification must complete before you can make your change. </p>
+    /// <p>Another modification is in progress at this time and it must complete before you can make your change. </p>
     ConcurrentModification(String),
     /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
     InternalFailure(String),
-    /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
     NotFound(String),
     /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
@@ -3975,13 +4964,13 @@ impl Error for UpdateResolverError {
 /// Errors returned by UpdateType
 #[derive(Debug, PartialEq)]
 pub enum UpdateTypeError {
-    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and try again. </p>
+    /// <p>The request is not well formed. For example, a value is invalid or a required field is missing. Check the field values, and then try again. </p>
     BadRequest(String),
-    /// <p>Another modification is being made. That modification must complete before you can make your change. </p>
+    /// <p>Another modification is in progress at this time and it must complete before you can make your change. </p>
     ConcurrentModification(String),
     /// <p>An internal AWS AppSync error occurred. Try your request again.</p>
     InternalFailure(String),
-    /// <p>The resource specified in the request was not found. Check the resource and try again.</p>
+    /// <p>The resource specified in the request was not found. Check the resource, and then try again.</p>
     NotFound(String),
     /// <p>You are not authorized to perform this operation.</p>
     Unauthorized(String),
@@ -4104,6 +5093,12 @@ pub trait AppSync {
         input: CreateDataSourceRequest,
     ) -> RusotoFuture<CreateDataSourceResponse, CreateDataSourceError>;
 
+    /// <p>Creates a <code>Function</code> object.</p> <p>A function is a reusable entity. Multiple functions can be used to compose the resolver logic.</p>
+    fn create_function(
+        &self,
+        input: CreateFunctionRequest,
+    ) -> RusotoFuture<CreateFunctionResponse, CreateFunctionError>;
+
     /// <p>Creates a <code>GraphqlApi</code> object.</p>
     fn create_graphql_api(
         &self,
@@ -4134,6 +5129,12 @@ pub trait AppSync {
         input: DeleteDataSourceRequest,
     ) -> RusotoFuture<DeleteDataSourceResponse, DeleteDataSourceError>;
 
+    /// <p>Deletes a <code>Function</code>.</p>
+    fn delete_function(
+        &self,
+        input: DeleteFunctionRequest,
+    ) -> RusotoFuture<DeleteFunctionResponse, DeleteFunctionError>;
+
     /// <p>Deletes a <code>GraphqlApi</code> object.</p>
     fn delete_graphql_api(
         &self,
@@ -4157,6 +5158,12 @@ pub trait AppSync {
         &self,
         input: GetDataSourceRequest,
     ) -> RusotoFuture<GetDataSourceResponse, GetDataSourceError>;
+
+    /// <p>Get a <code>Function</code>.</p>
+    fn get_function(
+        &self,
+        input: GetFunctionRequest,
+    ) -> RusotoFuture<GetFunctionResponse, GetFunctionError>;
 
     /// <p>Retrieves a <code>GraphqlApi</code> object.</p>
     fn get_graphql_api(
@@ -4197,6 +5204,12 @@ pub trait AppSync {
         input: ListDataSourcesRequest,
     ) -> RusotoFuture<ListDataSourcesResponse, ListDataSourcesError>;
 
+    /// <p>List multiple functions.</p>
+    fn list_functions(
+        &self,
+        input: ListFunctionsRequest,
+    ) -> RusotoFuture<ListFunctionsResponse, ListFunctionsError>;
+
     /// <p>Lists your GraphQL APIs.</p>
     fn list_graphql_apis(
         &self,
@@ -4208,6 +5221,12 @@ pub trait AppSync {
         &self,
         input: ListResolversRequest,
     ) -> RusotoFuture<ListResolversResponse, ListResolversError>;
+
+    /// <p>List the resolvers that are associated with a specific function.</p>
+    fn list_resolvers_by_function(
+        &self,
+        input: ListResolversByFunctionRequest,
+    ) -> RusotoFuture<ListResolversByFunctionResponse, ListResolversByFunctionError>;
 
     /// <p>Lists the types for a given API.</p>
     fn list_types(
@@ -4232,6 +5251,12 @@ pub trait AppSync {
         &self,
         input: UpdateDataSourceRequest,
     ) -> RusotoFuture<UpdateDataSourceResponse, UpdateDataSourceError>;
+
+    /// <p>Updates a <code>Function</code> object.</p>
+    fn update_function(
+        &self,
+        input: UpdateFunctionRequest,
+    ) -> RusotoFuture<UpdateFunctionResponse, UpdateFunctionError>;
 
     /// <p>Updates a <code>GraphqlApi</code> object.</p>
     fn update_graphql_api(
@@ -4361,6 +5386,45 @@ impl AppSync for AppSyncClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(CreateDataSourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Creates a <code>Function</code> object.</p> <p>A function is a reusable entity. Multiple functions can be used to compose the resolver logic.</p>
+    fn create_function(
+        &self,
+        input: CreateFunctionRequest,
+    ) -> RusotoFuture<CreateFunctionResponse, CreateFunctionError> {
+        let request_uri = format!("/v1/apis/{api_id}/functions", api_id = input.api_id);
+
+        let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<CreateFunctionResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateFunctionError::from_response(response))),
                 )
             }
         })
@@ -4567,6 +5631,46 @@ impl AppSync for AppSyncClient {
         })
     }
 
+    /// <p>Deletes a <code>Function</code>.</p>
+    fn delete_function(
+        &self,
+        input: DeleteFunctionRequest,
+    ) -> RusotoFuture<DeleteFunctionResponse, DeleteFunctionError> {
+        let request_uri = format!(
+            "/v1/apis/{api_id}/functions/{function_id}",
+            api_id = input.api_id,
+            function_id = input.function_id
+        );
+
+        let mut request = SignedRequest::new("DELETE", "appsync", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<DeleteFunctionResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteFunctionError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Deletes a <code>GraphqlApi</code> object.</p>
     fn delete_graphql_api(
         &self,
@@ -4719,6 +5823,46 @@ impl AppSync for AppSyncClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(GetDataSourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Get a <code>Function</code>.</p>
+    fn get_function(
+        &self,
+        input: GetFunctionRequest,
+    ) -> RusotoFuture<GetFunctionResponse, GetFunctionError> {
+        let request_uri = format!(
+            "/v1/apis/{api_id}/functions/{function_id}",
+            api_id = input.api_id,
+            function_id = input.function_id
+        );
+
+        let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GetFunctionResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetFunctionError::from_response(response))),
                 )
             }
         })
@@ -4998,6 +6142,51 @@ impl AppSync for AppSyncClient {
         })
     }
 
+    /// <p>List multiple functions.</p>
+    fn list_functions(
+        &self,
+        input: ListFunctionsRequest,
+    ) -> RusotoFuture<ListFunctionsResponse, ListFunctionsError> {
+        let request_uri = format!("/v1/apis/{api_id}/functions", api_id = input.api_id);
+
+        let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListFunctionsResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListFunctionsError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Lists your GraphQL APIs.</p>
     fn list_graphql_apis(
         &self,
@@ -5088,6 +6277,53 @@ impl AppSync for AppSyncClient {
                         .from_err()
                         .and_then(|response| Err(ListResolversError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p>List the resolvers that are associated with a specific function.</p>
+    fn list_resolvers_by_function(
+        &self,
+        input: ListResolversByFunctionRequest,
+    ) -> RusotoFuture<ListResolversByFunctionResponse, ListResolversByFunctionError> {
+        let request_uri = format!(
+            "/v1/apis/{api_id}/functions/{function_id}/resolvers",
+            api_id = input.api_id,
+            function_id = input.function_id
+        );
+
+        let mut request = SignedRequest::new("GET", "appsync", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListResolversByFunctionResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListResolversByFunctionError::from_response(response))
+                }))
             }
         })
     }
@@ -5258,6 +6494,49 @@ impl AppSync for AppSyncClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(UpdateDataSourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Updates a <code>Function</code> object.</p>
+    fn update_function(
+        &self,
+        input: UpdateFunctionRequest,
+    ) -> RusotoFuture<UpdateFunctionResponse, UpdateFunctionError> {
+        let request_uri = format!(
+            "/v1/apis/{api_id}/functions/{function_id}",
+            api_id = input.api_id,
+            function_id = input.function_id
+        );
+
+        let mut request = SignedRequest::new("POST", "appsync", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<UpdateFunctionResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateFunctionError::from_response(response))),
                 )
             }
         })

@@ -120,6 +120,40 @@ pub struct AssociateConfigurationItemsToApplicationRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct AssociateConfigurationItemsToApplicationResponse {}
 
+/// <p>Error messages returned for each import task that you deleted as a response for this command.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DiscoveryBatchDeleteImportDataError {
+    /// <p>The type of error that occurred for a specific import task.</p>
+    #[serde(rename = "errorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+    /// <p>The description of the error that occurred for a specific import task.</p>
+    #[serde(rename = "errorDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_description: Option<String>,
+    /// <p>The unique import ID associated with the error that occurred.</p>
+    #[serde(rename = "importTaskId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub import_task_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct BatchDeleteImportDataRequest {
+    /// <p>The IDs for the import tasks that you want to delete.</p>
+    #[serde(rename = "importTaskIds")]
+    pub import_task_ids: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct BatchDeleteImportDataResponse {
+    /// <p>Error messages returned for each import task that you deleted as a response for this command.</p>
+    #[serde(rename = "errors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub errors: Option<Vec<DiscoveryBatchDeleteImportDataError>>,
+}
+
 /// <p>Tags for a configuration item. Tags are metadata that help you categorize IT assets.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -144,6 +178,44 @@ pub struct ConfigurationTag {
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+/// <p>A list of continuous export descriptions.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ContinuousExportDescription {
+    /// <p>The type of data collector used to gather this data (currently only offered for AGENT).</p>
+    #[serde(rename = "dataSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_source: Option<String>,
+    /// <p>The unique ID assigned to this export.</p>
+    #[serde(rename = "exportId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub export_id: Option<String>,
+    /// <p>The name of the s3 bucket where the export data parquet files are stored.</p>
+    #[serde(rename = "s3Bucket")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s_3_bucket: Option<String>,
+    /// <p><p>An object which describes how the data is stored.</p> <ul> <li> <p> <code>databaseName</code> - the name of the Glue database used to store the schema.</p> </li> </ul></p>
+    #[serde(rename = "schemaStorageConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_storage_config: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The timestamp representing when the continuous export was started.</p>
+    #[serde(rename = "startTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    /// <p><p>Describes the status of the export. Can be one of the following values:</p> <ul> <li> <p>START<em>IN</em>PROGRESS - setting up resources to start continuous export.</p> </li> <li> <p>START<em>FAILED - an error occurred setting up continuous export. To recover, call start-continuous-export again.</p> </li> <li> <p>ACTIVE - data is being exported to the customer bucket.</p> </li> <li> <p>ERROR - an error occurred during export. To fix the issue, call stop-continuous-export and start-continuous-export.</p> </li> <li> <p>STOP</em>IN<em>PROGRESS - stopping the export.</p> </li> <li> <p>STOP</em>FAILED - an error occurred stopping the export. To recover, call stop-continuous-export again.</p> </li> <li> <p>INACTIVE - the continuous export has been stopped. Data is no longer being exported to the customer bucket.</p> </li> </ul></p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p><p>Contains information about any errors that have occurred. This data type can have the following values:</p> <ul> <li> <p>ACCESS<em>DENIED - You don’t have permission to start Data Exploration in Amazon Athena. Contact your AWS administrator for help. For more information, see <a href="http://docs.aws.amazon.com/application-discovery/latest/userguide/setting-up.html">Setting Up AWS Application Discovery Service</a> in the Application Discovery Service User Guide.</p> </li> <li> <p>DELIVERY</em>STREAM<em>LIMIT</em>FAILURE - You reached the limit for Amazon Kinesis Data Firehose delivery streams. Reduce the number of streams or request a limit increase and try again. For more information, see <a href="http://docs.aws.amazon.com/streams/latest/dev/service-sizes-and-limits.html">Kinesis Data Streams Limits</a> in the Amazon Kinesis Data Streams Developer Guide.</p> </li> <li> <p>FIREHOSE<em>ROLE</em>MISSING - The Data Exploration feature is in an error state because your IAM User is missing the AWSApplicationDiscoveryServiceFirehose role. Turn on Data Exploration in Amazon Athena and try again. For more information, see <a href="http://docs.aws.amazon.com/application-discovery/latest/userguide/setting-up.html#setting-up-user-policy">Step 3: Provide Application Discovery Service Access to Non-Administrator Users by Attaching Policies</a> in the Application Discovery Service User Guide.</p> </li> <li> <p>FIREHOSE<em>STREAM</em>DOES<em>NOT</em>EXIST - The Data Exploration feature is in an error state because your IAM User is missing one or more of the Kinesis data delivery streams.</p> </li> <li> <p>INTERNAL<em>FAILURE - The Data Exploration feature is in an error state because of an internal failure. Try again later. If this problem persists, contact AWS Support.</p> </li> <li> <p>S3</em>BUCKET<em>LIMIT</em>FAILURE - You reached the limit for Amazon S3 buckets. Reduce the number of Amazon S3 buckets or request a limit increase and try again. For more information, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/BucketRestrictions.html">Bucket Restrictions and Limitations</a> in the Amazon Simple Storage Service Developer Guide.</p> </li> <li> <p>S3<em>NOT</em>SIGNED_UP - Your account is not signed up for the Amazon S3 service. You must sign up before you can use Amazon S3. You can sign up at the following URL: <a href="https://aws.amazon.com/s3">https://aws.amazon.com/s3</a>.</p> </li> </ul></p>
+    #[serde(rename = "statusDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_detail: Option<String>,
+    /// <p>The timestamp that represents when this continuous export was stopped.</p>
+    #[serde(rename = "stopTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stop_time: Option<f64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -310,16 +382,45 @@ pub struct DescribeConfigurationsResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
-pub struct DescribeExportConfigurationsRequest {
-    /// <p>A unique identifier that you can use to query the export status.</p>
+pub struct DescribeContinuousExportsRequest {
+    /// <p>The unique IDs assigned to the exports.</p>
     #[serde(rename = "exportIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub export_ids: Option<Vec<String>>,
-    /// <p>The maximum number of results that you want to display as a part of the query.</p>
+    /// <p>A number between 1 and 100 specifying the maximum number of continuous export descriptions returned.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>A token to get the next set of results. For example, if you specify 100 IDs for <code>DescribeExportConfigurationsRequest$exportIds</code> but set <code>DescribeExportConfigurationsRequest$maxResults</code> to 10, you get results in a set of 10. Use the token in the query to get the next set of 10.</p>
+    /// <p>The token from the previous call to <code>DescribeExportTasks</code>.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeContinuousExportsResponse {
+    /// <p>A list of continuous export descriptions.</p>
+    #[serde(rename = "descriptions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub descriptions: Option<Vec<ContinuousExportDescription>>,
+    /// <p>The token from the previous call to <code>DescribeExportTasks</code>.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeExportConfigurationsRequest {
+    /// <p>A list of continuous export ids to search for.</p>
+    #[serde(rename = "exportIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub export_ids: Option<Vec<String>>,
+    /// <p>A number between 1 and 100 specifying the maximum number of continuous export descriptions returned.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token from the previous call to describe-export-tasks.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -328,11 +429,11 @@ pub struct DescribeExportConfigurationsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeExportConfigurationsResponse {
-    /// <p>Returns export details. When the status is complete, the response includes a URL for an Amazon S3 bucket where you can view the data in a CSV file.</p>
+    /// <p><p/></p>
     #[serde(rename = "exportsInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub exports_info: Option<Vec<ExportInfo>>,
-    /// <p>A token to get the next set of results. For example, if you specify 100 IDs for <code>DescribeExportConfigurationsRequest$exportIds</code> but set <code>DescribeExportConfigurationsRequest$maxResults</code> to 10, you get results in a set of 10. Use the token in the query to get the next set of 10.</p>
+    /// <p>The token from the previous call to describe-export-tasks.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -369,6 +470,35 @@ pub struct DescribeExportTasksResponse {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeImportTasksRequest {
+    /// <p>An array of name-value pairs that you provide to filter the results for the <code>DescribeImportTask</code> request to a specific subset of results. Currently, wildcard values aren't supported for filters.</p>
+    #[serde(rename = "filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<ImportTaskFilter>>,
+    /// <p>The maximum number of results that you want this request to return, up to 100.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token to request a specific page of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeImportTasksResponse {
+    /// <p>The token to request the next page of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A returned array of import tasks that match any applied filters, up to the specified number of maximum results.</p>
+    #[serde(rename = "tasks")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tasks: Option<Vec<ImportTask>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -517,6 +647,77 @@ pub struct GetDiscoverySummaryResponse {
     pub servers_mappedto_tags: Option<i64>,
 }
 
+/// <p>An array of information related to the import task request that includes status information, times, IDs, the Amazon S3 Object URL for the import file, and more.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ImportTask {
+    /// <p>The total number of application records in the import file that failed to be imported.</p>
+    #[serde(rename = "applicationImportFailure")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_import_failure: Option<i64>,
+    /// <p>The total number of application records in the import file that were successfully imported.</p>
+    #[serde(rename = "applicationImportSuccess")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_import_success: Option<i64>,
+    /// <p>A unique token used to prevent the same import request from occurring more than once. If you didn't provide a token, a token was automatically generated when the import task request was sent.</p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p>A link to a compressed archive folder (in the ZIP format) that contains an error log and a file of failed records. You can use these two files to quickly identify records that failed, why they failed, and correct those records. Afterward, you can upload the corrected file to your Amazon S3 bucket and create another import task request.</p> <p>This field also includes authorization information so you can confirm the authenticity of the compressed archive before you download it.</p> <p>If some records failed to be imported we recommend that you correct the records in the failed entries file and then imports that failed entries file. This prevents you frmo having to correct and update the larger original file and attempt importing it again.</p>
+    #[serde(rename = "errorsAndFailedEntriesZip")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub errors_and_failed_entries_zip: Option<String>,
+    /// <p>The time that the import task request finished, presented in the Unix time stamp format.</p>
+    #[serde(rename = "importCompletionTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub import_completion_time: Option<f64>,
+    /// <p>The time that the import task request was deleted, presented in the Unix time stamp format.</p>
+    #[serde(rename = "importDeletedTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub import_deleted_time: Option<f64>,
+    /// <p>The time that the import task request was made, presented in the Unix time stamp format.</p>
+    #[serde(rename = "importRequestTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub import_request_time: Option<f64>,
+    /// <p>The unique ID for a specific import task. These IDs aren't globally unique, but they are unique within an AWS account.</p>
+    #[serde(rename = "importTaskId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub import_task_id: Option<String>,
+    /// <p>The URL for your import file that you've uploaded to Amazon S3.</p>
+    #[serde(rename = "importUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub import_url: Option<String>,
+    /// <p>A descriptive name for an import task. You can use this name to filter future requests related to this import task, such as identifying applications and servers that were included in this import task. We recommend that you use a meaningful name for each import task.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The total number of server records in the import file that failed to be imported.</p>
+    #[serde(rename = "serverImportFailure")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server_import_failure: Option<i64>,
+    /// <p>The total number of server records in the import file that were successfully imported.</p>
+    #[serde(rename = "serverImportSuccess")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server_import_success: Option<i64>,
+    /// <p>The status of the import task. An import can have the status of <code>IMPORT_COMPLETE</code> and still have some records fail to import from the overall request. More information can be found in the downloadable archive defined in the <code>errorsAndFailedEntriesZip</code> field, or in the Migration Hub management console.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+}
+
+/// <p><p>A name-values pair of elements you can use to filter the results when querying your import tasks. Currently, wildcards are not supported for filters.</p> <note> <p>When filtering by import status, all other filter values are ignored.</p> </note></p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ImportTaskFilter {
+    /// <p>The name, status, or import task ID for a specific import task.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>An array of strings that you can provide to match against a specific name, status, or import task ID to filter the results for your import task queries.</p>
+    #[serde(rename = "values")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub values: Option<Vec<String>>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListConfigurationsRequest {
     /// <p>A valid configuration identified by Application Discovery Service. </p>
@@ -628,6 +829,34 @@ pub struct OrderByElement {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StartContinuousExportRequest {}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StartContinuousExportResponse {
+    /// <p>The type of data collector used to gather this data (currently only offered for AGENT).</p>
+    #[serde(rename = "dataSource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_source: Option<String>,
+    /// <p>The unique ID assigned to this export.</p>
+    #[serde(rename = "exportId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub export_id: Option<String>,
+    /// <p>The name of the s3 bucket where the export data parquet files are stored.</p>
+    #[serde(rename = "s3Bucket")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s_3_bucket: Option<String>,
+    /// <p><p>A dictionary which describes how the data is stored.</p> <ul> <li> <p> <code>databaseName</code> - the name of the Glue database used to store the schema.</p> </li> </ul></p>
+    #[serde(rename = "schemaStorageConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schema_storage_config: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The timestamp representing when the continuous export was started.</p>
+    #[serde(rename = "startTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartDataCollectionByAgentIdsRequest {
     /// <p>The IDs of the agents or connectors from which to start collecting data. If you send a request to an agent/connector ID that you do not have permission to contact, according to your AWS account, the service does not throw an exception. Instead, it returns the error in the <i>Description</i> field. If you send a request to multiple agents/connectors and you do not have permission to contact some of those agents/connectors, the system does not throw an exception. Instead, the system shows <code>Failed</code> in the <i>Description</i> field.</p>
     #[serde(rename = "agentIds")]
@@ -670,6 +899,49 @@ pub struct StartExportTaskResponse {
     #[serde(rename = "exportId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub export_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StartImportTaskRequest {
+    /// <p>Optional. A unique token that you can provide to prevent the same import request from occurring more than once. If you don't provide a token, a token is automatically generated.</p> <p>Sending more than one <code>StartImportTask</code> request with the same client request token will return information about the original import task with that client request token.</p>
+    #[serde(rename = "clientRequestToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_request_token: Option<String>,
+    /// <p><p>The URL for your import file that you&#39;ve uploaded to Amazon S3.</p> <note> <p>If you&#39;re using the AWS CLI, this URL is structured as follows: <code>s3://BucketName/ImportFileName.CSV</code> </p> </note></p>
+    #[serde(rename = "importUrl")]
+    pub import_url: String,
+    /// <p>A descriptive name for this request. You can use this name to filter future requests related to this import task, such as identifying applications and servers that were included in this import task. We recommend that you use a meaningful name for each import task.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StartImportTaskResponse {
+    /// <p>An array of information related to the import task request including status information, times, IDs, the Amazon S3 Object URL for the import file, and more. </p>
+    #[serde(rename = "task")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task: Option<ImportTask>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StopContinuousExportRequest {
+    /// <p>The unique ID assigned to this export.</p>
+    #[serde(rename = "exportId")]
+    pub export_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StopContinuousExportResponse {
+    /// <p>Timestamp that represents when this continuous export started collecting data.</p>
+    #[serde(rename = "startTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+    /// <p>Timestamp that represents when this continuous export was stopped.</p>
+    #[serde(rename = "stopTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stop_time: Option<f64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -842,6 +1114,106 @@ impl Error for AssociateConfigurationItemsToApplicationError {
             }
             AssociateConfigurationItemsToApplicationError::ParseError(ref cause) => cause,
             AssociateConfigurationItemsToApplicationError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by BatchDeleteImportData
+#[derive(Debug, PartialEq)]
+pub enum BatchDeleteImportDataError {
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    AuthorizationError(String),
+    /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
+    InvalidParameterValue(String),
+    /// <p>The server experienced an internal error. Try again.</p>
+    ServerInternalError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl BatchDeleteImportDataError {
+    pub fn from_response(res: BufferedHttpResponse) -> BatchDeleteImportDataError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AuthorizationErrorException" => {
+                    return BatchDeleteImportDataError::AuthorizationError(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidParameterValueException" => {
+                    return BatchDeleteImportDataError::InvalidParameterValue(String::from(
+                        error_message,
+                    ));
+                }
+                "ServerInternalErrorException" => {
+                    return BatchDeleteImportDataError::ServerInternalError(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return BatchDeleteImportDataError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return BatchDeleteImportDataError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for BatchDeleteImportDataError {
+    fn from(err: serde_json::error::Error) -> BatchDeleteImportDataError {
+        BatchDeleteImportDataError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for BatchDeleteImportDataError {
+    fn from(err: CredentialsError) -> BatchDeleteImportDataError {
+        BatchDeleteImportDataError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for BatchDeleteImportDataError {
+    fn from(err: HttpDispatchError) -> BatchDeleteImportDataError {
+        BatchDeleteImportDataError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for BatchDeleteImportDataError {
+    fn from(err: io::Error) -> BatchDeleteImportDataError {
+        BatchDeleteImportDataError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for BatchDeleteImportDataError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for BatchDeleteImportDataError {
+    fn description(&self) -> &str {
+        match *self {
+            BatchDeleteImportDataError::AuthorizationError(ref cause) => cause,
+            BatchDeleteImportDataError::InvalidParameterValue(ref cause) => cause,
+            BatchDeleteImportDataError::ServerInternalError(ref cause) => cause,
+            BatchDeleteImportDataError::Validation(ref cause) => cause,
+            BatchDeleteImportDataError::Credentials(ref err) => err.description(),
+            BatchDeleteImportDataError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            BatchDeleteImportDataError::ParseError(ref cause) => cause,
+            BatchDeleteImportDataError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1463,6 +1835,130 @@ impl Error for DescribeConfigurationsError {
         }
     }
 }
+/// Errors returned by DescribeContinuousExports
+#[derive(Debug, PartialEq)]
+pub enum DescribeContinuousExportsError {
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    AuthorizationError(String),
+    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
+    InvalidParameter(String),
+    /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
+    InvalidParameterValue(String),
+    /// <p>This operation is not permitted.</p>
+    OperationNotPermitted(String),
+    /// <p>The specified configuration ID was not located. Verify the configuration ID and try again.</p>
+    ResourceNotFound(String),
+    /// <p>The server experienced an internal error. Try again.</p>
+    ServerInternalError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DescribeContinuousExportsError {
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeContinuousExportsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AuthorizationErrorException" => {
+                    return DescribeContinuousExportsError::AuthorizationError(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidParameterException" => {
+                    return DescribeContinuousExportsError::InvalidParameter(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidParameterValueException" => {
+                    return DescribeContinuousExportsError::InvalidParameterValue(String::from(
+                        error_message,
+                    ));
+                }
+                "OperationNotPermittedException" => {
+                    return DescribeContinuousExportsError::OperationNotPermitted(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceNotFoundException" => {
+                    return DescribeContinuousExportsError::ResourceNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "ServerInternalErrorException" => {
+                    return DescribeContinuousExportsError::ServerInternalError(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return DescribeContinuousExportsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DescribeContinuousExportsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeContinuousExportsError {
+    fn from(err: serde_json::error::Error) -> DescribeContinuousExportsError {
+        DescribeContinuousExportsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeContinuousExportsError {
+    fn from(err: CredentialsError) -> DescribeContinuousExportsError {
+        DescribeContinuousExportsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeContinuousExportsError {
+    fn from(err: HttpDispatchError) -> DescribeContinuousExportsError {
+        DescribeContinuousExportsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeContinuousExportsError {
+    fn from(err: io::Error) -> DescribeContinuousExportsError {
+        DescribeContinuousExportsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeContinuousExportsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeContinuousExportsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeContinuousExportsError::AuthorizationError(ref cause) => cause,
+            DescribeContinuousExportsError::InvalidParameter(ref cause) => cause,
+            DescribeContinuousExportsError::InvalidParameterValue(ref cause) => cause,
+            DescribeContinuousExportsError::OperationNotPermitted(ref cause) => cause,
+            DescribeContinuousExportsError::ResourceNotFound(ref cause) => cause,
+            DescribeContinuousExportsError::ServerInternalError(ref cause) => cause,
+            DescribeContinuousExportsError::Validation(ref cause) => cause,
+            DescribeContinuousExportsError::Credentials(ref err) => err.description(),
+            DescribeContinuousExportsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeContinuousExportsError::ParseError(ref cause) => cause,
+            DescribeContinuousExportsError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by DescribeExportConfigurations
 #[derive(Debug, PartialEq)]
 pub enum DescribeExportConfigurationsError {
@@ -1680,6 +2176,104 @@ impl Error for DescribeExportTasksError {
             }
             DescribeExportTasksError::ParseError(ref cause) => cause,
             DescribeExportTasksError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DescribeImportTasks
+#[derive(Debug, PartialEq)]
+pub enum DescribeImportTasksError {
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    AuthorizationError(String),
+    /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
+    InvalidParameterValue(String),
+    /// <p>The server experienced an internal error. Try again.</p>
+    ServerInternalError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DescribeImportTasksError {
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeImportTasksError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AuthorizationErrorException" => {
+                    return DescribeImportTasksError::AuthorizationError(String::from(error_message));
+                }
+                "InvalidParameterValueException" => {
+                    return DescribeImportTasksError::InvalidParameterValue(String::from(
+                        error_message,
+                    ));
+                }
+                "ServerInternalErrorException" => {
+                    return DescribeImportTasksError::ServerInternalError(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return DescribeImportTasksError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DescribeImportTasksError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeImportTasksError {
+    fn from(err: serde_json::error::Error) -> DescribeImportTasksError {
+        DescribeImportTasksError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeImportTasksError {
+    fn from(err: CredentialsError) -> DescribeImportTasksError {
+        DescribeImportTasksError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeImportTasksError {
+    fn from(err: HttpDispatchError) -> DescribeImportTasksError {
+        DescribeImportTasksError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeImportTasksError {
+    fn from(err: io::Error) -> DescribeImportTasksError {
+        DescribeImportTasksError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeImportTasksError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeImportTasksError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeImportTasksError::AuthorizationError(ref cause) => cause,
+            DescribeImportTasksError::InvalidParameterValue(ref cause) => cause,
+            DescribeImportTasksError::ServerInternalError(ref cause) => cause,
+            DescribeImportTasksError::Validation(ref cause) => cause,
+            DescribeImportTasksError::Credentials(ref err) => err.description(),
+            DescribeImportTasksError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeImportTasksError::ParseError(ref cause) => cause,
+            DescribeImportTasksError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2343,6 +2937,132 @@ impl Error for ListServerNeighborsError {
         }
     }
 }
+/// Errors returned by StartContinuousExport
+#[derive(Debug, PartialEq)]
+pub enum StartContinuousExportError {
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    AuthorizationError(String),
+    /// <p><p/></p>
+    ConflictError(String),
+    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
+    InvalidParameter(String),
+    /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
+    InvalidParameterValue(String),
+    /// <p>This operation is not permitted.</p>
+    OperationNotPermitted(String),
+    /// <p>This issue occurs when the same <code>clientRequestToken</code> is used with the <code>StartImportTask</code> action, but with different parameters. For example, you use the same request token but have two different import URLs, you can encounter this issue. If the import tasks are meant to be different, use a different <code>clientRequestToken</code>, and try again.</p>
+    ResourceInUse(String),
+    /// <p>The server experienced an internal error. Try again.</p>
+    ServerInternalError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl StartContinuousExportError {
+    pub fn from_response(res: BufferedHttpResponse) -> StartContinuousExportError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AuthorizationErrorException" => {
+                    return StartContinuousExportError::AuthorizationError(String::from(
+                        error_message,
+                    ));
+                }
+                "ConflictErrorException" => {
+                    return StartContinuousExportError::ConflictError(String::from(error_message));
+                }
+                "InvalidParameterException" => {
+                    return StartContinuousExportError::InvalidParameter(String::from(error_message));
+                }
+                "InvalidParameterValueException" => {
+                    return StartContinuousExportError::InvalidParameterValue(String::from(
+                        error_message,
+                    ));
+                }
+                "OperationNotPermittedException" => {
+                    return StartContinuousExportError::OperationNotPermitted(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceInUseException" => {
+                    return StartContinuousExportError::ResourceInUse(String::from(error_message));
+                }
+                "ServerInternalErrorException" => {
+                    return StartContinuousExportError::ServerInternalError(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return StartContinuousExportError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return StartContinuousExportError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for StartContinuousExportError {
+    fn from(err: serde_json::error::Error) -> StartContinuousExportError {
+        StartContinuousExportError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for StartContinuousExportError {
+    fn from(err: CredentialsError) -> StartContinuousExportError {
+        StartContinuousExportError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for StartContinuousExportError {
+    fn from(err: HttpDispatchError) -> StartContinuousExportError {
+        StartContinuousExportError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StartContinuousExportError {
+    fn from(err: io::Error) -> StartContinuousExportError {
+        StartContinuousExportError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for StartContinuousExportError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartContinuousExportError {
+    fn description(&self) -> &str {
+        match *self {
+            StartContinuousExportError::AuthorizationError(ref cause) => cause,
+            StartContinuousExportError::ConflictError(ref cause) => cause,
+            StartContinuousExportError::InvalidParameter(ref cause) => cause,
+            StartContinuousExportError::InvalidParameterValue(ref cause) => cause,
+            StartContinuousExportError::OperationNotPermitted(ref cause) => cause,
+            StartContinuousExportError::ResourceInUse(ref cause) => cause,
+            StartContinuousExportError::ServerInternalError(ref cause) => cause,
+            StartContinuousExportError::Validation(ref cause) => cause,
+            StartContinuousExportError::Credentials(ref err) => err.description(),
+            StartContinuousExportError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            StartContinuousExportError::ParseError(ref cause) => cause,
+            StartContinuousExportError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by StartDataCollectionByAgentIds
 #[derive(Debug, PartialEq)]
 pub enum StartDataCollectionByAgentIdsError {
@@ -2552,6 +3272,230 @@ impl Error for StartExportTaskError {
             StartExportTaskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             StartExportTaskError::ParseError(ref cause) => cause,
             StartExportTaskError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by StartImportTask
+#[derive(Debug, PartialEq)]
+pub enum StartImportTaskError {
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    AuthorizationError(String),
+    /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
+    InvalidParameterValue(String),
+    /// <p>This issue occurs when the same <code>clientRequestToken</code> is used with the <code>StartImportTask</code> action, but with different parameters. For example, you use the same request token but have two different import URLs, you can encounter this issue. If the import tasks are meant to be different, use a different <code>clientRequestToken</code>, and try again.</p>
+    ResourceInUse(String),
+    /// <p>The server experienced an internal error. Try again.</p>
+    ServerInternalError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl StartImportTaskError {
+    pub fn from_response(res: BufferedHttpResponse) -> StartImportTaskError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AuthorizationErrorException" => {
+                    return StartImportTaskError::AuthorizationError(String::from(error_message));
+                }
+                "InvalidParameterValueException" => {
+                    return StartImportTaskError::InvalidParameterValue(String::from(error_message));
+                }
+                "ResourceInUseException" => {
+                    return StartImportTaskError::ResourceInUse(String::from(error_message));
+                }
+                "ServerInternalErrorException" => {
+                    return StartImportTaskError::ServerInternalError(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return StartImportTaskError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return StartImportTaskError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for StartImportTaskError {
+    fn from(err: serde_json::error::Error) -> StartImportTaskError {
+        StartImportTaskError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for StartImportTaskError {
+    fn from(err: CredentialsError) -> StartImportTaskError {
+        StartImportTaskError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for StartImportTaskError {
+    fn from(err: HttpDispatchError) -> StartImportTaskError {
+        StartImportTaskError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StartImportTaskError {
+    fn from(err: io::Error) -> StartImportTaskError {
+        StartImportTaskError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for StartImportTaskError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartImportTaskError {
+    fn description(&self) -> &str {
+        match *self {
+            StartImportTaskError::AuthorizationError(ref cause) => cause,
+            StartImportTaskError::InvalidParameterValue(ref cause) => cause,
+            StartImportTaskError::ResourceInUse(ref cause) => cause,
+            StartImportTaskError::ServerInternalError(ref cause) => cause,
+            StartImportTaskError::Validation(ref cause) => cause,
+            StartImportTaskError::Credentials(ref err) => err.description(),
+            StartImportTaskError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            StartImportTaskError::ParseError(ref cause) => cause,
+            StartImportTaskError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by StopContinuousExport
+#[derive(Debug, PartialEq)]
+pub enum StopContinuousExportError {
+    /// <p>The AWS user account does not have permission to perform the action. Check the IAM policy associated with this account.</p>
+    AuthorizationError(String),
+    /// <p>One or more parameters are not valid. Verify the parameters and try again.</p>
+    InvalidParameter(String),
+    /// <p>The value of one or more parameters are either invalid or out of range. Verify the parameter values and try again.</p>
+    InvalidParameterValue(String),
+    /// <p>This operation is not permitted.</p>
+    OperationNotPermitted(String),
+    /// <p>This issue occurs when the same <code>clientRequestToken</code> is used with the <code>StartImportTask</code> action, but with different parameters. For example, you use the same request token but have two different import URLs, you can encounter this issue. If the import tasks are meant to be different, use a different <code>clientRequestToken</code>, and try again.</p>
+    ResourceInUse(String),
+    /// <p>The specified configuration ID was not located. Verify the configuration ID and try again.</p>
+    ResourceNotFound(String),
+    /// <p>The server experienced an internal error. Try again.</p>
+    ServerInternalError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl StopContinuousExportError {
+    pub fn from_response(res: BufferedHttpResponse) -> StopContinuousExportError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AuthorizationErrorException" => {
+                    return StopContinuousExportError::AuthorizationError(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidParameterException" => {
+                    return StopContinuousExportError::InvalidParameter(String::from(error_message));
+                }
+                "InvalidParameterValueException" => {
+                    return StopContinuousExportError::InvalidParameterValue(String::from(
+                        error_message,
+                    ));
+                }
+                "OperationNotPermittedException" => {
+                    return StopContinuousExportError::OperationNotPermitted(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceInUseException" => {
+                    return StopContinuousExportError::ResourceInUse(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return StopContinuousExportError::ResourceNotFound(String::from(error_message));
+                }
+                "ServerInternalErrorException" => {
+                    return StopContinuousExportError::ServerInternalError(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return StopContinuousExportError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return StopContinuousExportError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for StopContinuousExportError {
+    fn from(err: serde_json::error::Error) -> StopContinuousExportError {
+        StopContinuousExportError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for StopContinuousExportError {
+    fn from(err: CredentialsError) -> StopContinuousExportError {
+        StopContinuousExportError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for StopContinuousExportError {
+    fn from(err: HttpDispatchError) -> StopContinuousExportError {
+        StopContinuousExportError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StopContinuousExportError {
+    fn from(err: io::Error) -> StopContinuousExportError {
+        StopContinuousExportError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for StopContinuousExportError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StopContinuousExportError {
+    fn description(&self) -> &str {
+        match *self {
+            StopContinuousExportError::AuthorizationError(ref cause) => cause,
+            StopContinuousExportError::InvalidParameter(ref cause) => cause,
+            StopContinuousExportError::InvalidParameterValue(ref cause) => cause,
+            StopContinuousExportError::OperationNotPermitted(ref cause) => cause,
+            StopContinuousExportError::ResourceInUse(ref cause) => cause,
+            StopContinuousExportError::ResourceNotFound(ref cause) => cause,
+            StopContinuousExportError::ServerInternalError(ref cause) => cause,
+            StopContinuousExportError::Validation(ref cause) => cause,
+            StopContinuousExportError::Credentials(ref err) => err.description(),
+            StopContinuousExportError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            StopContinuousExportError::ParseError(ref cause) => cause,
+            StopContinuousExportError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2776,6 +3720,12 @@ pub trait Discovery {
         AssociateConfigurationItemsToApplicationError,
     >;
 
+    /// <p>Deletes one or more import tasks, each identified by their import ID. Each import task has a number of records that can identify servers or applications. </p> <p>AWS Application Discovery Service has built-in matching logic that will identify when discovered servers match existing entries that you've previously discovered, the information for the already-existing discovered server is updated. When you delete an import task that contains records that were used to match, the information in those matched records that comes from the deleted records will also be deleted.</p>
+    fn batch_delete_import_data(
+        &self,
+        input: BatchDeleteImportDataRequest,
+    ) -> RusotoFuture<BatchDeleteImportDataResponse, BatchDeleteImportDataError>;
+
     /// <p>Creates an application with the given name and description.</p>
     fn create_application(
         &self,
@@ -2800,19 +3750,25 @@ pub trait Discovery {
         input: DeleteTagsRequest,
     ) -> RusotoFuture<DeleteTagsResponse, DeleteTagsError>;
 
-    /// <p>Lists agents or the Connector by ID or lists all agents/Connectors associated with your user account if you did not specify an ID.</p>
+    /// <p>Lists agents or connectors as specified by ID or other filters. All agents/connectors associated with your user account can be listed if you call <code>DescribeAgents</code> as is without passing any parameters.</p>
     fn describe_agents(
         &self,
         input: DescribeAgentsRequest,
     ) -> RusotoFuture<DescribeAgentsResponse, DescribeAgentsError>;
 
-    /// <p>Retrieves attributes for a list of configuration item IDs. All of the supplied IDs must be for the same asset type (server, application, process, or connection). Output fields are specific to the asset type selected. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, such as host name, operating system, and number of network cards.</p> <p>For a complete list of outputs for each asset type, see <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#DescribeConfigurations">Using the DescribeConfigurations Action</a>.</p>
+    /// <p><p>Retrieves attributes for a list of configuration item IDs.</p> <note> <p>All of the supplied IDs must be for the same asset type from one of the following:</p> <ul> <li> <p>server</p> </li> <li> <p>application</p> </li> <li> <p>process</p> </li> <li> <p>connection</p> </li> </ul> <p>Output fields are specific to the asset type specified. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, such as host name, operating system, number of network cards, etc.</p> <p>For a complete list of outputs for each asset type, see <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#DescribeConfigurations">Using the DescribeConfigurations Action</a>.</p> </note></p>
     fn describe_configurations(
         &self,
         input: DescribeConfigurationsRequest,
     ) -> RusotoFuture<DescribeConfigurationsResponse, DescribeConfigurationsError>;
 
-    /// <p>Deprecated. Use <code>DescribeExportTasks</code> instead.</p> <p>Retrieves the status of a given export process. You can retrieve status from a maximum of 100 processes.</p>
+    /// <p>Lists exports as specified by ID. All continuous exports associated with your user account can be listed if you call <code>DescribeContinuousExports</code> as is without passing any parameters.</p>
+    fn describe_continuous_exports(
+        &self,
+        input: DescribeContinuousExportsRequest,
+    ) -> RusotoFuture<DescribeContinuousExportsResponse, DescribeContinuousExportsError>;
+
+    /// <p> <code>DescribeExportConfigurations</code> is deprecated.</p> <p>Use instead <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/API_DescribeExportTasks.html"> <code>DescribeExportTasks</code> </a>.</p>
     fn describe_export_configurations(
         &self,
         input: DescribeExportConfigurationsRequest,
@@ -2824,7 +3780,13 @@ pub trait Discovery {
         input: DescribeExportTasksRequest,
     ) -> RusotoFuture<DescribeExportTasksResponse, DescribeExportTasksError>;
 
-    /// <p>Retrieves a list of configuration items that are tagged with a specific tag. Or retrieves a list of all tags assigned to a specific configuration item.</p>
+    /// <p>Returns an array of import tasks for your account, including status information, times, IDs, the Amazon S3 Object URL for the import file, and more.</p>
+    fn describe_import_tasks(
+        &self,
+        input: DescribeImportTasksRequest,
+    ) -> RusotoFuture<DescribeImportTasksResponse, DescribeImportTasksError>;
+
+    /// <p>Retrieves a list of configuration items that have tags as specified by the key-value pairs, name and value, passed to the optional parameter <code>filters</code>.</p> <p>There are three valid tag filter names:</p> <ul> <li> <p>tagKey</p> </li> <li> <p>tagValue</p> </li> <li> <p>configurationId</p> </li> </ul> <p>Also, all configuration items associated with your user account that have tags can be listed if you call <code>DescribeTags</code> as is without passing any parameters.</p>
     fn describe_tags(
         &self,
         input: DescribeTagsRequest,
@@ -2844,12 +3806,12 @@ pub trait Discovery {
         &self,
     ) -> RusotoFuture<ExportConfigurationsResponse, ExportConfigurationsError>;
 
-    /// <p>Retrieves a short summary of discovered assets.</p>
+    /// <p>Retrieves a short summary of discovered assets.</p> <p>This API operation takes no request parameters and is called as is at the command prompt as shown in the example.</p>
     fn get_discovery_summary(
         &self,
     ) -> RusotoFuture<GetDiscoverySummaryResponse, GetDiscoverySummaryError>;
 
-    /// <p>Retrieves a list of configuration items according to criteria that you specify in a filter. The filter criteria identifies the relationship requirements.</p>
+    /// <p>Retrieves a list of configuration items as specified by the value passed to the required paramater <code>configurationType</code>. Optional filtering may be applied to refine search results.</p>
     fn list_configurations(
         &self,
         input: ListConfigurationsRequest,
@@ -2860,6 +3822,11 @@ pub trait Discovery {
         &self,
         input: ListServerNeighborsRequest,
     ) -> RusotoFuture<ListServerNeighborsResponse, ListServerNeighborsError>;
+
+    /// <p>Start the continuous flow of agent's discovered data into Amazon Athena.</p>
+    fn start_continuous_export(
+        &self,
+    ) -> RusotoFuture<StartContinuousExportResponse, StartContinuousExportError>;
 
     /// <p>Instructs the specified agents or connectors to start collecting data.</p>
     fn start_data_collection_by_agent_ids(
@@ -2872,6 +3839,18 @@ pub trait Discovery {
         &self,
         input: StartExportTaskRequest,
     ) -> RusotoFuture<StartExportTaskResponse, StartExportTaskError>;
+
+    /// <p><p>Starts an import task, which allows you to import details of your on-premises environment directly into AWS without having to use the Application Discovery Service (ADS) tools such as the Discovery Connector or Discovery Agent. This gives you the option to perform migration assessment and planning directly from your imported data, including the ability to group your devices as applications and track their migration status.</p> <p>To start an import request, do this:</p> <ol> <li> <p>Download the specially formatted comma separated value (CSV) import template, which you can find here: <a href="https://s3-us-west-2.amazonaws.com/templates-7cffcf56-bd96-4b1c-b45b-a5b42f282e46/import_template.csv">https://s3-us-west-2.amazonaws.com/templates-7cffcf56-bd96-4b1c-b45b-a5b42f282e46/import<em>template.csv</a>.</p> </li> <li> <p>Fill out the template with your server and application data.</p> </li> <li> <p>Upload your import file to an Amazon S3 bucket, and make a note of it&#39;s Object URL. Your import file must be in the CSV format.</p> </li> <li> <p>Use the console or the <code>StartImportTask</code> command with the AWS CLI or one of the AWS SDKs to import the records from your file.</p> </li> </ol> <p>For more information, including step-by-step procedures, see <a href="https://docs.aws.amazon.com/application-discovery/latest/userguide/discovery-import.html">Migration Hub Import</a> in the <i>AWS Application Discovery Service User Guide</i>.</p> <note> <p>There are limits to the number of import tasks you can create (and delete) in an AWS account. For more information, see &lt;a href=&quot;https://docs.aws.amazon.com/application-discovery/latest/userguide/ads</em>service_limits.html&quot;&gt;AWS Application Discovery Service Limits</a> in the <i>AWS Application Discovery Service User Guide</i>.</p> </note></p>
+    fn start_import_task(
+        &self,
+        input: StartImportTaskRequest,
+    ) -> RusotoFuture<StartImportTaskResponse, StartImportTaskError>;
+
+    /// <p>Stop the continuous flow of agent's discovered data into Amazon Athena.</p>
+    fn stop_continuous_export(
+        &self,
+        input: StopContinuousExportRequest,
+    ) -> RusotoFuture<StopContinuousExportResponse, StopContinuousExportError>;
 
     /// <p>Instructs the specified agents or connectors to stop collecting data.</p>
     fn stop_data_collection_by_agent_ids(
@@ -2958,6 +3937,45 @@ impl Discovery for DiscoveryClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AssociateConfigurationItemsToApplicationError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p>Deletes one or more import tasks, each identified by their import ID. Each import task has a number of records that can identify servers or applications. </p> <p>AWS Application Discovery Service has built-in matching logic that will identify when discovered servers match existing entries that you've previously discovered, the information for the already-existing discovered server is updated. When you delete an import task that contains records that were used to match, the information in those matched records that comes from the deleted records will also be deleted.</p>
+    fn batch_delete_import_data(
+        &self,
+        input: BatchDeleteImportDataRequest,
+    ) -> RusotoFuture<BatchDeleteImportDataResponse, BatchDeleteImportDataError> {
+        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSPoseidonService_V2015_11_01.BatchDeleteImportData",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<BatchDeleteImportDataResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(BatchDeleteImportDataError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -3116,7 +4134,7 @@ impl Discovery for DiscoveryClient {
         })
     }
 
-    /// <p>Lists agents or the Connector by ID or lists all agents/Connectors associated with your user account if you did not specify an ID.</p>
+    /// <p>Lists agents or connectors as specified by ID or other filters. All agents/connectors associated with your user account can be listed if you call <code>DescribeAgents</code> as is without passing any parameters.</p>
     fn describe_agents(
         &self,
         input: DescribeAgentsRequest,
@@ -3156,7 +4174,7 @@ impl Discovery for DiscoveryClient {
         })
     }
 
-    /// <p>Retrieves attributes for a list of configuration item IDs. All of the supplied IDs must be for the same asset type (server, application, process, or connection). Output fields are specific to the asset type selected. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, such as host name, operating system, and number of network cards.</p> <p>For a complete list of outputs for each asset type, see <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#DescribeConfigurations">Using the DescribeConfigurations Action</a>.</p>
+    /// <p><p>Retrieves attributes for a list of configuration item IDs.</p> <note> <p>All of the supplied IDs must be for the same asset type from one of the following:</p> <ul> <li> <p>server</p> </li> <li> <p>application</p> </li> <li> <p>process</p> </li> <li> <p>connection</p> </li> </ul> <p>Output fields are specific to the asset type specified. For example, the output for a <i>server</i> configuration item includes a list of attributes about the server, such as host name, operating system, number of network cards, etc.</p> <p>For a complete list of outputs for each asset type, see <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/discovery-api-queries.html#DescribeConfigurations">Using the DescribeConfigurations Action</a>.</p> </note></p>
     fn describe_configurations(
         &self,
         input: DescribeConfigurationsRequest,
@@ -3195,7 +4213,44 @@ impl Discovery for DiscoveryClient {
         })
     }
 
-    /// <p>Deprecated. Use <code>DescribeExportTasks</code> instead.</p> <p>Retrieves the status of a given export process. You can retrieve status from a maximum of 100 processes.</p>
+    /// <p>Lists exports as specified by ID. All continuous exports associated with your user account can be listed if you call <code>DescribeContinuousExports</code> as is without passing any parameters.</p>
+    fn describe_continuous_exports(
+        &self,
+        input: DescribeContinuousExportsRequest,
+    ) -> RusotoFuture<DescribeContinuousExportsResponse, DescribeContinuousExportsError> {
+        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSPoseidonService_V2015_11_01.DescribeContinuousExports",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeContinuousExportsResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeContinuousExportsError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p> <code>DescribeExportConfigurations</code> is deprecated.</p> <p>Use instead <a href="http://docs.aws.amazon.com/application-discovery/latest/APIReference/API_DescribeExportTasks.html"> <code>DescribeExportTasks</code> </a>.</p>
     fn describe_export_configurations(
         &self,
         input: DescribeExportConfigurationsRequest,
@@ -3271,7 +4326,46 @@ impl Discovery for DiscoveryClient {
         })
     }
 
-    /// <p>Retrieves a list of configuration items that are tagged with a specific tag. Or retrieves a list of all tags assigned to a specific configuration item.</p>
+    /// <p>Returns an array of import tasks for your account, including status information, times, IDs, the Amazon S3 Object URL for the import file, and more.</p>
+    fn describe_import_tasks(
+        &self,
+        input: DescribeImportTasksRequest,
+    ) -> RusotoFuture<DescribeImportTasksResponse, DescribeImportTasksError> {
+        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSPoseidonService_V2015_11_01.DescribeImportTasks",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeImportTasksResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeImportTasksError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Retrieves a list of configuration items that have tags as specified by the key-value pairs, name and value, passed to the optional parameter <code>filters</code>.</p> <p>There are three valid tag filter names:</p> <ul> <li> <p>tagKey</p> </li> <li> <p>tagValue</p> </li> <li> <p>configurationId</p> </li> </ul> <p>Also, all configuration items associated with your user account that have tags can be listed if you call <code>DescribeTags</code> as is without passing any parameters.</p>
     fn describe_tags(
         &self,
         input: DescribeTagsRequest,
@@ -3388,7 +4482,7 @@ impl Discovery for DiscoveryClient {
         })
     }
 
-    /// <p>Retrieves a short summary of discovered assets.</p>
+    /// <p>Retrieves a short summary of discovered assets.</p> <p>This API operation takes no request parameters and is called as is at the command prompt as shown in the example.</p>
     fn get_discovery_summary(
         &self,
     ) -> RusotoFuture<GetDiscoverySummaryResponse, GetDiscoverySummaryError> {
@@ -3425,7 +4519,7 @@ impl Discovery for DiscoveryClient {
         })
     }
 
-    /// <p>Retrieves a list of configuration items according to criteria that you specify in a filter. The filter criteria identifies the relationship requirements.</p>
+    /// <p>Retrieves a list of configuration items as specified by the value passed to the required paramater <code>configurationType</code>. Optional filtering may be applied to refine search results.</p>
     fn list_configurations(
         &self,
         input: ListConfigurationsRequest,
@@ -3498,6 +4592,43 @@ impl Discovery for DiscoveryClient {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
                         Err(ListServerNeighborsError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Start the continuous flow of agent's discovered data into Amazon Athena.</p>
+    fn start_continuous_export(
+        &self,
+    ) -> RusotoFuture<StartContinuousExportResponse, StartContinuousExportError> {
+        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSPoseidonService_V2015_11_01.StartContinuousExport",
+        );
+        request.set_payload(Some(b"{}".to_vec()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<StartContinuousExportResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(StartContinuousExportError::from_response(response))
                     }),
                 )
             }
@@ -3577,6 +4708,85 @@ impl Discovery for DiscoveryClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(StartExportTaskError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p><p>Starts an import task, which allows you to import details of your on-premises environment directly into AWS without having to use the Application Discovery Service (ADS) tools such as the Discovery Connector or Discovery Agent. This gives you the option to perform migration assessment and planning directly from your imported data, including the ability to group your devices as applications and track their migration status.</p> <p>To start an import request, do this:</p> <ol> <li> <p>Download the specially formatted comma separated value (CSV) import template, which you can find here: <a href="https://s3-us-west-2.amazonaws.com/templates-7cffcf56-bd96-4b1c-b45b-a5b42f282e46/import_template.csv">https://s3-us-west-2.amazonaws.com/templates-7cffcf56-bd96-4b1c-b45b-a5b42f282e46/import<em>template.csv</a>.</p> </li> <li> <p>Fill out the template with your server and application data.</p> </li> <li> <p>Upload your import file to an Amazon S3 bucket, and make a note of it&#39;s Object URL. Your import file must be in the CSV format.</p> </li> <li> <p>Use the console or the <code>StartImportTask</code> command with the AWS CLI or one of the AWS SDKs to import the records from your file.</p> </li> </ol> <p>For more information, including step-by-step procedures, see <a href="https://docs.aws.amazon.com/application-discovery/latest/userguide/discovery-import.html">Migration Hub Import</a> in the <i>AWS Application Discovery Service User Guide</i>.</p> <note> <p>There are limits to the number of import tasks you can create (and delete) in an AWS account. For more information, see &lt;a href=&quot;https://docs.aws.amazon.com/application-discovery/latest/userguide/ads</em>service_limits.html&quot;&gt;AWS Application Discovery Service Limits</a> in the <i>AWS Application Discovery Service User Guide</i>.</p> </note></p>
+    fn start_import_task(
+        &self,
+        input: StartImportTaskRequest,
+    ) -> RusotoFuture<StartImportTaskResponse, StartImportTaskError> {
+        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSPoseidonService_V2015_11_01.StartImportTask",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<StartImportTaskResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StartImportTaskError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Stop the continuous flow of agent's discovered data into Amazon Athena.</p>
+    fn stop_continuous_export(
+        &self,
+        input: StopContinuousExportRequest,
+    ) -> RusotoFuture<StopContinuousExportResponse, StopContinuousExportError> {
+        let mut request = SignedRequest::new("POST", "discovery", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWSPoseidonService_V2015_11_01.StopContinuousExport",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<StopContinuousExportResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(StopContinuousExportError::from_response(response))
+                    }),
                 )
             }
         })
