@@ -13,5 +13,5 @@ fn should_list_groups() {
 
     let result = client.list_groups(request).sync().unwrap();
     println!("{:#?}", result);
-    assert!(result.groups.is_some());
+    assert!(result.group_identifiers.is_some());
 }
