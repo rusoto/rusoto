@@ -17,11 +17,29 @@
     "protocolVersion": "2017-11-09",
     "baseTypeName": "AlexaForBusiness"
   },
+  "amplify": {
+    "version": "0.36.0",
+    "coreVersion": "0.36.0",
+    "protocolVersion": "2017-07-25",
+    "baseTypeName": "Amplify"
+  },
   "apigateway": {
     "version": "0.36.0",
     "coreVersion": "0.36.0",
     "protocolVersion": "2015-07-09",
     "baseTypeName": "ApiGateway"
+  },
+  "apigatewaymanagementapi": {
+    "version": "0.36.0",
+    "coreVersion": "0.36.0",
+    "protocolVersion": "2018-11-29",
+    "baseTypeName": "ApiGatewayManagementApi"
+  },
+  "apigatewayv2": {
+    "version": "0.36.0",
+    "coreVersion": "0.36.0",
+    "protocolVersion": "2018-11-29",
+    "baseTypeName": "ApiGatewayV2"
   },
   "application-autoscaling": {
     "version": "0.36.0",
@@ -631,6 +649,12 @@
     "coreVersion": "0.36.0",
     "protocolVersion": "2017-10-15",
     "baseTypeName": "Pricing"
+  },
+  "ram": {
+    "version": "0.36.0",
+    "coreVersion": "0.36.0",
+    "protocolVersion": "2018-01-04",
+    "baseTypeName": "Ram"
   },
   "rds": {
     "version": "0.36.0",
