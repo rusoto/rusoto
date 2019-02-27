@@ -540,7 +540,7 @@ mod tests {
     use std::path::Path;
 
     use futures::Future;
-    use test_utils::{is_secret_hidden_behind_asterisks, SECRET};
+    use test_utils::{is_secret_hidden_behind_asterisks, lock, ENV_MUTEX, SECRET};
 
     use super::*;
 
@@ -563,6 +563,7 @@ mod tests {
 
     #[test]
     fn profile_provider_finds_right_credentials_in_file() {
+        let _guard = lock(&ENV_MUTEX);
         let profile_provider = ProfileProvider::with_configuration(
             "tests/sample-data/multiple_profile_credentials",
             "foo",

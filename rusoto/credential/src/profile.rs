@@ -545,6 +545,7 @@ mod tests {
 
     #[test]
     fn profile_provider_happy_path() {
+        let _guard = lock(&ENV_MUTEX);
         let provider = ProfileProvider::with_configuration(
             "tests/sample-data/multiple_profile_credentials",
             "foo",
@@ -588,6 +589,7 @@ mod tests {
 
     #[test]
     fn profile_provider_bad_profile() {
+        let _guard = lock(&ENV_MUTEX);
         let provider = ProfileProvider::with_configuration(
             "tests/sample-data/multiple_profile_credentials",
             "not_a_profile",
