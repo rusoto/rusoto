@@ -164,23 +164,7 @@ fn new_request(uri: &str, env_var_name: &str) -> Result<Request<Body>, Credentia
 mod tests {
     use super::*;
     use std::env;
-    use std::sync::{Mutex, MutexGuard};
-
-    // cargo runs tests in parallel, which leads to race conditions when changing
-    // environment variables. Therefore we use a global mutex for all tests which
-    // rely on environment variables.
-    lazy_static! {
-        static ref ENV_MUTEX: Mutex<()> = Mutex::new(());
-    }
-
-    // As failed (panic) tests will poisen the global mutex, we use a helper which
-    // recovers from poisoned mutex.
-    fn lock<'a, T>(mutex: &'a Mutex<T>) -> MutexGuard<'a, T> {
-        match mutex.lock() {
-            Ok(guard) => guard,
-            Err(poisoned) => poisoned.into_inner(),
-        }
-    }
+    use test_utils::{lock, ENV_MUTEX};
 
     #[test]
     fn request_from_relative_uri() {

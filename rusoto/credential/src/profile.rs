@@ -350,24 +350,8 @@ mod tests {
     use std::path::Path;
 
     use super::*;
-    use std::sync::{Mutex, MutexGuard};
+    use test_utils::{lock, ENV_MUTEX};
     use {CredentialsError, ProvideAwsCredentials};
-
-    // cargo runs tests in parallel, which leads to race conditions when changing
-    // environment variables. Therefore we use a global mutex for all tests which
-    // rely on environment variables.
-    lazy_static! {
-        static ref ENV_MUTEX: Mutex<()> = Mutex::new(());
-    }
-
-    // As failed (panic) tests will poisen the global mutex, we use a helper which
-    // recovers from poisoned mutex.
-    fn lock<'a, T>(mutex: &'a Mutex<T>) -> MutexGuard<'a, T> {
-        match mutex.lock() {
-            Ok(guard) => guard,
-            Err(poisoned) => poisoned.into_inner(),
-        }
-    }
 
     #[test]
     fn parse_config_file_default_profile() {
