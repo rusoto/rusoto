@@ -9,6 +9,7 @@
 - Add Eu-North-1 Region
 - Fix bug in SNS publish message action
 - Mock can simulate communications errors
+- Upgrade botocore definitions to [`1.12.100`](https://github.com/boto/botocore/tree/1.12.100)
 
 ## [0.36.0] - 2018-12-04
 

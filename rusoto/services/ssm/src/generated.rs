@@ -68,6 +68,10 @@ pub struct Activation {
     #[serde(rename = "RegistrationsCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub registrations_count: Option<i64>,
+    /// <p>Tags assigned to the activation.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -149,6 +153,14 @@ pub struct AssociationDescription {
     #[serde(rename = "AssociationVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub association_version: Option<String>,
+    /// <p>Specify the target for the association. This target is required for associations that use an Automation document and target resources by using rate controls.</p>
+    #[serde(rename = "AutomationTargetParameterName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub automation_target_parameter_name: Option<String>,
+    /// <p>The severity level that is assigned to the association.</p>
+    #[serde(rename = "ComplianceSeverity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compliance_severity: Option<String>,
     /// <p>The date when the association was made.</p>
     #[serde(rename = "Date")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -173,6 +185,14 @@ pub struct AssociationDescription {
     #[serde(rename = "LastUpdateAssociationDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_update_association_date: Option<f64>,
+    /// <p>The maximum number of targets allowed to run the association at the same time. You can specify a number, for example 10, or a percentage of the target set, for example 10%. The default value is 100%, which means all targets run the association at the same time.</p> <p>If a new instance starts and attempts to execute an association while Systems Manager is executing MaxConcurrency associations, the association is allowed to run. During the next association interval, the new instance will process its association within the limit specified for MaxConcurrency.</p>
+    #[serde(rename = "MaxConcurrency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_concurrency: Option<String>,
+    /// <p>The number of errors that are allowed before the system stops sending requests to run the association on additional targets. You can specify either an absolute number of errors, for example 10, or a percentage of the target set, for example 10%. If you specify 3, for example, the system stops sending requests when the fourth error is received. If you specify 0, then the system stops sending requests after the first error is returned. If you run an association on 50 instances and set MaxError to 10%, then the system stops sending the request when the sixth error is received.</p> <p>Executions that are already running an association when MaxErrors is reached are allowed to complete, but some of these executions may fail as well. If you need to ensure that there won't be more than max-errors failed executions, set MaxConcurrency to 1 so that executions proceed one at a time.</p>
+    #[serde(rename = "MaxErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_errors: Option<String>,
     /// <p>The name of the Systems Manager document.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -371,6 +391,10 @@ pub struct AssociationVersionInfo {
     #[serde(rename = "AssociationVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub association_version: Option<String>,
+    /// <p>The severity level that is assigned to the association.</p>
+    #[serde(rename = "ComplianceSeverity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compliance_severity: Option<String>,
     /// <p>The date the association version was created.</p>
     #[serde(rename = "CreatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -379,6 +403,14 @@ pub struct AssociationVersionInfo {
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
+    /// <p>The maximum number of targets allowed to run the association at the same time. You can specify a number, for example 10, or a percentage of the target set, for example 10%. The default value is 100%, which means all targets run the association at the same time.</p> <p>If a new instance starts and attempts to execute an association while Systems Manager is executing MaxConcurrency associations, the association is allowed to run. During the next association interval, the new instance will process its association within the limit specified for MaxConcurrency.</p>
+    #[serde(rename = "MaxConcurrency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_concurrency: Option<String>,
+    /// <p>The number of errors that are allowed before the system stops sending requests to run the association on additional targets. You can specify either an absolute number of errors, for example 10, or a percentage of the target set, for example 10%. If you specify 3, for example, the system stops sending requests when the fourth error is received. If you specify 0, then the system stops sending requests after the first error is returned. If you run an association on 50 instances and set MaxError to 10%, then the system stops sending the request when the sixth error is received.</p> <p>Executions that are already running an association when MaxErrors is reached are allowed to complete, but some of these executions may fail as well. If you need to ensure that there won't be more than max-errors failed executions, set MaxConcurrency to 1 so that executions proceed one at a time.</p>
+    #[serde(rename = "MaxErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_errors: Option<String>,
     /// <p>The name specified when the association was created.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -399,6 +431,55 @@ pub struct AssociationVersionInfo {
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
+}
+
+/// <p>A structure that includes attributes that describe a document attachment.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AttachmentContent {
+    /// <p>The cryptographic hash value of the document content.</p>
+    #[serde(rename = "Hash")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hash: Option<String>,
+    /// <p>The hash algorithm used to calculate the hash value.</p>
+    #[serde(rename = "HashType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hash_type: Option<String>,
+    /// <p>The name of an attachment.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The size of an attachment in bytes.</p>
+    #[serde(rename = "Size")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub size: Option<i64>,
+    /// <p>The URL location of the attachment content.</p>
+    #[serde(rename = "Url")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub url: Option<String>,
+}
+
+/// <p>An attribute of an attachment, such as the attachment name.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AttachmentInformation {
+    /// <p>The name of the attachment.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+/// <p>A key and value pair that identifies the location of an attachment to a document.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct AttachmentsSource {
+    /// <p>The key of a key and value pair that identifies the location of an attachment to a document.</p>
+    #[serde(rename = "Key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    /// <p>The URL of the location of a document attachment, such as the URL of an Amazon S3 bucket.</p>
+    #[serde(rename = "Values")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub values: Option<Vec<String>>,
 }
 
 /// <p>Detailed information about the current state of an individual Automation execution.</p>
@@ -469,6 +550,10 @@ pub struct AutomationExecution {
     #[serde(rename = "ParentAutomationExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parent_automation_execution_id: Option<String>,
+    /// <p>An aggregate of step execution statuses displayed in the AWS Console for a multi-Region and multi-account Automation execution.</p>
+    #[serde(rename = "ProgressCounters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub progress_counters: Option<ProgressCounters>,
     /// <p>A list of resolved targets in the rate control execution.</p>
     #[serde(rename = "ResolvedTargets")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -485,6 +570,14 @@ pub struct AutomationExecution {
     #[serde(rename = "Target")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target: Option<String>,
+    /// <p>The combination of AWS Regions and/or AWS accounts where you want to execute the Automation.</p>
+    #[serde(rename = "TargetLocations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_locations: Option<Vec<TargetLocation>>,
+    /// <p>The specified key-value mapping of document parameters to target resources.</p>
+    #[serde(rename = "TargetMaps")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_maps: Option<Vec<::std::collections::HashMap<String, Vec<String>>>>,
     /// <p>The parameter name.</p>
     #[serde(rename = "TargetParameterName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -518,6 +611,10 @@ pub struct AutomationExecutionMetadata {
     #[serde(rename = "AutomationExecutionStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub automation_execution_status: Option<String>,
+    /// <p>Use this filter with <a>DescribeAutomationExecutions</a>. Specify either Local or CrossAccount. CrossAccount is an Automation that executes in multiple AWS Regions and accounts. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-automation-multiple-accounts-and-regions.html">Concurrently Executing Automations in Multiple AWS Regions and Accounts</a> in the <i>AWS Systems Manager User Guide</i>. </p>
+    #[serde(rename = "AutomationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub automation_type: Option<String>,
     /// <p>The action of the currently executing step.</p>
     #[serde(rename = "CurrentAction")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -582,6 +679,10 @@ pub struct AutomationExecutionMetadata {
     #[serde(rename = "Target")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target: Option<String>,
+    /// <p>The specified key-value mapping of document parameters to target resources.</p>
+    #[serde(rename = "TargetMaps")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_maps: Option<Vec<::std::collections::HashMap<String, Vec<String>>>>,
     /// <p>The list of execution outputs as defined in the Automation document.</p>
     #[serde(rename = "TargetParameterName")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -608,6 +709,22 @@ pub struct CancelCommandRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CancelCommandResult {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CancelMaintenanceWindowExecutionRequest {
+    /// <p>The ID of the Maintenance Window execution to stop.</p>
+    #[serde(rename = "WindowExecutionId")]
+    pub window_execution_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CancelMaintenanceWindowExecutionResult {
+    /// <p>The ID of the Maintenance Window execution that has been stopped.</p>
+    #[serde(rename = "WindowExecutionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub window_execution_id: Option<String>,
+}
 
 /// <p>Configuration options for sending command output to CloudWatch Logs.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
@@ -726,7 +843,7 @@ pub struct CommandFilter {
     /// <p>The name of the filter.</p>
     #[serde(rename = "key")]
     pub key: String,
-    /// <p>The filter value. </p>
+    /// <p><p>The filter value. Valid values for each filter key are as follows:</p> <ul> <li> <p> <b>InvokedAfter</b>: Specify a timestamp to limit your results. For example, specify <code>2018-07-07T00:00:00Z</code> to see a list of command executions occurring July 7, 2018, and later.</p> </li> <li> <p> <b>InvokedBefore</b>: Specify a timestamp to limit your results. For example, specify <code>2018-07-07T00:00:00Z</code> to see a list of command executions from before July 7, 2018.</p> </li> <li> <p> <b>Status</b>: Specify a valid command status to see a list of all command executions with that status. Status values you can specify include:</p> <ul> <li> <p> <code>Pending</code> </p> </li> <li> <p> <code>InProgress</code> </p> </li> <li> <p> <code>Success</code> </p> </li> <li> <p> <code>Cancelled</code> </p> </li> <li> <p> <code>Failed</code> </p> </li> <li> <p> <code>TimedOut</code> </p> </li> <li> <p> <code>Cancelling</code> </p> </li> </ul> </li> <li> <p> <b>DocumentName</b>: Specify name of the SSM document for which you want to see command execution results. For example, specify <code>AWS-RunPatchBaseline</code> to see command executions that used this SSM document to perform security patching operations on instances. </p> </li> <li> <p> <b>ExecutionStage</b>: Specify one of the following values:</p> <ul> <li> <p> <code>Executing</code>: Returns a list of command executions that are currently still running.</p> </li> <li> <p> <code>Complete</code>: Returns a list of command executions that have already completed. </p> </li> </ul> </li> </ul></p>
     #[serde(rename = "value")]
     pub value: String,
 }
@@ -1005,6 +1122,10 @@ pub struct CreateActivationRequest {
     #[serde(rename = "RegistrationLimit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub registration_limit: Option<i64>,
+    /// <p>Optional metadata that you assign to a resource. Tags enable you to categorize a resource in different ways, such as by purpose, owner, or environment. For example, you might want to tag an activation to identify which servers or virtual machines (VMs) in your on-premises environment you intend to activate. In this case, you could specify the following key name/value pairs:</p> <ul> <li> <p> <code>Key=OS,Value=Windows</code> </p> </li> <li> <p> <code>Key=Environment,Value=Production</code> </p> </li> </ul> <important> <p>When you install SSM Agent on your on-premises servers and VMs, you specify an activation ID and code. When you specify the activation ID and code, tags assigned to the activation are automatically applied to the on-premises servers or VMs.</p> </important> <p>You can't add tags to or delete tags from an existing activation. You can tag your on-premises servers and VMs after they connect to Systems Manager for the first time and are assigned a managed instance ID. This means they are listed in the AWS Systems Manager console with an ID that is prefixed with "mi-". For information about how to add tags to your managed instances, see <a>AddTagsToResource</a>. For information about how to remove tags from your managed instances, see <a>RemoveTagsFromResource</a>.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1027,13 +1148,21 @@ pub struct CreateAssociationBatchRequest {
     pub entries: Vec<CreateAssociationBatchRequestEntry>,
 }
 
-/// <p>Describes the association of a Systems Manager document and an instance.</p>
+/// <p>Describes the association of a Systems Manager SSM document and an instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CreateAssociationBatchRequestEntry {
     /// <p>Specify a descriptive name for the association.</p>
     #[serde(rename = "AssociationName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub association_name: Option<String>,
+    /// <p>Specify the target for the association. This target is required for associations that use an Automation document and target resources by using rate controls.</p>
+    #[serde(rename = "AutomationTargetParameterName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub automation_target_parameter_name: Option<String>,
+    /// <p>The severity level to assign to the association.</p>
+    #[serde(rename = "ComplianceSeverity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compliance_severity: Option<String>,
     /// <p>The document version.</p>
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1042,6 +1171,14 @@ pub struct CreateAssociationBatchRequestEntry {
     #[serde(rename = "InstanceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
+    /// <p>The maximum number of targets allowed to run the association at the same time. You can specify a number, for example 10, or a percentage of the target set, for example 10%. The default value is 100%, which means all targets run the association at the same time.</p> <p>If a new instance starts and attempts to execute an association while Systems Manager is executing MaxConcurrency associations, the association is allowed to run. During the next association interval, the new instance will process its association within the limit specified for MaxConcurrency.</p>
+    #[serde(rename = "MaxConcurrency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_concurrency: Option<String>,
+    /// <p>The number of errors that are allowed before the system stops sending requests to run the association on additional targets. You can specify either an absolute number of errors, for example 10, or a percentage of the target set, for example 10%. If you specify 3, for example, the system stops sending requests when the fourth error is received. If you specify 0, then the system stops sending requests after the first error is returned. If you run an association on 50 instances and set MaxError to 10%, then the system stops sending the request when the sixth error is received.</p> <p>Executions that are already running an association when MaxErrors is reached are allowed to complete, but some of these executions may fail as well. If you need to ensure that there won't be more than max-errors failed executions, set MaxConcurrency to 1 so that executions proceed one at a time.</p>
+    #[serde(rename = "MaxErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_errors: Option<String>,
     /// <p>The name of the configuration document. </p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -1082,6 +1219,14 @@ pub struct CreateAssociationRequest {
     #[serde(rename = "AssociationName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub association_name: Option<String>,
+    /// <p>Specify the target for the association. This target is required for associations that use an Automation document and target resources by using rate controls.</p>
+    #[serde(rename = "AutomationTargetParameterName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub automation_target_parameter_name: Option<String>,
+    /// <p>The severity level to assign to the association.</p>
+    #[serde(rename = "ComplianceSeverity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compliance_severity: Option<String>,
     /// <p>The document version you want to associate with the target(s). Can be a specific version or the default version.</p>
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1090,6 +1235,14 @@ pub struct CreateAssociationRequest {
     #[serde(rename = "InstanceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_id: Option<String>,
+    /// <p>The maximum number of targets allowed to run the association at the same time. You can specify a number, for example 10, or a percentage of the target set, for example 10%. The default value is 100%, which means all targets run the association at the same time.</p> <p>If a new instance starts and attempts to execute an association while Systems Manager is executing MaxConcurrency associations, the association is allowed to run. During the next association interval, the new instance will process its association within the limit specified for MaxConcurrency.</p>
+    #[serde(rename = "MaxConcurrency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_concurrency: Option<String>,
+    /// <p>The number of errors that are allowed before the system stops sending requests to run the association on additional targets. You can specify either an absolute number of errors, for example 10, or a percentage of the target set, for example 10%. If you specify 3, for example, the system stops sending requests when the fourth error is received. If you specify 0, then the system stops sending requests after the first error is returned. If you run an association on 50 instances and set MaxError to 10%, then the system stops sending the request when the sixth error is received.</p> <p>Executions that are already running an association when MaxErrors is reached are allowed to complete, but some of these executions may fail as well. If you need to ensure that there won't be more than max-errors failed executions, set MaxConcurrency to 1 so that executions proceed one at a time.</p>
+    #[serde(rename = "MaxErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_errors: Option<String>,
     /// <p>The name of the Systems Manager document.</p>
     #[serde(rename = "Name")]
     pub name: String,
@@ -1122,6 +1275,10 @@ pub struct CreateAssociationResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDocumentRequest {
+    /// <p>A list of key and value pairs that describe attachments to a version of a document.</p>
+    #[serde(rename = "Attachments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attachments: Option<Vec<AttachmentsSource>>,
     /// <p>A valid JSON or YAML string.</p>
     #[serde(rename = "Content")]
     pub content: String,
@@ -1129,17 +1286,25 @@ pub struct CreateDocumentRequest {
     #[serde(rename = "DocumentFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_format: Option<String>,
-    /// <p>The type of document to create. Valid document types include: Policy, Automation, and Command.</p>
+    /// <p>The type of document to create. Valid document types include: <code>Command</code>, <code>Policy</code>, <code>Automation</code>, <code>Session</code>, and <code>Package</code>.</p>
     #[serde(rename = "DocumentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_type: Option<String>,
     /// <p><p>A name for the Systems Manager document.</p> <important> <p>Do not use the following to begin the names of documents you create. They are reserved by AWS for use as document prefixes:</p> <ul> <li> <p> <code>aws</code> </p> </li> <li> <p> <code>amazon</code> </p> </li> <li> <p> <code>amzn</code> </p> </li> </ul> </important></p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p><p>Optional metadata that you assign to a resource. Tags enable you to categorize a resource in different ways, such as by purpose, owner, or environment. For example, you might want to tag an SSM document to identify the types of targets or the environment where it will run. In this case, you could specify the following key name/value pairs:</p> <ul> <li> <p> <code>Key=OS,Value=Windows</code> </p> </li> <li> <p> <code>Key=Environment,Value=Production</code> </p> </li> </ul> <note> <p>To add tags to an existing SSM document, use the <a>AddTagsToResource</a> action.</p> </note></p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>Specify a target type to define the kinds of resources the document can run on. For example, to run a document on EC2 instances, specify the following value: /AWS::EC2::Instance. If you specify a value of '/' the document can run on all types of resources. If you don't specify a value, the document can't run on any resources. For a list of valid resource types, see <a href="http://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-template-resource-type-ref.html">AWS Resource Types Reference</a> in the <i>AWS CloudFormation User Guide</i>. </p>
     #[serde(rename = "TargetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_type: Option<String>,
+    /// <p>An optional field specifying the version of the artifact you are creating with the document. For example, "Release 12, Update 6". This value is unique across all versions of a document, and cannot be changed.</p>
+    #[serde(rename = "VersionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1170,12 +1335,28 @@ pub struct CreateMaintenanceWindowRequest {
     /// <p>The duration of the Maintenance Window in hours.</p>
     #[serde(rename = "Duration")]
     pub duration: i64,
+    /// <p>The date and time, in ISO-8601 Extended format, for when you want the Maintenance Window to become inactive. EndDate allows you to set a date and time in the future when the Maintenance Window will no longer run.</p>
+    #[serde(rename = "EndDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_date: Option<String>,
     /// <p>The name of the Maintenance Window.</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>The schedule of the Maintenance Window in the form of a cron or rate expression.</p>
     #[serde(rename = "Schedule")]
     pub schedule: String,
+    /// <p>The time zone that the scheduled Maintenance Window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the <a href="https://www.iana.org/time-zones">Time Zone Database</a> on the IANA website.</p>
+    #[serde(rename = "ScheduleTimezone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schedule_timezone: Option<String>,
+    /// <p>The date and time, in ISO-8601 Extended format, for when you want the Maintenance Window to become active. StartDate allows you to delay activation of the Maintenance Window until the specified future date.</p>
+    #[serde(rename = "StartDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_date: Option<String>,
+    /// <p><p>Optional metadata that you assign to a resource. Tags enable you to categorize a resource in different ways, such as by purpose, owner, or environment. For example, you might want to tag a Maintenance Window to identify the type of tasks it will run, the types of targets, and the environment it will run in. In this case, you could specify the following key name/value pairs:</p> <ul> <li> <p> <code>Key=TaskType,Value=AgentUpdate</code> </p> </li> <li> <p> <code>Key=OS,Value=Windows</code> </p> </li> <li> <p> <code>Key=Environment,Value=Production</code> </p> </li> </ul> <note> <p>To add tags to an existing Maintenance Window, use the <a>AddTagsToResource</a> action.</p> </note></p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1228,10 +1409,18 @@ pub struct CreatePatchBaselineRequest {
     #[serde(rename = "RejectedPatches")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rejected_patches: Option<Vec<String>>,
+    /// <p><p>The action for Patch Manager to take on patches included in the RejectedPackages list.</p> <ul> <li> <p> <b>ALLOW<em>AS</em>DEPENDENCY</b>: A package in the Rejected patches list is installed only if it is a dependency of another package. It is considered compliant with the patch baseline, and its status is reported as <i>InstalledOther</i>. This is the default action if no option is specified.</p> </li> <li> <p> <b>BLOCK</b>: Packages in the RejectedPatches list, and packages that include them as dependencies, are not installed under any circumstances. If a package was installed before it was added to the Rejected patches list, it is considered non-compliant with the patch baseline, and its status is reported as <i>InstalledRejected</i>.</p> </li> </ul></p>
+    #[serde(rename = "RejectedPatchesAction")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rejected_patches_action: Option<String>,
     /// <p>Information about the patches to use to update the instances, including target operating systems and source repositories. Applies to Linux instances only.</p>
     #[serde(rename = "Sources")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sources: Option<Vec<PatchSource>>,
+    /// <p><p>Optional metadata that you assign to a resource. Tags enable you to categorize a resource in different ways, such as by purpose, owner, or environment. For example, you might want to tag a patch baseline to identify the severity level of patches it specifies and the operating system family it applies to. In this case, you could specify the following key name/value pairs:</p> <ul> <li> <p> <code>Key=PatchSeverity,Value=Critical</code> </p> </li> <li> <p> <code>Key=OS,Value=Windows</code> </p> </li> </ul> <note> <p>To add tags to an existing patch baseline, use the <a>AddTagsToResource</a> action.</p> </note></p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1608,7 +1797,7 @@ pub struct DescribeAssociationRequest {
     #[serde(rename = "AssociationId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub association_id: Option<String>,
-    /// <p>Specify the association version to retrieve. To view the latest version, either specify <code>$LATEST</code> for this parameter, or omit this parameter. To view a list of all associations for an instance, use ListInstanceAssociations. To get a list of versions for a specific association, use ListAssociationVersions. </p>
+    /// <p>Specify the association version to retrieve. To view the latest version, either specify <code>$LATEST</code> for this parameter, or omit this parameter. To view a list of all associations for an instance, use <a>ListAssociations</a>. To get a list of versions for a specific association, use <a>ListAssociationVersions</a>. </p>
     #[serde(rename = "AssociationVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub association_version: Option<String>,
@@ -1753,6 +1942,10 @@ pub struct DescribeDocumentRequest {
     /// <p>The name of the Systems Manager document.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>An optional field specifying the version of the artifact associated with the document. For example, "Release 12, Update 6". This value is unique across all versions of a document, and cannot be changed.</p>
+    #[serde(rename = "VersionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1850,11 +2043,11 @@ pub struct DescribeInstanceAssociationsStatusResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeInstanceInformationRequest {
-    /// <p>One or more filters. Use a filter to return a more specific list of instances.</p>
+    /// <p>One or more filters. Use a filter to return a more specific list of instances. You can filter on Amazon EC2 tag. Specify tags by using a key-value mapping.</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<InstanceInformationStringFilter>>,
-    /// <p>One or more filters. Use a filter to return a more specific list of instances.</p>
+    /// <p>This is a legacy method. We recommend that you don't use this method. Instead, use the <a>InstanceInformationFilter</a> action. The <code>InstanceInformationFilter</code> action enables you to return instance information by using tags that are specified as a key-value mapping. </p> <p>If you do use this method, then you can't use the <code>InstanceInformationFilter</code> action. Using this method and the <code>InstanceInformationFilter</code> action causes an exception error. </p>
     #[serde(rename = "InstanceInformationFilterList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_information_filter_list: Option<Vec<InstanceInformationFilter>>,
@@ -1967,7 +2160,7 @@ pub struct DescribeInstancePatchesResult {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>Each entry in the array is a structure containing:</p> <p>Title (string)</p> <p>KBId (string)</p> <p>Classification (string)</p> <p>Severity (string)</p> <p>State (string: "INSTALLED", "INSTALLED OTHER", "MISSING", "NOT APPLICABLE", "FAILED")</p> <p>InstalledTime (DateTime)</p> <p>InstalledBy (string)</p>
+    /// <p>Each entry in the array is a structure containing:</p> <p>Title (string)</p> <p>KBId (string)</p> <p>Classification (string)</p> <p>Severity (string)</p> <p>State (string, such as "INSTALLED" or "FAILED")</p> <p>InstalledTime (DateTime)</p> <p>InstalledBy (string)</p>
     #[serde(rename = "Patches")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub patches: Option<Vec<PatchComplianceData>>,
@@ -2103,6 +2296,47 @@ pub struct DescribeMaintenanceWindowExecutionsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeMaintenanceWindowScheduleRequest {
+    /// <p>Filters used to limit the range of results. For example, you can limit Maintenance Window executions to only those scheduled before or after a certain date and time.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<PatchOrchestratorFilter>>,
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The type of resource you want to retrieve information about. For example, "INSTANCE".</p>
+    #[serde(rename = "ResourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+    /// <p>The instance ID or key/value pair to retrieve information about.</p>
+    #[serde(rename = "Targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub targets: Option<Vec<Target>>,
+    /// <p>The ID of the Maintenance Window to retrieve information about.</p>
+    #[serde(rename = "WindowId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub window_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeMaintenanceWindowScheduleResult {
+    /// <p>The token for the next set of items to return. (You use this token in the next call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Information about Maintenance Window executions scheduled for the specified time range.</p>
+    #[serde(rename = "ScheduledWindowExecutions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scheduled_window_executions: Option<Vec<ScheduledWindowExecution>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeMaintenanceWindowTargetsRequest {
     /// <p>Optional filters that can be used to narrow down the scope of the returned window targets. The supported filter keys are Type, WindowTargetId and OwnerInformation.</p>
     #[serde(rename = "Filters")]
@@ -2167,8 +2401,39 @@ pub struct DescribeMaintenanceWindowTasksResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeMaintenanceWindowsForTargetRequest {
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The type of resource you want to retrieve information about. For example, "INSTANCE".</p>
+    #[serde(rename = "ResourceType")]
+    pub resource_type: String,
+    /// <p>The instance ID or key/value pair to retrieve information about.</p>
+    #[serde(rename = "Targets")]
+    pub targets: Vec<Target>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeMaintenanceWindowsForTargetResult {
+    /// <p>The token for the next set of items to return. (You use this token in the next call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Information about the Maintenance Window targets and tasks an instance is associated with.</p>
+    #[serde(rename = "WindowIdentities")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub window_identities: Option<Vec<MaintenanceWindowIdentityForTarget>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeMaintenanceWindowsRequest {
-    /// <p>Optional filters used to narrow down the scope of the returned Maintenance Windows. Supported filter keys are Name and Enabled.</p>
+    /// <p>Optional filters used to narrow down the scope of the returned Maintenance Windows. Supported filter keys are <b>Name</b> and <b>Enabled</b>.</p>
     #[serde(rename = "Filters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub filters: Option<Vec<MaintenanceWindowFilter>>,
@@ -2283,6 +2548,10 @@ pub struct DescribePatchGroupStateResult {
     #[serde(rename = "InstancesWithInstalledPatches")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instances_with_installed_patches: Option<i64>,
+    /// <p><p>The number of instances with patches installed that are specified in a RejectedPatches list. Patches with a status of <i>INSTALLED<em>REJECTED</i> were typically installed before they were added to a RejectedPatches list.</p> <note> <p>If ALLOW</em>AS_DEPENDENCY is the specified option for RejectedPatchesAction, the value of InstancesWithInstalledRejectedPatches will always be 0 (zero).</p> </note></p>
+    #[serde(rename = "InstancesWithInstalledRejectedPatches")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instances_with_installed_rejected_patches: Option<i64>,
     /// <p>The number of instances with missing patches from the patch baseline.</p>
     #[serde(rename = "InstancesWithMissingPatches")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2322,6 +2591,38 @@ pub struct DescribePatchGroupsResult {
     pub next_token: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeSessionsRequest {
+    /// <p>One or more filters to limit the type of sessions returned by the request.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<SessionFilter>>,
+    /// <p>The maximum number of items to return for this call. The call also returns a token that you can specify in a subsequent call to get the next set of results.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The session status to retrieve a list of sessions for. For example, "Active".</p>
+    #[serde(rename = "State")]
+    pub state: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeSessionsResponse {
+    /// <p>The token for the next set of items to return. (You received this token from a previous call.)</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A list of sessions meeting the request parameters.</p>
+    #[serde(rename = "Sessions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sessions: Option<Vec<Session>>,
+}
+
 /// <p>A default version of a document.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -2330,6 +2631,10 @@ pub struct DocumentDefaultVersionDescription {
     #[serde(rename = "DefaultVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub default_version: Option<String>,
+    /// <p>The default version of the artifact associated with the document.</p>
+    #[serde(rename = "DefaultVersionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_version_name: Option<String>,
     /// <p>The name of the document.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2340,6 +2645,10 @@ pub struct DocumentDefaultVersionDescription {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DocumentDescription {
+    /// <p>Details about the document attachments, including names, locations, sizes, etc.</p>
+    #[serde(rename = "AttachmentsInformation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attachments_information: Option<Vec<AttachmentInformation>>,
     /// <p>The date when the document was created.</p>
     #[serde(rename = "CreatedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2356,7 +2665,7 @@ pub struct DocumentDescription {
     #[serde(rename = "DocumentFormat")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_format: Option<String>,
-    /// <p>The type of document. </p>
+    /// <p>The type of document.</p>
     #[serde(rename = "DocumentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_type: Option<String>,
@@ -2368,7 +2677,7 @@ pub struct DocumentDescription {
     #[serde(rename = "Hash")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hash: Option<String>,
-    /// <p><p>Sha256 or Sha1.</p> <note> <p>Sha1 hashes have been deprecated.</p> </note></p>
+    /// <p><p>The hash type of the document. Valid values include <code>Sha256</code> or <code>Sha1</code>.</p> <note> <p>Sha1 hashes have been deprecated.</p> </note></p>
     #[serde(rename = "HashType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub hash_type: Option<String>,
@@ -2404,6 +2713,10 @@ pub struct DocumentDescription {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+    /// <p>A message returned by AWS Systems Manager that explains the <code>Status</code> value. For example, a <code>Failed</code> status might be explained by the <code>StatusInformation</code> message, "The specified S3 bucket does not exist. Verify that the URL of the S3 bucket is correct."</p>
+    #[serde(rename = "StatusInformation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_information: Option<String>,
     /// <p>The tags, or metadata, that have been applied to the document.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2412,6 +2725,10 @@ pub struct DocumentDescription {
     #[serde(rename = "TargetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_type: Option<String>,
+    /// <p>The version of the artifact associated with the document.</p>
+    #[serde(rename = "VersionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_name: Option<String>,
 }
 
 /// <p>Describes a filter.</p>
@@ -2465,6 +2782,10 @@ pub struct DocumentIdentifier {
     #[serde(rename = "TargetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_type: Option<String>,
+    /// <p>An optional field specifying the version of the artifact associated with the document. For example, "Release 12, Update 6". This value is unique across all versions of a document, and cannot be changed.</p>
+    #[serde(rename = "VersionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_name: Option<String>,
 }
 
 /// <p>One or more filters. Use a filter to return a more specific list of documents.</p> <p>For keys, you can specify one or more tags that have been applied to a document. </p> <p>Other valid values include Owner, Name, PlatformTypes, and DocumentType.</p> <p>Note that only one Owner can be specified in a request. For example: <code>Key=Owner,Values=Self</code>.</p> <p>If you use Name as a key, you can use a name prefix to return a list of documents. For example, in the AWS CLI, to return a list of all documents that begin with <code>Te</code>, run the following command:</p> <p> <code>aws ssm list-documents --filters Key=Name,Values=Te</code> </p> <p>If you specify more than two keys, only documents that are identified by all the tags are returned in the results. If you specify more than two values for a key, documents that are identified by any of the values are returned in the results.</p> <p>To specify a custom key and value pair, use the format <code>Key=tag:[tagName],Values=[valueName]</code>.</p> <p>For example, if you created a Key called region and are using the AWS CLI to call the <code>list-documents</code> command: </p> <p> <code>aws ssm list-documents --filters Key=tag:region,Values=east,west Key=Owner,Values=Self</code> </p>
@@ -2526,6 +2847,18 @@ pub struct DocumentVersionInfo {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The status of the Systems Manager document, such as <code>Creating</code>, <code>Active</code>, <code>Failed</code>, and <code>Deleting</code>.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>A message returned by AWS Systems Manager that explains the <code>Status</code> value. For example, a <code>Failed</code> status might be explained by the <code>StatusInformation</code> message, "The specified S3 bucket does not exist. Verify that the URL of the S3 bucket is correct."</p>
+    #[serde(rename = "StatusInformation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_information: Option<String>,
+    /// <p>The version of the artifact associated with the document. For example, "Release 12, Update 6". This value is unique across all versions of a document, and cannot be changed.</p>
+    #[serde(rename = "VersionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_name: Option<String>,
 }
 
 /// <p>The EffectivePatch structure defines metadata about a patch along with the approval state of the patch in a particular patch baseline. The approval state includes information about whether the patch is currently approved, due to be approved by a rule, explicitly approved, or explicitly rejected and the date the patch was or will be approved.</p>
@@ -2682,6 +3015,26 @@ pub struct GetCommandInvocationResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetConnectionStatusRequest {
+    /// <p>The ID of the instance.</p>
+    #[serde(rename = "Target")]
+    pub target: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetConnectionStatusResponse {
+    /// <p>The status of the connection to the instance. For example, 'Connected' or 'Not Connected'.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The ID of the instance to check connection status. </p>
+    #[serde(rename = "Target")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDefaultPatchBaselineRequest {
     /// <p>Returns the default patch baseline for the specified operating system.</p>
     #[serde(rename = "OperatingSystem")]
@@ -2746,11 +3099,19 @@ pub struct GetDocumentRequest {
     /// <p>The name of the Systems Manager document.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>An optional field specifying the version of the artifact associated with the document. For example, "Release 12, Update 6". This value is unique across all versions of a document, and cannot be changed.</p>
+    #[serde(rename = "VersionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetDocumentResult {
+    /// <p>A description of the document attachments, including names, locations, sizes, etc.</p>
+    #[serde(rename = "AttachmentsContent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attachments_content: Option<Vec<AttachmentContent>>,
     /// <p>The contents of the Systems Manager document.</p>
     #[serde(rename = "Content")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2771,6 +3132,18 @@ pub struct GetDocumentResult {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The status of the Systems Manager document, such as <code>Creating</code>, <code>Active</code>, <code>Updating</code>, <code>Failed</code>, and <code>Deleting</code>.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>A message returned by AWS Systems Manager that explains the <code>Status</code> value. For example, a <code>Failed</code> status might be explained by the <code>StatusInformation</code> message, "The specified S3 bucket does not exist. Verify that the URL of the S3 bucket is correct."</p>
+    #[serde(rename = "StatusInformation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status_information: Option<String>,
+    /// <p>The version of the artifact associated with the document. For example, "Release 12, Update 6". This value is unique across all versions of a document, and cannot be changed.</p>
+    #[serde(rename = "VersionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3052,6 +3425,10 @@ pub struct GetMaintenanceWindowResult {
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
+    /// <p>The date and time, in ISO-8601 Extended format, for when the Maintenance Window is scheduled to become inactive. The Maintenance Window will not run after this specified time.</p>
+    #[serde(rename = "EndDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_date: Option<String>,
     /// <p>The date the Maintenance Window was last modified.</p>
     #[serde(rename = "ModifiedDate")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3060,10 +3437,22 @@ pub struct GetMaintenanceWindowResult {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The next time the Maintenance Window will actually run, taking into account any specified times for the Maintenance Window to become active or inactive.</p>
+    #[serde(rename = "NextExecutionTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_execution_time: Option<String>,
     /// <p>The schedule of the Maintenance Window in the form of a cron or rate expression.</p>
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
+    /// <p>The time zone that the scheduled Maintenance Window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the <a href="https://www.iana.org/time-zones">Time Zone Database</a> on the IANA website.</p>
+    #[serde(rename = "ScheduleTimezone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schedule_timezone: Option<String>,
+    /// <p>The date and time, in ISO-8601 Extended format, for when the Maintenance Window is scheduled to become active. The Maintenance Window will not run before this specified time.</p>
+    #[serde(rename = "StartDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_date: Option<String>,
     /// <p>The ID of the created Maintenance Window.</p>
     #[serde(rename = "WindowId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3348,6 +3737,10 @@ pub struct GetPatchBaselineResult {
     #[serde(rename = "RejectedPatches")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rejected_patches: Option<Vec<String>>,
+    /// <p>The action specified to take on patches included in the RejectedPatches list. A patch can be allowed only if it is a dependency of another package, or blocked entirely along with packages that include it as a dependency.</p>
+    #[serde(rename = "RejectedPatchesAction")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rejected_patches_action: Option<String>,
     /// <p>Information about the patches to use to update the instances, including target operating systems and source repositories. Applies to Linux instances only.</p>
     #[serde(rename = "Sources")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3546,7 +3939,7 @@ pub struct InstanceInformation {
     pub resource_type: Option<String>,
 }
 
-/// <p>Describes a filter for a specific list of instances. </p>
+/// <p>Describes a filter for a specific list of instances. You can filter instances information by using tags. You specify tags by using a key-value mapping.</p> <p>Use this action instead of the <a>DescribeInstanceInformationRequest$InstanceInformationFilterList</a> method. The <code>InstanceInformationFilterList</code> method is a legacy method and does not support tags. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct InstanceInformationFilter {
     /// <p>The name of the filter. </p>
@@ -3579,6 +3972,10 @@ pub struct InstancePatchState {
     #[serde(rename = "FailedCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_count: Option<i64>,
+    /// <p>An https URL or an Amazon S3 path-style URL to a list of patches to be installed. This patch installation list, which you maintain in an Amazon S3 bucket in YAML format and specify in the SSM document <code>AWS-RunPatchBaseline</code>, overrides the patches specified by the default patch baseline.</p> <p>For more information about the <code>InstallOverrideList</code> parameter, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/patch-manager-about-aws-runpatchbaseline.html">About the SSM Document AWS-RunPatchBaseline</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    #[serde(rename = "InstallOverrideList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub install_override_list: Option<String>,
     /// <p>The number of patches from the patch baseline that are installed on the instance.</p>
     #[serde(rename = "InstalledCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -3587,6 +3984,10 @@ pub struct InstancePatchState {
     #[serde(rename = "InstalledOtherCount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub installed_other_count: Option<i64>,
+    /// <p><p>The number of instances with patches installed that are specified in a RejectedPatches list. Patches with a status of <i>InstalledRejected</i> were typically installed before they were added to a RejectedPatches list.</p> <note> <p>If ALLOW<em>AS</em>DEPENDENCY is the specified option for RejectedPatchesAction, the value of InstalledRejectedCount will always be 0 (zero).</p> </note></p>
+    #[serde(rename = "InstalledRejectedCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub installed_rejected_count: Option<i64>,
     /// <p>The ID of the managed instance the high-level patch compliance information was collected for.</p>
     #[serde(rename = "InstanceId")]
     pub instance_id: String,
@@ -3645,6 +4046,10 @@ pub struct InventoryAggregator {
     #[serde(rename = "Expression")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expression: Option<String>,
+    /// <p>A user-defined set of one or more filters on which to aggregate inventory data. Groups return a count of resources that match and don't match the specified criteria.</p>
+    #[serde(rename = "Groups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub groups: Option<Vec<InventoryGroup>>,
 }
 
 /// <p>Status information returned by the <code>DeleteInventory</code> action.</p>
@@ -3730,6 +4135,17 @@ pub struct InventoryFilter {
     /// <p>Inventory filter values. Example: inventory filter where instance IDs are specified as values Key=AWS:InstanceInformation.InstanceId,Values= i-a12b3c4d5e6g, i-1a2b3c4d5e6,Type=Equal </p>
     #[serde(rename = "Values")]
     pub values: Vec<String>,
+}
+
+/// <p>A user-defined set of one or more filters on which to aggregate inventory data. Groups return a count of resources that match and don't match the specified criteria.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct InventoryGroup {
+    /// <p>Filters define the criteria for the group. The <code>matchingCount</code> field displays the number of resources that match the criteria. The <code>notMatchingCount</code> field displays the number of resources that don't match the criteria. </p>
+    #[serde(rename = "Filters")]
+    pub filters: Vec<InventoryFilter>,
+    /// <p>The name of the group.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
 }
 
 /// <p>Information collected from managed instances based on your inventory policy document</p>
@@ -3829,10 +4245,13 @@ pub struct InventoryResultItem {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct LabelParameterVersionRequest {
+    /// <p>One or more labels to attach to the specified parameter version.</p>
     #[serde(rename = "Labels")]
     pub labels: Vec<String>,
+    /// <p>The parameter name on which you want to attach one or more labels.</p>
     #[serde(rename = "Name")]
     pub name: String,
+    /// <p>The specific version of the parameter on which you want to attach one or more labels. If no version is specified, the system attaches the label to the latest version.)</p>
     #[serde(rename = "ParameterVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_version: Option<i64>,
@@ -3841,6 +4260,7 @@ pub struct LabelParameterVersionRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct LabelParameterVersionResult {
+    /// <p>The label does not meet the requirements. For information about parameter label requirements, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-paramstore-labels.html">Labeling Parameters</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "InvalidLabels")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub invalid_labels: Option<Vec<String>>,
@@ -4382,7 +4802,7 @@ pub struct MaintenanceWindowExecutionTaskInvocationIdentity {
     pub window_target_id: Option<String>,
 }
 
-/// <p>Filter used in the request.</p>
+/// <p>Filter used in the request. Supported filter keys are Name and Enabled.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct MaintenanceWindowFilter {
     /// <p>The name of the filter.</p>
@@ -4415,6 +4835,40 @@ pub struct MaintenanceWindowIdentity {
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
+    /// <p>The date and time, in ISO-8601 Extended format, for when the Maintenance Window is scheduled to become inactive.</p>
+    #[serde(rename = "EndDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_date: Option<String>,
+    /// <p>The name of the Maintenance Window.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The next time the Maintenance Window will actually run, taking into account any specified times for the Maintenance Window to become active or inactive.</p>
+    #[serde(rename = "NextExecutionTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_execution_time: Option<String>,
+    /// <p>The schedule of the Maintenance Window in the form of a cron or rate expression.</p>
+    #[serde(rename = "Schedule")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schedule: Option<String>,
+    /// <p>The time zone that the scheduled Maintenance Window executions are based on, in Internet Assigned Numbers Authority (IANA) format.</p>
+    #[serde(rename = "ScheduleTimezone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schedule_timezone: Option<String>,
+    /// <p>The date and time, in ISO-8601 Extended format, for when the Maintenance Window is scheduled to become active.</p>
+    #[serde(rename = "StartDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_date: Option<String>,
+    /// <p>The ID of the Maintenance Window.</p>
+    #[serde(rename = "WindowId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub window_id: Option<String>,
+}
+
+/// <p>The Maintenance Window to which the specified target belongs.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct MaintenanceWindowIdentityForTarget {
     /// <p>The name of the Maintenance Window.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -4482,7 +4936,7 @@ pub struct MaintenanceWindowRunCommandParameters {
     #[serde(rename = "ServiceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
-    /// <p>If this time is reached and the command has not already started executing, it doesn not execute.</p>
+    /// <p>If this time is reached and the command has not already started executing, it doesn't run.</p>
     #[serde(rename = "TimeoutSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout_seconds: Option<i64>,
@@ -4940,7 +5394,7 @@ pub struct PatchComplianceData {
     /// <p>The severity of the patch (for example, Critical, Important, Moderate).</p>
     #[serde(rename = "Severity")]
     pub severity: String,
-    /// <p>The state of the patch on the instance (INSTALLED, INSTALLED_OTHER, MISSING, NOT_APPLICABLE or FAILED).</p>
+    /// <p>The state of the patch on the instance, such as INSTALLED or FAILED.</p> <p>For descriptions of each patch state, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-compliance-about.html#sysman-compliance-monitor-patch">About Patch Compliance</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "State")]
     pub state: String,
     /// <p>The title of the patch.</p>
@@ -4948,7 +5402,7 @@ pub struct PatchComplianceData {
     pub title: String,
 }
 
-/// <p><p>Defines a patch filter.</p> <p>A patch filter consists of key/value pairs, but not all keys are valid for all operating system types. For example, the key <code>PRODUCT</code> is valid for all supported operating system types. The key <code>MSRC<em>SEVERITY</code>, however, is valid only for Windows operating systems, and the key <code>SECTION</code> is valid only for Ubuntu operating systems.</p> <p>Refer to the following sections for information about which keys may be used with each major operating system, and which values are valid for each key.</p> <p> <b>Windows Operating Systems</b> </p> <p>The supported keys for Windows operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>MSRC</em>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Windows7</code> </p> </li> <li> <p> <code>Windows8</code> </p> </li> <li> <p> <code>Windows8.1</code> </p> </li> <li> <p> <code>Windows8Embedded</code> </p> </li> <li> <p> <code>Windows10</code> </p> </li> <li> <p> <code>Windows10LTSB</code> </p> </li> <li> <p> <code>WindowsServer2008</code> </p> </li> <li> <p> <code>WindowsServer2008R2</code> </p> </li> <li> <p> <code>WindowsServer2012</code> </p> </li> <li> <p> <code>WindowsServer2012R2</code> </p> </li> <li> <p> <code>WindowsServer2016</code> </p> </li> <li> <p> <code><em></code> </p> <p> <i>Use a wildcard character (</em>) to target all supported operating system versions.</i> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>CriticalUpdates</code> </p> </li> <li> <p> <code>DefinitionUpdates</code> </p> </li> <li> <p> <code>Drivers</code> </p> </li> <li> <p> <code>FeaturePacks</code> </p> </li> <li> <p> <code>SecurityUpdates</code> </p> </li> <li> <p> <code>ServicePacks</code> </p> </li> <li> <p> <code>Tools</code> </p> </li> <li> <p> <code>UpdateRollups</code> </p> </li> <li> <p> <code>Updates</code> </p> </li> <li> <p> <code>Upgrades</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>MSRC_SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Moderate</code> </p> </li> <li> <p> <code>Low</code> </p> </li> <li> <p> <code>Unspecified</code> </p> </li> </ul> <p> <b>Ubuntu Operating Systems</b> </p> <p>The supported keys for Ubuntu operating systems are <code>PRODUCT</code>, <code>PRIORITY</code>, and <code>SECTION</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Ubuntu14.04</code> </p> </li> <li> <p> <code>Ubuntu16.04</code> </p> </li> <li> <p> <code><em></code> </p> <p> <i>Use a wildcard character (</em>) to target all supported operating system versions.</i> </p> </li> </ul> <p> <i>Supported key:</i> <code>PRIORITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Required</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Standard</code> </p> </li> <li> <p> <code>Optional</code> </p> </li> <li> <p> <code>Extra</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SECTION</code> </p> <p>Only the length of the key value is validated. Minimum length is 1. Maximum length is 64.</p> <p> <b>Amazon Linux Operating Systems</b> </p> <p>The supported keys for Amazon Linux operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>AmazonLinux2012.03</code> </p> </li> <li> <p> <code>AmazonLinux2012.09</code> </p> </li> <li> <p> <code>AmazonLinux2013.03</code> </p> </li> <li> <p> <code>AmazonLinux2013.09</code> </p> </li> <li> <p> <code>AmazonLinux2014.03</code> </p> </li> <li> <p> <code>AmazonLinux2014.09</code> </p> </li> <li> <p> <code>AmazonLinux2015.03</code> </p> </li> <li> <p> <code>AmazonLinux2015.09</code> </p> </li> <li> <p> <code>AmazonLinux2016.03</code> </p> </li> <li> <p> <code>AmazonLinux2016.09</code> </p> </li> <li> <p> <code>AmazonLinux2017.03</code> </p> </li> <li> <p> <code>AmazonLinux2017.09</code> </p> </li> <li> <p> <code><em></code> </p> <p> <i>Use a wildcard character (</em>) to target all supported operating system versions.</i> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Security</code> </p> </li> <li> <p> <code>Bugfix</code> </p> </li> <li> <p> <code>Enhancement</code> </p> </li> <li> <p> <code>Recommended</code> </p> </li> <li> <p> <code>Newpackage</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Medium</code> </p> </li> <li> <p> <code>Low</code> </p> </li> </ul> <p> <b>Amazon Linux 2 Operating Systems</b> </p> <p>The supported keys for Amazon Linux 2 operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>AmazonLinux2</code> </p> </li> <li> <p> <code>AmazonLinux2.0</code> </p> </li> <li> <p> <code><em></code> </p> <p> <i>Use a wildcard character (</em>) to target all supported operating system versions.</i> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Security</code> </p> </li> <li> <p> <code>Bugfix</code> </p> </li> <li> <p> <code>Enhancement</code> </p> </li> <li> <p> <code>Recommended</code> </p> </li> <li> <p> <code>Newpackage</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Medium</code> </p> </li> <li> <p> <code>Low</code> </p> </li> </ul> <p> <b>RedHat Enterprise Linux (RHEL) Operating Systems</b> </p> <p>The supported keys for RedHat Enterprise Linux operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>RedhatEnterpriseLinux6.5</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.6</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.7</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.8</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.9</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.0</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.1</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.2</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.3</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.4</code> </p> </li> <li> <p> <code><em></code> </p> <p> <i>Use a wildcard character (</em>) to target all supported operating system versions.</i> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Security</code> </p> </li> <li> <p> <code>Bugfix</code> </p> </li> <li> <p> <code>Enhancement</code> </p> </li> <li> <p> <code>Recommended</code> </p> </li> <li> <p> <code>Newpackage</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Medium</code> </p> </li> <li> <p> <code>Low</code> </p> </li> </ul> <p> <b>SUSE Linux Enterprise Server (SLES) Operating Systems</b> </p> <p>The supported keys for SLES operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Suse12.0</code> </p> </li> <li> <p> <code>Suse12.1</code> </p> </li> <li> <p> <code>Suse12.2</code> </p> </li> <li> <p> <code>Suse12.3</code> </p> </li> <li> <p> <code>Suse12.4</code> </p> </li> <li> <p> <code>Suse12.5</code> </p> </li> <li> <p> <code>Suse12.6</code> </p> </li> <li> <p> <code>Suse12.7</code> </p> </li> <li> <p> <code>Suse12.8</code> </p> </li> <li> <p> <code>Suse12.9</code> </p> </li> <li> <p> <code><em></code> </p> <p> <i>Use a wildcard character (</em>) to target all supported operating system versions.</i> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Security</code> </p> </li> <li> <p> <code>Recommended</code> </p> </li> <li> <p> <code>Optional</code> </p> </li> <li> <p> <code>Feature</code> </p> </li> <li> <p> <code>Document</code> </p> </li> <li> <p> <code>Yast</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Moderate</code> </p> </li> <li> <p> <code>Low</code> </p> </li> </ul> <p> <b>CentOS Operating Systems</b> </p> <p>The supported keys for CentOS operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>CentOS6.5</code> </p> </li> <li> <p> <code>CentOS6.6</code> </p> </li> <li> <p> <code>CentOS6.7</code> </p> </li> <li> <p> <code>CentOS6.8</code> </p> </li> <li> <p> <code>CentOS6.9</code> </p> </li> <li> <p> <code>CentOS7.0</code> </p> </li> <li> <p> <code>CentOS7.1</code> </p> </li> <li> <p> <code>CentOS7.2</code> </p> </li> <li> <p> <code>CentOS7.3</code> </p> </li> <li> <p> <code>CentOS7.4</code> </p> </li> <li> <p> <code><em></code> </p> <p> <i>Use a wildcard character (</em>) to target all supported operating system versions.</i> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Security</code> </p> </li> <li> <p> <code>Bugfix</code> </p> </li> <li> <p> <code>Enhancement</code> </p> </li> <li> <p> <code>Recommended</code> </p> </li> <li> <p> <code>Newpackage</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Medium</code> </p> </li> <li> <p> <code>Low</code> </p> </li> </ul></p>
+/// <p><p>Defines a patch filter.</p> <p>A patch filter consists of key/value pairs, but not all keys are valid for all operating system types. For example, the key <code>PRODUCT</code> is valid for all supported operating system types. The key <code>MSRC<em>SEVERITY</code>, however, is valid only for Windows operating systems, and the key <code>SECTION</code> is valid only for Ubuntu operating systems.</p> <p>Refer to the following sections for information about which keys may be used with each major operating system, and which values are valid for each key.</p> <p> <b>Windows Operating Systems</b> </p> <p>The supported keys for Windows operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>MSRC</em>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Windows7</code> </p> </li> <li> <p> <code>Windows8</code> </p> </li> <li> <p> <code>Windows8.1</code> </p> </li> <li> <p> <code>Windows8Embedded</code> </p> </li> <li> <p> <code>Windows10</code> </p> </li> <li> <p> <code>Windows10LTSB</code> </p> </li> <li> <p> <code>WindowsServer2008</code> </p> </li> <li> <p> <code>WindowsServer2008R2</code> </p> </li> <li> <p> <code>WindowsServer2012</code> </p> </li> <li> <p> <code>WindowsServer2012R2</code> </p> </li> <li> <p> <code>WindowsServer2016</code> </p> </li> <li> <p> <code>WindowsServer2019</code> </p> </li> <li> <p> <code><em></code> </p> <p> <i>Use a wildcard character (</em>) to target all supported operating system versions.</i> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>CriticalUpdates</code> </p> </li> <li> <p> <code>DefinitionUpdates</code> </p> </li> <li> <p> <code>Drivers</code> </p> </li> <li> <p> <code>FeaturePacks</code> </p> </li> <li> <p> <code>SecurityUpdates</code> </p> </li> <li> <p> <code>ServicePacks</code> </p> </li> <li> <p> <code>Tools</code> </p> </li> <li> <p> <code>UpdateRollups</code> </p> </li> <li> <p> <code>Updates</code> </p> </li> <li> <p> <code>Upgrades</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>MSRC_SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Moderate</code> </p> </li> <li> <p> <code>Low</code> </p> </li> <li> <p> <code>Unspecified</code> </p> </li> </ul> <p> <b>Ubuntu Operating Systems</b> </p> <p>The supported keys for Ubuntu operating systems are <code>PRODUCT</code>, <code>PRIORITY</code>, and <code>SECTION</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Ubuntu14.04</code> </p> </li> <li> <p> <code>Ubuntu16.04</code> </p> </li> <li> <p> <code><em></code> </p> <p> <i>Use a wildcard character (</em>) to target all supported operating system versions.</i> </p> </li> </ul> <p> <i>Supported key:</i> <code>PRIORITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Required</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Standard</code> </p> </li> <li> <p> <code>Optional</code> </p> </li> <li> <p> <code>Extra</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SECTION</code> </p> <p>Only the length of the key value is validated. Minimum length is 1. Maximum length is 64.</p> <p> <b>Amazon Linux Operating Systems</b> </p> <p>The supported keys for Amazon Linux operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>AmazonLinux2012.03</code> </p> </li> <li> <p> <code>AmazonLinux2012.09</code> </p> </li> <li> <p> <code>AmazonLinux2013.03</code> </p> </li> <li> <p> <code>AmazonLinux2013.09</code> </p> </li> <li> <p> <code>AmazonLinux2014.03</code> </p> </li> <li> <p> <code>AmazonLinux2014.09</code> </p> </li> <li> <p> <code>AmazonLinux2015.03</code> </p> </li> <li> <p> <code>AmazonLinux2015.09</code> </p> </li> <li> <p> <code>AmazonLinux2016.03</code> </p> </li> <li> <p> <code>AmazonLinux2016.09</code> </p> </li> <li> <p> <code>AmazonLinux2017.03</code> </p> </li> <li> <p> <code>AmazonLinux2017.09</code> </p> </li> <li> <p> <code><em></code> </p> <p> <i>Use a wildcard character (</em>) to target all supported operating system versions.</i> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Security</code> </p> </li> <li> <p> <code>Bugfix</code> </p> </li> <li> <p> <code>Enhancement</code> </p> </li> <li> <p> <code>Recommended</code> </p> </li> <li> <p> <code>Newpackage</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Medium</code> </p> </li> <li> <p> <code>Low</code> </p> </li> </ul> <p> <b>Amazon Linux 2 Operating Systems</b> </p> <p>The supported keys for Amazon Linux 2 operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>AmazonLinux2</code> </p> </li> <li> <p> <code>AmazonLinux2.0</code> </p> </li> <li> <p> <code><em></code> </p> <p> <i>Use a wildcard character (</em>) to target all supported operating system versions.</i> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Security</code> </p> </li> <li> <p> <code>Bugfix</code> </p> </li> <li> <p> <code>Enhancement</code> </p> </li> <li> <p> <code>Recommended</code> </p> </li> <li> <p> <code>Newpackage</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Medium</code> </p> </li> <li> <p> <code>Low</code> </p> </li> </ul> <p> <b>RedHat Enterprise Linux (RHEL) Operating Systems</b> </p> <p>The supported keys for RedHat Enterprise Linux operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>RedhatEnterpriseLinux6.5</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.6</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.7</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.8</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux6.9</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.0</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.1</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.2</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.3</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.4</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.5</code> </p> </li> <li> <p> <code>RedhatEnterpriseLinux7.6</code> </p> </li> <li> <p> <code><em></code> </p> <p> <i>Use a wildcard character (</em>) to target all supported operating system versions.</i> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Security</code> </p> </li> <li> <p> <code>Bugfix</code> </p> </li> <li> <p> <code>Enhancement</code> </p> </li> <li> <p> <code>Recommended</code> </p> </li> <li> <p> <code>Newpackage</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Medium</code> </p> </li> <li> <p> <code>Low</code> </p> </li> </ul> <p> <b>SUSE Linux Enterprise Server (SLES) Operating Systems</b> </p> <p>The supported keys for SLES operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Suse12.0</code> </p> </li> <li> <p> <code>Suse12.1</code> </p> </li> <li> <p> <code>Suse12.2</code> </p> </li> <li> <p> <code>Suse12.3</code> </p> </li> <li> <p> <code>Suse12.4</code> </p> </li> <li> <p> <code>Suse12.5</code> </p> </li> <li> <p> <code>Suse12.6</code> </p> </li> <li> <p> <code>Suse12.7</code> </p> </li> <li> <p> <code>Suse12.8</code> </p> </li> <li> <p> <code>Suse12.9</code> </p> </li> <li> <p> <code><em></code> </p> <p> <i>Use a wildcard character (</em>) to target all supported operating system versions.</i> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Security</code> </p> </li> <li> <p> <code>Recommended</code> </p> </li> <li> <p> <code>Optional</code> </p> </li> <li> <p> <code>Feature</code> </p> </li> <li> <p> <code>Document</code> </p> </li> <li> <p> <code>Yast</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Moderate</code> </p> </li> <li> <p> <code>Low</code> </p> </li> </ul> <p> <b>CentOS Operating Systems</b> </p> <p>The supported keys for CentOS operating systems are <code>PRODUCT</code>, <code>CLASSIFICATION</code>, and <code>SEVERITY</code>. See the following lists for valid values for each of these keys.</p> <p> <i>Supported key:</i> <code>PRODUCT</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>CentOS6.5</code> </p> </li> <li> <p> <code>CentOS6.6</code> </p> </li> <li> <p> <code>CentOS6.7</code> </p> </li> <li> <p> <code>CentOS6.8</code> </p> </li> <li> <p> <code>CentOS6.9</code> </p> </li> <li> <p> <code>CentOS7.0</code> </p> </li> <li> <p> <code>CentOS7.1</code> </p> </li> <li> <p> <code>CentOS7.2</code> </p> </li> <li> <p> <code>CentOS7.3</code> </p> </li> <li> <p> <code>CentOS7.4</code> </p> </li> <li> <p> <code><em></code> </p> <p> <i>Use a wildcard character (</em>) to target all supported operating system versions.</i> </p> </li> </ul> <p> <i>Supported key:</i> <code>CLASSIFICATION</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Security</code> </p> </li> <li> <p> <code>Bugfix</code> </p> </li> <li> <p> <code>Enhancement</code> </p> </li> <li> <p> <code>Recommended</code> </p> </li> <li> <p> <code>Newpackage</code> </p> </li> </ul> <p> <i>Supported key:</i> <code>SEVERITY</code> </p> <p> <i>Supported values:</i> </p> <ul> <li> <p> <code>Critical</code> </p> </li> <li> <p> <code>Important</code> </p> </li> <li> <p> <code>Medium</code> </p> </li> <li> <p> <code>Low</code> </p> </li> </ul></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PatchFilter {
     /// <p>The key for the filter.</p> <p>See <a>PatchFilter</a> for lists of valid keys for each operating system type.</p>
@@ -5024,7 +5478,7 @@ pub struct PatchRuleGroup {
 /// <p>Information about the patches to use to update the instances, including target operating systems and source repository. Applies to Linux instances only.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct PatchSource {
-    /// <p>The value of the yum repo configuration. For example:</p> <p> <code>cachedir=/var/cache/yum/$basesearch</code> </p> <p> <code>$releasever</code> </p> <p> <code>keepcache=0</code> </p> <p> <code>debuglevel=2</code> </p>
+    /// <p>The value of the yum repo configuration. For example:</p> <p> <code>[main]</code> </p> <p> <code>cachedir=/var/cache/yum/$basesearch$releasever</code> </p> <p> <code>keepcache=0</code> </p> <p> <code>debuglevel=2</code> </p>
     #[serde(rename = "Configuration")]
     pub configuration: String,
     /// <p>The name specified to identify the patch source.</p>
@@ -5051,6 +5505,32 @@ pub struct PatchStatus {
     #[serde(rename = "DeploymentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_status: Option<String>,
+}
+
+/// <p>An aggregate of step execution statuses displayed in the AWS Console for a multi-Region and multi-account Automation execution.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ProgressCounters {
+    /// <p>The total number of steps that the system cancelled in all specified AWS Regions and accounts for the current Automation execution.</p>
+    #[serde(rename = "CancelledSteps")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cancelled_steps: Option<i64>,
+    /// <p>The total number of steps that failed to execute in all specified AWS Regions and accounts for the current Automation execution.</p>
+    #[serde(rename = "FailedSteps")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failed_steps: Option<i64>,
+    /// <p>The total number of steps that successfully completed in all specified AWS Regions and accounts for the current Automation execution.</p>
+    #[serde(rename = "SuccessSteps")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub success_steps: Option<i64>,
+    /// <p>The total number of steps that timed out in all specified AWS Regions and accounts for the current Automation execution.</p>
+    #[serde(rename = "TimedOutSteps")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timed_out_steps: Option<i64>,
+    /// <p>The total number of steps executed in all specified AWS Regions and accounts for the current Automation execution.</p>
+    #[serde(rename = "TotalSteps")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub total_steps: Option<i64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -5120,6 +5600,10 @@ pub struct PutParameterRequest {
     #[serde(rename = "Overwrite")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub overwrite: Option<bool>,
+    /// <p><p>Optional metadata that you assign to a resource. Tags enable you to categorize a resource in different ways, such as by purpose, owner, or environment. For example, you might want to tag a Systems Manager parameter to identify the type of resource to which it applies, the environment, or the type of configuration data referenced by the parameter. In this case, you could specify the following key name/value pairs:</p> <ul> <li> <p> <code>Key=Resource,Value=S3bucket</code> </p> </li> <li> <p> <code>Key=OS,Value=Windows</code> </p> </li> <li> <p> <code>Key=ParameterType,Value=LicenseKey</code> </p> </li> </ul> <note> <p>To add tags to an existing Systems Manager parameter, use the <a>AddTagsToResource</a> action.</p> </note></p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p><p>The type of parameter that you want to add to the system.</p> <p>Items in a <code>StringList</code> must be separated by a comma (,). You can&#39;t use other punctuation or special character to escape items in the list. If you have a parameter value that requires a comma, then use the <code>String</code> data type.</p> <note> <p> <code>SecureString</code> is not currently supported for AWS CloudFormation templates or in the China Regions.</p> </note></p>
     #[serde(rename = "Type")]
     pub type_: String,
@@ -5242,9 +5726,10 @@ pub struct RegisterTaskWithMaintenanceWindowRequest {
     #[serde(rename = "Priority")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<i64>,
-    /// <p>The role that should be assumed when executing the task.</p>
+    /// <p>The role to assume when running the Maintenance Window task.</p> <p>If you do not specify a service role ARN, Systems Manager will use your account's service-linked role for Systems Manager by default. If no service-linked role for Systems Manager exists in your account, it will be created when you run <code>RegisterTaskWithMaintenanceWindow</code> without specifying a service role ARN.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/using-service-linked-roles.html#slr-permissions">Service-Linked Role Permissions for Systems Manager</a> and <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-maintenance-permissions.html#maintenance-window-tasks-service-role">Should I Use a Service-Linked Role or a Custom Service Role to Run Maintenance Window Tasks? </a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "ServiceRoleArn")]
-    pub service_role_arn: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_role_arn: Option<String>,
     /// <p>The targets (either instances or Maintenance Window targets).</p> <p>Specify instances using the following format: </p> <p> <code>Key=InstanceIds,Values=&lt;instance-id-1&gt;,&lt;instance-id-2&gt;</code> </p> <p>Specify Maintenance Window targets using the following format:</p> <p> <code>Key=&lt;WindowTargetIds&gt;,Values=&lt;window-target-id-1&gt;,&lt;window-target-id-2&gt;</code> </p>
     #[serde(rename = "Targets")]
     pub targets: Vec<Target>,
@@ -5271,7 +5756,7 @@ pub struct RegisterTaskWithMaintenanceWindowRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct RegisterTaskWithMaintenanceWindowResult {
-    /// <p>The id of the task in the Maintenance Window.</p>
+    /// <p>The ID of the task in the Maintenance Window.</p>
     #[serde(rename = "WindowTaskId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub window_task_id: Option<String>,
@@ -5410,6 +5895,30 @@ pub struct ResultAttribute {
     pub type_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ResumeSessionRequest {
+    /// <p>The ID of the disconnected session to resume.</p>
+    #[serde(rename = "SessionId")]
+    pub session_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ResumeSessionResponse {
+    /// <p>The ID of the session.</p>
+    #[serde(rename = "SessionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub session_id: Option<String>,
+    /// <p>A URL back to SSM Agent on the instance that the Session Manager client uses to send commands and receive output from the instance. Format: <code>wss://ssm-messages.<b>region</b>.amazonaws.com/v1/data-channel/<b>session-id</b>?stream=(input|output)</code>.</p> <p> <b>region</b> represents the Region identifier for an AWS Region supported by AWS Systems Manager, such as <code>us-east-2</code> for the US East (Ohio) Region. For a list of supported <b>region</b> values, see the <b>Region</b> column in the <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html#ssm_region">AWS Systems Manager table of regions and endpoints</a> in the <i>AWS General Reference</i>.</p> <p> <b>session-id</b> represents the ID of a Session Manager session, such as <code>1a2b3c4dEXAMPLE</code>.</p>
+    #[serde(rename = "StreamUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_url: Option<String>,
+    /// <p>An encrypted token value containing session and caller information. Used to authenticate the connection to the instance.</p>
+    #[serde(rename = "TokenValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub token_value: Option<String>,
+}
+
 /// <p>An Amazon S3 bucket where you want to store the results of this request.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct S3OutputLocation {
@@ -5435,6 +5944,24 @@ pub struct S3OutputUrl {
     #[serde(rename = "OutputUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub output_url: Option<String>,
+}
+
+/// <p>Information about a scheduled execution for a Maintenance Window.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ScheduledWindowExecution {
+    /// <p>The time, in ISO-8601 Extended format, that the Maintenance Window is scheduled to be run.</p>
+    #[serde(rename = "ExecutionTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub execution_time: Option<String>,
+    /// <p>The name of the Maintenance Window to be run.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The ID of the Maintenance Window to be run.</p>
+    #[serde(rename = "WindowId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub window_id: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -5480,7 +6007,7 @@ pub struct SendCommandRequest {
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
-    /// <p>The instance IDs where the command should execute. You can specify a maximum of 50 IDs. If you prefer not to list individual instance IDs, you can instead send commands to a fleet of instances using the Targets parameter, which accepts EC2 tags. For more information about how to use Targets, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html">Sending Commands to a Fleet</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    /// <p>The instance IDs where the command should execute. You can specify a maximum of 50 IDs. If you prefer not to list individual instance IDs, you can instead send commands to a fleet of instances using the Targets parameter, which accepts EC2 tags. For more information about how to use targets, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html">Sending Commands to a Fleet</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "InstanceIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_ids: Option<Vec<String>>,
@@ -5516,7 +6043,7 @@ pub struct SendCommandRequest {
     #[serde(rename = "ServiceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
-    /// <p>(Optional) An array of search criteria that targets instances using a Key,Value combination that you specify. Targets is required if you don't provide one or more instance IDs in the call. For more information about how to use Targets, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html">Sending Commands to a Fleet</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    /// <p>(Optional) An array of search criteria that targets instances using a Key,Value combination that you specify. Targets is required if you don't provide one or more instance IDs in the call. For more information about how to use targets, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/send-commands-multiple.html">Sending Commands to a Fleet</a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "Targets")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub targets: Option<Vec<Target>>,
@@ -5533,6 +6060,73 @@ pub struct SendCommandResult {
     #[serde(rename = "Command")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub command: Option<Command>,
+}
+
+/// <p>Information about a Session Manager connection to an instance.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct Session {
+    /// <p>Reserved for future use.</p>
+    #[serde(rename = "Details")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub details: Option<String>,
+    /// <p>The name of the Session Manager SSM document used to define the parameters and plugin settings for the session. For example, <code>SSM-SessionManagerRunShell</code>.</p>
+    #[serde(rename = "DocumentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_name: Option<String>,
+    /// <p>The date and time, in ISO-8601 Extended format, when the session was terminated.</p>
+    #[serde(rename = "EndDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_date: Option<f64>,
+    /// <p>Reserved for future use.</p>
+    #[serde(rename = "OutputUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_url: Option<SessionManagerOutputUrl>,
+    /// <p>The ID of the AWS user account that started the session.</p>
+    #[serde(rename = "Owner")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub owner: Option<String>,
+    /// <p>The ID of the session.</p>
+    #[serde(rename = "SessionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub session_id: Option<String>,
+    /// <p>The date and time, in ISO-8601 Extended format, when the session began.</p>
+    #[serde(rename = "StartDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_date: Option<f64>,
+    /// <p>The status of the session. For example, "Connected" or "Terminated".</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The instance that the Session Manager session connected to.</p>
+    #[serde(rename = "Target")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target: Option<String>,
+}
+
+/// <p>Describes a filter for Session Manager information.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct SessionFilter {
+    /// <p>The name of the filter.</p>
+    #[serde(rename = "key")]
+    pub key: String,
+    /// <p><p>The filter value. Valid values for each filter key are as follows:</p> <ul> <li> <p>InvokedAfter: Specify a timestamp to limit your results. For example, specify 2018-08-29T00:00:00Z to see sessions that started August 29, 2018, and later.</p> </li> <li> <p>InvokedBefore: Specify a timestamp to limit your results. For example, specify 2018-08-29T00:00:00Z to see sessions that started before August 29, 2018.</p> </li> <li> <p>Target: Specify an instance to which session connections have been made.</p> </li> <li> <p>Owner: Specify an AWS user account to see a list of sessions started by that user.</p> </li> <li> <p>Status: Specify a valid session status to see a list of all sessions with that status. Status values you can specify include:</p> <ul> <li> <p>Connected</p> </li> <li> <p>Connecting</p> </li> <li> <p>Disconnected</p> </li> <li> <p>Terminated</p> </li> <li> <p>Terminating</p> </li> <li> <p>Failed</p> </li> </ul> </li> </ul></p>
+    #[serde(rename = "value")]
+    pub value: String,
+}
+
+/// <p>Reserved for future use.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct SessionManagerOutputUrl {
+    /// <p>Reserved for future use.</p>
+    #[serde(rename = "CloudWatchOutputUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_watch_output_url: Option<String>,
+    /// <p>Reserved for future use.</p>
+    #[serde(rename = "S3OutputUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub s3_output_url: Option<String>,
 }
 
 /// <p>The number of managed instances found for each patch severity level defined in the request filter.</p>
@@ -5605,7 +6199,15 @@ pub struct StartAutomationExecutionRequest {
     #[serde(rename = "Parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameters: Option<::std::collections::HashMap<String, Vec<String>>>,
-    /// <p>The name of the parameter used as the target resource for the rate-controlled execution. Required if you specify Targets.</p>
+    /// <p>A location is a combination of AWS Regions and/or AWS accounts where you want to execute the Automation. Use this action to start an Automation in multiple Regions and multiple accounts. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-automation-multiple-accounts-and-regions.html">Concurrently Executing Automations in Multiple AWS Regions and Accounts</a> in the <i>AWS Systems Manager User Guide</i>. </p>
+    #[serde(rename = "TargetLocations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_locations: Option<Vec<TargetLocation>>,
+    /// <p>A key-value mapping of document parameters to target resources. Both Targets and TargetMaps cannot be specified together.</p>
+    #[serde(rename = "TargetMaps")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_maps: Option<Vec<::std::collections::HashMap<String, Vec<String>>>>,
+    /// <p>The name of the parameter used as the target resource for the rate-controlled execution. Required if you specify targets.</p>
     #[serde(rename = "TargetParameterName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_parameter_name: Option<String>,
@@ -5622,6 +6224,38 @@ pub struct StartAutomationExecutionResult {
     #[serde(rename = "AutomationExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub automation_execution_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StartSessionRequest {
+    /// <p>The name of the SSM document to define the parameters and plugin settings for the session. For example, <code>SSM-SessionManagerRunShell</code>. If no document name is provided, a shell to the instance is launched by default.</p>
+    #[serde(rename = "DocumentName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub document_name: Option<String>,
+    /// <p>Reserved for future use.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameters: Option<::std::collections::HashMap<String, Vec<String>>>,
+    /// <p>The instance to connect to for the session.</p>
+    #[serde(rename = "Target")]
+    pub target: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StartSessionResponse {
+    /// <p>The ID of the session.</p>
+    #[serde(rename = "SessionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub session_id: Option<String>,
+    /// <p>A URL back to SSM Agent on the instance that the Session Manager client uses to send commands and receive output from the instance. Format: <code>wss://ssm-messages.<b>region</b>.amazonaws.com/v1/data-channel/<b>session-id</b>?stream=(input|output)</code> </p> <p> <b>region</b> represents the Region identifier for an AWS Region supported by AWS Systems Manager, such as <code>us-east-2</code> for the US East (Ohio) Region. For a list of supported <b>region</b> values, see the <b>Region</b> column in the <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html#ssm_region">AWS Systems Manager table of regions and endpoints</a> in the <i>AWS General Reference</i>.</p> <p> <b>session-id</b> represents the ID of a Session Manager session, such as <code>1a2b3c4dEXAMPLE</code>.</p>
+    #[serde(rename = "StreamUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stream_url: Option<String>,
+    /// <p>An encrypted token value containing session and caller information. Used to authenticate the connection to the instance.</p>
+    #[serde(rename = "TokenValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub token_value: Option<String>,
 }
 
 /// <p>Detailed information about an the execution state of an Automation step.</p>
@@ -5700,6 +6334,14 @@ pub struct StepExecution {
     #[serde(rename = "StepStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub step_status: Option<String>,
+    /// <p>The combination of AWS Regions and accounts targeted by the current Automation execution.</p>
+    #[serde(rename = "TargetLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_location: Option<TargetLocation>,
+    /// <p>The targets for the step execution.</p>
+    #[serde(rename = "Targets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub targets: Option<Vec<Target>>,
     /// <p>The timeout seconds of the step.</p>
     #[serde(rename = "TimeoutSeconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5760,6 +6402,47 @@ pub struct Target {
     pub values: Option<Vec<String>>,
 }
 
+/// <p>The combination of AWS Regions and accounts targeted by the current Automation execution.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TargetLocation {
+    /// <p>The AWS accounts targeted by the current Automation execution.</p>
+    #[serde(rename = "Accounts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accounts: Option<Vec<String>>,
+    /// <p>The Automation execution role used by the currently executing Automation.</p>
+    #[serde(rename = "ExecutionRoleName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub execution_role_name: Option<String>,
+    /// <p>The AWS Regions targeted by the current Automation execution.</p>
+    #[serde(rename = "Regions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub regions: Option<Vec<String>>,
+    /// <p>The maxium number of AWS accounts and AWS regions allowed to run the Automation concurrently </p>
+    #[serde(rename = "TargetLocationMaxConcurrency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_location_max_concurrency: Option<String>,
+    /// <p>The maxium number of errors allowed before the system stops queueing additional Automation executions for the currently executing Automation. </p>
+    #[serde(rename = "TargetLocationMaxErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_location_max_errors: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TerminateSessionRequest {
+    /// <p>The ID of the session to terminate.</p>
+    #[serde(rename = "SessionId")]
+    pub session_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TerminateSessionResponse {
+    /// <p>The ID of the session that has been terminated.</p>
+    #[serde(rename = "SessionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub session_id: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateAssociationRequest {
     /// <p>The ID of the association you want to update. </p>
@@ -5773,10 +6456,26 @@ pub struct UpdateAssociationRequest {
     #[serde(rename = "AssociationVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub association_version: Option<String>,
+    /// <p>Specify the target for the association. This target is required for associations that use an Automation document and target resources by using rate controls.</p>
+    #[serde(rename = "AutomationTargetParameterName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub automation_target_parameter_name: Option<String>,
+    /// <p>The severity level to assign to the association.</p>
+    #[serde(rename = "ComplianceSeverity")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub compliance_severity: Option<String>,
     /// <p>The document version you want update for the association. </p>
     #[serde(rename = "DocumentVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub document_version: Option<String>,
+    /// <p>The maximum number of targets allowed to run the association at the same time. You can specify a number, for example 10, or a percentage of the target set, for example 10%. The default value is 100%, which means all targets run the association at the same time.</p> <p>If a new instance starts and attempts to execute an association while Systems Manager is executing MaxConcurrency associations, the association is allowed to run. During the next association interval, the new instance will process its association within the limit specified for MaxConcurrency.</p>
+    #[serde(rename = "MaxConcurrency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_concurrency: Option<String>,
+    /// <p>The number of errors that are allowed before the system stops sending requests to run the association on additional targets. You can specify either an absolute number of errors, for example 10, or a percentage of the target set, for example 10%. If you specify 3, for example, the system stops sending requests when the fourth error is received. If you specify 0, then the system stops sending requests after the first error is returned. If you run an association on 50 instances and set MaxError to 10%, then the system stops sending the request when the sixth error is received.</p> <p>Executions that are already running an association when MaxErrors is reached are allowed to complete, but some of these executions may fail as well. If you need to ensure that there won't be more than max-errors failed executions, set MaxConcurrency to 1 so that executions proceed one at a time.</p>
+    #[serde(rename = "MaxErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_errors: Option<String>,
     /// <p>The name of the association document.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5851,7 +6550,11 @@ pub struct UpdateDocumentDefaultVersionResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateDocumentRequest {
-    /// <p>The content in a document that you want to update.</p>
+    /// <p>A list of key and value pairs that describe attachments to a version of a document.</p>
+    #[serde(rename = "Attachments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attachments: Option<Vec<AttachmentsSource>>,
+    /// <p>A valid JSON or YAML string.</p>
     #[serde(rename = "Content")]
     pub content: String,
     /// <p>Specify the document format for the new document version. Systems Manager supports JSON and YAML documents. JSON is the default format.</p>
@@ -5869,6 +6572,10 @@ pub struct UpdateDocumentRequest {
     #[serde(rename = "TargetType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_type: Option<String>,
+    /// <p>An optional field specifying the version of the artifact you are updating with the document. For example, "Release 12, Update 6". This value is unique across all versions of a document, and cannot be changed.</p>
+    #[serde(rename = "VersionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -5902,6 +6609,10 @@ pub struct UpdateMaintenanceWindowRequest {
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
+    /// <p>The date and time, in ISO-8601 Extended format, for when you want the Maintenance Window to become inactive. EndDate allows you to set a date and time in the future when the Maintenance Window will no longer run.</p>
+    #[serde(rename = "EndDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_date: Option<String>,
     /// <p>The name of the Maintenance Window.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5914,6 +6625,14 @@ pub struct UpdateMaintenanceWindowRequest {
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
+    /// <p>The time zone that the scheduled Maintenance Window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the <a href="https://www.iana.org/time-zones">Time Zone Database</a> on the IANA website.</p>
+    #[serde(rename = "ScheduleTimezone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schedule_timezone: Option<String>,
+    /// <p>The time zone that the scheduled Maintenance Window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the <a href="https://www.iana.org/time-zones">Time Zone Database</a> on the IANA website.</p>
+    #[serde(rename = "StartDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_date: Option<String>,
     /// <p>The ID of the Maintenance Window to update.</p>
     #[serde(rename = "WindowId")]
     pub window_id: String,
@@ -5942,6 +6661,10 @@ pub struct UpdateMaintenanceWindowResult {
     #[serde(rename = "Enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
+    /// <p>The date and time, in ISO-8601 Extended format, for when the Maintenance Window is scheduled to become inactive. The Maintenance Window will not run after this specified time.</p>
+    #[serde(rename = "EndDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_date: Option<String>,
     /// <p>The name of the Maintenance Window.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -5950,6 +6673,14 @@ pub struct UpdateMaintenanceWindowResult {
     #[serde(rename = "Schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub schedule: Option<String>,
+    /// <p>The time zone that the scheduled Maintenance Window executions are based on, in Internet Assigned Numbers Authority (IANA) format. For example: "America/Los_Angeles", "etc/UTC", or "Asia/Seoul". For more information, see the <a href="https://www.iana.org/time-zones">Time Zone Database</a> on the IANA website.</p>
+    #[serde(rename = "ScheduleTimezone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schedule_timezone: Option<String>,
+    /// <p>The date and time, in ISO-8601 Extended format, for when the Maintenance Window is scheduled to become active. The Maintenance Window will not run before this specified time.</p>
+    #[serde(rename = "StartDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_date: Option<String>,
     /// <p>The ID of the created Maintenance Window.</p>
     #[serde(rename = "WindowId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6045,7 +6776,7 @@ pub struct UpdateMaintenanceWindowTaskRequest {
     #[serde(rename = "Replace")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub replace: Option<bool>,
-    /// <p>The IAM service role ARN to modify. The system assumes this role during task execution. </p>
+    /// <p>The IAM service role ARN to modify. The system assumes this role during task execution.</p> <p>If you do not specify a service role ARN, Systems Manager will use your account's service-linked role for Systems Manager by default. If no service-linked role for Systems Manager exists in your account, it will be created when you run <code>RegisterTaskWithMaintenanceWindow</code> without specifying a service role ARN.</p> <p>For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/using-service-linked-roles.html#slr-permissions">Service-Linked Role Permissions for Systems Manager</a> and <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/sysman-maintenance-permissions.html#maintenance-window-tasks-service-role">Should I Use a Service-Linked Role or a Custom Service Role to Run Maintenance Window Tasks? </a> in the <i>AWS Systems Manager User Guide</i>.</p>
     #[serde(rename = "ServiceRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role_arn: Option<String>,
@@ -6183,6 +6914,10 @@ pub struct UpdatePatchBaselineRequest {
     #[serde(rename = "RejectedPatches")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rejected_patches: Option<Vec<String>>,
+    /// <p><p>The action for Patch Manager to take on patches included in the RejectedPackages list.</p> <ul> <li> <p> <b>ALLOW<em>AS</em>DEPENDENCY</b>: A package in the Rejected patches list is installed only if it is a dependency of another package. It is considered compliant with the patch baseline, and its status is reported as <i>InstalledOther</i>. This is the default action if no option is specified.</p> </li> <li> <p> <b>BLOCK</b>: Packages in the RejectedPatches list, and packages that include them as dependencies, are not installed under any circumstances. If a package was installed before it was added to the Rejected patches list, it is considered non-compliant with the patch baseline, and its status is reported as <i>InstalledRejected</i>.</p> </li> </ul></p>
+    #[serde(rename = "RejectedPatchesAction")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rejected_patches_action: Option<String>,
     /// <p>If True, then all fields that are required by the CreatePatchBaseline action are also required for this API request. Optional fields that are not specified are set to null.</p>
     #[serde(rename = "Replace")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6244,6 +6979,10 @@ pub struct UpdatePatchBaselineResult {
     #[serde(rename = "RejectedPatches")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rejected_patches: Option<Vec<String>>,
+    /// <p>The action specified to take on patches included in the RejectedPatches list. A patch can be allowed only if it is a dependency of another package, or blocked entirely along with packages that include it as a dependency.</p>
+    #[serde(rename = "RejectedPatchesAction")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rejected_patches_action: Option<String>,
     /// <p>Information about the patches to use to update the instances, including target operating systems and source repositories. Applies to Linux instances only.</p>
     #[serde(rename = "Sources")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -6451,6 +7190,100 @@ impl Error for CancelCommandError {
             CancelCommandError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             CancelCommandError::ParseError(ref cause) => cause,
             CancelCommandError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by CancelMaintenanceWindowExecution
+#[derive(Debug, PartialEq)]
+pub enum CancelMaintenanceWindowExecutionError {
+    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    DoesNotExist(String),
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl CancelMaintenanceWindowExecutionError {
+    pub fn from_response(res: BufferedHttpResponse) -> CancelMaintenanceWindowExecutionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "DoesNotExistException" => {
+                    return CancelMaintenanceWindowExecutionError::DoesNotExist(String::from(
+                        error_message,
+                    ));
+                }
+                "InternalServerError" => {
+                    return CancelMaintenanceWindowExecutionError::InternalServerError(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return CancelMaintenanceWindowExecutionError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return CancelMaintenanceWindowExecutionError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for CancelMaintenanceWindowExecutionError {
+    fn from(err: serde_json::error::Error) -> CancelMaintenanceWindowExecutionError {
+        CancelMaintenanceWindowExecutionError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CancelMaintenanceWindowExecutionError {
+    fn from(err: CredentialsError) -> CancelMaintenanceWindowExecutionError {
+        CancelMaintenanceWindowExecutionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CancelMaintenanceWindowExecutionError {
+    fn from(err: HttpDispatchError) -> CancelMaintenanceWindowExecutionError {
+        CancelMaintenanceWindowExecutionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CancelMaintenanceWindowExecutionError {
+    fn from(err: io::Error) -> CancelMaintenanceWindowExecutionError {
+        CancelMaintenanceWindowExecutionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CancelMaintenanceWindowExecutionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CancelMaintenanceWindowExecutionError {
+    fn description(&self) -> &str {
+        match *self {
+            CancelMaintenanceWindowExecutionError::DoesNotExist(ref cause) => cause,
+            CancelMaintenanceWindowExecutionError::InternalServerError(ref cause) => cause,
+            CancelMaintenanceWindowExecutionError::Validation(ref cause) => cause,
+            CancelMaintenanceWindowExecutionError::Credentials(ref err) => err.description(),
+            CancelMaintenanceWindowExecutionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CancelMaintenanceWindowExecutionError::ParseError(ref cause) => cause,
+            CancelMaintenanceWindowExecutionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10516,6 +11349,100 @@ impl Error for DescribeMaintenanceWindowExecutionsError {
         }
     }
 }
+/// Errors returned by DescribeMaintenanceWindowSchedule
+#[derive(Debug, PartialEq)]
+pub enum DescribeMaintenanceWindowScheduleError {
+    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    DoesNotExist(String),
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DescribeMaintenanceWindowScheduleError {
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeMaintenanceWindowScheduleError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "DoesNotExistException" => {
+                    return DescribeMaintenanceWindowScheduleError::DoesNotExist(String::from(
+                        error_message,
+                    ));
+                }
+                "InternalServerError" => {
+                    return DescribeMaintenanceWindowScheduleError::InternalServerError(
+                        String::from(error_message),
+                    );
+                }
+                "ValidationException" => {
+                    return DescribeMaintenanceWindowScheduleError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return DescribeMaintenanceWindowScheduleError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeMaintenanceWindowScheduleError {
+    fn from(err: serde_json::error::Error) -> DescribeMaintenanceWindowScheduleError {
+        DescribeMaintenanceWindowScheduleError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeMaintenanceWindowScheduleError {
+    fn from(err: CredentialsError) -> DescribeMaintenanceWindowScheduleError {
+        DescribeMaintenanceWindowScheduleError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeMaintenanceWindowScheduleError {
+    fn from(err: HttpDispatchError) -> DescribeMaintenanceWindowScheduleError {
+        DescribeMaintenanceWindowScheduleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeMaintenanceWindowScheduleError {
+    fn from(err: io::Error) -> DescribeMaintenanceWindowScheduleError {
+        DescribeMaintenanceWindowScheduleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeMaintenanceWindowScheduleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeMaintenanceWindowScheduleError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeMaintenanceWindowScheduleError::DoesNotExist(ref cause) => cause,
+            DescribeMaintenanceWindowScheduleError::InternalServerError(ref cause) => cause,
+            DescribeMaintenanceWindowScheduleError::Validation(ref cause) => cause,
+            DescribeMaintenanceWindowScheduleError::Credentials(ref err) => err.description(),
+            DescribeMaintenanceWindowScheduleError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeMaintenanceWindowScheduleError::ParseError(ref cause) => cause,
+            DescribeMaintenanceWindowScheduleError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by DescribeMaintenanceWindowTargets
 #[derive(Debug, PartialEq)]
 pub enum DescribeMaintenanceWindowTargetsError {
@@ -10785,6 +11712,92 @@ impl Error for DescribeMaintenanceWindowsError {
             }
             DescribeMaintenanceWindowsError::ParseError(ref cause) => cause,
             DescribeMaintenanceWindowsError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DescribeMaintenanceWindowsForTarget
+#[derive(Debug, PartialEq)]
+pub enum DescribeMaintenanceWindowsForTargetError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DescribeMaintenanceWindowsForTargetError {
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeMaintenanceWindowsForTargetError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalServerError" => {
+                    return DescribeMaintenanceWindowsForTargetError::InternalServerError(
+                        String::from(error_message),
+                    );
+                }
+                "ValidationException" => {
+                    return DescribeMaintenanceWindowsForTargetError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return DescribeMaintenanceWindowsForTargetError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeMaintenanceWindowsForTargetError {
+    fn from(err: serde_json::error::Error) -> DescribeMaintenanceWindowsForTargetError {
+        DescribeMaintenanceWindowsForTargetError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeMaintenanceWindowsForTargetError {
+    fn from(err: CredentialsError) -> DescribeMaintenanceWindowsForTargetError {
+        DescribeMaintenanceWindowsForTargetError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeMaintenanceWindowsForTargetError {
+    fn from(err: HttpDispatchError) -> DescribeMaintenanceWindowsForTargetError {
+        DescribeMaintenanceWindowsForTargetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeMaintenanceWindowsForTargetError {
+    fn from(err: io::Error) -> DescribeMaintenanceWindowsForTargetError {
+        DescribeMaintenanceWindowsForTargetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeMaintenanceWindowsForTargetError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeMaintenanceWindowsForTargetError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeMaintenanceWindowsForTargetError::InternalServerError(ref cause) => cause,
+            DescribeMaintenanceWindowsForTargetError::Validation(ref cause) => cause,
+            DescribeMaintenanceWindowsForTargetError::Credentials(ref err) => err.description(),
+            DescribeMaintenanceWindowsForTargetError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeMaintenanceWindowsForTargetError::ParseError(ref cause) => cause,
+            DescribeMaintenanceWindowsForTargetError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11154,6 +12167,98 @@ impl Error for DescribePatchGroupsError {
         }
     }
 }
+/// Errors returned by DescribeSessions
+#[derive(Debug, PartialEq)]
+pub enum DescribeSessionsError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>The specified key is not valid.</p>
+    InvalidFilterKey(String),
+    /// <p>The specified token is not valid.</p>
+    InvalidNextToken(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DescribeSessionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeSessionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalServerError" => {
+                    return DescribeSessionsError::InternalServerError(String::from(error_message));
+                }
+                "InvalidFilterKey" => {
+                    return DescribeSessionsError::InvalidFilterKey(String::from(error_message));
+                }
+                "InvalidNextToken" => {
+                    return DescribeSessionsError::InvalidNextToken(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return DescribeSessionsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DescribeSessionsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeSessionsError {
+    fn from(err: serde_json::error::Error) -> DescribeSessionsError {
+        DescribeSessionsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeSessionsError {
+    fn from(err: CredentialsError) -> DescribeSessionsError {
+        DescribeSessionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeSessionsError {
+    fn from(err: HttpDispatchError) -> DescribeSessionsError {
+        DescribeSessionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeSessionsError {
+    fn from(err: io::Error) -> DescribeSessionsError {
+        DescribeSessionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeSessionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeSessionsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeSessionsError::InternalServerError(ref cause) => cause,
+            DescribeSessionsError::InvalidFilterKey(ref cause) => cause,
+            DescribeSessionsError::InvalidNextToken(ref cause) => cause,
+            DescribeSessionsError::Validation(ref cause) => cause,
+            DescribeSessionsError::Credentials(ref err) => err.description(),
+            DescribeSessionsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DescribeSessionsError::ParseError(ref cause) => cause,
+            DescribeSessionsError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by GetAutomationExecution
 #[derive(Debug, PartialEq)]
 pub enum GetAutomationExecutionError {
@@ -11353,6 +12458,90 @@ impl Error for GetCommandInvocationError {
             }
             GetCommandInvocationError::ParseError(ref cause) => cause,
             GetCommandInvocationError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetConnectionStatus
+#[derive(Debug, PartialEq)]
+pub enum GetConnectionStatusError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetConnectionStatusError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetConnectionStatusError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalServerError" => {
+                    return GetConnectionStatusError::InternalServerError(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return GetConnectionStatusError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetConnectionStatusError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetConnectionStatusError {
+    fn from(err: serde_json::error::Error) -> GetConnectionStatusError {
+        GetConnectionStatusError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetConnectionStatusError {
+    fn from(err: CredentialsError) -> GetConnectionStatusError {
+        GetConnectionStatusError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetConnectionStatusError {
+    fn from(err: HttpDispatchError) -> GetConnectionStatusError {
+        GetConnectionStatusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetConnectionStatusError {
+    fn from(err: io::Error) -> GetConnectionStatusError {
+        GetConnectionStatusError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetConnectionStatusError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetConnectionStatusError {
+    fn description(&self) -> &str {
+        match *self {
+            GetConnectionStatusError::InternalServerError(ref cause) => cause,
+            GetConnectionStatusError::Validation(ref cause) => cause,
+            GetConnectionStatusError::Credentials(ref err) => err.description(),
+            GetConnectionStatusError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetConnectionStatusError::ParseError(ref cause) => cause,
+            GetConnectionStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -11633,8 +12822,12 @@ impl Error for GetDocumentError {
 pub enum GetInventoryError {
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
+    /// <p>The specified aggregator is not valid for inventory groups. Verify that the aggregator uses a valid inventory type such as <code>AWS:Application</code> or <code>AWS:InstanceInformation</code>.</p>
+    InvalidAggregator(String),
     /// <p>The filter name is not valid. Verify the you entered the correct name and try again.</p>
     InvalidFilter(String),
+    /// <p>The specified inventory group is not valid.</p>
+    InvalidInventoryGroup(String),
     /// <p>The specified token is not valid.</p>
     InvalidNextToken(String),
     /// <p>The specified inventory item result attribute is not valid.</p>
@@ -11669,8 +12862,14 @@ impl GetInventoryError {
                 "InternalServerError" => {
                     return GetInventoryError::InternalServerError(String::from(error_message));
                 }
+                "InvalidAggregatorException" => {
+                    return GetInventoryError::InvalidAggregator(String::from(error_message));
+                }
                 "InvalidFilter" => {
                     return GetInventoryError::InvalidFilter(String::from(error_message));
+                }
+                "InvalidInventoryGroupException" => {
+                    return GetInventoryError::InvalidInventoryGroup(String::from(error_message));
                 }
                 "InvalidNextToken" => {
                     return GetInventoryError::InvalidNextToken(String::from(error_message));
@@ -11720,7 +12919,9 @@ impl Error for GetInventoryError {
     fn description(&self) -> &str {
         match *self {
             GetInventoryError::InternalServerError(ref cause) => cause,
+            GetInventoryError::InvalidAggregator(ref cause) => cause,
             GetInventoryError::InvalidFilter(ref cause) => cause,
+            GetInventoryError::InvalidInventoryGroup(ref cause) => cause,
             GetInventoryError::InvalidNextToken(ref cause) => cause,
             GetInventoryError::InvalidResultAttribute(ref cause) => cause,
             GetInventoryError::InvalidTypeName(ref cause) => cause,
@@ -12877,7 +14078,7 @@ pub enum LabelParameterVersionError {
     InternalServerError(String),
     /// <p>The parameter could not be found. Verify the name and try again.</p>
     ParameterNotFound(String),
-
+    /// <p>A parameter version can have a maximum of ten labels.</p>
     ParameterVersionLabelLimitExceeded(String),
     /// <p>The specified parameter version was not found. Verify the parameter name and version, and try again.</p>
     ParameterVersionNotFound(String),
@@ -15276,6 +16477,92 @@ impl Error for RemoveTagsFromResourceError {
         }
     }
 }
+/// Errors returned by ResumeSession
+#[derive(Debug, PartialEq)]
+pub enum ResumeSessionError {
+    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    DoesNotExist(String),
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ResumeSessionError {
+    pub fn from_response(res: BufferedHttpResponse) -> ResumeSessionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "DoesNotExistException" => {
+                    return ResumeSessionError::DoesNotExist(String::from(error_message));
+                }
+                "InternalServerError" => {
+                    return ResumeSessionError::InternalServerError(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return ResumeSessionError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ResumeSessionError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ResumeSessionError {
+    fn from(err: serde_json::error::Error) -> ResumeSessionError {
+        ResumeSessionError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ResumeSessionError {
+    fn from(err: CredentialsError) -> ResumeSessionError {
+        ResumeSessionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ResumeSessionError {
+    fn from(err: HttpDispatchError) -> ResumeSessionError {
+        ResumeSessionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ResumeSessionError {
+    fn from(err: io::Error) -> ResumeSessionError {
+        ResumeSessionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ResumeSessionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ResumeSessionError {
+    fn description(&self) -> &str {
+        match *self {
+            ResumeSessionError::DoesNotExist(ref cause) => cause,
+            ResumeSessionError::InternalServerError(ref cause) => cause,
+            ResumeSessionError::Validation(ref cause) => cause,
+            ResumeSessionError::Credentials(ref err) => err.description(),
+            ResumeSessionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ResumeSessionError::ParseError(ref cause) => cause,
+            ResumeSessionError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by SendAutomationSignal
 #[derive(Debug, PartialEq)]
 pub enum SendAutomationSignalError {
@@ -15744,6 +17031,98 @@ impl Error for StartAutomationExecutionError {
         }
     }
 }
+/// Errors returned by StartSession
+#[derive(Debug, PartialEq)]
+pub enum StartSessionError {
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// <p>The specified document does not exist.</p>
+    InvalidDocument(String),
+    /// <p>The specified target instance for the session is not fully configured for use with Session Manager. For more information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-getting-started.html">Getting Started with Session Manager</a> in the <i>AWS Systems Manager User Guide</i>.</p>
+    TargetNotConnected(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl StartSessionError {
+    pub fn from_response(res: BufferedHttpResponse) -> StartSessionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalServerError" => {
+                    return StartSessionError::InternalServerError(String::from(error_message));
+                }
+                "InvalidDocument" => {
+                    return StartSessionError::InvalidDocument(String::from(error_message));
+                }
+                "TargetNotConnected" => {
+                    return StartSessionError::TargetNotConnected(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return StartSessionError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return StartSessionError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for StartSessionError {
+    fn from(err: serde_json::error::Error) -> StartSessionError {
+        StartSessionError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for StartSessionError {
+    fn from(err: CredentialsError) -> StartSessionError {
+        StartSessionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for StartSessionError {
+    fn from(err: HttpDispatchError) -> StartSessionError {
+        StartSessionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StartSessionError {
+    fn from(err: io::Error) -> StartSessionError {
+        StartSessionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for StartSessionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartSessionError {
+    fn description(&self) -> &str {
+        match *self {
+            StartSessionError::InternalServerError(ref cause) => cause,
+            StartSessionError::InvalidDocument(ref cause) => cause,
+            StartSessionError::TargetNotConnected(ref cause) => cause,
+            StartSessionError::Validation(ref cause) => cause,
+            StartSessionError::Credentials(ref err) => err.description(),
+            StartSessionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            StartSessionError::ParseError(ref cause) => cause,
+            StartSessionError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by StopAutomationExecution
 #[derive(Debug, PartialEq)]
 pub enum StopAutomationExecutionError {
@@ -15841,6 +17220,92 @@ impl Error for StopAutomationExecutionError {
             }
             StopAutomationExecutionError::ParseError(ref cause) => cause,
             StopAutomationExecutionError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by TerminateSession
+#[derive(Debug, PartialEq)]
+pub enum TerminateSessionError {
+    /// <p>Error returned when the ID specified for a resource, such as a Maintenance Window or Patch baseline, doesn't exist.</p> <p>For information about resource limits in Systems Manager, see <a href="http://docs.aws.amazon.com/general/latest/gr/aws_service_limits.html#limits_ssm">AWS Systems Manager Limits</a>.</p>
+    DoesNotExist(String),
+    /// <p>An error occurred on the server side.</p>
+    InternalServerError(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl TerminateSessionError {
+    pub fn from_response(res: BufferedHttpResponse) -> TerminateSessionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "DoesNotExistException" => {
+                    return TerminateSessionError::DoesNotExist(String::from(error_message));
+                }
+                "InternalServerError" => {
+                    return TerminateSessionError::InternalServerError(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return TerminateSessionError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return TerminateSessionError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for TerminateSessionError {
+    fn from(err: serde_json::error::Error) -> TerminateSessionError {
+        TerminateSessionError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for TerminateSessionError {
+    fn from(err: CredentialsError) -> TerminateSessionError {
+        TerminateSessionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for TerminateSessionError {
+    fn from(err: HttpDispatchError) -> TerminateSessionError {
+        TerminateSessionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for TerminateSessionError {
+    fn from(err: io::Error) -> TerminateSessionError {
+        TerminateSessionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for TerminateSessionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TerminateSessionError {
+    fn description(&self) -> &str {
+        match *self {
+            TerminateSessionError::DoesNotExist(ref cause) => cause,
+            TerminateSessionError::InternalServerError(ref cause) => cause,
+            TerminateSessionError::Validation(ref cause) => cause,
+            TerminateSessionError::Credentials(ref err) => err.description(),
+            TerminateSessionError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            TerminateSessionError::ParseError(ref cause) => cause,
+            TerminateSessionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -16131,12 +17596,16 @@ pub enum UpdateDocumentError {
     DocumentVersionLimitExceeded(String),
     /// <p>The content of the association document matches another document. Change the content of the document and try again.</p>
     DuplicateDocumentContent(String),
+    /// <p>The version name has already been used in this document. Specify a different version name, and then try again.</p>
+    DuplicateDocumentVersionName(String),
     /// <p>An error occurred on the server side.</p>
     InternalServerError(String),
     /// <p>The specified document does not exist.</p>
     InvalidDocument(String),
     /// <p>The content for the document is not valid.</p>
     InvalidDocumentContent(String),
+    /// <p>You attempted to delete a document while it is still shared. You must stop sharing the document before you can delete it.</p>
+    InvalidDocumentOperation(String),
     /// <p>The version of the document schema is not supported.</p>
     InvalidDocumentSchemaVersion(String),
     /// <p>The document version is not valid or does not exist.</p>
@@ -16178,6 +17647,11 @@ impl UpdateDocumentError {
                         error_message,
                     ));
                 }
+                "DuplicateDocumentVersionName" => {
+                    return UpdateDocumentError::DuplicateDocumentVersionName(String::from(
+                        error_message,
+                    ));
+                }
                 "InternalServerError" => {
                     return UpdateDocumentError::InternalServerError(String::from(error_message));
                 }
@@ -16186,6 +17660,11 @@ impl UpdateDocumentError {
                 }
                 "InvalidDocumentContent" => {
                     return UpdateDocumentError::InvalidDocumentContent(String::from(error_message));
+                }
+                "InvalidDocumentOperation" => {
+                    return UpdateDocumentError::InvalidDocumentOperation(String::from(
+                        error_message,
+                    ));
                 }
                 "InvalidDocumentSchemaVersion" => {
                     return UpdateDocumentError::InvalidDocumentSchemaVersion(String::from(
@@ -16238,9 +17717,11 @@ impl Error for UpdateDocumentError {
         match *self {
             UpdateDocumentError::DocumentVersionLimitExceeded(ref cause) => cause,
             UpdateDocumentError::DuplicateDocumentContent(ref cause) => cause,
+            UpdateDocumentError::DuplicateDocumentVersionName(ref cause) => cause,
             UpdateDocumentError::InternalServerError(ref cause) => cause,
             UpdateDocumentError::InvalidDocument(ref cause) => cause,
             UpdateDocumentError::InvalidDocumentContent(ref cause) => cause,
+            UpdateDocumentError::InvalidDocumentOperation(ref cause) => cause,
             UpdateDocumentError::InvalidDocumentSchemaVersion(ref cause) => cause,
             UpdateDocumentError::InvalidDocumentVersion(ref cause) => cause,
             UpdateDocumentError::MaxDocumentSizeExceeded(ref cause) => cause,
@@ -16830,19 +18311,25 @@ pub trait Ssm {
         input: CancelCommandRequest,
     ) -> RusotoFuture<CancelCommandResult, CancelCommandError>;
 
+    /// <p>Stops a Maintenance Window execution that is already in progress and cancels any tasks in the window that have not already starting running. (Tasks already in progress will continue to completion.)</p>
+    fn cancel_maintenance_window_execution(
+        &self,
+        input: CancelMaintenanceWindowExecutionRequest,
+    ) -> RusotoFuture<CancelMaintenanceWindowExecutionResult, CancelMaintenanceWindowExecutionError>;
+
     /// <p>Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html">Setting Up Systems Manager in Hybrid Environments</a>.</p>
     fn create_activation(
         &self,
         input: CreateActivationRequest,
     ) -> RusotoFuture<CreateActivationResult, CreateActivationError>;
 
-    /// <p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, the SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>
+    /// <p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system returns the AssociationAlreadyExists exception.</p>
     fn create_association(
         &self,
         input: CreateAssociationRequest,
     ) -> RusotoFuture<CreateAssociationResult, CreateAssociationError>;
 
-    /// <p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, the SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>
+    /// <p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system returns the AssociationAlreadyExists exception.</p>
     fn create_association_batch(
         &self,
         input: CreateAssociationBatchRequest,
@@ -17103,6 +18590,12 @@ pub trait Ssm {
         DescribeMaintenanceWindowExecutionsError,
     >;
 
+    /// <p>Retrieves information about upcoming executions of a Maintenance Window.</p>
+    fn describe_maintenance_window_schedule(
+        &self,
+        input: DescribeMaintenanceWindowScheduleRequest,
+    ) -> RusotoFuture<DescribeMaintenanceWindowScheduleResult, DescribeMaintenanceWindowScheduleError>;
+
     /// <p>Lists the targets registered with the Maintenance Window.</p>
     fn describe_maintenance_window_targets(
         &self,
@@ -17120,6 +18613,15 @@ pub trait Ssm {
         &self,
         input: DescribeMaintenanceWindowsRequest,
     ) -> RusotoFuture<DescribeMaintenanceWindowsResult, DescribeMaintenanceWindowsError>;
+
+    /// <p>Retrieves information about the Maintenance Windows targets or tasks that an instance is associated with.</p>
+    fn describe_maintenance_windows_for_target(
+        &self,
+        input: DescribeMaintenanceWindowsForTargetRequest,
+    ) -> RusotoFuture<
+        DescribeMaintenanceWindowsForTargetResult,
+        DescribeMaintenanceWindowsForTargetError,
+    >;
 
     /// <p>Get information about a parameter.</p> <p>Request results are returned on a best-effort basis. If you specify <code>MaxResults</code> in the request, the response includes information up to the limit specified. The number of items returned, however, can be between zero and the value of <code>MaxResults</code>. If the service reaches an internal limit while processing the results, it stops the operation and returns the matching values up to that point and a <code>NextToken</code>. You can specify the <code>NextToken</code> in a subsequent call to get the next set of results.</p>
     fn describe_parameters(
@@ -17145,6 +18647,12 @@ pub trait Ssm {
         input: DescribePatchGroupsRequest,
     ) -> RusotoFuture<DescribePatchGroupsResult, DescribePatchGroupsError>;
 
+    /// <p>Retrieves a list of all active sessions (both connected and disconnected) or terminated sessions from the past 30 days.</p>
+    fn describe_sessions(
+        &self,
+        input: DescribeSessionsRequest,
+    ) -> RusotoFuture<DescribeSessionsResponse, DescribeSessionsError>;
+
     /// <p>Get detailed information about a particular Automation execution.</p>
     fn get_automation_execution(
         &self,
@@ -17156,6 +18664,12 @@ pub trait Ssm {
         &self,
         input: GetCommandInvocationRequest,
     ) -> RusotoFuture<GetCommandInvocationResult, GetCommandInvocationError>;
+
+    /// <p>Retrieves the Session Manager connection status for an instance to determine whether it is connected and ready to receive Session Manager connections.</p>
+    fn get_connection_status(
+        &self,
+        input: GetConnectionStatusRequest,
+    ) -> RusotoFuture<GetConnectionStatusResponse, GetConnectionStatusError>;
 
     /// <p>Retrieves the default patch baseline. Note that Systems Manager supports creating multiple default patch baselines. For example, you can create a default patch baseline for each operating system.</p> <p>If you do not specify an operating system value, the default patch baseline for Windows is returned.</p>
     fn get_default_patch_baseline(
@@ -17259,6 +18773,7 @@ pub trait Ssm {
         input: GetPatchBaselineForPatchGroupRequest,
     ) -> RusotoFuture<GetPatchBaselineForPatchGroupResult, GetPatchBaselineForPatchGroupError>;
 
+    /// <p><p>A parameter label is a user-defined alias to help you manage different versions of a parameter. When you modify a parameter, Systems Manager automatically saves a new version and increments the version number by one. A label can help you remember the purpose of a parameter when there are multiple versions. </p> <p>Parameter labels have the following requirements and restrictions.</p> <ul> <li> <p>A version of a parameter can have a maximum of 10 labels.</p> </li> <li> <p>You can&#39;t attach the same label to different versions of the same parameter. For example, if version 1 has the label Production, then you can&#39;t attach Production to version 2.</p> </li> <li> <p>You can move a label from one version of a parameter to another.</p> </li> <li> <p>You can&#39;t create a label when you create a new parameter. You must attach a label to a specific version of a parameter.</p> </li> <li> <p>You can&#39;t delete a parameter label. If you no longer want to use a parameter label, then you must move it to a different version of a parameter.</p> </li> <li> <p>A label can have a maximum of 100 characters.</p> </li> <li> <p>Labels can contain letters (case sensitive), numbers, periods (.), hyphens (-), or underscores (_).</p> </li> <li> <p>Labels can&#39;t begin with a number, &quot;aws,&quot; or &quot;ssm&quot; (not case sensitive). If a label fails to meet these requirements, then the label is not associated with a parameter and the system displays it in the list of InvalidLabels.</p> </li> </ul></p>
     fn label_parameter_version(
         &self,
         input: LabelParameterVersionRequest,
@@ -17396,6 +18911,12 @@ pub trait Ssm {
         input: RemoveTagsFromResourceRequest,
     ) -> RusotoFuture<RemoveTagsFromResourceResult, RemoveTagsFromResourceError>;
 
+    /// <p><p>Reconnects a session to an instance after it has been disconnected. Connections can be resumed for disconnected sessions, but not terminated sessions.</p> <note> <p>This command is primarily for use by client machines to automatically reconnect during intermittent network issues. It is not intended for any other use.</p> </note></p>
+    fn resume_session(
+        &self,
+        input: ResumeSessionRequest,
+    ) -> RusotoFuture<ResumeSessionResponse, ResumeSessionError>;
+
     /// <p>Sends a signal to an Automation execution to change the current behavior or status of the execution. </p>
     fn send_automation_signal(
         &self,
@@ -17420,11 +18941,23 @@ pub trait Ssm {
         input: StartAutomationExecutionRequest,
     ) -> RusotoFuture<StartAutomationExecutionResult, StartAutomationExecutionError>;
 
+    /// <p><p>Initiates a connection to a target (for example, an instance) for a Session Manager session. Returns a URL and token that can be used to open a WebSocket connection for sending input and receiving outputs.</p> <note> <p>AWS CLI usage: <code>start-session</code> is an interactive command that requires the Session Manager plugin to be installed on the client machine making the call. For information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html"> Install the Session Manager Plugin for the AWS CLI</a> in the <i>AWS Systems Manager User Guide</i>.</p> </note></p>
+    fn start_session(
+        &self,
+        input: StartSessionRequest,
+    ) -> RusotoFuture<StartSessionResponse, StartSessionError>;
+
     /// <p>Stop an Automation that is currently executing.</p>
     fn stop_automation_execution(
         &self,
         input: StopAutomationExecutionRequest,
     ) -> RusotoFuture<StopAutomationExecutionResult, StopAutomationExecutionError>;
+
+    /// <p>Permanently ends a session and closes the data connection between the Session Manager client and SSM Agent on the instance. A terminated session cannot be resumed.</p>
+    fn terminate_session(
+        &self,
+        input: TerminateSessionRequest,
+    ) -> RusotoFuture<TerminateSessionResponse, TerminateSessionError>;
 
     /// <p>Updates an association. You can update the association name and version, the document version, schedule, parameters, and Amazon S3 output.</p>
     fn update_association(
@@ -17591,6 +19124,43 @@ impl Ssm for SsmClient {
         })
     }
 
+    /// <p>Stops a Maintenance Window execution that is already in progress and cancels any tasks in the window that have not already starting running. (Tasks already in progress will continue to completion.)</p>
+    fn cancel_maintenance_window_execution(
+        &self,
+        input: CancelMaintenanceWindowExecutionRequest,
+    ) -> RusotoFuture<CancelMaintenanceWindowExecutionResult, CancelMaintenanceWindowExecutionError>
+    {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.CancelMaintenanceWindowExecution");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<CancelMaintenanceWindowExecutionResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CancelMaintenanceWindowExecutionError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Registers your on-premises server or virtual machine with Amazon EC2 so that you can manage these resources using Run Command. An on-premises server or virtual machine that has been registered with EC2 is called a managed instance. For more information about activations, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/systems-manager-managedinstances.html">Setting Up Systems Manager in Hybrid Environments</a>.</p>
     fn create_activation(
         &self,
@@ -17628,7 +19198,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, the SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>
+    /// <p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system returns the AssociationAlreadyExists exception.</p>
     fn create_association(
         &self,
         input: CreateAssociationRequest,
@@ -17665,7 +19235,7 @@ impl Ssm for SsmClient {
         })
     }
 
-    /// <p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, the SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system throws the AssociationAlreadyExists exception.</p>
+    /// <p>Associates the specified Systems Manager document with the specified instances or targets.</p> <p>When you associate a document with one or more instances using instance IDs or tags, SSM Agent running on the instance processes the document and configures the instance as specified.</p> <p>If you associate a document with an instance that already has an associated document, the system returns the AssociationAlreadyExists exception.</p>
     fn create_association_batch(
         &self,
         input: CreateAssociationBatchRequest,
@@ -19084,6 +20654,46 @@ impl Ssm for SsmClient {
         })
     }
 
+    /// <p>Retrieves information about upcoming executions of a Maintenance Window.</p>
+    fn describe_maintenance_window_schedule(
+        &self,
+        input: DescribeMaintenanceWindowScheduleRequest,
+    ) -> RusotoFuture<DescribeMaintenanceWindowScheduleResult, DescribeMaintenanceWindowScheduleError>
+    {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AmazonSSM.DescribeMaintenanceWindowSchedule",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeMaintenanceWindowScheduleResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeMaintenanceWindowScheduleError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p>Lists the targets registered with the Maintenance Window.</p>
     fn describe_maintenance_window_targets(
         &self,
@@ -19185,6 +20795,48 @@ impl Ssm for SsmClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DescribeMaintenanceWindowsError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Retrieves information about the Maintenance Windows targets or tasks that an instance is associated with.</p>
+    fn describe_maintenance_windows_for_target(
+        &self,
+        input: DescribeMaintenanceWindowsForTargetRequest,
+    ) -> RusotoFuture<
+        DescribeMaintenanceWindowsForTargetResult,
+        DescribeMaintenanceWindowsForTargetError,
+    > {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AmazonSSM.DescribeMaintenanceWindowsForTarget",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeMaintenanceWindowsForTargetResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeMaintenanceWindowsForTargetError::from_response(
+                        response,
+                    ))
                 }))
             }
         })
@@ -19333,6 +20985,43 @@ impl Ssm for SsmClient {
         })
     }
 
+    /// <p>Retrieves a list of all active sessions (both connected and disconnected) or terminated sessions from the past 30 days.</p>
+    fn describe_sessions(
+        &self,
+        input: DescribeSessionsRequest,
+    ) -> RusotoFuture<DescribeSessionsResponse, DescribeSessionsError> {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.DescribeSessions");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeSessionsResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeSessionsError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Get detailed information about a particular Automation execution.</p>
     fn get_automation_execution(
         &self,
@@ -19399,6 +21088,42 @@ impl Ssm for SsmClient {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
                         Err(GetCommandInvocationError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Retrieves the Session Manager connection status for an instance to determine whether it is connected and ready to receive Session Manager connections.</p>
+    fn get_connection_status(
+        &self,
+        input: GetConnectionStatusRequest,
+    ) -> RusotoFuture<GetConnectionStatusResponse, GetConnectionStatusError> {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.GetConnectionStatus");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetConnectionStatusResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetConnectionStatusError::from_response(response))
                     }),
                 )
             }
@@ -19993,6 +21718,7 @@ impl Ssm for SsmClient {
         })
     }
 
+    /// <p><p>A parameter label is a user-defined alias to help you manage different versions of a parameter. When you modify a parameter, Systems Manager automatically saves a new version and increments the version number by one. A label can help you remember the purpose of a parameter when there are multiple versions. </p> <p>Parameter labels have the following requirements and restrictions.</p> <ul> <li> <p>A version of a parameter can have a maximum of 10 labels.</p> </li> <li> <p>You can&#39;t attach the same label to different versions of the same parameter. For example, if version 1 has the label Production, then you can&#39;t attach Production to version 2.</p> </li> <li> <p>You can move a label from one version of a parameter to another.</p> </li> <li> <p>You can&#39;t create a label when you create a new parameter. You must attach a label to a specific version of a parameter.</p> </li> <li> <p>You can&#39;t delete a parameter label. If you no longer want to use a parameter label, then you must move it to a different version of a parameter.</p> </li> <li> <p>A label can have a maximum of 100 characters.</p> </li> <li> <p>Labels can contain letters (case sensitive), numbers, periods (.), hyphens (-), or underscores (_).</p> </li> <li> <p>Labels can&#39;t begin with a number, &quot;aws,&quot; or &quot;ssm&quot; (not case sensitive). If a label fails to meet these requirements, then the label is not associated with a parameter and the system displays it in the list of InvalidLabels.</p> </li> </ul></p>
     fn label_parameter_version(
         &self,
         input: LabelParameterVersionRequest,
@@ -20799,6 +22525,43 @@ impl Ssm for SsmClient {
         })
     }
 
+    /// <p><p>Reconnects a session to an instance after it has been disconnected. Connections can be resumed for disconnected sessions, but not terminated sessions.</p> <note> <p>This command is primarily for use by client machines to automatically reconnect during intermittent network issues. It is not intended for any other use.</p> </note></p>
+    fn resume_session(
+        &self,
+        input: ResumeSessionRequest,
+    ) -> RusotoFuture<ResumeSessionResponse, ResumeSessionError> {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.ResumeSession");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ResumeSessionResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ResumeSessionError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Sends a signal to an Automation execution to change the current behavior or status of the execution. </p>
     fn send_automation_signal(
         &self,
@@ -20942,6 +22705,43 @@ impl Ssm for SsmClient {
         })
     }
 
+    /// <p><p>Initiates a connection to a target (for example, an instance) for a Session Manager session. Returns a URL and token that can be used to open a WebSocket connection for sending input and receiving outputs.</p> <note> <p>AWS CLI usage: <code>start-session</code> is an interactive command that requires the Session Manager plugin to be installed on the client machine making the call. For information, see <a href="http://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-working-with-install-plugin.html"> Install the Session Manager Plugin for the AWS CLI</a> in the <i>AWS Systems Manager User Guide</i>.</p> </note></p>
+    fn start_session(
+        &self,
+        input: StartSessionRequest,
+    ) -> RusotoFuture<StartSessionResponse, StartSessionError> {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.StartSession");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<StartSessionResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StartSessionError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Stop an Automation that is currently executing.</p>
     fn stop_automation_execution(
         &self,
@@ -20972,6 +22772,43 @@ impl Ssm for SsmClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(StopAutomationExecutionError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p>Permanently ends a session and closes the data connection between the Session Manager client and SSM Agent on the instance. A terminated session cannot be resumed.</p>
+    fn terminate_session(
+        &self,
+        input: TerminateSessionRequest,
+    ) -> RusotoFuture<TerminateSessionResponse, TerminateSessionError> {
+        let mut request = SignedRequest::new("POST", "ssm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonSSM.TerminateSession");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<TerminateSessionResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TerminateSessionError::from_response(response))),
+                )
             }
         })
     }

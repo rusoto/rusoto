@@ -117,6 +117,127 @@ impl AcceptReservedNodeExchangeOutputMessageDeserializer {
         Ok(obj)
     }
 }
+/// <p>A name value pair that describes an aspect of an account. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AccountAttribute {
+    /// <p>The name of the attribute.</p>
+    pub attribute_name: Option<String>,
+    /// <p>A list of attribute values.</p>
+    pub attribute_values: Option<Vec<AttributeValueTarget>>,
+}
+
+struct AccountAttributeDeserializer;
+impl AccountAttributeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AccountAttribute, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = AccountAttribute::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AttributeName" => {
+                        obj.attribute_name =
+                            Some(StringDeserializer::deserialize("AttributeName", stack)?);
+                    }
+                    "AttributeValues" => {
+                        obj.attribute_values = match obj.attribute_values {
+                            Some(ref mut existing) => {
+                                existing.extend(AttributeValueListDeserializer::deserialize(
+                                    "AttributeValues",
+                                    stack,
+                                )?);
+                                Some(existing.to_vec())
+                            }
+                            None => Some(AttributeValueListDeserializer::deserialize(
+                                "AttributeValues",
+                                stack,
+                            )?),
+                        };
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AccountAttributeList {
+    /// <p>A list of attributes assigned to an account.</p>
+    pub account_attributes: Option<Vec<AccountAttribute>>,
+}
+
+struct AccountAttributeListDeserializer;
+impl AccountAttributeListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AccountAttributeList, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = AccountAttributeList::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AccountAttributes" => {
+                        obj.account_attributes = match obj.account_attributes {
+                            Some(ref mut existing) => {
+                                existing.extend(AttributeListDeserializer::deserialize(
+                                    "AccountAttributes",
+                                    stack,
+                                )?);
+                                Some(existing.to_vec())
+                            }
+                            None => Some(AttributeListDeserializer::deserialize(
+                                "AccountAttributes",
+                                stack,
+                            )?),
+                        };
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 /// <p>Describes an AWS customer account authorized to restore a snapshot.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AccountWithRestoreAccess {
@@ -208,6 +329,194 @@ impl AccountsWithRestoreAccessListDeserializer {
                 }
             }
         }
+
+        Ok(obj)
+    }
+}
+struct AssociatedClusterListDeserializer;
+impl AssociatedClusterListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<ClusterAssociatedToSchedule>, XmlParseError> {
+        let mut obj = vec![];
+        start_element(tag_name, stack)?;
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "ClusterAssociatedToSchedule" {
+                        obj.push(ClusterAssociatedToScheduleDeserializer::deserialize(
+                            "ClusterAssociatedToSchedule",
+                            stack,
+                        )?);
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    end_element(tag_name, stack)?;
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+struct AttributeListDeserializer;
+impl AttributeListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<AccountAttribute>, XmlParseError> {
+        let mut obj = vec![];
+        start_element(tag_name, stack)?;
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "AccountAttribute" {
+                        obj.push(AccountAttributeDeserializer::deserialize(
+                            "AccountAttribute",
+                            stack,
+                        )?);
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    end_element(tag_name, stack)?;
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `AttributeNameList` contents to a `SignedRequest`.
+struct AttributeNameListSerializer;
+impl AttributeNameListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
+struct AttributeValueListDeserializer;
+impl AttributeValueListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<AttributeValueTarget>, XmlParseError> {
+        let mut obj = vec![];
+        start_element(tag_name, stack)?;
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "AttributeValueTarget" {
+                        obj.push(AttributeValueTargetDeserializer::deserialize(
+                            "AttributeValueTarget",
+                            stack,
+                        )?);
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    end_element(tag_name, stack)?;
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+/// <p>Describes an attribute value.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct AttributeValueTarget {
+    /// <p>The value of the attribute.</p>
+    pub attribute_value: Option<String>,
+}
+
+struct AttributeValueTargetDeserializer;
+impl AttributeValueTargetDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<AttributeValueTarget, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = AttributeValueTarget::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AttributeValue" => {
+                        obj.attribute_value =
+                            Some(StringDeserializer::deserialize("AttributeValue", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
 
         Ok(obj)
     }
@@ -494,6 +803,299 @@ impl AvailabilityZoneListDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct BatchDeleteClusterSnapshotsRequest {
+    /// <p>A list of identifiers for the snapshots that you want to delete.</p>
+    pub identifiers: Vec<DeleteClusterSnapshotMessage>,
+}
+
+/// Serialize `BatchDeleteClusterSnapshotsRequest` contents to a `SignedRequest`.
+struct BatchDeleteClusterSnapshotsRequestSerializer;
+impl BatchDeleteClusterSnapshotsRequestSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &BatchDeleteClusterSnapshotsRequest) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        DeleteClusterSnapshotMessageListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "DeleteClusterSnapshotMessage"),
+            &obj.identifiers,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct BatchDeleteClusterSnapshotsResult {
+    /// <p>A list of any errors returned.</p>
+    pub errors: Option<Vec<SnapshotErrorMessage>>,
+    /// <p>A list of the snapshot identifiers that were deleted. </p>
+    pub resources: Option<Vec<String>>,
+}
+
+struct BatchDeleteClusterSnapshotsResultDeserializer;
+impl BatchDeleteClusterSnapshotsResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<BatchDeleteClusterSnapshotsResult, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = BatchDeleteClusterSnapshotsResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Errors" => {
+                        obj.errors = match obj.errors {
+                            Some(ref mut existing) => {
+                                existing.extend(
+                                    BatchSnapshotOperationErrorListDeserializer::deserialize(
+                                        "Errors", stack,
+                                    )?,
+                                );
+                                Some(existing.to_vec())
+                            }
+                            None => Some(BatchSnapshotOperationErrorListDeserializer::deserialize(
+                                "Errors", stack,
+                            )?),
+                        };
+                    }
+                    "Resources" => {
+                        obj.resources = match obj.resources {
+                            Some(ref mut existing) => {
+                                existing.extend(SnapshotIdentifierListDeserializer::deserialize(
+                                    "Resources",
+                                    stack,
+                                )?);
+                                Some(existing.to_vec())
+                            }
+                            None => Some(SnapshotIdentifierListDeserializer::deserialize(
+                                "Resources",
+                                stack,
+                            )?),
+                        };
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct BatchModifyClusterSnapshotsMessage {
+    /// <p>A boolean value indicating whether to override an exception if the retention period has passed. </p>
+    pub force: Option<bool>,
+    /// <p>The number of days that a manual snapshot is retained. If you specify the value -1, the manual snapshot is retained indefinitely.</p> <p>The number must be either -1 or an integer between 1 and 3,653.</p> <p>If you decrease the manual snapshot retention period from its current value, existing manual snapshots that fall outside of the new retention period will return an error. If you want to suppress the errors and delete the snapshots, use the force option. </p>
+    pub manual_snapshot_retention_period: Option<i64>,
+    /// <p>A list of snapshot identifiers you want to modify.</p>
+    pub snapshot_identifier_list: Vec<String>,
+}
+
+/// Serialize `BatchModifyClusterSnapshotsMessage` contents to a `SignedRequest`.
+struct BatchModifyClusterSnapshotsMessageSerializer;
+impl BatchModifyClusterSnapshotsMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &BatchModifyClusterSnapshotsMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.force {
+            params.put(&format!("{}{}", prefix, "Force"), &field_value.to_string());
+        }
+        if let Some(ref field_value) = obj.manual_snapshot_retention_period {
+            params.put(
+                &format!("{}{}", prefix, "ManualSnapshotRetentionPeriod"),
+                &field_value.to_string(),
+            );
+        }
+        SnapshotIdentifierListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "String"),
+            &obj.snapshot_identifier_list,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct BatchModifyClusterSnapshotsOutputMessage {
+    /// <p>A list of any errors returned.</p>
+    pub errors: Option<Vec<SnapshotErrorMessage>>,
+    /// <p>A list of the snapshots that were modified.</p>
+    pub resources: Option<Vec<String>>,
+}
+
+struct BatchModifyClusterSnapshotsOutputMessageDeserializer;
+impl BatchModifyClusterSnapshotsOutputMessageDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<BatchModifyClusterSnapshotsOutputMessage, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = BatchModifyClusterSnapshotsOutputMessage::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Errors" => {
+                        obj.errors = match obj.errors {
+                            Some(ref mut existing) => {
+                                existing.extend(
+                                    BatchSnapshotOperationErrorsDeserializer::deserialize(
+                                        "Errors", stack,
+                                    )?,
+                                );
+                                Some(existing.to_vec())
+                            }
+                            None => Some(BatchSnapshotOperationErrorsDeserializer::deserialize(
+                                "Errors", stack,
+                            )?),
+                        };
+                    }
+                    "Resources" => {
+                        obj.resources = match obj.resources {
+                            Some(ref mut existing) => {
+                                existing.extend(SnapshotIdentifierListDeserializer::deserialize(
+                                    "Resources",
+                                    stack,
+                                )?);
+                                Some(existing.to_vec())
+                            }
+                            None => Some(SnapshotIdentifierListDeserializer::deserialize(
+                                "Resources",
+                                stack,
+                            )?),
+                        };
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct BatchSnapshotOperationErrorListDeserializer;
+impl BatchSnapshotOperationErrorListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<SnapshotErrorMessage>, XmlParseError> {
+        let mut obj = vec![];
+        start_element(tag_name, stack)?;
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "SnapshotErrorMessage" {
+                        obj.push(SnapshotErrorMessageDeserializer::deserialize(
+                            "SnapshotErrorMessage",
+                            stack,
+                        )?);
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    end_element(tag_name, stack)?;
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+struct BatchSnapshotOperationErrorsDeserializer;
+impl BatchSnapshotOperationErrorsDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<SnapshotErrorMessage>, XmlParseError> {
+        let mut obj = vec![];
+        start_element(tag_name, stack)?;
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "SnapshotErrorMessage" {
+                        obj.push(SnapshotErrorMessageDeserializer::deserialize(
+                            "SnapshotErrorMessage",
+                            stack,
+                        )?);
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    end_element(tag_name, stack)?;
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
 struct BooleanDeserializer;
 impl BooleanDeserializer {
     #[allow(unused_variables)]
@@ -522,10 +1124,32 @@ impl BooleanOptionalDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CancelResizeMessage {
+    /// <p>The unique identifier for the cluster that you want to cancel a resize operation for.</p>
+    pub cluster_identifier: String,
+}
+
+/// Serialize `CancelResizeMessage` contents to a `SignedRequest`.
+struct CancelResizeMessageSerializer;
+impl CancelResizeMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CancelResizeMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "ClusterIdentifier"),
+            &obj.cluster_identifier,
+        );
+    }
+}
+
 /// <p>Describes a cluster.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Cluster {
-    /// <p>A Boolean value that, if <code>true</code>, indicates that major version upgrades will be applied automatically to the cluster during the maintenance window. </p>
+    /// <p>A boolean value that, if <code>true</code>, indicates that major version upgrades will be applied automatically to the cluster during the maintenance window. </p>
     pub allow_version_upgrade: Option<bool>,
     /// <p>The number of days that automatic cluster snapshots are retained.</p>
     pub automated_snapshot_retention_period: Option<i64>,
@@ -547,7 +1171,7 @@ pub struct Cluster {
     pub cluster_security_groups: Option<Vec<ClusterSecurityGroupMembership>>,
     /// <p>A value that returns the destination region and retention period that are configured for cross-region snapshot copy.</p>
     pub cluster_snapshot_copy_status: Option<ClusterSnapshotCopyStatus>,
-    /// <p><p> The current state of the cluster. Possible values are the following:</p> <ul> <li> <p> <code>available</code> </p> </li> <li> <p> <code>creating</code> </p> </li> <li> <p> <code>deleting</code> </p> </li> <li> <p> <code>final-snapshot</code> </p> </li> <li> <p> <code>hardware-failure</code> </p> </li> <li> <p> <code>incompatible-hsm</code> </p> </li> <li> <p> <code>incompatible-network</code> </p> </li> <li> <p> <code>incompatible-parameters</code> </p> </li> <li> <p> <code>incompatible-restore</code> </p> </li> <li> <p> <code>modifying</code> </p> </li> <li> <p> <code>rebooting</code> </p> </li> <li> <p> <code>renaming</code> </p> </li> <li> <p> <code>resizing</code> </p> </li> <li> <p> <code>rotating-keys</code> </p> </li> <li> <p> <code>storage-full</code> </p> </li> <li> <p> <code>updating-hsm</code> </p> </li> </ul></p>
+    /// <p><p> The current state of the cluster. Possible values are the following:</p> <ul> <li> <p> <code>available</code> </p> </li> <li> <p> <code>available, prep-for-resize</code> </p> </li> <li> <p> <code>available, resize-cleanup</code> </p> </li> <li> <p> <code>cancelling-resize</code> </p> </li> <li> <p> <code>creating</code> </p> </li> <li> <p> <code>deleting</code> </p> </li> <li> <p> <code>final-snapshot</code> </p> </li> <li> <p> <code>hardware-failure</code> </p> </li> <li> <p> <code>incompatible-hsm</code> </p> </li> <li> <p> <code>incompatible-network</code> </p> </li> <li> <p> <code>incompatible-parameters</code> </p> </li> <li> <p> <code>incompatible-restore</code> </p> </li> <li> <p> <code>modifying</code> </p> </li> <li> <p> <code>rebooting</code> </p> </li> <li> <p> <code>renaming</code> </p> </li> <li> <p> <code>resizing</code> </p> </li> <li> <p> <code>rotating-keys</code> </p> </li> <li> <p> <code>storage-full</code> </p> </li> <li> <p> <code>updating-hsm</code> </p> </li> </ul></p>
     pub cluster_status: Option<String>,
     /// <p>The name of the subnet group that is associated with the cluster. This parameter is valid only when the cluster is in a VPC.</p>
     pub cluster_subnet_group_name: Option<String>,
@@ -555,9 +1179,14 @@ pub struct Cluster {
     pub cluster_version: Option<String>,
     /// <p>The name of the initial database that was created when the cluster was created. This same name is returned for the life of the cluster. If an initial database was not specified, a database named <code>dev</code>dev was created by default. </p>
     pub db_name: Option<String>,
+    pub data_transfer_progress: Option<DataTransferProgress>,
+    /// <p>Describes a group of <code>DeferredMaintenanceWindow</code> objects.</p>
+    pub deferred_maintenance_windows: Option<Vec<DeferredMaintenanceWindow>>,
     /// <p>The status of the elastic IP (EIP) address.</p>
     pub elastic_ip_status: Option<ElasticIpStatus>,
-    /// <p>A Boolean value that, if <code>true</code>, indicates that data in the cluster is encrypted at rest.</p>
+    /// <p>The number of nodes that you can resize the cluster to with the elastic resize method. </p>
+    pub elastic_resize_number_of_node_options: Option<String>,
+    /// <p>A boolean value that, if <code>true</code>, indicates that data in the cluster is encrypted at rest.</p>
     pub encrypted: Option<bool>,
     /// <p>The connection endpoint.</p>
     pub endpoint: Option<Endpoint>,
@@ -571,6 +1200,8 @@ pub struct Cluster {
     pub kms_key_id: Option<String>,
     /// <p>The name of the maintenance track for the cluster.</p>
     pub maintenance_track_name: Option<String>,
+    /// <p>The default number of days to retain a manual snapshot. If the value is -1, the snapshot is retained indefinitely. This setting doesn't change the retention period of existing snapshots.</p> <p>The value must be either -1 or an integer between 1 and 3,653.</p>
+    pub manual_snapshot_retention_period: Option<i64>,
     /// <p>The master user name for the cluster. This name is used to connect to the database that is specified in the <b>DBName</b> parameter. </p>
     pub master_username: Option<String>,
     /// <p>The status of a modify operation, if any, initiated for the cluster.</p>
@@ -585,10 +1216,16 @@ pub struct Cluster {
     pub pending_modified_values: Option<PendingModifiedValues>,
     /// <p>The weekly time range, in Universal Coordinated Time (UTC), during which system maintenance can occur.</p>
     pub preferred_maintenance_window: Option<String>,
-    /// <p>A Boolean value that, if <code>true</code>, indicates that the cluster can be accessed from a public network.</p>
+    /// <p>A boolean value that, if <code>true</code>, indicates that the cluster can be accessed from a public network.</p>
     pub publicly_accessible: Option<bool>,
+    /// <p><p>Returns the following:</p> <ul> <li> <p>AllowCancelResize: a boolean value indicating if the resize operation can be cancelled.</p> </li> <li> <p>ResizeType: Returns ClassicResize</p> </li> </ul></p>
+    pub resize_info: Option<ResizeInfo>,
     /// <p>A value that describes the status of a cluster restore action. This parameter returns null if the cluster was not created by restoring a snapshot.</p>
     pub restore_status: Option<RestoreStatus>,
+    /// <p>A unique identifier for the cluster snapshot schedule.</p>
+    pub snapshot_schedule_identifier: Option<String>,
+    /// <p>The current state of the cluster snapshot schedule.</p>
+    pub snapshot_schedule_state: Option<String>,
     /// <p>The list of tags for the cluster.</p>
     pub tags: Option<Vec<Tag>>,
     /// <p>The identifier of the VPC the cluster is in, if the cluster is in a VPC.</p>
@@ -729,11 +1366,42 @@ impl ClusterDeserializer {
                     "DBName" => {
                         obj.db_name = Some(StringDeserializer::deserialize("DBName", stack)?);
                     }
+                    "DataTransferProgress" => {
+                        obj.data_transfer_progress =
+                            Some(DataTransferProgressDeserializer::deserialize(
+                                "DataTransferProgress",
+                                stack,
+                            )?);
+                    }
+                    "DeferredMaintenanceWindows" => {
+                        obj.deferred_maintenance_windows = match obj.deferred_maintenance_windows {
+                            Some(ref mut existing) => {
+                                existing.extend(
+                                    DeferredMaintenanceWindowsListDeserializer::deserialize(
+                                        "DeferredMaintenanceWindows",
+                                        stack,
+                                    )?,
+                                );
+                                Some(existing.to_vec())
+                            }
+                            None => Some(DeferredMaintenanceWindowsListDeserializer::deserialize(
+                                "DeferredMaintenanceWindows",
+                                stack,
+                            )?),
+                        };
+                    }
                     "ElasticIpStatus" => {
                         obj.elastic_ip_status = Some(ElasticIpStatusDeserializer::deserialize(
                             "ElasticIpStatus",
                             stack,
                         )?);
+                    }
+                    "ElasticResizeNumberOfNodeOptions" => {
+                        obj.elastic_resize_number_of_node_options =
+                            Some(StringDeserializer::deserialize(
+                                "ElasticResizeNumberOfNodeOptions",
+                                stack,
+                            )?);
                     }
                     "Encrypted" => {
                         obj.encrypted = Some(BooleanDeserializer::deserialize("Encrypted", stack)?);
@@ -772,6 +1440,13 @@ impl ClusterDeserializer {
                             "MaintenanceTrackName",
                             stack,
                         )?);
+                    }
+                    "ManualSnapshotRetentionPeriod" => {
+                        obj.manual_snapshot_retention_period =
+                            Some(IntegerDeserializer::deserialize(
+                                "ManualSnapshotRetentionPeriod",
+                                stack,
+                            )?);
                     }
                     "MasterUsername" => {
                         obj.master_username =
@@ -822,9 +1497,25 @@ impl ClusterDeserializer {
                             stack,
                         )?);
                     }
+                    "ResizeInfo" => {
+                        obj.resize_info =
+                            Some(ResizeInfoDeserializer::deserialize("ResizeInfo", stack)?);
+                    }
                     "RestoreStatus" => {
                         obj.restore_status = Some(RestoreStatusDeserializer::deserialize(
                             "RestoreStatus",
+                            stack,
+                        )?);
+                    }
+                    "SnapshotScheduleIdentifier" => {
+                        obj.snapshot_schedule_identifier = Some(StringDeserializer::deserialize(
+                            "SnapshotScheduleIdentifier",
+                            stack,
+                        )?);
+                    }
+                    "SnapshotScheduleState" => {
+                        obj.snapshot_schedule_state = Some(ScheduleStateDeserializer::deserialize(
+                            "SnapshotScheduleState",
                             stack,
                         )?);
                     }
@@ -856,6 +1547,59 @@ impl ClusterDeserializer {
                                 stack,
                             )?),
                         };
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ClusterAssociatedToSchedule {
+    pub cluster_identifier: Option<String>,
+    pub schedule_association_state: Option<String>,
+}
+
+struct ClusterAssociatedToScheduleDeserializer;
+impl ClusterAssociatedToScheduleDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ClusterAssociatedToSchedule, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = ClusterAssociatedToSchedule::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "ClusterIdentifier" => {
+                        obj.cluster_identifier =
+                            Some(StringDeserializer::deserialize("ClusterIdentifier", stack)?);
+                    }
+                    "ScheduleAssociationState" => {
+                        obj.schedule_association_state =
+                            Some(ScheduleStateDeserializer::deserialize(
+                                "ScheduleAssociationState",
+                                stack,
+                            )?);
                     }
                     _ => skip_tree(stack),
                 },
@@ -2149,6 +2893,8 @@ impl ClusterSecurityGroupsDeserializer {
 pub struct ClusterSnapshotCopyStatus {
     /// <p>The destination region that snapshots are automatically copied to when cross-region snapshot copy is enabled.</p>
     pub destination_region: Option<String>,
+    /// <p>The number of days that automated snapshots are retained in the destination region after they are copied from a source region. If the value is -1, the manual snapshot is retained indefinitely. </p> <p>The value must be either -1 or an integer between 1 and 3,653.</p>
+    pub manual_snapshot_retention_period: Option<i64>,
     /// <p>The number of days that automated snapshots are retained in the destination region after they are copied from a source region.</p>
     pub retention_period: Option<i64>,
     /// <p>The name of the snapshot copy grant.</p>
@@ -2180,6 +2926,13 @@ impl ClusterSnapshotCopyStatusDeserializer {
                     "DestinationRegion" => {
                         obj.destination_region =
                             Some(StringDeserializer::deserialize("DestinationRegion", stack)?);
+                    }
+                    "ManualSnapshotRetentionPeriod" => {
+                        obj.manual_snapshot_retention_period =
+                            Some(IntegerDeserializer::deserialize(
+                                "ManualSnapshotRetentionPeriod",
+                                stack,
+                            )?);
                     }
                     "RetentionPeriod" => {
                         obj.retention_period =
@@ -2629,6 +3382,8 @@ impl ClustersMessageDeserializer {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CopyClusterSnapshotMessage {
+    /// <p>The number of days that a manual snapshot is retained. If the value is -1, the manual snapshot is retained indefinitely. </p> <p>The value must be either -1 or an integer between 1 and 3,653.</p> <p>The default value is -1.</p>
+    pub manual_snapshot_retention_period: Option<i64>,
     /// <p><p>The identifier of the cluster the source snapshot was created from. This parameter is required if your IAM user has a policy containing a snapshot resource element that specifies anything other than * for the cluster name.</p> <p>Constraints:</p> <ul> <li> <p>Must be the identifier for a valid cluster.</p> </li> </ul></p>
     pub source_snapshot_cluster_identifier: Option<String>,
     /// <p><p>The identifier for the source snapshot.</p> <p>Constraints:</p> <ul> <li> <p>Must be the identifier for a valid automated snapshot whose state is <code>available</code>.</p> </li> </ul></p>
@@ -2646,6 +3401,12 @@ impl CopyClusterSnapshotMessageSerializer {
             prefix.push_str(".");
         }
 
+        if let Some(ref field_value) = obj.manual_snapshot_retention_period {
+            params.put(
+                &format!("{}{}", prefix, "ManualSnapshotRetentionPeriod"),
+                &field_value.to_string(),
+            );
+        }
         if let Some(ref field_value) = obj.source_snapshot_cluster_identifier {
             params.put(
                 &format!("{}{}", prefix, "SourceSnapshotClusterIdentifier"),
@@ -2748,6 +3509,8 @@ pub struct CreateClusterMessage {
     pub kms_key_id: Option<String>,
     /// <p>An optional parameter for the name of the maintenance track for the cluster. If you don't provide a maintenance track name, the cluster is assigned to the <code>current</code> track.</p>
     pub maintenance_track_name: Option<String>,
+    /// <p>The default number of days to retain a manual snapshot. If the value is -1, the snapshot is retained indefinitely. This setting doesn't change the retention period of existing snapshots.</p> <p>The value must be either -1 or an integer between 1 and 3,653.</p>
+    pub manual_snapshot_retention_period: Option<i64>,
     /// <p><p>The password associated with the master user account for the cluster that is being created.</p> <p>Constraints:</p> <ul> <li> <p>Must be between 8 and 64 characters in length.</p> </li> <li> <p>Must contain at least one uppercase letter.</p> </li> <li> <p>Must contain at least one lowercase letter.</p> </li> <li> <p>Must contain one number.</p> </li> <li> <p>Can be any printable ASCII character (ASCII code 33 to 126) except &#39; (single quote), &quot; (double quote), \, /, @, or space.</p> </li> </ul></p>
     pub master_user_password: String,
     /// <p><p>The user name associated with the master user account for the cluster that is being created.</p> <p>Constraints:</p> <ul> <li> <p>Must be 1 - 128 alphanumeric characters. The user name can&#39;t be <code>PUBLIC</code>.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot be a reserved word. A list of reserved words can be found in <a href="http://docs.aws.amazon.com/redshift/latest/dg/r_pg_keywords.html">Reserved Words</a> in the Amazon Redshift Database Developer Guide. </p> </li> </ul></p>
@@ -2762,6 +3525,8 @@ pub struct CreateClusterMessage {
     pub preferred_maintenance_window: Option<String>,
     /// <p>If <code>true</code>, the cluster can be accessed from a public network. </p>
     pub publicly_accessible: Option<bool>,
+    /// <p>A unique identifier for the snapshot schedule.</p>
+    pub snapshot_schedule_identifier: Option<String>,
     /// <p>A list of tag instances.</p>
     pub tags: Option<Vec<Tag>>,
     /// <p>A list of Virtual Private Cloud (VPC) security groups to be associated with the cluster.</p> <p>Default: The default VPC security group is associated with the cluster.</p>
@@ -2870,6 +3635,12 @@ impl CreateClusterMessageSerializer {
                 &field_value,
             );
         }
+        if let Some(ref field_value) = obj.manual_snapshot_retention_period {
+            params.put(
+                &format!("{}{}", prefix, "ManualSnapshotRetentionPeriod"),
+                &field_value.to_string(),
+            );
+        }
         params.put(
             &format!("{}{}", prefix, "MasterUserPassword"),
             &obj.master_user_password,
@@ -2898,6 +3669,12 @@ impl CreateClusterMessageSerializer {
             params.put(
                 &format!("{}{}", prefix, "PubliclyAccessible"),
                 &field_value.to_string(),
+            );
+        }
+        if let Some(ref field_value) = obj.snapshot_schedule_identifier {
+            params.put(
+                &format!("{}{}", prefix, "SnapshotScheduleIdentifier"),
+                &field_value,
             );
         }
         if let Some(ref field_value) = obj.tags {
@@ -3126,6 +3903,8 @@ impl CreateClusterSecurityGroupResultDeserializer {
 pub struct CreateClusterSnapshotMessage {
     /// <p>The cluster identifier for which you want a snapshot.</p>
     pub cluster_identifier: String,
+    /// <p>The number of days that a manual snapshot is retained. If the value is -1, the manual snapshot is retained indefinitely. </p> <p>The value must be either -1 or an integer between 1 and 3,653.</p> <p>The default value is -1.</p>
+    pub manual_snapshot_retention_period: Option<i64>,
     /// <p>A unique identifier for the snapshot that you are requesting. This identifier must be unique for all snapshots within the AWS account.</p> <p>Constraints:</p> <ul> <li> <p>Cannot be null, empty, or blank</p> </li> <li> <p>Must contain from 1 to 255 alphanumeric characters or hyphens</p> </li> <li> <p>First character must be a letter</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens</p> </li> </ul> <p>Example: <code>my-snapshot-id</code> </p>
     pub snapshot_identifier: String,
     /// <p>A list of tag instances.</p>
@@ -3145,6 +3924,12 @@ impl CreateClusterSnapshotMessageSerializer {
             &format!("{}{}", prefix, "ClusterIdentifier"),
             &obj.cluster_identifier,
         );
+        if let Some(ref field_value) = obj.manual_snapshot_retention_period {
+            params.put(
+                &format!("{}{}", prefix, "ManualSnapshotRetentionPeriod"),
+                &field_value.to_string(),
+            );
+        }
         params.put(
             &format!("{}{}", prefix, "SnapshotIdentifier"),
             &obj.snapshot_identifier,
@@ -3288,9 +4073,9 @@ impl CreateClusterSubnetGroupResultDeserializer {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateEventSubscriptionMessage {
-    /// <p>A Boolean value; set to <code>true</code> to activate the subscription, set to <code>false</code> to create the subscription but not active it. </p>
+    /// <p>A boolean value; set to <code>true</code> to activate the subscription, and set to <code>false</code> to create the subscription but not activate it. </p>
     pub enabled: Option<bool>,
-    /// <p>Specifies the Amazon Redshift event categories to be published by the event notification subscription.</p> <p>Values: Configuration, Management, Monitoring, Security</p>
+    /// <p>Specifies the Amazon Redshift event categories to be published by the event notification subscription.</p> <p>Values: configuration, management, monitoring, security</p>
     pub event_categories: Option<Vec<String>>,
     /// <p>Specifies the Amazon Redshift event severity to be published by the event notification subscription.</p> <p>Values: ERROR, INFO</p>
     pub severity: Option<String>,
@@ -3657,6 +4442,59 @@ impl CreateSnapshotCopyGrantResultDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CreateSnapshotScheduleMessage {
+    pub dry_run: Option<bool>,
+    pub next_invocations: Option<i64>,
+    /// <p>The definition of the snapshot schedule. The definition is made up of schedule expressions, for example "cron(30 12 *)" or "rate(12 hours)". </p>
+    pub schedule_definitions: Option<Vec<String>>,
+    /// <p>The description of the snapshot schedule.</p>
+    pub schedule_description: Option<String>,
+    /// <p>A unique identifier for a snapshot schedule. Only alphanumeric characters are allowed for the identifier.</p>
+    pub schedule_identifier: Option<String>,
+    pub tags: Option<Vec<Tag>>,
+}
+
+/// Serialize `CreateSnapshotScheduleMessage` contents to a `SignedRequest`.
+struct CreateSnapshotScheduleMessageSerializer;
+impl CreateSnapshotScheduleMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &CreateSnapshotScheduleMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.dry_run {
+            params.put(&format!("{}{}", prefix, "DryRun"), &field_value.to_string());
+        }
+        if let Some(ref field_value) = obj.next_invocations {
+            params.put(
+                &format!("{}{}", prefix, "NextInvocations"),
+                &field_value.to_string(),
+            );
+        }
+        if let Some(ref field_value) = obj.schedule_definitions {
+            ScheduleDefinitionListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "ScheduleDefinition"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.schedule_description {
+            params.put(
+                &format!("{}{}", prefix, "ScheduleDescription"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.schedule_identifier {
+            params.put(&format!("{}{}", prefix, "ScheduleIdentifier"), &field_value);
+        }
+        if let Some(ref field_value) = obj.tags {
+            TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), field_value);
+        }
+    }
+}
+
 /// <p>Contains the output from the <code>CreateTags</code> action. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateTagsMessage {
@@ -3677,6 +4515,151 @@ impl CreateTagsMessageSerializer {
 
         params.put(&format!("{}{}", prefix, "ResourceName"), &obj.resource_name);
         TagListSerializer::serialize(params, &format!("{}{}", prefix, "Tag"), &obj.tags);
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct CustomerStorageMessage {
+    /// <p>The total amount of storage currently used for snapshots.</p>
+    pub total_backup_size_in_mega_bytes: Option<f64>,
+    /// <p>The total amount of storage currently provisioned.</p>
+    pub total_provisioned_storage_in_mega_bytes: Option<f64>,
+}
+
+struct CustomerStorageMessageDeserializer;
+impl CustomerStorageMessageDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<CustomerStorageMessage, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = CustomerStorageMessage::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "TotalBackupSizeInMegaBytes" => {
+                        obj.total_backup_size_in_mega_bytes = Some(
+                            DoubleDeserializer::deserialize("TotalBackupSizeInMegaBytes", stack)?,
+                        );
+                    }
+                    "TotalProvisionedStorageInMegaBytes" => {
+                        obj.total_provisioned_storage_in_mega_bytes =
+                            Some(DoubleDeserializer::deserialize(
+                                "TotalProvisionedStorageInMegaBytes",
+                                stack,
+                            )?);
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+/// <p>Describes the status of a cluster while it is in the process of resizing with an incremental resize.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DataTransferProgress {
+    /// <p>Describes the data transfer rate in MB's per second.</p>
+    pub current_rate_in_mega_bytes_per_second: Option<f64>,
+    /// <p>Describes the total amount of data that has been transfered in MB's.</p>
+    pub data_transferred_in_mega_bytes: Option<i64>,
+    /// <p>Describes the number of seconds that have elapsed during the data transfer.</p>
+    pub elapsed_time_in_seconds: Option<i64>,
+    /// <p>Describes the estimated number of seconds remaining to complete the transfer.</p>
+    pub estimated_time_to_completion_in_seconds: Option<i64>,
+    /// <p>Describes the status of the cluster. While the transfer is in progress the status is <code>transferringdata</code>.</p>
+    pub status: Option<String>,
+    /// <p>Describes the total amount of data to be transfered in megabytes.</p>
+    pub total_data_in_mega_bytes: Option<i64>,
+}
+
+struct DataTransferProgressDeserializer;
+impl DataTransferProgressDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DataTransferProgress, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = DataTransferProgress::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "CurrentRateInMegaBytesPerSecond" => {
+                        obj.current_rate_in_mega_bytes_per_second =
+                            Some(DoubleOptionalDeserializer::deserialize(
+                                "CurrentRateInMegaBytesPerSecond",
+                                stack,
+                            )?);
+                    }
+                    "DataTransferredInMegaBytes" => {
+                        obj.data_transferred_in_mega_bytes = Some(LongDeserializer::deserialize(
+                            "DataTransferredInMegaBytes",
+                            stack,
+                        )?);
+                    }
+                    "ElapsedTimeInSeconds" => {
+                        obj.elapsed_time_in_seconds = Some(LongOptionalDeserializer::deserialize(
+                            "ElapsedTimeInSeconds",
+                            stack,
+                        )?);
+                    }
+                    "EstimatedTimeToCompletionInSeconds" => {
+                        obj.estimated_time_to_completion_in_seconds =
+                            Some(LongOptionalDeserializer::deserialize(
+                                "EstimatedTimeToCompletionInSeconds",
+                                stack,
+                            )?);
+                    }
+                    "Status" => {
+                        obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
+                    }
+                    "TotalDataInMegaBytes" => {
+                        obj.total_data_in_mega_bytes = Some(LongDeserializer::deserialize(
+                            "TotalDataInMegaBytes",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
     }
 }
 
@@ -3762,6 +4745,114 @@ impl DefaultClusterParametersDeserializer {
         Ok(obj)
     }
 }
+/// <p>Describes a deferred maintenance window</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeferredMaintenanceWindow {
+    /// <p> A timestamp for the end of the time period when we defer maintenance.</p>
+    pub defer_maintenance_end_time: Option<String>,
+    /// <p>A unique identifier for the maintenance window.</p>
+    pub defer_maintenance_identifier: Option<String>,
+    /// <p> A timestamp for the beginning of the time period when we defer maintenance.</p>
+    pub defer_maintenance_start_time: Option<String>,
+}
+
+struct DeferredMaintenanceWindowDeserializer;
+impl DeferredMaintenanceWindowDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeferredMaintenanceWindow, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = DeferredMaintenanceWindow::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DeferMaintenanceEndTime" => {
+                        obj.defer_maintenance_end_time = Some(TStampDeserializer::deserialize(
+                            "DeferMaintenanceEndTime",
+                            stack,
+                        )?);
+                    }
+                    "DeferMaintenanceIdentifier" => {
+                        obj.defer_maintenance_identifier = Some(StringDeserializer::deserialize(
+                            "DeferMaintenanceIdentifier",
+                            stack,
+                        )?);
+                    }
+                    "DeferMaintenanceStartTime" => {
+                        obj.defer_maintenance_start_time = Some(TStampDeserializer::deserialize(
+                            "DeferMaintenanceStartTime",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct DeferredMaintenanceWindowsListDeserializer;
+impl DeferredMaintenanceWindowsListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<DeferredMaintenanceWindow>, XmlParseError> {
+        let mut obj = vec![];
+        start_element(tag_name, stack)?;
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "DeferredMaintenanceWindow" {
+                        obj.push(DeferredMaintenanceWindowDeserializer::deserialize(
+                            "DeferredMaintenanceWindow",
+                            stack,
+                        )?);
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    end_element(tag_name, stack)?;
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteClusterMessage {
@@ -3769,6 +4860,8 @@ pub struct DeleteClusterMessage {
     pub cluster_identifier: String,
     /// <p><p>The identifier of the final snapshot that is to be created immediately before deleting the cluster. If this parameter is provided, <i>SkipFinalClusterSnapshot</i> must be <code>false</code>. </p> <p>Constraints:</p> <ul> <li> <p>Must be 1 to 255 alphanumeric characters.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> </ul></p>
     pub final_cluster_snapshot_identifier: Option<String>,
+    /// <p>The number of days that a manual snapshot is retained. If the value is -1, the manual snapshot is retained indefinitely.</p> <p>The value must be either -1 or an integer between 1 and 3,653.</p> <p>The default value is -1.</p>
+    pub final_cluster_snapshot_retention_period: Option<i64>,
     /// <p>Determines whether a final snapshot of the cluster is created before Amazon Redshift deletes the cluster. If <code>true</code>, a final cluster snapshot is not created. If <code>false</code>, a final cluster snapshot is created before the cluster is deleted. </p> <note> <p>The <i>FinalClusterSnapshotIdentifier</i> parameter must be specified if <i>SkipFinalClusterSnapshot</i> is <code>false</code>.</p> </note> <p>Default: <code>false</code> </p>
     pub skip_final_cluster_snapshot: Option<bool>,
 }
@@ -3790,6 +4883,12 @@ impl DeleteClusterMessageSerializer {
             params.put(
                 &format!("{}{}", prefix, "FinalClusterSnapshotIdentifier"),
                 &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.final_cluster_snapshot_retention_period {
+            params.put(
+                &format!("{}{}", prefix, "FinalClusterSnapshotRetentionPeriod"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.skip_final_cluster_snapshot {
@@ -3896,7 +4995,7 @@ impl DeleteClusterSecurityGroupMessageSerializer {
 pub struct DeleteClusterSnapshotMessage {
     /// <p>The unique identifier of the cluster the snapshot was created from. This parameter is required if your IAM user has a policy containing a snapshot resource element that specifies anything other than * for the cluster name.</p> <p>Constraints: Must be the name of valid cluster.</p>
     pub snapshot_cluster_identifier: Option<String>,
-    /// <p>The unique identifier of the manual snapshot to be deleted.</p> <p>Constraints: Must be the name of an existing snapshot that is in the <code>available</code> state.</p>
+    /// <p>The unique identifier of the manual snapshot to be deleted.</p> <p>Constraints: Must be the name of an existing snapshot that is in the <code>available</code>, <code>failed</code>, or <code>cancelled</code> state.</p>
     pub snapshot_identifier: String,
 }
 
@@ -3919,6 +5018,17 @@ impl DeleteClusterSnapshotMessageSerializer {
             &format!("{}{}", prefix, "SnapshotIdentifier"),
             &obj.snapshot_identifier,
         );
+    }
+}
+
+/// Serialize `DeleteClusterSnapshotMessageList` contents to a `SignedRequest`.
+struct DeleteClusterSnapshotMessageListSerializer;
+impl DeleteClusterSnapshotMessageListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<DeleteClusterSnapshotMessage>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            DeleteClusterSnapshotMessageSerializer::serialize(params, &key, obj);
+        }
     }
 }
 
@@ -4081,6 +5191,28 @@ impl DeleteSnapshotCopyGrantMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteSnapshotScheduleMessage {
+    /// <p>A unique identifier of the snapshot schedule to delete.</p>
+    pub schedule_identifier: String,
+}
+
+/// Serialize `DeleteSnapshotScheduleMessage` contents to a `SignedRequest`.
+struct DeleteSnapshotScheduleMessageSerializer;
+impl DeleteSnapshotScheduleMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DeleteSnapshotScheduleMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "ScheduleIdentifier"),
+            &obj.schedule_identifier,
+        );
+    }
+}
+
 /// <p>Contains the output from the <code>DeleteTags</code> action. </p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteTagsMessage {
@@ -4101,6 +5233,31 @@ impl DeleteTagsMessageSerializer {
 
         params.put(&format!("{}{}", prefix, "ResourceName"), &obj.resource_name);
         TagKeyListSerializer::serialize(params, &format!("{}{}", prefix, "TagKey"), &obj.tag_keys);
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeAccountAttributesMessage {
+    /// <p>A list of attribute names.</p>
+    pub attribute_names: Option<Vec<String>>,
+}
+
+/// Serialize `DescribeAccountAttributesMessage` contents to a `SignedRequest`.
+struct DescribeAccountAttributesMessageSerializer;
+impl DescribeAccountAttributesMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeAccountAttributesMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.attribute_names {
+            AttributeNameListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "AttributeName"),
+                field_value,
+            );
+        }
     }
 }
 
@@ -4307,6 +5464,7 @@ pub struct DescribeClusterSnapshotsMessage {
     pub snapshot_identifier: Option<String>,
     /// <p>The type of snapshots for which you are requesting information. By default, snapshots of all types are returned.</p> <p>Valid Values: <code>automated</code> | <code>manual</code> </p>
     pub snapshot_type: Option<String>,
+    pub sorting_entities: Option<Vec<SnapshotSortingEntity>>,
     /// <p>A value that requests only snapshots created at or after the specified time. The time value is specified in ISO 8601 format. For more information about ISO 8601, go to the <a href="http://en.wikipedia.org/wiki/ISO_8601">ISO8601 Wikipedia page.</a> </p> <p>Example: <code>2012-07-16T18:00:00Z</code> </p>
     pub start_time: Option<String>,
     /// <p>A tag key or keys for which you want to return all matching cluster snapshots that are associated with the specified key or keys. For example, suppose that you have snapshots that are tagged with keys called <code>owner</code> and <code>environment</code>. If you specify both of these tag keys in the request, Amazon Redshift returns a response with the snapshots that have either or both of these tag keys associated with them.</p>
@@ -4353,6 +5511,13 @@ impl DescribeClusterSnapshotsMessageSerializer {
         }
         if let Some(ref field_value) = obj.snapshot_type {
             params.put(&format!("{}{}", prefix, "SnapshotType"), &field_value);
+        }
+        if let Some(ref field_value) = obj.sorting_entities {
+            SnapshotSortingEntityListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "SnapshotSortingEntity"),
+                field_value,
+            );
         }
         if let Some(ref field_value) = obj.start_time {
             params.put(&format!("{}{}", prefix, "StartTime"), &field_value);
@@ -5107,6 +6272,125 @@ impl DescribeSnapshotCopyGrantsMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeSnapshotSchedulesMessage {
+    /// <p>The unique identifier for the cluster whose snapshot schedules you want to view.</p>
+    pub cluster_identifier: Option<String>,
+    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>marker</code> parameter and retrying the command. If the <code>marker</code> field is empty, all response records have been retrieved for the request.</p>
+    pub marker: Option<String>,
+    /// <p>The maximum number or response records to return in each call. If the number of remaining response records exceeds the specified <code>MaxRecords</code> value, a value is returned in a <code>marker</code> field of the response. You can retrieve the next set of records by retrying the command with the returned <code>marker</code> value.</p>
+    pub max_records: Option<i64>,
+    /// <p>A unique identifier for a snapshot schedule.</p>
+    pub schedule_identifier: Option<String>,
+    /// <p>The key value for a snapshot schedule tag.</p>
+    pub tag_keys: Option<Vec<String>>,
+    /// <p>The value corresponding to the key of the snapshot schedule tag.</p>
+    pub tag_values: Option<Vec<String>>,
+}
+
+/// Serialize `DescribeSnapshotSchedulesMessage` contents to a `SignedRequest`.
+struct DescribeSnapshotSchedulesMessageSerializer;
+impl DescribeSnapshotSchedulesMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &DescribeSnapshotSchedulesMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.cluster_identifier {
+            params.put(&format!("{}{}", prefix, "ClusterIdentifier"), &field_value);
+        }
+        if let Some(ref field_value) = obj.marker {
+            params.put(&format!("{}{}", prefix, "Marker"), &field_value);
+        }
+        if let Some(ref field_value) = obj.max_records {
+            params.put(
+                &format!("{}{}", prefix, "MaxRecords"),
+                &field_value.to_string(),
+            );
+        }
+        if let Some(ref field_value) = obj.schedule_identifier {
+            params.put(&format!("{}{}", prefix, "ScheduleIdentifier"), &field_value);
+        }
+        if let Some(ref field_value) = obj.tag_keys {
+            TagKeyListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "TagKey"),
+                field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.tag_values {
+            TagValueListSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "TagValue"),
+                field_value,
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DescribeSnapshotSchedulesOutputMessage {
+    /// <p>A value that indicates the starting point for the next set of response records in a subsequent request. If a value is returned in a response, you can retrieve the next set of records by providing this returned marker value in the <code>marker</code> parameter and retrying the command. If the <code>marker</code> field is empty, all response records have been retrieved for the request.</p>
+    pub marker: Option<String>,
+    /// <p>A list of SnapshotSchedules.</p>
+    pub snapshot_schedules: Option<Vec<SnapshotSchedule>>,
+}
+
+struct DescribeSnapshotSchedulesOutputMessageDeserializer;
+impl DescribeSnapshotSchedulesOutputMessageDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DescribeSnapshotSchedulesOutputMessage, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = DescribeSnapshotSchedulesOutputMessage::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Marker" => {
+                        obj.marker = Some(StringDeserializer::deserialize("Marker", stack)?);
+                    }
+                    "SnapshotSchedules" => {
+                        obj.snapshot_schedules = match obj.snapshot_schedules {
+                            Some(ref mut existing) => {
+                                existing.extend(SnapshotScheduleListDeserializer::deserialize(
+                                    "SnapshotSchedules",
+                                    stack,
+                                )?);
+                                Some(existing.to_vec())
+                            }
+                            None => Some(SnapshotScheduleListDeserializer::deserialize(
+                                "SnapshotSchedules",
+                                stack,
+                            )?),
+                        };
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeTableRestoreStatusMessage {
@@ -5572,8 +6856,10 @@ impl EnableLoggingMessageSerializer {
 pub struct EnableSnapshotCopyMessage {
     /// <p>The unique identifier of the source cluster to copy snapshots from.</p> <p>Constraints: Must be the valid name of an existing cluster that does not already have cross-region snapshot copy enabled.</p>
     pub cluster_identifier: String,
-    /// <p>The destination region that you want to copy snapshots to.</p> <p>Constraints: Must be the name of a valid region. For more information, see <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html#redshift_region">Regions and Endpoints</a> in the Amazon Web Services General Reference. </p>
+    /// <p>The destination AWS Region that you want to copy snapshots to.</p> <p>Constraints: Must be the name of a valid AWS Region. For more information, see <a href="http://docs.aws.amazon.com/general/latest/gr/rande.html#redshift_region">Regions and Endpoints</a> in the Amazon Web Services General Reference. </p>
     pub destination_region: String,
+    /// <p>The number of days to retain newly copied snapshots in the destination AWS Region after they are copied from the source AWS Region. If the value is -1, the manual snapshot is retained indefinitely. </p> <p>The value must be either -1 or an integer between 1 and 3,653.</p>
+    pub manual_snapshot_retention_period: Option<i64>,
     /// <p>The number of days to retain automated snapshots in the destination region after they are copied from the source region.</p> <p>Default: 7.</p> <p>Constraints: Must be at least 1 and no more than 35.</p>
     pub retention_period: Option<i64>,
     /// <p>The name of the snapshot copy grant to use when snapshots of an AWS KMS-encrypted cluster are copied to the destination region.</p>
@@ -5597,6 +6883,12 @@ impl EnableSnapshotCopyMessageSerializer {
             &format!("{}{}", prefix, "DestinationRegion"),
             &obj.destination_region,
         );
+        if let Some(ref field_value) = obj.manual_snapshot_retention_period {
+            params.put(
+                &format!("{}{}", prefix, "ManualSnapshotRetentionPeriod"),
+                &field_value.to_string(),
+            );
+        }
         if let Some(ref field_value) = obj.retention_period {
             params.put(
                 &format!("{}{}", prefix, "RetentionPeriod"),
@@ -6176,7 +7468,7 @@ pub struct EventSubscription {
     pub cust_subscription_id: Option<String>,
     /// <p>The AWS customer account associated with the Amazon Redshift event notification subscription.</p>
     pub customer_aws_id: Option<String>,
-    /// <p>A Boolean value indicating whether the subscription is enabled. <code>true</code> indicates the subscription is enabled.</p>
+    /// <p>A boolean value indicating whether the subscription is enabled; <code>true</code> indicates that the subscription is enabled.</p>
     pub enabled: Option<bool>,
     /// <p>The list of Amazon Redshift event categories specified in the event notification subscription.</p> <p>Values: Configuration, Management, Monitoring, Security</p>
     pub event_categories_list: Option<Vec<String>>,
@@ -7651,6 +8943,112 @@ impl ModifyClusterIamRolesResultDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyClusterMaintenanceMessage {
+    /// <p>A unique identifier for the cluster.</p>
+    pub cluster_identifier: String,
+    /// <p>A boolean indicating whether to enable the deferred maintenance window. </p>
+    pub defer_maintenance: Option<bool>,
+    /// <p>An integer indicating the duration of the maintenance window in days. If you specify a duration, you can't specify an end time. The duration must be 14 days or less.</p>
+    pub defer_maintenance_duration: Option<i64>,
+    /// <p>A timestamp indicating end time for the deferred maintenance window. If you specify an end time, you can't specify a duration.</p>
+    pub defer_maintenance_end_time: Option<String>,
+    /// <p>A unique identifier for the deferred maintenance window.</p>
+    pub defer_maintenance_identifier: Option<String>,
+    /// <p>A timestamp indicating the start time for the deferred maintenance window.</p>
+    pub defer_maintenance_start_time: Option<String>,
+}
+
+/// Serialize `ModifyClusterMaintenanceMessage` contents to a `SignedRequest`.
+struct ModifyClusterMaintenanceMessageSerializer;
+impl ModifyClusterMaintenanceMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyClusterMaintenanceMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "ClusterIdentifier"),
+            &obj.cluster_identifier,
+        );
+        if let Some(ref field_value) = obj.defer_maintenance {
+            params.put(
+                &format!("{}{}", prefix, "DeferMaintenance"),
+                &field_value.to_string(),
+            );
+        }
+        if let Some(ref field_value) = obj.defer_maintenance_duration {
+            params.put(
+                &format!("{}{}", prefix, "DeferMaintenanceDuration"),
+                &field_value.to_string(),
+            );
+        }
+        if let Some(ref field_value) = obj.defer_maintenance_end_time {
+            params.put(
+                &format!("{}{}", prefix, "DeferMaintenanceEndTime"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.defer_maintenance_identifier {
+            params.put(
+                &format!("{}{}", prefix, "DeferMaintenanceIdentifier"),
+                &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.defer_maintenance_start_time {
+            params.put(
+                &format!("{}{}", prefix, "DeferMaintenanceStartTime"),
+                &field_value,
+            );
+        }
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyClusterMaintenanceResult {
+    pub cluster: Option<Cluster>,
+}
+
+struct ModifyClusterMaintenanceResultDeserializer;
+impl ModifyClusterMaintenanceResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyClusterMaintenanceResult, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = ModifyClusterMaintenanceResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Cluster" => {
+                        obj.cluster = Some(ClusterDeserializer::deserialize("Cluster", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyClusterMessage {
@@ -7670,14 +9068,20 @@ pub struct ModifyClusterMessage {
     pub cluster_version: Option<String>,
     /// <p>The Elastic IP (EIP) address for the cluster.</p> <p>Constraints: The cluster must be provisioned in EC2-VPC and publicly-accessible through an Internet gateway. For more information about provisioning clusters in EC2-VPC, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#cluster-platforms">Supported Platforms to Launch Your Cluster</a> in the Amazon Redshift Cluster Management Guide.</p>
     pub elastic_ip: Option<String>,
+    /// <p>Indicates whether the cluster is encrypted. If the cluster is encrypted and you provide a value for the <code>KmsKeyId</code> parameter, we will encrypt the cluster with the provided <code>KmsKeyId</code>. If you don't provide a <code>KmsKeyId</code>, we will encrypt with the default key. In the China region we will use legacy encryption if you specify that the cluster is encrypted.</p>
+    pub encrypted: Option<bool>,
     /// <p>An option that specifies whether to create the cluster with enhanced VPC routing enabled. To create a cluster that uses enhanced VPC routing, the cluster must be in a VPC. For more information, see <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/enhanced-vpc-routing.html">Enhanced VPC Routing</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If this option is <code>true</code>, enhanced VPC routing is enabled. </p> <p>Default: false</p>
     pub enhanced_vpc_routing: Option<bool>,
     /// <p>Specifies the name of the HSM client certificate the Amazon Redshift cluster uses to retrieve the data encryption keys stored in an HSM.</p>
     pub hsm_client_certificate_identifier: Option<String>,
     /// <p>Specifies the name of the HSM configuration that contains the information the Amazon Redshift cluster can use to retrieve and store keys in an HSM.</p>
     pub hsm_configuration_identifier: Option<String>,
+    /// <p>The AWS Key Management Service (KMS) key ID of the encryption key that you want to use to encrypt data in the cluster.</p>
+    pub kms_key_id: Option<String>,
     /// <p>The name for the maintenance track that you want to assign for the cluster. This name change is asynchronous. The new track name stays in the <code>PendingModifiedValues</code> for the cluster until the next maintenance window. When the maintenance track changes, the cluster is switched to the latest cluster release available for the maintenance track. At this point, the maintenance track name is applied.</p>
     pub maintenance_track_name: Option<String>,
+    /// <p>The default for number of days that a newly created manual snapshot is retained. If the value is -1, the manual snapshot is retained indefinitely. This value doesn't retroactively change the retention periods of existing manual snapshots.</p> <p>The value must be either -1 or an integer between 1 and 3,653.</p> <p>The default value is -1.</p>
+    pub manual_snapshot_retention_period: Option<i64>,
     /// <p><p>The new password for the cluster master user. This change is asynchronously applied as soon as possible. Between the time of the request and the completion of the request, the <code>MasterUserPassword</code> element exists in the <code>PendingModifiedValues</code> element of the operation response. </p> <note> <p>Operations never return the password, so this operation provides a way to regain access to the master user account for a cluster if the password is lost.</p> </note> <p>Default: Uses existing setting.</p> <p>Constraints:</p> <ul> <li> <p>Must be between 8 and 64 characters in length.</p> </li> <li> <p>Must contain at least one uppercase letter.</p> </li> <li> <p>Must contain at least one lowercase letter.</p> </li> <li> <p>Must contain one number.</p> </li> <li> <p>Can be any printable ASCII character (ASCII code 33 to 126) except &#39; (single quote), &quot; (double quote), \, /, @, or space.</p> </li> </ul></p>
     pub master_user_password: Option<String>,
     /// <p>The new identifier for the cluster.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 63 alphanumeric characters or hyphens.</p> </li> <li> <p>Alphabetic characters must be lowercase.</p> </li> <li> <p>First character must be a letter.</p> </li> <li> <p>Cannot end with a hyphen or contain two consecutive hyphens.</p> </li> <li> <p>Must be unique for all clusters within an AWS account.</p> </li> </ul> <p>Example: <code>examplecluster</code> </p>
@@ -7741,6 +9145,12 @@ impl ModifyClusterMessageSerializer {
         if let Some(ref field_value) = obj.elastic_ip {
             params.put(&format!("{}{}", prefix, "ElasticIp"), &field_value);
         }
+        if let Some(ref field_value) = obj.encrypted {
+            params.put(
+                &format!("{}{}", prefix, "Encrypted"),
+                &field_value.to_string(),
+            );
+        }
         if let Some(ref field_value) = obj.enhanced_vpc_routing {
             params.put(
                 &format!("{}{}", prefix, "EnhancedVpcRouting"),
@@ -7759,10 +9169,19 @@ impl ModifyClusterMessageSerializer {
                 &field_value,
             );
         }
+        if let Some(ref field_value) = obj.kms_key_id {
+            params.put(&format!("{}{}", prefix, "KmsKeyId"), &field_value);
+        }
         if let Some(ref field_value) = obj.maintenance_track_name {
             params.put(
                 &format!("{}{}", prefix, "MaintenanceTrackName"),
                 &field_value,
+            );
+        }
+        if let Some(ref field_value) = obj.manual_snapshot_retention_period {
+            params.put(
+                &format!("{}{}", prefix, "ManualSnapshotRetentionPeriod"),
+                &field_value.to_string(),
             );
         }
         if let Some(ref field_value) = obj.master_user_password {
@@ -7879,6 +9298,120 @@ impl ModifyClusterResultDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyClusterSnapshotMessage {
+    /// <p>A Boolean option to override an exception if the retention period has already passed.</p>
+    pub force: Option<bool>,
+    /// <p>The number of days that a manual snapshot is retained. If the value is -1, the manual snapshot is retained indefinitely.</p> <p>If the manual snapshot falls outside of the new retention period, you can specify the force option to immediately delete the snapshot.</p> <p>The value must be either -1 or an integer between 1 and 3,653.</p>
+    pub manual_snapshot_retention_period: Option<i64>,
+    /// <p>The identifier of the snapshot whose setting you want to modify.</p>
+    pub snapshot_identifier: String,
+}
+
+/// Serialize `ModifyClusterSnapshotMessage` contents to a `SignedRequest`.
+struct ModifyClusterSnapshotMessageSerializer;
+impl ModifyClusterSnapshotMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyClusterSnapshotMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.force {
+            params.put(&format!("{}{}", prefix, "Force"), &field_value.to_string());
+        }
+        if let Some(ref field_value) = obj.manual_snapshot_retention_period {
+            params.put(
+                &format!("{}{}", prefix, "ManualSnapshotRetentionPeriod"),
+                &field_value.to_string(),
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "SnapshotIdentifier"),
+            &obj.snapshot_identifier,
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyClusterSnapshotResult {
+    pub snapshot: Option<Snapshot>,
+}
+
+struct ModifyClusterSnapshotResultDeserializer;
+impl ModifyClusterSnapshotResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ModifyClusterSnapshotResult, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = ModifyClusterSnapshotResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Snapshot" => {
+                        obj.snapshot = Some(SnapshotDeserializer::deserialize("Snapshot", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifyClusterSnapshotScheduleMessage {
+    /// <p>A unique identifier for the cluster whose snapshot schedule you want to modify. </p>
+    pub cluster_identifier: String,
+    /// <p>A boolean to indicate whether to remove the assoiciation between the cluster and the schedule.</p>
+    pub disassociate_schedule: Option<bool>,
+    /// <p>A unique alphanumeric identifier for the schedule that you want to associate with the cluster.</p>
+    pub schedule_identifier: Option<String>,
+}
+
+/// Serialize `ModifyClusterSnapshotScheduleMessage` contents to a `SignedRequest`.
+struct ModifyClusterSnapshotScheduleMessageSerializer;
+impl ModifyClusterSnapshotScheduleMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifyClusterSnapshotScheduleMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(
+            &format!("{}{}", prefix, "ClusterIdentifier"),
+            &obj.cluster_identifier,
+        );
+        if let Some(ref field_value) = obj.disassociate_schedule {
+            params.put(
+                &format!("{}{}", prefix, "DisassociateSchedule"),
+                &field_value.to_string(),
+            );
+        }
+        if let Some(ref field_value) = obj.schedule_identifier {
+            params.put(&format!("{}{}", prefix, "ScheduleIdentifier"), &field_value);
+        }
+    }
+}
+
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifyClusterSubnetGroupMessage {
@@ -7967,7 +9500,7 @@ impl ModifyClusterSubnetGroupResultDeserializer {
 pub struct ModifyEventSubscriptionMessage {
     /// <p>A Boolean value indicating if the subscription is enabled. <code>true</code> indicates the subscription is enabled </p>
     pub enabled: Option<bool>,
-    /// <p>Specifies the Amazon Redshift event categories to be published by the event notification subscription.</p> <p>Values: Configuration, Management, Monitoring, Security</p>
+    /// <p>Specifies the Amazon Redshift event categories to be published by the event notification subscription.</p> <p>Values: configuration, management, monitoring, security</p>
     pub event_categories: Option<Vec<String>>,
     /// <p>Specifies the Amazon Redshift event severity to be published by the event notification subscription.</p> <p>Values: ERROR, INFO</p>
     pub severity: Option<String>,
@@ -8076,9 +9609,11 @@ impl ModifyEventSubscriptionResultDeserializer {
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ModifySnapshotCopyRetentionPeriodMessage {
-    /// <p>The unique identifier of the cluster for which you want to change the retention period for automated snapshots that are copied to a destination region.</p> <p>Constraints: Must be the valid name of an existing cluster that has cross-region snapshot copy enabled.</p>
+    /// <p>The unique identifier of the cluster for which you want to change the retention period for either automated or manual snapshots that are copied to a destination AWS Region.</p> <p>Constraints: Must be the valid name of an existing cluster that has cross-region snapshot copy enabled.</p>
     pub cluster_identifier: String,
-    /// <p>The number of days to retain automated snapshots in the destination region after they are copied from the source region.</p> <p>If you decrease the retention period for automated snapshots that are copied to a destination region, Amazon Redshift will delete any existing automated snapshots that were copied to the destination region and that fall outside of the new retention period.</p> <p>Constraints: Must be at least 1 and no more than 35.</p>
+    /// <p>Indicates whether to apply the snapshot retention period to newly copied manual snapshots instead of automated snapshots.</p>
+    pub manual: Option<bool>,
+    /// <p>The number of days to retain automated snapshots in the destination AWS Region after they are copied from the source AWS Region.</p> <p>By default, this only changes the retention period of copied automated snapshots. </p> <p>If you decrease the retention period for automated snapshots that are copied to a destination AWS Region, Amazon Redshift deletes any existing automated snapshots that were copied to the destination AWS Region and that fall outside of the new retention period.</p> <p>Constraints: Must be at least 1 and no more than 35 for automated snapshots. </p> <p>If you specify the <code>manual</code> option, only newly copied manual snapshots will have the new retention period. </p> <p>If you specify the value of -1 newly copied manual snapshots are retained indefinitely.</p> <p>Constraints: The number of days must be either -1 or an integer between 1 and 3,653 for manual snapshots.</p>
     pub retention_period: i64,
 }
 
@@ -8095,6 +9630,9 @@ impl ModifySnapshotCopyRetentionPeriodMessageSerializer {
             &format!("{}{}", prefix, "ClusterIdentifier"),
             &obj.cluster_identifier,
         );
+        if let Some(ref field_value) = obj.manual {
+            params.put(&format!("{}{}", prefix, "Manual"), &field_value.to_string());
+        }
         params.put(
             &format!("{}{}", prefix, "RetentionPeriod"),
             &obj.retention_period.to_string(),
@@ -8146,6 +9684,35 @@ impl ModifySnapshotCopyRetentionPeriodResultDeserializer {
         Ok(obj)
     }
 }
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ModifySnapshotScheduleMessage {
+    /// <p>An updated list of schedule definitions. A schedule definition is made up of schedule expressions, for example, "cron(30 12 *)" or "rate(12 hours)".</p>
+    pub schedule_definitions: Vec<String>,
+    /// <p>A unique alphanumeric identifier of the schedule to modify.</p>
+    pub schedule_identifier: String,
+}
+
+/// Serialize `ModifySnapshotScheduleMessage` contents to a `SignedRequest`.
+struct ModifySnapshotScheduleMessageSerializer;
+impl ModifySnapshotScheduleMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ModifySnapshotScheduleMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        ScheduleDefinitionListSerializer::serialize(
+            params,
+            &format!("{}{}", prefix, "ScheduleDefinition"),
+            &obj.schedule_definitions,
+        );
+        params.put(
+            &format!("{}{}", prefix, "ScheduleIdentifier"),
+            &obj.schedule_identifier,
+        );
+    }
+}
+
 /// <p>Describes an orderable cluster option.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct OrderableClusterOption {
@@ -8632,6 +10199,8 @@ pub struct PendingModifiedValues {
     pub cluster_type: Option<String>,
     /// <p>The pending or in-progress change of the service version.</p>
     pub cluster_version: Option<String>,
+    /// <p>The encryption type for a cluster. Possible values are: KMS and None. For the China region the possible values are None, and Legacy. </p>
+    pub encryption_type: Option<String>,
     /// <p>An option that specifies whether to create the cluster with enhanced VPC routing enabled. To create a cluster that uses enhanced VPC routing, the cluster must be in a VPC. For more information, see <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/enhanced-vpc-routing.html">Enhanced VPC Routing</a> in the Amazon Redshift Cluster Management Guide.</p> <p>If this option is <code>true</code>, enhanced VPC routing is enabled. </p> <p>Default: false</p>
     pub enhanced_vpc_routing: Option<bool>,
     /// <p>The name of the maintenance track that the cluster will change to during the next maintenance window.</p>
@@ -8686,6 +10255,10 @@ impl PendingModifiedValuesDeserializer {
                     "ClusterVersion" => {
                         obj.cluster_version =
                             Some(StringDeserializer::deserialize("ClusterVersion", stack)?);
+                    }
+                    "EncryptionType" => {
+                        obj.encryption_type =
+                            Some(StringDeserializer::deserialize("EncryptionType", stack)?);
                     }
                     "EnhancedVpcRouting" => {
                         obj.enhanced_vpc_routing = Some(BooleanOptionalDeserializer::deserialize(
@@ -9483,6 +11056,151 @@ impl ResetClusterParameterGroupMessageSerializer {
     }
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResizeClusterMessage {
+    /// <p>A boolean value indicating whether the resize operation is using the classic resize process. If you don't provide this parameter or set the value to <code>false</code>, the resize type is elastic. </p>
+    pub classic: Option<bool>,
+    /// <p>The unique identifier for the cluster to resize.</p>
+    pub cluster_identifier: String,
+    /// <p>The new cluster type for the specified cluster.</p>
+    pub cluster_type: Option<String>,
+    /// <p>The new node type for the nodes you are adding.</p>
+    pub node_type: Option<String>,
+    /// <p>The new number of nodes for the cluster.</p>
+    pub number_of_nodes: i64,
+}
+
+/// Serialize `ResizeClusterMessage` contents to a `SignedRequest`.
+struct ResizeClusterMessageSerializer;
+impl ResizeClusterMessageSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &ResizeClusterMessage) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        if let Some(ref field_value) = obj.classic {
+            params.put(
+                &format!("{}{}", prefix, "Classic"),
+                &field_value.to_string(),
+            );
+        }
+        params.put(
+            &format!("{}{}", prefix, "ClusterIdentifier"),
+            &obj.cluster_identifier,
+        );
+        if let Some(ref field_value) = obj.cluster_type {
+            params.put(&format!("{}{}", prefix, "ClusterType"), &field_value);
+        }
+        if let Some(ref field_value) = obj.node_type {
+            params.put(&format!("{}{}", prefix, "NodeType"), &field_value);
+        }
+        params.put(
+            &format!("{}{}", prefix, "NumberOfNodes"),
+            &obj.number_of_nodes.to_string(),
+        );
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResizeClusterResult {
+    pub cluster: Option<Cluster>,
+}
+
+struct ResizeClusterResultDeserializer;
+impl ResizeClusterResultDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ResizeClusterResult, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = ResizeClusterResult::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Cluster" => {
+                        obj.cluster = Some(ClusterDeserializer::deserialize("Cluster", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+/// <p>Describes a resize operation.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ResizeInfo {
+    /// <p>A boolean value indicating if the resize operation can be cancelled.</p>
+    pub allow_cancel_resize: Option<bool>,
+    /// <p>Returns the value <code>ClassicResize</code>.</p>
+    pub resize_type: Option<String>,
+}
+
+struct ResizeInfoDeserializer;
+impl ResizeInfoDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ResizeInfo, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = ResizeInfo::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AllowCancelResize" => {
+                        obj.allow_cancel_resize = Some(BooleanDeserializer::deserialize(
+                            "AllowCancelResize",
+                            stack,
+                        )?);
+                    }
+                    "ResizeType" => {
+                        obj.resize_type =
+                            Some(StringDeserializer::deserialize("ResizeType", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 /// <p>Describes the result of a cluster resize operation.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ResizeProgressMessage {
@@ -9498,12 +11216,18 @@ pub struct ResizeProgressMessage {
     pub import_tables_in_progress: Option<Vec<String>>,
     /// <p>The names of tables that have not been yet imported.</p> <p>Valid Values: List of table names</p>
     pub import_tables_not_started: Option<Vec<String>>,
+    /// <p>An optional string to provide additional details about the resize action.</p>
+    pub message: Option<String>,
     /// <p>While the resize operation is in progress, this value shows the current amount of data, in megabytes, that has been processed so far. When the resize operation is complete, this value shows the total amount of data, in megabytes, on the cluster, which may be more or less than TotalResizeDataInMegaBytes (the estimated total amount of data before resize).</p>
     pub progress_in_mega_bytes: Option<i64>,
-    /// <p>The status of the resize operation.</p> <p>Valid Values: <code>NONE</code> | <code>IN_PROGRESS</code> | <code>FAILED</code> | <code>SUCCEEDED</code> </p>
+    /// <p>An enum with possible values of <code>ClassicResize</code> and <code>ElasticResize</code>. These values describe the type of resize operation being performed. </p>
+    pub resize_type: Option<String>,
+    /// <p>The status of the resize operation.</p> <p>Valid Values: <code>NONE</code> | <code>IN_PROGRESS</code> | <code>FAILED</code> | <code>SUCCEEDED</code> | <code>CANCELLING</code> </p>
     pub status: Option<String>,
     /// <p>The cluster type after the resize operation is complete.</p> <p>Valid Values: <code>multi-node</code> | <code>single-node</code> </p>
     pub target_cluster_type: Option<String>,
+    /// <p>The type of encryption for the cluster after the resize is complete.</p> <p>Possible values are <code>KMS</code> and <code>None</code>. In the China region possible values are: <code>Legacy</code> and <code>None</code>.</p>
+    pub target_encryption_type: Option<String>,
     /// <p>The node type that the cluster will have after the resize operation is complete.</p>
     pub target_node_type: Option<String>,
     /// <p>The number of nodes that the cluster will have after the resize operation is complete.</p>
@@ -9599,11 +11323,18 @@ impl ResizeProgressMessageDeserializer {
                             )?),
                         };
                     }
+                    "Message" => {
+                        obj.message = Some(StringDeserializer::deserialize("Message", stack)?);
+                    }
                     "ProgressInMegaBytes" => {
                         obj.progress_in_mega_bytes = Some(LongOptionalDeserializer::deserialize(
                             "ProgressInMegaBytes",
                             stack,
                         )?);
+                    }
+                    "ResizeType" => {
+                        obj.resize_type =
+                            Some(StringDeserializer::deserialize("ResizeType", stack)?);
                     }
                     "Status" => {
                         obj.status = Some(StringDeserializer::deserialize("Status", stack)?);
@@ -9611,6 +11342,12 @@ impl ResizeProgressMessageDeserializer {
                     "TargetClusterType" => {
                         obj.target_cluster_type =
                             Some(StringDeserializer::deserialize("TargetClusterType", stack)?);
+                    }
+                    "TargetEncryptionType" => {
+                        obj.target_encryption_type = Some(StringDeserializer::deserialize(
+                            "TargetEncryptionType",
+                            stack,
+                        )?);
                     }
                     "TargetNodeType" => {
                         obj.target_node_type =
@@ -9715,6 +11452,7 @@ pub struct RestoreFromClusterSnapshotMessage {
     pub kms_key_id: Option<String>,
     /// <p>The name of the maintenance track for the restored cluster. When you take a snapshot, the snapshot inherits the <code>MaintenanceTrack</code> value from the cluster. The snapshot might be on a different track than the cluster that was the source for the snapshot. For example, suppose that you take a snapshot of a cluster that is on the current track and then change the cluster to be on the trailing track. In this case, the snapshot and the source cluster are on different tracks.</p>
     pub maintenance_track_name: Option<String>,
+    pub manual_snapshot_retention_period: Option<i64>,
     /// <p>The node type that the restored cluster will be provisioned with.</p> <p>Default: The node type of the cluster from which the snapshot was taken. You can modify this if you are using any DS node type. In that case, you can choose to restore into another DS node type of the same size. For example, you can restore ds1.8xlarge into ds2.8xlarge, or ds1.xlarge into ds2.xlarge. If you have a DC instance type, you must restore into that same instance type and size. In other words, you can only restore a dc1.large instance type into another dc1.large instance type or dc2.large instance type. You can't restore dc1.8xlarge to dc2.8xlarge. First restore to a dc1.8xlareg cluster, then resize to a dc2.8large cluster. For more information about node types, see <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html#rs-about-clusters-and-nodes"> About Clusters and Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     pub node_type: Option<String>,
     /// <p>The AWS customer account used to create or copy the snapshot. Required if you are restoring a snapshot you do not own, optional if you own the snapshot.</p>
@@ -9729,6 +11467,8 @@ pub struct RestoreFromClusterSnapshotMessage {
     pub snapshot_cluster_identifier: Option<String>,
     /// <p>The name of the snapshot from which to create the new cluster. This parameter isn't case sensitive.</p> <p>Example: <code>my-snapshot-id</code> </p>
     pub snapshot_identifier: String,
+    /// <p>A unique identifier for the snapshot schedule.</p>
+    pub snapshot_schedule_identifier: Option<String>,
     /// <p>A list of Virtual Private Cloud (VPC) security groups to be associated with the cluster.</p> <p>Default: The default VPC security group is associated with the cluster.</p> <p>VPC security groups only apply to clusters in VPCs.</p>
     pub vpc_security_group_ids: Option<Vec<String>>,
 }
@@ -9820,6 +11560,12 @@ impl RestoreFromClusterSnapshotMessageSerializer {
                 &field_value,
             );
         }
+        if let Some(ref field_value) = obj.manual_snapshot_retention_period {
+            params.put(
+                &format!("{}{}", prefix, "ManualSnapshotRetentionPeriod"),
+                &field_value.to_string(),
+            );
+        }
         if let Some(ref field_value) = obj.node_type {
             params.put(&format!("{}{}", prefix, "NodeType"), &field_value);
         }
@@ -9851,6 +11597,12 @@ impl RestoreFromClusterSnapshotMessageSerializer {
             &format!("{}{}", prefix, "SnapshotIdentifier"),
             &obj.snapshot_identifier,
         );
+        if let Some(ref field_value) = obj.snapshot_schedule_identifier {
+            params.put(
+                &format!("{}{}", prefix, "SnapshotScheduleIdentifier"),
+                &field_value,
+            );
+        }
         if let Some(ref field_value) = obj.vpc_security_group_ids {
             VpcSecurityGroupIdListSerializer::serialize(
                 params,
@@ -10445,6 +12197,115 @@ impl RotateEncryptionKeyResultDeserializer {
         Ok(obj)
     }
 }
+struct ScheduleDefinitionListDeserializer;
+impl ScheduleDefinitionListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
+        let mut obj = vec![];
+        start_element(tag_name, stack)?;
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "ScheduleDefinition" {
+                        obj.push(StringDeserializer::deserialize(
+                            "ScheduleDefinition",
+                            stack,
+                        )?);
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    end_element(tag_name, stack)?;
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `ScheduleDefinitionList` contents to a `SignedRequest`.
+struct ScheduleDefinitionListSerializer;
+impl ScheduleDefinitionListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
+struct ScheduleStateDeserializer;
+impl ScheduleStateDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct ScheduledSnapshotTimeListDeserializer;
+impl ScheduledSnapshotTimeListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
+        let mut obj = vec![];
+        start_element(tag_name, stack)?;
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "SnapshotTime" {
+                        obj.push(TStampDeserializer::deserialize("SnapshotTime", stack)?);
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    end_element(tag_name, stack)?;
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
 struct SensitiveStringDeserializer;
 impl SensitiveStringDeserializer {
     #[allow(unused_variables)]
@@ -10494,6 +12355,10 @@ pub struct Snapshot {
     pub kms_key_id: Option<String>,
     /// <p>The name of the maintenance track for the snapshot.</p>
     pub maintenance_track_name: Option<String>,
+    /// <p>The number of days until a manual snapshot will pass its retention period.</p>
+    pub manual_snapshot_remaining_days: Option<i64>,
+    /// <p>The number of days that a manual snapshot is retained. If the value is -1, the manual snapshot is retained indefinitely. </p> <p>The value must be either -1 or an integer between 1 and 3,653.</p>
+    pub manual_snapshot_retention_period: Option<i64>,
     /// <p>The master user name for the cluster.</p>
     pub master_username: Option<String>,
     /// <p>The node type of the nodes in the cluster.</p>
@@ -10506,15 +12371,17 @@ pub struct Snapshot {
     pub port: Option<i64>,
     /// <p>The list of node types that this cluster snapshot is able to restore into.</p>
     pub restorable_node_types: Option<Vec<String>>,
-    /// <p>The time (UTC) when Amazon Redshift began the snapshot. A snapshot contains a copy of the cluster data as of this exact time.</p>
+    /// <p>The time (in UTC format) when Amazon Redshift began the snapshot. A snapshot contains a copy of the cluster data as of this exact time.</p>
     pub snapshot_create_time: Option<String>,
     /// <p>The snapshot identifier that is provided in the request.</p>
     pub snapshot_identifier: Option<String>,
-    /// <p>The snapshot type. Snapshots created using <a>CreateClusterSnapshot</a> and <a>CopyClusterSnapshot</a> will be of type "manual". </p>
+    /// <p>A timestamp representing the start of the retention period for the snapshot.</p>
+    pub snapshot_retention_start_time: Option<String>,
+    /// <p>The snapshot type. Snapshots created using <a>CreateClusterSnapshot</a> and <a>CopyClusterSnapshot</a> are of type "manual". </p>
     pub snapshot_type: Option<String>,
     /// <p>The source region from which the snapshot was copied.</p>
     pub source_region: Option<String>,
-    /// <p><p>The snapshot status. The value of the status depends on the API operation used. </p> <ul> <li> <p> <a>CreateClusterSnapshot</a> and <a>CopyClusterSnapshot</a> returns status as &quot;creating&quot;. </p> </li> <li> <p> <a>DescribeClusterSnapshots</a> returns status as &quot;creating&quot;, &quot;available&quot;, &quot;final snapshot&quot;, or &quot;failed&quot;.</p> </li> <li> <p> <a>DeleteClusterSnapshot</a> returns status as &quot;deleted&quot;.</p> </li> </ul></p>
+    /// <p><p>The snapshot status. The value of the status depends on the API operation used: </p> <ul> <li> <p> <a>CreateClusterSnapshot</a> and <a>CopyClusterSnapshot</a> returns status as &quot;creating&quot;. </p> </li> <li> <p> <a>DescribeClusterSnapshots</a> returns status as &quot;creating&quot;, &quot;available&quot;, &quot;final snapshot&quot;, or &quot;failed&quot;.</p> </li> <li> <p> <a>DeleteClusterSnapshot</a> returns status as &quot;deleted&quot;.</p> </li> </ul></p>
     pub status: Option<String>,
     /// <p>The list of tags for the cluster snapshot.</p>
     pub tags: Option<Vec<Tag>>,
@@ -10636,6 +12503,20 @@ impl SnapshotDeserializer {
                             stack,
                         )?);
                     }
+                    "ManualSnapshotRemainingDays" => {
+                        obj.manual_snapshot_remaining_days =
+                            Some(IntegerOptionalDeserializer::deserialize(
+                                "ManualSnapshotRemainingDays",
+                                stack,
+                            )?);
+                    }
+                    "ManualSnapshotRetentionPeriod" => {
+                        obj.manual_snapshot_retention_period =
+                            Some(IntegerOptionalDeserializer::deserialize(
+                                "ManualSnapshotRetentionPeriod",
+                                stack,
+                            )?);
+                    }
                     "MasterUsername" => {
                         obj.master_username =
                             Some(StringDeserializer::deserialize("MasterUsername", stack)?);
@@ -10678,6 +12559,12 @@ impl SnapshotDeserializer {
                     "SnapshotIdentifier" => {
                         obj.snapshot_identifier = Some(StringDeserializer::deserialize(
                             "SnapshotIdentifier",
+                            stack,
+                        )?);
+                    }
+                    "SnapshotRetentionStartTime" => {
+                        obj.snapshot_retention_start_time = Some(TStampDeserializer::deserialize(
+                            "SnapshotRetentionStartTime",
                             stack,
                         )?);
                     }
@@ -10894,6 +12781,127 @@ impl SnapshotCopyGrantMessageDeserializer {
         Ok(obj)
     }
 }
+/// <p>Describes the errors returned by a snapshot.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SnapshotErrorMessage {
+    /// <p>The failure code for the error.</p>
+    pub failure_code: Option<String>,
+    /// <p>The text message describing the error.</p>
+    pub failure_reason: Option<String>,
+    /// <p>A unique identifier for the cluster.</p>
+    pub snapshot_cluster_identifier: Option<String>,
+    /// <p>A unique identifier for the snapshot returning the error.</p>
+    pub snapshot_identifier: Option<String>,
+}
+
+struct SnapshotErrorMessageDeserializer;
+impl SnapshotErrorMessageDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SnapshotErrorMessage, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = SnapshotErrorMessage::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "FailureCode" => {
+                        obj.failure_code =
+                            Some(StringDeserializer::deserialize("FailureCode", stack)?);
+                    }
+                    "FailureReason" => {
+                        obj.failure_reason =
+                            Some(StringDeserializer::deserialize("FailureReason", stack)?);
+                    }
+                    "SnapshotClusterIdentifier" => {
+                        obj.snapshot_cluster_identifier = Some(StringDeserializer::deserialize(
+                            "SnapshotClusterIdentifier",
+                            stack,
+                        )?);
+                    }
+                    "SnapshotIdentifier" => {
+                        obj.snapshot_identifier = Some(StringDeserializer::deserialize(
+                            "SnapshotIdentifier",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct SnapshotIdentifierListDeserializer;
+impl SnapshotIdentifierListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<String>, XmlParseError> {
+        let mut obj = vec![];
+        start_element(tag_name, stack)?;
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "String" {
+                        obj.push(StringDeserializer::deserialize("String", stack)?);
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    end_element(tag_name, stack)?;
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+
+/// Serialize `SnapshotIdentifierList` contents to a `SignedRequest`.
+struct SnapshotIdentifierListSerializer;
+impl SnapshotIdentifierListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<String>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            params.put(&key, &obj);
+        }
+    }
+}
+
 struct SnapshotListDeserializer;
 impl SnapshotListDeserializer {
     #[allow(unused_variables)]
@@ -10996,6 +13004,212 @@ impl SnapshotMessageDeserializer {
         Ok(obj)
     }
 }
+/// <p>Describes a snapshot schedule. You can set a regular interval for creating snapshots of a cluster. You can also schedule snapshots for specific dates. </p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SnapshotSchedule {
+    pub associated_cluster_count: Option<i64>,
+    pub associated_clusters: Option<Vec<ClusterAssociatedToSchedule>>,
+    pub next_invocations: Option<Vec<String>>,
+    /// <p>A list of ScheduleDefinitions</p>
+    pub schedule_definitions: Option<Vec<String>>,
+    /// <p>The description of the schedule.</p>
+    pub schedule_description: Option<String>,
+    /// <p>A unique identifier for the schedule.</p>
+    pub schedule_identifier: Option<String>,
+    /// <p>An optional set of tags describing the schedule.</p>
+    pub tags: Option<Vec<Tag>>,
+}
+
+struct SnapshotScheduleDeserializer;
+impl SnapshotScheduleDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SnapshotSchedule, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = SnapshotSchedule::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "AssociatedClusterCount" => {
+                        obj.associated_cluster_count =
+                            Some(IntegerOptionalDeserializer::deserialize(
+                                "AssociatedClusterCount",
+                                stack,
+                            )?);
+                    }
+                    "AssociatedClusters" => {
+                        obj.associated_clusters = match obj.associated_clusters {
+                            Some(ref mut existing) => {
+                                existing.extend(AssociatedClusterListDeserializer::deserialize(
+                                    "AssociatedClusters",
+                                    stack,
+                                )?);
+                                Some(existing.to_vec())
+                            }
+                            None => Some(AssociatedClusterListDeserializer::deserialize(
+                                "AssociatedClusters",
+                                stack,
+                            )?),
+                        };
+                    }
+                    "NextInvocations" => {
+                        obj.next_invocations = match obj.next_invocations {
+                            Some(ref mut existing) => {
+                                existing.extend(
+                                    ScheduledSnapshotTimeListDeserializer::deserialize(
+                                        "NextInvocations",
+                                        stack,
+                                    )?,
+                                );
+                                Some(existing.to_vec())
+                            }
+                            None => Some(ScheduledSnapshotTimeListDeserializer::deserialize(
+                                "NextInvocations",
+                                stack,
+                            )?),
+                        };
+                    }
+                    "ScheduleDefinitions" => {
+                        obj.schedule_definitions = match obj.schedule_definitions {
+                            Some(ref mut existing) => {
+                                existing.extend(ScheduleDefinitionListDeserializer::deserialize(
+                                    "ScheduleDefinitions",
+                                    stack,
+                                )?);
+                                Some(existing.to_vec())
+                            }
+                            None => Some(ScheduleDefinitionListDeserializer::deserialize(
+                                "ScheduleDefinitions",
+                                stack,
+                            )?),
+                        };
+                    }
+                    "ScheduleDescription" => {
+                        obj.schedule_description = Some(StringDeserializer::deserialize(
+                            "ScheduleDescription",
+                            stack,
+                        )?);
+                    }
+                    "ScheduleIdentifier" => {
+                        obj.schedule_identifier = Some(StringDeserializer::deserialize(
+                            "ScheduleIdentifier",
+                            stack,
+                        )?);
+                    }
+                    "Tags" => {
+                        obj.tags = match obj.tags {
+                            Some(ref mut existing) => {
+                                existing.extend(TagListDeserializer::deserialize("Tags", stack)?);
+                                Some(existing.to_vec())
+                            }
+                            None => Some(TagListDeserializer::deserialize("Tags", stack)?),
+                        };
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct SnapshotScheduleListDeserializer;
+impl SnapshotScheduleListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<SnapshotSchedule>, XmlParseError> {
+        let mut obj = vec![];
+        start_element(tag_name, stack)?;
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "SnapshotSchedule" {
+                        obj.push(SnapshotScheduleDeserializer::deserialize(
+                            "SnapshotSchedule",
+                            stack,
+                        )?);
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    end_element(tag_name, stack)?;
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+/// <p>Describes a sorting entity</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SnapshotSortingEntity {
+    /// <p>The category for sorting the snapshots.</p>
+    pub attribute: String,
+    /// <p>The order for listing the attributes.</p>
+    pub sort_order: Option<String>,
+}
+
+/// Serialize `SnapshotSortingEntity` contents to a `SignedRequest`.
+struct SnapshotSortingEntitySerializer;
+impl SnapshotSortingEntitySerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &SnapshotSortingEntity) {
+        let mut prefix = name.to_string();
+        if prefix != "" {
+            prefix.push_str(".");
+        }
+
+        params.put(&format!("{}{}", prefix, "Attribute"), &obj.attribute);
+        if let Some(ref field_value) = obj.sort_order {
+            params.put(&format!("{}{}", prefix, "SortOrder"), &field_value);
+        }
+    }
+}
+
+/// Serialize `SnapshotSortingEntityList` contents to a `SignedRequest`.
+struct SnapshotSortingEntityListSerializer;
+impl SnapshotSortingEntityListSerializer {
+    fn serialize(params: &mut Params, name: &str, obj: &Vec<SnapshotSortingEntity>) {
+        for (index, obj) in obj.iter().enumerate() {
+            let key = format!("{}.member.{}", name, index + 1);
+            SnapshotSortingEntitySerializer::serialize(params, &key, obj);
+        }
+    }
+}
+
 struct SourceIdsListDeserializer;
 impl SourceIdsListDeserializer {
     #[allow(unused_variables)]
@@ -11172,6 +13386,96 @@ impl SubnetListDeserializer {
                 DeserializerNext::Element(name) => {
                     if name == "Subnet" {
                         obj.push(SubnetDeserializer::deserialize("Subnet", stack)?);
+                    } else {
+                        skip_tree(stack);
+                    }
+                }
+                DeserializerNext::Close => {
+                    end_element(tag_name, stack)?;
+                    break;
+                }
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        Ok(obj)
+    }
+}
+/// <p>Describes the operations that are allowed on a maintenance track.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct SupportedOperation {
+    /// <p>A list of the supported operations.</p>
+    pub operation_name: Option<String>,
+}
+
+struct SupportedOperationDeserializer;
+impl SupportedOperationDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<SupportedOperation, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = SupportedOperation::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "OperationName" => {
+                        obj.operation_name =
+                            Some(StringDeserializer::deserialize("OperationName", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+struct SupportedOperationListDeserializer;
+impl SupportedOperationListDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<Vec<SupportedOperation>, XmlParseError> {
+        let mut obj = vec![];
+        start_element(tag_name, stack)?;
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => {
+                    if name == "SupportedOperation" {
+                        obj.push(SupportedOperationDeserializer::deserialize(
+                            "SupportedOperation",
+                            stack,
+                        )?);
                     } else {
                         skip_tree(stack);
                     }
@@ -11695,7 +13999,7 @@ impl TagValueListSerializer {
 /// <p>A tag and its associated resource.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct TaggedResource {
-    /// <p>The Amazon Resource Name (ARN) with which the tag is associated. For example, <code>arn:aws:redshift:us-east-1:123456789:cluster:t1</code>.</p>
+    /// <p>The Amazon Resource Name (ARN) with which the tag is associated, for example: <code>arn:aws:redshift:us-east-1:123456789:cluster:t1</code>.</p>
     pub resource_name: Option<String>,
     /// <p>The type of resource with which the tag is associated. Valid resource types are: </p> <ul> <li> <p>Cluster</p> </li> <li> <p>CIDR/IP</p> </li> <li> <p>EC2 security group</p> </li> <li> <p>Snapshot</p> </li> <li> <p>Cluster security group</p> </li> <li> <p>Subnet group</p> </li> <li> <p>HSM connection</p> </li> <li> <p>HSM certificate</p> </li> <li> <p>Parameter group</p> </li> </ul> <p>For more information about Amazon Redshift resource types and constructing ARNs, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/redshift-iam-access-control-overview.html#redshift-iam-access-control-specify-actions">Constructing an Amazon Redshift Amazon Resource Name (ARN)</a> in the Amazon Redshift Cluster Management Guide. </p>
     pub resource_type: Option<String>,
@@ -11968,6 +14272,8 @@ pub struct UpdateTarget {
     pub database_version: Option<String>,
     /// <p>The name of the new maintenance track.</p>
     pub maintenance_track_name: Option<String>,
+    /// <p>A list of operations supported by the maintenance track.</p>
+    pub supported_operations: Option<Vec<SupportedOperation>>,
 }
 
 struct UpdateTargetDeserializer;
@@ -12001,6 +14307,21 @@ impl UpdateTargetDeserializer {
                             "MaintenanceTrackName",
                             stack,
                         )?);
+                    }
+                    "SupportedOperations" => {
+                        obj.supported_operations = match obj.supported_operations {
+                            Some(ref mut existing) => {
+                                existing.extend(SupportedOperationListDeserializer::deserialize(
+                                    "SupportedOperations",
+                                    stack,
+                                )?);
+                                Some(existing.to_vec())
+                            }
+                            None => Some(SupportedOperationListDeserializer::deserialize(
+                                "SupportedOperations",
+                                stack,
+                            )?),
+                        };
                     }
                     _ => skip_tree(stack),
                 },
@@ -12485,6 +14806,288 @@ impl Error for AuthorizeSnapshotAccessError {
         }
     }
 }
+/// Errors returned by BatchDeleteClusterSnapshots
+#[derive(Debug, PartialEq)]
+pub enum BatchDeleteClusterSnapshotsError {
+    /// <p>The maximum number for a batch delete of snapshots has been reached. The limit is 100. </p>
+    BatchDeleteRequestSizeExceededFault(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl BatchDeleteClusterSnapshotsError {
+    pub fn from_response(res: BufferedHttpResponse) -> BatchDeleteClusterSnapshotsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "BatchDeleteRequestSizeExceeded" => {
+                        return BatchDeleteClusterSnapshotsError::BatchDeleteRequestSizeExceededFault(
+                            String::from(parsed_error.message),
+                        );
+                    }
+                    _ => {}
+                }
+            }
+        }
+        BatchDeleteClusterSnapshotsError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for BatchDeleteClusterSnapshotsError {
+    fn from(err: XmlParseError) -> BatchDeleteClusterSnapshotsError {
+        let XmlParseError(message) = err;
+        BatchDeleteClusterSnapshotsError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for BatchDeleteClusterSnapshotsError {
+    fn from(err: CredentialsError) -> BatchDeleteClusterSnapshotsError {
+        BatchDeleteClusterSnapshotsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for BatchDeleteClusterSnapshotsError {
+    fn from(err: HttpDispatchError) -> BatchDeleteClusterSnapshotsError {
+        BatchDeleteClusterSnapshotsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for BatchDeleteClusterSnapshotsError {
+    fn from(err: io::Error) -> BatchDeleteClusterSnapshotsError {
+        BatchDeleteClusterSnapshotsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for BatchDeleteClusterSnapshotsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for BatchDeleteClusterSnapshotsError {
+    fn description(&self) -> &str {
+        match *self {
+            BatchDeleteClusterSnapshotsError::BatchDeleteRequestSizeExceededFault(ref cause) => {
+                cause
+            }
+            BatchDeleteClusterSnapshotsError::Validation(ref cause) => cause,
+            BatchDeleteClusterSnapshotsError::Credentials(ref err) => err.description(),
+            BatchDeleteClusterSnapshotsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            BatchDeleteClusterSnapshotsError::ParseError(ref cause) => cause,
+            BatchDeleteClusterSnapshotsError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by BatchModifyClusterSnapshots
+#[derive(Debug, PartialEq)]
+pub enum BatchModifyClusterSnapshotsError {
+    /// <p>The maximum number for snapshot identifiers has been reached. The limit is 100. </p>
+    BatchModifyClusterSnapshotsLimitExceededFault(String),
+    /// <p>The retention period specified is either in the past or is not a valid value.</p> <p>The value must be either -1 or an integer between 1 and 3,653.</p>
+    InvalidRetentionPeriodFault(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl BatchModifyClusterSnapshotsError {
+    pub fn from_response(res: BufferedHttpResponse) -> BatchModifyClusterSnapshotsError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "BatchModifyClusterSnapshotsLimitExceededFault" => return BatchModifyClusterSnapshotsError::BatchModifyClusterSnapshotsLimitExceededFault(String::from(parsed_error.message)),"InvalidRetentionPeriodFault" => return BatchModifyClusterSnapshotsError::InvalidRetentionPeriodFault(String::from(parsed_error.message)),_ => {}
+                                }
+            }
+        }
+        BatchModifyClusterSnapshotsError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for BatchModifyClusterSnapshotsError {
+    fn from(err: XmlParseError) -> BatchModifyClusterSnapshotsError {
+        let XmlParseError(message) = err;
+        BatchModifyClusterSnapshotsError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for BatchModifyClusterSnapshotsError {
+    fn from(err: CredentialsError) -> BatchModifyClusterSnapshotsError {
+        BatchModifyClusterSnapshotsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for BatchModifyClusterSnapshotsError {
+    fn from(err: HttpDispatchError) -> BatchModifyClusterSnapshotsError {
+        BatchModifyClusterSnapshotsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for BatchModifyClusterSnapshotsError {
+    fn from(err: io::Error) -> BatchModifyClusterSnapshotsError {
+        BatchModifyClusterSnapshotsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for BatchModifyClusterSnapshotsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for BatchModifyClusterSnapshotsError {
+    fn description(&self) -> &str {
+        match *self {
+            BatchModifyClusterSnapshotsError::BatchModifyClusterSnapshotsLimitExceededFault(
+                ref cause,
+            ) => cause,
+            BatchModifyClusterSnapshotsError::InvalidRetentionPeriodFault(ref cause) => cause,
+            BatchModifyClusterSnapshotsError::Validation(ref cause) => cause,
+            BatchModifyClusterSnapshotsError::Credentials(ref err) => err.description(),
+            BatchModifyClusterSnapshotsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            BatchModifyClusterSnapshotsError::ParseError(ref cause) => cause,
+            BatchModifyClusterSnapshotsError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by CancelResize
+#[derive(Debug, PartialEq)]
+pub enum CancelResizeError {
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    ClusterNotFoundFault(String),
+    /// <p>The specified cluster is not in the <code>available</code> state. </p>
+    InvalidClusterStateFault(String),
+    /// <p>A resize operation for the specified cluster is not found.</p>
+    ResizeNotFoundFault(String),
+    /// <p>The requested operation isn't supported.</p>
+    UnsupportedOperationFault(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl CancelResizeError {
+    pub fn from_response(res: BufferedHttpResponse) -> CancelResizeError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return CancelResizeError::ClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    "InvalidClusterState" => {
+                        return CancelResizeError::InvalidClusterStateFault(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    "ResizeNotFound" => {
+                        return CancelResizeError::ResizeNotFoundFault(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    "UnsupportedOperation" => {
+                        return CancelResizeError::UnsupportedOperationFault(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    _ => {}
+                }
+            }
+        }
+        CancelResizeError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for CancelResizeError {
+    fn from(err: XmlParseError) -> CancelResizeError {
+        let XmlParseError(message) = err;
+        CancelResizeError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for CancelResizeError {
+    fn from(err: CredentialsError) -> CancelResizeError {
+        CancelResizeError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CancelResizeError {
+    fn from(err: HttpDispatchError) -> CancelResizeError {
+        CancelResizeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CancelResizeError {
+    fn from(err: io::Error) -> CancelResizeError {
+        CancelResizeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CancelResizeError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CancelResizeError {
+    fn description(&self) -> &str {
+        match *self {
+            CancelResizeError::ClusterNotFoundFault(ref cause) => cause,
+            CancelResizeError::InvalidClusterStateFault(ref cause) => cause,
+            CancelResizeError::ResizeNotFoundFault(ref cause) => cause,
+            CancelResizeError::UnsupportedOperationFault(ref cause) => cause,
+            CancelResizeError::Validation(ref cause) => cause,
+            CancelResizeError::Credentials(ref err) => err.description(),
+            CancelResizeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CancelResizeError::ParseError(ref cause) => cause,
+            CancelResizeError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by CopyClusterSnapshot
 #[derive(Debug, PartialEq)]
 pub enum CopyClusterSnapshotError {
@@ -12496,6 +15099,8 @@ pub enum CopyClusterSnapshotError {
     ClusterSnapshotQuotaExceededFault(String),
     /// <p>The specified cluster snapshot is not in the <code>available</code> state, or other accounts are authorized to access the snapshot. </p>
     InvalidClusterSnapshotStateFault(String),
+    /// <p>The retention period specified is either in the past or is not a valid value.</p> <p>The value must be either -1 or an integer between 1 and 3,653.</p>
+    InvalidRetentionPeriodFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -12535,6 +15140,11 @@ impl CopyClusterSnapshotError {
                         return CopyClusterSnapshotError::InvalidClusterSnapshotStateFault(
                             String::from(parsed_error.message),
                         );
+                    }
+                    "InvalidRetentionPeriodFault" => {
+                        return CopyClusterSnapshotError::InvalidRetentionPeriodFault(String::from(
+                            parsed_error.message,
+                        ));
                     }
                     _ => {}
                 }
@@ -12585,6 +15195,7 @@ impl Error for CopyClusterSnapshotError {
             CopyClusterSnapshotError::ClusterSnapshotNotFoundFault(ref cause) => cause,
             CopyClusterSnapshotError::ClusterSnapshotQuotaExceededFault(ref cause) => cause,
             CopyClusterSnapshotError::InvalidClusterSnapshotStateFault(ref cause) => cause,
+            CopyClusterSnapshotError::InvalidRetentionPeriodFault(ref cause) => cause,
             CopyClusterSnapshotError::Validation(ref cause) => cause,
             CopyClusterSnapshotError::Credentials(ref err) => err.description(),
             CopyClusterSnapshotError::HttpDispatch(ref dispatch_error) => {
@@ -12622,6 +15233,8 @@ pub enum CreateClusterError {
     InvalidClusterTrackFault(String),
     /// <p>The Elastic IP (EIP) is invalid or cannot be found.</p>
     InvalidElasticIpFault(String),
+    /// <p>The retention period specified is either in the past or is not a valid value.</p> <p>The value must be either -1 or an integer between 1 and 3,653.</p>
+    InvalidRetentionPeriodFault(String),
     /// <p>The requested subnet is not valid, or not all of the subnets are in the same VPC.</p>
     InvalidSubnet(String),
     /// <p>The tag is invalid.</p>
@@ -12634,7 +15247,9 @@ pub enum CreateClusterError {
     NumberOfNodesPerClusterLimitExceededFault(String),
     /// <p>The operation would exceed the number of nodes allotted to the account. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     NumberOfNodesQuotaExceededFault(String),
-    /// <p>The number of tables in your source cluster exceeds the limit for the target cluster. Resize to a larger cluster node type.</p>
+    /// <p>We could not find the specified snapshot schedule. </p>
+    SnapshotScheduleNotFoundFault(String),
+    /// <p>You have exceeded the number of tags allowed.</p>
     TagLimitExceededFault(String),
     /// <p>Your account is not authorized to perform the requested operation.</p>
     UnauthorizedOperation(String),
@@ -12718,6 +15333,11 @@ impl CreateClusterError {
                             parsed_error.message,
                         ));
                     }
+                    "InvalidRetentionPeriodFault" => {
+                        return CreateClusterError::InvalidRetentionPeriodFault(String::from(
+                            parsed_error.message,
+                        ));
+                    }
                     "InvalidSubnet" => {
                         return CreateClusterError::InvalidSubnet(String::from(parsed_error.message));
                     }
@@ -12743,6 +15363,11 @@ impl CreateClusterError {
                     }
                     "NumberOfNodesQuotaExceeded" => {
                         return CreateClusterError::NumberOfNodesQuotaExceededFault(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    "SnapshotScheduleNotFound" => {
+                        return CreateClusterError::SnapshotScheduleNotFoundFault(String::from(
                             parsed_error.message,
                         ));
                     }
@@ -12813,12 +15438,14 @@ impl Error for CreateClusterError {
             CreateClusterError::InvalidClusterSubnetGroupStateFault(ref cause) => cause,
             CreateClusterError::InvalidClusterTrackFault(ref cause) => cause,
             CreateClusterError::InvalidElasticIpFault(ref cause) => cause,
+            CreateClusterError::InvalidRetentionPeriodFault(ref cause) => cause,
             CreateClusterError::InvalidSubnet(ref cause) => cause,
             CreateClusterError::InvalidTagFault(ref cause) => cause,
             CreateClusterError::InvalidVPCNetworkStateFault(ref cause) => cause,
             CreateClusterError::LimitExceededFault(ref cause) => cause,
             CreateClusterError::NumberOfNodesPerClusterLimitExceededFault(ref cause) => cause,
             CreateClusterError::NumberOfNodesQuotaExceededFault(ref cause) => cause,
+            CreateClusterError::SnapshotScheduleNotFoundFault(ref cause) => cause,
             CreateClusterError::TagLimitExceededFault(ref cause) => cause,
             CreateClusterError::UnauthorizedOperation(ref cause) => cause,
             CreateClusterError::Validation(ref cause) => cause,
@@ -12838,7 +15465,7 @@ pub enum CreateClusterParameterGroupError {
     ClusterParameterGroupQuotaExceededFault(String),
     /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    /// <p>The number of tables in your source cluster exceeds the limit for the target cluster. Resize to a larger cluster node type.</p>
+    /// <p>You have exceeded the number of tags allowed.</p>
     TagLimitExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -12932,7 +15559,7 @@ pub enum CreateClusterSecurityGroupError {
     ClusterSecurityGroupQuotaExceededFault(String),
     /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    /// <p>The number of tables in your source cluster exceeds the limit for the target cluster. Resize to a larger cluster node type.</p>
+    /// <p>You have exceeded the number of tags allowed.</p>
     TagLimitExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13028,9 +15655,11 @@ pub enum CreateClusterSnapshotError {
     ClusterSnapshotQuotaExceededFault(String),
     /// <p>The specified cluster is not in the <code>available</code> state. </p>
     InvalidClusterStateFault(String),
+    /// <p>The retention period specified is either in the past or is not a valid value.</p> <p>The value must be either -1 or an integer between 1 and 3,653.</p>
+    InvalidRetentionPeriodFault(String),
     /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    /// <p>The number of tables in your source cluster exceeds the limit for the target cluster. Resize to a larger cluster node type.</p>
+    /// <p>You have exceeded the number of tags allowed.</p>
     TagLimitExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13071,6 +15700,11 @@ impl CreateClusterSnapshotError {
                         return CreateClusterSnapshotError::InvalidClusterStateFault(String::from(
                             parsed_error.message,
                         ));
+                    }
+                    "InvalidRetentionPeriodFault" => {
+                        return CreateClusterSnapshotError::InvalidRetentionPeriodFault(
+                            String::from(parsed_error.message),
+                        );
                     }
                     "InvalidTagFault" => {
                         return CreateClusterSnapshotError::InvalidTagFault(String::from(
@@ -13131,6 +15765,7 @@ impl Error for CreateClusterSnapshotError {
             CreateClusterSnapshotError::ClusterSnapshotAlreadyExistsFault(ref cause) => cause,
             CreateClusterSnapshotError::ClusterSnapshotQuotaExceededFault(ref cause) => cause,
             CreateClusterSnapshotError::InvalidClusterStateFault(ref cause) => cause,
+            CreateClusterSnapshotError::InvalidRetentionPeriodFault(ref cause) => cause,
             CreateClusterSnapshotError::InvalidTagFault(ref cause) => cause,
             CreateClusterSnapshotError::TagLimitExceededFault(ref cause) => cause,
             CreateClusterSnapshotError::Validation(ref cause) => cause,
@@ -13158,7 +15793,7 @@ pub enum CreateClusterSubnetGroupError {
     InvalidSubnet(String),
     /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    /// <p>The number of tables in your source cluster exceeds the limit for the target cluster. Resize to a larger cluster node type.</p>
+    /// <p>You have exceeded the number of tags allowed.</p>
     TagLimitExceededFault(String),
     /// <p>Your account is not authorized to perform the requested operation.</p>
     UnauthorizedOperation(String),
@@ -13310,7 +15945,7 @@ pub enum CreateEventSubscriptionError {
     SubscriptionEventIdNotFoundFault(String),
     /// <p>The value specified for the event severity was not one of the allowed values, or it specified a severity that does not apply to the specified source type. The allowed values are ERROR and INFO.</p>
     SubscriptionSeverityNotFoundFault(String),
-    /// <p>The number of tables in your source cluster exceeds the limit for the target cluster. Resize to a larger cluster node type.</p>
+    /// <p>You have exceeded the number of tags allowed.</p>
     TagLimitExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13462,7 +16097,7 @@ pub enum CreateHsmClientCertificateError {
     HsmClientCertificateQuotaExceededFault(String),
     /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    /// <p>The number of tables in your source cluster exceeds the limit for the target cluster. Resize to a larger cluster node type.</p>
+    /// <p>You have exceeded the number of tags allowed.</p>
     TagLimitExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13556,7 +16191,7 @@ pub enum CreateHsmConfigurationError {
     HsmConfigurationQuotaExceededFault(String),
     /// <p>The tag is invalid.</p>
     InvalidTagFault(String),
-    /// <p>The number of tables in your source cluster exceeds the limit for the target cluster. Resize to a larger cluster node type.</p>
+    /// <p>You have exceeded the number of tags allowed.</p>
     TagLimitExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13670,7 +16305,7 @@ pub enum CreateSnapshotCopyGrantError {
     SnapshotCopyGrantAlreadyExistsFault(String),
     /// <p>The AWS account has exceeded the maximum number of snapshot copy grants in this region.</p>
     SnapshotCopyGrantQuotaExceededFault(String),
-    /// <p>The number of tables in your source cluster exceeds the limit for the target cluster. Resize to a larger cluster node type.</p>
+    /// <p>You have exceeded the number of tags allowed.</p>
     TagLimitExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13785,6 +16420,124 @@ impl Error for CreateSnapshotCopyGrantError {
         }
     }
 }
+/// Errors returned by CreateSnapshotSchedule
+#[derive(Debug, PartialEq)]
+pub enum CreateSnapshotScheduleError {
+    /// <p>The schedule you submitted isn't valid.</p>
+    InvalidScheduleFault(String),
+    /// <p>The definition you submitted is not supported.</p>
+    ScheduleDefinitionTypeUnsupportedFault(String),
+    /// <p>The specified snapshot schedule already exists. </p>
+    SnapshotScheduleAlreadyExistsFault(String),
+    /// <p>You have exceeded the quota of snapshot schedules. </p>
+    SnapshotScheduleQuotaExceededFault(String),
+    /// <p>You have exceeded the number of tags allowed.</p>
+    TagLimitExceededFault(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl CreateSnapshotScheduleError {
+    pub fn from_response(res: BufferedHttpResponse) -> CreateSnapshotScheduleError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidSchedule" => {
+                        return CreateSnapshotScheduleError::InvalidScheduleFault(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    "ScheduleDefinitionTypeUnsupported" => {
+                        return CreateSnapshotScheduleError::ScheduleDefinitionTypeUnsupportedFault(
+                            String::from(parsed_error.message),
+                        );
+                    }
+                    "SnapshotScheduleAlreadyExists" => {
+                        return CreateSnapshotScheduleError::SnapshotScheduleAlreadyExistsFault(
+                            String::from(parsed_error.message),
+                        );
+                    }
+                    "SnapshotScheduleQuotaExceeded" => {
+                        return CreateSnapshotScheduleError::SnapshotScheduleQuotaExceededFault(
+                            String::from(parsed_error.message),
+                        );
+                    }
+                    "TagLimitExceededFault" => {
+                        return CreateSnapshotScheduleError::TagLimitExceededFault(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    _ => {}
+                }
+            }
+        }
+        CreateSnapshotScheduleError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for CreateSnapshotScheduleError {
+    fn from(err: XmlParseError) -> CreateSnapshotScheduleError {
+        let XmlParseError(message) = err;
+        CreateSnapshotScheduleError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for CreateSnapshotScheduleError {
+    fn from(err: CredentialsError) -> CreateSnapshotScheduleError {
+        CreateSnapshotScheduleError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateSnapshotScheduleError {
+    fn from(err: HttpDispatchError) -> CreateSnapshotScheduleError {
+        CreateSnapshotScheduleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateSnapshotScheduleError {
+    fn from(err: io::Error) -> CreateSnapshotScheduleError {
+        CreateSnapshotScheduleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateSnapshotScheduleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateSnapshotScheduleError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateSnapshotScheduleError::InvalidScheduleFault(ref cause) => cause,
+            CreateSnapshotScheduleError::ScheduleDefinitionTypeUnsupportedFault(ref cause) => cause,
+            CreateSnapshotScheduleError::SnapshotScheduleAlreadyExistsFault(ref cause) => cause,
+            CreateSnapshotScheduleError::SnapshotScheduleQuotaExceededFault(ref cause) => cause,
+            CreateSnapshotScheduleError::TagLimitExceededFault(ref cause) => cause,
+            CreateSnapshotScheduleError::Validation(ref cause) => cause,
+            CreateSnapshotScheduleError::Credentials(ref err) => err.description(),
+            CreateSnapshotScheduleError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateSnapshotScheduleError::ParseError(ref cause) => cause,
+            CreateSnapshotScheduleError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by CreateTags
 #[derive(Debug, PartialEq)]
 pub enum CreateTagsError {
@@ -13792,7 +16545,7 @@ pub enum CreateTagsError {
     InvalidTagFault(String),
     /// <p>The resource could not be found.</p>
     ResourceNotFoundFault(String),
-    /// <p>The number of tables in your source cluster exceeds the limit for the target cluster. Resize to a larger cluster node type.</p>
+    /// <p>You have exceeded the number of tags allowed.</p>
     TagLimitExceededFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -13894,6 +16647,8 @@ pub enum DeleteClusterError {
     ClusterSnapshotQuotaExceededFault(String),
     /// <p>The specified cluster is not in the <code>available</code> state. </p>
     InvalidClusterStateFault(String),
+    /// <p>The retention period specified is either in the past or is not a valid value.</p> <p>The value must be either -1 or an integer between 1 and 3,653.</p>
+    InvalidRetentionPeriodFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -13931,6 +16686,11 @@ impl DeleteClusterError {
                     }
                     "InvalidClusterState" => {
                         return DeleteClusterError::InvalidClusterStateFault(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    "InvalidRetentionPeriodFault" => {
+                        return DeleteClusterError::InvalidRetentionPeriodFault(String::from(
                             parsed_error.message,
                         ));
                     }
@@ -13983,6 +16743,7 @@ impl Error for DeleteClusterError {
             DeleteClusterError::ClusterSnapshotAlreadyExistsFault(ref cause) => cause,
             DeleteClusterError::ClusterSnapshotQuotaExceededFault(ref cause) => cause,
             DeleteClusterError::InvalidClusterStateFault(ref cause) => cause,
+            DeleteClusterError::InvalidRetentionPeriodFault(ref cause) => cause,
             DeleteClusterError::Validation(ref cause) => cause,
             DeleteClusterError::Credentials(ref err) => err.description(),
             DeleteClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -14729,6 +17490,102 @@ impl Error for DeleteSnapshotCopyGrantError {
         }
     }
 }
+/// Errors returned by DeleteSnapshotSchedule
+#[derive(Debug, PartialEq)]
+pub enum DeleteSnapshotScheduleError {
+    /// <p>The cluster snapshot schedule state is not valid.</p>
+    InvalidClusterSnapshotScheduleStateFault(String),
+    /// <p>We could not find the specified snapshot schedule. </p>
+    SnapshotScheduleNotFoundFault(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DeleteSnapshotScheduleError {
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteSnapshotScheduleError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidClusterSnapshotScheduleState" => {
+                        return DeleteSnapshotScheduleError::InvalidClusterSnapshotScheduleStateFault(
+                            String::from(parsed_error.message),
+                        );
+                    }
+                    "SnapshotScheduleNotFound" => {
+                        return DeleteSnapshotScheduleError::SnapshotScheduleNotFoundFault(
+                            String::from(parsed_error.message),
+                        );
+                    }
+                    _ => {}
+                }
+            }
+        }
+        DeleteSnapshotScheduleError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for DeleteSnapshotScheduleError {
+    fn from(err: XmlParseError) -> DeleteSnapshotScheduleError {
+        let XmlParseError(message) = err;
+        DeleteSnapshotScheduleError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for DeleteSnapshotScheduleError {
+    fn from(err: CredentialsError) -> DeleteSnapshotScheduleError {
+        DeleteSnapshotScheduleError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteSnapshotScheduleError {
+    fn from(err: HttpDispatchError) -> DeleteSnapshotScheduleError {
+        DeleteSnapshotScheduleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteSnapshotScheduleError {
+    fn from(err: io::Error) -> DeleteSnapshotScheduleError {
+        DeleteSnapshotScheduleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteSnapshotScheduleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteSnapshotScheduleError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteSnapshotScheduleError::InvalidClusterSnapshotScheduleStateFault(ref cause) => {
+                cause
+            }
+            DeleteSnapshotScheduleError::SnapshotScheduleNotFoundFault(ref cause) => cause,
+            DeleteSnapshotScheduleError::Validation(ref cause) => cause,
+            DeleteSnapshotScheduleError::Credentials(ref err) => err.description(),
+            DeleteSnapshotScheduleError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteSnapshotScheduleError::ParseError(ref cause) => cause,
+            DeleteSnapshotScheduleError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by DeleteTags
 #[derive(Debug, PartialEq)]
 pub enum DeleteTagsError {
@@ -14819,11 +17676,91 @@ impl Error for DeleteTagsError {
         }
     }
 }
+/// Errors returned by DescribeAccountAttributes
+#[derive(Debug, PartialEq)]
+pub enum DescribeAccountAttributesError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DescribeAccountAttributesError {
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeAccountAttributesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        DescribeAccountAttributesError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for DescribeAccountAttributesError {
+    fn from(err: XmlParseError) -> DescribeAccountAttributesError {
+        let XmlParseError(message) = err;
+        DescribeAccountAttributesError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for DescribeAccountAttributesError {
+    fn from(err: CredentialsError) -> DescribeAccountAttributesError {
+        DescribeAccountAttributesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeAccountAttributesError {
+    fn from(err: HttpDispatchError) -> DescribeAccountAttributesError {
+        DescribeAccountAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAccountAttributesError {
+    fn from(err: io::Error) -> DescribeAccountAttributesError {
+        DescribeAccountAttributesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeAccountAttributesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeAccountAttributesError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeAccountAttributesError::Validation(ref cause) => cause,
+            DescribeAccountAttributesError::Credentials(ref err) => err.description(),
+            DescribeAccountAttributesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeAccountAttributesError::ParseError(ref cause) => cause,
+            DescribeAccountAttributesError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by DescribeClusterDbRevisions
 #[derive(Debug, PartialEq)]
 pub enum DescribeClusterDbRevisionsError {
     /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
     ClusterNotFoundFault(String),
+    /// <p>The specified cluster is not in the <code>available</code> state. </p>
+    InvalidClusterStateFault(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -14848,6 +17785,11 @@ impl DescribeClusterDbRevisionsError {
                         return DescribeClusterDbRevisionsError::ClusterNotFoundFault(String::from(
                             parsed_error.message,
                         ));
+                    }
+                    "InvalidClusterState" => {
+                        return DescribeClusterDbRevisionsError::InvalidClusterStateFault(
+                            String::from(parsed_error.message),
+                        );
                     }
                     _ => {}
                 }
@@ -14895,6 +17837,7 @@ impl Error for DescribeClusterDbRevisionsError {
     fn description(&self) -> &str {
         match *self {
             DescribeClusterDbRevisionsError::ClusterNotFoundFault(ref cause) => cause,
+            DescribeClusterDbRevisionsError::InvalidClusterStateFault(ref cause) => cause,
             DescribeClusterDbRevisionsError::Validation(ref cause) => cause,
             DescribeClusterDbRevisionsError::Credentials(ref err) => err.description(),
             DescribeClusterDbRevisionsError::HttpDispatch(ref dispatch_error) => {
@@ -16699,6 +19642,160 @@ impl Error for DescribeSnapshotCopyGrantsError {
         }
     }
 }
+/// Errors returned by DescribeSnapshotSchedules
+#[derive(Debug, PartialEq)]
+pub enum DescribeSnapshotSchedulesError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DescribeSnapshotSchedulesError {
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeSnapshotSchedulesError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        DescribeSnapshotSchedulesError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for DescribeSnapshotSchedulesError {
+    fn from(err: XmlParseError) -> DescribeSnapshotSchedulesError {
+        let XmlParseError(message) = err;
+        DescribeSnapshotSchedulesError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for DescribeSnapshotSchedulesError {
+    fn from(err: CredentialsError) -> DescribeSnapshotSchedulesError {
+        DescribeSnapshotSchedulesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeSnapshotSchedulesError {
+    fn from(err: HttpDispatchError) -> DescribeSnapshotSchedulesError {
+        DescribeSnapshotSchedulesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeSnapshotSchedulesError {
+    fn from(err: io::Error) -> DescribeSnapshotSchedulesError {
+        DescribeSnapshotSchedulesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeSnapshotSchedulesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeSnapshotSchedulesError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeSnapshotSchedulesError::Validation(ref cause) => cause,
+            DescribeSnapshotSchedulesError::Credentials(ref err) => err.description(),
+            DescribeSnapshotSchedulesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeSnapshotSchedulesError::ParseError(ref cause) => cause,
+            DescribeSnapshotSchedulesError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DescribeStorage
+#[derive(Debug, PartialEq)]
+pub enum DescribeStorageError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DescribeStorageError {
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeStorageError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        DescribeStorageError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for DescribeStorageError {
+    fn from(err: XmlParseError) -> DescribeStorageError {
+        let XmlParseError(message) = err;
+        DescribeStorageError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for DescribeStorageError {
+    fn from(err: CredentialsError) -> DescribeStorageError {
+        DescribeStorageError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeStorageError {
+    fn from(err: HttpDispatchError) -> DescribeStorageError {
+        DescribeStorageError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeStorageError {
+    fn from(err: io::Error) -> DescribeStorageError {
+        DescribeStorageError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeStorageError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeStorageError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeStorageError::Validation(ref cause) => cause,
+            DescribeStorageError::Credentials(ref err) => err.description(),
+            DescribeStorageError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DescribeStorageError::ParseError(ref cause) => cause,
+            DescribeStorageError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by DescribeTableRestoreStatus
 #[derive(Debug, PartialEq)]
 pub enum DescribeTableRestoreStatusError {
@@ -17208,6 +20305,8 @@ pub enum EnableSnapshotCopyError {
     IncompatibleOrderableOptions(String),
     /// <p>The specified cluster is not in the <code>available</code> state. </p>
     InvalidClusterStateFault(String),
+    /// <p>The retention period specified is either in the past or is not a valid value.</p> <p>The value must be either -1 or an integer between 1 and 3,653.</p>
+    InvalidRetentionPeriodFault(String),
     /// <p>The encryption key has exceeded its grant limit in AWS KMS.</p>
     LimitExceededFault(String),
     /// <p>The cluster already has cross-region snapshot copy enabled.</p>
@@ -17260,6 +20359,11 @@ impl EnableSnapshotCopyError {
                     }
                     "InvalidClusterState" => {
                         return EnableSnapshotCopyError::InvalidClusterStateFault(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    "InvalidRetentionPeriodFault" => {
+                        return EnableSnapshotCopyError::InvalidRetentionPeriodFault(String::from(
                             parsed_error.message,
                         ));
                     }
@@ -17338,6 +20442,7 @@ impl Error for EnableSnapshotCopyError {
             EnableSnapshotCopyError::DependentServiceRequestThrottlingFault(ref cause) => cause,
             EnableSnapshotCopyError::IncompatibleOrderableOptions(ref cause) => cause,
             EnableSnapshotCopyError::InvalidClusterStateFault(ref cause) => cause,
+            EnableSnapshotCopyError::InvalidRetentionPeriodFault(ref cause) => cause,
             EnableSnapshotCopyError::LimitExceededFault(ref cause) => cause,
             EnableSnapshotCopyError::SnapshotCopyAlreadyEnabledFault(ref cause) => cause,
             EnableSnapshotCopyError::SnapshotCopyGrantNotFoundFault(ref cause) => cause,
@@ -17578,6 +20683,8 @@ pub enum ModifyClusterError {
     InvalidClusterTrackFault(String),
     /// <p>The Elastic IP (EIP) is invalid or cannot be found.</p>
     InvalidElasticIpFault(String),
+    /// <p>The retention period specified is either in the past or is not a valid value.</p> <p>The value must be either -1 or an integer between 1 and 3,653.</p>
+    InvalidRetentionPeriodFault(String),
     /// <p>The encryption key has exceeded its grant limit in AWS KMS.</p>
     LimitExceededFault(String),
     /// <p>The operation would exceed the number of nodes allowed for a cluster.</p>
@@ -17670,6 +20777,11 @@ impl ModifyClusterError {
                             parsed_error.message,
                         ));
                     }
+                    "InvalidRetentionPeriodFault" => {
+                        return ModifyClusterError::InvalidRetentionPeriodFault(String::from(
+                            parsed_error.message,
+                        ));
+                    }
                     "LimitExceededFault" => {
                         return ModifyClusterError::LimitExceededFault(String::from(
                             parsed_error.message,
@@ -17757,6 +20869,7 @@ impl Error for ModifyClusterError {
             ModifyClusterError::InvalidClusterStateFault(ref cause) => cause,
             ModifyClusterError::InvalidClusterTrackFault(ref cause) => cause,
             ModifyClusterError::InvalidElasticIpFault(ref cause) => cause,
+            ModifyClusterError::InvalidRetentionPeriodFault(ref cause) => cause,
             ModifyClusterError::LimitExceededFault(ref cause) => cause,
             ModifyClusterError::NumberOfNodesPerClusterLimitExceededFault(ref cause) => cause,
             ModifyClusterError::NumberOfNodesQuotaExceededFault(ref cause) => cause,
@@ -17967,6 +21080,92 @@ impl Error for ModifyClusterIamRolesError {
         }
     }
 }
+/// Errors returned by ModifyClusterMaintenance
+#[derive(Debug, PartialEq)]
+pub enum ModifyClusterMaintenanceError {
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    ClusterNotFoundFault(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ModifyClusterMaintenanceError {
+    pub fn from_response(res: BufferedHttpResponse) -> ModifyClusterMaintenanceError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return ModifyClusterMaintenanceError::ClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    _ => {}
+                }
+            }
+        }
+        ModifyClusterMaintenanceError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for ModifyClusterMaintenanceError {
+    fn from(err: XmlParseError) -> ModifyClusterMaintenanceError {
+        let XmlParseError(message) = err;
+        ModifyClusterMaintenanceError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for ModifyClusterMaintenanceError {
+    fn from(err: CredentialsError) -> ModifyClusterMaintenanceError {
+        ModifyClusterMaintenanceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ModifyClusterMaintenanceError {
+    fn from(err: HttpDispatchError) -> ModifyClusterMaintenanceError {
+        ModifyClusterMaintenanceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyClusterMaintenanceError {
+    fn from(err: io::Error) -> ModifyClusterMaintenanceError {
+        ModifyClusterMaintenanceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ModifyClusterMaintenanceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyClusterMaintenanceError {
+    fn description(&self) -> &str {
+        match *self {
+            ModifyClusterMaintenanceError::ClusterNotFoundFault(ref cause) => cause,
+            ModifyClusterMaintenanceError::Validation(ref cause) => cause,
+            ModifyClusterMaintenanceError::Credentials(ref err) => err.description(),
+            ModifyClusterMaintenanceError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ModifyClusterMaintenanceError::ParseError(ref cause) => cause,
+            ModifyClusterMaintenanceError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by ModifyClusterParameterGroup
 #[derive(Debug, PartialEq)]
 pub enum ModifyClusterParameterGroupError {
@@ -18052,6 +21251,197 @@ impl Error for ModifyClusterParameterGroupError {
             }
             ModifyClusterParameterGroupError::ParseError(ref cause) => cause,
             ModifyClusterParameterGroupError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by ModifyClusterSnapshot
+#[derive(Debug, PartialEq)]
+pub enum ModifyClusterSnapshotError {
+    /// <p>The snapshot identifier does not refer to an existing cluster snapshot.</p>
+    ClusterSnapshotNotFoundFault(String),
+    /// <p>The specified cluster snapshot is not in the <code>available</code> state, or other accounts are authorized to access the snapshot. </p>
+    InvalidClusterSnapshotStateFault(String),
+    /// <p>The retention period specified is either in the past or is not a valid value.</p> <p>The value must be either -1 or an integer between 1 and 3,653.</p>
+    InvalidRetentionPeriodFault(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ModifyClusterSnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> ModifyClusterSnapshotError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterSnapshotNotFound" => {
+                        return ModifyClusterSnapshotError::ClusterSnapshotNotFoundFault(
+                            String::from(parsed_error.message),
+                        );
+                    }
+                    "InvalidClusterSnapshotState" => {
+                        return ModifyClusterSnapshotError::InvalidClusterSnapshotStateFault(
+                            String::from(parsed_error.message),
+                        );
+                    }
+                    "InvalidRetentionPeriodFault" => {
+                        return ModifyClusterSnapshotError::InvalidRetentionPeriodFault(
+                            String::from(parsed_error.message),
+                        );
+                    }
+                    _ => {}
+                }
+            }
+        }
+        ModifyClusterSnapshotError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for ModifyClusterSnapshotError {
+    fn from(err: XmlParseError) -> ModifyClusterSnapshotError {
+        let XmlParseError(message) = err;
+        ModifyClusterSnapshotError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for ModifyClusterSnapshotError {
+    fn from(err: CredentialsError) -> ModifyClusterSnapshotError {
+        ModifyClusterSnapshotError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ModifyClusterSnapshotError {
+    fn from(err: HttpDispatchError) -> ModifyClusterSnapshotError {
+        ModifyClusterSnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyClusterSnapshotError {
+    fn from(err: io::Error) -> ModifyClusterSnapshotError {
+        ModifyClusterSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ModifyClusterSnapshotError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyClusterSnapshotError {
+    fn description(&self) -> &str {
+        match *self {
+            ModifyClusterSnapshotError::ClusterSnapshotNotFoundFault(ref cause) => cause,
+            ModifyClusterSnapshotError::InvalidClusterSnapshotStateFault(ref cause) => cause,
+            ModifyClusterSnapshotError::InvalidRetentionPeriodFault(ref cause) => cause,
+            ModifyClusterSnapshotError::Validation(ref cause) => cause,
+            ModifyClusterSnapshotError::Credentials(ref err) => err.description(),
+            ModifyClusterSnapshotError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ModifyClusterSnapshotError::ParseError(ref cause) => cause,
+            ModifyClusterSnapshotError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by ModifyClusterSnapshotSchedule
+#[derive(Debug, PartialEq)]
+pub enum ModifyClusterSnapshotScheduleError {
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    ClusterNotFoundFault(String),
+    /// <p>The cluster snapshot schedule state is not valid.</p>
+    InvalidClusterSnapshotScheduleStateFault(String),
+    /// <p>We could not find the specified snapshot schedule. </p>
+    SnapshotScheduleNotFoundFault(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ModifyClusterSnapshotScheduleError {
+    pub fn from_response(res: BufferedHttpResponse) -> ModifyClusterSnapshotScheduleError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                                    "ClusterNotFound" => return ModifyClusterSnapshotScheduleError::ClusterNotFoundFault(String::from(parsed_error.message)),"InvalidClusterSnapshotScheduleState" => return ModifyClusterSnapshotScheduleError::InvalidClusterSnapshotScheduleStateFault(String::from(parsed_error.message)),"SnapshotScheduleNotFound" => return ModifyClusterSnapshotScheduleError::SnapshotScheduleNotFoundFault(String::from(parsed_error.message)),_ => {}
+                                }
+            }
+        }
+        ModifyClusterSnapshotScheduleError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for ModifyClusterSnapshotScheduleError {
+    fn from(err: XmlParseError) -> ModifyClusterSnapshotScheduleError {
+        let XmlParseError(message) = err;
+        ModifyClusterSnapshotScheduleError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for ModifyClusterSnapshotScheduleError {
+    fn from(err: CredentialsError) -> ModifyClusterSnapshotScheduleError {
+        ModifyClusterSnapshotScheduleError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ModifyClusterSnapshotScheduleError {
+    fn from(err: HttpDispatchError) -> ModifyClusterSnapshotScheduleError {
+        ModifyClusterSnapshotScheduleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyClusterSnapshotScheduleError {
+    fn from(err: io::Error) -> ModifyClusterSnapshotScheduleError {
+        ModifyClusterSnapshotScheduleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ModifyClusterSnapshotScheduleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyClusterSnapshotScheduleError {
+    fn description(&self) -> &str {
+        match *self {
+            ModifyClusterSnapshotScheduleError::ClusterNotFoundFault(ref cause) => cause,
+            ModifyClusterSnapshotScheduleError::InvalidClusterSnapshotScheduleStateFault(
+                ref cause,
+            ) => cause,
+            ModifyClusterSnapshotScheduleError::SnapshotScheduleNotFoundFault(ref cause) => cause,
+            ModifyClusterSnapshotScheduleError::Validation(ref cause) => cause,
+            ModifyClusterSnapshotScheduleError::Credentials(ref err) => err.description(),
+            ModifyClusterSnapshotScheduleError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ModifyClusterSnapshotScheduleError::ParseError(ref cause) => cause,
+            ModifyClusterSnapshotScheduleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18340,6 +21730,8 @@ pub enum ModifySnapshotCopyRetentionPeriodError {
     ClusterNotFoundFault(String),
     /// <p>The specified cluster is not in the <code>available</code> state. </p>
     InvalidClusterStateFault(String),
+    /// <p>The retention period specified is either in the past or is not a valid value.</p> <p>The value must be either -1 or an integer between 1 and 3,653.</p>
+    InvalidRetentionPeriodFault(String),
     /// <p>Cross-region snapshot copy was temporarily disabled. Try your request again.</p>
     SnapshotCopyDisabledFault(String),
     /// <p>Your account is not authorized to perform the requested operation.</p>
@@ -18371,6 +21763,11 @@ impl ModifySnapshotCopyRetentionPeriodError {
                     }
                     "InvalidClusterState" => {
                         return ModifySnapshotCopyRetentionPeriodError::InvalidClusterStateFault(
+                            String::from(parsed_error.message),
+                        );
+                    }
+                    "InvalidRetentionPeriodFault" => {
+                        return ModifySnapshotCopyRetentionPeriodError::InvalidRetentionPeriodFault(
                             String::from(parsed_error.message),
                         );
                     }
@@ -18431,6 +21828,7 @@ impl Error for ModifySnapshotCopyRetentionPeriodError {
         match *self {
             ModifySnapshotCopyRetentionPeriodError::ClusterNotFoundFault(ref cause) => cause,
             ModifySnapshotCopyRetentionPeriodError::InvalidClusterStateFault(ref cause) => cause,
+            ModifySnapshotCopyRetentionPeriodError::InvalidRetentionPeriodFault(ref cause) => cause,
             ModifySnapshotCopyRetentionPeriodError::SnapshotCopyDisabledFault(ref cause) => cause,
             ModifySnapshotCopyRetentionPeriodError::UnauthorizedOperation(ref cause) => cause,
             ModifySnapshotCopyRetentionPeriodError::Validation(ref cause) => cause,
@@ -18440,6 +21838,108 @@ impl Error for ModifySnapshotCopyRetentionPeriodError {
             }
             ModifySnapshotCopyRetentionPeriodError::ParseError(ref cause) => cause,
             ModifySnapshotCopyRetentionPeriodError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by ModifySnapshotSchedule
+#[derive(Debug, PartialEq)]
+pub enum ModifySnapshotScheduleError {
+    /// <p>The schedule you submitted isn't valid.</p>
+    InvalidScheduleFault(String),
+    /// <p>We could not find the specified snapshot schedule. </p>
+    SnapshotScheduleNotFoundFault(String),
+    /// <p>The specified snapshot schedule is already being updated.</p>
+    SnapshotScheduleUpdateInProgressFault(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ModifySnapshotScheduleError {
+    pub fn from_response(res: BufferedHttpResponse) -> ModifySnapshotScheduleError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "InvalidSchedule" => {
+                        return ModifySnapshotScheduleError::InvalidScheduleFault(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    "SnapshotScheduleNotFound" => {
+                        return ModifySnapshotScheduleError::SnapshotScheduleNotFoundFault(
+                            String::from(parsed_error.message),
+                        );
+                    }
+                    "SnapshotScheduleUpdateInProgress" => {
+                        return ModifySnapshotScheduleError::SnapshotScheduleUpdateInProgressFault(
+                            String::from(parsed_error.message),
+                        );
+                    }
+                    _ => {}
+                }
+            }
+        }
+        ModifySnapshotScheduleError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for ModifySnapshotScheduleError {
+    fn from(err: XmlParseError) -> ModifySnapshotScheduleError {
+        let XmlParseError(message) = err;
+        ModifySnapshotScheduleError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for ModifySnapshotScheduleError {
+    fn from(err: CredentialsError) -> ModifySnapshotScheduleError {
+        ModifySnapshotScheduleError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ModifySnapshotScheduleError {
+    fn from(err: HttpDispatchError) -> ModifySnapshotScheduleError {
+        ModifySnapshotScheduleError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifySnapshotScheduleError {
+    fn from(err: io::Error) -> ModifySnapshotScheduleError {
+        ModifySnapshotScheduleError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ModifySnapshotScheduleError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifySnapshotScheduleError {
+    fn description(&self) -> &str {
+        match *self {
+            ModifySnapshotScheduleError::InvalidScheduleFault(ref cause) => cause,
+            ModifySnapshotScheduleError::SnapshotScheduleNotFoundFault(ref cause) => cause,
+            ModifySnapshotScheduleError::SnapshotScheduleUpdateInProgressFault(ref cause) => cause,
+            ModifySnapshotScheduleError::Validation(ref cause) => cause,
+            ModifySnapshotScheduleError::Credentials(ref err) => err.description(),
+            ModifySnapshotScheduleError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ModifySnapshotScheduleError::ParseError(ref cause) => cause,
+            ModifySnapshotScheduleError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -18733,6 +22233,154 @@ impl Error for ResetClusterParameterGroupError {
         }
     }
 }
+/// Errors returned by ResizeCluster
+#[derive(Debug, PartialEq)]
+pub enum ResizeClusterError {
+    /// <p>The <code>ClusterIdentifier</code> parameter does not refer to an existing cluster. </p>
+    ClusterNotFoundFault(String),
+    /// <p>The number of nodes specified exceeds the allotted capacity of the cluster.</p>
+    InsufficientClusterCapacityFault(String),
+    /// <p>The specified cluster is not in the <code>available</code> state. </p>
+    InvalidClusterStateFault(String),
+    /// <p>The encryption key has exceeded its grant limit in AWS KMS.</p>
+    LimitExceededFault(String),
+    /// <p>The operation would exceed the number of nodes allowed for a cluster.</p>
+    NumberOfNodesPerClusterLimitExceededFault(String),
+    /// <p>The operation would exceed the number of nodes allotted to the account. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
+    NumberOfNodesQuotaExceededFault(String),
+    /// <p>Your account is not authorized to perform the requested operation.</p>
+    UnauthorizedOperation(String),
+    /// <p>The requested operation isn't supported.</p>
+    UnsupportedOperationFault(String),
+    /// <p>A request option was specified that is not supported.</p>
+    UnsupportedOptionFault(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ResizeClusterError {
+    pub fn from_response(res: BufferedHttpResponse) -> ResizeClusterError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    "ClusterNotFound" => {
+                        return ResizeClusterError::ClusterNotFoundFault(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    "InsufficientClusterCapacity" => {
+                        return ResizeClusterError::InsufficientClusterCapacityFault(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    "InvalidClusterState" => {
+                        return ResizeClusterError::InvalidClusterStateFault(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    "LimitExceededFault" => {
+                        return ResizeClusterError::LimitExceededFault(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    "NumberOfNodesPerClusterLimitExceeded" => {
+                        return ResizeClusterError::NumberOfNodesPerClusterLimitExceededFault(
+                            String::from(parsed_error.message),
+                        );
+                    }
+                    "NumberOfNodesQuotaExceeded" => {
+                        return ResizeClusterError::NumberOfNodesQuotaExceededFault(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    "UnauthorizedOperation" => {
+                        return ResizeClusterError::UnauthorizedOperation(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    "UnsupportedOperation" => {
+                        return ResizeClusterError::UnsupportedOperationFault(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    "UnsupportedOptionFault" => {
+                        return ResizeClusterError::UnsupportedOptionFault(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    _ => {}
+                }
+            }
+        }
+        ResizeClusterError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        start_element("ErrorResponse", stack)?;
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for ResizeClusterError {
+    fn from(err: XmlParseError) -> ResizeClusterError {
+        let XmlParseError(message) = err;
+        ResizeClusterError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for ResizeClusterError {
+    fn from(err: CredentialsError) -> ResizeClusterError {
+        ResizeClusterError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ResizeClusterError {
+    fn from(err: HttpDispatchError) -> ResizeClusterError {
+        ResizeClusterError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ResizeClusterError {
+    fn from(err: io::Error) -> ResizeClusterError {
+        ResizeClusterError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ResizeClusterError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ResizeClusterError {
+    fn description(&self) -> &str {
+        match *self {
+            ResizeClusterError::ClusterNotFoundFault(ref cause) => cause,
+            ResizeClusterError::InsufficientClusterCapacityFault(ref cause) => cause,
+            ResizeClusterError::InvalidClusterStateFault(ref cause) => cause,
+            ResizeClusterError::LimitExceededFault(ref cause) => cause,
+            ResizeClusterError::NumberOfNodesPerClusterLimitExceededFault(ref cause) => cause,
+            ResizeClusterError::NumberOfNodesQuotaExceededFault(ref cause) => cause,
+            ResizeClusterError::UnauthorizedOperation(ref cause) => cause,
+            ResizeClusterError::UnsupportedOperationFault(ref cause) => cause,
+            ResizeClusterError::UnsupportedOptionFault(ref cause) => cause,
+            ResizeClusterError::Validation(ref cause) => cause,
+            ResizeClusterError::Credentials(ref err) => err.description(),
+            ResizeClusterError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ResizeClusterError::ParseError(ref cause) => cause,
+            ResizeClusterError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by RestoreFromClusterSnapshot
 #[derive(Debug, PartialEq)]
 pub enum RestoreFromClusterSnapshotError {
@@ -18778,6 +22426,8 @@ pub enum RestoreFromClusterSnapshotError {
     NumberOfNodesPerClusterLimitExceededFault(String),
     /// <p>The operation would exceed the number of nodes allotted to the account. For information about increasing your quota, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/amazon-redshift-limits.html">Limits in Amazon Redshift</a> in the <i>Amazon Redshift Cluster Management Guide</i>. </p>
     NumberOfNodesQuotaExceededFault(String),
+    /// <p>We could not find the specified snapshot schedule. </p>
+    SnapshotScheduleNotFoundFault(String),
     /// <p>Your account is not authorized to perform the requested operation.</p>
     UnauthorizedOperation(String),
     /// An error occurred dispatching the HTTP request
@@ -18800,7 +22450,7 @@ impl RestoreFromClusterSnapshotError {
             find_start_element(&mut stack);
             if let Ok(parsed_error) = Self::deserialize(&mut stack) {
                 match &parsed_error.code[..] {
-                                    "AccessToSnapshotDenied" => return RestoreFromClusterSnapshotError::AccessToSnapshotDeniedFault(String::from(parsed_error.message)),"ClusterAlreadyExists" => return RestoreFromClusterSnapshotError::ClusterAlreadyExistsFault(String::from(parsed_error.message)),"ClusterParameterGroupNotFound" => return RestoreFromClusterSnapshotError::ClusterParameterGroupNotFoundFault(String::from(parsed_error.message)),"ClusterQuotaExceeded" => return RestoreFromClusterSnapshotError::ClusterQuotaExceededFault(String::from(parsed_error.message)),"ClusterSecurityGroupNotFound" => return RestoreFromClusterSnapshotError::ClusterSecurityGroupNotFoundFault(String::from(parsed_error.message)),"ClusterSnapshotNotFound" => return RestoreFromClusterSnapshotError::ClusterSnapshotNotFoundFault(String::from(parsed_error.message)),"ClusterSubnetGroupNotFoundFault" => return RestoreFromClusterSnapshotError::ClusterSubnetGroupNotFoundFault(String::from(parsed_error.message)),"DependentServiceRequestThrottlingFault" => return RestoreFromClusterSnapshotError::DependentServiceRequestThrottlingFault(String::from(parsed_error.message)),"HsmClientCertificateNotFoundFault" => return RestoreFromClusterSnapshotError::HsmClientCertificateNotFoundFault(String::from(parsed_error.message)),"HsmConfigurationNotFoundFault" => return RestoreFromClusterSnapshotError::HsmConfigurationNotFoundFault(String::from(parsed_error.message)),"InsufficientClusterCapacity" => return RestoreFromClusterSnapshotError::InsufficientClusterCapacityFault(String::from(parsed_error.message)),"InvalidClusterSnapshotState" => return RestoreFromClusterSnapshotError::InvalidClusterSnapshotStateFault(String::from(parsed_error.message)),"InvalidClusterSubnetGroupStateFault" => return RestoreFromClusterSnapshotError::InvalidClusterSubnetGroupStateFault(String::from(parsed_error.message)),"InvalidClusterTrack" => return RestoreFromClusterSnapshotError::InvalidClusterTrackFault(String::from(parsed_error.message)),"InvalidElasticIpFault" => return RestoreFromClusterSnapshotError::InvalidElasticIpFault(String::from(parsed_error.message)),"InvalidRestore" => return RestoreFromClusterSnapshotError::InvalidRestoreFault(String::from(parsed_error.message)),"InvalidSubnet" => return RestoreFromClusterSnapshotError::InvalidSubnet(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => return RestoreFromClusterSnapshotError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"LimitExceededFault" => return RestoreFromClusterSnapshotError::LimitExceededFault(String::from(parsed_error.message)),"NumberOfNodesPerClusterLimitExceeded" => return RestoreFromClusterSnapshotError::NumberOfNodesPerClusterLimitExceededFault(String::from(parsed_error.message)),"NumberOfNodesQuotaExceeded" => return RestoreFromClusterSnapshotError::NumberOfNodesQuotaExceededFault(String::from(parsed_error.message)),"UnauthorizedOperation" => return RestoreFromClusterSnapshotError::UnauthorizedOperation(String::from(parsed_error.message)),_ => {}
+                                    "AccessToSnapshotDenied" => return RestoreFromClusterSnapshotError::AccessToSnapshotDeniedFault(String::from(parsed_error.message)),"ClusterAlreadyExists" => return RestoreFromClusterSnapshotError::ClusterAlreadyExistsFault(String::from(parsed_error.message)),"ClusterParameterGroupNotFound" => return RestoreFromClusterSnapshotError::ClusterParameterGroupNotFoundFault(String::from(parsed_error.message)),"ClusterQuotaExceeded" => return RestoreFromClusterSnapshotError::ClusterQuotaExceededFault(String::from(parsed_error.message)),"ClusterSecurityGroupNotFound" => return RestoreFromClusterSnapshotError::ClusterSecurityGroupNotFoundFault(String::from(parsed_error.message)),"ClusterSnapshotNotFound" => return RestoreFromClusterSnapshotError::ClusterSnapshotNotFoundFault(String::from(parsed_error.message)),"ClusterSubnetGroupNotFoundFault" => return RestoreFromClusterSnapshotError::ClusterSubnetGroupNotFoundFault(String::from(parsed_error.message)),"DependentServiceRequestThrottlingFault" => return RestoreFromClusterSnapshotError::DependentServiceRequestThrottlingFault(String::from(parsed_error.message)),"HsmClientCertificateNotFoundFault" => return RestoreFromClusterSnapshotError::HsmClientCertificateNotFoundFault(String::from(parsed_error.message)),"HsmConfigurationNotFoundFault" => return RestoreFromClusterSnapshotError::HsmConfigurationNotFoundFault(String::from(parsed_error.message)),"InsufficientClusterCapacity" => return RestoreFromClusterSnapshotError::InsufficientClusterCapacityFault(String::from(parsed_error.message)),"InvalidClusterSnapshotState" => return RestoreFromClusterSnapshotError::InvalidClusterSnapshotStateFault(String::from(parsed_error.message)),"InvalidClusterSubnetGroupStateFault" => return RestoreFromClusterSnapshotError::InvalidClusterSubnetGroupStateFault(String::from(parsed_error.message)),"InvalidClusterTrack" => return RestoreFromClusterSnapshotError::InvalidClusterTrackFault(String::from(parsed_error.message)),"InvalidElasticIpFault" => return RestoreFromClusterSnapshotError::InvalidElasticIpFault(String::from(parsed_error.message)),"InvalidRestore" => return RestoreFromClusterSnapshotError::InvalidRestoreFault(String::from(parsed_error.message)),"InvalidSubnet" => return RestoreFromClusterSnapshotError::InvalidSubnet(String::from(parsed_error.message)),"InvalidVPCNetworkStateFault" => return RestoreFromClusterSnapshotError::InvalidVPCNetworkStateFault(String::from(parsed_error.message)),"LimitExceededFault" => return RestoreFromClusterSnapshotError::LimitExceededFault(String::from(parsed_error.message)),"NumberOfNodesPerClusterLimitExceeded" => return RestoreFromClusterSnapshotError::NumberOfNodesPerClusterLimitExceededFault(String::from(parsed_error.message)),"NumberOfNodesQuotaExceeded" => return RestoreFromClusterSnapshotError::NumberOfNodesQuotaExceededFault(String::from(parsed_error.message)),"SnapshotScheduleNotFound" => return RestoreFromClusterSnapshotError::SnapshotScheduleNotFoundFault(String::from(parsed_error.message)),"UnauthorizedOperation" => return RestoreFromClusterSnapshotError::UnauthorizedOperation(String::from(parsed_error.message)),_ => {}
                                 }
             }
         }
@@ -18872,6 +22522,7 @@ impl Error for RestoreFromClusterSnapshotError {
                 ref cause,
             ) => cause,
             RestoreFromClusterSnapshotError::NumberOfNodesQuotaExceededFault(ref cause) => cause,
+            RestoreFromClusterSnapshotError::SnapshotScheduleNotFoundFault(ref cause) => cause,
             RestoreFromClusterSnapshotError::UnauthorizedOperation(ref cause) => cause,
             RestoreFromClusterSnapshotError::Validation(ref cause) => cause,
             RestoreFromClusterSnapshotError::Credentials(ref err) => err.description(),
@@ -19291,7 +22942,7 @@ pub trait Redshift {
         input: AcceptReservedNodeExchangeInputMessage,
     ) -> RusotoFuture<AcceptReservedNodeExchangeOutputMessage, AcceptReservedNodeExchangeError>;
 
-    /// <p>Adds an inbound (ingress) rule to an Amazon Redshift security group. Depending on whether the application accessing your cluster is running on the Internet or an Amazon EC2 instance, you can authorize inbound access to either a Classless Interdomain Routing (CIDR)/Internet Protocol (IP) range or to an Amazon EC2 security group. You can add as many as 20 ingress rules to an Amazon Redshift security group.</p> <p>If you authorize access to an Amazon EC2 security group, specify <i>EC2SecurityGroupName</i> and <i>EC2SecurityGroupOwnerId</i>. The Amazon EC2 security group and Amazon Redshift cluster must be in the same AWS region. </p> <p>If you authorize access to a CIDR/IP address range, specify <i>CIDRIP</i>. For an overview of CIDR blocks, see the Wikipedia article on <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Classless Inter-Domain Routing</a>. </p> <p>You must also associate the security group with a cluster so that clients running on these IP addresses or the EC2 instance are authorized to connect to the cluster. For information about managing security groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Working with Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
+    /// <p>Adds an inbound (ingress) rule to an Amazon Redshift security group. Depending on whether the application accessing your cluster is running on the Internet or an Amazon EC2 instance, you can authorize inbound access to either a Classless Interdomain Routing (CIDR)/Internet Protocol (IP) range or to an Amazon EC2 security group. You can add as many as 20 ingress rules to an Amazon Redshift security group.</p> <p>If you authorize access to an Amazon EC2 security group, specify <i>EC2SecurityGroupName</i> and <i>EC2SecurityGroupOwnerId</i>. The Amazon EC2 security group and Amazon Redshift cluster must be in the same AWS Region. </p> <p>If you authorize access to a CIDR/IP address range, specify <i>CIDRIP</i>. For an overview of CIDR blocks, see the Wikipedia article on <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Classless Inter-Domain Routing</a>. </p> <p>You must also associate the security group with a cluster so that clients running on these IP addresses or the EC2 instance are authorized to connect to the cluster. For information about managing security groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Working with Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn authorize_cluster_security_group_ingress(
         &self,
         input: AuthorizeClusterSecurityGroupIngressMessage,
@@ -19305,6 +22956,24 @@ pub trait Redshift {
         &self,
         input: AuthorizeSnapshotAccessMessage,
     ) -> RusotoFuture<AuthorizeSnapshotAccessResult, AuthorizeSnapshotAccessError>;
+
+    /// <p>Deletes a set of cluster snapshots.</p>
+    fn batch_delete_cluster_snapshots(
+        &self,
+        input: BatchDeleteClusterSnapshotsRequest,
+    ) -> RusotoFuture<BatchDeleteClusterSnapshotsResult, BatchDeleteClusterSnapshotsError>;
+
+    /// <p>Modifies the settings for a list of snapshots.</p>
+    fn batch_modify_cluster_snapshots(
+        &self,
+        input: BatchModifyClusterSnapshotsMessage,
+    ) -> RusotoFuture<BatchModifyClusterSnapshotsOutputMessage, BatchModifyClusterSnapshotsError>;
+
+    /// <p>Cancels a resize operation.</p>
+    fn cancel_resize(
+        &self,
+        input: CancelResizeMessage,
+    ) -> RusotoFuture<ResizeProgressMessage, CancelResizeError>;
 
     /// <p>Copies the specified automated cluster snapshot to a new manual cluster snapshot. The source must be an automated snapshot and it must be in the available state.</p> <p>When you delete a cluster, Amazon Redshift deletes any automated snapshots of the cluster. Also, when the retention period of the snapshot expires, Amazon Redshift automatically deletes it. If you want to keep an automated snapshot for a longer period, you can make a manual copy of the snapshot. Manual snapshots are retained until you delete them.</p> <p> For more information about working with snapshots, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn copy_cluster_snapshot(
@@ -19366,6 +23035,12 @@ pub trait Redshift {
         input: CreateSnapshotCopyGrantMessage,
     ) -> RusotoFuture<CreateSnapshotCopyGrantResult, CreateSnapshotCopyGrantError>;
 
+    /// <p>Creates a new snapshot schedule.</p>
+    fn create_snapshot_schedule(
+        &self,
+        input: CreateSnapshotScheduleMessage,
+    ) -> RusotoFuture<SnapshotSchedule, CreateSnapshotScheduleError>;
+
     /// <p>Adds one or more tags to a specified resource.</p> <p>A resource can have up to 50 tags. If you try to create more than 50 tags for a resource, you will receive an error and the attempt will fail.</p> <p>If you specify a key that already exists for the resource, the value for that key will be updated with the new value.</p>
     fn create_tags(&self, input: CreateTagsMessage) -> RusotoFuture<(), CreateTagsError>;
 
@@ -19423,8 +23098,20 @@ pub trait Redshift {
         input: DeleteSnapshotCopyGrantMessage,
     ) -> RusotoFuture<(), DeleteSnapshotCopyGrantError>;
 
+    /// <p>Deletes a snapshot schedule.</p>
+    fn delete_snapshot_schedule(
+        &self,
+        input: DeleteSnapshotScheduleMessage,
+    ) -> RusotoFuture<(), DeleteSnapshotScheduleError>;
+
     /// <p>Deletes a tag or tags from a resource. You must provide the ARN of the resource from which you want to delete the tag or tags.</p>
     fn delete_tags(&self, input: DeleteTagsMessage) -> RusotoFuture<(), DeleteTagsError>;
+
+    /// <p>Returns a list of attributes attached to an account</p>
+    fn describe_account_attributes(
+        &self,
+        input: DescribeAccountAttributesMessage,
+    ) -> RusotoFuture<AccountAttributeList, DescribeAccountAttributesError>;
 
     /// <p>Returns an array of <code>ClusterDbRevision</code> objects.</p>
     fn describe_cluster_db_revisions(
@@ -19522,7 +23209,7 @@ pub trait Redshift {
         input: DescribeLoggingStatusMessage,
     ) -> RusotoFuture<LoggingStatus, DescribeLoggingStatusError>;
 
-    /// <p>Returns a list of orderable cluster options. Before you create a new cluster you can use this operation to find what options are available, such as the EC2 Availability Zones (AZ) in the specific AWS region that you can specify, and the node types you can request. The node types differ by available storage, memory, CPU and price. With the cost involved you might want to obtain a list of cluster options in the specific region and specify values when creating a cluster. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
+    /// <p>Returns a list of orderable cluster options. Before you create a new cluster you can use this operation to find what options are available, such as the EC2 Availability Zones (AZ) in the specific AWS Region that you can specify, and the node types you can request. The node types differ by available storage, memory, CPU and price. With the cost involved you might want to obtain a list of cluster options in the specific region and specify values when creating a cluster. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_orderable_cluster_options(
         &self,
         input: DescribeOrderableClusterOptionsMessage,
@@ -19551,6 +23238,15 @@ pub trait Redshift {
         &self,
         input: DescribeSnapshotCopyGrantsMessage,
     ) -> RusotoFuture<SnapshotCopyGrantMessage, DescribeSnapshotCopyGrantsError>;
+
+    /// <p>Returns a list of snapshot schedules. </p>
+    fn describe_snapshot_schedules(
+        &self,
+        input: DescribeSnapshotSchedulesMessage,
+    ) -> RusotoFuture<DescribeSnapshotSchedulesOutputMessage, DescribeSnapshotSchedulesError>;
+
+    /// <p>Returns the total amount of snapshot usage and provisioned storage for a user in megabytes.</p>
+    fn describe_storage(&self) -> RusotoFuture<CustomerStorageMessage, DescribeStorageError>;
 
     /// <p>Lists the status of one or more table restore requests made using the <a>RestoreTableFromClusterSnapshot</a> API action. If you don't specify a value for the <code>TableRestoreRequestId</code> parameter, then <code>DescribeTableRestoreStatus</code> returns the status of all table restore requests ordered by the date and time of the request in ascending order. Otherwise <code>DescribeTableRestoreStatus</code> returns the status of the table specified by <code>TableRestoreRequestId</code>.</p>
     fn describe_table_restore_status(
@@ -19621,11 +23317,29 @@ pub trait Redshift {
         input: ModifyClusterIamRolesMessage,
     ) -> RusotoFuture<ModifyClusterIamRolesResult, ModifyClusterIamRolesError>;
 
+    /// <p>Modifies the maintenance settings of a cluster. For example, you can defer a maintenance window. You can also update or cancel a deferment. </p>
+    fn modify_cluster_maintenance(
+        &self,
+        input: ModifyClusterMaintenanceMessage,
+    ) -> RusotoFuture<ModifyClusterMaintenanceResult, ModifyClusterMaintenanceError>;
+
     /// <p>Modifies the parameters of a parameter group.</p> <p> For more information about parameters and parameter groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-parameter-groups.html">Amazon Redshift Parameter Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn modify_cluster_parameter_group(
         &self,
         input: ModifyClusterParameterGroupMessage,
     ) -> RusotoFuture<ClusterParameterGroupNameMessage, ModifyClusterParameterGroupError>;
+
+    /// <p>Modifies the settings for a snapshot.</p>
+    fn modify_cluster_snapshot(
+        &self,
+        input: ModifyClusterSnapshotMessage,
+    ) -> RusotoFuture<ModifyClusterSnapshotResult, ModifyClusterSnapshotError>;
+
+    /// <p>Modifies a snapshot schedule for a cluster.</p>
+    fn modify_cluster_snapshot_schedule(
+        &self,
+        input: ModifyClusterSnapshotScheduleMessage,
+    ) -> RusotoFuture<(), ModifyClusterSnapshotScheduleError>;
 
     /// <p>Modifies a cluster subnet group to include the specified list of VPC subnets. The operation replaces the existing list of subnets with the new list of subnets.</p>
     fn modify_cluster_subnet_group(
@@ -19639,11 +23353,17 @@ pub trait Redshift {
         input: ModifyEventSubscriptionMessage,
     ) -> RusotoFuture<ModifyEventSubscriptionResult, ModifyEventSubscriptionError>;
 
-    /// <p>Modifies the number of days to retain automated snapshots in the destination region after they are copied from the source region.</p>
+    /// <p>Modifies the number of days to retain snapshots in the destination AWS Region after they are copied from the source AWS Region. By default, this operation only changes the retention period of copied automated snapshots. The retention periods for both new and existing copied automated snapshots are updated with the new retention period. You can set the manual option to change only the retention periods of copied manual snapshots. If you set this option, only newly copied manual snapshots have the new retention period. </p>
     fn modify_snapshot_copy_retention_period(
         &self,
         input: ModifySnapshotCopyRetentionPeriodMessage,
     ) -> RusotoFuture<ModifySnapshotCopyRetentionPeriodResult, ModifySnapshotCopyRetentionPeriodError>;
+
+    /// <p>Modifies a snapshot schedule. Any schedule associated with a cluster is modified asynchronously.</p>
+    fn modify_snapshot_schedule(
+        &self,
+        input: ModifySnapshotScheduleMessage,
+    ) -> RusotoFuture<SnapshotSchedule, ModifySnapshotScheduleError>;
 
     /// <p>Allows you to purchase reserved nodes. Amazon Redshift offers a predefined set of reserved node offerings. You can purchase one or more of the offerings. You can call the <a>DescribeReservedNodeOfferings</a> API to obtain the available reserved node offerings. You can call this API by providing a specific reserved node offering and the number of nodes you want to reserve. </p> <p> For more information about reserved node offerings, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/purchase-reserved-node-instance.html">Purchasing Reserved Nodes</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn purchase_reserved_node_offering(
@@ -19662,6 +23382,12 @@ pub trait Redshift {
         &self,
         input: ResetClusterParameterGroupMessage,
     ) -> RusotoFuture<ClusterParameterGroupNameMessage, ResetClusterParameterGroupError>;
+
+    /// <p><p>Changes the size of the cluster. You can change the cluster&#39;s type, or change the number or type of nodes. The default behavior is to use the elastic resize method. With an elastic resize, your cluster is available for read and write operations more quickly than with the classic resize method. </p> <p>Elastic resize operations have the following restrictions:</p> <ul> <li> <p>You can only resize clusters of the following types:</p> <ul> <li> <p>dc2.large</p> </li> <li> <p>dc2.8xlarge</p> </li> <li> <p>ds2.xlarge</p> </li> <li> <p>ds2.8xlarge</p> </li> </ul> </li> <li> <p>The type of nodes that you add must match the node type for the cluster.</p> </li> </ul></p>
+    fn resize_cluster(
+        &self,
+        input: ResizeClusterMessage,
+    ) -> RusotoFuture<ResizeClusterResult, ResizeClusterError>;
 
     /// <p>Creates a new cluster from a snapshot. By default, Amazon Redshift creates the resulting cluster with the same configuration as the original cluster from which the snapshot was created, except that the new cluster is created with the default cluster security and parameter groups. After Amazon Redshift creates the cluster, you can use the <a>ModifyCluster</a> API to associate a different security group and different parameter group with the restored cluster. If you are using a DS node type, you can also choose to change to another DS node type of the same size during restore.</p> <p>If you restore a cluster into a VPC, you must provide a cluster subnet group where you want the cluster restored.</p> <p> For more information about working with snapshots, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-snapshots.html">Amazon Redshift Snapshots</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn restore_from_cluster_snapshot(
@@ -19775,13 +23501,13 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
     }
 
-    /// <p>Adds an inbound (ingress) rule to an Amazon Redshift security group. Depending on whether the application accessing your cluster is running on the Internet or an Amazon EC2 instance, you can authorize inbound access to either a Classless Interdomain Routing (CIDR)/Internet Protocol (IP) range or to an Amazon EC2 security group. You can add as many as 20 ingress rules to an Amazon Redshift security group.</p> <p>If you authorize access to an Amazon EC2 security group, specify <i>EC2SecurityGroupName</i> and <i>EC2SecurityGroupOwnerId</i>. The Amazon EC2 security group and Amazon Redshift cluster must be in the same AWS region. </p> <p>If you authorize access to a CIDR/IP address range, specify <i>CIDRIP</i>. For an overview of CIDR blocks, see the Wikipedia article on <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Classless Inter-Domain Routing</a>. </p> <p>You must also associate the security group with a cluster so that clients running on these IP addresses or the EC2 instance are authorized to connect to the cluster. For information about managing security groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Working with Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
+    /// <p>Adds an inbound (ingress) rule to an Amazon Redshift security group. Depending on whether the application accessing your cluster is running on the Internet or an Amazon EC2 instance, you can authorize inbound access to either a Classless Interdomain Routing (CIDR)/Internet Protocol (IP) range or to an Amazon EC2 security group. You can add as many as 20 ingress rules to an Amazon Redshift security group.</p> <p>If you authorize access to an Amazon EC2 security group, specify <i>EC2SecurityGroupName</i> and <i>EC2SecurityGroupOwnerId</i>. The Amazon EC2 security group and Amazon Redshift cluster must be in the same AWS Region. </p> <p>If you authorize access to a CIDR/IP address range, specify <i>CIDRIP</i>. For an overview of CIDR blocks, see the Wikipedia article on <a href="http://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing">Classless Inter-Domain Routing</a>. </p> <p>You must also associate the security group with a cluster so that clients running on these IP addresses or the EC2 instance are authorized to connect to the cluster. For information about managing security groups, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-security-groups.html">Working with Security Groups</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn authorize_cluster_security_group_ingress(
         &self,
         input: AuthorizeClusterSecurityGroupIngressMessage,
@@ -19830,7 +23556,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -19880,7 +23606,161 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
 
+    /// <p>Deletes a set of cluster snapshots.</p>
+    fn batch_delete_cluster_snapshots(
+        &self,
+        input: BatchDeleteClusterSnapshotsRequest,
+    ) -> RusotoFuture<BatchDeleteClusterSnapshotsResult, BatchDeleteClusterSnapshotsError> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "BatchDeleteClusterSnapshots");
+        params.put("Version", "2012-12-01");
+        BatchDeleteClusterSnapshotsRequestSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(BatchDeleteClusterSnapshotsError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = BatchDeleteClusterSnapshotsResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = BatchDeleteClusterSnapshotsResultDeserializer::deserialize(
+                        "BatchDeleteClusterSnapshotsResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Modifies the settings for a list of snapshots.</p>
+    fn batch_modify_cluster_snapshots(
+        &self,
+        input: BatchModifyClusterSnapshotsMessage,
+    ) -> RusotoFuture<BatchModifyClusterSnapshotsOutputMessage, BatchModifyClusterSnapshotsError>
+    {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "BatchModifyClusterSnapshots");
+        params.put("Version", "2012-12-01");
+        BatchModifyClusterSnapshotsMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(BatchModifyClusterSnapshotsError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = BatchModifyClusterSnapshotsOutputMessage::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = BatchModifyClusterSnapshotsOutputMessageDeserializer::deserialize(
+                        "BatchModifyClusterSnapshotsResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Cancels a resize operation.</p>
+    fn cancel_resize(
+        &self,
+        input: CancelResizeMessage,
+    ) -> RusotoFuture<ResizeProgressMessage, CancelResizeError> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "CancelResize");
+        params.put("Version", "2012-12-01");
+        CancelResizeMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CancelResizeError::from_response(response))),
+                );
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = ResizeProgressMessage::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ResizeProgressMessageDeserializer::deserialize(
+                        "CancelResizeResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -19932,7 +23812,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -19985,7 +23865,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -20035,7 +23915,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -20085,7 +23965,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -20137,7 +24017,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -20187,7 +24067,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -20237,7 +24117,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -20287,7 +24167,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -20337,7 +24217,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -20387,7 +24267,57 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
 
+    /// <p>Creates a new snapshot schedule.</p>
+    fn create_snapshot_schedule(
+        &self,
+        input: CreateSnapshotScheduleMessage,
+    ) -> RusotoFuture<SnapshotSchedule, CreateSnapshotScheduleError> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "CreateSnapshotSchedule");
+        params.put("Version", "2012-12-01");
+        CreateSnapshotScheduleMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateSnapshotScheduleError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = SnapshotSchedule::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = SnapshotScheduleDeserializer::deserialize(
+                        "CreateSnapshotScheduleResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -20467,7 +24397,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -20573,7 +24503,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -20714,6 +24644,33 @@ impl Redshift for RedshiftClient {
         })
     }
 
+    /// <p>Deletes a snapshot schedule.</p>
+    fn delete_snapshot_schedule(
+        &self,
+        input: DeleteSnapshotScheduleMessage,
+    ) -> RusotoFuture<(), DeleteSnapshotScheduleError> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DeleteSnapshotSchedule");
+        params.put("Version", "2012-12-01");
+        DeleteSnapshotScheduleMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteSnapshotScheduleError::from_response(response))
+                }));
+            }
+
+            Box::new(future::ok(::std::mem::drop(response)))
+        })
+    }
+
     /// <p>Deletes a tag or tags from a resource. You must provide the ARN of the resource from which you want to delete the tag or tags.</p>
     fn delete_tags(&self, input: DeleteTagsMessage) -> RusotoFuture<(), DeleteTagsError> {
         let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
@@ -20738,6 +24695,56 @@ impl Redshift for RedshiftClient {
             }
 
             Box::new(future::ok(::std::mem::drop(response)))
+        })
+    }
+
+    /// <p>Returns a list of attributes attached to an account</p>
+    fn describe_account_attributes(
+        &self,
+        input: DescribeAccountAttributesMessage,
+    ) -> RusotoFuture<AccountAttributeList, DescribeAccountAttributesError> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeAccountAttributes");
+        params.put("Version", "2012-12-01");
+        DescribeAccountAttributesMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeAccountAttributesError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = AccountAttributeList::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = AccountAttributeListDeserializer::deserialize(
+                        "DescribeAccountAttributesResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
 
@@ -20785,7 +24792,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -20835,7 +24842,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -20885,7 +24892,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -20935,7 +24942,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -20985,7 +24992,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -21035,7 +25042,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -21087,7 +25094,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -21137,7 +25144,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -21190,7 +25197,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -21243,7 +25250,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -21293,7 +25300,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -21343,7 +25350,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -21394,7 +25401,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -21444,7 +25451,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -21494,7 +25501,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -21546,13 +25553,13 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
     }
 
-    /// <p>Returns a list of orderable cluster options. Before you create a new cluster you can use this operation to find what options are available, such as the EC2 Availability Zones (AZ) in the specific AWS region that you can specify, and the node types you can request. The node types differ by available storage, memory, CPU and price. With the cost involved you might want to obtain a list of cluster options in the specific region and specify values when creating a cluster. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
+    /// <p>Returns a list of orderable cluster options. Before you create a new cluster you can use this operation to find what options are available, such as the EC2 Availability Zones (AZ) in the specific AWS Region that you can specify, and the node types you can request. The node types differ by available storage, memory, CPU and price. With the cost involved you might want to obtain a list of cluster options in the specific region and specify values when creating a cluster. For more information about managing clusters, go to <a href="http://docs.aws.amazon.com/redshift/latest/mgmt/working-with-clusters.html">Amazon Redshift Clusters</a> in the <i>Amazon Redshift Cluster Management Guide</i>.</p>
     fn describe_orderable_cluster_options(
         &self,
         input: DescribeOrderableClusterOptionsMessage,
@@ -21598,7 +25605,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -21648,7 +25655,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -21700,7 +25707,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -21753,7 +25760,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -21803,7 +25810,107 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
 
+    /// <p>Returns a list of snapshot schedules. </p>
+    fn describe_snapshot_schedules(
+        &self,
+        input: DescribeSnapshotSchedulesMessage,
+    ) -> RusotoFuture<DescribeSnapshotSchedulesOutputMessage, DescribeSnapshotSchedulesError> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeSnapshotSchedules");
+        params.put("Version", "2012-12-01");
+        DescribeSnapshotSchedulesMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeSnapshotSchedulesError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = DescribeSnapshotSchedulesOutputMessage::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = DescribeSnapshotSchedulesOutputMessageDeserializer::deserialize(
+                        "DescribeSnapshotSchedulesResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Returns the total amount of snapshot usage and provisioned storage for a user in megabytes.</p>
+    fn describe_storage(&self) -> RusotoFuture<CustomerStorageMessage, DescribeStorageError> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "DescribeStorage");
+        params.put("Version", "2012-12-01");
+
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeStorageError::from_response(response))),
+                );
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = CustomerStorageMessage::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = CustomerStorageMessageDeserializer::deserialize(
+                        "DescribeStorageResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -21853,7 +25960,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -21906,7 +26013,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -21957,7 +26064,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -22009,7 +26116,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -22060,7 +26167,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -22113,7 +26220,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -22165,7 +26272,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -22221,7 +26328,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -22274,7 +26381,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -22324,7 +26431,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -22376,7 +26483,57 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
 
+    /// <p>Modifies the maintenance settings of a cluster. For example, you can defer a maintenance window. You can also update or cancel a deferment. </p>
+    fn modify_cluster_maintenance(
+        &self,
+        input: ModifyClusterMaintenanceMessage,
+    ) -> RusotoFuture<ModifyClusterMaintenanceResult, ModifyClusterMaintenanceError> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ModifyClusterMaintenance");
+        params.put("Version", "2012-12-01");
+        ModifyClusterMaintenanceMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ModifyClusterMaintenanceError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = ModifyClusterMaintenanceResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ModifyClusterMaintenanceResultDeserializer::deserialize(
+                        "ModifyClusterMaintenanceResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -22426,9 +26583,88 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
+        })
+    }
+
+    /// <p>Modifies the settings for a snapshot.</p>
+    fn modify_cluster_snapshot(
+        &self,
+        input: ModifyClusterSnapshotMessage,
+    ) -> RusotoFuture<ModifyClusterSnapshotResult, ModifyClusterSnapshotError> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ModifyClusterSnapshot");
+        params.put("Version", "2012-12-01");
+        ModifyClusterSnapshotMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ModifyClusterSnapshotError::from_response(response))
+                    }),
+                );
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = ModifyClusterSnapshotResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ModifyClusterSnapshotResultDeserializer::deserialize(
+                        "ModifyClusterSnapshotResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Modifies a snapshot schedule for a cluster.</p>
+    fn modify_cluster_snapshot_schedule(
+        &self,
+        input: ModifyClusterSnapshotScheduleMessage,
+    ) -> RusotoFuture<(), ModifyClusterSnapshotScheduleError> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ModifyClusterSnapshotSchedule");
+        params.put("Version", "2012-12-01");
+        ModifyClusterSnapshotScheduleMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ModifyClusterSnapshotScheduleError::from_response(response))
+                }));
+            }
+
+            Box::new(future::ok(::std::mem::drop(response)))
         })
     }
 
@@ -22476,7 +26712,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -22526,13 +26762,13 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
     }
 
-    /// <p>Modifies the number of days to retain automated snapshots in the destination region after they are copied from the source region.</p>
+    /// <p>Modifies the number of days to retain snapshots in the destination AWS Region after they are copied from the source AWS Region. By default, this operation only changes the retention period of copied automated snapshots. The retention periods for both new and existing copied automated snapshots are updated with the new retention period. You can set the manual option to change only the retention periods of copied manual snapshots. If you set this option, only newly copied manual snapshots have the new retention period. </p>
     fn modify_snapshot_copy_retention_period(
         &self,
         input: ModifySnapshotCopyRetentionPeriodMessage,
@@ -22579,7 +26815,57 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
 
+    /// <p>Modifies a snapshot schedule. Any schedule associated with a cluster is modified asynchronously.</p>
+    fn modify_snapshot_schedule(
+        &self,
+        input: ModifySnapshotScheduleMessage,
+    ) -> RusotoFuture<SnapshotSchedule, ModifySnapshotScheduleError> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ModifySnapshotSchedule");
+        params.put("Version", "2012-12-01");
+        ModifySnapshotScheduleMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ModifySnapshotScheduleError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = SnapshotSchedule::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = SnapshotScheduleDeserializer::deserialize(
+                        "ModifySnapshotScheduleResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -22629,7 +26915,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -22682,7 +26968,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -22732,7 +27018,60 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
 
+    /// <p><p>Changes the size of the cluster. You can change the cluster&#39;s type, or change the number or type of nodes. The default behavior is to use the elastic resize method. With an elastic resize, your cluster is available for read and write operations more quickly than with the classic resize method. </p> <p>Elastic resize operations have the following restrictions:</p> <ul> <li> <p>You can only resize clusters of the following types:</p> <ul> <li> <p>dc2.large</p> </li> <li> <p>dc2.8xlarge</p> </li> <li> <p>ds2.xlarge</p> </li> <li> <p>ds2.8xlarge</p> </li> </ul> </li> <li> <p>The type of nodes that you add must match the node type for the cluster.</p> </li> </ul></p>
+    fn resize_cluster(
+        &self,
+        input: ResizeClusterMessage,
+    ) -> RusotoFuture<ResizeClusterResult, ResizeClusterError> {
+        let mut request = SignedRequest::new("POST", "redshift", &self.region, "/");
+        let mut params = Params::new();
+
+        params.put("Action", "ResizeCluster");
+        params.put("Version", "2012-12-01");
+        ResizeClusterMessageSerializer::serialize(&mut params, "", &input);
+        request.set_payload(Some(
+            serde_urlencoded::to_string(&params).unwrap().into_bytes(),
+        ));
+        request.set_content_type("application/x-www-form-urlencoded".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ResizeClusterError::from_response(response))),
+                );
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let result;
+
+                if response.body.is_empty() {
+                    result = ResizeClusterResult::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    start_element(&actual_tag_name, &mut stack)?;
+                    result = ResizeClusterResultDeserializer::deserialize(
+                        "ResizeClusterResult",
+                        &mut stack,
+                    )?;
+                    skip_tree(&mut stack);
+                    end_element(&actual_tag_name, &mut stack)?;
+                }
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -22782,7 +27121,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -22835,7 +27174,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -22888,7 +27227,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -22940,7 +27279,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -22992,7 +27331,7 @@ impl Redshift for RedshiftClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })

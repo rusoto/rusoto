@@ -121,16 +121,20 @@ pub struct CreateNamedQueryInput {
     /// <p>The database to which the query belongs.</p>
     #[serde(rename = "Database")]
     pub database: String,
-    /// <p>A brief explanation of the query.</p>
+    /// <p>The query description.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The plain language name for the query.</p>
+    /// <p>The query name.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p>The text of the query itself. In other words, all query statements.</p>
+    /// <p>The contents of the query with all query statements.</p>
     #[serde(rename = "QueryString")]
     pub query_string: String,
+    /// <p>The name of the workgroup in which the named query is being created.</p>
+    #[serde(rename = "WorkGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub work_group: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -141,6 +145,25 @@ pub struct CreateNamedQueryOutput {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub named_query_id: Option<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateWorkGroupInput {
+    /// <p>The configuration for the workgroup, which includes the location in Amazon S3 where query results are stored, the encryption configuration, if any, used for encrypting query results, whether the Amazon CloudWatch Metrics are enabled for the workgroup, the limit for the amount of bytes scanned (cutoff) per query, if it is specified, and whether workgroup's settings (specified with EnforceWorkGroupConfiguration) in the WorkGroupConfiguration override client-side settings. See <a>WorkGroupConfiguration$EnforceWorkGroupConfiguration</a>.</p>
+    #[serde(rename = "Configuration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration: Option<WorkGroupConfiguration>,
+    /// <p>The workgroup description.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The workgroup name.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateWorkGroupOutput {}
 
 /// <p>A piece of data (a field in the table).</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -163,10 +186,25 @@ pub struct DeleteNamedQueryInput {
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeleteNamedQueryOutput {}
 
-/// <p>If query results are encrypted in Amazon S3, indicates the Amazon S3 encryption option used.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteWorkGroupInput {
+    /// <p>The option to delete the workgroup and its contents even if the workgroup contains any named queries.</p>
+    #[serde(rename = "RecursiveDeleteOption")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recursive_delete_option: Option<bool>,
+    /// <p>The unique name of the workgroup to delete.</p>
+    #[serde(rename = "WorkGroup")]
+    pub work_group: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteWorkGroupOutput {}
+
+/// <p>If query results are encrypted in Amazon S3, indicates the encryption option used (for example, <code>SSE-KMS</code> or <code>CSE-KMS</code>) and key information.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EncryptionConfiguration {
-    /// <p>Indicates whether Amazon S3 server-side encryption with Amazon S3-managed keys (<code>SSE-S3</code>), server-side encryption with KMS-managed keys (<code>SSE-KMS</code>), or client-side encryption with KMS-managed keys (CSE-KMS) is used.</p>
+    /// <p>Indicates whether Amazon S3 server-side encryption with Amazon S3-managed keys (<code>SSE-S3</code>), server-side encryption with KMS-managed keys (<code>SSE-KMS</code>), or client-side encryption with KMS-managed keys (CSE-KMS) is used.</p> <p>If a query runs in a workgroup and the workgroup overrides client-side settings, then the workgroup's setting for encryption is used. It specifies whether query results must be encrypted, for all queries that run in this workgroup. </p>
     #[serde(rename = "EncryptionOption")]
     pub encryption_option: String,
     /// <p>For <code>SSE-KMS</code> and <code>CSE-KMS</code>, this is the KMS key ARN or ID.</p>
@@ -233,6 +271,26 @@ pub struct GetQueryResultsOutput {
     #[serde(rename = "ResultSet")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub result_set: Option<ResultSet>,
+    /// <p>The number of rows inserted with a CREATE TABLE AS SELECT statement. </p>
+    #[serde(rename = "UpdateCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub update_count: Option<i64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetWorkGroupInput {
+    /// <p>The name of the workgroup.</p>
+    #[serde(rename = "WorkGroup")]
+    pub work_group: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetWorkGroupOutput {
+    /// <p>Information about the workgroup.</p>
+    #[serde(rename = "WorkGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub work_group: Option<WorkGroup>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -245,6 +303,10 @@ pub struct ListNamedQueriesInput {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p>The name of the workgroup from which the named queries are being returned.</p>
+    #[serde(rename = "WorkGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub work_group: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -270,6 +332,10 @@ pub struct ListQueryExecutionsInput {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+    /// <p>The name of the workgroup from which queries are being returned.</p>
+    #[serde(rename = "WorkGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub work_group: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -285,18 +351,43 @@ pub struct ListQueryExecutionsOutput {
     pub query_execution_ids: Option<Vec<String>>,
 }
 
-/// <p>A query, where <code>QueryString</code> is the SQL query statements that comprise the query.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListWorkGroupsInput {
+    /// <p>The maximum number of workgroups to return in this request.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>A token to be used by the next request if this request is truncated.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListWorkGroupsOutput {
+    /// <p>A token to be used by the next request if this request is truncated.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The list of workgroups, including their names, descriptions, creation times, and states.</p>
+    #[serde(rename = "WorkGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub work_groups: Option<Vec<WorkGroupSummary>>,
+}
+
+/// <p>A query, where <code>QueryString</code> is the list of SQL query statements that comprise the query.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct NamedQuery {
     /// <p>The database to which the query belongs.</p>
     #[serde(rename = "Database")]
     pub database: String,
-    /// <p>A brief description of the query.</p>
+    /// <p>The query description.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>The plain-language name of the query.</p>
+    /// <p>The query name.</p>
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>The unique identifier of the query.</p>
@@ -306,6 +397,10 @@ pub struct NamedQuery {
     /// <p>The SQL query statements that comprise the query.</p>
     #[serde(rename = "QueryString")]
     pub query_string: String,
+    /// <p>The name of the workgroup that contains the named query.</p>
+    #[serde(rename = "WorkGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub work_group: Option<String>,
 }
 
 /// <p>Information about a single instance of a query execution.</p>
@@ -324,11 +419,15 @@ pub struct QueryExecution {
     #[serde(rename = "QueryExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub query_execution_id: Option<String>,
-    /// <p>The location in Amazon S3 where query results were stored and the encryption option, if any, used for query results.</p>
+    /// <p>The location in Amazon S3 where query results were stored and the encryption option, if any, used for query results. These are known as "client-side settings". If workgroup settings override client-side settings, then the query uses the location for the query results and the encryption configuration that are specified for the workgroup.</p>
     #[serde(rename = "ResultConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub result_configuration: Option<ResultConfiguration>,
-    /// <p>The amount of data scanned during the query execution and the amount of time that it took to execute.</p>
+    /// <p>The type of query statement that was run. <code>DDL</code> indicates DDL query statements. <code>DML</code> indicates DML (Data Manipulation Language) query statements, such as <code>CREATE TABLE AS SELECT</code>. <code>UTILITY</code> indicates query statements other than DDL and DML, such as <code>SHOW CREATE TABLE</code>, or <code>DESCRIBE &lt;table&gt;</code>.</p>
+    #[serde(rename = "StatementType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub statement_type: Option<String>,
+    /// <p>The amount of data scanned during the query execution and the amount of time that it took to execute, and the type of statement that was run.</p>
     #[serde(rename = "Statistics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub statistics: Option<QueryExecutionStatistics>,
@@ -336,6 +435,10 @@ pub struct QueryExecution {
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<QueryExecutionStatus>,
+    /// <p>The name of the workgroup in which the query ran.</p>
+    #[serde(rename = "WorkGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub work_group: Option<String>,
 }
 
 /// <p>The database in which the query execution occurs.</p>
@@ -347,7 +450,7 @@ pub struct QueryExecutionContext {
     pub database: Option<String>,
 }
 
-/// <p>The amount of data scanned during the query execution and the amount of time that it took to execute.</p>
+/// <p>The amount of data scanned during the query execution and the amount of time that it took to execute, and the type of statement that was run.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct QueryExecutionStatistics {
@@ -369,7 +472,7 @@ pub struct QueryExecutionStatus {
     #[serde(rename = "CompletionDateTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub completion_date_time: Option<f64>,
-    /// <p>The state of query execution. <code>SUBMITTED</code> indicates that the query is queued for execution. <code>RUNNING</code> indicates that the query is scanning data and returning results. <code>SUCCEEDED</code> indicates that the query completed without error. <code>FAILED</code> indicates that the query experienced an error and did not complete processing. <code>CANCELLED</code> indicates that user input interrupted query execution.</p>
+    /// <p>The state of query execution. <code>QUEUED</code> state is listed but is not used by Athena and is reserved for future use. <code>RUNNING</code> indicates that the query has been submitted to the service, and Athena will execute the query as soon as resources are available. <code>SUCCEEDED</code> indicates that the query completed without errors. <code>FAILED</code> indicates that the query experienced an error and did not complete processing. <code>CANCELLED</code> indicates that a user input interrupted query execution. </p>
     #[serde(rename = "State")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
@@ -383,16 +486,38 @@ pub struct QueryExecutionStatus {
     pub submission_date_time: Option<f64>,
 }
 
-/// <p>The location in Amazon S3 where query results are stored and the encryption option, if any, used for query results.</p>
+/// <p>The location in Amazon S3 where query results are stored and the encryption option, if any, used for query results. These are known as "client-side settings". If workgroup settings override client-side settings, then the query uses the location for the query results and the encryption configuration that are specified for the workgroup.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResultConfiguration {
-    /// <p>If query results are encrypted in S3, indicates the S3 encryption option used (for example, <code>SSE-KMS</code> or <code>CSE-KMS</code> and key information.</p>
+    /// <p>If query results are encrypted in Amazon S3, indicates the encryption option used (for example, <code>SSE-KMS</code> or <code>CSE-KMS</code>) and key information. This is a client-side setting. If workgroup settings override client-side settings, then the query uses the encryption configuration that is specified for the workgroup, and also uses the location for storing query results specified in the workgroup. See <a>WorkGroupConfiguration$EnforceWorkGroupConfiguration</a> and <a href="https://docs.aws.amazon.com/athena/latest/ug/workgroups-settings-override.html">Workgroup Settings Override Client-Side Settings</a>.</p>
     #[serde(rename = "EncryptionConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub encryption_configuration: Option<EncryptionConfiguration>,
-    /// <p>The location in S3 where query results are stored.</p>
+    /// <p>The location in Amazon S3 where your query results are stored, such as <code>s3://path/to/query/bucket/</code>. For more information, see <a href="https://docs.aws.amazon.com/athena/latest/ug/querying.html">Queries and Query Result Files.</a> If workgroup settings override client-side settings, then the query uses the location for the query results and the encryption configuration that are specified for the workgroup. The "workgroup settings override" is specified in EnforceWorkGroupConfiguration (true/false) in the WorkGroupConfiguration. See <a>WorkGroupConfiguration$EnforceWorkGroupConfiguration</a>.</p>
     #[serde(rename = "OutputLocation")]
-    pub output_location: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_location: Option<String>,
+}
+
+/// <p>The information about the updates in the query results, such as output location and encryption configuration for the query results.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ResultConfigurationUpdates {
+    /// <p>The encryption configuration for the query results.</p>
+    #[serde(rename = "EncryptionConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub encryption_configuration: Option<EncryptionConfiguration>,
+    /// <p>The location in Amazon S3 where your query results are stored, such as <code>s3://path/to/query/bucket/</code>. For more information, see <a href="https://docs.aws.amazon.com/athena/latest/ug/querying.html">Queries and Query Result Files.</a> If workgroup settings override client-side settings, then the query uses the location for the query results and the encryption configuration that are specified for the workgroup. The "workgroup settings override" is specified in EnforceWorkGroupConfiguration (true/false) in the WorkGroupConfiguration. See <a>WorkGroupConfiguration$EnforceWorkGroupConfiguration</a>.</p>
+    #[serde(rename = "OutputLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_location: Option<String>,
+    /// <p>If set to "true", indicates that the previously-specified encryption configuration (also known as the client-side setting) for queries in this workgroup should be ignored and set to null. If set to "false" or not set, and a value is present in the EncryptionConfiguration in ResultConfigurationUpdates (the client-side setting), the EncryptionConfiguration in the workgroup's ResultConfiguration will be updated with the new value. For more information, see <a href="https://docs.aws.amazon.com/athena/latest/ug/workgroups-settings-override.html">Workgroup Settings Override Client-Side Settings</a>.</p>
+    #[serde(rename = "RemoveEncryptionConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub remove_encryption_configuration: Option<bool>,
+    /// <p>If set to "true", indicates that the previously-specified query results location (also known as a client-side setting) for queries in this workgroup should be ignored and set to null. If set to "false" or not set, and a value is present in the OutputLocation in ResultConfigurationUpdates (the client-side setting), the OutputLocation in the workgroup's ResultConfiguration will be updated with the new value. For more information, see <a href="https://docs.aws.amazon.com/athena/latest/ug/workgroups-settings-override.html">Workgroup Settings Override Client-Side Settings</a>.</p>
+    #[serde(rename = "RemoveOutputLocation")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub remove_output_location: Option<bool>,
 }
 
 /// <p>The metadata and rows that comprise a query result set. The metadata describes the column structure and data types.</p>
@@ -409,11 +534,11 @@ pub struct ResultSet {
     pub rows: Option<Vec<Row>>,
 }
 
-/// <p>The metadata that describes the column structure and data types of a table of query results.</p>
+/// <p>The metadata that describes the column structure and data types of a table of query results. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ResultSetMetadata {
-    /// <p>Information about the columns in a query execution result.</p>
+    /// <p>Information about the columns returned in a query result metadata.</p>
     #[serde(rename = "ColumnInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub column_info: Option<Vec<ColumnInfo>>,
@@ -442,9 +567,14 @@ pub struct StartQueryExecutionInput {
     /// <p>The SQL query statements to be executed.</p>
     #[serde(rename = "QueryString")]
     pub query_string: String,
-    /// <p>Specifies information about where and how to save the results of the query execution.</p>
+    /// <p>Specifies information about where and how to save the results of the query execution. If the query runs in a workgroup, then workgroup's settings may override query settings. This affects the query results location. The workgroup settings override is specified in EnforceWorkGroupConfiguration (true/false) in the WorkGroupConfiguration. See <a>WorkGroupConfiguration$EnforceWorkGroupConfiguration</a>.</p>
     #[serde(rename = "ResultConfiguration")]
-    pub result_configuration: ResultConfiguration,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub result_configuration: Option<ResultConfiguration>,
+    /// <p>The name of the workgroup in which the query is being started.</p>
+    #[serde(rename = "WorkGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub work_group: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -501,6 +631,122 @@ pub struct UnprocessedQueryExecutionId {
     #[serde(rename = "QueryExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub query_execution_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateWorkGroupInput {
+    /// <p>The workgroup configuration that will be updated for the given workgroup.</p>
+    #[serde(rename = "ConfigurationUpdates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration_updates: Option<WorkGroupConfigurationUpdates>,
+    /// <p>The workgroup description.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The workgroup state that will be updated for the given workgroup.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>The specified workgroup that will be updated.</p>
+    #[serde(rename = "WorkGroup")]
+    pub work_group: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateWorkGroupOutput {}
+
+/// <p>A workgroup, which contains a name, description, creation time, state, and other configuration, listed under <a>WorkGroup$Configuration</a>. Each workgroup enables you to isolate queries for you or your group of users from other queries in the same account, to configure the query results location and the encryption configuration (known as workgroup settings), to enable sending query metrics to Amazon CloudWatch, and to establish per-query data usage control limits for all queries in a workgroup. The workgroup settings override is specified in EnforceWorkGroupConfiguration (true/false) in the WorkGroupConfiguration. See <a>WorkGroupConfiguration$EnforceWorkGroupConfiguration</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct WorkGroup {
+    /// <p>The configuration of the workgroup, which includes the location in Amazon S3 where query results are stored, the encryption configuration, if any, used for query results; whether the Amazon CloudWatch Metrics are enabled for the workgroup; whether workgroup settings override client-side settings; and the data usage limit for the amount of data scanned per query, if it is specified. The workgroup settings override is specified in EnforceWorkGroupConfiguration (true/false) in the WorkGroupConfiguration. See <a>WorkGroupConfiguration$EnforceWorkGroupConfiguration</a>.</p>
+    #[serde(rename = "Configuration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration: Option<WorkGroupConfiguration>,
+    /// <p>The date and time the workgroup was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The workgroup description.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The workgroup name.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+    /// <p>The state of the workgroup: ENABLED or DISABLED.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+}
+
+/// <p>The configuration of the workgroup, which includes the location in Amazon S3 where query results are stored, the encryption option, if any, used for query results, whether the Amazon CloudWatch Metrics are enabled for the workgroup and whether workgroup settings override query settings, and the data usage limit for the amount of data scanned per query, if it is specified. The workgroup settings override is specified in EnforceWorkGroupConfiguration (true/false) in the WorkGroupConfiguration. See <a>WorkGroupConfiguration$EnforceWorkGroupConfiguration</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct WorkGroupConfiguration {
+    /// <p>The upper data usage limit (cutoff) for the amount of bytes a single query in a workgroup is allowed to scan.</p>
+    #[serde(rename = "BytesScannedCutoffPerQuery")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bytes_scanned_cutoff_per_query: Option<i64>,
+    /// <p>If set to "true", the settings for the workgroup override client-side settings. If set to "false", client-side settings are used. For more information, see <a href="https://docs.aws.amazon.com/athena/latest/ug/workgroups-settings-override.html">Workgroup Settings Override Client-Side Settings</a>.</p>
+    #[serde(rename = "EnforceWorkGroupConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enforce_work_group_configuration: Option<bool>,
+    /// <p>Indicates that the Amazon CloudWatch metrics are enabled for the workgroup.</p>
+    #[serde(rename = "PublishCloudWatchMetricsEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub publish_cloud_watch_metrics_enabled: Option<bool>,
+    /// <p>The configuration for the workgroup, which includes the location in Amazon S3 where query results are stored and the encryption option, if any, used for query results.</p>
+    #[serde(rename = "ResultConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub result_configuration: Option<ResultConfiguration>,
+}
+
+/// <p>The configuration information that will be updated for this workgroup, which includes the location in Amazon S3 where query results are stored, the encryption option, if any, used for query results, whether the Amazon CloudWatch Metrics are enabled for the workgroup, whether the workgroup settings override the client-side settings, and the data usage limit for the amount of bytes scanned per query, if it is specified.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct WorkGroupConfigurationUpdates {
+    /// <p>The upper limit (cutoff) for the amount of bytes a single query in a workgroup is allowed to scan.</p>
+    #[serde(rename = "BytesScannedCutoffPerQuery")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bytes_scanned_cutoff_per_query: Option<i64>,
+    /// <p>If set to "true", the settings for the workgroup override client-side settings. If set to "false" client-side settings are used. For more information, see <a href="https://docs.aws.amazon.com/athena/latest/ug/workgroups-settings-override.html">Workgroup Settings Override Client-Side Settings</a>.</p>
+    #[serde(rename = "EnforceWorkGroupConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enforce_work_group_configuration: Option<bool>,
+    /// <p>Indicates whether this workgroup enables publishing metrics to Amazon CloudWatch.</p>
+    #[serde(rename = "PublishCloudWatchMetricsEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub publish_cloud_watch_metrics_enabled: Option<bool>,
+    /// <p>Indicates that the data usage control limit per query is removed. <a>WorkGroupConfiguration$BytesScannedCutoffPerQuery</a> </p>
+    #[serde(rename = "RemoveBytesScannedCutoffPerQuery")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub remove_bytes_scanned_cutoff_per_query: Option<bool>,
+    /// <p>The result configuration information about the queries in this workgroup that will be updated. Includes the updated results location and an updated option for encrypting query results.</p>
+    #[serde(rename = "ResultConfigurationUpdates")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub result_configuration_updates: Option<ResultConfigurationUpdates>,
+}
+
+/// <p>The summary information for the workgroup, which includes its name, state, description, and the date and time it was created.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct WorkGroupSummary {
+    /// <p>The workgroup creation date and time.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The workgroup description.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The name of the workgroup.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The state of the workgroup.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
 }
 
 /// Errors returned by BatchGetNamedQuery
@@ -765,6 +1011,92 @@ impl Error for CreateNamedQueryError {
         }
     }
 }
+/// Errors returned by CreateWorkGroup
+#[derive(Debug, PartialEq)]
+pub enum CreateWorkGroupError {
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    InternalServer(String),
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    InvalidRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl CreateWorkGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> CreateWorkGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalServerException" => {
+                    return CreateWorkGroupError::InternalServer(String::from(error_message));
+                }
+                "InvalidRequestException" => {
+                    return CreateWorkGroupError::InvalidRequest(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return CreateWorkGroupError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return CreateWorkGroupError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for CreateWorkGroupError {
+    fn from(err: serde_json::error::Error) -> CreateWorkGroupError {
+        CreateWorkGroupError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateWorkGroupError {
+    fn from(err: CredentialsError) -> CreateWorkGroupError {
+        CreateWorkGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateWorkGroupError {
+    fn from(err: HttpDispatchError) -> CreateWorkGroupError {
+        CreateWorkGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateWorkGroupError {
+    fn from(err: io::Error) -> CreateWorkGroupError {
+        CreateWorkGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateWorkGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateWorkGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateWorkGroupError::InternalServer(ref cause) => cause,
+            CreateWorkGroupError::InvalidRequest(ref cause) => cause,
+            CreateWorkGroupError::Validation(ref cause) => cause,
+            CreateWorkGroupError::Credentials(ref err) => err.description(),
+            CreateWorkGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CreateWorkGroupError::ParseError(ref cause) => cause,
+            CreateWorkGroupError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by DeleteNamedQuery
 #[derive(Debug, PartialEq)]
 pub enum DeleteNamedQueryError {
@@ -848,6 +1180,92 @@ impl Error for DeleteNamedQueryError {
             DeleteNamedQueryError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             DeleteNamedQueryError::ParseError(ref cause) => cause,
             DeleteNamedQueryError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DeleteWorkGroup
+#[derive(Debug, PartialEq)]
+pub enum DeleteWorkGroupError {
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    InternalServer(String),
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    InvalidRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DeleteWorkGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteWorkGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalServerException" => {
+                    return DeleteWorkGroupError::InternalServer(String::from(error_message));
+                }
+                "InvalidRequestException" => {
+                    return DeleteWorkGroupError::InvalidRequest(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return DeleteWorkGroupError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DeleteWorkGroupError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteWorkGroupError {
+    fn from(err: serde_json::error::Error) -> DeleteWorkGroupError {
+        DeleteWorkGroupError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteWorkGroupError {
+    fn from(err: CredentialsError) -> DeleteWorkGroupError {
+        DeleteWorkGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteWorkGroupError {
+    fn from(err: HttpDispatchError) -> DeleteWorkGroupError {
+        DeleteWorkGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteWorkGroupError {
+    fn from(err: io::Error) -> DeleteWorkGroupError {
+        DeleteWorkGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteWorkGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteWorkGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteWorkGroupError::InternalServer(ref cause) => cause,
+            DeleteWorkGroupError::InvalidRequest(ref cause) => cause,
+            DeleteWorkGroupError::Validation(ref cause) => cause,
+            DeleteWorkGroupError::Credentials(ref err) => err.description(),
+            DeleteWorkGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteWorkGroupError::ParseError(ref cause) => cause,
+            DeleteWorkGroupError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1111,6 +1529,92 @@ impl Error for GetQueryResultsError {
         }
     }
 }
+/// Errors returned by GetWorkGroup
+#[derive(Debug, PartialEq)]
+pub enum GetWorkGroupError {
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    InternalServer(String),
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    InvalidRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetWorkGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetWorkGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalServerException" => {
+                    return GetWorkGroupError::InternalServer(String::from(error_message));
+                }
+                "InvalidRequestException" => {
+                    return GetWorkGroupError::InvalidRequest(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return GetWorkGroupError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetWorkGroupError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetWorkGroupError {
+    fn from(err: serde_json::error::Error) -> GetWorkGroupError {
+        GetWorkGroupError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetWorkGroupError {
+    fn from(err: CredentialsError) -> GetWorkGroupError {
+        GetWorkGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetWorkGroupError {
+    fn from(err: HttpDispatchError) -> GetWorkGroupError {
+        GetWorkGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetWorkGroupError {
+    fn from(err: io::Error) -> GetWorkGroupError {
+        GetWorkGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetWorkGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetWorkGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            GetWorkGroupError::InternalServer(ref cause) => cause,
+            GetWorkGroupError::InvalidRequest(ref cause) => cause,
+            GetWorkGroupError::Validation(ref cause) => cause,
+            GetWorkGroupError::Credentials(ref err) => err.description(),
+            GetWorkGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetWorkGroupError::ParseError(ref cause) => cause,
+            GetWorkGroupError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by ListNamedQueries
 #[derive(Debug, PartialEq)]
 pub enum ListNamedQueriesError {
@@ -1282,6 +1786,92 @@ impl Error for ListQueryExecutionsError {
             }
             ListQueryExecutionsError::ParseError(ref cause) => cause,
             ListQueryExecutionsError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by ListWorkGroups
+#[derive(Debug, PartialEq)]
+pub enum ListWorkGroupsError {
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    InternalServer(String),
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    InvalidRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListWorkGroupsError {
+    pub fn from_response(res: BufferedHttpResponse) -> ListWorkGroupsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalServerException" => {
+                    return ListWorkGroupsError::InternalServer(String::from(error_message));
+                }
+                "InvalidRequestException" => {
+                    return ListWorkGroupsError::InvalidRequest(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return ListWorkGroupsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ListWorkGroupsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListWorkGroupsError {
+    fn from(err: serde_json::error::Error) -> ListWorkGroupsError {
+        ListWorkGroupsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListWorkGroupsError {
+    fn from(err: CredentialsError) -> ListWorkGroupsError {
+        ListWorkGroupsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListWorkGroupsError {
+    fn from(err: HttpDispatchError) -> ListWorkGroupsError {
+        ListWorkGroupsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListWorkGroupsError {
+    fn from(err: io::Error) -> ListWorkGroupsError {
+        ListWorkGroupsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListWorkGroupsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListWorkGroupsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListWorkGroupsError::InternalServer(ref cause) => cause,
+            ListWorkGroupsError::InvalidRequest(ref cause) => cause,
+            ListWorkGroupsError::Validation(ref cause) => cause,
+            ListWorkGroupsError::Credentials(ref err) => err.description(),
+            ListWorkGroupsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ListWorkGroupsError::ParseError(ref cause) => cause,
+            ListWorkGroupsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1467,73 +2057,189 @@ impl Error for StopQueryExecutionError {
         }
     }
 }
+/// Errors returned by UpdateWorkGroup
+#[derive(Debug, PartialEq)]
+pub enum UpdateWorkGroupError {
+    /// <p>Indicates a platform issue, which may be due to a transient condition or outage.</p>
+    InternalServer(String),
+    /// <p>Indicates that something is wrong with the input to the request. For example, a required parameter may be missing or out of range.</p>
+    InvalidRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl UpdateWorkGroupError {
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateWorkGroupError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalServerException" => {
+                    return UpdateWorkGroupError::InternalServer(String::from(error_message));
+                }
+                "InvalidRequestException" => {
+                    return UpdateWorkGroupError::InvalidRequest(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return UpdateWorkGroupError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return UpdateWorkGroupError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateWorkGroupError {
+    fn from(err: serde_json::error::Error) -> UpdateWorkGroupError {
+        UpdateWorkGroupError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateWorkGroupError {
+    fn from(err: CredentialsError) -> UpdateWorkGroupError {
+        UpdateWorkGroupError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateWorkGroupError {
+    fn from(err: HttpDispatchError) -> UpdateWorkGroupError {
+        UpdateWorkGroupError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateWorkGroupError {
+    fn from(err: io::Error) -> UpdateWorkGroupError {
+        UpdateWorkGroupError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateWorkGroupError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateWorkGroupError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateWorkGroupError::InternalServer(ref cause) => cause,
+            UpdateWorkGroupError::InvalidRequest(ref cause) => cause,
+            UpdateWorkGroupError::Validation(ref cause) => cause,
+            UpdateWorkGroupError::Credentials(ref err) => err.description(),
+            UpdateWorkGroupError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UpdateWorkGroupError::ParseError(ref cause) => cause,
+            UpdateWorkGroupError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Trait representing the capabilities of the Amazon Athena API. Amazon Athena clients implement this trait.
 pub trait Athena {
-    /// <p>Returns the details of a single named query or a list of up to 50 queries, which you provide as an array of query ID strings. Use <a>ListNamedQueries</a> to get the list of named query IDs. If information could not be retrieved for a submitted query ID, information about the query ID submitted is listed under <a>UnprocessedNamedQueryId</a>. Named queries are different from executed queries. Use <a>BatchGetQueryExecution</a> to get details about each unique query execution, and <a>ListQueryExecutions</a> to get a list of query execution IDs.</p>
+    /// <p>Returns the details of a single named query or a list of up to 50 queries, which you provide as an array of query ID strings. Requires you to have access to the workgroup in which the queries were saved. Use <a>ListNamedQueriesInput</a> to get the list of named query IDs in the specified workgroup. If information could not be retrieved for a submitted query ID, information about the query ID submitted is listed under <a>UnprocessedNamedQueryId</a>. Named queries differ from executed queries. Use <a>BatchGetQueryExecutionInput</a> to get details about each unique query execution, and <a>ListQueryExecutionsInput</a> to get a list of query execution IDs.</p>
     fn batch_get_named_query(
         &self,
         input: BatchGetNamedQueryInput,
     ) -> RusotoFuture<BatchGetNamedQueryOutput, BatchGetNamedQueryError>;
 
-    /// <p>Returns the details of a single query execution or a list of up to 50 query executions, which you provide as an array of query execution ID strings. To get a list of query execution IDs, use <a>ListQueryExecutions</a>. Query executions are different from named (saved) queries. Use <a>BatchGetNamedQuery</a> to get details about named queries.</p>
+    /// <p>Returns the details of a single query execution or a list of up to 50 query executions, which you provide as an array of query execution ID strings. Requires you to have access to the workgroup in which the queries ran. To get a list of query execution IDs, use <a>ListQueryExecutionsInput$WorkGroup</a>. Query executions differ from named (saved) queries. Use <a>BatchGetNamedQueryInput</a> to get details about named queries.</p>
     fn batch_get_query_execution(
         &self,
         input: BatchGetQueryExecutionInput,
     ) -> RusotoFuture<BatchGetQueryExecutionOutput, BatchGetQueryExecutionError>;
 
-    /// <p>Creates a named query.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    /// <p>Creates a named query in the specified workgroup. Requires that you have access to the workgroup.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn create_named_query(
         &self,
         input: CreateNamedQueryInput,
     ) -> RusotoFuture<CreateNamedQueryOutput, CreateNamedQueryError>;
 
-    /// <p>Deletes a named query.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    /// <p>Creates a workgroup with the specified name.</p>
+    fn create_work_group(
+        &self,
+        input: CreateWorkGroupInput,
+    ) -> RusotoFuture<CreateWorkGroupOutput, CreateWorkGroupError>;
+
+    /// <p>Deletes the named query if you have access to the workgroup in which the query was saved.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn delete_named_query(
         &self,
         input: DeleteNamedQueryInput,
     ) -> RusotoFuture<DeleteNamedQueryOutput, DeleteNamedQueryError>;
 
-    /// <p>Returns information about a single query.</p>
+    /// <p>Deletes the workgroup with the specified name. The primary workgroup cannot be deleted.</p>
+    fn delete_work_group(
+        &self,
+        input: DeleteWorkGroupInput,
+    ) -> RusotoFuture<DeleteWorkGroupOutput, DeleteWorkGroupError>;
+
+    /// <p>Returns information about a single query. Requires that you have access to the workgroup in which the query was saved.</p>
     fn get_named_query(
         &self,
         input: GetNamedQueryInput,
     ) -> RusotoFuture<GetNamedQueryOutput, GetNamedQueryError>;
 
-    /// <p>Returns information about a single execution of a query. Each time a query executes, information about the query execution is saved with a unique ID.</p>
+    /// <p>Returns information about a single execution of a query if you have access to the workgroup in which the query ran. Each time a query executes, information about the query execution is saved with a unique ID.</p>
     fn get_query_execution(
         &self,
         input: GetQueryExecutionInput,
     ) -> RusotoFuture<GetQueryExecutionOutput, GetQueryExecutionError>;
 
-    /// <p>Returns the results of a single query execution specified by <code>QueryExecutionId</code>. This request does not execute the query but returns results. Use <a>StartQueryExecution</a> to run a query.</p>
+    /// <p>Returns the results of a single query execution specified by <code>QueryExecutionId</code> if you have access to the workgroup in which the query ran. This request does not execute the query but returns results. Use <a>StartQueryExecution</a> to run a query.</p>
     fn get_query_results(
         &self,
         input: GetQueryResultsInput,
     ) -> RusotoFuture<GetQueryResultsOutput, GetQueryResultsError>;
 
-    /// <p>Provides a list of all available query IDs.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    /// <p>Returns information about the workgroup with the speficied name.</p>
+    fn get_work_group(
+        &self,
+        input: GetWorkGroupInput,
+    ) -> RusotoFuture<GetWorkGroupOutput, GetWorkGroupError>;
+
+    /// <p>Provides a list of available query IDs only for queries saved in the specified workgroup. Requires that you have access to the workgroup.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn list_named_queries(
         &self,
         input: ListNamedQueriesInput,
     ) -> RusotoFuture<ListNamedQueriesOutput, ListNamedQueriesError>;
 
-    /// <p>Provides a list of all available query execution IDs.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    /// <p>Provides a list of available query execution IDs for the queries in the specified workgroup. Requires you to have access to the workgroup in which the queries ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn list_query_executions(
         &self,
         input: ListQueryExecutionsInput,
     ) -> RusotoFuture<ListQueryExecutionsOutput, ListQueryExecutionsError>;
 
-    /// <p>Runs (executes) the SQL query statements contained in the <code>Query</code> string.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    /// <p>Lists available workgroups for the account.</p>
+    fn list_work_groups(
+        &self,
+        input: ListWorkGroupsInput,
+    ) -> RusotoFuture<ListWorkGroupsOutput, ListWorkGroupsError>;
+
+    /// <p>Runs the SQL query statements contained in the <code>Query</code>. Requires you to have access to the workgroup in which the query ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn start_query_execution(
         &self,
         input: StartQueryExecutionInput,
     ) -> RusotoFuture<StartQueryExecutionOutput, StartQueryExecutionError>;
 
-    /// <p>Stops a query execution.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    /// <p>Stops a query execution. Requires you to have access to the workgroup in which the query ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn stop_query_execution(
         &self,
         input: StopQueryExecutionInput,
     ) -> RusotoFuture<StopQueryExecutionOutput, StopQueryExecutionError>;
+
+    /// <p>Updates the workgroup with the specified name. The workgroup's name cannot be changed.</p>
+    fn update_work_group(
+        &self,
+        input: UpdateWorkGroupInput,
+    ) -> RusotoFuture<UpdateWorkGroupOutput, UpdateWorkGroupError>;
 }
 /// A client for the Amazon Athena API.
 #[derive(Clone)]
@@ -1572,7 +2278,7 @@ impl AthenaClient {
 }
 
 impl Athena for AthenaClient {
-    /// <p>Returns the details of a single named query or a list of up to 50 queries, which you provide as an array of query ID strings. Use <a>ListNamedQueries</a> to get the list of named query IDs. If information could not be retrieved for a submitted query ID, information about the query ID submitted is listed under <a>UnprocessedNamedQueryId</a>. Named queries are different from executed queries. Use <a>BatchGetQueryExecution</a> to get details about each unique query execution, and <a>ListQueryExecutions</a> to get a list of query execution IDs.</p>
+    /// <p>Returns the details of a single named query or a list of up to 50 queries, which you provide as an array of query ID strings. Requires you to have access to the workgroup in which the queries were saved. Use <a>ListNamedQueriesInput</a> to get the list of named query IDs in the specified workgroup. If information could not be retrieved for a submitted query ID, information about the query ID submitted is listed under <a>UnprocessedNamedQueryId</a>. Named queries differ from executed queries. Use <a>BatchGetQueryExecutionInput</a> to get details about each unique query execution, and <a>ListQueryExecutionsInput</a> to get a list of query execution IDs.</p>
     fn batch_get_named_query(
         &self,
         input: BatchGetNamedQueryInput,
@@ -1609,7 +2315,7 @@ impl Athena for AthenaClient {
         })
     }
 
-    /// <p>Returns the details of a single query execution or a list of up to 50 query executions, which you provide as an array of query execution ID strings. To get a list of query execution IDs, use <a>ListQueryExecutions</a>. Query executions are different from named (saved) queries. Use <a>BatchGetNamedQuery</a> to get details about named queries.</p>
+    /// <p>Returns the details of a single query execution or a list of up to 50 query executions, which you provide as an array of query execution ID strings. Requires you to have access to the workgroup in which the queries ran. To get a list of query execution IDs, use <a>ListQueryExecutionsInput$WorkGroup</a>. Query executions differ from named (saved) queries. Use <a>BatchGetNamedQueryInput</a> to get details about named queries.</p>
     fn batch_get_query_execution(
         &self,
         input: BatchGetQueryExecutionInput,
@@ -1645,7 +2351,7 @@ impl Athena for AthenaClient {
         })
     }
 
-    /// <p>Creates a named query.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    /// <p>Creates a named query in the specified workgroup. Requires that you have access to the workgroup.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn create_named_query(
         &self,
         input: CreateNamedQueryInput,
@@ -1682,7 +2388,44 @@ impl Athena for AthenaClient {
         })
     }
 
-    /// <p>Deletes a named query.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    /// <p>Creates a workgroup with the specified name.</p>
+    fn create_work_group(
+        &self,
+        input: CreateWorkGroupInput,
+    ) -> RusotoFuture<CreateWorkGroupOutput, CreateWorkGroupError> {
+        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonAthena.CreateWorkGroup");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<CreateWorkGroupOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateWorkGroupError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Deletes the named query if you have access to the workgroup in which the query was saved.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn delete_named_query(
         &self,
         input: DeleteNamedQueryInput,
@@ -1719,7 +2462,44 @@ impl Athena for AthenaClient {
         })
     }
 
-    /// <p>Returns information about a single query.</p>
+    /// <p>Deletes the workgroup with the specified name. The primary workgroup cannot be deleted.</p>
+    fn delete_work_group(
+        &self,
+        input: DeleteWorkGroupInput,
+    ) -> RusotoFuture<DeleteWorkGroupOutput, DeleteWorkGroupError> {
+        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonAthena.DeleteWorkGroup");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DeleteWorkGroupOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteWorkGroupError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Returns information about a single query. Requires that you have access to the workgroup in which the query was saved.</p>
     fn get_named_query(
         &self,
         input: GetNamedQueryInput,
@@ -1756,7 +2536,7 @@ impl Athena for AthenaClient {
         })
     }
 
-    /// <p>Returns information about a single execution of a query. Each time a query executes, information about the query execution is saved with a unique ID.</p>
+    /// <p>Returns information about a single execution of a query if you have access to the workgroup in which the query ran. Each time a query executes, information about the query execution is saved with a unique ID.</p>
     fn get_query_execution(
         &self,
         input: GetQueryExecutionInput,
@@ -1793,7 +2573,7 @@ impl Athena for AthenaClient {
         })
     }
 
-    /// <p>Returns the results of a single query execution specified by <code>QueryExecutionId</code>. This request does not execute the query but returns results. Use <a>StartQueryExecution</a> to run a query.</p>
+    /// <p>Returns the results of a single query execution specified by <code>QueryExecutionId</code> if you have access to the workgroup in which the query ran. This request does not execute the query but returns results. Use <a>StartQueryExecution</a> to run a query.</p>
     fn get_query_results(
         &self,
         input: GetQueryResultsInput,
@@ -1830,7 +2610,44 @@ impl Athena for AthenaClient {
         })
     }
 
-    /// <p>Provides a list of all available query IDs.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    /// <p>Returns information about the workgroup with the speficied name.</p>
+    fn get_work_group(
+        &self,
+        input: GetWorkGroupInput,
+    ) -> RusotoFuture<GetWorkGroupOutput, GetWorkGroupError> {
+        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonAthena.GetWorkGroup");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetWorkGroupOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetWorkGroupError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Provides a list of available query IDs only for queries saved in the specified workgroup. Requires that you have access to the workgroup.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn list_named_queries(
         &self,
         input: ListNamedQueriesInput,
@@ -1867,7 +2684,7 @@ impl Athena for AthenaClient {
         })
     }
 
-    /// <p>Provides a list of all available query execution IDs.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    /// <p>Provides a list of available query execution IDs for the queries in the specified workgroup. Requires you to have access to the workgroup in which the queries ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn list_query_executions(
         &self,
         input: ListQueryExecutionsInput,
@@ -1903,7 +2720,44 @@ impl Athena for AthenaClient {
         })
     }
 
-    /// <p>Runs (executes) the SQL query statements contained in the <code>Query</code> string.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    /// <p>Lists available workgroups for the account.</p>
+    fn list_work_groups(
+        &self,
+        input: ListWorkGroupsInput,
+    ) -> RusotoFuture<ListWorkGroupsOutput, ListWorkGroupsError> {
+        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonAthena.ListWorkGroups");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ListWorkGroupsOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListWorkGroupsError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Runs the SQL query statements contained in the <code>Query</code>. Requires you to have access to the workgroup in which the query ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn start_query_execution(
         &self,
         input: StartQueryExecutionInput,
@@ -1939,7 +2793,7 @@ impl Athena for AthenaClient {
         })
     }
 
-    /// <p>Stops a query execution.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
+    /// <p>Stops a query execution. Requires you to have access to the workgroup in which the query ran.</p> <p>For code samples using the AWS SDK for Java, see <a href="http://docs.aws.amazon.com/athena/latest/ug/code-samples.html">Examples and Code Samples</a> in the <i>Amazon Athena User Guide</i>.</p>
     fn stop_query_execution(
         &self,
         input: StopQueryExecutionInput,
@@ -1971,6 +2825,43 @@ impl Athena for AthenaClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(StopQueryExecutionError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Updates the workgroup with the specified name. The workgroup's name cannot be changed.</p>
+    fn update_work_group(
+        &self,
+        input: UpdateWorkGroupInput,
+    ) -> RusotoFuture<UpdateWorkGroupOutput, UpdateWorkGroupError> {
+        let mut request = SignedRequest::new("POST", "athena", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AmazonAthena.UpdateWorkGroup");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<UpdateWorkGroupOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UpdateWorkGroupError::from_response(response))),
                 )
             }
         })

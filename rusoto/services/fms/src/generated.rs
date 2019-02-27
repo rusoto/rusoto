@@ -58,6 +58,10 @@ pub struct DeleteNotificationChannelRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeletePolicyRequest {
+    /// <p>If <code>True</code>, the request will also delete all web ACLs in this policy. Associated resources will no longer be protected by web ACLs in this policy.</p>
+    #[serde(rename = "DeleteAllPolicyResources")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delete_all_policy_resources: Option<bool>,
     /// <p>The ID of the policy that you want to delete. <code>PolicyId</code> is returned by <code>PutPolicy</code> and by <code>ListPolicies</code>.</p>
     #[serde(rename = "PolicyId")]
     pub policy_id: String,
@@ -94,6 +98,10 @@ pub struct GetAdminAccountResponse {
     #[serde(rename = "AdminAccount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub admin_account: Option<String>,
+    /// <p>The status of the AWS account that you set as the AWS Firewall Manager administrator.</p>
+    #[serde(rename = "RoleStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_status: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -180,6 +188,31 @@ pub struct ListComplianceStatusResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListMemberAccountsRequest {
+    /// <p>Specifies the number of member account IDs that you want AWS Firewall Manager to return for this request. If you have more IDs than the number that you specify for <code>MaxResults</code>, the response includes a <code>NextToken</code> value that you can use to get another batch of member account IDs.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If you specify a value for <code>MaxResults</code> and you have more account IDs than the number that you specify for <code>MaxResults</code>, AWS Firewall Manager returns a <code>NextToken</code> value in the response that allows you to list another group of IDs. For the second and subsequent <code>ListMemberAccountsRequest</code> requests, specify the value of <code>NextToken</code> from the previous response to get information about another batch of member account IDs.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListMemberAccountsResponse {
+    /// <p>An array of account IDs.</p>
+    #[serde(rename = "MemberAccounts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub member_accounts: Option<Vec<String>>,
+    /// <p>If you have more member account IDs than the number that you specified for <code>MaxResults</code> in the request, the response includes a <code>NextToken</code> value. To list more IDs, submit another <code>ListMemberAccounts</code> request, and specify the <code>NextToken</code> value from the response in the <code>NextToken</code> value in the next request.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListPoliciesRequest {
     /// <p>Specifies the number of <code>PolicySummary</code> objects that you want AWS Firewall Manager to return for this request. If you have more <code>PolicySummary</code> objects than the number that you specify for <code>MaxResults</code>, the response includes a <code>NextToken</code> value that you can use to get another batch of <code>PolicySummary</code> objects.</p>
     #[serde(rename = "MaxResults")]
@@ -207,9 +240,17 @@ pub struct ListPoliciesResponse {
 /// <p>An AWS Firewall Manager policy.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Policy {
+    /// <p>Specifies the AWS account IDs to exclude from the policy. The <code>IncludeMap</code> values are evaluated first, with all the appropriate account IDs added to the policy. Then the accounts listed in <code>ExcludeMap</code> are removed, resulting in the final list of accounts to add to the policy.</p> <p>The key to the map is <code>ACCOUNT</code>. For example, a valid <code>ExcludeMap</code> would be <code>{“ACCOUNT” : [“accountID1”, “accountID2”]}</code>.</p>
+    #[serde(rename = "ExcludeMap")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub exclude_map: Option<::std::collections::HashMap<String, Vec<String>>>,
     /// <p>If set to <code>True</code>, resources with the tags that are specified in the <code>ResourceTag</code> array are not protected by the policy. If set to <code>False</code>, and the <code>ResourceTag</code> array is not null, only resources with the specified tags are associated with the policy.</p>
     #[serde(rename = "ExcludeResourceTags")]
     pub exclude_resource_tags: bool,
+    /// <p>Specifies the AWS account IDs to include in the policy. If <code>IncludeMap</code> is null, all accounts in the organization in AWS Organizations are included in the policy. If <code>IncludeMap</code> is not null, only values listed in <code>IncludeMap</code> are included in the policy.</p> <p>The key to the map is <code>ACCOUNT</code>. For example, a valid <code>IncludeMap</code> would be <code>{“ACCOUNT” : [“accountID1”, “accountID2”]}</code>.</p>
+    #[serde(rename = "IncludeMap")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_map: Option<::std::collections::HashMap<String, Vec<String>>>,
     /// <p>The ID of the AWS Firewall Manager policy.</p>
     #[serde(rename = "PolicyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -248,6 +289,10 @@ pub struct PolicyComplianceDetail {
     #[serde(rename = "ExpiredAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub expired_at: Option<f64>,
+    /// <p>Details about problems with dependent services, such as AWS WAF or AWS Config, that are causing a resource to be non-compliant. The details include the name of the dependent service and the error message received that indicates the problem with the service.</p>
+    #[serde(rename = "IssueInfoMap")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub issue_info_map: Option<::std::collections::HashMap<String, String>>,
     /// <p>The AWS account ID.</p>
     #[serde(rename = "MemberAccount")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -274,6 +319,10 @@ pub struct PolicyComplianceStatus {
     #[serde(rename = "EvaluationResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub evaluation_results: Option<Vec<EvaluationResult>>,
+    /// <p>Details about problems with dependent services, such as AWS WAF or AWS Config, that are causing a resource to be non-compliant. The details include the name of the dependent service and the error message received that indicates the problem with the service.</p>
+    #[serde(rename = "IssueInfoMap")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub issue_info_map: Option<::std::collections::HashMap<String, String>>,
     /// <p>Time stamp of the last update to the <code>EvaluationResult</code> objects.</p>
     #[serde(rename = "LastUpdated")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1055,6 +1104,8 @@ pub enum GetPolicyError {
     InternalError(String),
     /// <p>The operation failed because there was nothing to do. For example, you might have submitted an <code>AssociateAdminAccount</code> request, but the account ID that you submitted was already set as the AWS Firewall Manager administrator.</p>
     InvalidOperation(String),
+    /// <p>The value of the <code>Type</code> parameter is invalid.</p>
+    InvalidType(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
@@ -1087,6 +1138,9 @@ impl GetPolicyError {
                 }
                 "InvalidOperationException" => {
                     return GetPolicyError::InvalidOperation(String::from(error_message));
+                }
+                "InvalidTypeException" => {
+                    return GetPolicyError::InvalidType(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return GetPolicyError::ResourceNotFound(String::from(error_message));
@@ -1131,6 +1185,7 @@ impl Error for GetPolicyError {
         match *self {
             GetPolicyError::InternalError(ref cause) => cause,
             GetPolicyError::InvalidOperation(ref cause) => cause,
+            GetPolicyError::InvalidType(ref cause) => cause,
             GetPolicyError::ResourceNotFound(ref cause) => cause,
             GetPolicyError::Validation(ref cause) => cause,
             GetPolicyError::Credentials(ref err) => err.description(),
@@ -1225,6 +1280,94 @@ impl Error for ListComplianceStatusError {
             }
             ListComplianceStatusError::ParseError(ref cause) => cause,
             ListComplianceStatusError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by ListMemberAccounts
+#[derive(Debug, PartialEq)]
+pub enum ListMemberAccountsError {
+    /// <p>The operation failed because of a system problem, even though the request was valid. Retry your request.</p>
+    InternalError(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListMemberAccountsError {
+    pub fn from_response(res: BufferedHttpResponse) -> ListMemberAccountsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalErrorException" => {
+                    return ListMemberAccountsError::InternalError(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return ListMemberAccountsError::ResourceNotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return ListMemberAccountsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ListMemberAccountsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListMemberAccountsError {
+    fn from(err: serde_json::error::Error) -> ListMemberAccountsError {
+        ListMemberAccountsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListMemberAccountsError {
+    fn from(err: CredentialsError) -> ListMemberAccountsError {
+        ListMemberAccountsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListMemberAccountsError {
+    fn from(err: HttpDispatchError) -> ListMemberAccountsError {
+        ListMemberAccountsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListMemberAccountsError {
+    fn from(err: io::Error) -> ListMemberAccountsError {
+        ListMemberAccountsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListMemberAccountsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListMemberAccountsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListMemberAccountsError::InternalError(ref cause) => cause,
+            ListMemberAccountsError::ResourceNotFound(ref cause) => cause,
+            ListMemberAccountsError::Validation(ref cause) => cause,
+            ListMemberAccountsError::Credentials(ref err) => err.description(),
+            ListMemberAccountsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListMemberAccountsError::ParseError(ref cause) => cause,
+            ListMemberAccountsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1433,6 +1576,10 @@ pub enum PutPolicyError {
     InvalidInput(String),
     /// <p>The operation failed because there was nothing to do. For example, you might have submitted an <code>AssociateAdminAccount</code> request, but the account ID that you submitted was already set as the AWS Firewall Manager administrator.</p>
     InvalidOperation(String),
+    /// <p>The value of the <code>Type</code> parameter is invalid.</p>
+    InvalidType(String),
+    /// <p>The operation exceeds a resource limit, for example, the maximum number of <code>policy</code> objects that you can create for an AWS account. For more information, see <a href="http://docs.aws.amazon.com/waf/latest/developerguide/fms-limits.html">Firewall Manager Limits</a> in the <i>AWS WAF Developer Guide</i>.</p>
+    LimitExceeded(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
@@ -1468,6 +1615,12 @@ impl PutPolicyError {
                 }
                 "InvalidOperationException" => {
                     return PutPolicyError::InvalidOperation(String::from(error_message));
+                }
+                "InvalidTypeException" => {
+                    return PutPolicyError::InvalidType(String::from(error_message));
+                }
+                "LimitExceededException" => {
+                    return PutPolicyError::LimitExceeded(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return PutPolicyError::ResourceNotFound(String::from(error_message));
@@ -1513,6 +1666,8 @@ impl Error for PutPolicyError {
             PutPolicyError::InternalError(ref cause) => cause,
             PutPolicyError::InvalidInput(ref cause) => cause,
             PutPolicyError::InvalidOperation(ref cause) => cause,
+            PutPolicyError::InvalidType(ref cause) => cause,
+            PutPolicyError::LimitExceeded(ref cause) => cause,
             PutPolicyError::ResourceNotFound(ref cause) => cause,
             PutPolicyError::Validation(ref cause) => cause,
             PutPolicyError::Credentials(ref err) => err.description(),
@@ -1524,7 +1679,7 @@ impl Error for PutPolicyError {
 }
 /// Trait representing the capabilities of the FMS API. FMS clients implement this trait.
 pub trait Fms {
-    /// <p>Sets the AWS Firewall Manager administrator account. AWS Firewall Manager must be associated with a master account in AWS Organizations or associated with a member account that has the appropriate permissions. If the account ID that you submit is not an AWS Organizations master account, AWS Firewall Manager will set the appropriate permissions for the given member account.</p> <p>The account that you associate with AWS Firewall Manager is called the AWS Firewall manager administrator account. </p>
+    /// <p>Sets the AWS Firewall Manager administrator account. AWS Firewall Manager must be associated with the master account your AWS organization or associated with a member account that has the appropriate permissions. If the account ID that you submit is not an AWS Organizations master account, AWS Firewall Manager will set the appropriate permissions for the given member account.</p> <p>The account that you associate with AWS Firewall Manager is called the AWS Firewall Manager administrator account. </p>
     fn associate_admin_account(
         &self,
         input: AssociateAdminAccountRequest,
@@ -1536,7 +1691,7 @@ pub trait Fms {
     /// <p>Permanently deletes an AWS Firewall Manager policy. </p>
     fn delete_policy(&self, input: DeletePolicyRequest) -> RusotoFuture<(), DeletePolicyError>;
 
-    /// <p>Disassociates the account that has been set as the AWS Firewall Manager administrator account. You will need to submit an <code>AssociateAdminAccount</code> request to set a new account as the AWS Firewall administrator.</p>
+    /// <p>Disassociates the account that has been set as the AWS Firewall Manager administrator account. To set a different account as the administrator account, you must submit an <code>AssociateAdminAccount</code> request .</p>
     fn disassociate_admin_account(&self) -> RusotoFuture<(), DisassociateAdminAccountError>;
 
     /// <p>Returns the AWS Organizations master account that is associated with AWS Firewall Manager as the AWS Firewall Manager administrator.</p>
@@ -1564,6 +1719,12 @@ pub trait Fms {
         &self,
         input: ListComplianceStatusRequest,
     ) -> RusotoFuture<ListComplianceStatusResponse, ListComplianceStatusError>;
+
+    /// <p>Returns a <code>MemberAccounts</code> object that lists the member accounts in the administrator's AWS organization.</p> <p>The <code>ListMemberAccounts</code> must be submitted by the account that is set as the AWS Firewall Manager administrator.</p>
+    fn list_member_accounts(
+        &self,
+        input: ListMemberAccountsRequest,
+    ) -> RusotoFuture<ListMemberAccountsResponse, ListMemberAccountsError>;
 
     /// <p>Returns an array of <code>PolicySummary</code> objects in the response.</p>
     fn list_policies(
@@ -1620,7 +1781,7 @@ impl FmsClient {
 }
 
 impl Fms for FmsClient {
-    /// <p>Sets the AWS Firewall Manager administrator account. AWS Firewall Manager must be associated with a master account in AWS Organizations or associated with a member account that has the appropriate permissions. If the account ID that you submit is not an AWS Organizations master account, AWS Firewall Manager will set the appropriate permissions for the given member account.</p> <p>The account that you associate with AWS Firewall Manager is called the AWS Firewall manager administrator account. </p>
+    /// <p>Sets the AWS Firewall Manager administrator account. AWS Firewall Manager must be associated with the master account your AWS organization or associated with a member account that has the appropriate permissions. If the account ID that you submit is not an AWS Organizations master account, AWS Firewall Manager will set the appropriate permissions for the given member account.</p> <p>The account that you associate with AWS Firewall Manager is called the AWS Firewall Manager administrator account. </p>
     fn associate_admin_account(
         &self,
         input: AssociateAdminAccountRequest,
@@ -1687,7 +1848,7 @@ impl Fms for FmsClient {
         })
     }
 
-    /// <p>Disassociates the account that has been set as the AWS Firewall Manager administrator account. You will need to submit an <code>AssociateAdminAccount</code> request to set a new account as the AWS Firewall administrator.</p>
+    /// <p>Disassociates the account that has been set as the AWS Firewall Manager administrator account. To set a different account as the administrator account, you must submit an <code>AssociateAdminAccount</code> request .</p>
     fn disassociate_admin_account(&self) -> RusotoFuture<(), DisassociateAdminAccountError> {
         let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
 
@@ -1877,6 +2038,43 @@ impl Fms for FmsClient {
                     response.buffer().from_err().and_then(|response| {
                         Err(ListComplianceStatusError::from_response(response))
                     }),
+                )
+            }
+        })
+    }
+
+    /// <p>Returns a <code>MemberAccounts</code> object that lists the member accounts in the administrator's AWS organization.</p> <p>The <code>ListMemberAccounts</code> must be submitted by the account that is set as the AWS Firewall Manager administrator.</p>
+    fn list_member_accounts(
+        &self,
+        input: ListMemberAccountsRequest,
+    ) -> RusotoFuture<ListMemberAccountsResponse, ListMemberAccountsError> {
+        let mut request = SignedRequest::new("POST", "fms", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "AWSFMS_20180101.ListMemberAccounts");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ListMemberAccountsResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListMemberAccountsError::from_response(response))),
                 )
             }
         })

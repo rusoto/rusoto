@@ -1,6 +1,6 @@
 
 # Rusoto ServiceDiscovery
-Rust SDK for Amazon Route 53 Auto Naming
+Rust SDK for AWS Cloud Map
 
 You may be looking for:
 

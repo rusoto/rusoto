@@ -57,6 +57,27 @@ pub struct Application {
     pub version: Option<Version>,
 }
 
+/// <p>A list of application summaries nested in the application.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ApplicationDependencyPage {
+    /// <p>An array of application summaries nested in the application.</p>
+    pub dependencies: Vec<ApplicationDependencySummary>,
+    /// <p>The token to request the next page of results.</p>
+    pub next_token: Option<String>,
+}
+
+/// <p>A nested application summary.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ApplicationDependencySummary {
+    /// <p>The Amazon Resource Name (ARN) of the nested application.</p>
+    #[serde(rename = "ApplicationId")]
+    pub application_id: String,
+    /// <p>The semantic version of the nested application.</p>
+    #[serde(rename = "SemanticVersion")]
+    pub semantic_version: String,
+}
+
 /// <p>A list of application details.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ApplicationPage {
@@ -76,7 +97,8 @@ pub struct ApplicationPolicy {
 /// <p>Policy statement applied to the application.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ApplicationPolicyStatement {
-    /// <p>See <a href="https://docs.aws.amazon.com/serverlessrepo/latest/devguide/access-control-resource-based.html#application-permissions">Application Permissions</a> for the list of supported actions.</p>
+    /// <p>For the list of actions supported for this operation, see <a href="https://docs.aws.amazon.com/serverlessrepo/latest/devguide/access-control-resource-based.html#application-permissions">Application
+    /// Permissions</a>.</p>
     #[serde(rename = "Actions")]
     pub actions: Vec<String>,
     /// <p>An AWS account ID, or * to make the application public.</p>
@@ -160,16 +182,16 @@ pub struct CreateApplicationInput {
     /// <p>Labels to improve discovery of apps in search results.</p><p>Minimum length=1. Maximum length=127. Maximum number of labels: 10</p><p>Pattern: "^[a-zA-Z0-9+\\-_:\\/@]+$";</p>
     pub labels: Option<Vec<String>>,
     /// <p>A local text file that contains the license of the app that matches the spdxLicenseID value of your application.
-    /// The file is of the format file://&lt;path>/&lt;filename>.</p><p>Maximum size 5 MB</p><p>Note: Only one of licenseBody and licenseUrl can be specified, otherwise an error will result.</p>
+    /// The file has the format file://&lt;path>/&lt;filename>.</p><p>Maximum size 5 MB</p><p>You can specify only one of licenseBody and licenseUrl; otherwise, an error results.</p>
     pub license_body: Option<String>,
-    /// <p>A link to the S3 object that contains the license of the app that matches the spdxLicenseID value of your application.</p><p>Maximum size 5 MB</p><p>Note: Only one of licenseBody and licenseUrl can be specified, otherwise an error will result.</p>
+    /// <p>A link to the S3 object that contains the license of the app that matches the spdxLicenseID value of your application.</p><p>Maximum size 5 MB</p><p>You can specify only one of licenseBody and licenseUrl; otherwise, an error results.</p>
     pub license_url: Option<String>,
     /// <p>The name of the application that you want to publish.</p><p>Minimum length=1. Maximum length=140</p><p>Pattern: "[a-zA-Z0-9\\-]+";</p>
     pub name: String,
     /// <p>A local text readme file in Markdown language that contains a more detailed description of the application and how it works.
-    /// The file is of the format file://&lt;path>/&lt;filename>.</p><p>Maximum size 5 MB</p><p>Note: Only one of readmeBody and readmeUrl can be specified, otherwise an error will result.</p>
+    /// The file has the format file://&lt;path>/&lt;filename>.</p><p>Maximum size 5 MB</p><p>You can specify only one of readmeBody and readmeUrl; otherwise, an error results.</p>
     pub readme_body: Option<String>,
-    /// <p>A link to the S3 object in Markdown language that contains a more detailed description of the application and how it works.</p><p>Maximum size 5 MB</p><p>Note: Only one of readmeBody and readmeUrl can be specified, otherwise an error will result.</p>
+    /// <p>A link to the S3 object in Markdown language that contains a more detailed description of the application and how it works.</p><p>Maximum size 5 MB</p><p>You can specify only one of readmeBody and readmeUrl; otherwise, an error results.</p>
     pub readme_url: Option<String>,
     /// <p>The semantic version of the application:</p><p>
     /// <a href="https://semver.org/">https://semver.org/</a>
@@ -180,9 +202,9 @@ pub struct CreateApplicationInput {
     /// <p>A valid identifier from <a href="https://spdx.org/licenses/">https://spdx.org/licenses/</a>.</p>
     pub spdx_license_id: Option<String>,
     /// <p>The local raw packaged AWS SAM template file of your application.
-    /// The file is of the format file://&lt;path>/&lt;filename>.</p><p>Note: Only one of templateBody and templateUrl can be specified, otherwise an error will result.</p>
+    /// The file has the format file://&lt;path>/&lt;filename>.</p><p>You can specify only one of templateBody and templateUrl; otherwise an error results.</p>
     pub template_body: Option<String>,
-    /// <p>A link to the S3 object cotaining the packaged AWS SAM template of your application.</p><p>Note: Only one of templateBody and templateUrl can be specified, otherwise an error will result.</p>
+    /// <p>A link to the S3 object containing the packaged AWS SAM template of your application.</p><p>You can specify only one of templateBody and templateUrl; otherwise an error results.</p>
     pub template_url: Option<String>,
 }
 
@@ -204,11 +226,11 @@ pub struct CreateApplicationRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub labels: Option<Vec<String>>,
     /// <p>A local text file that contains the license of the app that matches the spdxLicenseID value of your application.
-    /// The file is of the format file://&lt;path>/&lt;filename>.</p><p>Maximum size 5 MB</p><p>Note: Only one of licenseBody and licenseUrl can be specified, otherwise an error will result.</p>
+    /// The file has the format file://&lt;path>/&lt;filename>.</p><p>Maximum size 5 MB</p><p>You can specify only one of licenseBody and licenseUrl; otherwise, an error results.</p>
     #[serde(rename = "LicenseBody")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub license_body: Option<String>,
-    /// <p>A link to the S3 object that contains the license of the app that matches the spdxLicenseID value of your application.</p><p>Maximum size 5 MB</p><p>Note: Only one of licenseBody and licenseUrl can be specified, otherwise an error will result.</p>
+    /// <p>A link to the S3 object that contains the license of the app that matches the spdxLicenseID value of your application.</p><p>Maximum size 5 MB</p><p>You can specify only one of licenseBody and licenseUrl; otherwise, an error results.</p>
     #[serde(rename = "LicenseUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub license_url: Option<String>,
@@ -216,11 +238,11 @@ pub struct CreateApplicationRequest {
     #[serde(rename = "Name")]
     pub name: String,
     /// <p>A local text readme file in Markdown language that contains a more detailed description of the application and how it works.
-    /// The file is of the format file://&lt;path>/&lt;filename>.</p><p>Maximum size 5 MB</p><p>Note: Only one of readmeBody and readmeUrl can be specified, otherwise an error will result.</p>
+    /// The file has the format file://&lt;path>/&lt;filename>.</p><p>Maximum size 5 MB</p><p>You can specify only one of readmeBody and readmeUrl; otherwise, an error results.</p>
     #[serde(rename = "ReadmeBody")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub readme_body: Option<String>,
-    /// <p>A link to the S3 object in Markdown language that contains a more detailed description of the application and how it works.</p><p>Maximum size 5 MB</p><p>Note: Only one of readmeBody and readmeUrl can be specified, otherwise an error will result.</p>
+    /// <p>A link to the S3 object in Markdown language that contains a more detailed description of the application and how it works.</p><p>Maximum size 5 MB</p><p>You can specify only one of readmeBody and readmeUrl; otherwise, an error results.</p>
     #[serde(rename = "ReadmeUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub readme_url: Option<String>,
@@ -239,11 +261,11 @@ pub struct CreateApplicationRequest {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub spdx_license_id: Option<String>,
     /// <p>The local raw packaged AWS SAM template file of your application.
-    /// The file is of the format file://&lt;path>/&lt;filename>.</p><p>Note: Only one of templateBody and templateUrl can be specified, otherwise an error will result.</p>
+    /// The file has the format file://&lt;path>/&lt;filename>.</p><p>You can specify only one of templateBody and templateUrl; otherwise an error results.</p>
     #[serde(rename = "TemplateBody")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_body: Option<String>,
-    /// <p>A link to the S3 object cotaining the packaged AWS SAM template of your application.</p><p>Note: Only one of templateBody and templateUrl can be specified, otherwise an error will result.</p>
+    /// <p>A link to the S3 object containing the packaged AWS SAM template of your application.</p><p>You can specify only one of templateBody and templateUrl; otherwise an error results.</p>
     #[serde(rename = "TemplateUrl")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub template_url: Option<String>,
@@ -347,6 +369,37 @@ pub struct CreateApplicationVersionResponse {
     #[serde(rename = "ParameterDefinitions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_definitions: Option<Vec<ParameterDefinition>>,
+    /// <p>A list of values that you must specify before you can deploy certain applications.
+    /// Some applications might include resources that can affect permissions in your AWS
+    /// account, for example, by creating new AWS Identity and Access Management (IAM) users.
+    /// For those applications, you must explicitly acknowledge their capabilities by
+    /// specifying this parameter.</p><p>The only valid values are CAPABILITY_IAM, CAPABILITY_NAMED_IAM,
+    /// and CAPABILITY_RESOURCE_POLICY.</p><p>The following resources require you to specify CAPABILITY_IAM or
+    /// CAPABILITY_NAMED_IAM:
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html">AWS::IAM::Group</a>,
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html">AWS::IAM::InstanceProfile</a>,
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-policy.html">AWS::IAM::Policy</a>, and
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html">AWS::IAM::Role</a>.
+    /// If the application contains IAM resources, you can specify either CAPABILITY_IAM
+    /// or CAPABILITY_NAMED_IAM. If the application contains IAM resources
+    /// with custom names, you must specify CAPABILITY_NAMED_IAM.</p><p>The following resources require you to specify CAPABILITY_RESOURCE_POLICY:
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-permission.html">AWS::Lambda::Permission</a>,
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-policy.html">AWS::IAM:Policy</a>,
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalingpolicy.html">AWS::ApplicationAutoScaling::ScalingPolicy</a>,
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-policy.html">AWS::S3::BucketPolicy</a>,
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-policy.html">AWS::SQS::QueuePolicy</a>, and
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sns-policy.html">AWS::SNS::TopicPolicy</a>.</p><p>If your application template contains any of the above resources, we recommend that you review
+    /// all permissions associated with the application before deploying. If you don't specify
+    /// this parameter for an application that requires capabilities, the call will fail.</p><p>Valid values: CAPABILITY_IAM | CAPABILITY_NAMED_IAM | CAPABILITY_RESOURCE_POLICY
+    /// </p>
+    #[serde(rename = "RequiredCapabilities")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub required_capabilities: Option<Vec<String>>,
+    /// <p>Whether all of the AWS resources contained in this application are supported in the region
+    /// in which it is being retrieved.</p>
+    #[serde(rename = "ResourcesSupported")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resources_supported: Option<bool>,
     /// <p>The semantic version of the application:</p><p>
     /// <a href="https://semver.org/">https://semver.org/</a>
     /// </p>
@@ -366,16 +419,54 @@ pub struct CreateApplicationVersionResponse {
 /// <p>Create an application change set request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateCloudFormationChangeSetInput {
+    /// <p>A list of values that you must specify before you can deploy certain applications.
+    /// Some applications might include resources that can affect permissions in your AWS
+    /// account, for example, by creating new AWS Identity and Access Management (IAM) users.
+    /// For those applications, you must explicitly acknowledge their capabilities by
+    /// specifying this parameter.</p><p>The only valid values are CAPABILITY_IAM, CAPABILITY_NAMED_IAM,
+    /// and CAPABILITY_RESOURCE_POLICY.</p><p>The following resources require you to specify CAPABILITY_IAM or
+    /// CAPABILITY_NAMED_IAM:
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html">AWS::IAM::Group</a>,
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html">AWS::IAM::InstanceProfile</a>,
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-policy.html">AWS::IAM::Policy</a>, and
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html">AWS::IAM::Role</a>.
+    /// If the application contains IAM resources, you can specify either CAPABILITY_IAM
+    /// or CAPABILITY_NAMED_IAM. If the application contains IAM resources
+    /// with custom names, you must specify CAPABILITY_NAMED_IAM.</p><p>The following resources require you to specify CAPABILITY_RESOURCE_POLICY:
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-permission.html">AWS::Lambda::Permission</a>,
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-policy.html">AWS::IAM:Policy</a>,
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalingpolicy.html">AWS::ApplicationAutoScaling::ScalingPolicy</a>,
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-policy.html">AWS::S3::BucketPolicy</a>,
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-policy.html">AWS::SQS::QueuePolicy</a>, and
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sns-policy.html">AWS::SNS:TopicPolicy</a>.</p><p>If your application template contains any of the above resources, we recommend that you review
+    /// all permissions associated with the application before deploying. If you don't specify
+    /// this parameter for an application that requires capabilities, the call will fail.</p><p>Valid values: CAPABILITY_IAM | CAPABILITY_NAMED_IAM | CAPABILITY_RESOURCE_POLICY
+    /// </p>
+    pub capabilities: Option<Vec<String>>,
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    pub change_set_name: Option<String>,
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    pub client_token: Option<String>,
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    pub description: Option<String>,
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    pub notification_arns: Option<Vec<String>>,
     /// <p>A list of parameter values for the parameters of the application.</p>
     pub parameter_overrides: Option<Vec<ParameterValue>>,
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    pub resource_types: Option<Vec<String>>,
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    pub rollback_configuration: Option<RollbackConfiguration>,
     /// <p>The semantic version of the application:</p><p>
     /// <a href="https://semver.org/">https://semver.org/</a>
     /// </p>
     pub semantic_version: Option<String>,
-    /// <p>The name or the unique ID of the stack for which you are creating a change set. AWS CloudFormation generates
-    /// the change set by comparing this stack's information with the information that you submit, such as a modified
-    /// template or different parameter input values. </p><p>Constraints: Minimum length of 1.</p><p>Pattern: ([a-zA-Z][-a-zA-Z0-9]*)|(arn:\b(aws|aws-us-gov|aws-cn)\b:[-a-zA-Z0-9:/._+]*)</p>
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
     pub stack_name: String,
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    pub tags: Option<Vec<Tag>>,
+    /// <p>The UUID returned by CreateCloudFormationTemplate.</p><p>Pattern: [0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}</p>
+    pub template_id: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -383,21 +474,77 @@ pub struct CreateCloudFormationChangeSetRequest {
     /// <p>The Amazon Resource Name (ARN) of the application.</p>
     #[serde(rename = "ApplicationId")]
     pub application_id: String,
+    /// <p>A list of values that you must specify before you can deploy certain applications.
+    /// Some applications might include resources that can affect permissions in your AWS
+    /// account, for example, by creating new AWS Identity and Access Management (IAM) users.
+    /// For those applications, you must explicitly acknowledge their capabilities by
+    /// specifying this parameter.</p><p>The only valid values are CAPABILITY_IAM, CAPABILITY_NAMED_IAM,
+    /// and CAPABILITY_RESOURCE_POLICY.</p><p>The following resources require you to specify CAPABILITY_IAM or
+    /// CAPABILITY_NAMED_IAM:
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html">AWS::IAM::Group</a>,
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html">AWS::IAM::InstanceProfile</a>,
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-policy.html">AWS::IAM::Policy</a>, and
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html">AWS::IAM::Role</a>.
+    /// If the application contains IAM resources, you can specify either CAPABILITY_IAM
+    /// or CAPABILITY_NAMED_IAM. If the application contains IAM resources
+    /// with custom names, you must specify CAPABILITY_NAMED_IAM.</p><p>The following resources require you to specify CAPABILITY_RESOURCE_POLICY:
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-permission.html">AWS::Lambda::Permission</a>,
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-policy.html">AWS::IAM:Policy</a>,
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalingpolicy.html">AWS::ApplicationAutoScaling::ScalingPolicy</a>,
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-policy.html">AWS::S3::BucketPolicy</a>,
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-policy.html">AWS::SQS::QueuePolicy</a>, and
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sns-policy.html">AWS::SNS:TopicPolicy</a>.</p><p>If your application template contains any of the above resources, we recommend that you review
+    /// all permissions associated with the application before deploying. If you don't specify
+    /// this parameter for an application that requires capabilities, the call will fail.</p><p>Valid values: CAPABILITY_IAM | CAPABILITY_NAMED_IAM | CAPABILITY_RESOURCE_POLICY
+    /// </p>
+    #[serde(rename = "Capabilities")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub capabilities: Option<Vec<String>>,
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    #[serde(rename = "ChangeSetName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub change_set_name: Option<String>,
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    #[serde(rename = "ClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_token: Option<String>,
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    #[serde(rename = "NotificationArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notification_arns: Option<Vec<String>>,
     /// <p>A list of parameter values for the parameters of the application.</p>
     #[serde(rename = "ParameterOverrides")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub parameter_overrides: Option<Vec<ParameterValue>>,
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    #[serde(rename = "ResourceTypes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_types: Option<Vec<String>>,
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    #[serde(rename = "RollbackConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rollback_configuration: Option<RollbackConfiguration>,
     /// <p>The semantic version of the application:</p><p>
     /// <a href="https://semver.org/">https://semver.org/</a>
     /// </p>
     #[serde(rename = "SemanticVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub semantic_version: Option<String>,
-    /// <p>The name or the unique ID of the stack for which you are creating a change set. AWS CloudFormation generates
-    /// the change set by comparing this stack's information with the information that you submit, such as a modified
-    /// template or different parameter input values. </p><p>Constraints: Minimum length of 1.</p><p>Pattern: ([a-zA-Z][-a-zA-Z0-9]*)|(arn:\b(aws|aws-us-gov|aws-cn)\b:[-a-zA-Z0-9:/._+]*)</p>
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
     #[serde(rename = "StackName")]
     pub stack_name: String,
+    /// <p>This property corresponds to the parameter of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/CreateChangeSet">CreateChangeSet</a></i> API.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>The UUID returned by CreateCloudFormationTemplate.</p><p>Pattern: [0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}</p>
+    #[serde(rename = "TemplateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_id: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -421,6 +568,56 @@ pub struct CreateCloudFormationChangeSetResponse {
     #[serde(rename = "StackId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stack_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateCloudFormationTemplateRequest {
+    /// <p>The Amazon Resource Name (ARN) of the application.</p>
+    #[serde(rename = "ApplicationId")]
+    pub application_id: String,
+    /// <p>The semantic version of the application:</p><p>
+    /// <a href="https://semver.org/">https://semver.org/</a>
+    /// </p>
+    #[serde(rename = "SemanticVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub semantic_version: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateCloudFormationTemplateResponse {
+    /// <p>The application Amazon Resource Name (ARN).</p>
+    #[serde(rename = "ApplicationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_id: Option<String>,
+    /// <p>The date and time this resource was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<String>,
+    /// <p>The date and time this template expires. Templates
+    /// expire 1 hour after creation.</p>
+    #[serde(rename = "ExpirationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expiration_time: Option<String>,
+    /// <p>The semantic version of the application:</p><p>
+    /// <a href="https://semver.org/">https://semver.org/</a>
+    /// </p>
+    #[serde(rename = "SemanticVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub semantic_version: Option<String>,
+    /// <p>Status of the template creation workflow.</p><p>Possible values: PREPARING | ACTIVE | EXPIRED</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The UUID returned by CreateCloudFormationTemplate.</p><p>Pattern: [0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}</p>
+    #[serde(rename = "TemplateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_id: Option<String>,
+    /// <p>A link to the template that can be used to deploy the application using
+    /// AWS CloudFormation.</p>
+    #[serde(rename = "TemplateUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_url: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -505,6 +702,85 @@ pub struct GetApplicationResponse {
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<Version>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetCloudFormationTemplateRequest {
+    /// <p>The Amazon Resource Name (ARN) of the application.</p>
+    #[serde(rename = "ApplicationId")]
+    pub application_id: String,
+    /// <p>The UUID returned by CreateCloudFormationTemplate.</p><p>Pattern: [0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}</p>
+    #[serde(rename = "TemplateId")]
+    pub template_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetCloudFormationTemplateResponse {
+    /// <p>The application Amazon Resource Name (ARN).</p>
+    #[serde(rename = "ApplicationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub application_id: Option<String>,
+    /// <p>The date and time this resource was created.</p>
+    #[serde(rename = "CreationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<String>,
+    /// <p>The date and time this template expires. Templates
+    /// expire 1 hour after creation.</p>
+    #[serde(rename = "ExpirationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub expiration_time: Option<String>,
+    /// <p>The semantic version of the application:</p><p>
+    /// <a href="https://semver.org/">https://semver.org/</a>
+    /// </p>
+    #[serde(rename = "SemanticVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub semantic_version: Option<String>,
+    /// <p>Status of the template creation workflow.</p><p>Possible values: PREPARING | ACTIVE | EXPIRED</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p>The UUID returned by CreateCloudFormationTemplate.</p><p>Pattern: [0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}</p>
+    #[serde(rename = "TemplateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_id: Option<String>,
+    /// <p>A link to the template that can be used to deploy the application using
+    /// AWS CloudFormation.</p>
+    #[serde(rename = "TemplateUrl")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub template_url: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListApplicationDependenciesRequest {
+    /// <p>The Amazon Resource Name (ARN) of the application.</p>
+    #[serde(rename = "ApplicationId")]
+    pub application_id: String,
+    /// <p>The total number of items to return.</p>
+    #[serde(rename = "MaxItems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_items: Option<i64>,
+    /// <p>A token to specify where to start paginating.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The semantic version of the application to get.</p>
+    #[serde(rename = "SemanticVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub semantic_version: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListApplicationDependenciesResponse {
+    /// <p>An array of application summaries nested in the application.</p>
+    #[serde(rename = "Dependencies")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dependencies: Option<Vec<ApplicationDependencySummary>>,
+    /// <p>The token to request the next page of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -664,6 +940,67 @@ pub struct PutApplicationPolicyResponse {
     pub statements: Option<Vec<ApplicationPolicyStatement>>,
 }
 
+/// <p>This property corresponds to the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackConfiguration">RollbackConfiguration</a></i> Data Type.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct RollbackConfiguration {
+    /// <p>This property corresponds to the content of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackConfiguration">RollbackConfiguration</a></i> Data Type.</p>
+    #[serde(rename = "MonitoringTimeInMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub monitoring_time_in_minutes: Option<i64>,
+    /// <p>This property corresponds to the content of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackConfiguration">RollbackConfiguration</a></i> Data Type.</p>
+    #[serde(rename = "RollbackTriggers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rollback_triggers: Option<Vec<RollbackTrigger>>,
+}
+
+/// <p>This property corresponds to the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackTrigger">RollbackTrigger</a></i> Data Type.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct RollbackTrigger {
+    /// <p>This property corresponds to the content of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackTrigger">RollbackTrigger</a></i> Data Type.</p>
+    #[serde(rename = "Arn")]
+    pub arn: String,
+    /// <p>This property corresponds to the content of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/RollbackTrigger">RollbackTrigger</a></i> Data Type.</p>
+    #[serde(rename = "Type")]
+    pub type_: String,
+}
+
+/// <p>This property corresponds to the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/Tag">Tag</a></i> Data Type.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct Tag {
+    /// <p>This property corresponds to the content of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/Tag">Tag</a></i> Data Type.</p>
+    #[serde(rename = "Key")]
+    pub key: String,
+    /// <p>This property corresponds to the content of the same name for the <i>AWS CloudFormation <a href="https://docs.aws.amazon.com/goto/WebAPI/cloudformation-2010-05-15/Tag">
+    /// Tag</a>
+    /// </i>
+    /// Data Type.</p>
+    #[serde(rename = "Value")]
+    pub value: String,
+}
+
+/// <p>Details of the template.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct TemplateDetails {
+    /// <p>The application Amazon Resource Name (ARN).</p>
+    pub application_id: String,
+    /// <p>The date and time this resource was created.</p>
+    pub creation_time: String,
+    /// <p>The date and time this template expires. Templates
+    /// expire 1 hour after creation.</p>
+    pub expiration_time: String,
+    /// <p>The semantic version of the application:</p><p>
+    /// <a href="https://semver.org/">https://semver.org/</a>
+    /// </p>
+    pub semantic_version: String,
+    /// <p>Status of the template creation workflow.</p><p>Possible values: PREPARING | ACTIVE | EXPIRED</p>
+    pub status: String,
+    /// <p>The UUID returned by CreateCloudFormationTemplate.</p><p>Pattern: [0-9a-fA-F]{8}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{4}\-[0-9a-fA-F]{12}</p>
+    pub template_id: String,
+    /// <p>A link to the template that can be used to deploy the application using
+    /// AWS CloudFormation.</p>
+    pub template_url: String,
+}
+
 /// <p>Update the application request.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateApplicationInput {
@@ -777,6 +1114,35 @@ pub struct Version {
     /// <p>An array of parameter types supported by the application.</p>
     #[serde(rename = "ParameterDefinitions")]
     pub parameter_definitions: Vec<ParameterDefinition>,
+    /// <p>A list of values that you must specify before you can deploy certain applications.
+    /// Some applications might include resources that can affect permissions in your AWS
+    /// account, for example, by creating new AWS Identity and Access Management (IAM) users.
+    /// For those applications, you must explicitly acknowledge their capabilities by
+    /// specifying this parameter.</p><p>The only valid values are CAPABILITY_IAM, CAPABILITY_NAMED_IAM,
+    /// and CAPABILITY_RESOURCE_POLICY.</p><p>The following resources require you to specify CAPABILITY_IAM or
+    /// CAPABILITY_NAMED_IAM:
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-iam-group.html">AWS::IAM::Group</a>,
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html">AWS::IAM::InstanceProfile</a>,
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-policy.html">AWS::IAM::Policy</a>, and
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html">AWS::IAM::Role</a>.
+    /// If the application contains IAM resources, you can specify either CAPABILITY_IAM
+    /// or CAPABILITY_NAMED_IAM. If the application contains IAM resources
+    /// with custom names, you must specify CAPABILITY_NAMED_IAM.</p><p>The following resources require you to specify CAPABILITY_RESOURCE_POLICY:
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-lambda-permission.html">AWS::Lambda::Permission</a>,
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-policy.html">AWS::IAM:Policy</a>,
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-applicationautoscaling-scalingpolicy.html">AWS::ApplicationAutoScaling::ScalingPolicy</a>,
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-policy.html">AWS::S3::BucketPolicy</a>,
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sqs-policy.html">AWS::SQS::QueuePolicy</a>, and
+    /// <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-sns-policy.html">AWS::SNS::TopicPolicy</a>.</p><p>If your application template contains any of the above resources, we recommend that you review
+    /// all permissions associated with the application before deploying. If you don't specify
+    /// this parameter for an application that requires capabilities, the call will fail.</p><p>Valid values: CAPABILITY_IAM | CAPABILITY_NAMED_IAM | CAPABILITY_RESOURCE_POLICY
+    /// </p>
+    #[serde(rename = "RequiredCapabilities")]
+    pub required_capabilities: Vec<String>,
+    /// <p>Whether all of the AWS resources contained in this application are supported in the region
+    /// in which it is being retrieved.</p>
+    #[serde(rename = "ResourcesSupported")]
+    pub resources_supported: bool,
     /// <p>The semantic version of the application:</p><p>
     /// <a href="https://semver.org/">https://semver.org/</a>
     /// </p>
@@ -1178,6 +1544,132 @@ impl Error for CreateCloudFormationChangeSetError {
         }
     }
 }
+/// Errors returned by CreateCloudFormationTemplate
+#[derive(Debug, PartialEq)]
+pub enum CreateCloudFormationTemplateError {
+    /// <p>One of the parameters in the request is invalid.</p>
+    BadRequest(String),
+    /// <p>The client is not authenticated.</p>
+    Forbidden(String),
+    /// <p>The AWS Serverless Application Repository service encountered an internal error.</p>
+    InternalServerError(String),
+    /// <p>The resource (for example, an access policy statement) specified in the request doesn't exist.</p>
+    NotFound(String),
+    /// <p>The client is sending more than the allowed number of requests per unit of time.</p>
+    TooManyRequests(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl CreateCloudFormationTemplateError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> CreateCloudFormationTemplateError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "BadRequestException" => {
+                    return CreateCloudFormationTemplateError::BadRequest(String::from(
+                        error_message,
+                    ));
+                }
+                "ForbiddenException" => {
+                    return CreateCloudFormationTemplateError::Forbidden(String::from(error_message));
+                }
+                "InternalServerErrorException" => {
+                    return CreateCloudFormationTemplateError::InternalServerError(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return CreateCloudFormationTemplateError::NotFound(String::from(error_message));
+                }
+                "TooManyRequestsException" => {
+                    return CreateCloudFormationTemplateError::TooManyRequests(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return CreateCloudFormationTemplateError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return CreateCloudFormationTemplateError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for CreateCloudFormationTemplateError {
+    fn from(err: serde_json::error::Error) -> CreateCloudFormationTemplateError {
+        CreateCloudFormationTemplateError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateCloudFormationTemplateError {
+    fn from(err: CredentialsError) -> CreateCloudFormationTemplateError {
+        CreateCloudFormationTemplateError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateCloudFormationTemplateError {
+    fn from(err: HttpDispatchError) -> CreateCloudFormationTemplateError {
+        CreateCloudFormationTemplateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateCloudFormationTemplateError {
+    fn from(err: io::Error) -> CreateCloudFormationTemplateError {
+        CreateCloudFormationTemplateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateCloudFormationTemplateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateCloudFormationTemplateError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateCloudFormationTemplateError::BadRequest(ref cause) => cause,
+            CreateCloudFormationTemplateError::Forbidden(ref cause) => cause,
+            CreateCloudFormationTemplateError::InternalServerError(ref cause) => cause,
+            CreateCloudFormationTemplateError::NotFound(ref cause) => cause,
+            CreateCloudFormationTemplateError::TooManyRequests(ref cause) => cause,
+            CreateCloudFormationTemplateError::Validation(ref cause) => cause,
+            CreateCloudFormationTemplateError::Credentials(ref err) => err.description(),
+            CreateCloudFormationTemplateError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateCloudFormationTemplateError::ParseError(ref cause) => cause,
+            CreateCloudFormationTemplateError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by DeleteApplication
 #[derive(Debug, PartialEq)]
 pub enum DeleteApplicationError {
@@ -1541,6 +2033,254 @@ impl Error for GetApplicationPolicyError {
             }
             GetApplicationPolicyError::ParseError(ref cause) => cause,
             GetApplicationPolicyError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetCloudFormationTemplate
+#[derive(Debug, PartialEq)]
+pub enum GetCloudFormationTemplateError {
+    /// <p>One of the parameters in the request is invalid.</p>
+    BadRequest(String),
+    /// <p>The client is not authenticated.</p>
+    Forbidden(String),
+    /// <p>The AWS Serverless Application Repository service encountered an internal error.</p>
+    InternalServerError(String),
+    /// <p>The resource (for example, an access policy statement) specified in the request doesn't exist.</p>
+    NotFound(String),
+    /// <p>The client is sending more than the allowed number of requests per unit of time.</p>
+    TooManyRequests(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetCloudFormationTemplateError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> GetCloudFormationTemplateError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "BadRequestException" => {
+                    return GetCloudFormationTemplateError::BadRequest(String::from(error_message));
+                }
+                "ForbiddenException" => {
+                    return GetCloudFormationTemplateError::Forbidden(String::from(error_message));
+                }
+                "InternalServerErrorException" => {
+                    return GetCloudFormationTemplateError::InternalServerError(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return GetCloudFormationTemplateError::NotFound(String::from(error_message));
+                }
+                "TooManyRequestsException" => {
+                    return GetCloudFormationTemplateError::TooManyRequests(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return GetCloudFormationTemplateError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetCloudFormationTemplateError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetCloudFormationTemplateError {
+    fn from(err: serde_json::error::Error) -> GetCloudFormationTemplateError {
+        GetCloudFormationTemplateError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetCloudFormationTemplateError {
+    fn from(err: CredentialsError) -> GetCloudFormationTemplateError {
+        GetCloudFormationTemplateError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetCloudFormationTemplateError {
+    fn from(err: HttpDispatchError) -> GetCloudFormationTemplateError {
+        GetCloudFormationTemplateError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetCloudFormationTemplateError {
+    fn from(err: io::Error) -> GetCloudFormationTemplateError {
+        GetCloudFormationTemplateError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetCloudFormationTemplateError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetCloudFormationTemplateError {
+    fn description(&self) -> &str {
+        match *self {
+            GetCloudFormationTemplateError::BadRequest(ref cause) => cause,
+            GetCloudFormationTemplateError::Forbidden(ref cause) => cause,
+            GetCloudFormationTemplateError::InternalServerError(ref cause) => cause,
+            GetCloudFormationTemplateError::NotFound(ref cause) => cause,
+            GetCloudFormationTemplateError::TooManyRequests(ref cause) => cause,
+            GetCloudFormationTemplateError::Validation(ref cause) => cause,
+            GetCloudFormationTemplateError::Credentials(ref err) => err.description(),
+            GetCloudFormationTemplateError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetCloudFormationTemplateError::ParseError(ref cause) => cause,
+            GetCloudFormationTemplateError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by ListApplicationDependencies
+#[derive(Debug, PartialEq)]
+pub enum ListApplicationDependenciesError {
+    /// <p>One of the parameters in the request is invalid.</p>
+    BadRequest(String),
+    /// <p>The client is not authenticated.</p>
+    Forbidden(String),
+    /// <p>The AWS Serverless Application Repository service encountered an internal error.</p>
+    InternalServerError(String),
+    /// <p>The resource (for example, an access policy statement) specified in the request doesn't exist.</p>
+    NotFound(String),
+    /// <p>The client is sending more than the allowed number of requests per unit of time.</p>
+    TooManyRequests(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListApplicationDependenciesError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> ListApplicationDependenciesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "BadRequestException" => {
+                    return ListApplicationDependenciesError::BadRequest(String::from(error_message));
+                }
+                "ForbiddenException" => {
+                    return ListApplicationDependenciesError::Forbidden(String::from(error_message));
+                }
+                "InternalServerErrorException" => {
+                    return ListApplicationDependenciesError::InternalServerError(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return ListApplicationDependenciesError::NotFound(String::from(error_message));
+                }
+                "TooManyRequestsException" => {
+                    return ListApplicationDependenciesError::TooManyRequests(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return ListApplicationDependenciesError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ListApplicationDependenciesError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListApplicationDependenciesError {
+    fn from(err: serde_json::error::Error) -> ListApplicationDependenciesError {
+        ListApplicationDependenciesError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListApplicationDependenciesError {
+    fn from(err: CredentialsError) -> ListApplicationDependenciesError {
+        ListApplicationDependenciesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListApplicationDependenciesError {
+    fn from(err: HttpDispatchError) -> ListApplicationDependenciesError {
+        ListApplicationDependenciesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListApplicationDependenciesError {
+    fn from(err: io::Error) -> ListApplicationDependenciesError {
+        ListApplicationDependenciesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListApplicationDependenciesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListApplicationDependenciesError {
+    fn description(&self) -> &str {
+        match *self {
+            ListApplicationDependenciesError::BadRequest(ref cause) => cause,
+            ListApplicationDependenciesError::Forbidden(ref cause) => cause,
+            ListApplicationDependenciesError::InternalServerError(ref cause) => cause,
+            ListApplicationDependenciesError::NotFound(ref cause) => cause,
+            ListApplicationDependenciesError::TooManyRequests(ref cause) => cause,
+            ListApplicationDependenciesError::Validation(ref cause) => cause,
+            ListApplicationDependenciesError::Credentials(ref err) => err.description(),
+            ListApplicationDependenciesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListApplicationDependenciesError::ParseError(ref cause) => cause,
+            ListApplicationDependenciesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2048,6 +2788,12 @@ pub trait ServerlessRepo {
         input: CreateCloudFormationChangeSetRequest,
     ) -> RusotoFuture<CreateCloudFormationChangeSetResponse, CreateCloudFormationChangeSetError>;
 
+    /// <p>Creates an AWS CloudFormation template.</p>
+    fn create_cloud_formation_template(
+        &self,
+        input: CreateCloudFormationTemplateRequest,
+    ) -> RusotoFuture<CreateCloudFormationTemplateResponse, CreateCloudFormationTemplateError>;
+
     /// <p>Deletes the specified application.</p>
     fn delete_application(
         &self,
@@ -2066,6 +2812,18 @@ pub trait ServerlessRepo {
         input: GetApplicationPolicyRequest,
     ) -> RusotoFuture<GetApplicationPolicyResponse, GetApplicationPolicyError>;
 
+    /// <p>Gets the specified AWS CloudFormation template.</p>
+    fn get_cloud_formation_template(
+        &self,
+        input: GetCloudFormationTemplateRequest,
+    ) -> RusotoFuture<GetCloudFormationTemplateResponse, GetCloudFormationTemplateError>;
+
+    /// <p>Retrieves the list of applications nested in the containing application.</p>
+    fn list_application_dependencies(
+        &self,
+        input: ListApplicationDependenciesRequest,
+    ) -> RusotoFuture<ListApplicationDependenciesResponse, ListApplicationDependenciesError>;
+
     /// <p>Lists versions for the specified application.</p>
     fn list_application_versions(
         &self,
@@ -2078,9 +2836,10 @@ pub trait ServerlessRepo {
         input: ListApplicationsRequest,
     ) -> RusotoFuture<ListApplicationsResponse, ListApplicationsError>;
 
-    /// <p>Sets the permission policy for an application. See
-    /// <a href="https://docs.aws.amazon.com/serverlessrepo/latest/devguide/access-control-resource-based.html#application-permissions">Application Permissions</a>
-    /// for the list of supported actions that can be used with this operation.</p>
+    /// <p>Sets the permission policy for an application. For the list of actions supported for this operation, see
+    /// <a href="https://docs.aws.amazon.com/serverlessrepo/latest/devguide/access-control-resource-based.html#application-permissions">Application
+    /// Permissions</a>
+    /// .</p>
     fn put_application_policy(
         &self,
         input: PutApplicationPolicyRequest,
@@ -2252,6 +3011,47 @@ impl ServerlessRepo for ServerlessRepoClient {
         })
     }
 
+    /// <p>Creates an AWS CloudFormation template.</p>
+    fn create_cloud_formation_template(
+        &self,
+        input: CreateCloudFormationTemplateRequest,
+    ) -> RusotoFuture<CreateCloudFormationTemplateResponse, CreateCloudFormationTemplateError> {
+        let request_uri = format!(
+            "/applications/{application_id}/templates",
+            application_id = input.application_id
+        );
+
+        let mut request = SignedRequest::new("POST", "serverlessrepo", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 201 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<CreateCloudFormationTemplateResponse>(&body)
+                            .unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateCloudFormationTemplateError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Deletes the specified application.</p>
     fn delete_application(
         &self,
@@ -2368,6 +3168,94 @@ impl ServerlessRepo for ServerlessRepoClient {
         })
     }
 
+    /// <p>Gets the specified AWS CloudFormation template.</p>
+    fn get_cloud_formation_template(
+        &self,
+        input: GetCloudFormationTemplateRequest,
+    ) -> RusotoFuture<GetCloudFormationTemplateResponse, GetCloudFormationTemplateError> {
+        let request_uri = format!(
+            "/applications/{application_id}/templates/{template_id}",
+            application_id = input.application_id,
+            template_id = input.template_id
+        );
+
+        let mut request = SignedRequest::new("GET", "serverlessrepo", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetCloudFormationTemplateResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetCloudFormationTemplateError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Retrieves the list of applications nested in the containing application.</p>
+    fn list_application_dependencies(
+        &self,
+        input: ListApplicationDependenciesRequest,
+    ) -> RusotoFuture<ListApplicationDependenciesResponse, ListApplicationDependenciesError> {
+        let request_uri = format!(
+            "/applications/{application_id}/dependencies",
+            application_id = input.application_id
+        );
+
+        let mut request = SignedRequest::new("GET", "serverlessrepo", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_items {
+            params.put("maxItems", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        if let Some(ref x) = input.semantic_version {
+            params.put("semanticVersion", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListApplicationDependenciesResponse>(&body)
+                            .unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListApplicationDependenciesError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Lists versions for the specified application.</p>
     fn list_application_versions(
         &self,
@@ -2459,9 +3347,10 @@ impl ServerlessRepo for ServerlessRepoClient {
         })
     }
 
-    /// <p>Sets the permission policy for an application. See
-    /// <a href="https://docs.aws.amazon.com/serverlessrepo/latest/devguide/access-control-resource-based.html#application-permissions">Application Permissions</a>
-    /// for the list of supported actions that can be used with this operation.</p>
+    /// <p>Sets the permission policy for an application. For the list of actions supported for this operation, see
+    /// <a href="https://docs.aws.amazon.com/serverlessrepo/latest/devguide/access-control-resource-based.html#application-permissions">Application
+    /// Permissions</a>
+    /// .</p>
     fn put_application_policy(
         &self,
         input: PutApplicationPolicyRequest,

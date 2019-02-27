@@ -28,12 +28,42 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
+/// <p>Describes a modification to the configuration of bring your own license (BYOL) for the specified account. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AccountModification {
+    /// <p>The IP address range, specified as an IPv4 CIDR block, for the management network interface used for the account.</p>
+    #[serde(rename = "DedicatedTenancyManagementCidrRange")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dedicated_tenancy_management_cidr_range: Option<String>,
+    /// <p>The status of BYOL (whether BYOL is being enabled or disabled).</p>
+    #[serde(rename = "DedicatedTenancySupport")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dedicated_tenancy_support: Option<String>,
+    /// <p>The error code that is returned if the configuration of BYOL cannot be modified.</p>
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+    /// <p>The text of the error message that is returned if the configuration of BYOL cannot be modified.</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    /// <p>The state of the modification to the configuration of BYOL.</p>
+    #[serde(rename = "ModificationState")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub modification_state: Option<String>,
+    /// <p>The timestamp when the modification of the BYOL configuration was started.</p>
+    #[serde(rename = "StartTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateIpGroupsRequest {
-    /// <p>The ID of the directory.</p>
+    /// <p>The identifier of the directory.</p>
     #[serde(rename = "DirectoryId")]
     pub directory_id: String,
-    /// <p>The IDs of one or more IP access control groups.</p>
+    /// <p>The identifiers of one or more IP access control groups.</p>
     #[serde(rename = "GroupIds")]
     pub group_ids: Vec<String>,
 }
@@ -44,7 +74,7 @@ pub struct AssociateIpGroupsResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AuthorizeIpRulesRequest {
-    /// <p>The ID of the group.</p>
+    /// <p>The identifier of the group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
     /// <p>The rules to add to the group.</p>
@@ -56,7 +86,30 @@ pub struct AuthorizeIpRulesRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct AuthorizeIpRulesResult {}
 
-/// <p>Information about the compute type.</p>
+/// <p>Describes an Amazon WorkSpaces client.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ClientProperties {
+    /// <p>Specifies whether users can cache their credentials on the Amazon WorkSpaces client. When enabled, users can choose to reconnect to their WorkSpaces without re-entering their credentials. </p>
+    #[serde(rename = "ReconnectEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reconnect_enabled: Option<String>,
+}
+
+/// <p>Information about the Amazon WorkSpaces client.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ClientPropertiesResult {
+    /// <p>Information about the Amazon WorkSpaces client.</p>
+    #[serde(rename = "ClientProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_properties: Option<ClientProperties>,
+    /// <p>The resource identifier, in the form of a directory ID.</p>
+    #[serde(rename = "ResourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_id: Option<String>,
+}
+
+/// <p>Describes the compute type.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ComputeType {
@@ -84,7 +137,7 @@ pub struct CreateIpGroupRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateIpGroupResult {
-    /// <p>The ID of the group.</p>
+    /// <p>The identifier of the group.</p>
     #[serde(rename = "GroupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_id: Option<String>,
@@ -92,7 +145,7 @@ pub struct CreateIpGroupResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateTagsRequest {
-    /// <p>The ID of the WorkSpace. To find this ID, use <a>DescribeWorkspaces</a>.</p>
+    /// <p>The identifier of the WorkSpace. To find this ID, use <a>DescribeWorkspaces</a>.</p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
     /// <p>The tags. Each WorkSpace can have a maximum of 50 tags.</p>
@@ -124,7 +177,7 @@ pub struct CreateWorkspacesResult {
     pub pending_requests: Option<Vec<Workspace>>,
 }
 
-/// <p>Information about defaults used to create a WorkSpace.</p>
+/// <p>Describes the default values used to create a WorkSpace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DefaultWorkspaceCreationProperties {
@@ -140,11 +193,11 @@ pub struct DefaultWorkspaceCreationProperties {
     #[serde(rename = "EnableInternetAccess")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_internet_access: Option<bool>,
-    /// <p>Indicates whether the directory is enabled for Amazon WorkDocs.</p>
+    /// <p>Specifies whether the directory is enabled for Amazon WorkDocs.</p>
     #[serde(rename = "EnableWorkDocs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable_work_docs: Option<bool>,
-    /// <p>Indicates whether the WorkSpace user is an administrator on the WorkSpace.</p>
+    /// <p>Specifies whether the WorkSpace user is an administrator on the WorkSpace.</p>
     #[serde(rename = "UserEnabledAsLocalAdministrator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_enabled_as_local_administrator: Option<bool>,
@@ -152,7 +205,7 @@ pub struct DefaultWorkspaceCreationProperties {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteIpGroupRequest {
-    /// <p>The ID of the IP access control group.</p>
+    /// <p>The identifier of the IP access control group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
 }
@@ -163,7 +216,7 @@ pub struct DeleteIpGroupResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteTagsRequest {
-    /// <p>The ID of the WorkSpace. To find this ID, use <a>DescribeWorkspaces</a>.</p>
+    /// <p>The identifier of the WorkSpace. To find this ID, use <a>DescribeWorkspaces</a>.</p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
     /// <p>The tag keys.</p>
@@ -176,8 +229,72 @@ pub struct DeleteTagsRequest {
 pub struct DeleteTagsResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteWorkspaceImageRequest {
+    /// <p>The identifier of the image.</p>
+    #[serde(rename = "ImageId")]
+    pub image_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteWorkspaceImageResult {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeAccountModificationsRequest {
+    /// <p>If you received a <code>NextToken</code> from a previous call that was paginated, provide this token to receive the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeAccountModificationsResult {
+    /// <p>The list of modifications to the configuration of BYOL.</p>
+    #[serde(rename = "AccountModifications")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_modifications: Option<Vec<AccountModification>>,
+    /// <p>The token to use to retrieve the next set of results, or null if no more results are available.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeAccountRequest {}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeAccountResult {
+    /// <p>The IP address range, specified as an IPv4 CIDR block, used for the management network interface.</p> <p>The management network interface is connected to a secure Amazon WorkSpaces management network. It is used for interactive streaming of the WorkSpace desktop to Amazon WorkSpaces clients, and to allow Amazon WorkSpaces to manage the WorkSpace.</p>
+    #[serde(rename = "DedicatedTenancyManagementCidrRange")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dedicated_tenancy_management_cidr_range: Option<String>,
+    /// <p>The status of BYOL (whether BYOL is enabled or disabled).</p>
+    #[serde(rename = "DedicatedTenancySupport")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dedicated_tenancy_support: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeClientPropertiesRequest {
+    /// <p>The resource identifiers, in the form of directory IDs.</p>
+    #[serde(rename = "ResourceIds")]
+    pub resource_ids: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeClientPropertiesResult {
+    /// <p>Information about the specified Amazon WorkSpaces clients.</p>
+    #[serde(rename = "ClientPropertiesList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_properties_list: Option<Vec<ClientPropertiesResult>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeIpGroupsRequest {
-    /// <p>The IDs of one or more IP access control groups.</p>
+    /// <p>The identifiers of one or more IP access control groups.</p>
     #[serde(rename = "GroupIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_ids: Option<Vec<String>>,
@@ -185,7 +302,7 @@ pub struct DescribeIpGroupsRequest {
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token for the next set of results. (You received this token from a previous call.)</p>
+    /// <p>If you received a <code>NextToken</code> from a previous call that was paginated, provide this token to receive the next set of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -194,7 +311,7 @@ pub struct DescribeIpGroupsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeIpGroupsResult {
-    /// <p>The token to use to retrieve the next set of results, or null if there are no more results available. This token is valid for one day and must be used within that time frame.</p>
+    /// <p>The token to use to retrieve the next set of results, or null if no more results are available.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -206,7 +323,7 @@ pub struct DescribeIpGroupsResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeTagsRequest {
-    /// <p>The ID of the WorkSpace. To find this ID, use <a>DescribeWorkspaces</a>.</p>
+    /// <p>The identifier of the WorkSpace. To find this ID, use <a>DescribeWorkspaces</a>.</p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
 }
@@ -222,7 +339,7 @@ pub struct DescribeTagsResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeWorkspaceBundlesRequest {
-    /// <p>The IDs of the bundles. This parameter cannot be combined with any other filter.</p>
+    /// <p>The identifiers of the bundles. You cannot combine this parameter with any other filter.</p>
     #[serde(rename = "BundleIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bundle_ids: Option<Vec<String>>,
@@ -230,7 +347,7 @@ pub struct DescribeWorkspaceBundlesRequest {
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The owner of the bundles. This parameter cannot be combined with any other filter.</p> <p>Specify <code>AMAZON</code> to describe the bundles provided by AWS or null to describe the bundles that belong to your account.</p>
+    /// <p>The owner of the bundles. You cannot combine this parameter with any other filter.</p> <p>Specify <code>AMAZON</code> to describe the bundles provided by AWS or null to describe the bundles that belong to your account.</p>
     #[serde(rename = "Owner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
@@ -255,7 +372,7 @@ pub struct DescribeWorkspaceDirectoriesRequest {
     #[serde(rename = "DirectoryIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub directory_ids: Option<Vec<String>>,
-    /// <p>The token for the next set of results. (You received this token from a previous call.)</p>
+    /// <p>If you received a <code>NextToken</code> from a previous call that was paginated, provide this token to receive the next set of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -268,7 +385,36 @@ pub struct DescribeWorkspaceDirectoriesResult {
     #[serde(rename = "Directories")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub directories: Option<Vec<WorkspaceDirectory>>,
-    /// <p>The token to use to retrieve the next set of results, or null if there are no more results available. This token is valid for one day and must be used within that time frame.</p>
+    /// <p>The token to use to retrieve the next set of results, or null if no more results are available.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeWorkspaceImagesRequest {
+    /// <p>The identifier of the image.</p>
+    #[serde(rename = "ImageIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_ids: Option<Vec<String>>,
+    /// <p>The maximum number of items to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If you received a <code>NextToken</code> from a previous call that was paginated, provide this token to receive the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeWorkspaceImagesResult {
+    /// <p>Information about the images.</p>
+    #[serde(rename = "Images")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub images: Option<Vec<WorkspaceImage>>,
+    /// <p>The token to use to retrieve the next set of results, or null if no more results are available.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -276,7 +422,7 @@ pub struct DescribeWorkspaceDirectoriesResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeWorkspacesConnectionStatusRequest {
-    /// <p>The token for the next set of results. (You received this token from a previous call.)</p>
+    /// <p>If you received a <code>NextToken</code> from a previous call that was paginated, provide this token to receive the next set of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -289,7 +435,7 @@ pub struct DescribeWorkspacesConnectionStatusRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeWorkspacesConnectionStatusResult {
-    /// <p>The token to use to retrieve the next set of results, or null if there are no more results available.</p>
+    /// <p>The token to use to retrieve the next set of results, or null if no more results are available.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -301,11 +447,11 @@ pub struct DescribeWorkspacesConnectionStatusResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeWorkspacesRequest {
-    /// <p>The ID of the bundle. All WorkSpaces that are created from this bundle are retrieved. This parameter cannot be combined with any other filter.</p>
+    /// <p>The identifier of the bundle. All WorkSpaces that are created from this bundle are retrieved. You cannot combine this parameter with any other filter.</p>
     #[serde(rename = "BundleId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bundle_id: Option<String>,
-    /// <p>The ID of the directory. In addition, you can optionally specify a specific directory user (see <code>UserName</code>). This parameter cannot be combined with any other filter.</p>
+    /// <p>The identifier of the directory. In addition, you can optionally specify a specific directory user (see <code>UserName</code>). You cannot combine this parameter with any other filter.</p>
     #[serde(rename = "DirectoryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub directory_id: Option<String>,
@@ -313,7 +459,7 @@ pub struct DescribeWorkspacesRequest {
     #[serde(rename = "Limit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub limit: Option<i64>,
-    /// <p>The token for the next set of results. (You received this token from a previous call.)</p>
+    /// <p>If you received a <code>NextToken</code> from a previous call that was paginated, provide this token to receive the next set of results.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -321,7 +467,7 @@ pub struct DescribeWorkspacesRequest {
     #[serde(rename = "UserName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_name: Option<String>,
-    /// <p>The IDs of the WorkSpaces. This parameter cannot be combined with any other filter.</p> <p>Because the <a>CreateWorkspaces</a> operation is asynchronous, the identifier it returns is not immediately available. If you immediately call <a>DescribeWorkspaces</a> with this identifier, no information is returned.</p>
+    /// <p>The identifiers of the WorkSpaces. You cannot combine this parameter with any other filter.</p> <p>Because the <a>CreateWorkspaces</a> operation is asynchronous, the identifier it returns is not immediately available. If you immediately call <a>DescribeWorkspaces</a> with this identifier, no information is returned.</p>
     #[serde(rename = "WorkspaceIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub workspace_ids: Option<Vec<String>>,
@@ -330,7 +476,7 @@ pub struct DescribeWorkspacesRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeWorkspacesResult {
-    /// <p>The token to use to retrieve the next set of results, or null if there are no more results available. This token is valid for one day and must be used within that time frame.</p>
+    /// <p>The token to use to retrieve the next set of results, or null if no more results are available.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -342,10 +488,10 @@ pub struct DescribeWorkspacesResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisassociateIpGroupsRequest {
-    /// <p>The ID of the directory.</p>
+    /// <p>The identifier of the directory.</p>
     #[serde(rename = "DirectoryId")]
     pub directory_id: String,
-    /// <p>The IDs of one or more IP access control groups.</p>
+    /// <p>The identifiers of one or more IP access control groups.</p>
     #[serde(rename = "GroupIds")]
     pub group_ids: Vec<String>,
 }
@@ -354,15 +500,15 @@ pub struct DisassociateIpGroupsRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateIpGroupsResult {}
 
-/// <p>Information about a WorkSpace that could not be created.</p>
+/// <p>Describes a WorkSpace that cannot be created.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct FailedCreateWorkspaceRequest {
-    /// <p>The error code.</p>
+    /// <p>The error code that is returned if the WorkSpace cannot be created.</p>
     #[serde(rename = "ErrorCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_code: Option<String>,
-    /// <p>The textual error message.</p>
+    /// <p>The text of the error message that is returned if the WorkSpace cannot be created.</p>
     #[serde(rename = "ErrorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
@@ -372,15 +518,15 @@ pub struct FailedCreateWorkspaceRequest {
     pub workspace_request: Option<WorkspaceRequest>,
 }
 
-/// <p>Information about a WorkSpace that could not be rebooted (<a>RebootWorkspaces</a>), rebuilt (<a>RebuildWorkspaces</a>), terminated (<a>TerminateWorkspaces</a>), started (<a>StartWorkspaces</a>), or stopped (<a>StopWorkspaces</a>).</p>
+/// <p>Describes a WorkSpace that could not be rebooted. (<a>RebootWorkspaces</a>), rebuilt (<a>RebuildWorkspaces</a>), terminated (<a>TerminateWorkspaces</a>), started (<a>StartWorkspaces</a>), or stopped (<a>StopWorkspaces</a>).</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct FailedWorkspaceChangeRequest {
-    /// <p>The error code.</p>
+    /// <p>The error code that is returned if the WorkSpace cannot be rebooted.</p>
     #[serde(rename = "ErrorCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_code: Option<String>,
-    /// <p>The textual error message.</p>
+    /// <p>The text of the error message that is returned if the WorkSpace cannot be rebooted.</p>
     #[serde(rename = "ErrorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
@@ -390,7 +536,32 @@ pub struct FailedWorkspaceChangeRequest {
     pub workspace_id: Option<String>,
 }
 
-/// <p>Information about a rule for an IP access control group.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ImportWorkspaceImageRequest {
+    /// <p>The identifier of the EC2 image.</p>
+    #[serde(rename = "Ec2ImageId")]
+    pub ec_2_image_id: String,
+    /// <p>The description of the WorkSpace image.</p>
+    #[serde(rename = "ImageDescription")]
+    pub image_description: String,
+    /// <p>The name of the WorkSpace image.</p>
+    #[serde(rename = "ImageName")]
+    pub image_name: String,
+    /// <p>The ingestion process to be used when importing the image.</p>
+    #[serde(rename = "IngestionProcess")]
+    pub ingestion_process: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ImportWorkspaceImageResult {
+    /// <p>The identifier of the WorkSpace image.</p>
+    #[serde(rename = "ImageId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_id: Option<String>,
+}
+
+/// <p>Describes a rule for an IP access control group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct IpRuleItem {
     /// <p>The IP address range, in CIDR notation.</p>
@@ -403,7 +574,35 @@ pub struct IpRuleItem {
     pub rule_desc: Option<String>,
 }
 
-/// <p>Information about a WorkSpace modification.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListAvailableManagementCidrRangesRequest {
+    /// <p>The IP address range to search. Specify an IP address range that is compatible with your network and in CIDR notation (that is, specify the range as an IPv4 CIDR block).</p>
+    #[serde(rename = "ManagementCidrRangeConstraint")]
+    pub management_cidr_range_constraint: String,
+    /// <p>The maximum number of items to return.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>If you received a <code>NextToken</code> from a previous call that was paginated, provide this token to receive the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListAvailableManagementCidrRangesResult {
+    /// <p>The list of available IP address ranges, specified as IPv4 CIDR blocks.</p>
+    #[serde(rename = "ManagementCidrRanges")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub management_cidr_ranges: Option<Vec<String>>,
+    /// <p>The token to use to retrieve the next set of results, or null if no more results are available.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+/// <p>Describes a WorkSpace modification.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ModificationState {
@@ -418,8 +617,38 @@ pub struct ModificationState {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ModifyAccountRequest {
+    /// <p>The IP address range, specified as an IPv4 CIDR block, for the management network interface. Specify an IP address range that is compatible with your network and in CIDR notation (that is, specify the range as an IPv4 CIDR block). The CIDR block size must be /16 (for example, 203.0.113.25/16). It must also be specified as available by the <code>ListAvailableManagementCidrRanges</code> operation.</p>
+    #[serde(rename = "DedicatedTenancyManagementCidrRange")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dedicated_tenancy_management_cidr_range: Option<String>,
+    /// <p>The status of BYOL.</p>
+    #[serde(rename = "DedicatedTenancySupport")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dedicated_tenancy_support: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ModifyAccountResult {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ModifyClientPropertiesRequest {
+    /// <p>Information about the Amazon WorkSpaces client.</p>
+    #[serde(rename = "ClientProperties")]
+    pub client_properties: ClientProperties,
+    /// <p>The resource identifiers, in the form of directory IDs.</p>
+    #[serde(rename = "ResourceId")]
+    pub resource_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ModifyClientPropertiesResult {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ModifyWorkspacePropertiesRequest {
-    /// <p>The ID of the WorkSpace.</p>
+    /// <p>The identifier of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
     pub workspace_id: String,
     /// <p>The properties of the WorkSpace.</p>
@@ -433,7 +662,7 @@ pub struct ModifyWorkspacePropertiesResult {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ModifyWorkspaceStateRequest {
-    /// <p>The ID of the WorkSpace.</p>
+    /// <p>The identifier of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
     pub workspace_id: String,
     /// <p>The WorkSpace state.</p>
@@ -445,10 +674,20 @@ pub struct ModifyWorkspaceStateRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct ModifyWorkspaceStateResult {}
 
-/// <p>Information used to reboot a WorkSpace.</p>
+/// <p>The operating system that the image is running.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct OperatingSystem {
+    /// <p>The operating system.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+}
+
+/// <p>Describes the information used to reboot a WorkSpace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RebootRequest {
-    /// <p>The ID of the WorkSpace.</p>
+    /// <p>The identifier of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
     pub workspace_id: String,
 }
@@ -469,10 +708,10 @@ pub struct RebootWorkspacesResult {
     pub failed_requests: Option<Vec<FailedWorkspaceChangeRequest>>,
 }
 
-/// <p>Information used to rebuild a WorkSpace.</p>
+/// <p>Describes the information used to rebuild a WorkSpace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RebuildRequest {
-    /// <p>The ID of the WorkSpace.</p>
+    /// <p>The identifier of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
     pub workspace_id: String,
 }
@@ -487,7 +726,7 @@ pub struct RebuildWorkspacesRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct RebuildWorkspacesResult {
-    /// <p>Information about the WorkSpace if it could not be rebuilt.</p>
+    /// <p>Information about the WorkSpace that could not be rebuilt.</p>
     #[serde(rename = "FailedRequests")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub failed_requests: Option<Vec<FailedWorkspaceChangeRequest>>,
@@ -495,7 +734,7 @@ pub struct RebuildWorkspacesResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RevokeIpRulesRequest {
-    /// <p>The ID of the group.</p>
+    /// <p>The identifier of the group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
     /// <p>The rules to remove from the group.</p>
@@ -507,7 +746,7 @@ pub struct RevokeIpRulesRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct RevokeIpRulesResult {}
 
-/// <p>Information about the root volume for a WorkSpace bundle.</p>
+/// <p>Describes the root volume for a WorkSpace bundle.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct RootStorage {
@@ -520,7 +759,7 @@ pub struct RootStorage {
 /// <p>Information used to start a WorkSpace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartRequest {
-    /// <p>The ID of the WorkSpace.</p>
+    /// <p>The identifier of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub workspace_id: Option<String>,
@@ -542,10 +781,10 @@ pub struct StartWorkspacesResult {
     pub failed_requests: Option<Vec<FailedWorkspaceChangeRequest>>,
 }
 
-/// <p>Information used to stop a WorkSpace.</p>
+/// <p>Describes the information used to stop a WorkSpace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StopRequest {
-    /// <p>The ID of the WorkSpace.</p>
+    /// <p>The identifier of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub workspace_id: Option<String>,
@@ -567,7 +806,7 @@ pub struct StopWorkspacesResult {
     pub failed_requests: Option<Vec<FailedWorkspaceChangeRequest>>,
 }
 
-/// <p>Information about a tag.</p>
+/// <p>Describes a tag.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Tag {
     /// <p>The key of the tag.</p>
@@ -579,10 +818,10 @@ pub struct Tag {
     pub value: Option<String>,
 }
 
-/// <p>Information used to terminate a WorkSpace.</p>
+/// <p>Describes the information used to terminate a WorkSpace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TerminateRequest {
-    /// <p>The ID of the WorkSpace.</p>
+    /// <p>The identifier of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
     pub workspace_id: String,
 }
@@ -605,7 +844,7 @@ pub struct TerminateWorkspacesResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateRulesOfIpGroupRequest {
-    /// <p>The ID of the group.</p>
+    /// <p>The identifier of the group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
     /// <p>One or more rules.</p>
@@ -617,7 +856,7 @@ pub struct UpdateRulesOfIpGroupRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct UpdateRulesOfIpGroupResult {}
 
-/// <p>Information about the user storage for a WorkSpace bundle.</p>
+/// <p>Describes the user storage for a WorkSpace bundle.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct UserStorage {
@@ -627,7 +866,7 @@ pub struct UserStorage {
     pub capacity: Option<String>,
 }
 
-/// <p>Information about a WorkSpace.</p>
+/// <p>Describes a WorkSpace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Workspace {
@@ -643,11 +882,11 @@ pub struct Workspace {
     #[serde(rename = "DirectoryId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub directory_id: Option<String>,
-    /// <p>If the WorkSpace could not be created, contains the error code.</p>
+    /// <p>The error code that is returned if the WorkSpace cannot be created.</p>
     #[serde(rename = "ErrorCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_code: Option<String>,
-    /// <p>If the WorkSpace could not be created, contains a textual error message that describes the failure.</p>
+    /// <p>The text of the error message that is returned if the WorkSpace cannot be created.</p>
     #[serde(rename = "ErrorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
@@ -693,7 +932,7 @@ pub struct Workspace {
     pub workspace_properties: Option<WorkspaceProperties>,
 }
 
-/// <p>Information about a WorkSpace bundle.</p>
+/// <p>Describes a WorkSpace bundle.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct WorkspaceBundle {
@@ -735,7 +974,7 @@ pub struct WorkspaceConnectionStatus {
     #[serde(rename = "ConnectionState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_state: Option<String>,
-    /// <p>The timestamp of the connection state check.</p>
+    /// <p>The timestamp of the connection status check.</p>
     #[serde(rename = "ConnectionStateCheckTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_state_check_timestamp: Option<f64>,
@@ -743,13 +982,13 @@ pub struct WorkspaceConnectionStatus {
     #[serde(rename = "LastKnownUserConnectionTimestamp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_known_user_connection_timestamp: Option<f64>,
-    /// <p>The ID of the WorkSpace.</p>
+    /// <p>The identifier of the WorkSpace.</p>
     #[serde(rename = "WorkspaceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub workspace_id: Option<String>,
 }
 
-/// <p>Information about an AWS Directory Service directory for use with Amazon WorkSpaces.</p>
+/// <p>Describes an AWS Directory Service directory that is used with Amazon WorkSpaces.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct WorkspaceDirectory {
@@ -807,7 +1046,45 @@ pub struct WorkspaceDirectory {
     pub ip_group_ids: Option<Vec<String>>,
 }
 
-/// <p>Information about a WorkSpace.</p>
+/// <p>Describes a WorkSpace image.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct WorkspaceImage {
+    /// <p>The description of the image.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The error code that is returned for the image.</p>
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+    /// <p>The text of the error message that is returned for the image.</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    /// <p>The identifier of the image.</p>
+    #[serde(rename = "ImageId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image_id: Option<String>,
+    /// <p>The name of the image.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The operating system that the image is running. </p>
+    #[serde(rename = "OperatingSystem")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operating_system: Option<OperatingSystem>,
+    /// <p>Specifies whether the image is running on dedicated hardware. When bring your own license (BYOL) is enabled, this value is set to DEDICATED. </p>
+    #[serde(rename = "RequiredTenancy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub required_tenancy: Option<String>,
+    /// <p>The status of the image.</p>
+    #[serde(rename = "State")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+}
+
+/// <p>Describes a WorkSpace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WorkspaceProperties {
     /// <p>The compute type. For more information, see <a href="http://aws.amazon.com/workspaces/details/#Amazon_WorkSpaces_Bundles">Amazon WorkSpaces Bundles</a>.</p>
@@ -832,7 +1109,7 @@ pub struct WorkspaceProperties {
     pub user_volume_size_gib: Option<i64>,
 }
 
-/// <p>Information used to create a WorkSpace.</p>
+/// <p>Describes the information used to create a WorkSpace.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct WorkspaceRequest {
     /// <p>The identifier of the bundle for the WorkSpace. You can use <a>DescribeWorkspaceBundles</a> to list the available bundles.</p>
@@ -866,7 +1143,7 @@ pub struct WorkspaceRequest {
     pub workspace_properties: Option<WorkspaceProperties>,
 }
 
-/// <p>Information about an IP access control group.</p>
+/// <p>Describes an IP access control group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct WorkspacesIpGroup {
@@ -874,7 +1151,7 @@ pub struct WorkspacesIpGroup {
     #[serde(rename = "groupDesc")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_desc: Option<String>,
-    /// <p>The ID of the group.</p>
+    /// <p>The identifier of the group.</p>
     #[serde(rename = "groupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group_id: Option<String>,
@@ -1580,6 +1857,366 @@ impl Error for DeleteTagsError {
         }
     }
 }
+/// Errors returned by DeleteWorkspaceImage
+#[derive(Debug, PartialEq)]
+pub enum DeleteWorkspaceImageError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>The state of the resource is not valid for this operation.</p>
+    InvalidResourceState(String),
+    /// <p>The resource is associated with a directory.</p>
+    ResourceAssociated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DeleteWorkspaceImageError {
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteWorkspaceImageError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DeleteWorkspaceImageError::AccessDenied(String::from(error_message));
+                }
+                "InvalidResourceStateException" => {
+                    return DeleteWorkspaceImageError::InvalidResourceState(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceAssociatedException" => {
+                    return DeleteWorkspaceImageError::ResourceAssociated(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return DeleteWorkspaceImageError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DeleteWorkspaceImageError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteWorkspaceImageError {
+    fn from(err: serde_json::error::Error) -> DeleteWorkspaceImageError {
+        DeleteWorkspaceImageError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteWorkspaceImageError {
+    fn from(err: CredentialsError) -> DeleteWorkspaceImageError {
+        DeleteWorkspaceImageError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteWorkspaceImageError {
+    fn from(err: HttpDispatchError) -> DeleteWorkspaceImageError {
+        DeleteWorkspaceImageError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteWorkspaceImageError {
+    fn from(err: io::Error) -> DeleteWorkspaceImageError {
+        DeleteWorkspaceImageError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteWorkspaceImageError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteWorkspaceImageError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteWorkspaceImageError::AccessDenied(ref cause) => cause,
+            DeleteWorkspaceImageError::InvalidResourceState(ref cause) => cause,
+            DeleteWorkspaceImageError::ResourceAssociated(ref cause) => cause,
+            DeleteWorkspaceImageError::Validation(ref cause) => cause,
+            DeleteWorkspaceImageError::Credentials(ref err) => err.description(),
+            DeleteWorkspaceImageError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteWorkspaceImageError::ParseError(ref cause) => cause,
+            DeleteWorkspaceImageError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DescribeAccount
+#[derive(Debug, PartialEq)]
+pub enum DescribeAccountError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DescribeAccountError {
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeAccountError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DescribeAccountError::AccessDenied(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return DescribeAccountError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DescribeAccountError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeAccountError {
+    fn from(err: serde_json::error::Error) -> DescribeAccountError {
+        DescribeAccountError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeAccountError {
+    fn from(err: CredentialsError) -> DescribeAccountError {
+        DescribeAccountError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeAccountError {
+    fn from(err: HttpDispatchError) -> DescribeAccountError {
+        DescribeAccountError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAccountError {
+    fn from(err: io::Error) -> DescribeAccountError {
+        DescribeAccountError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeAccountError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeAccountError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeAccountError::AccessDenied(ref cause) => cause,
+            DescribeAccountError::Validation(ref cause) => cause,
+            DescribeAccountError::Credentials(ref err) => err.description(),
+            DescribeAccountError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DescribeAccountError::ParseError(ref cause) => cause,
+            DescribeAccountError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DescribeAccountModifications
+#[derive(Debug, PartialEq)]
+pub enum DescribeAccountModificationsError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DescribeAccountModificationsError {
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeAccountModificationsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DescribeAccountModificationsError::AccessDenied(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return DescribeAccountModificationsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DescribeAccountModificationsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeAccountModificationsError {
+    fn from(err: serde_json::error::Error) -> DescribeAccountModificationsError {
+        DescribeAccountModificationsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeAccountModificationsError {
+    fn from(err: CredentialsError) -> DescribeAccountModificationsError {
+        DescribeAccountModificationsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeAccountModificationsError {
+    fn from(err: HttpDispatchError) -> DescribeAccountModificationsError {
+        DescribeAccountModificationsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeAccountModificationsError {
+    fn from(err: io::Error) -> DescribeAccountModificationsError {
+        DescribeAccountModificationsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeAccountModificationsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeAccountModificationsError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeAccountModificationsError::AccessDenied(ref cause) => cause,
+            DescribeAccountModificationsError::Validation(ref cause) => cause,
+            DescribeAccountModificationsError::Credentials(ref err) => err.description(),
+            DescribeAccountModificationsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeAccountModificationsError::ParseError(ref cause) => cause,
+            DescribeAccountModificationsError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DescribeClientProperties
+#[derive(Debug, PartialEq)]
+pub enum DescribeClientPropertiesError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DescribeClientPropertiesError {
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeClientPropertiesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DescribeClientPropertiesError::AccessDenied(String::from(error_message));
+                }
+                "InvalidParameterValuesException" => {
+                    return DescribeClientPropertiesError::InvalidParameterValues(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceNotFoundException" => {
+                    return DescribeClientPropertiesError::ResourceNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return DescribeClientPropertiesError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DescribeClientPropertiesError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeClientPropertiesError {
+    fn from(err: serde_json::error::Error) -> DescribeClientPropertiesError {
+        DescribeClientPropertiesError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeClientPropertiesError {
+    fn from(err: CredentialsError) -> DescribeClientPropertiesError {
+        DescribeClientPropertiesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeClientPropertiesError {
+    fn from(err: HttpDispatchError) -> DescribeClientPropertiesError {
+        DescribeClientPropertiesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeClientPropertiesError {
+    fn from(err: io::Error) -> DescribeClientPropertiesError {
+        DescribeClientPropertiesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeClientPropertiesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeClientPropertiesError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeClientPropertiesError::AccessDenied(ref cause) => cause,
+            DescribeClientPropertiesError::InvalidParameterValues(ref cause) => cause,
+            DescribeClientPropertiesError::ResourceNotFound(ref cause) => cause,
+            DescribeClientPropertiesError::Validation(ref cause) => cause,
+            DescribeClientPropertiesError::Credentials(ref err) => err.description(),
+            DescribeClientPropertiesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeClientPropertiesError::ParseError(ref cause) => cause,
+            DescribeClientPropertiesError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by DescribeIpGroups
 #[derive(Debug, PartialEq)]
 pub enum DescribeIpGroupsError {
@@ -1916,6 +2553,88 @@ impl Error for DescribeWorkspaceDirectoriesError {
         }
     }
 }
+/// Errors returned by DescribeWorkspaceImages
+#[derive(Debug, PartialEq)]
+pub enum DescribeWorkspaceImagesError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DescribeWorkspaceImagesError {
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeWorkspaceImagesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DescribeWorkspaceImagesError::AccessDenied(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return DescribeWorkspaceImagesError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DescribeWorkspaceImagesError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeWorkspaceImagesError {
+    fn from(err: serde_json::error::Error) -> DescribeWorkspaceImagesError {
+        DescribeWorkspaceImagesError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeWorkspaceImagesError {
+    fn from(err: CredentialsError) -> DescribeWorkspaceImagesError {
+        DescribeWorkspaceImagesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeWorkspaceImagesError {
+    fn from(err: HttpDispatchError) -> DescribeWorkspaceImagesError {
+        DescribeWorkspaceImagesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeWorkspaceImagesError {
+    fn from(err: io::Error) -> DescribeWorkspaceImagesError {
+        DescribeWorkspaceImagesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeWorkspaceImagesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeWorkspaceImagesError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeWorkspaceImagesError::AccessDenied(ref cause) => cause,
+            DescribeWorkspaceImagesError::Validation(ref cause) => cause,
+            DescribeWorkspaceImagesError::Credentials(ref err) => err.description(),
+            DescribeWorkspaceImagesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeWorkspaceImagesError::ParseError(ref cause) => cause,
+            DescribeWorkspaceImagesError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by DescribeWorkspaces
 #[derive(Debug, PartialEq)]
 pub enum DescribeWorkspacesError {
@@ -2193,6 +2912,414 @@ impl Error for DisassociateIpGroupsError {
             }
             DisassociateIpGroupsError::ParseError(ref cause) => cause,
             DisassociateIpGroupsError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by ImportWorkspaceImage
+#[derive(Debug, PartialEq)]
+pub enum ImportWorkspaceImageError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>This operation is not supported.</p>
+    OperationNotSupported(String),
+    /// <p>The specified resource already exists.</p>
+    ResourceAlreadyExists(String),
+    /// <p>Your resource limits have been exceeded.</p>
+    ResourceLimitExceeded(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ImportWorkspaceImageError {
+    pub fn from_response(res: BufferedHttpResponse) -> ImportWorkspaceImageError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ImportWorkspaceImageError::AccessDenied(String::from(error_message));
+                }
+                "OperationNotSupportedException" => {
+                    return ImportWorkspaceImageError::OperationNotSupported(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceAlreadyExistsException" => {
+                    return ImportWorkspaceImageError::ResourceAlreadyExists(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceLimitExceededException" => {
+                    return ImportWorkspaceImageError::ResourceLimitExceeded(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceNotFoundException" => {
+                    return ImportWorkspaceImageError::ResourceNotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return ImportWorkspaceImageError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ImportWorkspaceImageError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ImportWorkspaceImageError {
+    fn from(err: serde_json::error::Error) -> ImportWorkspaceImageError {
+        ImportWorkspaceImageError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ImportWorkspaceImageError {
+    fn from(err: CredentialsError) -> ImportWorkspaceImageError {
+        ImportWorkspaceImageError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ImportWorkspaceImageError {
+    fn from(err: HttpDispatchError) -> ImportWorkspaceImageError {
+        ImportWorkspaceImageError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ImportWorkspaceImageError {
+    fn from(err: io::Error) -> ImportWorkspaceImageError {
+        ImportWorkspaceImageError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ImportWorkspaceImageError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ImportWorkspaceImageError {
+    fn description(&self) -> &str {
+        match *self {
+            ImportWorkspaceImageError::AccessDenied(ref cause) => cause,
+            ImportWorkspaceImageError::OperationNotSupported(ref cause) => cause,
+            ImportWorkspaceImageError::ResourceAlreadyExists(ref cause) => cause,
+            ImportWorkspaceImageError::ResourceLimitExceeded(ref cause) => cause,
+            ImportWorkspaceImageError::ResourceNotFound(ref cause) => cause,
+            ImportWorkspaceImageError::Validation(ref cause) => cause,
+            ImportWorkspaceImageError::Credentials(ref err) => err.description(),
+            ImportWorkspaceImageError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ImportWorkspaceImageError::ParseError(ref cause) => cause,
+            ImportWorkspaceImageError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by ListAvailableManagementCidrRanges
+#[derive(Debug, PartialEq)]
+pub enum ListAvailableManagementCidrRangesError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListAvailableManagementCidrRangesError {
+    pub fn from_response(res: BufferedHttpResponse) -> ListAvailableManagementCidrRangesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ListAvailableManagementCidrRangesError::AccessDenied(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidParameterValuesException" => {
+                    return ListAvailableManagementCidrRangesError::InvalidParameterValues(
+                        String::from(error_message),
+                    );
+                }
+                "ValidationException" => {
+                    return ListAvailableManagementCidrRangesError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return ListAvailableManagementCidrRangesError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListAvailableManagementCidrRangesError {
+    fn from(err: serde_json::error::Error) -> ListAvailableManagementCidrRangesError {
+        ListAvailableManagementCidrRangesError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListAvailableManagementCidrRangesError {
+    fn from(err: CredentialsError) -> ListAvailableManagementCidrRangesError {
+        ListAvailableManagementCidrRangesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListAvailableManagementCidrRangesError {
+    fn from(err: HttpDispatchError) -> ListAvailableManagementCidrRangesError {
+        ListAvailableManagementCidrRangesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListAvailableManagementCidrRangesError {
+    fn from(err: io::Error) -> ListAvailableManagementCidrRangesError {
+        ListAvailableManagementCidrRangesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListAvailableManagementCidrRangesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListAvailableManagementCidrRangesError {
+    fn description(&self) -> &str {
+        match *self {
+            ListAvailableManagementCidrRangesError::AccessDenied(ref cause) => cause,
+            ListAvailableManagementCidrRangesError::InvalidParameterValues(ref cause) => cause,
+            ListAvailableManagementCidrRangesError::Validation(ref cause) => cause,
+            ListAvailableManagementCidrRangesError::Credentials(ref err) => err.description(),
+            ListAvailableManagementCidrRangesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListAvailableManagementCidrRangesError::ParseError(ref cause) => cause,
+            ListAvailableManagementCidrRangesError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by ModifyAccount
+#[derive(Debug, PartialEq)]
+pub enum ModifyAccountError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>The state of the resource is not valid for this operation.</p>
+    InvalidResourceState(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+    /// <p>The specified resource is not available.</p>
+    ResourceUnavailable(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ModifyAccountError {
+    pub fn from_response(res: BufferedHttpResponse) -> ModifyAccountError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ModifyAccountError::AccessDenied(String::from(error_message));
+                }
+                "InvalidParameterValuesException" => {
+                    return ModifyAccountError::InvalidParameterValues(String::from(error_message));
+                }
+                "InvalidResourceStateException" => {
+                    return ModifyAccountError::InvalidResourceState(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return ModifyAccountError::ResourceNotFound(String::from(error_message));
+                }
+                "ResourceUnavailableException" => {
+                    return ModifyAccountError::ResourceUnavailable(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return ModifyAccountError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ModifyAccountError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ModifyAccountError {
+    fn from(err: serde_json::error::Error) -> ModifyAccountError {
+        ModifyAccountError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ModifyAccountError {
+    fn from(err: CredentialsError) -> ModifyAccountError {
+        ModifyAccountError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ModifyAccountError {
+    fn from(err: HttpDispatchError) -> ModifyAccountError {
+        ModifyAccountError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyAccountError {
+    fn from(err: io::Error) -> ModifyAccountError {
+        ModifyAccountError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ModifyAccountError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyAccountError {
+    fn description(&self) -> &str {
+        match *self {
+            ModifyAccountError::AccessDenied(ref cause) => cause,
+            ModifyAccountError::InvalidParameterValues(ref cause) => cause,
+            ModifyAccountError::InvalidResourceState(ref cause) => cause,
+            ModifyAccountError::ResourceNotFound(ref cause) => cause,
+            ModifyAccountError::ResourceUnavailable(ref cause) => cause,
+            ModifyAccountError::Validation(ref cause) => cause,
+            ModifyAccountError::Credentials(ref err) => err.description(),
+            ModifyAccountError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ModifyAccountError::ParseError(ref cause) => cause,
+            ModifyAccountError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by ModifyClientProperties
+#[derive(Debug, PartialEq)]
+pub enum ModifyClientPropertiesError {
+    /// <p>The user is not authorized to access a resource.</p>
+    AccessDenied(String),
+    /// <p>One or more parameter values are not valid.</p>
+    InvalidParameterValues(String),
+    /// <p>The resource could not be found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ModifyClientPropertiesError {
+    pub fn from_response(res: BufferedHttpResponse) -> ModifyClientPropertiesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ModifyClientPropertiesError::AccessDenied(String::from(error_message));
+                }
+                "InvalidParameterValuesException" => {
+                    return ModifyClientPropertiesError::InvalidParameterValues(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceNotFoundException" => {
+                    return ModifyClientPropertiesError::ResourceNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return ModifyClientPropertiesError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ModifyClientPropertiesError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ModifyClientPropertiesError {
+    fn from(err: serde_json::error::Error) -> ModifyClientPropertiesError {
+        ModifyClientPropertiesError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ModifyClientPropertiesError {
+    fn from(err: CredentialsError) -> ModifyClientPropertiesError {
+        ModifyClientPropertiesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ModifyClientPropertiesError {
+    fn from(err: HttpDispatchError) -> ModifyClientPropertiesError {
+        ModifyClientPropertiesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ModifyClientPropertiesError {
+    fn from(err: io::Error) -> ModifyClientPropertiesError {
+        ModifyClientPropertiesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ModifyClientPropertiesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ModifyClientPropertiesError {
+    fn description(&self) -> &str {
+        match *self {
+            ModifyClientPropertiesError::AccessDenied(ref cause) => cause,
+            ModifyClientPropertiesError::InvalidParameterValues(ref cause) => cause,
+            ModifyClientPropertiesError::ResourceNotFound(ref cause) => cause,
+            ModifyClientPropertiesError::Validation(ref cause) => cause,
+            ModifyClientPropertiesError::Credentials(ref err) => err.description(),
+            ModifyClientPropertiesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ModifyClientPropertiesError::ParseError(ref cause) => cause,
+            ModifyClientPropertiesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -3052,6 +4179,27 @@ pub trait Workspaces {
         input: DeleteTagsRequest,
     ) -> RusotoFuture<DeleteTagsResult, DeleteTagsError>;
 
+    /// <p>Deletes the specified image from your account. To delete an image, you must first delete any bundles that are associated with the image. </p>
+    fn delete_workspace_image(
+        &self,
+        input: DeleteWorkspaceImageRequest,
+    ) -> RusotoFuture<DeleteWorkspaceImageResult, DeleteWorkspaceImageError>;
+
+    /// <p>Retrieves a list that describes the configuration of bring your own license (BYOL) for the specified account.</p>
+    fn describe_account(&self) -> RusotoFuture<DescribeAccountResult, DescribeAccountError>;
+
+    /// <p>Retrieves a list that describes modifications to the configuration of bring your own license (BYOL) for the specified account.</p>
+    fn describe_account_modifications(
+        &self,
+        input: DescribeAccountModificationsRequest,
+    ) -> RusotoFuture<DescribeAccountModificationsResult, DescribeAccountModificationsError>;
+
+    /// <p>Retrieves a list that describes one or more specified Amazon WorkSpaces clients.</p>
+    fn describe_client_properties(
+        &self,
+        input: DescribeClientPropertiesRequest,
+    ) -> RusotoFuture<DescribeClientPropertiesResult, DescribeClientPropertiesError>;
+
     /// <p>Describes one or more of your IP access control groups.</p>
     fn describe_ip_groups(
         &self,
@@ -3064,7 +4212,7 @@ pub trait Workspaces {
         input: DescribeTagsRequest,
     ) -> RusotoFuture<DescribeTagsResult, DescribeTagsError>;
 
-    /// <p>Describes the available WorkSpace bundles.</p> <p>You can filter the results using either bundle ID or owner, but not both.</p>
+    /// <p>Retrieves a list that describes the available WorkSpace bundles.</p> <p>You can filter the results using either bundle ID or owner, but not both.</p>
     fn describe_workspace_bundles(
         &self,
         input: DescribeWorkspaceBundlesRequest,
@@ -3076,7 +4224,13 @@ pub trait Workspaces {
         input: DescribeWorkspaceDirectoriesRequest,
     ) -> RusotoFuture<DescribeWorkspaceDirectoriesResult, DescribeWorkspaceDirectoriesError>;
 
-    /// <p>Describes the specified WorkSpaces.</p> <p>You can filter the results using bundle ID, directory ID, or owner, but you can specify only one filter at a time.</p>
+    /// <p>Retrieves a list that describes one or more specified images, if the image identifiers are provided. Otherwise, all images in the account are described. </p>
+    fn describe_workspace_images(
+        &self,
+        input: DescribeWorkspaceImagesRequest,
+    ) -> RusotoFuture<DescribeWorkspaceImagesResult, DescribeWorkspaceImagesError>;
+
+    /// <p>Describes the specified WorkSpaces.</p> <p>You can filter the results by using the bundle identifier, directory identifier, or owner, but you can specify only one filter at a time.</p>
     fn describe_workspaces(
         &self,
         input: DescribeWorkspacesRequest,
@@ -3096,6 +4250,30 @@ pub trait Workspaces {
         &self,
         input: DisassociateIpGroupsRequest,
     ) -> RusotoFuture<DisassociateIpGroupsResult, DisassociateIpGroupsError>;
+
+    /// <p>Imports the specified Windows 7 or Windows 10 bring your own license (BYOL) image into Amazon WorkSpaces. The image must be an already licensed EC2 image that is in your AWS account, and you must own the image. </p>
+    fn import_workspace_image(
+        &self,
+        input: ImportWorkspaceImageRequest,
+    ) -> RusotoFuture<ImportWorkspaceImageResult, ImportWorkspaceImageError>;
+
+    /// <p>Retrieves a list of IP address ranges, specified as IPv4 CIDR blocks, that you can use for the network management interface when you enable bring your own license (BYOL). </p> <p>The management network interface is connected to a secure Amazon WorkSpaces management network. It is used for interactive streaming of the WorkSpace desktop to Amazon WorkSpaces clients, and to allow Amazon WorkSpaces to manage the WorkSpace.</p>
+    fn list_available_management_cidr_ranges(
+        &self,
+        input: ListAvailableManagementCidrRangesRequest,
+    ) -> RusotoFuture<ListAvailableManagementCidrRangesResult, ListAvailableManagementCidrRangesError>;
+
+    /// <p>Modifies the configuration of bring your own license (BYOL) for the specified account.</p>
+    fn modify_account(
+        &self,
+        input: ModifyAccountRequest,
+    ) -> RusotoFuture<ModifyAccountResult, ModifyAccountError>;
+
+    /// <p>Modifies the properties of the specified Amazon WorkSpaces client.</p>
+    fn modify_client_properties(
+        &self,
+        input: ModifyClientPropertiesRequest,
+    ) -> RusotoFuture<ModifyClientPropertiesResult, ModifyClientPropertiesError>;
 
     /// <p>Modifies the specified WorkSpace properties.</p>
     fn modify_workspace_properties(
@@ -3447,6 +4625,146 @@ impl Workspaces for WorkspacesClient {
         })
     }
 
+    /// <p>Deletes the specified image from your account. To delete an image, you must first delete any bundles that are associated with the image. </p>
+    fn delete_workspace_image(
+        &self,
+        input: DeleteWorkspaceImageRequest,
+    ) -> RusotoFuture<DeleteWorkspaceImageResult, DeleteWorkspaceImageError> {
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkspacesService.DeleteWorkspaceImage");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DeleteWorkspaceImageResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteWorkspaceImageError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Retrieves a list that describes the configuration of bring your own license (BYOL) for the specified account.</p>
+    fn describe_account(&self) -> RusotoFuture<DescribeAccountResult, DescribeAccountError> {
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkspacesService.DescribeAccount");
+        request.set_payload(Some(b"{}".to_vec()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeAccountResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DescribeAccountError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Retrieves a list that describes modifications to the configuration of bring your own license (BYOL) for the specified account.</p>
+    fn describe_account_modifications(
+        &self,
+        input: DescribeAccountModificationsRequest,
+    ) -> RusotoFuture<DescribeAccountModificationsResult, DescribeAccountModificationsError> {
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "WorkspacesService.DescribeAccountModifications",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeAccountModificationsResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeAccountModificationsError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Retrieves a list that describes one or more specified Amazon WorkSpaces clients.</p>
+    fn describe_client_properties(
+        &self,
+        input: DescribeClientPropertiesRequest,
+    ) -> RusotoFuture<DescribeClientPropertiesResult, DescribeClientPropertiesError> {
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkspacesService.DescribeClientProperties");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeClientPropertiesResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeClientPropertiesError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Describes one or more of your IP access control groups.</p>
     fn describe_ip_groups(
         &self,
@@ -3521,7 +4839,7 @@ impl Workspaces for WorkspacesClient {
         })
     }
 
-    /// <p>Describes the available WorkSpace bundles.</p> <p>You can filter the results using either bundle ID or owner, but not both.</p>
+    /// <p>Retrieves a list that describes the available WorkSpace bundles.</p> <p>You can filter the results using either bundle ID or owner, but not both.</p>
     fn describe_workspace_bundles(
         &self,
         input: DescribeWorkspaceBundlesRequest,
@@ -3592,7 +4910,41 @@ impl Workspaces for WorkspacesClient {
         })
     }
 
-    /// <p>Describes the specified WorkSpaces.</p> <p>You can filter the results using bundle ID, directory ID, or owner, but you can specify only one filter at a time.</p>
+    /// <p>Retrieves a list that describes one or more specified images, if the image identifiers are provided. Otherwise, all images in the account are described. </p>
+    fn describe_workspace_images(
+        &self,
+        input: DescribeWorkspaceImagesRequest,
+    ) -> RusotoFuture<DescribeWorkspaceImagesResult, DescribeWorkspaceImagesError> {
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkspacesService.DescribeWorkspaceImages");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeWorkspaceImagesResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribeWorkspaceImagesError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Describes the specified WorkSpaces.</p> <p>You can filter the results by using the bundle identifier, directory identifier, or owner, but you can specify only one filter at a time.</p>
     fn describe_workspaces(
         &self,
         input: DescribeWorkspacesRequest,
@@ -3701,6 +5053,155 @@ impl Workspaces for WorkspacesClient {
                 Box::new(
                     response.buffer().from_err().and_then(|response| {
                         Err(DisassociateIpGroupsError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Imports the specified Windows 7 or Windows 10 bring your own license (BYOL) image into Amazon WorkSpaces. The image must be an already licensed EC2 image that is in your AWS account, and you must own the image. </p>
+    fn import_workspace_image(
+        &self,
+        input: ImportWorkspaceImageRequest,
+    ) -> RusotoFuture<ImportWorkspaceImageResult, ImportWorkspaceImageError> {
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkspacesService.ImportWorkspaceImage");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ImportWorkspaceImageResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ImportWorkspaceImageError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Retrieves a list of IP address ranges, specified as IPv4 CIDR blocks, that you can use for the network management interface when you enable bring your own license (BYOL). </p> <p>The management network interface is connected to a secure Amazon WorkSpaces management network. It is used for interactive streaming of the WorkSpace desktop to Amazon WorkSpaces clients, and to allow Amazon WorkSpaces to manage the WorkSpace.</p>
+    fn list_available_management_cidr_ranges(
+        &self,
+        input: ListAvailableManagementCidrRangesRequest,
+    ) -> RusotoFuture<ListAvailableManagementCidrRangesResult, ListAvailableManagementCidrRangesError>
+    {
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "WorkspacesService.ListAvailableManagementCidrRanges",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ListAvailableManagementCidrRangesResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListAvailableManagementCidrRangesError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Modifies the configuration of bring your own license (BYOL) for the specified account.</p>
+    fn modify_account(
+        &self,
+        input: ModifyAccountRequest,
+    ) -> RusotoFuture<ModifyAccountResult, ModifyAccountError> {
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkspacesService.ModifyAccount");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ModifyAccountResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ModifyAccountError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Modifies the properties of the specified Amazon WorkSpaces client.</p>
+    fn modify_client_properties(
+        &self,
+        input: ModifyClientPropertiesRequest,
+    ) -> RusotoFuture<ModifyClientPropertiesResult, ModifyClientPropertiesError> {
+        let mut request = SignedRequest::new("POST", "workspaces", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "WorkspacesService.ModifyClientProperties");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ModifyClientPropertiesResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ModifyClientPropertiesError::from_response(response))
                     }),
                 )
             }

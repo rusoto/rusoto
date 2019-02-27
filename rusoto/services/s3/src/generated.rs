@@ -206,7 +206,7 @@ impl AccessControlPolicySerializer {
     }
 }
 
-/// <p>Container for information regarding the access control for replicas.</p>
+/// <p>A container for information about access control for replicas.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct AccessControlTranslation {
     /// <p>The override value for the owner of the replica object.</p>
@@ -1701,17 +1701,17 @@ impl CORSRulesSerializer {
 pub struct CSVInput {
     /// <p>Specifies that CSV field values may contain quoted record delimiters and such records should be allowed. Default value is FALSE. Setting this value to TRUE may lower performance.</p>
     pub allow_quoted_record_delimiter: Option<bool>,
-    /// <p>Single character used to indicate a row should be ignored when present at the start of a row.</p>
+    /// <p>The single character used to indicate a row should be ignored when present at the start of a row.</p>
     pub comments: Option<String>,
-    /// <p>Value used to separate individual fields in a record.</p>
+    /// <p>The value used to separate individual fields in a record.</p>
     pub field_delimiter: Option<String>,
     /// <p>Describes the first line of input. Valid values: None, Ignore, Use.</p>
     pub file_header_info: Option<String>,
     /// <p>Value used for escaping where the field delimiter is part of the value.</p>
     pub quote_character: Option<String>,
-    /// <p>Single character used for escaping the quote character inside an already escaped value.</p>
+    /// <p>The single character used for escaping the quote character inside an already escaped value.</p>
     pub quote_escape_character: Option<String>,
-    /// <p>Value used to separate individual records.</p>
+    /// <p>The value used to separate individual records.</p>
     pub record_delimiter: Option<String>,
 }
 
@@ -1792,15 +1792,15 @@ impl CSVInputSerializer {
 /// <p>Describes how CSV-formatted results are formatted.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CSVOutput {
-    /// <p>Value used to separate individual fields in a record.</p>
+    /// <p>The value used to separate individual fields in a record.</p>
     pub field_delimiter: Option<String>,
-    /// <p>Value used for escaping where the field delimiter is part of the value.</p>
+    /// <p>The value used for escaping where the field delimiter is part of the value.</p>
     pub quote_character: Option<String>,
-    /// <p>Single character used for escaping the quote character inside an already escaped value.</p>
+    /// <p>Th single character used for escaping the quote character inside an already escaped value.</p>
     pub quote_escape_character: Option<String>,
     /// <p>Indicates whether or not all output fields should be quoted.</p>
     pub quote_fields: Option<String>,
-    /// <p>Value used to separate individual records.</p>
+    /// <p>The value used to separate individual records.</p>
     pub record_delimiter: Option<String>,
 }
 
@@ -2517,6 +2517,12 @@ pub struct CopyObjectRequest {
     pub metadata: Option<::std::collections::HashMap<String, String>>,
     /// <p>Specifies whether the metadata is copied from the source object or replaced with metadata provided in the request.</p>
     pub metadata_directive: Option<String>,
+    /// <p>Specifies whether you want to apply a Legal Hold to the copied object.</p>
+    pub object_lock_legal_hold_status: Option<String>,
+    /// <p>The Object Lock mode that you want to apply to the copied object.</p>
+    pub object_lock_mode: Option<String>,
+    /// <p>The date and time when you want the copied object's Object Lock to expire.</p>
+    pub object_lock_retain_until_date: Option<String>,
     pub request_payer: Option<String>,
     /// <p>Specifies the algorithm to use to when encrypting the object (e.g., AES256).</p>
     pub sse_customer_algorithm: Option<String>,
@@ -2709,6 +2715,8 @@ pub struct CreateBucketRequest {
     pub grant_write: Option<String>,
     /// <p>Allows grantee to write the ACL for the applicable bucket.</p>
     pub grant_write_acp: Option<String>,
+    /// <p>Specifies whether you want S3 Object Lock to be enabled for the new bucket.</p>
+    pub object_lock_enabled_for_bucket: Option<bool>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -2809,6 +2817,12 @@ pub struct CreateMultipartUploadRequest {
     pub key: String,
     /// <p>A map of metadata to store with the object in S3.</p>
     pub metadata: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Specifies whether you want to apply a Legal Hold to the uploaded object.</p>
+    pub object_lock_legal_hold_status: Option<String>,
+    /// <p>Specifies the Object Lock mode that you want to apply to the uploaded object.</p>
+    pub object_lock_mode: Option<String>,
+    /// <p>Specifies the date and time when you want the Object Lock to expire.</p>
+    pub object_lock_retain_until_date: Option<String>,
     pub request_payer: Option<String>,
     /// <p>Specifies the algorithm to use to when encrypting the object (e.g., AES256).</p>
     pub sse_customer_algorithm: Option<String>,
@@ -2947,6 +2961,105 @@ impl DaysAfterInitiationSerializer {
     }
 }
 
+/// <p>The container element for specifying the default Object Lock retention settings for new objects placed in the specified bucket.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DefaultRetention {
+    /// <p>The number of days that you want to specify for the default retention period.</p>
+    pub days: Option<i64>,
+    /// <p>The default Object Lock retention mode you want to apply to new objects placed in the specified bucket.</p>
+    pub mode: Option<String>,
+    /// <p>The number of years that you want to specify for the default retention period.</p>
+    pub years: Option<i64>,
+}
+
+struct DefaultRetentionDeserializer;
+impl DefaultRetentionDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DefaultRetention, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = DefaultRetention::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Days" => {
+                        obj.days = Some(DaysDeserializer::deserialize("Days", stack)?);
+                    }
+                    "Mode" => {
+                        obj.mode = Some(ObjectLockRetentionModeDeserializer::deserialize(
+                            "Mode", stack,
+                        )?);
+                    }
+                    "Years" => {
+                        obj.years = Some(YearsDeserializer::deserialize("Years", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+
+pub struct DefaultRetentionSerializer;
+impl DefaultRetentionSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &DefaultRetention,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        if let Some(ref value) = obj.days {
+            writer.write(xml::writer::XmlEvent::start_element("Days"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
+            writer.write(xml::writer::XmlEvent::end_element())?;
+        }
+        if let Some(ref value) = obj.mode {
+            writer.write(xml::writer::XmlEvent::start_element("Mode"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
+            writer.write(xml::writer::XmlEvent::end_element())?;
+        }
+        if let Some(ref value) = obj.years {
+            writer.write(xml::writer::XmlEvent::start_element("Years"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
+            writer.write(xml::writer::XmlEvent::end_element())?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Delete {
     pub objects: Vec<ObjectIdentifier>,
@@ -3026,6 +3139,7 @@ pub struct DeleteBucketPolicyRequest {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteBucketReplicationRequest {
+    /// <p><p> The bucket name. </p> <note> <p>It can take a while to propagate the deletion of a replication configuration to all Amazon S3 systems.</p> </note></p>
     pub bucket: String,
 }
 
@@ -3128,6 +3242,114 @@ impl DeleteMarkerEntryDeserializer {
         Ok(obj)
     }
 }
+/// <p>Specifies whether Amazon S3 should replicate delete makers.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeleteMarkerReplication {
+    /// <p><p>The status of the delete marker replication.</p> <note> <p> In the current implementation, Amazon S3 doesn&#39;t replicate the delete markers. The status must be <code>Disabled</code>. </p> </note></p>
+    pub status: Option<String>,
+}
+
+struct DeleteMarkerReplicationDeserializer;
+impl DeleteMarkerReplicationDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<DeleteMarkerReplication, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = DeleteMarkerReplication::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Status" => {
+                        obj.status = Some(DeleteMarkerReplicationStatusDeserializer::deserialize(
+                            "Status", stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+
+pub struct DeleteMarkerReplicationSerializer;
+impl DeleteMarkerReplicationSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &DeleteMarkerReplication,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        if let Some(ref value) = obj.status {
+            writer.write(xml::writer::XmlEvent::start_element("Status"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
+            writer.write(xml::writer::XmlEvent::end_element())?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+struct DeleteMarkerReplicationStatusDeserializer;
+impl DeleteMarkerReplicationStatusDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+
+pub struct DeleteMarkerReplicationStatusSerializer;
+impl DeleteMarkerReplicationStatusSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
 struct DeleteMarkerVersionIdDeserializer;
 impl DeleteMarkerVersionIdDeserializer {
     #[allow(unused_variables)]
@@ -3195,6 +3417,8 @@ impl DeleteObjectOutputDeserializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteObjectRequest {
     pub bucket: String,
+    /// <p>Indicates whether S3 Object Lock should bypass Governance-mode restrictions to process this operation.</p>
+    pub bypass_governance_retention: Option<bool>,
     pub key: String,
     /// <p>The concatenation of the authentication device's serial number, a space, and the value that is displayed on your authentication device.</p>
     pub mfa: Option<String>,
@@ -3301,10 +3525,18 @@ impl DeleteObjectsOutputDeserializer {
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DeleteObjectsRequest {
     pub bucket: String,
+    /// <p>Specifies whether you want to delete this object even if it has a Governance-type Object Lock in place. You must have sufficient permissions to perform this operation.</p>
+    pub bypass_governance_retention: Option<bool>,
     pub delete: Delete,
     /// <p>The concatenation of the authentication device's serial number, a space, and the value that is displayed on your authentication device.</p>
     pub mfa: Option<String>,
     pub request_payer: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct DeletePublicAccessBlockRequest {
+    /// <p>The Amazon S3 bucket whose <code>PublicAccessBlock</code> configuration you want to delete. </p>
+    pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -3453,18 +3685,18 @@ impl DescriptionSerializer {
     }
 }
 
-/// <p>Container for replication destination information.</p>
+/// <p>A container for information about the replication destination.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Destination {
-    /// <p>Container for information regarding the access control for replicas.</p>
+    /// <p>A container for information about access control for replicas. </p> <p>Use this element only in a cross-account scenario where source and destination bucket owners are not the same to change replica ownership to the AWS account that owns the destination bucket. If you don't add this element to the replication configuration, the replicas are owned by same AWS account that owns the source object. </p>
     pub access_control_translation: Option<AccessControlTranslation>,
-    /// <p>Account ID of the destination bucket. Currently this is only being verified if Access Control Translation is enabled</p>
+    /// <p>The account ID of the destination bucket. Currently, Amazon S3 verifies this value only if Access Control Translation is enabled. </p> <p>In a cross-account scenario, if you change replica ownership to the AWS account that owns the destination bucket by adding the <code>AccessControlTranslation</code> element, this is the account ID of the owner of the destination bucket. </p>
     pub account: Option<String>,
-    /// <p>Amazon resource name (ARN) of the bucket where you want Amazon S3 to store replicas of the object identified by the rule.</p>
+    /// <p> The Amazon Resource Name (ARN) of the bucket where you want Amazon S3 to store replicas of the object identified by the rule. </p> <p> If there are multiple rules in your replication configuration, all rules must specify the same bucket as the destination. A replication configuration can replicate objects to only one destination bucket. </p>
     pub bucket: String,
-    /// <p>Container for information regarding encryption based configuration for replicas.</p>
+    /// <p>A container that provides information about encryption. If <code>SourceSelectionCriteria</code> is specified, you must specify this element. </p>
     pub encryption_configuration: Option<EncryptionConfiguration>,
-    /// <p>The class of storage used to store the object.</p>
+    /// <p> The class of storage used to store the object. By default Amazon S3 uses storage class of the source object when creating a replica. </p>
     pub storage_class: Option<String>,
 }
 
@@ -3792,10 +4024,10 @@ impl EncryptionSerializer {
     }
 }
 
-/// <p>Container for information regarding encryption based configuration for replicas.</p>
+/// <p>A container for information about the encryption-based configuration for replicas.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct EncryptionConfiguration {
-    /// <p>The id of the KMS key used to encrypt the replica object.</p>
+    /// <p>The ID of the AWS KMS key for the AWS Region where the destination bucket resides. Amazon S3 uses this key to encrypt the replica object. </p>
     pub replica_kms_key_id: Option<String>,
 }
 
@@ -4365,10 +4597,10 @@ impl FileHeaderInfoSerializer {
     }
 }
 
-/// <p>Container for key value pair that defines the criteria for the filter rule.</p>
+/// <p>A container for a key value pair that defines the criteria for the filter rule.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct FilterRule {
-    /// <p>Object key name prefix or suffix identifying one or more objects to which the filtering rule applies. Maximum prefix length can be up to 1,024 characters. Overlapping prefixes and suffixes are not supported. For more information, go to <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Configuring Event Notifications</a> in the Amazon Simple Storage Service Developer Guide.</p>
+    /// <p>The object key name prefix or suffix identifying one or more objects to which the filtering rule applies. The maximum prefix length is 1,024 characters. Overlapping prefixes and suffixes are not supported. For more information, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Configuring Event Notifications</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
     pub name: Option<String>,
     pub value: Option<String>,
 }
@@ -5062,6 +5294,34 @@ pub struct GetBucketPolicyRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetBucketPolicyStatusOutput {
+    /// <p>The policy status for the specified bucket.</p>
+    pub policy_status: Option<PolicyStatus>,
+}
+
+struct GetBucketPolicyStatusOutputDeserializer;
+impl GetBucketPolicyStatusOutputDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetBucketPolicyStatusOutput, XmlParseError> {
+        Ok(GetBucketPolicyStatusOutput {
+            policy_status: Some(PolicyStatusDeserializer::deserialize(
+                "PolicyStatus",
+                stack,
+            )?),
+            ..GetBucketPolicyStatusOutput::default()
+        })
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetBucketPolicyStatusRequest {
+    /// <p>The name of the Amazon S3 bucket whose policy status you want to retrieve.</p>
+    pub bucket: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetBucketReplicationOutput {
     pub replication_configuration: Option<ReplicationConfiguration>,
 }
@@ -5400,6 +5660,67 @@ pub struct GetObjectAclRequest {
     pub version_id: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetObjectLegalHoldOutput {
+    /// <p>The current Legal Hold status for the specified object.</p>
+    pub legal_hold: Option<ObjectLockLegalHold>,
+}
+
+struct GetObjectLegalHoldOutputDeserializer;
+impl GetObjectLegalHoldOutputDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetObjectLegalHoldOutput, XmlParseError> {
+        Ok(GetObjectLegalHoldOutput {
+            legal_hold: Some(ObjectLockLegalHoldDeserializer::deserialize(
+                "LegalHold",
+                stack,
+            )?),
+            ..GetObjectLegalHoldOutput::default()
+        })
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetObjectLegalHoldRequest {
+    /// <p>The bucket containing the object whose Legal Hold status you want to retrieve.</p>
+    pub bucket: String,
+    /// <p>The key name for the object whose Legal Hold status you want to retrieve.</p>
+    pub key: String,
+    pub request_payer: Option<String>,
+    /// <p>The version ID of the object whose Legal Hold status you want to retrieve.</p>
+    pub version_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetObjectLockConfigurationOutput {
+    /// <p>The specified bucket's Object Lock configuration.</p>
+    pub object_lock_configuration: Option<ObjectLockConfiguration>,
+}
+
+struct GetObjectLockConfigurationOutputDeserializer;
+impl GetObjectLockConfigurationOutputDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetObjectLockConfigurationOutput, XmlParseError> {
+        Ok(GetObjectLockConfigurationOutput {
+            object_lock_configuration: Some(ObjectLockConfigurationDeserializer::deserialize(
+                "ObjectLockConfiguration",
+                stack,
+            )?),
+            ..GetObjectLockConfigurationOutput::default()
+        })
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetObjectLockConfigurationRequest {
+    /// <p>The bucket whose Object Lock configuration you want to retrieve.</p>
+    pub bucket: String,
+}
+
 #[derive(Default, Debug)]
 pub struct GetObjectOutput {
     pub accept_ranges: Option<String>,
@@ -5433,6 +5754,12 @@ pub struct GetObjectOutput {
     pub metadata: Option<::std::collections::HashMap<String, String>>,
     /// <p>This is set to the number of metadata entries not returned in x-amz-meta headers. This can happen if you create metadata using an API like SOAP that supports more flexible metadata than the REST API. For example, using SOAP, you can create metadata whose values are not legal HTTP headers.</p>
     pub missing_meta: Option<i64>,
+    /// <p>Indicates whether this object has an active legal hold. This field is only returned if you have permission to view an object's legal hold status.</p>
+    pub object_lock_legal_hold_status: Option<String>,
+    /// <p>The Object Lock mode currently in place for this object.</p>
+    pub object_lock_mode: Option<String>,
+    /// <p>The date and time when this object's Object Lock will expire.</p>
+    pub object_lock_retain_until_date: Option<String>,
     /// <p>The count of parts this object has.</p>
     pub parts_count: Option<i64>,
     pub replication_status: Option<String>,
@@ -5492,6 +5819,39 @@ pub struct GetObjectRequest {
     /// <p>Specifies the 128-bit MD5 digest of the encryption key according to RFC 1321. Amazon S3 uses this header for a message integrity check to ensure the encryption key was transmitted without error.</p>
     pub sse_customer_key_md5: Option<String>,
     /// <p>VersionId used to reference a specific version of the object.</p>
+    pub version_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetObjectRetentionOutput {
+    /// <p>The container element for an object's retention settings.</p>
+    pub retention: Option<ObjectLockRetention>,
+}
+
+struct GetObjectRetentionOutputDeserializer;
+impl GetObjectRetentionOutputDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetObjectRetentionOutput, XmlParseError> {
+        Ok(GetObjectRetentionOutput {
+            retention: Some(ObjectLockRetentionDeserializer::deserialize(
+                "Retention",
+                stack,
+            )?),
+            ..GetObjectRetentionOutput::default()
+        })
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetObjectRetentionRequest {
+    /// <p>The bucket containing the object whose retention settings you want to retrieve.</p>
+    pub bucket: String,
+    /// <p>The key name for the object whose retention settings you want to retrieve.</p>
+    pub key: String,
+    pub request_payer: Option<String>,
+    /// <p>The version ID for the object whose retention settings you want to retrieve.</p>
     pub version_id: Option<String>,
 }
 
@@ -5559,6 +5919,36 @@ pub struct GetObjectTorrentRequest {
     pub bucket: String,
     pub key: String,
     pub request_payer: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetPublicAccessBlockOutput {
+    /// <p>The <code>PublicAccessBlock</code> configuration currently in effect for this Amazon S3 bucket.</p>
+    pub public_access_block_configuration: Option<PublicAccessBlockConfiguration>,
+}
+
+struct GetPublicAccessBlockOutputDeserializer;
+impl GetPublicAccessBlockOutputDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<GetPublicAccessBlockOutput, XmlParseError> {
+        Ok(GetPublicAccessBlockOutput {
+            public_access_block_configuration: Some(
+                PublicAccessBlockConfigurationDeserializer::deserialize(
+                    "PublicAccessBlockConfiguration",
+                    stack,
+                )?,
+            ),
+            ..GetPublicAccessBlockOutput::default()
+        })
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct GetPublicAccessBlockRequest {
+    /// <p>The name of the Amazon S3 bucket whose <code>PublicAccessBlock</code> configuration you want to retrieve. </p>
+    pub bucket: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -5886,6 +6276,12 @@ pub struct HeadObjectOutput {
     pub metadata: Option<::std::collections::HashMap<String, String>>,
     /// <p>This is set to the number of metadata entries not returned in x-amz-meta headers. This can happen if you create metadata using an API like SOAP that supports more flexible metadata than the REST API. For example, using SOAP, you can create metadata whose values are not legal HTTP headers.</p>
     pub missing_meta: Option<i64>,
+    /// <p>The Legal Hold status for the specified object.</p>
+    pub object_lock_legal_hold_status: Option<String>,
+    /// <p>The Object Lock mode currently in place for this object.</p>
+    pub object_lock_mode: Option<String>,
+    /// <p>The date and time when this object's Object Lock will expire.</p>
+    pub object_lock_retain_until_date: Option<String>,
     /// <p>The count of parts this object has.</p>
     pub parts_count: Option<i64>,
     pub replication_status: Option<String>,
@@ -6232,6 +6628,8 @@ pub struct InputSerialization {
     pub compression_type: Option<String>,
     /// <p>Specifies JSON as object's input serialization format.</p>
     pub json: Option<JSONInput>,
+    /// <p>Specifies Parquet as object's input serialization format.</p>
+    pub parquet: Option<ParquetInput>,
 }
 
 pub struct InputSerializationSerializer;
@@ -6259,6 +6657,9 @@ impl InputSerializationSerializer {
         }
         if let Some(ref value) = obj.json {
             &JSONInputSerializer::serialize(&mut writer, "JSON", value)?;
+        }
+        if let Some(ref value) = obj.parquet {
+            &ParquetInputSerializer::serialize(&mut writer, "Parquet", value)?;
         }
         writer.write(xml::writer::XmlEvent::end_element())
     }
@@ -6504,9 +6905,9 @@ impl InventoryDestinationSerializer {
 /// <p>Contains the type of server-side encryption used to encrypt the inventory results.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct InventoryEncryption {
-    /// <p>Specifies the use of SSE-KMS to encrypt delievered Inventory reports.</p>
+    /// <p>Specifies the use of SSE-KMS to encrypt delivered Inventory reports.</p>
     pub ssekms: Option<SSEKMS>,
-    /// <p>Specifies the use of SSE-S3 to encrypt delievered Inventory reports.</p>
+    /// <p>Specifies the use of SSE-S3 to encrypt delivered Inventory reports.</p>
     pub sses3: Option<SSES3>,
 }
 
@@ -7116,6 +7517,20 @@ impl IsLatestDeserializer {
         Ok(obj)
     }
 }
+struct IsPublicDeserializer;
+impl IsPublicDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<bool, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 struct IsTruncatedDeserializer;
 impl IsTruncatedDeserializer {
     #[allow(unused_variables)]
@@ -7349,13 +7764,13 @@ impl LambdaFunctionArnSerializer {
     }
 }
 
-/// <p>Container for specifying the AWS Lambda notification configuration.</p>
+/// <p>A container for specifying the configuration for AWS Lambda notifications.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct LambdaFunctionConfiguration {
     pub events: Vec<String>,
     pub filter: Option<NotificationConfigurationFilter>,
     pub id: Option<String>,
-    /// <p>Lambda cloud function ARN that Amazon S3 can invoke when it detects events of the specified type.</p>
+    /// <p>The Amazon Resource Name (ARN) of the Lambda cloud function that Amazon S3 can invoke when it detects events of the specified type.</p>
     pub lambda_function_arn: String,
 }
 
@@ -10098,7 +10513,7 @@ impl NoncurrentVersionExpirationSerializer {
     }
 }
 
-/// <p>Container for the transition rule that describes when noncurrent objects transition to the STANDARD_IA, ONEZONE_IA or GLACIER storage class. If your bucket is versioning-enabled (or versioning is suspended), you can set this action to request that Amazon S3 transition noncurrent object versions to the STANDARD_IA, ONEZONE_IA or GLACIER storage class at a specific period in the object's lifetime.</p>
+/// <p>Container for the transition rule that describes when noncurrent objects transition to the STANDARD_IA, ONEZONE_IA, INTELLIGENT_TIERING or GLACIER storage class. If your bucket is versioning-enabled (or versioning is suspended), you can set this action to request that Amazon S3 transition noncurrent object versions to the STANDARD_IA, ONEZONE_IA, INTELLIGENT_TIERING or GLACIER storage class at a specific period in the object's lifetime.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct NoncurrentVersionTransition {
     /// <p>Specifies the number of days an object is noncurrent before Amazon S3 can perform the associated action. For information about the noncurrent days calculations, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html">How Amazon S3 Calculates When an Object Became Noncurrent</a> in the Amazon Simple Storage Service Developer Guide.</p>
@@ -10232,7 +10647,7 @@ impl NoncurrentVersionTransitionListSerializer {
     }
 }
 
-/// <p>Container for specifying the notification configuration of the bucket. If this element is empty, notifications are turned off on the bucket.</p>
+/// <p>A container for specifying the notification configuration of the bucket. If this element is empty, notifications are turned off for the bucket.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct NotificationConfiguration {
     pub lambda_function_configurations: Option<Vec<LambdaFunctionConfiguration>>,
@@ -10457,7 +10872,7 @@ impl NotificationConfigurationDeprecatedSerializer {
     }
 }
 
-/// <p>Container for object key name filtering rules. For information about key name filtering, go to <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Configuring Event Notifications</a> in the Amazon Simple Storage Service Developer Guide.</p>
+/// <p>A container for object key name filtering rules. For information about key name filtering, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/NotificationHowTo.html">Configuring Event Notifications</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct NotificationConfigurationFilter {
     pub key: Option<S3KeyFilter>,
@@ -10765,6 +11180,422 @@ impl ObjectListDeserializer {
         Ok(obj)
     }
 }
+/// <p>The container element for Object Lock configuration parameters.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ObjectLockConfiguration {
+    /// <p>Indicates whether this bucket has an Object Lock configuration enabled.</p>
+    pub object_lock_enabled: Option<String>,
+    /// <p>The Object Lock rule in place for the specified object.</p>
+    pub rule: Option<ObjectLockRule>,
+}
+
+struct ObjectLockConfigurationDeserializer;
+impl ObjectLockConfigurationDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ObjectLockConfiguration, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = ObjectLockConfiguration::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "ObjectLockEnabled" => {
+                        obj.object_lock_enabled = Some(ObjectLockEnabledDeserializer::deserialize(
+                            "ObjectLockEnabled",
+                            stack,
+                        )?);
+                    }
+                    "Rule" => {
+                        obj.rule = Some(ObjectLockRuleDeserializer::deserialize("Rule", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+
+pub struct ObjectLockConfigurationSerializer;
+impl ObjectLockConfigurationSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &ObjectLockConfiguration,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        if let Some(ref value) = obj.object_lock_enabled {
+            writer.write(xml::writer::XmlEvent::start_element("ObjectLockEnabled"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
+            writer.write(xml::writer::XmlEvent::end_element())?;
+        }
+        if let Some(ref value) = obj.rule {
+            &ObjectLockRuleSerializer::serialize(&mut writer, "Rule", value)?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+struct ObjectLockEnabledDeserializer;
+impl ObjectLockEnabledDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+
+pub struct ObjectLockEnabledSerializer;
+impl ObjectLockEnabledSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+/// <p>A Legal Hold configuration for an object.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ObjectLockLegalHold {
+    /// <p>Indicates whether the specified object has a Legal Hold in place.</p>
+    pub status: Option<String>,
+}
+
+struct ObjectLockLegalHoldDeserializer;
+impl ObjectLockLegalHoldDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ObjectLockLegalHold, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = ObjectLockLegalHold::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Status" => {
+                        obj.status = Some(ObjectLockLegalHoldStatusDeserializer::deserialize(
+                            "Status", stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+
+pub struct ObjectLockLegalHoldSerializer;
+impl ObjectLockLegalHoldSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &ObjectLockLegalHold,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        if let Some(ref value) = obj.status {
+            writer.write(xml::writer::XmlEvent::start_element("Status"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
+            writer.write(xml::writer::XmlEvent::end_element())?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+struct ObjectLockLegalHoldStatusDeserializer;
+impl ObjectLockLegalHoldStatusDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+
+pub struct ObjectLockLegalHoldStatusSerializer;
+impl ObjectLockLegalHoldStatusSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+/// <p>A Retention configuration for an object.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ObjectLockRetention {
+    /// <p>Indicates the Retention mode for the specified object.</p>
+    pub mode: Option<String>,
+    /// <p>The date on which this Object Lock Retention will expire.</p>
+    pub retain_until_date: Option<String>,
+}
+
+struct ObjectLockRetentionDeserializer;
+impl ObjectLockRetentionDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ObjectLockRetention, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = ObjectLockRetention::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Mode" => {
+                        obj.mode = Some(ObjectLockRetentionModeDeserializer::deserialize(
+                            "Mode", stack,
+                        )?);
+                    }
+                    "RetainUntilDate" => {
+                        obj.retain_until_date =
+                            Some(DateDeserializer::deserialize("RetainUntilDate", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+
+pub struct ObjectLockRetentionSerializer;
+impl ObjectLockRetentionSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &ObjectLockRetention,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        if let Some(ref value) = obj.mode {
+            writer.write(xml::writer::XmlEvent::start_element("Mode"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
+            writer.write(xml::writer::XmlEvent::end_element())?;
+        }
+        if let Some(ref value) = obj.retain_until_date {
+            writer.write(xml::writer::XmlEvent::start_element("RetainUntilDate"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
+            writer.write(xml::writer::XmlEvent::end_element())?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+struct ObjectLockRetentionModeDeserializer;
+impl ObjectLockRetentionModeDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<String, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = characters(stack)?;
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+
+pub struct ObjectLockRetentionModeSerializer;
+impl ObjectLockRetentionModeSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &String,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+/// <p>The container element for an Object Lock rule.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ObjectLockRule {
+    /// <p>The default retention period that you want to apply to new objects placed in the specified bucket.</p>
+    pub default_retention: Option<DefaultRetention>,
+}
+
+struct ObjectLockRuleDeserializer;
+impl ObjectLockRuleDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ObjectLockRule, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = ObjectLockRule::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "DefaultRetention" => {
+                        obj.default_retention = Some(DefaultRetentionDeserializer::deserialize(
+                            "DefaultRetention",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+
+pub struct ObjectLockRuleSerializer;
+impl ObjectLockRuleSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &ObjectLockRule,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        if let Some(ref value) = obj.default_retention {
+            &DefaultRetentionSerializer::serialize(&mut writer, "DefaultRetention", value)?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
 struct ObjectStorageClassDeserializer;
 impl ObjectStorageClassDeserializer {
     #[allow(unused_variables)]
@@ -11116,6 +11947,25 @@ impl OwnerOverrideSerializer {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct ParquetInput {}
+
+pub struct ParquetInputSerializer;
+impl ParquetInputSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &ParquetInput,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct Part {
     /// <p>Entity tag returned when the part was uploaded.</p>
     pub e_tag: Option<String>,
@@ -11123,7 +11973,7 @@ pub struct Part {
     pub last_modified: Option<String>,
     /// <p>Part number identifying the part. This is a positive integer between 1 and 10,000.</p>
     pub part_number: Option<i64>,
-    /// <p>Size of the uploaded part data.</p>
+    /// <p>Size in bytes of the uploaded part data.</p>
     pub size: Option<i64>,
 }
 
@@ -11364,6 +12214,52 @@ impl PolicySerializer {
     }
 }
 
+/// <p>The container element for a bucket's policy status.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PolicyStatus {
+    /// <p>The policy status for this bucket. <code>TRUE</code> indicates that this bucket is public. <code>FALSE</code> indicates that the bucket is not public.</p>
+    pub is_public: Option<bool>,
+}
+
+struct PolicyStatusDeserializer;
+impl PolicyStatusDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PolicyStatus, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = PolicyStatus::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "IsPublic" => {
+                        obj.is_public = Some(IsPublicDeserializer::deserialize("IsPublic", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
 struct PrefixDeserializer;
 impl PrefixDeserializer {
     #[allow(unused_variables)]
@@ -11399,13 +12295,48 @@ impl PrefixSerializer {
     }
 }
 
+struct PriorityDeserializer;
+impl PriorityDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+
+pub struct PrioritySerializer;
+impl PrioritySerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &i64,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Progress {
-    /// <p>Current number of uncompressed object bytes processed.</p>
+    /// <p>The current number of uncompressed object bytes processed.</p>
     pub bytes_processed: Option<i64>,
-    /// <p>Current number of bytes of records payload data returned.</p>
+    /// <p>The current number of bytes of records payload data returned.</p>
     pub bytes_returned: Option<i64>,
-    /// <p>Current number of object bytes scanned.</p>
+    /// <p>The current number of object bytes scanned.</p>
     pub bytes_scanned: Option<i64>,
 }
 
@@ -11539,6 +12470,125 @@ impl ProtocolSerializer {
             "{value}",
             value = obj.to_string()
         )))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PublicAccessBlockConfiguration {
+    /// <p>Specifies whether Amazon S3 should block public access control lists (ACLs) for this bucket and objects in this bucket. Setting this element to <code>TRUE</code> causes the following behavior:</p> <ul> <li> <p>PUT Bucket acl and PUT Object acl calls fail if the specified ACL is public.</p> </li> <li> <p>PUT Object calls fail if the request includes a public ACL.</p> </li> </ul> <p>Enabling this setting doesn't affect existing policies or ACLs.</p>
+    pub block_public_acls: Option<bool>,
+    /// <p>Specifies whether Amazon S3 should block public bucket policies for this bucket. Setting this element to <code>TRUE</code> causes Amazon S3 to reject calls to PUT Bucket policy if the specified bucket policy allows public access. </p> <p>Enabling this setting doesn't affect existing bucket policies.</p>
+    pub block_public_policy: Option<bool>,
+    /// <p>Specifies whether Amazon S3 should ignore public ACLs for this bucket and objects in this bucket. Setting this element to <code>TRUE</code> causes Amazon S3 to ignore all public ACLs on this bucket and objects in this bucket.</p> <p>Enabling this setting doesn't affect the persistence of any existing ACLs and doesn't prevent new public ACLs from being set.</p>
+    pub ignore_public_acls: Option<bool>,
+    /// <p>Specifies whether Amazon S3 should restrict public bucket policies for this bucket. Setting this element to <code>TRUE</code> restricts access to this bucket to only AWS services and authorized users within this account if the bucket has a public policy.</p> <p>Enabling this setting doesn't affect previously stored bucket policies, except that public and cross-account access within any public bucket policy, including non-public delegation to specific accounts, is blocked.</p>
+    pub restrict_public_buckets: Option<bool>,
+}
+
+struct PublicAccessBlockConfigurationDeserializer;
+impl PublicAccessBlockConfigurationDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PublicAccessBlockConfiguration, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = PublicAccessBlockConfiguration::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "BlockPublicAcls" => {
+                        obj.block_public_acls =
+                            Some(SettingDeserializer::deserialize("BlockPublicAcls", stack)?);
+                    }
+                    "BlockPublicPolicy" => {
+                        obj.block_public_policy = Some(SettingDeserializer::deserialize(
+                            "BlockPublicPolicy",
+                            stack,
+                        )?);
+                    }
+                    "IgnorePublicAcls" => {
+                        obj.ignore_public_acls =
+                            Some(SettingDeserializer::deserialize("IgnorePublicAcls", stack)?);
+                    }
+                    "RestrictPublicBuckets" => {
+                        obj.restrict_public_buckets = Some(SettingDeserializer::deserialize(
+                            "RestrictPublicBuckets",
+                            stack,
+                        )?);
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+
+pub struct PublicAccessBlockConfigurationSerializer;
+impl PublicAccessBlockConfigurationSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &PublicAccessBlockConfiguration,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        if let Some(ref value) = obj.block_public_acls {
+            writer.write(xml::writer::XmlEvent::start_element("BlockPublicAcls"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
+            writer.write(xml::writer::XmlEvent::end_element())?;
+        }
+        if let Some(ref value) = obj.block_public_policy {
+            writer.write(xml::writer::XmlEvent::start_element("BlockPublicPolicy"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
+            writer.write(xml::writer::XmlEvent::end_element())?;
+        }
+        if let Some(ref value) = obj.ignore_public_acls {
+            writer.write(xml::writer::XmlEvent::start_element("IgnorePublicAcls"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
+            writer.write(xml::writer::XmlEvent::end_element())?;
+        }
+        if let Some(ref value) = obj.restrict_public_buckets {
+            writer.write(xml::writer::XmlEvent::start_element(
+                "RestrictPublicBuckets",
+            ))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
+            writer.write(xml::writer::XmlEvent::end_element())?;
+        }
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -11741,6 +12791,75 @@ pub struct PutObjectAclRequest {
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutObjectLegalHoldOutput {
+    pub request_charged: Option<String>,
+}
+
+struct PutObjectLegalHoldOutputDeserializer;
+impl PutObjectLegalHoldOutputDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutObjectLegalHoldOutput, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let obj = PutObjectLegalHoldOutput::default();
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutObjectLegalHoldRequest {
+    /// <p>The bucket containing the object that you want to place a Legal Hold on.</p>
+    pub bucket: String,
+    /// <p>The MD5 hash for the request body.</p>
+    pub content_md5: Option<String>,
+    /// <p>The key name for the object that you want to place a Legal Hold on.</p>
+    pub key: String,
+    /// <p>Container element for the Legal Hold configuration you want to apply to the specified object.</p>
+    pub legal_hold: Option<ObjectLockLegalHold>,
+    pub request_payer: Option<String>,
+    /// <p>The version ID of the object that you want to place a Legal Hold on.</p>
+    pub version_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutObjectLockConfigurationOutput {
+    pub request_charged: Option<String>,
+}
+
+struct PutObjectLockConfigurationOutputDeserializer;
+impl PutObjectLockConfigurationOutputDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutObjectLockConfigurationOutput, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let obj = PutObjectLockConfigurationOutput::default();
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutObjectLockConfigurationRequest {
+    /// <p>The bucket whose Object Lock configuration you want to create or replace.</p>
+    pub bucket: String,
+    /// <p>The MD5 hash for the request body.</p>
+    pub content_md5: Option<String>,
+    /// <p>The Object Lock configuration that you want to apply to the specified bucket.</p>
+    pub object_lock_configuration: Option<ObjectLockConfiguration>,
+    pub request_payer: Option<String>,
+    pub token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
 pub struct PutObjectOutput {
     /// <p>Entity tag for the uploaded object.</p>
     pub e_tag: Option<String>,
@@ -11811,6 +12930,12 @@ pub struct PutObjectRequest {
     pub key: String,
     /// <p>A map of metadata to store with the object in S3.</p>
     pub metadata: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The Legal Hold status that you want to apply to the specified object.</p>
+    pub object_lock_legal_hold_status: Option<String>,
+    /// <p>The Object Lock mode that you want to apply to this object.</p>
+    pub object_lock_mode: Option<String>,
+    /// <p>The date and time when you want this object's Object Lock to expire.</p>
+    pub object_lock_retain_until_date: Option<String>,
     pub request_payer: Option<String>,
     /// <p>Specifies the algorithm to use to when encrypting the object (e.g., AES256).</p>
     pub sse_customer_algorithm: Option<String>,
@@ -11824,10 +12949,48 @@ pub struct PutObjectRequest {
     pub server_side_encryption: Option<String>,
     /// <p>The type of storage to use for the object. Defaults to 'STANDARD'.</p>
     pub storage_class: Option<String>,
-    /// <p>The tag-set for the object. The tag-set must be encoded as URL Query parameters</p>
+    /// <p>The tag-set for the object. The tag-set must be encoded as URL Query parameters. (For example, "Key1=Value1")</p>
     pub tagging: Option<String>,
     /// <p>If the bucket is configured as a website, redirects requests for this object to another object in the same bucket or to an external URL. Amazon S3 stores the value of this header in the object metadata.</p>
     pub website_redirect_location: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutObjectRetentionOutput {
+    pub request_charged: Option<String>,
+}
+
+struct PutObjectRetentionOutputDeserializer;
+impl PutObjectRetentionOutputDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<PutObjectRetentionOutput, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let obj = PutObjectRetentionOutput::default();
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutObjectRetentionRequest {
+    /// <p>The bucket that contains the object you want to apply this Object Retention configuration to.</p>
+    pub bucket: String,
+    /// <p>Indicates whether this operation should bypass Governance-mode restrictions.j</p>
+    pub bypass_governance_retention: Option<bool>,
+    /// <p>The MD5 hash for the request body.</p>
+    pub content_md5: Option<String>,
+    /// <p>The key name for the object that you want to apply this Object Retention configuration to.</p>
+    pub key: String,
+    pub request_payer: Option<String>,
+    /// <p>The container element for the Object Retention configuration.</p>
+    pub retention: Option<ObjectLockRetention>,
+    /// <p>The version ID for the object that you want to apply this Object Retention configuration to.</p>
+    pub version_id: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq)]
@@ -11858,6 +13021,16 @@ pub struct PutObjectTaggingRequest {
     pub key: String,
     pub tagging: Tagging,
     pub version_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct PutPublicAccessBlockRequest {
+    /// <p>The name of the Amazon S3 bucket whose <code>PublicAccessBlock</code> configuration you want to set.</p>
+    pub bucket: String,
+    /// <p>The MD5 hash of the <code>PutPublicAccessBlock</code> request body. </p>
+    pub content_md5: Option<String>,
+    /// <p>The <code>PublicAccessBlock</code> configuration that you want to apply to this Amazon S3 bucket. You can enable the configuration options in any combination. For more information about when Amazon S3 considers a bucket or object public, see <a href="https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html#access-control-block-public-access-policy-status">The Meaning of "Public"</a> in the <i>Amazon Simple Storage Service Developer Guide</i>.</p>
+    pub public_access_block_configuration: PublicAccessBlockConfiguration,
 }
 
 struct QueueArnDeserializer;
@@ -11895,13 +13068,13 @@ impl QueueArnSerializer {
     }
 }
 
-/// <p>Container for specifying an configuration when you want Amazon S3 to publish events to an Amazon Simple Queue Service (Amazon SQS) queue.</p>
+/// <p>A container for specifying the configuration for publication of messages to an Amazon Simple Queue Service (Amazon SQS) queue.when Amazon S3 detects specified events.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct QueueConfiguration {
     pub events: Vec<String>,
     pub filter: Option<NotificationConfigurationFilter>,
     pub id: Option<String>,
-    /// <p>Amazon SQS queue ARN to which Amazon S3 will publish a message when it detects events of specified type.</p>
+    /// <p>The Amazon Resource Name (ARN) of the Amazon SQS queue to which Amazon S3 will publish a message when it detects events of the specified type.</p>
     pub queue_arn: String,
 }
 
@@ -12596,12 +13769,12 @@ impl ReplicaKmsKeyIDSerializer {
     }
 }
 
-/// <p>Container for replication rules. You can add as many as 1,000 rules. Total replication configuration size can be up to 2 MB.</p>
+/// <p>A container for replication rules. You can add up to 1,000 rules. The maximum size of a replication configuration is 2 MB.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReplicationConfiguration {
-    /// <p>Amazon Resource Name (ARN) of an IAM role for Amazon S3 to assume when replicating the objects.</p>
+    /// <p>The Amazon Resource Name (ARN) of the AWS Identity and Access Management (IAM) role that Amazon S3 can assume when replicating the objects.</p>
     pub role: String,
-    /// <p>Container for information about a particular replication rule. Replication configuration must have at least one rule and can contain up to 1,000 rules.</p>
+    /// <p>A container for one or more replication rules. A replication configuration must have at least one rule and can contain a maximum of 1,000 rules. </p>
     pub rules: Vec<ReplicationRule>,
 }
 
@@ -12672,18 +13845,20 @@ impl ReplicationConfigurationSerializer {
     }
 }
 
-/// <p>Container for information about a particular replication rule.</p>
+/// <p>A container for information about a specific replication rule.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ReplicationRule {
-    /// <p>Container for replication destination information.</p>
+    pub delete_marker_replication: Option<DeleteMarkerReplication>,
+    /// <p>A container for information about the replication destination.</p>
     pub destination: Destination,
-    /// <p>Unique identifier for the rule. The value cannot be longer than 255 characters.</p>
+    pub filter: Option<ReplicationRuleFilter>,
+    /// <p>A unique identifier for the rule. The maximum value is 255 characters.</p>
     pub id: Option<String>,
-    /// <p>Object keyname prefix identifying one or more objects to which the rule applies. Maximum prefix length can be up to 1,024 characters. Overlapping prefixes are not supported.</p>
-    pub prefix: String,
-    /// <p>Container for filters that define which source objects should be replicated.</p>
+    /// <p>The priority associated with the rule. If you specify multiple rules in a replication configuration, Amazon S3 prioritizes the rules to prevent conflicts when filtering. If two or more rules identify the same object based on a specified filter, the rule with higher priority takes precedence. For example:</p> <ul> <li> <p>Same object quality prefix based filter criteria If prefixes you specified in multiple rules overlap </p> </li> <li> <p>Same object qualify tag based filter criteria specified in multiple rules</p> </li> </ul> <p>For more information, see <a href=" https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html">Cross-Region Replication (CRR)</a> in the <i>Amazon S3 Developer Guide</i>.</p>
+    pub priority: Option<i64>,
+    /// <p>A container that describes additional filters for identifying the source objects that you want to replicate. You can choose to enable or disable the replication of these objects. Currently, Amazon S3 supports only the filter that you can specify for objects created with server-side encryption using an AWS KMS-Managed Key (SSE-KMS). </p> <p> If you want Amazon S3 to replicate objects created with server-side encryption using AWS KMS-Managed Keys. </p>
     pub source_selection_criteria: Option<SourceSelectionCriteria>,
-    /// <p>The rule is ignored if status is not Enabled.</p>
+    /// <p>If status isn't enabled, the rule is ignored.</p>
     pub status: String,
 }
 
@@ -12709,15 +13884,27 @@ impl ReplicationRuleDeserializer {
 
             match next_event {
                 DeserializerNext::Element(name) => match &name[..] {
+                    "DeleteMarkerReplication" => {
+                        obj.delete_marker_replication =
+                            Some(DeleteMarkerReplicationDeserializer::deserialize(
+                                "DeleteMarkerReplication",
+                                stack,
+                            )?);
+                    }
                     "Destination" => {
                         obj.destination =
                             DestinationDeserializer::deserialize("Destination", stack)?;
                     }
+                    "Filter" => {
+                        obj.filter = Some(ReplicationRuleFilterDeserializer::deserialize(
+                            "Filter", stack,
+                        )?);
+                    }
                     "ID" => {
                         obj.id = Some(IDDeserializer::deserialize("ID", stack)?);
                     }
-                    "Prefix" => {
-                        obj.prefix = PrefixDeserializer::deserialize("Prefix", stack)?;
+                    "Priority" => {
+                        obj.priority = Some(PriorityDeserializer::deserialize("Priority", stack)?);
                     }
                     "SourceSelectionCriteria" => {
                         obj.source_selection_criteria =
@@ -12757,7 +13944,17 @@ impl ReplicationRuleSerializer {
         W: Write,
     {
         writer.write(xml::writer::XmlEvent::start_element(name))?;
+        if let Some(ref value) = obj.delete_marker_replication {
+            &DeleteMarkerReplicationSerializer::serialize(
+                &mut writer,
+                "DeleteMarkerReplication",
+                value,
+            )?;
+        }
         DestinationSerializer::serialize(&mut writer, "Destination", &obj.destination)?;
+        if let Some(ref value) = obj.filter {
+            &ReplicationRuleFilterSerializer::serialize(&mut writer, "Filter", value)?;
+        }
         if let Some(ref value) = obj.id {
             writer.write(xml::writer::XmlEvent::start_element("ID"))?;
             writer.write(xml::writer::XmlEvent::characters(&format!(
@@ -12766,12 +13963,14 @@ impl ReplicationRuleSerializer {
             )));
             writer.write(xml::writer::XmlEvent::end_element())?;
         }
-        writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
-        writer.write(xml::writer::XmlEvent::characters(&format!(
-            "{value}",
-            value = obj.prefix
-        )))?;
-        writer.write(xml::writer::XmlEvent::end_element())?;
+        if let Some(ref value) = obj.priority {
+            writer.write(xml::writer::XmlEvent::start_element("Priority"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
+            writer.write(xml::writer::XmlEvent::end_element())?;
+        }
         if let Some(ref value) = obj.source_selection_criteria {
             &SourceSelectionCriteriaSerializer::serialize(
                 &mut writer,
@@ -12785,6 +13984,177 @@ impl ReplicationRuleSerializer {
             value = obj.status
         )))?;
         writer.write(xml::writer::XmlEvent::end_element())?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ReplicationRuleAndOperator {
+    pub prefix: Option<String>,
+    pub tags: Option<Vec<Tag>>,
+}
+
+struct ReplicationRuleAndOperatorDeserializer;
+impl ReplicationRuleAndOperatorDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ReplicationRuleAndOperator, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = ReplicationRuleAndOperator::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "Prefix" => {
+                        obj.prefix = Some(PrefixDeserializer::deserialize("Prefix", stack)?);
+                    }
+                    "Tag" => {
+                        obj.tags = match obj.tags {
+                            Some(ref mut existing) => {
+                                existing.extend(TagSetDeserializer::deserialize("Tag", stack)?);
+                                Some(existing.to_vec())
+                            }
+                            None => Some(TagSetDeserializer::deserialize("Tag", stack)?),
+                        };
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+
+pub struct ReplicationRuleAndOperatorSerializer;
+impl ReplicationRuleAndOperatorSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &ReplicationRuleAndOperator,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        if let Some(ref value) = obj.prefix {
+            writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
+            writer.write(xml::writer::XmlEvent::end_element())?;
+        }
+        if let Some(ref value) = obj.tags {
+            &TagSetSerializer::serialize(&mut writer, "Tag", value)?;
+        }
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+/// <p>A filter that identifies the subset of objects to which the replication rule applies. A <code>Filter</code> must specify exactly one <code>Prefix</code>, <code>Tag</code>, or an <code>And</code> child element.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct ReplicationRuleFilter {
+    /// <p><p>A container for specifying rule filters. The filters determine the subset of objects to which the rule applies. This element is required only if you specify more than one filter. For example: </p> <ul> <li> <p>If you specify both a <code>Prefix</code> and a <code>Tag</code> filter, wrap these filters in an <code>And</code> tag.</p> </li> <li> <p>If you specify a filter based on multiple tags, wrap the <code>Tag</code> elements in an <code>And</code> tag.</p> </li> </ul></p>
+    pub and: Option<ReplicationRuleAndOperator>,
+    /// <p>An object keyname prefix that identifies the subset of objects to which the rule applies.</p>
+    pub prefix: Option<String>,
+    /// <p>A container for specifying a tag key and value. </p> <p>The rule applies only to objects that have the tag in their tag set.</p>
+    pub tag: Option<Tag>,
+}
+
+struct ReplicationRuleFilterDeserializer;
+impl ReplicationRuleFilterDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<ReplicationRuleFilter, XmlParseError> {
+        start_element(tag_name, stack)?;
+
+        let mut obj = ReplicationRuleFilter::default();
+
+        loop {
+            let next_event = match stack.peek() {
+                Some(&Ok(XmlEvent::EndElement { ref name, .. })) => DeserializerNext::Close,
+                Some(&Ok(XmlEvent::StartElement { ref name, .. })) => {
+                    DeserializerNext::Element(name.local_name.to_owned())
+                }
+                _ => DeserializerNext::Skip,
+            };
+
+            match next_event {
+                DeserializerNext::Element(name) => match &name[..] {
+                    "And" => {
+                        obj.and = Some(ReplicationRuleAndOperatorDeserializer::deserialize(
+                            "And", stack,
+                        )?);
+                    }
+                    "Prefix" => {
+                        obj.prefix = Some(PrefixDeserializer::deserialize("Prefix", stack)?);
+                    }
+                    "Tag" => {
+                        obj.tag = Some(TagDeserializer::deserialize("Tag", stack)?);
+                    }
+                    _ => skip_tree(stack),
+                },
+                DeserializerNext::Close => break,
+                DeserializerNext::Skip => {
+                    stack.next();
+                }
+            }
+        }
+
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+
+pub struct ReplicationRuleFilterSerializer;
+impl ReplicationRuleFilterSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &ReplicationRuleFilter,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        if let Some(ref value) = obj.and {
+            &ReplicationRuleAndOperatorSerializer::serialize(&mut writer, "And", value)?;
+        }
+        if let Some(ref value) = obj.prefix {
+            writer.write(xml::writer::XmlEvent::start_element("Prefix"))?;
+            writer.write(xml::writer::XmlEvent::characters(&format!(
+                "{value}",
+                value = value
+            )));
+            writer.write(xml::writer::XmlEvent::end_element())?;
+        }
+        if let Some(ref value) = obj.tag {
+            &TagSerializer::serialize(&mut writer, "Tag", value)?;
+        }
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -13213,7 +14583,7 @@ impl RoleSerializer {
 pub struct RoutingRule {
     /// <p>A container for describing a condition that must be met for the specified redirect to apply. For example, 1. If request is for pages in the /docs folder, redirect to the /documents folder. 2. If request results in HTTP error 4xx, redirect request to another host where you might process the error.</p>
     pub condition: Option<Condition>,
-    /// <p>Container for redirect information. You can redirect requests to another host, to another page, or with another protocol. In the event of an error, you can can specify a different error code to return.</p>
+    /// <p>Container for redirect information. You can redirect requests to another host, to another page, or with another protocol. In the event of an error, you can specify a different error code to return.</p>
     pub redirect: Redirect,
 }
 
@@ -13541,7 +14911,7 @@ impl RulesSerializer {
     }
 }
 
-/// <p>Container for object key name prefix and suffix filtering rules.</p>
+/// <p>A container for object key name prefix and suffix filtering rules.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct S3KeyFilter {
     pub filter_rules: Option<Vec<FilterRule>>,
@@ -13694,7 +15064,7 @@ impl S3LocationSerializer {
     }
 }
 
-/// <p>Specifies the use of SSE-KMS to encrypt delievered Inventory reports.</p>
+/// <p>Specifies the use of SSE-KMS to encrypt delivered Inventory reports.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SSEKMS {
     /// <p>Specifies the ID of the AWS Key Management Service (KMS) master encryption key to use for encrypting Inventory reports.</p>
@@ -13798,7 +15168,7 @@ impl SSEKMSKeyIdSerializer {
     }
 }
 
-/// <p>Specifies the use of SSE-S3 to encrypt delievered Inventory reports.</p>
+/// <p>Specifies the use of SSE-S3 to encrypt delivered Inventory reports.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SSES3 {}
 
@@ -13922,28 +15292,28 @@ impl SelectObjectContentOutputDeserializer {
         })
     }
 }
-/// <p>Request to filter the contents of an Amazon S3 object based on a simple Structured Query Language (SQL) statement. In the request, along with the SQL expression, you must also specify a data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data into records, and returns only records that match the specified SQL expression. You must also specify the data serialization format for the response. For more information, go to <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectSELECTContent.html">S3Select API Documentation</a>.</p>
+/// <p>Request to filter the contents of an Amazon S3 object based on a simple Structured Query Language (SQL) statement. In the request, along with the SQL expression, you must specify a data serialization format (JSON or CSV) of the object. Amazon S3 uses this to parse object data into records. It returns only records that match the specified SQL expression. You must also specify the data serialization format for the response. For more information, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/RESTObjectSELECTContent.html">S3Select API Documentation</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SelectObjectContentRequest {
-    /// <p>The S3 Bucket.</p>
+    /// <p>The S3 bucket.</p>
     pub bucket: String,
     /// <p>The expression that is used to query the object.</p>
     pub expression: String,
-    /// <p>The type of the provided expression (e.g., SQL).</p>
+    /// <p>The type of the provided expression (for example., SQL).</p>
     pub expression_type: String,
     /// <p>Describes the format of the data in the object that is being queried.</p>
     pub input_serialization: InputSerialization,
-    /// <p>The Object Key.</p>
+    /// <p>The object key.</p>
     pub key: String,
     /// <p>Describes the format of the data that you want Amazon S3 to return in response.</p>
     pub output_serialization: OutputSerialization,
     /// <p>Specifies if periodic request progress information should be enabled.</p>
     pub request_progress: Option<RequestProgress>,
-    /// <p>The SSE Algorithm used to encrypt the object. For more information, go to <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html"> Server-Side Encryption (Using Customer-Provided Encryption Keys</a>. </p>
+    /// <p>The SSE Algorithm used to encrypt the object. For more information, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html"> Server-Side Encryption (Using Customer-Provided Encryption Keys</a>. </p>
     pub sse_customer_algorithm: Option<String>,
-    /// <p>The SSE Customer Key. For more information, go to <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html"> Server-Side Encryption (Using Customer-Provided Encryption Keys</a>. </p>
+    /// <p>The SSE Customer Key. For more information, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html"> Server-Side Encryption (Using Customer-Provided Encryption Keys</a>. </p>
     pub sse_customer_key: Option<String>,
-    /// <p>The SSE Customer Key MD5. For more information, go to <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html"> Server-Side Encryption (Using Customer-Provided Encryption Keys</a>. </p>
+    /// <p>The SSE Customer Key MD5. For more information, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/dev/ServerSideEncryptionCustomerKeys.html"> Server-Side Encryption (Using Customer-Provided Encryption Keys</a>. </p>
     pub sse_customer_key_md5: Option<String>,
 }
 
@@ -14337,6 +15707,41 @@ impl ServerSideEncryptionRulesSerializer {
     }
 }
 
+struct SettingDeserializer;
+impl SettingDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<bool, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = bool::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+
+pub struct SettingSerializer;
+impl SettingSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &bool,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
 struct SizeDeserializer;
 impl SizeDeserializer {
     #[allow(unused_variables)]
@@ -14351,10 +15756,10 @@ impl SizeDeserializer {
         Ok(obj)
     }
 }
-/// <p>Container for filters that define which source objects should be replicated.</p>
+/// <p>A container for filters that define which source objects should be replicated.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SourceSelectionCriteria {
-    /// <p>Container for filter information of selection of KMS Encrypted S3 objects.</p>
+    /// <p> A container for filter information for the selection of S3 objects encrypted with AWS KMS. If you include <code>SourceSelectionCriteria</code> in the replication configuration, this element is required. </p>
     pub sse_kms_encrypted_objects: Option<SseKmsEncryptedObjects>,
 }
 
@@ -14425,10 +15830,10 @@ impl SourceSelectionCriteriaSerializer {
     }
 }
 
-/// <p>Container for filter information of selection of KMS Encrypted S3 objects.</p>
+/// <p>A container for filter information for the selection of S3 objects encrypted with AWS KMS.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SseKmsEncryptedObjects {
-    /// <p>The replication for KMS encrypted S3 objects is disabled if status is not Enabled.</p>
+    /// <p> If the status is not <code>Enabled</code>, replication for S3 objects encrypted with AWS KMS is disabled.</p>
     pub status: String,
 }
 
@@ -14567,11 +15972,11 @@ impl StartAfterSerializer {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct Stats {
-    /// <p>Total number of uncompressed object bytes processed.</p>
+    /// <p>The total number of uncompressed object bytes processed.</p>
     pub bytes_processed: Option<i64>,
-    /// <p>Total number of bytes of records payload data returned.</p>
+    /// <p>The total number of bytes of records payload data returned.</p>
     pub bytes_returned: Option<i64>,
-    /// <p>Total number of object bytes scanned.</p>
+    /// <p>The total number of object bytes scanned.</p>
     pub bytes_scanned: Option<i64>,
 }
 
@@ -15396,13 +16801,13 @@ impl TopicArnSerializer {
     }
 }
 
-/// <p>Container for specifying the configuration when you want Amazon S3 to publish events to an Amazon Simple Notification Service (Amazon SNS) topic.</p>
+/// <p>A container for specifying the configuration for publication of messages to an Amazon Simple Notification Service (Amazon SNS) topic.when Amazon S3 detects specified events.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct TopicConfiguration {
     pub events: Vec<String>,
     pub filter: Option<NotificationConfigurationFilter>,
     pub id: Option<String>,
-    /// <p>Amazon SNS topic ARN to which Amazon S3 will publish a message when it detects events of specified type.</p>
+    /// <p>The Amazon Resource Name (ARN) of the Amazon SNS topic to which Amazon S3 will publish a message when it detects events of the specified type.</p>
     pub topic_arn: String,
 }
 
@@ -16207,6 +17612,41 @@ impl WebsiteConfigurationSerializer {
         if let Some(ref value) = obj.routing_rules {
             &RoutingRulesSerializer::serialize(&mut writer, "RoutingRules", value)?;
         }
+        writer.write(xml::writer::XmlEvent::end_element())
+    }
+}
+
+struct YearsDeserializer;
+impl YearsDeserializer {
+    #[allow(unused_variables)]
+    fn deserialize<'a, T: Peek + Next>(
+        tag_name: &str,
+        stack: &mut T,
+    ) -> Result<i64, XmlParseError> {
+        start_element(tag_name, stack)?;
+        let obj = i64::from_str(characters(stack)?.as_ref()).unwrap();
+        end_element(tag_name, stack)?;
+
+        Ok(obj)
+    }
+}
+
+pub struct YearsSerializer;
+impl YearsSerializer {
+    #[allow(unused_variables, warnings)]
+    pub fn serialize<W>(
+        mut writer: &mut EventWriter<W>,
+        name: &str,
+        obj: &i64,
+    ) -> Result<(), xml::writer::Error>
+    where
+        W: Write,
+    {
+        writer.write(xml::writer::XmlEvent::start_element(name))?;
+        writer.write(xml::writer::XmlEvent::characters(&format!(
+            "{value}",
+            value = obj.to_string()
+        )))?;
         writer.write(xml::writer::XmlEvent::end_element())
     }
 }
@@ -17694,6 +19134,83 @@ impl Error for DeleteObjectsError {
         }
     }
 }
+/// Errors returned by DeletePublicAccessBlock
+#[derive(Debug, PartialEq)]
+pub enum DeletePublicAccessBlockError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DeletePublicAccessBlockError {
+    pub fn from_response(res: BufferedHttpResponse) -> DeletePublicAccessBlockError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        DeletePublicAccessBlockError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for DeletePublicAccessBlockError {
+    fn from(err: XmlParseError) -> DeletePublicAccessBlockError {
+        let XmlParseError(message) = err;
+        DeletePublicAccessBlockError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for DeletePublicAccessBlockError {
+    fn from(err: CredentialsError) -> DeletePublicAccessBlockError {
+        DeletePublicAccessBlockError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeletePublicAccessBlockError {
+    fn from(err: HttpDispatchError) -> DeletePublicAccessBlockError {
+        DeletePublicAccessBlockError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeletePublicAccessBlockError {
+    fn from(err: io::Error) -> DeletePublicAccessBlockError {
+        DeletePublicAccessBlockError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeletePublicAccessBlockError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeletePublicAccessBlockError {
+    fn description(&self) -> &str {
+        match *self {
+            DeletePublicAccessBlockError::Validation(ref cause) => cause,
+            DeletePublicAccessBlockError::Credentials(ref err) => err.description(),
+            DeletePublicAccessBlockError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeletePublicAccessBlockError::ParseError(ref cause) => cause,
+            DeletePublicAccessBlockError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by GetBucketAccelerateConfiguration
 #[derive(Debug, PartialEq)]
 pub enum GetBucketAccelerateConfigurationError {
@@ -18764,6 +20281,83 @@ impl Error for GetBucketPolicyError {
         }
     }
 }
+/// Errors returned by GetBucketPolicyStatus
+#[derive(Debug, PartialEq)]
+pub enum GetBucketPolicyStatusError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetBucketPolicyStatusError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetBucketPolicyStatusError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        GetBucketPolicyStatusError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for GetBucketPolicyStatusError {
+    fn from(err: XmlParseError) -> GetBucketPolicyStatusError {
+        let XmlParseError(message) = err;
+        GetBucketPolicyStatusError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for GetBucketPolicyStatusError {
+    fn from(err: CredentialsError) -> GetBucketPolicyStatusError {
+        GetBucketPolicyStatusError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetBucketPolicyStatusError {
+    fn from(err: HttpDispatchError) -> GetBucketPolicyStatusError {
+        GetBucketPolicyStatusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetBucketPolicyStatusError {
+    fn from(err: io::Error) -> GetBucketPolicyStatusError {
+        GetBucketPolicyStatusError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetBucketPolicyStatusError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetBucketPolicyStatusError {
+    fn description(&self) -> &str {
+        match *self {
+            GetBucketPolicyStatusError::Validation(ref cause) => cause,
+            GetBucketPolicyStatusError::Credentials(ref err) => err.description(),
+            GetBucketPolicyStatusError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetBucketPolicyStatusError::ParseError(ref cause) => cause,
+            GetBucketPolicyStatusError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by GetBucketReplication
 #[derive(Debug, PartialEq)]
 pub enum GetBucketReplicationError {
@@ -19307,6 +20901,237 @@ impl Error for GetObjectAclError {
         }
     }
 }
+/// Errors returned by GetObjectLegalHold
+#[derive(Debug, PartialEq)]
+pub enum GetObjectLegalHoldError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetObjectLegalHoldError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetObjectLegalHoldError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        GetObjectLegalHoldError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for GetObjectLegalHoldError {
+    fn from(err: XmlParseError) -> GetObjectLegalHoldError {
+        let XmlParseError(message) = err;
+        GetObjectLegalHoldError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for GetObjectLegalHoldError {
+    fn from(err: CredentialsError) -> GetObjectLegalHoldError {
+        GetObjectLegalHoldError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetObjectLegalHoldError {
+    fn from(err: HttpDispatchError) -> GetObjectLegalHoldError {
+        GetObjectLegalHoldError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetObjectLegalHoldError {
+    fn from(err: io::Error) -> GetObjectLegalHoldError {
+        GetObjectLegalHoldError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetObjectLegalHoldError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetObjectLegalHoldError {
+    fn description(&self) -> &str {
+        match *self {
+            GetObjectLegalHoldError::Validation(ref cause) => cause,
+            GetObjectLegalHoldError::Credentials(ref err) => err.description(),
+            GetObjectLegalHoldError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetObjectLegalHoldError::ParseError(ref cause) => cause,
+            GetObjectLegalHoldError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetObjectLockConfiguration
+#[derive(Debug, PartialEq)]
+pub enum GetObjectLockConfigurationError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetObjectLockConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetObjectLockConfigurationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        GetObjectLockConfigurationError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for GetObjectLockConfigurationError {
+    fn from(err: XmlParseError) -> GetObjectLockConfigurationError {
+        let XmlParseError(message) = err;
+        GetObjectLockConfigurationError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for GetObjectLockConfigurationError {
+    fn from(err: CredentialsError) -> GetObjectLockConfigurationError {
+        GetObjectLockConfigurationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetObjectLockConfigurationError {
+    fn from(err: HttpDispatchError) -> GetObjectLockConfigurationError {
+        GetObjectLockConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetObjectLockConfigurationError {
+    fn from(err: io::Error) -> GetObjectLockConfigurationError {
+        GetObjectLockConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetObjectLockConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetObjectLockConfigurationError {
+    fn description(&self) -> &str {
+        match *self {
+            GetObjectLockConfigurationError::Validation(ref cause) => cause,
+            GetObjectLockConfigurationError::Credentials(ref err) => err.description(),
+            GetObjectLockConfigurationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetObjectLockConfigurationError::ParseError(ref cause) => cause,
+            GetObjectLockConfigurationError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetObjectRetention
+#[derive(Debug, PartialEq)]
+pub enum GetObjectRetentionError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetObjectRetentionError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetObjectRetentionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        GetObjectRetentionError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for GetObjectRetentionError {
+    fn from(err: XmlParseError) -> GetObjectRetentionError {
+        let XmlParseError(message) = err;
+        GetObjectRetentionError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for GetObjectRetentionError {
+    fn from(err: CredentialsError) -> GetObjectRetentionError {
+        GetObjectRetentionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetObjectRetentionError {
+    fn from(err: HttpDispatchError) -> GetObjectRetentionError {
+        GetObjectRetentionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetObjectRetentionError {
+    fn from(err: io::Error) -> GetObjectRetentionError {
+        GetObjectRetentionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetObjectRetentionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetObjectRetentionError {
+    fn description(&self) -> &str {
+        match *self {
+            GetObjectRetentionError::Validation(ref cause) => cause,
+            GetObjectRetentionError::Credentials(ref err) => err.description(),
+            GetObjectRetentionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetObjectRetentionError::ParseError(ref cause) => cause,
+            GetObjectRetentionError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by GetObjectTagging
 #[derive(Debug, PartialEq)]
 pub enum GetObjectTaggingError {
@@ -19454,6 +21279,83 @@ impl Error for GetObjectTorrentError {
             GetObjectTorrentError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             GetObjectTorrentError::ParseError(ref cause) => cause,
             GetObjectTorrentError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetPublicAccessBlock
+#[derive(Debug, PartialEq)]
+pub enum GetPublicAccessBlockError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetPublicAccessBlockError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetPublicAccessBlockError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        GetPublicAccessBlockError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for GetPublicAccessBlockError {
+    fn from(err: XmlParseError) -> GetPublicAccessBlockError {
+        let XmlParseError(message) = err;
+        GetPublicAccessBlockError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for GetPublicAccessBlockError {
+    fn from(err: CredentialsError) -> GetPublicAccessBlockError {
+        GetPublicAccessBlockError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetPublicAccessBlockError {
+    fn from(err: HttpDispatchError) -> GetPublicAccessBlockError {
+        GetPublicAccessBlockError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetPublicAccessBlockError {
+    fn from(err: io::Error) -> GetPublicAccessBlockError {
+        GetPublicAccessBlockError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetPublicAccessBlockError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetPublicAccessBlockError {
+    fn description(&self) -> &str {
+        match *self {
+            GetPublicAccessBlockError::Validation(ref cause) => cause,
+            GetPublicAccessBlockError::Credentials(ref err) => err.description(),
+            GetPublicAccessBlockError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetPublicAccessBlockError::ParseError(ref cause) => cause,
+            GetPublicAccessBlockError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -21846,6 +23748,237 @@ impl Error for PutObjectAclError {
         }
     }
 }
+/// Errors returned by PutObjectLegalHold
+#[derive(Debug, PartialEq)]
+pub enum PutObjectLegalHoldError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl PutObjectLegalHoldError {
+    pub fn from_response(res: BufferedHttpResponse) -> PutObjectLegalHoldError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        PutObjectLegalHoldError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for PutObjectLegalHoldError {
+    fn from(err: XmlParseError) -> PutObjectLegalHoldError {
+        let XmlParseError(message) = err;
+        PutObjectLegalHoldError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for PutObjectLegalHoldError {
+    fn from(err: CredentialsError) -> PutObjectLegalHoldError {
+        PutObjectLegalHoldError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for PutObjectLegalHoldError {
+    fn from(err: HttpDispatchError) -> PutObjectLegalHoldError {
+        PutObjectLegalHoldError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutObjectLegalHoldError {
+    fn from(err: io::Error) -> PutObjectLegalHoldError {
+        PutObjectLegalHoldError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for PutObjectLegalHoldError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutObjectLegalHoldError {
+    fn description(&self) -> &str {
+        match *self {
+            PutObjectLegalHoldError::Validation(ref cause) => cause,
+            PutObjectLegalHoldError::Credentials(ref err) => err.description(),
+            PutObjectLegalHoldError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            PutObjectLegalHoldError::ParseError(ref cause) => cause,
+            PutObjectLegalHoldError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by PutObjectLockConfiguration
+#[derive(Debug, PartialEq)]
+pub enum PutObjectLockConfigurationError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl PutObjectLockConfigurationError {
+    pub fn from_response(res: BufferedHttpResponse) -> PutObjectLockConfigurationError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        PutObjectLockConfigurationError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for PutObjectLockConfigurationError {
+    fn from(err: XmlParseError) -> PutObjectLockConfigurationError {
+        let XmlParseError(message) = err;
+        PutObjectLockConfigurationError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for PutObjectLockConfigurationError {
+    fn from(err: CredentialsError) -> PutObjectLockConfigurationError {
+        PutObjectLockConfigurationError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for PutObjectLockConfigurationError {
+    fn from(err: HttpDispatchError) -> PutObjectLockConfigurationError {
+        PutObjectLockConfigurationError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutObjectLockConfigurationError {
+    fn from(err: io::Error) -> PutObjectLockConfigurationError {
+        PutObjectLockConfigurationError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for PutObjectLockConfigurationError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutObjectLockConfigurationError {
+    fn description(&self) -> &str {
+        match *self {
+            PutObjectLockConfigurationError::Validation(ref cause) => cause,
+            PutObjectLockConfigurationError::Credentials(ref err) => err.description(),
+            PutObjectLockConfigurationError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            PutObjectLockConfigurationError::ParseError(ref cause) => cause,
+            PutObjectLockConfigurationError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by PutObjectRetention
+#[derive(Debug, PartialEq)]
+pub enum PutObjectRetentionError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl PutObjectRetentionError {
+    pub fn from_response(res: BufferedHttpResponse) -> PutObjectRetentionError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        PutObjectRetentionError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for PutObjectRetentionError {
+    fn from(err: XmlParseError) -> PutObjectRetentionError {
+        let XmlParseError(message) = err;
+        PutObjectRetentionError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for PutObjectRetentionError {
+    fn from(err: CredentialsError) -> PutObjectRetentionError {
+        PutObjectRetentionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for PutObjectRetentionError {
+    fn from(err: HttpDispatchError) -> PutObjectRetentionError {
+        PutObjectRetentionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutObjectRetentionError {
+    fn from(err: io::Error) -> PutObjectRetentionError {
+        PutObjectRetentionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for PutObjectRetentionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutObjectRetentionError {
+    fn description(&self) -> &str {
+        match *self {
+            PutObjectRetentionError::Validation(ref cause) => cause,
+            PutObjectRetentionError::Credentials(ref err) => err.description(),
+            PutObjectRetentionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            PutObjectRetentionError::ParseError(ref cause) => cause,
+            PutObjectRetentionError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by PutObjectTagging
 #[derive(Debug, PartialEq)]
 pub enum PutObjectTaggingError {
@@ -21918,6 +24051,83 @@ impl Error for PutObjectTaggingError {
             PutObjectTaggingError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             PutObjectTaggingError::ParseError(ref cause) => cause,
             PutObjectTaggingError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by PutPublicAccessBlock
+#[derive(Debug, PartialEq)]
+pub enum PutPublicAccessBlockError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl PutPublicAccessBlockError {
+    pub fn from_response(res: BufferedHttpResponse) -> PutPublicAccessBlockError {
+        {
+            let reader = EventReader::new(res.body.as_slice());
+            let mut stack = XmlResponse::new(reader.into_iter().peekable());
+            find_start_element(&mut stack);
+            if let Ok(parsed_error) = Self::deserialize(&mut stack) {
+                match &parsed_error.code[..] {
+                    _ => {}
+                }
+            }
+        }
+        PutPublicAccessBlockError::Unknown(res)
+    }
+
+    fn deserialize<T>(stack: &mut T) -> Result<XmlError, XmlParseError>
+    where
+        T: Peek + Next,
+    {
+        XmlErrorDeserializer::deserialize("Error", stack)
+    }
+}
+
+impl From<XmlParseError> for PutPublicAccessBlockError {
+    fn from(err: XmlParseError) -> PutPublicAccessBlockError {
+        let XmlParseError(message) = err;
+        PutPublicAccessBlockError::ParseError(message.to_string())
+    }
+}
+impl From<CredentialsError> for PutPublicAccessBlockError {
+    fn from(err: CredentialsError) -> PutPublicAccessBlockError {
+        PutPublicAccessBlockError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for PutPublicAccessBlockError {
+    fn from(err: HttpDispatchError) -> PutPublicAccessBlockError {
+        PutPublicAccessBlockError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for PutPublicAccessBlockError {
+    fn from(err: io::Error) -> PutPublicAccessBlockError {
+        PutPublicAccessBlockError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for PutPublicAccessBlockError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for PutPublicAccessBlockError {
+    fn description(&self) -> &str {
+        match *self {
+            PutPublicAccessBlockError::Validation(ref cause) => cause,
+            PutPublicAccessBlockError::Credentials(ref err) => err.description(),
+            PutPublicAccessBlockError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            PutPublicAccessBlockError::ParseError(ref cause) => cause,
+            PutPublicAccessBlockError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -22272,7 +24482,7 @@ pub trait S3 {
         input: DeleteBucketAnalyticsConfigurationRequest,
     ) -> RusotoFuture<(), DeleteBucketAnalyticsConfigurationError>;
 
-    /// <p>Deletes the cors configuration information set for the bucket.</p>
+    /// <p>Deletes the CORS configuration information set for the bucket.</p>
     fn delete_bucket_cors(
         &self,
         input: DeleteBucketCorsRequest,
@@ -22308,7 +24518,7 @@ pub trait S3 {
         input: DeleteBucketPolicyRequest,
     ) -> RusotoFuture<(), DeleteBucketPolicyError>;
 
-    /// <p>Deletes the replication configuration from the bucket.</p>
+    /// <p> Deletes the replication configuration from the bucket. For information about replication configuration, see <a href=" https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html">Cross-Region Replication (CRR)</a> in the <i>Amazon S3 Developer Guide</i>. </p>
     fn delete_bucket_replication(
         &self,
         input: DeleteBucketReplicationRequest,
@@ -22344,6 +24554,12 @@ pub trait S3 {
         input: DeleteObjectsRequest,
     ) -> RusotoFuture<DeleteObjectsOutput, DeleteObjectsError>;
 
+    /// <p>Removes the <code>PublicAccessBlock</code> configuration from an Amazon S3 bucket.</p>
+    fn delete_public_access_block(
+        &self,
+        input: DeletePublicAccessBlockRequest,
+    ) -> RusotoFuture<(), DeletePublicAccessBlockError>;
+
     /// <p>Returns the accelerate configuration of a bucket.</p>
     fn get_bucket_accelerate_configuration(
         &self,
@@ -22362,7 +24578,7 @@ pub trait S3 {
         input: GetBucketAnalyticsConfigurationRequest,
     ) -> RusotoFuture<GetBucketAnalyticsConfigurationOutput, GetBucketAnalyticsConfigurationError>;
 
-    /// <p>Returns the cors configuration for the bucket.</p>
+    /// <p>Returns the CORS configuration for the bucket.</p>
     fn get_bucket_cors(
         &self,
         input: GetBucketCorsRequest,
@@ -22428,7 +24644,13 @@ pub trait S3 {
         input: GetBucketPolicyRequest,
     ) -> RusotoFuture<GetBucketPolicyOutput, GetBucketPolicyError>;
 
-    /// <p>Returns the replication configuration of a bucket.</p>
+    /// <p>Retrieves the policy status for an Amazon S3 bucket, indicating whether the bucket is public.</p>
+    fn get_bucket_policy_status(
+        &self,
+        input: GetBucketPolicyStatusRequest,
+    ) -> RusotoFuture<GetBucketPolicyStatusOutput, GetBucketPolicyStatusError>;
+
+    /// <p><p>Returns the replication configuration of a bucket.</p> <note> <p> It can take a while to propagate the put or delete a replication configuration to all Amazon S3 systems. Therefore, a get request soon after put or delete can return a wrong result. </p> </note></p>
     fn get_bucket_replication(
         &self,
         input: GetBucketReplicationRequest,
@@ -22467,6 +24689,24 @@ pub trait S3 {
         input: GetObjectAclRequest,
     ) -> RusotoFuture<GetObjectAclOutput, GetObjectAclError>;
 
+    /// <p>Gets an object's current Legal Hold status.</p>
+    fn get_object_legal_hold(
+        &self,
+        input: GetObjectLegalHoldRequest,
+    ) -> RusotoFuture<GetObjectLegalHoldOutput, GetObjectLegalHoldError>;
+
+    /// <p>Gets the Object Lock configuration for a bucket. The rule specified in the Object Lock configuration will be applied by default to every new object placed in the specified bucket.</p>
+    fn get_object_lock_configuration(
+        &self,
+        input: GetObjectLockConfigurationRequest,
+    ) -> RusotoFuture<GetObjectLockConfigurationOutput, GetObjectLockConfigurationError>;
+
+    /// <p>Retrieves an object's retention settings.</p>
+    fn get_object_retention(
+        &self,
+        input: GetObjectRetentionRequest,
+    ) -> RusotoFuture<GetObjectRetentionOutput, GetObjectRetentionError>;
+
     /// <p>Returns the tag-set of an object.</p>
     fn get_object_tagging(
         &self,
@@ -22478,6 +24718,12 @@ pub trait S3 {
         &self,
         input: GetObjectTorrentRequest,
     ) -> RusotoFuture<GetObjectTorrentOutput, GetObjectTorrentError>;
+
+    /// <p>Retrieves the <code>PublicAccessBlock</code> configuration for an Amazon S3 bucket.</p>
+    fn get_public_access_block(
+        &self,
+        input: GetPublicAccessBlockRequest,
+    ) -> RusotoFuture<GetPublicAccessBlockOutput, GetPublicAccessBlockError>;
 
     /// <p>This operation is useful to determine if a bucket exists and you have permission to access it.</p>
     fn head_bucket(&self, input: HeadBucketRequest) -> RusotoFuture<(), HeadBucketError>;
@@ -22551,7 +24797,7 @@ pub trait S3 {
         input: PutBucketAnalyticsConfigurationRequest,
     ) -> RusotoFuture<(), PutBucketAnalyticsConfigurationError>;
 
-    /// <p>Sets the cors configuration for a bucket.</p>
+    /// <p>Sets the CORS configuration for a bucket.</p>
     fn put_bucket_cors(&self, input: PutBucketCorsRequest) -> RusotoFuture<(), PutBucketCorsError>;
 
     /// <p>Creates a new server-side encryption configuration (or replaces an existing one, if present).</p>
@@ -22608,7 +24854,7 @@ pub trait S3 {
         input: PutBucketPolicyRequest,
     ) -> RusotoFuture<(), PutBucketPolicyError>;
 
-    /// <p>Creates a new replication configuration (or replaces an existing one, if present).</p>
+    /// <p> Creates a replication configuration or replaces an existing one. For more information, see <a href=" https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html">Cross-Region Replication (CRR)</a> in the <i>Amazon S3 Developer Guide</i>. </p>
     fn put_bucket_replication(
         &self,
         input: PutBucketReplicationRequest,
@@ -22647,11 +24893,35 @@ pub trait S3 {
         input: PutObjectAclRequest,
     ) -> RusotoFuture<PutObjectAclOutput, PutObjectAclError>;
 
+    /// <p>Applies a Legal Hold configuration to the specified object.</p>
+    fn put_object_legal_hold(
+        &self,
+        input: PutObjectLegalHoldRequest,
+    ) -> RusotoFuture<PutObjectLegalHoldOutput, PutObjectLegalHoldError>;
+
+    /// <p>Places an Object Lock configuration on the specified bucket. The rule specified in the Object Lock configuration will be applied by default to every new object placed in the specified bucket.</p>
+    fn put_object_lock_configuration(
+        &self,
+        input: PutObjectLockConfigurationRequest,
+    ) -> RusotoFuture<PutObjectLockConfigurationOutput, PutObjectLockConfigurationError>;
+
+    /// <p>Places an Object Retention configuration on an object.</p>
+    fn put_object_retention(
+        &self,
+        input: PutObjectRetentionRequest,
+    ) -> RusotoFuture<PutObjectRetentionOutput, PutObjectRetentionError>;
+
     /// <p>Sets the supplied tag-set to an object that already exists in a bucket</p>
     fn put_object_tagging(
         &self,
         input: PutObjectTaggingRequest,
     ) -> RusotoFuture<PutObjectTaggingOutput, PutObjectTaggingError>;
+
+    /// <p>Creates or modifies the <code>PublicAccessBlock</code> configuration for an Amazon S3 bucket.</p>
+    fn put_public_access_block(
+        &self,
+        input: PutPublicAccessBlockRequest,
+    ) -> RusotoFuture<(), PutPublicAccessBlockError>;
 
     /// <p>Restores an archived copy of an object back into Amazon S3</p>
     fn restore_object(
@@ -22758,11 +25028,10 @@ impl S3 for S3Client {
                         &mut stack,
                     )?;
                 }
-
                 if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
                     result.request_charged = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
         })
@@ -22821,7 +25090,6 @@ impl S3 for S3Client {
                         &mut stack,
                     )?;
                 }
-
                 if let Some(expiration) = response.headers.get("x-amz-expiration") {
                     let value = expiration.to_owned();
                     result.expiration = Some(value)
@@ -22846,7 +25114,7 @@ impl S3 for S3Client {
                 if let Some(version_id) = response.headers.get("x-amz-version-id") {
                     let value = version_id.to_owned();
                     result.version_id = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
         })
@@ -22969,6 +25237,24 @@ impl S3 for S3Client {
             request.add_header("x-amz-metadata-directive", &metadata_directive.to_string());
         }
 
+        if let Some(ref object_lock_legal_hold_status) = input.object_lock_legal_hold_status {
+            request.add_header(
+                "x-amz-object-lock-legal-hold",
+                &object_lock_legal_hold_status.to_string(),
+            );
+        }
+
+        if let Some(ref object_lock_mode) = input.object_lock_mode {
+            request.add_header("x-amz-object-lock-mode", &object_lock_mode.to_string());
+        }
+
+        if let Some(ref object_lock_retain_until_date) = input.object_lock_retain_until_date {
+            request.add_header(
+                "x-amz-object-lock-retain-until-date",
+                &object_lock_retain_until_date.to_string(),
+            );
+        }
+
         if let Some(ref request_payer) = input.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
@@ -23053,7 +25339,6 @@ impl S3 for S3Client {
                     result =
                         CopyObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
                 }
-
                 if let Some(copy_source_version_id) =
                     response.headers.get("x-amz-copy-source-version-id")
                 {
@@ -23098,7 +25383,7 @@ impl S3 for S3Client {
                 if let Some(version_id) = response.headers.get("x-amz-version-id") {
                     let value = version_id.to_owned();
                     result.version_id = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
         })
@@ -23136,6 +25421,13 @@ impl S3 for S3Client {
 
         if let Some(ref grant_write_acp) = input.grant_write_acp {
             request.add_header("x-amz-grant-write-acp", &grant_write_acp.to_string());
+        }
+
+        if let Some(ref object_lock_enabled_for_bucket) = input.object_lock_enabled_for_bucket {
+            request.add_header(
+                "x-amz-bucket-object-lock-enabled",
+                &object_lock_enabled_for_bucket.to_string(),
+            );
         }
 
         if input.create_bucket_configuration.is_some() {
@@ -23176,11 +25468,10 @@ impl S3 for S3Client {
                     result =
                         CreateBucketOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
                 }
-
                 if let Some(location) = response.headers.get("Location") {
                     let value = location.to_owned();
                     result.location = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
         })
@@ -23245,6 +25536,24 @@ impl S3 for S3Client {
                 let header = format!("x-amz-meta-{}", header_name);
                 request.add_header(header, header_value);
             }
+        }
+
+        if let Some(ref object_lock_legal_hold_status) = input.object_lock_legal_hold_status {
+            request.add_header(
+                "x-amz-object-lock-legal-hold",
+                &object_lock_legal_hold_status.to_string(),
+            );
+        }
+
+        if let Some(ref object_lock_mode) = input.object_lock_mode {
+            request.add_header("x-amz-object-lock-mode", &object_lock_mode.to_string());
+        }
+
+        if let Some(ref object_lock_retain_until_date) = input.object_lock_retain_until_date {
+            request.add_header(
+                "x-amz-object-lock-retain-until-date",
+                &object_lock_retain_until_date.to_string(),
+            );
         }
 
         if let Some(ref request_payer) = input.request_payer {
@@ -23331,7 +25640,6 @@ impl S3 for S3Client {
                         &mut stack,
                     )?;
                 }
-
                 if let Some(abort_date) = response.headers.get("x-amz-abort-date") {
                     let value = abort_date.to_owned();
                     result.abort_date = Some(value)
@@ -23370,7 +25678,7 @@ impl S3 for S3Client {
                 {
                     let value = server_side_encryption.to_owned();
                     result.server_side_encryption = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
         })
@@ -23425,7 +25733,7 @@ impl S3 for S3Client {
         })
     }
 
-    /// <p>Deletes the cors configuration information set for the bucket.</p>
+    /// <p>Deletes the CORS configuration information set for the bucket.</p>
     #[allow(unused_variables, warnings)]
     fn delete_bucket_cors(
         &self,
@@ -23589,7 +25897,7 @@ impl S3 for S3Client {
         })
     }
 
-    /// <p>Deletes the replication configuration from the bucket.</p>
+    /// <p> Deletes the replication configuration from the bucket. For information about replication configuration, see <a href=" https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html">Cross-Region Replication (CRR)</a> in the <i>Amazon S3 Developer Guide</i>. </p>
     #[allow(unused_variables, warnings)]
     fn delete_bucket_replication(
         &self,
@@ -23678,6 +25986,13 @@ impl S3 for S3Client {
 
         let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
 
+        if let Some(ref bypass_governance_retention) = input.bypass_governance_retention {
+            request.add_header(
+                "x-amz-bypass-governance-retention",
+                &bypass_governance_retention.to_string(),
+            );
+        }
+
         if let Some(ref mfa) = input.mfa {
             request.add_header("x-amz-mfa", &mfa.to_string());
         }
@@ -23717,7 +26032,6 @@ impl S3 for S3Client {
                     result =
                         DeleteObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
                 }
-
                 if let Some(delete_marker) = response.headers.get("x-amz-delete-marker") {
                     let value = delete_marker.to_owned();
                     result.delete_marker = Some(value.parse::<bool>().unwrap())
@@ -23729,7 +26043,7 @@ impl S3 for S3Client {
                 if let Some(version_id) = response.headers.get("x-amz-version-id") {
                     let value = version_id.to_owned();
                     result.version_id = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
         })
@@ -23779,11 +26093,10 @@ impl S3 for S3Client {
                         &mut stack,
                     )?;
                 }
-
                 if let Some(version_id) = response.headers.get("x-amz-version-id") {
                     let value = version_id.to_owned();
                     result.version_id = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
         })
@@ -23798,6 +26111,13 @@ impl S3 for S3Client {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
 
         let mut request = SignedRequest::new("POST", "s3", &self.region, &request_uri);
+
+        if let Some(ref bypass_governance_retention) = input.bypass_governance_retention {
+            request.add_header(
+                "x-amz-bypass-governance-retention",
+                &bypass_governance_retention.to_string(),
+            );
+        }
 
         if let Some(ref mfa) = input.mfa {
             request.add_header("x-amz-mfa", &mfa.to_string());
@@ -23840,13 +26160,37 @@ impl S3 for S3Client {
                     result =
                         DeleteObjectsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
                 }
-
                 if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
                     result.request_charged = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
+        })
+    }
+
+    /// <p>Removes the <code>PublicAccessBlock</code> configuration from an Amazon S3 bucket.</p>
+    #[allow(unused_variables, warnings)]
+    fn delete_public_access_block(
+        &self,
+        input: DeletePublicAccessBlockRequest,
+    ) -> RusotoFuture<(), DeletePublicAccessBlockError> {
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
+
+        let mut request = SignedRequest::new("DELETE", "s3", &self.region, &request_uri);
+
+        let mut params = Params::new();
+        params.put_key("publicAccessBlock");
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeletePublicAccessBlockError::from_response(response))
+                }));
+            }
+
+            Box::new(future::ok(::std::mem::drop(response)))
         })
     }
 
@@ -23892,7 +26236,7 @@ impl S3 for S3Client {
                         &mut stack,
                     )?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -23938,7 +26282,7 @@ impl S3 for S3Client {
                     result =
                         GetBucketAclOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -23987,13 +26331,13 @@ impl S3 for S3Client {
                         &mut stack,
                     )?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
     }
 
-    /// <p>Returns the cors configuration for the bucket.</p>
+    /// <p>Returns the CORS configuration for the bucket.</p>
     #[allow(unused_variables, warnings)]
     fn get_bucket_cors(
         &self,
@@ -24033,7 +26377,7 @@ impl S3 for S3Client {
                     result =
                         GetBucketCorsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -24080,7 +26424,7 @@ impl S3 for S3Client {
                         &mut stack,
                     )?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -24129,7 +26473,7 @@ impl S3 for S3Client {
                         &mut stack,
                     )?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -24177,7 +26521,7 @@ impl S3 for S3Client {
                         &mut stack,
                     )?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -24225,7 +26569,7 @@ impl S3 for S3Client {
                         &mut stack,
                     )?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -24273,7 +26617,7 @@ impl S3 for S3Client {
                         &mut stack,
                     )?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -24321,7 +26665,7 @@ impl S3 for S3Client {
                         &mut stack,
                     )?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -24367,7 +26711,7 @@ impl S3 for S3Client {
                         &mut stack,
                     )?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -24414,7 +26758,7 @@ impl S3 for S3Client {
                         &mut stack,
                     )?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -24461,7 +26805,7 @@ impl S3 for S3Client {
                         &mut stack,
                     )?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -24500,7 +26844,54 @@ impl S3 for S3Client {
         })
     }
 
-    /// <p>Returns the replication configuration of a bucket.</p>
+    /// <p>Retrieves the policy status for an Amazon S3 bucket, indicating whether the bucket is public.</p>
+    #[allow(unused_variables, warnings)]
+    fn get_bucket_policy_status(
+        &self,
+        input: GetBucketPolicyStatusRequest,
+    ) -> RusotoFuture<GetBucketPolicyStatusOutput, GetBucketPolicyStatusError> {
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
+
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+
+        let mut params = Params::new();
+        params.put_key("policyStatus");
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetBucketPolicyStatusError::from_response(response))
+                    }),
+                );
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = GetBucketPolicyStatusOutput::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = GetBucketPolicyStatusOutputDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p><p>Returns the replication configuration of a bucket.</p> <note> <p> It can take a while to propagate the put or delete a replication configuration to all Amazon S3 systems. Therefore, a get request soon after put or delete can return a wrong result. </p> </note></p>
     #[allow(unused_variables, warnings)]
     fn get_bucket_replication(
         &self,
@@ -24541,7 +26932,7 @@ impl S3 for S3Client {
                         &mut stack,
                     )?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -24586,7 +26977,7 @@ impl S3 for S3Client {
                         &mut stack,
                     )?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -24634,7 +27025,7 @@ impl S3 for S3Client {
                         &mut stack,
                     )?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -24681,7 +27072,7 @@ impl S3 for S3Client {
                         &mut stack,
                     )?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -24729,7 +27120,7 @@ impl S3 for S3Client {
                         &mut stack,
                     )?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -24888,6 +27279,22 @@ impl S3 for S3Client {
                 let value = missing_meta.to_owned();
                 result.missing_meta = Some(value.parse::<i64>().unwrap())
             };
+            if let Some(object_lock_legal_hold_status) =
+                response.headers.get("x-amz-object-lock-legal-hold")
+            {
+                let value = object_lock_legal_hold_status.to_owned();
+                result.object_lock_legal_hold_status = Some(value)
+            };
+            if let Some(object_lock_mode) = response.headers.get("x-amz-object-lock-mode") {
+                let value = object_lock_mode.to_owned();
+                result.object_lock_mode = Some(value)
+            };
+            if let Some(object_lock_retain_until_date) =
+                response.headers.get("x-amz-object-lock-retain-until-date")
+            {
+                let value = object_lock_retain_until_date.to_owned();
+                result.object_lock_retain_until_date = Some(value)
+            };
             if let Some(parts_count) = response.headers.get("x-amz-mp-parts-count") {
                 let value = parts_count.to_owned();
                 result.parts_count = Some(value.parse::<i64>().unwrap())
@@ -24999,11 +27406,163 @@ impl S3 for S3Client {
                     result =
                         GetObjectAclOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
                 }
-
                 if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
                     result.request_charged = Some(value)
-                };
+                }; // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Gets an object's current Legal Hold status.</p>
+    #[allow(unused_variables, warnings)]
+    fn get_object_legal_hold(
+        &self,
+        input: GetObjectLegalHoldRequest,
+    ) -> RusotoFuture<GetObjectLegalHoldOutput, GetObjectLegalHoldError> {
+        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+
+        if let Some(ref request_payer) = input.request_payer {
+            request.add_header("x-amz-request-payer", &request_payer.to_string());
+        }
+        let mut params = Params::new();
+        if let Some(ref x) = input.version_id {
+            params.put("versionId", x);
+        }
+        params.put_key("legal-hold");
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetObjectLegalHoldError::from_response(response))),
+                );
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = GetObjectLegalHoldOutput::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = GetObjectLegalHoldOutputDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Gets the Object Lock configuration for a bucket. The rule specified in the Object Lock configuration will be applied by default to every new object placed in the specified bucket.</p>
+    #[allow(unused_variables, warnings)]
+    fn get_object_lock_configuration(
+        &self,
+        input: GetObjectLockConfigurationRequest,
+    ) -> RusotoFuture<GetObjectLockConfigurationOutput, GetObjectLockConfigurationError> {
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
+
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+
+        let mut params = Params::new();
+        params.put_key("object-lock");
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetObjectLockConfigurationError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = GetObjectLockConfigurationOutput::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = GetObjectLockConfigurationOutputDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Retrieves an object's retention settings.</p>
+    #[allow(unused_variables, warnings)]
+    fn get_object_retention(
+        &self,
+        input: GetObjectRetentionRequest,
+    ) -> RusotoFuture<GetObjectRetentionOutput, GetObjectRetentionError> {
+        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+
+        if let Some(ref request_payer) = input.request_payer {
+            request.add_header("x-amz-request-payer", &request_payer.to_string());
+        }
+        let mut params = Params::new();
+        if let Some(ref x) = input.version_id {
+            params.put("versionId", x);
+        }
+        params.put_key("retention");
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetObjectRetentionError::from_response(response))),
+                );
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = GetObjectRetentionOutput::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = GetObjectRetentionOutputDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -25054,11 +27613,10 @@ impl S3 for S3Client {
                         &mut stack,
                     )?;
                 }
-
                 if let Some(version_id) = response.headers.get("x-amz-version-id") {
                     let value = version_id.to_owned();
                     result.version_id = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
         })
@@ -25098,6 +27656,53 @@ impl S3 for S3Client {
                 result.request_charged = Some(value)
             };
             Box::new(future::ok(result))
+        })
+    }
+
+    /// <p>Retrieves the <code>PublicAccessBlock</code> configuration for an Amazon S3 bucket.</p>
+    #[allow(unused_variables, warnings)]
+    fn get_public_access_block(
+        &self,
+        input: GetPublicAccessBlockRequest,
+    ) -> RusotoFuture<GetPublicAccessBlockOutput, GetPublicAccessBlockError> {
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
+
+        let mut request = SignedRequest::new("GET", "s3", &self.region, &request_uri);
+
+        let mut params = Params::new();
+        params.put_key("publicAccessBlock");
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetPublicAccessBlockError::from_response(response))
+                    }),
+                );
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = GetPublicAccessBlockOutput::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = GetPublicAccessBlockOutputDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                // parse non-payload
+                Ok(result)
+            }))
         })
     }
 
@@ -25211,7 +27816,6 @@ impl S3 for S3Client {
                     result =
                         HeadObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
                 }
-
                 if let Some(accept_ranges) = response.headers.get("accept-ranges") {
                     let value = accept_ranges.to_owned();
                     result.accept_ranges = Some(value)
@@ -25271,6 +27875,22 @@ impl S3 for S3Client {
                     let value = missing_meta.to_owned();
                     result.missing_meta = Some(value.parse::<i64>().unwrap())
                 };
+                if let Some(object_lock_legal_hold_status) =
+                    response.headers.get("x-amz-object-lock-legal-hold")
+                {
+                    let value = object_lock_legal_hold_status.to_owned();
+                    result.object_lock_legal_hold_status = Some(value)
+                };
+                if let Some(object_lock_mode) = response.headers.get("x-amz-object-lock-mode") {
+                    let value = object_lock_mode.to_owned();
+                    result.object_lock_mode = Some(value)
+                };
+                if let Some(object_lock_retain_until_date) =
+                    response.headers.get("x-amz-object-lock-retain-until-date")
+                {
+                    let value = object_lock_retain_until_date.to_owned();
+                    result.object_lock_retain_until_date = Some(value)
+                };
                 if let Some(parts_count) = response.headers.get("x-amz-mp-parts-count") {
                     let value = parts_count.to_owned();
                     result.parts_count = Some(value.parse::<i64>().unwrap())
@@ -25327,7 +27947,7 @@ impl S3 for S3Client {
                 {
                     let value = website_redirect_location.to_owned();
                     result.website_redirect_location = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
         })
@@ -25378,7 +27998,7 @@ impl S3 for S3Client {
                         &mut stack,
                     )?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -25429,7 +28049,7 @@ impl S3 for S3Client {
                         &mut stack,
                     )?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -25480,7 +28100,7 @@ impl S3 for S3Client {
                         &mut stack,
                     )?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -25519,7 +28139,7 @@ impl S3 for S3Client {
                     result =
                         ListBucketsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -25584,7 +28204,7 @@ impl S3 for S3Client {
                         &mut stack,
                     )?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -25650,7 +28270,7 @@ impl S3 for S3Client {
                         &mut stack,
                     )?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -25713,7 +28333,7 @@ impl S3 for S3Client {
                     result =
                         ListObjectsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -25783,7 +28403,7 @@ impl S3 for S3Client {
                     result =
                         ListObjectsV2OutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -25835,7 +28455,6 @@ impl S3 for S3Client {
                     result =
                         ListPartsOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
                 }
-
                 if let Some(abort_date) = response.headers.get("x-amz-abort-date") {
                     let value = abort_date.to_owned();
                     result.abort_date = Some(value)
@@ -25847,7 +28466,7 @@ impl S3 for S3Client {
                 if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
                     result.request_charged = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
         })
@@ -25985,7 +28604,7 @@ impl S3 for S3Client {
         })
     }
 
-    /// <p>Sets the cors configuration for a bucket.</p>
+    /// <p>Sets the CORS configuration for a bucket.</p>
     #[allow(unused_variables, warnings)]
     fn put_bucket_cors(&self, input: PutBucketCorsRequest) -> RusotoFuture<(), PutBucketCorsError> {
         let request_uri = format!("/{bucket}", bucket = input.bucket);
@@ -26359,7 +28978,7 @@ impl S3 for S3Client {
         })
     }
 
-    /// <p>Creates a new replication configuration (or replaces an existing one, if present).</p>
+    /// <p> Creates a replication configuration or replaces an existing one. For more information, see <a href=" https://docs.aws.amazon.com/AmazonS3/latest/dev/crr.html">Cross-Region Replication (CRR)</a> in the <i>Amazon S3 Developer Guide</i>. </p>
     #[allow(unused_variables, warnings)]
     fn put_bucket_replication(
         &self,
@@ -26612,6 +29231,24 @@ impl S3 for S3Client {
             }
         }
 
+        if let Some(ref object_lock_legal_hold_status) = input.object_lock_legal_hold_status {
+            request.add_header(
+                "x-amz-object-lock-legal-hold",
+                &object_lock_legal_hold_status.to_string(),
+            );
+        }
+
+        if let Some(ref object_lock_mode) = input.object_lock_mode {
+            request.add_header("x-amz-object-lock-mode", &object_lock_mode.to_string());
+        }
+
+        if let Some(ref object_lock_retain_until_date) = input.object_lock_retain_until_date {
+            request.add_header(
+                "x-amz-object-lock-retain-until-date",
+                &object_lock_retain_until_date.to_string(),
+            );
+        }
+
         if let Some(ref request_payer) = input.request_payer {
             request.add_header("x-amz-request-payer", &request_payer.to_string());
         }
@@ -26696,7 +29333,6 @@ impl S3 for S3Client {
                     result =
                         PutObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
                 }
-
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
@@ -26739,7 +29375,7 @@ impl S3 for S3Client {
                 if let Some(version_id) = response.headers.get("x-amz-version-id") {
                     let value = version_id.to_owned();
                     result.version_id = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
         })
@@ -26830,11 +29466,231 @@ impl S3 for S3Client {
                     result =
                         PutObjectAclOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
                 }
-
                 if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
                     result.request_charged = Some(value)
-                };
+                }; // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Applies a Legal Hold configuration to the specified object.</p>
+    #[allow(unused_variables, warnings)]
+    fn put_object_legal_hold(
+        &self,
+        input: PutObjectLegalHoldRequest,
+    ) -> RusotoFuture<PutObjectLegalHoldOutput, PutObjectLegalHoldError> {
+        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+
+        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+
+        if let Some(ref content_md5) = input.content_md5 {
+            request.add_header("Content-MD5", &content_md5.to_string());
+        }
+
+        if let Some(ref request_payer) = input.request_payer {
+            request.add_header("x-amz-request-payer", &request_payer.to_string());
+        }
+        let mut params = Params::new();
+        if let Some(ref x) = input.version_id {
+            params.put("versionId", x);
+        }
+        params.put_key("legal-hold");
+        request.set_params(params);
+        if input.legal_hold.is_some() {
+            let mut writer = EventWriter::new(Vec::new());
+            ObjectLockLegalHoldSerializer::serialize(
+                &mut writer,
+                "LegalHold",
+                input.legal_hold.as_ref().unwrap(),
+            );
+            request.set_payload(Some(writer.into_inner()));
+        } else {
+            request.set_payload(Some(Vec::new()));
+        }
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutObjectLegalHoldError::from_response(response))),
+                );
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = PutObjectLegalHoldOutput::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutObjectLegalHoldOutputDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                    let value = request_charged.to_owned();
+                    result.request_charged = Some(value)
+                }; // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Places an Object Lock configuration on the specified bucket. The rule specified in the Object Lock configuration will be applied by default to every new object placed in the specified bucket.</p>
+    #[allow(unused_variables, warnings)]
+    fn put_object_lock_configuration(
+        &self,
+        input: PutObjectLockConfigurationRequest,
+    ) -> RusotoFuture<PutObjectLockConfigurationOutput, PutObjectLockConfigurationError> {
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
+
+        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+
+        if let Some(ref content_md5) = input.content_md5 {
+            request.add_header("Content-MD5", &content_md5.to_string());
+        }
+
+        if let Some(ref request_payer) = input.request_payer {
+            request.add_header("x-amz-request-payer", &request_payer.to_string());
+        }
+
+        if let Some(ref token) = input.token {
+            request.add_header("x-amz-bucket-object-lock-token", &token.to_string());
+        }
+        let mut params = Params::new();
+        params.put_key("object-lock");
+        request.set_params(params);
+        if input.object_lock_configuration.is_some() {
+            let mut writer = EventWriter::new(Vec::new());
+            ObjectLockConfigurationSerializer::serialize(
+                &mut writer,
+                "ObjectLockConfiguration",
+                input.object_lock_configuration.as_ref().unwrap(),
+            );
+            request.set_payload(Some(writer.into_inner()));
+        } else {
+            request.set_payload(Some(Vec::new()));
+        }
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(PutObjectLockConfigurationError::from_response(response))
+                }));
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = PutObjectLockConfigurationOutput::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutObjectLockConfigurationOutputDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                    let value = request_charged.to_owned();
+                    result.request_charged = Some(value)
+                }; // parse non-payload
+                Ok(result)
+            }))
+        })
+    }
+
+    /// <p>Places an Object Retention configuration on an object.</p>
+    #[allow(unused_variables, warnings)]
+    fn put_object_retention(
+        &self,
+        input: PutObjectRetentionRequest,
+    ) -> RusotoFuture<PutObjectRetentionOutput, PutObjectRetentionError> {
+        let request_uri = format!("/{bucket}/{key}", bucket = input.bucket, key = input.key);
+
+        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+
+        if let Some(ref bypass_governance_retention) = input.bypass_governance_retention {
+            request.add_header(
+                "x-amz-bypass-governance-retention",
+                &bypass_governance_retention.to_string(),
+            );
+        }
+
+        if let Some(ref content_md5) = input.content_md5 {
+            request.add_header("Content-MD5", &content_md5.to_string());
+        }
+
+        if let Some(ref request_payer) = input.request_payer {
+            request.add_header("x-amz-request-payer", &request_payer.to_string());
+        }
+        let mut params = Params::new();
+        if let Some(ref x) = input.version_id {
+            params.put("versionId", x);
+        }
+        params.put_key("retention");
+        request.set_params(params);
+        if input.retention.is_some() {
+            let mut writer = EventWriter::new(Vec::new());
+            ObjectLockRetentionSerializer::serialize(
+                &mut writer,
+                "Retention",
+                input.retention.as_ref().unwrap(),
+            );
+            request.set_payload(Some(writer.into_inner()));
+        } else {
+            request.set_payload(Some(Vec::new()));
+        }
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(PutObjectRetentionError::from_response(response))),
+                );
+            }
+
+            Box::new(response.buffer().from_err().and_then(move |response| {
+                let mut result;
+
+                if response.body.is_empty() {
+                    result = PutObjectRetentionOutput::default();
+                } else {
+                    let reader = EventReader::new_with_config(
+                        response.body.as_slice(),
+                        ParserConfig::new().trim_whitespace(true),
+                    );
+                    let mut stack = XmlResponse::new(reader.into_iter().peekable());
+                    let _start_document = stack.next();
+                    let actual_tag_name = peek_at_name(&mut stack)?;
+                    result = PutObjectRetentionOutputDeserializer::deserialize(
+                        &actual_tag_name,
+                        &mut stack,
+                    )?;
+                }
+                if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
+                    let value = request_charged.to_owned();
+                    result.request_charged = Some(value)
+                }; // parse non-payload
                 Ok(result)
             }))
         })
@@ -26891,13 +29747,49 @@ impl S3 for S3Client {
                         &mut stack,
                     )?;
                 }
-
                 if let Some(version_id) = response.headers.get("x-amz-version-id") {
                     let value = version_id.to_owned();
                     result.version_id = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
+        })
+    }
+
+    /// <p>Creates or modifies the <code>PublicAccessBlock</code> configuration for an Amazon S3 bucket.</p>
+    #[allow(unused_variables, warnings)]
+    fn put_public_access_block(
+        &self,
+        input: PutPublicAccessBlockRequest,
+    ) -> RusotoFuture<(), PutPublicAccessBlockError> {
+        let request_uri = format!("/{bucket}", bucket = input.bucket);
+
+        let mut request = SignedRequest::new("PUT", "s3", &self.region, &request_uri);
+
+        if let Some(ref content_md5) = input.content_md5 {
+            request.add_header("Content-MD5", &content_md5.to_string());
+        }
+        let mut params = Params::new();
+        params.put_key("publicAccessBlock");
+        request.set_params(params);
+        let mut writer = EventWriter::new(Vec::new());
+        PublicAccessBlockConfigurationSerializer::serialize(
+            &mut writer,
+            "PublicAccessBlockConfiguration",
+            &input.public_access_block_configuration,
+        );
+        request.set_payload(Some(writer.into_inner()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if !response.status.is_success() {
+                return Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(PutPublicAccessBlockError::from_response(response))
+                    }),
+                );
+            }
+
+            Box::new(future::ok(::std::mem::drop(response)))
         })
     }
 
@@ -26958,7 +29850,6 @@ impl S3 for S3Client {
                     result =
                         RestoreObjectOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
                 }
-
                 if let Some(request_charged) = response.headers.get("x-amz-request-charged") {
                     let value = request_charged.to_owned();
                     result.request_charged = Some(value)
@@ -26967,7 +29858,7 @@ impl S3 for S3Client {
                 {
                     let value = restore_output_path.to_owned();
                     result.restore_output_path = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
         })
@@ -27042,7 +29933,7 @@ impl S3 for S3Client {
                         &mut stack,
                     )?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -27124,7 +30015,6 @@ impl S3 for S3Client {
                     result =
                         UploadPartOutputDeserializer::deserialize(&actual_tag_name, &mut stack)?;
                 }
-
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
@@ -27159,7 +30049,7 @@ impl S3 for S3Client {
                 {
                     let value = server_side_encryption.to_owned();
                     result.server_side_encryption = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
         })
@@ -27289,7 +30179,6 @@ impl S3 for S3Client {
                         &mut stack,
                     )?;
                 }
-
                 if let Some(copy_source_version_id) =
                     response.headers.get("x-amz-copy-source-version-id")
                 {
@@ -27326,7 +30215,7 @@ impl S3 for S3Client {
                 {
                     let value = server_side_encryption.to_owned();
                     result.server_side_encryption = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
         })

@@ -80,6 +80,10 @@ pub struct GetPendingJobExecutionsResponse {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct JobExecution {
+    /// <p>The estimated number of seconds that remain before the job execution status will be changed to <code>TIMED_OUT</code>.</p>
+    #[serde(rename = "approximateSecondsBeforeTimedOut")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub approximate_seconds_before_timed_out: Option<i64>,
     /// <p>A number that identifies a particular job execution on a particular device. It can be used later in commands that return or update job execution information.</p>
     #[serde(rename = "executionNumber")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -176,6 +180,10 @@ pub struct StartNextPendingJobExecutionRequest {
     #[serde(rename = "statusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_details: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Specifies the amount of time this device has to finish execution of this job. If the job execution status is not set to a terminal state before this timer expires, or before the timer is reset (by calling <code>UpdateJobExecution</code>, setting the status to <code>IN_PROGRESS</code> and specifying a new timeout value in field <code>stepTimeoutInMinutes</code>) the job execution status will be automatically set to <code>TIMED_OUT</code>. Note that setting this timeout has no effect on that job execution timeout which may have been specified when the job was created (<code>CreateJob</code> using field <code>timeoutConfig</code>).</p>
+    #[serde(rename = "stepTimeoutInMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub step_timeout_in_minutes: Option<i64>,
     /// <p>The name of the thing associated with the device.</p>
     #[serde(rename = "thingName")]
     pub thing_name: String,
@@ -218,6 +226,10 @@ pub struct UpdateJobExecutionRequest {
     #[serde(rename = "statusDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_details: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Specifies the amount of time this device has to finish execution of this job. If the job execution status is not set to a terminal state before this timer expires, or before the timer is reset (by again calling <code>UpdateJobExecution</code>, setting the status to <code>IN_PROGRESS</code> and specifying a new timeout value in this field) the job execution status will be automatically set to <code>TIMED_OUT</code>. Note that setting or resetting this timeout has no effect on that job execution timeout which may have been specified when the job was created (<code>CreateJob</code> using field <code>timeoutConfig</code>).</p>
+    #[serde(rename = "stepTimeoutInMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub step_timeout_in_minutes: Option<i64>,
     /// <p>The name of the thing associated with the device.</p>
     #[serde(rename = "thingName")]
     pub thing_name: String,

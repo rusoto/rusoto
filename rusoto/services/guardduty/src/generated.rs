@@ -37,12 +37,10 @@ pub struct AcceptInvitationRequest {
     pub detector_id: String,
     /// <p>This value is used to validate the master account to the member account.</p>
     #[serde(rename = "InvitationId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub invitation_id: Option<String>,
+    pub invitation_id: String,
     /// <p>The account ID of the master GuardDuty account whose invitation you&#39;re accepting.</p>
     #[serde(rename = "MasterId")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub master_id: Option<String>,
+    pub master_id: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -116,8 +114,7 @@ pub struct ArchiveFindingsRequest {
     pub detector_id: String,
     /// <p>IDs of the findings that you want to archive.</p>
     #[serde(rename = "FindingIds")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub finding_ids: Option<Vec<String>>,
+    pub finding_ids: Vec<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -206,10 +203,17 @@ pub struct Country {
 /// <p>CreateDetector request body.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDetectorRequest {
+    /// <p>The idempotency token for the create request.</p>
+    #[serde(rename = "ClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub client_token: Option<String>,
     /// <p>A boolean value that specifies whether the detector is to be enabled.</p>
     #[serde(rename = "Enable")]
+    pub enable: bool,
+    /// <p>A enum value that specifies how frequently customer got Finding updates published.</p>
+    #[serde(rename = "FindingPublishingFrequency")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub enable: Option<bool>,
+    pub finding_publishing_frequency: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -241,12 +245,10 @@ pub struct CreateFilterRequest {
     pub detector_id: String,
     /// <p>Represents the criteria to be used in the filter for querying findings.</p>
     #[serde(rename = "FindingCriteria")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub finding_criteria: Option<FindingCriteria>,
+    pub finding_criteria: FindingCriteria,
     /// <p>The name of the filter.</p>
     #[serde(rename = "Name")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: String,
     /// <p>Specifies the position of the filter in the list of current filters. Also specifies the order in which this filter is applied to the findings.</p>
     #[serde(rename = "Rank")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -267,23 +269,23 @@ pub struct CreateFilterResponse {
 pub struct CreateIPSetRequest {
     /// <p>A boolean value that indicates whether GuardDuty is to start using the uploaded IPSet.</p>
     #[serde(rename = "Activate")]
+    pub activate: bool,
+    /// <p>The idempotency token for the create request.</p>
+    #[serde(rename = "ClientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub activate: Option<bool>,
+    pub client_token: Option<String>,
     /// <p>The unique ID of the detector that you want to update.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
     /// <p>The format of the file that contains the IPSet.</p>
     #[serde(rename = "Format")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub format: Option<String>,
+    pub format: String,
     /// <p>The URI of the file that contains the IPSet. For example (https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key)</p>
     #[serde(rename = "Location")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub location: Option<String>,
+    pub location: String,
     /// <p>The user friendly name to identify the IPSet. This name is displayed in all findings that are triggered by activity that involves IP addresses included in this IPSet.</p>
     #[serde(rename = "Name")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -299,8 +301,7 @@ pub struct CreateIPSetResponse {
 pub struct CreateMembersRequest {
     /// <p>A list of account ID and email address pairs of the accounts that you want to associate with the master GuardDuty account.</p>
     #[serde(rename = "AccountDetails")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub account_details: Option<Vec<AccountDetail>>,
+    pub account_details: Vec<AccountDetail>,
     /// <p>The unique ID of the detector of the GuardDuty account with which you want to associate member accounts.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
@@ -336,23 +337,23 @@ pub struct CreateSampleFindingsResponse {}
 pub struct CreateThreatIntelSetRequest {
     /// <p>A boolean value that indicates whether GuardDuty is to start using the uploaded ThreatIntelSet.</p>
     #[serde(rename = "Activate")]
+    pub activate: bool,
+    /// <p>The idempotency token for the create request.</p>
+    #[serde(rename = "ClientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub activate: Option<bool>,
+    pub client_token: Option<String>,
     /// <p>The unique ID of the detector that you want to update.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
     /// <p>The format of the file that contains the ThreatIntelSet.</p>
     #[serde(rename = "Format")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub format: Option<String>,
+    pub format: String,
     /// <p>The URI of the file that contains the ThreatIntelSet. For example (https://s3.us-west-2.amazonaws.com/my-bucket/my-object-key).</p>
     #[serde(rename = "Location")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub location: Option<String>,
+    pub location: String,
     /// <p>A user-friendly ThreatIntelSet name that is displayed in all finding generated by activity that involves IP addresses included in this ThreatIntelSet.</p>
     #[serde(rename = "Name")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub name: Option<String>,
+    pub name: String,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -368,8 +369,7 @@ pub struct CreateThreatIntelSetResponse {
 pub struct DeclineInvitationsRequest {
     /// <p>A list of account IDs of the AWS accounts that sent invitations to the current member account that you want to decline invitations from.</p>
     #[serde(rename = "AccountIds")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub account_ids: Option<Vec<String>>,
+    pub account_ids: Vec<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -425,8 +425,7 @@ pub struct DeleteIPSetResponse {}
 pub struct DeleteInvitationsRequest {
     /// <p>A list of account IDs of the AWS accounts that sent invitations to the current member account that you want to delete invitations from.</p>
     #[serde(rename = "AccountIds")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub account_ids: Option<Vec<String>>,
+    pub account_ids: Vec<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -443,8 +442,7 @@ pub struct DeleteInvitationsResponse {
 pub struct DeleteMembersRequest {
     /// <p>A list of account IDs of the GuardDuty member accounts that you want to delete.</p>
     #[serde(rename = "AccountIds")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub account_ids: Option<Vec<String>>,
+    pub account_ids: Vec<String>,
     /// <p>The unique ID of the detector of the GuardDuty account whose members you want to delete.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
@@ -489,8 +487,7 @@ pub struct DisassociateFromMasterAccountResponse {}
 pub struct DisassociateMembersRequest {
     /// <p>A list of account IDs of the GuardDuty member accounts that you want to disassociate from master.</p>
     #[serde(rename = "AccountIds")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub account_ids: Option<Vec<String>>,
+    pub account_ids: Vec<String>,
     /// <p>The unique ID of the detector of the GuardDuty account whose members you want to disassociate from master.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
@@ -631,6 +628,9 @@ pub struct GetDetectorResponse {
     #[serde(rename = "CreatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<String>,
+    #[serde(rename = "FindingPublishingFrequency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub finding_publishing_frequency: Option<String>,
     #[serde(rename = "ServiceRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role: Option<String>,
@@ -685,8 +685,7 @@ pub struct GetFindingsRequest {
     pub detector_id: String,
     /// <p>IDs of the findings that you want to retrieve.</p>
     #[serde(rename = "FindingIds")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub finding_ids: Option<Vec<String>>,
+    pub finding_ids: Vec<String>,
     /// <p>Represents the criteria used for sorting findings.</p>
     #[serde(rename = "SortCriteria")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -713,8 +712,7 @@ pub struct GetFindingsStatisticsRequest {
     pub finding_criteria: Option<FindingCriteria>,
     /// <p>Types of finding statistics to retrieve.</p>
     #[serde(rename = "FindingStatisticTypes")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub finding_statistic_types: Option<Vec<String>>,
+    pub finding_statistic_types: Vec<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -789,8 +787,7 @@ pub struct GetMasterAccountResponse {
 pub struct GetMembersRequest {
     /// <p>A list of account IDs of the GuardDuty member accounts that you want to describe.</p>
     #[serde(rename = "AccountIds")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub account_ids: Option<Vec<String>>,
+    pub account_ids: Vec<String>,
     /// <p>The unique ID of the detector of the GuardDuty account whose members you want to retrieve.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
@@ -933,8 +930,7 @@ pub struct Invitation {
 pub struct InviteMembersRequest {
     /// <p>A list of account IDs of the accounts that you want to invite to GuardDuty as members.</p>
     #[serde(rename = "AccountIds")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub account_ids: Option<Vec<String>>,
+    pub account_ids: Vec<String>,
     /// <p>The unique ID of the detector of the GuardDuty account with which you want to invite members.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
@@ -1491,8 +1487,7 @@ pub struct SortCriteria {
 pub struct StartMonitoringMembersRequest {
     /// <p>A list of account IDs of the GuardDuty member accounts whose findings you want the master account to monitor.</p>
     #[serde(rename = "AccountIds")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub account_ids: Option<Vec<String>>,
+    pub account_ids: Vec<String>,
     /// <p>The unique ID of the detector of the GuardDuty account whom you want to re-enable to monitor members&#39; findings.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
@@ -1512,8 +1507,7 @@ pub struct StartMonitoringMembersResponse {
 pub struct StopMonitoringMembersRequest {
     /// <p>A list of account IDs of the GuardDuty member accounts whose findings you want the master account to stop monitoring.</p>
     #[serde(rename = "AccountIds")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub account_ids: Option<Vec<String>>,
+    pub account_ids: Vec<String>,
     /// <p>The unique ID of the detector of the GuardDuty account that you want to stop from monitor members&#39; findings.</p>
     #[serde(rename = "DetectorId")]
     pub detector_id: String,
@@ -1550,8 +1544,7 @@ pub struct UnarchiveFindingsRequest {
     pub detector_id: String,
     /// <p>IDs of the findings that you want to unarchive.</p>
     #[serde(rename = "FindingIds")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub finding_ids: Option<Vec<String>>,
+    pub finding_ids: Vec<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1580,6 +1573,10 @@ pub struct UpdateDetectorRequest {
     #[serde(rename = "Enable")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enable: Option<bool>,
+    /// <p>A enum value that specifies how frequently customer got Finding updates published.</p>
+    #[serde(rename = "FindingPublishingFrequency")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub finding_publishing_frequency: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1634,12 +1631,10 @@ pub struct UpdateFindingsFeedbackRequest {
     pub detector_id: String,
     /// <p>Valid values: USEFUL | NOT_USEFUL</p>
     #[serde(rename = "Feedback")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub feedback: Option<String>,
+    pub feedback: String,
     /// <p>IDs of the findings that you want to mark as useful or not useful.</p>
     #[serde(rename = "FindingIds")]
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub finding_ids: Option<Vec<String>>,
+    pub finding_ids: Vec<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]

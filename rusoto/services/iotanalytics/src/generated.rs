@@ -67,7 +67,7 @@ pub struct BatchPutMessageRequest {
     /// <p>The name of the channel where the messages are sent.</p>
     #[serde(rename = "channelName")]
     pub channel_name: String,
-    /// <p>The list of messages to be sent. Each message has format: '{ "messageId": "string", "payload": "string"}'.</p>
+    /// <p>The list of messages to be sent. Each message has format: '{ "messageId": "string", "payload": "string"}'.</p> <p>Note that the field names of message payloads (data) that you send to AWS IoT Analytics:</p> <ul> <li> <p>Must contain only alphanumeric characters and undescores (_); no other special characters are allowed.</p> </li> <li> <p>Must begin with an alphabetic character or single underscore (_).</p> </li> <li> <p>Cannot contain hyphens (-).</p> </li> <li> <p>In regular expression terms: "^[A-Za-z_]([A-Za-z0-9]*|[A-Za-z0-9][A-Za-z0-9_]*)$". </p> </li> <li> <p>Cannot be greater than 255 characters.</p> </li> <li> <p>Are case-insensitive. (Fields named "foo" and "FOO" in the same payload are considered duplicates.)</p> </li> </ul> <p>For example, {"temp_01": 29} or {"_temp_01": 29} are valid, but {"temp-01": 29}, {"01_temp": 29} or {"__temp_01": 29} are invalid in message payloads. </p>
     #[serde(rename = "messages")]
     pub messages: Vec<Message>,
 }
@@ -172,6 +172,24 @@ pub struct ChannelSummary {
     pub status: Option<String>,
 }
 
+/// <p>Information needed to run the "containerAction" to produce data set contents.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ContainerDatasetAction {
+    /// <p>The ARN of the role which gives permission to the system to access needed resources in order to run the "containerAction". This includes, at minimum, permission to retrieve the data set contents which are the input to the containerized application.</p>
+    #[serde(rename = "executionRoleArn")]
+    pub execution_role_arn: String,
+    /// <p>The ARN of the Docker container stored in your account. The Docker container contains an application and needed support libraries and is used to generate data set contents.</p>
+    #[serde(rename = "image")]
+    pub image: String,
+    /// <p>Configuration of the resource which executes the "containerAction".</p>
+    #[serde(rename = "resourceConfiguration")]
+    pub resource_configuration: ResourceConfiguration,
+    /// <p>The values of variables used within the context of the execution of the containerized application (basically, parameters passed to the application). Each variable must have a name and a value given by one of "stringValue", "datasetContentVersionValue", or "outputFileUriValue".</p>
+    #[serde(rename = "variables")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub variables: Option<Vec<Variable>>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateChannelRequest {
     /// <p>The name of the channel.</p>
@@ -211,19 +229,36 @@ pub struct CreateDatasetContentRequest {
     pub dataset_name: String,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateDatasetContentResponse {
+    /// <p>The version ID of the data set contents which are being created.</p>
+    #[serde(rename = "versionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version_id: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDatasetRequest {
-    /// <p>A list of actions that create the data set. Only one action is supported at this time.</p>
+    /// <p>A list of actions that create the data set contents.</p>
     #[serde(rename = "actions")]
     pub actions: Vec<DatasetAction>,
+    /// <p>When data set contents are created they are delivered to destinations specified here.</p>
+    #[serde(rename = "contentDeliveryRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_delivery_rules: Option<Vec<DatasetContentDeliveryRule>>,
     /// <p>The name of the data set.</p>
     #[serde(rename = "datasetName")]
     pub dataset_name: String,
+    /// <p>[Optional] How long, in days, message data is kept for the data set. If not given or set to null, the latest version of the dataset content plus the latest succeeded version (if they are different) are retained for at most 90 days.</p>
+    #[serde(rename = "retentionPeriod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retention_period: Option<RetentionPeriod>,
     /// <p>Metadata which can be used to manage the data set.</p>
     #[serde(rename = "tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>A list of triggers. A trigger causes data set content to be populated at a specified time or time interval. The list of triggers can be empty or contain up to five <b>DataSetTrigger</b> objects.</p>
+    /// <p>A list of triggers. A trigger causes data set contents to be populated at a specified time interval or when another data set's contents are created. The list of triggers can be empty or contain up to five <b>DataSetTrigger</b> objects.</p>
     #[serde(rename = "triggers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub triggers: Option<Vec<DatasetTrigger>>,
@@ -240,6 +275,10 @@ pub struct CreateDatasetResponse {
     #[serde(rename = "datasetName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub dataset_name: Option<String>,
+    /// <p>How long, in days, message data is kept for the data set.</p>
+    #[serde(rename = "retentionPeriod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retention_period: Option<RetentionPeriod>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -305,7 +344,7 @@ pub struct CreatePipelineResponse {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Dataset {
-    /// <p>The "DatasetAction" objects that create the data set.</p>
+    /// <p>The "DatasetAction" objects that automatically create the data set contents.</p>
     #[serde(rename = "actions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub actions: Option<Vec<DatasetAction>>,
@@ -313,6 +352,10 @@ pub struct Dataset {
     #[serde(rename = "arn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub arn: Option<String>,
+    /// <p>When data set contents are created they are delivered to destinations specified here.</p>
+    #[serde(rename = "contentDeliveryRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_delivery_rules: Option<Vec<DatasetContentDeliveryRule>>,
     /// <p>When the data set was created.</p>
     #[serde(rename = "creationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -325,6 +368,10 @@ pub struct Dataset {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>[Optional] How long, in days, message data is kept for the data set.</p>
+    #[serde(rename = "retentionPeriod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retention_period: Option<RetentionPeriod>,
     /// <p>The status of the data set.</p>
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -335,31 +382,100 @@ pub struct Dataset {
     pub triggers: Option<Vec<DatasetTrigger>>,
 }
 
-/// <p>A "DatasetAction" object specifying the query that creates the data set content.</p>
+/// <p>A "DatasetAction" object that specifies how data set contents are automatically created.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DatasetAction {
-    /// <p>The name of the data set action.</p>
+    /// <p>The name of the data set action by which data set contents are automatically created.</p>
     #[serde(rename = "actionName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action_name: Option<String>,
-    /// <p>An "SqlQueryDatasetAction" object that contains the SQL query to modify the message.</p>
+    /// <p>Information which allows the system to run a containerized application in order to create the data set contents. The application must be in a Docker container along with any needed support libraries.</p>
+    #[serde(rename = "containerAction")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container_action: Option<ContainerDatasetAction>,
+    /// <p>An "SqlQueryDatasetAction" object that uses an SQL query to automatically create data set contents.</p>
     #[serde(rename = "queryAction")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub query_action: Option<SqlQueryDatasetAction>,
 }
 
-/// <p>The state of the data set and the reason it is in this state.</p>
+/// <p><p/></p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DatasetActionSummary {
+    /// <p>The name of the action which automatically creates the data set's contents.</p>
+    #[serde(rename = "actionName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_name: Option<String>,
+    /// <p>The type of action by which the data set's contents are automatically created.</p>
+    #[serde(rename = "actionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action_type: Option<String>,
+}
+
+/// <p>The destination to which data set contents are delivered.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DatasetContentDeliveryDestination {
+    /// <p>Configuration information for delivery of data set contents to AWS IoT Events.</p>
+    #[serde(rename = "iotEventsDestinationConfiguration")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub iot_events_destination_configuration: Option<IotEventsDestinationConfiguration>,
+}
+
+/// <p>When data set contents are created they are delivered to destination specified here.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DatasetContentDeliveryRule {
+    /// <p>The destination to which data set contents are delivered.</p>
+    #[serde(rename = "destination")]
+    pub destination: DatasetContentDeliveryDestination,
+    /// <p>The name of the data set content delivery rules entry.</p>
+    #[serde(rename = "entryName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub entry_name: Option<String>,
+}
+
+/// <p>The state of the data set contents and the reason they are in this state.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DatasetContentStatus {
-    /// <p>The reason the data set is in this state.</p>
+    /// <p>The reason the data set contents are in this state.</p>
     #[serde(rename = "reason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub reason: Option<String>,
-    /// <p>The state of the data set. Can be one of "CREATING", "SUCCEEDED" or "FAILED".</p>
+    /// <p>The state of the data set contents. Can be one of "READY", "CREATING", "SUCCEEDED" or "FAILED".</p>
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
+}
+
+/// <p>Summary information about data set contents.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DatasetContentSummary {
+    /// <p>The actual time the creation of the data set contents was started.</p>
+    #[serde(rename = "creationTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_time: Option<f64>,
+    /// <p>The time the creation of the data set contents was scheduled to start.</p>
+    #[serde(rename = "scheduleTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub schedule_time: Option<f64>,
+    /// <p>The status of the data set contents.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<DatasetContentStatus>,
+    /// <p>The version of the data set contents.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
+}
+
+/// <p>The data set whose latest contents are used as input to the notebook or application.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DatasetContentVersionValue {
+    /// <p>The name of the data set whose latest contents are used as input to the notebook or application.</p>
+    #[serde(rename = "datasetName")]
+    pub dataset_name: String,
 }
 
 /// <p>The reference to a data set entry.</p>
@@ -380,6 +496,10 @@ pub struct DatasetEntry {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DatasetSummary {
+    /// <p>A list of "DataActionSummary" objects.</p>
+    #[serde(rename = "actions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub actions: Option<Vec<DatasetActionSummary>>,
     /// <p>The time the data set was created.</p>
     #[serde(rename = "creationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -396,11 +516,19 @@ pub struct DatasetSummary {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+    /// <p>A list of triggers. A trigger causes data set content to be populated at a specified time interval or when another data set is populated. The list of triggers can be empty or contain up to five DataSetTrigger objects</p>
+    #[serde(rename = "triggers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub triggers: Option<Vec<DatasetTrigger>>,
 }
 
 /// <p>The "DatasetTrigger" that specifies when the data set is automatically updated.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct DatasetTrigger {
+    /// <p>The data set whose content creation triggers the creation of this data set's contents.</p>
+    #[serde(rename = "dataset")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dataset: Option<TriggeringDataset>,
     /// <p>The "Schedule" when the trigger is initiated.</p>
     #[serde(rename = "schedule")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -448,7 +576,7 @@ pub struct DatastoreActivity {
     pub name: String,
 }
 
-/// <p>Statistics information about the data store.</p>
+/// <p>Statistical information about the data store.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DatastoreStatistics {
@@ -519,12 +647,23 @@ pub struct DeletePipelineRequest {
     pub pipeline_name: String,
 }
 
+/// <p>Used to limit data to that which has arrived since the last execution of the action.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct DeltaTime {
+    /// <p>The number of seconds of estimated "in flight" lag time of message data. When you create data set contents using message data from a specified time frame, some message data may still be "in flight" when processing begins, and so will not arrive in time to be processed. Use this field to make allowances for the "in flight" time of your message data, so that data not processed from a previous time frame will be included with the next time frame. Without this, missed message data would be excluded from processing during the next time frame as well, because its timestamp places it within the previous time frame.</p>
+    #[serde(rename = "offsetSeconds")]
+    pub offset_seconds: i64,
+    /// <p>An expression by which the time of the message data may be determined. This may be the name of a timestamp field, or a SQL expression which is used to derive the time the message data was generated.</p>
+    #[serde(rename = "timeExpression")]
+    pub time_expression: String,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeChannelRequest {
     /// <p>The name of the channel whose information is retrieved.</p>
     #[serde(rename = "channelName")]
     pub channel_name: String,
-    /// <p>If true, include statistics about the channel in the response.</p>
+    /// <p>If true, additional statistical information about the channel is included in the response.</p>
     #[serde(rename = "includeStatistics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_statistics: Option<bool>,
@@ -564,7 +703,7 @@ pub struct DescribeDatastoreRequest {
     /// <p>The name of the data store</p>
     #[serde(rename = "datastoreName")]
     pub datastore_name: String,
-    /// <p>If true, include statistics about the data store in the response.</p>
+    /// <p>If true, additional statistical information about the datastore is included in the response.</p>
     #[serde(rename = "includeStatistics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_statistics: Option<bool>,
@@ -577,7 +716,7 @@ pub struct DescribeDatastoreResponse {
     #[serde(rename = "datastore")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub datastore: Option<Datastore>,
-    /// <p>Statistics about the data store. Included if the 'includeStatistics' parameter is set to true in the request.</p>
+    /// <p>Additional statistical information about the data store. Included if the 'includeStatistics' parameter is set to true in the request.</p>
     #[serde(rename = "statistics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub statistics: Option<DatastoreStatistics>,
@@ -670,7 +809,7 @@ pub struct EstimatedResourceSize {
 /// <p>An activity that filters a message based on its attributes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FilterActivity {
-    /// <p>An expression that looks like an SQL WHERE clause that must return a Boolean value.</p>
+    /// <p>An expression that looks like a SQL WHERE clause that must return a Boolean value.</p>
     #[serde(rename = "filter")]
     pub filter: String,
     /// <p>The name of the 'filter' activity.</p>
@@ -710,6 +849,17 @@ pub struct GetDatasetContentResponse {
     pub timestamp: Option<f64>,
 }
 
+/// <p>Configuration information for delivery of data set contents to AWS IoT Events.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct IotEventsDestinationConfiguration {
+    /// <p>The name of the AWS IoT Events input to which data set contents are delivered.</p>
+    #[serde(rename = "inputName")]
+    pub input_name: String,
+    /// <p>The ARN of the role which grants AWS IoT Analytics permission to deliver data set contents to an AWS IoT Events input.</p>
+    #[serde(rename = "roleArn")]
+    pub role_arn: String,
+}
+
 /// <p>An activity that runs a Lambda function to modify the message.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LambdaActivity {
@@ -747,6 +897,42 @@ pub struct ListChannelsResponse {
     #[serde(rename = "channelSummaries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub channel_summaries: Option<Vec<ChannelSummary>>,
+    /// <p>The token to retrieve the next set of results, or <code>null</code> if there are no more results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListDatasetContentsRequest {
+    /// <p>The name of the data set whose contents information you want to list.</p>
+    #[serde(rename = "datasetName")]
+    pub dataset_name: String,
+    /// <p>The maximum number of results to return in this request.</p>
+    #[serde(rename = "maxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results.</p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>A filter to limit results to those data set contents whose creation is scheduled before the given time. See the field <code>triggers.schedule</code> in the CreateDataset request. (timestamp)</p>
+    #[serde(rename = "scheduledBefore")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scheduled_before: Option<f64>,
+    /// <p>A filter to limit results to those data set contents whose creation is scheduled on or after the given time. See the field <code>triggers.schedule</code> in the CreateDataset request. (timestamp)</p>
+    #[serde(rename = "scheduledOnOrAfter")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scheduled_on_or_after: Option<f64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListDatasetContentsResponse {
+    /// <p>Summary information about data set contents that have been created.</p>
+    #[serde(rename = "datasetContentSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dataset_content_summaries: Option<Vec<DatasetContentSummary>>,
     /// <p>The token to retrieve the next set of results, or <code>null</code> if there are no more results.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -861,7 +1047,7 @@ pub struct LoggingOptions {
 /// <p>An activity that computes an arithmetic expression using the message's attributes.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MathActivity {
-    /// <p>The name of the attribute that will contain the result of the math operation.</p>
+    /// <p>The name of the attribute that contains the result of the math operation.</p>
     #[serde(rename = "attribute")]
     pub attribute: String,
     /// <p>An expression that uses one or more existing attributes and must return an integer value.</p>
@@ -890,6 +1076,14 @@ pub struct Message {
         default
     )]
     pub payload: Vec<u8>,
+}
+
+/// <p>The value of the variable as a structure that specifies an output file URI.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OutputFileUriValue {
+    /// <p>The URI of the location where data set contents are stored, usually the URI of a file in an S3 bucket.</p>
+    #[serde(rename = "fileName")]
+    pub file_name: String,
 }
 
 /// <p>Contains information about a pipeline.</p>
@@ -996,6 +1190,15 @@ pub struct PutLoggingOptionsRequest {
     pub logging_options: LoggingOptions,
 }
 
+/// <p>Information which is used to filter message data, to segregate it according to the time frame in which it arrives.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct QueryFilter {
+    /// <p>Used to limit data to that which has arrived since the last execution of the action.</p>
+    #[serde(rename = "deltaTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub delta_time: Option<DeltaTime>,
+}
+
 /// <p>An activity that removes attributes from a message.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RemoveAttributesActivity {
@@ -1027,6 +1230,17 @@ pub struct ReprocessingSummary {
     #[serde(rename = "status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
+}
+
+/// <p>The configuration of the resource used to execute the "containerAction".</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ResourceConfiguration {
+    /// <p>The type of the compute resource used to execute the "containerAction". Possible values are: ACU_1 (vCPU=4, memory=16GiB) or ACU_2 (vCPU=8, memory=32GiB).</p>
+    #[serde(rename = "computeType")]
+    pub compute_type: String,
+    /// <p>The size (in GB) of the persistent storage available to the resource instance used to execute the "containerAction" (min: 1, max: 50).</p>
+    #[serde(rename = "volumeSizeInGB")]
+    pub volume_size_in_gb: i64,
 }
 
 /// <p>How long, in days, message data is kept.</p>
@@ -1120,7 +1334,11 @@ pub struct SelectAttributesActivity {
 /// <p>The SQL query to modify the message.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SqlQueryDatasetAction {
-    /// <p>An SQL query string.</p>
+    /// <p>Pre-filters applied to message data.</p>
+    #[serde(rename = "filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<Vec<QueryFilter>>,
+    /// <p>A SQL query string.</p>
     #[serde(rename = "sqlQuery")]
     pub sql_query: String,
 }
@@ -1162,7 +1380,7 @@ pub struct Tag {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TagResourceRequest {
-    /// <p>The ARN of the resource whose tags will be modified.</p>
+    /// <p>The ARN of the resource whose tags you want to modify.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
     /// <p>The new or modified tags for the resource.</p>
@@ -1174,12 +1392,20 @@ pub struct TagResourceRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct TagResourceResponse {}
 
+/// <p>Information about the data set whose content generation triggers the new data set content generation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TriggeringDataset {
+    /// <p>The name of the data set whose content generation triggers the new data set content generation.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UntagResourceRequest {
-    /// <p>The ARN of the resource whose tags will be removed.</p>
+    /// <p>The ARN of the resource whose tags you want to remove.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
-    /// <p>The keys of those tags which will be removed.</p>
+    /// <p>The keys of those tags which you want to remove.</p>
     #[serde(rename = "tagKeys")]
     pub tag_keys: Vec<String>,
 }
@@ -1201,12 +1427,20 @@ pub struct UpdateChannelRequest {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateDatasetRequest {
-    /// <p>A list of "DatasetAction" objects. Only one action is supported at this time.</p>
+    /// <p>A list of "DatasetAction" objects.</p>
     #[serde(rename = "actions")]
     pub actions: Vec<DatasetAction>,
+    /// <p>When data set contents are created they are delivered to destinations specified here.</p>
+    #[serde(rename = "contentDeliveryRules")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content_delivery_rules: Option<Vec<DatasetContentDeliveryRule>>,
     /// <p>The name of the data set to update.</p>
     #[serde(rename = "datasetName")]
     pub dataset_name: String,
+    /// <p>How long, in days, message data is kept for the data set.</p>
+    #[serde(rename = "retentionPeriod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retention_period: Option<RetentionPeriod>,
     /// <p>A list of "DatasetTrigger" objects. The list can be empty or can contain up to five <b>DataSetTrigger</b> objects.</p>
     #[serde(rename = "triggers")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1232,6 +1466,30 @@ pub struct UpdatePipelineRequest {
     /// <p>The name of the pipeline to update.</p>
     #[serde(rename = "pipelineName")]
     pub pipeline_name: String,
+}
+
+/// <p>An instance of a variable to be passed to the "containerAction" execution. Each variable must have a name and a value given by one of "stringValue", "datasetContentVersionValue", or "outputFileUriValue".</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Variable {
+    /// <p>The value of the variable as a structure that specifies a data set content version.</p>
+    #[serde(rename = "datasetContentVersionValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dataset_content_version_value: Option<DatasetContentVersionValue>,
+    /// <p>The value of the variable as a double (numeric).</p>
+    #[serde(rename = "doubleValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub double_value: Option<f64>,
+    /// <p>The name of the variable.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+    /// <p>The value of the variable as a structure that specifies an output file URI.</p>
+    #[serde(rename = "outputFileUriValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub output_file_uri_value: Option<OutputFileUriValue>,
+    /// <p>The value of the variable as a string.</p>
+    #[serde(rename = "stringValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub string_value: Option<String>,
 }
 
 /// Errors returned by BatchPutMessage
@@ -3522,6 +3780,126 @@ impl Error for ListChannelsError {
         }
     }
 }
+/// Errors returned by ListDatasetContents
+#[derive(Debug, PartialEq)]
+pub enum ListDatasetContentsError {
+    /// <p>There was an internal failure.</p>
+    InternalFailure(String),
+    /// <p>The request was not valid.</p>
+    InvalidRequest(String),
+    /// <p>A resource with the specified name could not be found.</p>
+    ResourceNotFound(String),
+    /// <p>The service is temporarily unavailable.</p>
+    ServiceUnavailable(String),
+    /// <p>The request was denied due to request throttling.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListDatasetContentsError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> ListDatasetContentsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InternalFailureException" => {
+                    return ListDatasetContentsError::InternalFailure(String::from(error_message));
+                }
+                "InvalidRequestException" => {
+                    return ListDatasetContentsError::InvalidRequest(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return ListDatasetContentsError::ResourceNotFound(String::from(error_message));
+                }
+                "ServiceUnavailableException" => {
+                    return ListDatasetContentsError::ServiceUnavailable(String::from(error_message));
+                }
+                "ThrottlingException" => {
+                    return ListDatasetContentsError::Throttling(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return ListDatasetContentsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ListDatasetContentsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListDatasetContentsError {
+    fn from(err: serde_json::error::Error) -> ListDatasetContentsError {
+        ListDatasetContentsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListDatasetContentsError {
+    fn from(err: CredentialsError) -> ListDatasetContentsError {
+        ListDatasetContentsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListDatasetContentsError {
+    fn from(err: HttpDispatchError) -> ListDatasetContentsError {
+        ListDatasetContentsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListDatasetContentsError {
+    fn from(err: io::Error) -> ListDatasetContentsError {
+        ListDatasetContentsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListDatasetContentsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListDatasetContentsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListDatasetContentsError::InternalFailure(ref cause) => cause,
+            ListDatasetContentsError::InvalidRequest(ref cause) => cause,
+            ListDatasetContentsError::ResourceNotFound(ref cause) => cause,
+            ListDatasetContentsError::ServiceUnavailable(ref cause) => cause,
+            ListDatasetContentsError::Throttling(ref cause) => cause,
+            ListDatasetContentsError::Validation(ref cause) => cause,
+            ListDatasetContentsError::Credentials(ref err) => err.description(),
+            ListDatasetContentsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListDatasetContentsError::ParseError(ref cause) => cause,
+            ListDatasetContentsError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by ListDatasets
 #[derive(Debug, PartialEq)]
 pub enum ListDatasetsError {
@@ -5214,17 +5592,17 @@ pub trait IotAnalytics {
         input: CreateChannelRequest,
     ) -> RusotoFuture<CreateChannelResponse, CreateChannelError>;
 
-    /// <p><p>Creates a data set. A data set stores data retrieved from a data store by applying an SQL action.</p> <note> <p>This operation creates the skeleton of a data set. To populate the data set, call &quot;CreateDatasetContent&quot;.</p> </note></p>
+    /// <p>Creates a data set. A data set stores data retrieved from a data store by applying a "queryAction" (a SQL query) or a "containerAction" (executing a containerized application). This operation creates the skeleton of a data set. The data set can be populated manually by calling "CreateDatasetContent" or automatically according to a "trigger" you specify.</p>
     fn create_dataset(
         &self,
         input: CreateDatasetRequest,
     ) -> RusotoFuture<CreateDatasetResponse, CreateDatasetError>;
 
-    /// <p>Creates the content of a data set by applying an SQL action.</p>
+    /// <p>Creates the content of a data set by applying a "queryAction" (a SQL query) or a "containerAction" (executing a containerized application).</p>
     fn create_dataset_content(
         &self,
         input: CreateDatasetContentRequest,
-    ) -> RusotoFuture<(), CreateDatasetContentError>;
+    ) -> RusotoFuture<CreateDatasetContentResponse, CreateDatasetContentError>;
 
     /// <p>Creates a data store, which is a repository for messages.</p>
     fn create_datastore(
@@ -5302,6 +5680,12 @@ pub trait IotAnalytics {
         &self,
         input: ListChannelsRequest,
     ) -> RusotoFuture<ListChannelsResponse, ListChannelsError>;
+
+    /// <p>Lists information about data set contents that have been created.</p>
+    fn list_dataset_contents(
+        &self,
+        input: ListDatasetContentsRequest,
+    ) -> RusotoFuture<ListDatasetContentsResponse, ListDatasetContentsError>;
 
     /// <p>Retrieves information about data sets.</p>
     fn list_datasets(
@@ -5535,7 +5919,7 @@ impl IotAnalytics for IotAnalyticsClient {
         })
     }
 
-    /// <p><p>Creates a data set. A data set stores data retrieved from a data store by applying an SQL action.</p> <note> <p>This operation creates the skeleton of a data set. To populate the data set, call &quot;CreateDatasetContent&quot;.</p> </note></p>
+    /// <p>Creates a data set. A data set stores data retrieved from a data store by applying a "queryAction" (a SQL query) or a "containerAction" (executing a containerized application). This operation creates the skeleton of a data set. The data set can be populated manually by calling "CreateDatasetContent" or automatically according to a "trigger" you specify.</p>
     fn create_dataset(
         &self,
         input: CreateDatasetRequest,
@@ -5574,11 +5958,11 @@ impl IotAnalytics for IotAnalyticsClient {
         })
     }
 
-    /// <p>Creates the content of a data set by applying an SQL action.</p>
+    /// <p>Creates the content of a data set by applying a "queryAction" (a SQL query) or a "containerAction" (executing a containerized application).</p>
     fn create_dataset_content(
         &self,
         input: CreateDatasetContentRequest,
-    ) -> RusotoFuture<(), CreateDatasetContentError> {
+    ) -> RusotoFuture<CreateDatasetContentResponse, CreateDatasetContentError> {
         let request_uri = format!(
             "/datasets/{dataset_name}/content",
             dataset_name = input.dataset_name
@@ -5590,7 +5974,16 @@ impl IotAnalytics for IotAnalyticsClient {
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
-                    let result = ::std::mem::drop(response);
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<CreateDatasetContentResponse>(&body).unwrap();
 
                     result
                 }))
@@ -6126,6 +6519,60 @@ impl IotAnalytics for IotAnalyticsClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(ListChannelsError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Lists information about data set contents that have been created.</p>
+    fn list_dataset_contents(
+        &self,
+        input: ListDatasetContentsRequest,
+    ) -> RusotoFuture<ListDatasetContentsResponse, ListDatasetContentsError> {
+        let request_uri = format!(
+            "/datasets/{dataset_name}/contents",
+            dataset_name = input.dataset_name
+        );
+
+        let mut request = SignedRequest::new("GET", "iotanalytics", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("maxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("nextToken", x);
+        }
+        if let Some(ref x) = input.scheduled_before {
+            params.put("scheduledBefore", x);
+        }
+        if let Some(ref x) = input.scheduled_on_or_after {
+            params.put("scheduledOnOrAfter", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListDatasetContentsResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListDatasetContentsError::from_response(response))
+                    }),
                 )
             }
         })

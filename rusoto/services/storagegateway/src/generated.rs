@@ -43,7 +43,7 @@ pub struct ActivateGatewayInput {
     /// <p>A value that indicates the time zone you want to set for the gateway. The time zone is of the format "GMT-hr:mm" or "GMT+hr:mm". For example, GMT-4:00 indicates the time is 4 hours behind GMT. GMT+2:00 indicates the time is 2 hours ahead of GMT. The time zone is used, for example, for scheduling snapshots and your gateway's maintenance schedule.</p>
     #[serde(rename = "GatewayTimezone")]
     pub gateway_timezone: String,
-    /// <p>A value that defines the type of gateway to activate. The type specified is critical to all later functions of the gateway and cannot be changed after activation. The default value is <code>STORED</code>. </p> <p> Valid Values: "STORED", "CACHED", "VTL", "FILE_S3"</p>
+    /// <p>A value that defines the type of gateway to activate. The type specified is critical to all later functions of the gateway and cannot be changed after activation. The default value is <code>CACHED</code>. </p> <p> Valid Values: "STORED", "CACHED", "VTL", "FILE_S3"</p>
     #[serde(rename = "GatewayType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub gateway_type: Option<String>,
@@ -138,6 +138,42 @@ pub struct AddWorkingStorageOutput {
     pub gateway_arn: Option<String>,
 }
 
+/// <p>AttachVolumeInput</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct AttachVolumeInput {
+    /// <p>The unique device ID or other distinguishing data that identifies the local disk used to create the volume. This value is only required when you are attaching a stored volume.</p>
+    #[serde(rename = "DiskId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disk_id: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the gateway that you want to attach the volume to.</p>
+    #[serde(rename = "GatewayARN")]
+    pub gateway_arn: String,
+    /// <p>The network interface of the gateway on which to expose the iSCSI target. Only IPv4 addresses are accepted. Use <a>DescribeGatewayInformation</a> to get a list of the network interfaces available on a gateway.</p> <p> Valid Values: A valid IP address.</p>
+    #[serde(rename = "NetworkInterfaceId")]
+    pub network_interface_id: String,
+    /// <p>The name of the iSCSI target used by an initiator to connect to a volume and used as a suffix for the target ARN. For example, specifying <code>TargetName</code> as <i>myvolume</i> results in the target ARN of <code>arn:aws:storagegateway:us-east-2:111122223333:gateway/sgw-12A3456B/target/iqn.1997-05.com.amazon:myvolume</code>. The target name must be unique across all volumes on a gateway.</p> <p>If you don't specify a value, Storage Gateway uses the value that was previously used for this volume as the new target name.</p>
+    #[serde(rename = "TargetName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the volume to attach to the specified gateway.</p>
+    #[serde(rename = "VolumeARN")]
+    pub volume_arn: String,
+}
+
+/// <p>AttachVolumeOutput</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AttachVolumeOutput {
+    /// <p>The Amazon Resource Name (ARN) of the volume target, which includes the iSCSI name for the initiator that was used to connect to the target.</p>
+    #[serde(rename = "TargetARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_arn: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the volume that was attached to the gateway.</p>
+    #[serde(rename = "VolumeARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub volume_arn: Option<String>,
+}
+
 /// <p>Describes an iSCSI cached volume.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -153,10 +189,18 @@ pub struct CachediSCSIVolume {
     #[serde(rename = "SourceSnapshotId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_snapshot_id: Option<String>,
+    /// <p>The name of the iSCSI target that is used by an initiator to connect to a volume and used as a suffix for the target ARN. For example, specifying <code>TargetName</code> as <i>myvolume</i> results in the target ARN of <code>arn:aws:storagegateway:us-east-2:111122223333:gateway/sgw-12A3456B/target/iqn.1997-05.com.amazon:myvolume</code>.</p>
+    #[serde(rename = "TargetName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_name: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the storage volume.</p>
     #[serde(rename = "VolumeARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_arn: Option<String>,
+    /// <p>A value that indicates whether a storage volume is attached to or detached from a gateway.</p>
+    #[serde(rename = "VolumeAttachmentStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub volume_attachment_status: Option<String>,
     /// <p>The unique identifier of the volume, e.g. vol-AE4B946D.</p>
     #[serde(rename = "VolumeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -286,7 +330,7 @@ pub struct CreateCachediSCSIVolumeInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateCachediSCSIVolumeOutput {
-    /// <p>he Amazon Resource Name (ARN) of the volume target that includes the iSCSI name that initiators can use to connect to the target.</p>
+    /// <p>The Amazon Resource Name (ARN) of the volume target, which includes the iSCSI name that initiators can use to connect to the target.</p>
     #[serde(rename = "TargetARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_arn: Option<String>,
@@ -512,7 +556,7 @@ pub struct CreateStorediSCSIVolumeInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateStorediSCSIVolumeOutput {
-    /// <p>he Amazon Resource Name (ARN) of the volume target that includes the iSCSI name that initiators can use to connect to the target.</p>
+    /// <p>The Amazon Resource Name (ARN) of the volume target, which includes the iSCSI name that initiators can use to connect to the target.</p>
     #[serde(rename = "TargetARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_arn: Option<String>,
@@ -1203,6 +1247,28 @@ pub struct DescribeWorkingStorageOutput {
     pub working_storage_used_in_bytes: Option<i64>,
 }
 
+/// <p>AttachVolumeInput</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DetachVolumeInput {
+    /// <p>Set to <code>true</code> to forcibly remove the iSCSI connection of the target volume and detach the volume. The default is <code>false</code>. If this value is set to <code>false</code>, you must manually disconnect the iSCSI connection from the target volume.</p>
+    #[serde(rename = "ForceDetach")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub force_detach: Option<bool>,
+    /// <p>The Amazon Resource Name (ARN) of the volume to detach from the gateway.</p>
+    #[serde(rename = "VolumeARN")]
+    pub volume_arn: String,
+}
+
+/// <p>AttachVolumeOutput</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DetachVolumeOutput {
+    /// <p>The Amazon Resource Name (ARN) of the volume that was detached.</p>
+    #[serde(rename = "VolumeARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub volume_arn: Option<String>,
+}
+
 /// <p>Lists iSCSI information about a VTL device.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -1242,27 +1308,37 @@ pub struct DisableGatewayOutput {
     pub gateway_arn: Option<String>,
 }
 
+/// <p>Represents a gateway's local disk.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Disk {
+    /// <p>The iSCSI qualified name (IQN) that is defined for a disk. This field is not included in the response if the local disk is not defined as an iSCSI target. The format of this field is <i>targetIqn::LUNNumber::region-volumeId</i>. </p>
     #[serde(rename = "DiskAllocationResource")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disk_allocation_resource: Option<String>,
     #[serde(rename = "DiskAllocationType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disk_allocation_type: Option<String>,
+    #[serde(rename = "DiskAttributeList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disk_attribute_list: Option<Vec<String>>,
+    /// <p>The unique device ID or other distinguishing data that identifies a local disk.</p>
     #[serde(rename = "DiskId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disk_id: Option<String>,
+    /// <p>The device node of a local disk as assigned by the virtualization environment.</p>
     #[serde(rename = "DiskNode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disk_node: Option<String>,
+    /// <p>The path of a local disk in the gateway virtual machine (VM).</p>
     #[serde(rename = "DiskPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disk_path: Option<String>,
+    /// <p>The local disk size in bytes.</p>
     #[serde(rename = "DiskSizeInBytes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disk_size_in_bytes: Option<i64>,
+    /// <p>A value that represents the status of a local disk.</p>
     #[serde(rename = "DiskStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disk_status: Option<String>,
@@ -1318,12 +1394,20 @@ pub struct GatewayInfo {
 /// <p>JoinDomainInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct JoinDomainInput {
+    /// <p>List of IPv4 addresses, NetBIOS names, or host names of your domain server. If you need to specify the port number include it after the colon (“:”). For example, <code>mydc.mydomain.com:389</code>.</p>
+    #[serde(rename = "DomainControllers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub domain_controllers: Option<Vec<String>>,
     /// <p>The name of the domain that you want the gateway to join.</p>
     #[serde(rename = "DomainName")]
     pub domain_name: String,
-    /// <p>The unique Amazon Resource Name (ARN) of the file gateway you want to add to the Active Directory domain. </p>
+    /// <p>The Amazon Resource Name (ARN) of the gateway. Use the <code>ListGateways</code> operation to return a list of gateways for your account and region.</p>
     #[serde(rename = "GatewayARN")]
     pub gateway_arn: String,
+    /// <p>The organizational unit (OU) is a container with an Active Directory that can hold users, groups, computers, and other OUs and this parameter specifies the OU that the gateway will join within the AD domain.</p>
+    #[serde(rename = "OrganizationalUnit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organizational_unit: Option<String>,
     /// <p>Sets the password of the user who has permission to add the gateway to the Active Directory domain.</p>
     #[serde(rename = "Password")]
     pub password: String,
@@ -1665,18 +1749,32 @@ pub struct NotifyWhenUploadedOutput {
     pub notification_id: Option<String>,
 }
 
+/// <p>RefreshCacheInput</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RefreshCacheInput {
+    /// <p>The Amazon Resource Name (ARN) of the file share you want to refresh.</p>
     #[serde(rename = "FileShareARN")]
     pub file_share_arn: String,
+    /// <p>A comma-separated list of the paths of folders to refresh in the cache. The default is [<code>"/"</code>]. The default refreshes objects and folders at the root of the Amazon S3 bucket. If <code>Recursive</code> is set to "true", the entire S3 bucket that the file share has access to is refreshed.</p>
+    #[serde(rename = "FolderList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub folder_list: Option<Vec<String>>,
+    /// <p>A value that specifies whether to recursively refresh folders in the cache. The refresh includes folders that were in the cache the last time the gateway listed the folder's contents. If this value set to "true", each folder that is listed in <code>FolderList</code> is recursively updated. Otherwise, subfolders listed in <code>FolderList</code> are not refreshed. Only objects that are in folders listed directly under <code>FolderList</code> are found and used for the update. The default is "true".</p>
+    #[serde(rename = "Recursive")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub recursive: Option<bool>,
 }
 
+/// <p>RefreshCacheOutput</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct RefreshCacheOutput {
     #[serde(rename = "FileShareARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_share_arn: Option<String>,
+    #[serde(rename = "NotificationId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub notification_id: Option<String>,
 }
 
 /// <p>RemoveTagsFromResourceInput</p>
@@ -1917,10 +2015,18 @@ pub struct StorediSCSIVolume {
     #[serde(rename = "SourceSnapshotId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source_snapshot_id: Option<String>,
+    /// <p>The name of the iSCSI target that is used by an initiator to connect to a volume and used as a suffix for the target ARN. For example, specifying <code>TargetName</code> as <i>myvolume</i> results in the target ARN of <code>arn:aws:storagegateway:us-east-2:111122223333:gateway/sgw-12A3456B/target/iqn.1997-05.com.amazon:myvolume</code>.</p>
+    #[serde(rename = "TargetName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_name: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the storage volume.</p>
     #[serde(rename = "VolumeARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_arn: Option<String>,
+    /// <p>A value that indicates whether a storage volume is attached to, detached from, or is in the process of detaching from a gateway.</p>
+    #[serde(rename = "VolumeAttachmentStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub volume_attachment_status: Option<String>,
     /// <p>The ID of the local disk that was specified in the <a>CreateStorediSCSIVolume</a> operation.</p>
     #[serde(rename = "VolumeDiskId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2411,6 +2517,9 @@ pub struct VolumeInfo {
     #[serde(rename = "VolumeARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub volume_arn: Option<String>,
+    #[serde(rename = "VolumeAttachmentStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub volume_attachment_status: Option<String>,
     /// <p>The unique identifier assigned to the volume. This ID becomes part of the volume Amazon Resource Name (ARN), which you use as input for other operations.</p> <p> Valid Values: 50 to 500 lowercase letters, numbers, periods (.), and hyphens (-).</p>
     #[serde(rename = "VolumeId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2902,6 +3011,92 @@ impl Error for AddWorkingStorageError {
             }
             AddWorkingStorageError::ParseError(ref cause) => cause,
             AddWorkingStorageError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by AttachVolume
+#[derive(Debug, PartialEq)]
+pub enum AttachVolumeError {
+    /// <p>An internal server error has occurred during the request. For more information, see the error and message fields.</p>
+    InternalServerError(String),
+    /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
+    InvalidGatewayRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl AttachVolumeError {
+    pub fn from_response(res: BufferedHttpResponse) -> AttachVolumeError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalServerError" => {
+                    return AttachVolumeError::InternalServerError(String::from(error_message));
+                }
+                "InvalidGatewayRequestException" => {
+                    return AttachVolumeError::InvalidGatewayRequest(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return AttachVolumeError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return AttachVolumeError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for AttachVolumeError {
+    fn from(err: serde_json::error::Error) -> AttachVolumeError {
+        AttachVolumeError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for AttachVolumeError {
+    fn from(err: CredentialsError) -> AttachVolumeError {
+        AttachVolumeError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AttachVolumeError {
+    fn from(err: HttpDispatchError) -> AttachVolumeError {
+        AttachVolumeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AttachVolumeError {
+    fn from(err: io::Error) -> AttachVolumeError {
+        AttachVolumeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for AttachVolumeError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AttachVolumeError {
+    fn description(&self) -> &str {
+        match *self {
+            AttachVolumeError::InternalServerError(ref cause) => cause,
+            AttachVolumeError::InvalidGatewayRequest(ref cause) => cause,
+            AttachVolumeError::Validation(ref cause) => cause,
+            AttachVolumeError::Credentials(ref err) => err.description(),
+            AttachVolumeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            AttachVolumeError::ParseError(ref cause) => cause,
+            AttachVolumeError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6073,6 +6268,92 @@ impl Error for DescribeWorkingStorageError {
         }
     }
 }
+/// Errors returned by DetachVolume
+#[derive(Debug, PartialEq)]
+pub enum DetachVolumeError {
+    /// <p>An internal server error has occurred during the request. For more information, see the error and message fields.</p>
+    InternalServerError(String),
+    /// <p>An exception occurred because an invalid gateway request was issued to the service. For more information, see the error and message fields.</p>
+    InvalidGatewayRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DetachVolumeError {
+    pub fn from_response(res: BufferedHttpResponse) -> DetachVolumeError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalServerError" => {
+                    return DetachVolumeError::InternalServerError(String::from(error_message));
+                }
+                "InvalidGatewayRequestException" => {
+                    return DetachVolumeError::InvalidGatewayRequest(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return DetachVolumeError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DetachVolumeError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DetachVolumeError {
+    fn from(err: serde_json::error::Error) -> DetachVolumeError {
+        DetachVolumeError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DetachVolumeError {
+    fn from(err: CredentialsError) -> DetachVolumeError {
+        DetachVolumeError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DetachVolumeError {
+    fn from(err: HttpDispatchError) -> DetachVolumeError {
+        DetachVolumeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DetachVolumeError {
+    fn from(err: io::Error) -> DetachVolumeError {
+        DetachVolumeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DetachVolumeError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DetachVolumeError {
+    fn description(&self) -> &str {
+        match *self {
+            DetachVolumeError::InternalServerError(ref cause) => cause,
+            DetachVolumeError::InvalidGatewayRequest(ref cause) => cause,
+            DetachVolumeError::Validation(ref cause) => cause,
+            DetachVolumeError::Credentials(ref err) => err.description(),
+            DetachVolumeError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DetachVolumeError::ParseError(ref cause) => cause,
+            DetachVolumeError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by DisableGateway
 #[derive(Debug, PartialEq)]
 pub enum DisableGatewayError {
@@ -8698,6 +8979,12 @@ pub trait StorageGateway {
         input: AddWorkingStorageInput,
     ) -> RusotoFuture<AddWorkingStorageOutput, AddWorkingStorageError>;
 
+    /// <p>Connects a volume to an iSCSI connection and then attaches the volume to the specified gateway. Detaching and attaching a volume enables you to recover your data from one gateway to a different gateway without creating a snapshot. It also makes it easier to move your volumes from an on-premises gateway to a gateway hosted on an Amazon EC2 instance.</p>
+    fn attach_volume(
+        &self,
+        input: AttachVolumeInput,
+    ) -> RusotoFuture<AttachVolumeOutput, AttachVolumeError>;
+
     /// <p>Cancels archiving of a virtual tape to the virtual tape shelf (VTS) after the archiving process is initiated. This operation is only supported in the tape gateway type.</p>
     fn cancel_archival(
         &self,
@@ -8911,6 +9198,12 @@ pub trait StorageGateway {
         input: DescribeWorkingStorageInput,
     ) -> RusotoFuture<DescribeWorkingStorageOutput, DescribeWorkingStorageError>;
 
+    /// <p>Disconnects a volume from an iSCSI connection and then detaches the volume from the specified gateway. Detaching and attaching a volume enables you to recover your data from one gateway to a different gateway without creating a snapshot. It also makes it easier to move your volumes from an on-premises gateway to a gateway hosted on an Amazon EC2 instance.</p>
+    fn detach_volume(
+        &self,
+        input: DetachVolumeInput,
+    ) -> RusotoFuture<DetachVolumeOutput, DetachVolumeError>;
+
     /// <p><p>Disables a tape gateway when the gateway is no longer functioning. For example, if your gateway VM is damaged, you can disable the gateway so you can recover virtual tapes.</p> <p>Use this operation for a tape gateway that is not reachable or not functioning. This operation is only supported in the tape gateway type.</p> <important> <p>Once a gateway is disabled it cannot be enabled.</p> </important></p>
     fn disable_gateway(
         &self,
@@ -8974,7 +9267,7 @@ pub trait StorageGateway {
         input: NotifyWhenUploadedInput,
     ) -> RusotoFuture<NotifyWhenUploadedOutput, NotifyWhenUploadedError>;
 
-    /// <p>Refreshes the cache for the specified file share. This operation finds objects in the Amazon S3 bucket that were added, removed or replaced since the gateway last listed the bucket's contents and cached the results. This operation is only supported in the file gateway type.</p>
+    /// <p>Refreshes the cache for the specified file share. This operation finds objects in the Amazon S3 bucket that were added, removed or replaced since the gateway last listed the bucket's contents and cached the results. This operation is only supported in the file gateway type. You can subscribe to be notified through an Amazon CloudWatch event when your RefreshCache operation completes. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting Notified About File Operations</a>.</p>
     fn refresh_cache(
         &self,
         input: RefreshCacheInput,
@@ -9296,6 +9589,43 @@ impl StorageGateway for StorageGatewayClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(AddWorkingStorageError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Connects a volume to an iSCSI connection and then attaches the volume to the specified gateway. Detaching and attaching a volume enables you to recover your data from one gateway to a different gateway without creating a snapshot. It also makes it easier to move your volumes from an on-premises gateway to a gateway hosted on an Amazon EC2 instance.</p>
+    fn attach_volume(
+        &self,
+        input: AttachVolumeInput,
+    ) -> RusotoFuture<AttachVolumeOutput, AttachVolumeError> {
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "StorageGateway_20130630.AttachVolume");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<AttachVolumeOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(AttachVolumeError::from_response(response))),
                 )
             }
         })
@@ -10619,6 +10949,43 @@ impl StorageGateway for StorageGatewayClient {
         })
     }
 
+    /// <p>Disconnects a volume from an iSCSI connection and then detaches the volume from the specified gateway. Detaching and attaching a volume enables you to recover your data from one gateway to a different gateway without creating a snapshot. It also makes it easier to move your volumes from an on-premises gateway to a gateway hosted on an Amazon EC2 instance.</p>
+    fn detach_volume(
+        &self,
+        input: DetachVolumeInput,
+    ) -> RusotoFuture<DetachVolumeOutput, DetachVolumeError> {
+        let mut request = SignedRequest::new("POST", "storagegateway", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "StorageGateway_20130630.DetachVolume");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DetachVolumeOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DetachVolumeError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p><p>Disables a tape gateway when the gateway is no longer functioning. For example, if your gateway VM is damaged, you can disable the gateway so you can recover virtual tapes.</p> <p>Use this operation for a tape gateway that is not reachable or not functioning. This operation is only supported in the tape gateway type.</p> <important> <p>Once a gateway is disabled it cannot be enabled.</p> </important></p>
     fn disable_gateway(
         &self,
@@ -11027,7 +11394,7 @@ impl StorageGateway for StorageGatewayClient {
         })
     }
 
-    /// <p>Refreshes the cache for the specified file share. This operation finds objects in the Amazon S3 bucket that were added, removed or replaced since the gateway last listed the bucket's contents and cached the results. This operation is only supported in the file gateway type.</p>
+    /// <p>Refreshes the cache for the specified file share. This operation finds objects in the Amazon S3 bucket that were added, removed or replaced since the gateway last listed the bucket's contents and cached the results. This operation is only supported in the file gateway type. You can subscribe to be notified through an Amazon CloudWatch event when your RefreshCache operation completes. For more information, see <a href="https://docs.aws.amazon.com/storagegateway/latest/userguide/monitoring-file-gateway.html#get-notification">Getting Notified About File Operations</a>.</p>
     fn refresh_cache(
         &self,
         input: RefreshCacheInput,

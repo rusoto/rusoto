@@ -41,7 +41,7 @@ pub struct BrokerInstance {
     #[serde(rename = "Endpoints")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub endpoints: Option<Vec<String>>,
-    /// <p>The IP address of the ENI attached to the broker.</p>
+    /// <p>The IP address of the Elastic Network Interface (ENI) attached to the broker.</p>
     #[serde(rename = "IpAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ip_address: Option<String>,
@@ -101,7 +101,7 @@ pub struct Configuration {
     #[serde(rename = "EngineType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_type: Option<String>,
-    /// <p>Required. The version of the broker engine.</p>
+    /// <p>Required. The version of the broker engine. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
     #[serde(rename = "EngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_version: Option<String>,
@@ -117,6 +117,10 @@ pub struct Configuration {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The list of all tags associated with this configuration.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>A list of information about the configuration.</p>
@@ -183,7 +187,7 @@ pub struct CreateBrokerInput {
     pub deployment_mode: Option<String>,
     /// <p>Required. The type of broker engine. Note: Currently, Amazon MQ supports only ACTIVEMQ.</p>
     pub engine_type: Option<String>,
-    /// <p>Required. The version of the broker engine. Note: Currently, Amazon MQ supports only 5.15.0.</p>
+    /// <p>Required. The version of the broker engine. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
     pub engine_version: Option<String>,
     /// <p>Required. The broker&#39;s instance type.</p>
     pub host_instance_type: Option<String>,
@@ -197,6 +201,8 @@ pub struct CreateBrokerInput {
     pub security_groups: Option<Vec<String>>,
     /// <p>The list of groups (2 maximum) that define which subnets and IP ranges the broker can use from different Availability Zones. A SINGLE<em>INSTANCE deployment requires one subnet (for example, the default subnet). An ACTIVE</em>STANDBY<em>MULTI</em>AZ deployment requires two subnets.</p>
     pub subnet_ids: Option<Vec<String>>,
+    /// <p>Create tags when creating the broker.</p>
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>Required. The list of ActiveMQ users (persons or applications) who can access queues and topics. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 2-100 characters long.</p>
     pub users: Option<Vec<User>>,
 }
@@ -237,7 +243,7 @@ pub struct CreateBrokerRequest {
     #[serde(rename = "EngineType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_type: Option<String>,
-    /// <p>Required. The version of the broker engine. Note: Currently, Amazon MQ supports only 5.15.0.</p>
+    /// <p>Required. The version of the broker engine. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
     #[serde(rename = "EngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_version: Option<String>,
@@ -265,6 +271,10 @@ pub struct CreateBrokerRequest {
     #[serde(rename = "SubnetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_ids: Option<Vec<String>>,
+    /// <p>Create tags when creating the broker.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>Required. The list of ActiveMQ users (persons or applications) who can access queues and topics. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 2-100 characters long.</p>
     #[serde(rename = "Users")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -289,10 +299,12 @@ pub struct CreateBrokerResponse {
 pub struct CreateConfigurationInput {
     /// <p>Required. The type of broker engine. Note: Currently, Amazon MQ supports only ACTIVEMQ.</p>
     pub engine_type: Option<String>,
-    /// <p>Required. The version of the broker engine. Note: Currently, Amazon MQ supports only 5.15.0.</p>
+    /// <p>Required. The version of the broker engine. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
     pub engine_version: Option<String>,
     /// <p>Required. The name of the configuration. This value can contain only alphanumeric characters, dashes, periods, underscores, and tildes (- . _ ~). This value must be 1-150 characters long.</p>
     pub name: Option<String>,
+    /// <p>Create tags when creating the configuration.</p>
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>Returns information about the created configuration.</p>
@@ -317,7 +329,7 @@ pub struct CreateConfigurationRequest {
     #[serde(rename = "EngineType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_type: Option<String>,
-    /// <p>Required. The version of the broker engine. Note: Currently, Amazon MQ supports only 5.15.0.</p>
+    /// <p>Required. The version of the broker engine. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
     #[serde(rename = "EngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_version: Option<String>,
@@ -325,6 +337,10 @@ pub struct CreateConfigurationRequest {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>Create tags when creating the configuration.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -350,6 +366,18 @@ pub struct CreateConfigurationResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+}
+
+/// <p>A map of the key-value pairs for the resource tag.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateTagsRequest {
+    /// <p>the Amazon Resource Name (ARN)</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>The key-value pair for the resource tag.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>Creates a new ActiveMQ user.</p>
@@ -414,6 +442,16 @@ pub struct DeleteBrokerResponse {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteTagsRequest {
+    /// <p>the Amazon Resource Name (ARN)</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+    /// <p>An array of tag keys to delete</p>
+    #[serde(rename = "TagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteUserRequest {
     /// <p>The unique ID that Amazon MQ generates for the broker.</p>
     #[serde(rename = "BrokerId")]
@@ -427,7 +465,7 @@ pub struct DeleteUserRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeleteUserResponse {}
 
-/// <p>The version of the broker engine. Note: Currently, Amazon MQ supports only 5.15.0.</p>
+/// <p>The version of the broker engine. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct DescribeBrokerOutput {
     /// <p>Required. Enables automatic upgrades to new minor versions for brokers, as Apache releases the versions. The automatic upgrades occur during the maintenance window of the broker or after a manual broker reboot.</p>
@@ -450,7 +488,7 @@ pub struct DescribeBrokerOutput {
     pub deployment_mode: Option<String>,
     /// <p>Required. The type of broker engine. Note: Currently, Amazon MQ supports only ACTIVEMQ.</p>
     pub engine_type: Option<String>,
-    /// <p>The version of the broker engine. Note: Currently, Amazon MQ supports only 5.15.0.</p>
+    /// <p>The version of the broker engine. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
     pub engine_version: Option<String>,
     /// <p>The broker&#39;s instance type.</p>
     pub host_instance_type: Option<String>,
@@ -458,12 +496,16 @@ pub struct DescribeBrokerOutput {
     pub logs: Option<LogsSummary>,
     /// <p>The parameters that determine the WeeklyStartTime.</p>
     pub maintenance_window_start_time: Option<WeeklyStartTime>,
+    /// <p>The version of the broker engine to upgrade to. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
+    pub pending_engine_version: Option<String>,
     /// <p>Required. Enables connections from applications outside of the VPC that hosts the broker&#39;s subnets.</p>
     pub publicly_accessible: Option<bool>,
     /// <p>Required. The list of rules (1 minimum, 125 maximum) that authorize connections to brokers.</p>
     pub security_groups: Option<Vec<String>>,
     /// <p>The list of groups (2 maximum) that define which subnets and IP ranges the broker can use from different Availability Zones. A SINGLE<em>INSTANCE deployment requires one subnet (for example, the default subnet). An ACTIVE</em>STANDBY<em>MULTI</em>AZ deployment requires two subnets.</p>
     pub subnet_ids: Option<Vec<String>>,
+    /// <p>The list of all tags associated with this broker.</p>
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The list of all ActiveMQ usernames for the specified broker.</p>
     pub users: Option<Vec<UserSummary>>,
 }
@@ -518,7 +560,7 @@ pub struct DescribeBrokerResponse {
     #[serde(rename = "EngineType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_type: Option<String>,
-    /// <p>The version of the broker engine. Note: Currently, Amazon MQ supports only 5.15.0.</p>
+    /// <p>The version of the broker engine. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
     #[serde(rename = "EngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_version: Option<String>,
@@ -534,6 +576,10 @@ pub struct DescribeBrokerResponse {
     #[serde(rename = "MaintenanceWindowStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub maintenance_window_start_time: Option<WeeklyStartTime>,
+    /// <p>The version of the broker engine to upgrade to. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
+    #[serde(rename = "PendingEngineVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pending_engine_version: Option<String>,
     /// <p>Required. Enables connections from applications outside of the VPC that hosts the broker&#39;s subnets.</p>
     #[serde(rename = "PubliclyAccessible")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -546,6 +592,10 @@ pub struct DescribeBrokerResponse {
     #[serde(rename = "SubnetIds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subnet_ids: Option<Vec<String>>,
+    /// <p>The list of all tags associated with this broker.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
     /// <p>The list of all ActiveMQ usernames for the specified broker.</p>
     #[serde(rename = "Users")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -578,7 +628,7 @@ pub struct DescribeConfigurationResponse {
     #[serde(rename = "EngineType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_type: Option<String>,
-    /// <p>Required. The version of the broker engine.</p>
+    /// <p>Required. The version of the broker engine. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
     #[serde(rename = "EngineVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub engine_version: Option<String>,
@@ -594,6 +644,10 @@ pub struct DescribeConfigurationResponse {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The list of all tags associated with this configuration.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 /// <p>Returns the specified configuration revision for the specified configuration.</p>
@@ -822,6 +876,22 @@ pub struct ListConfigurationsResponse {
     pub next_token: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListTagsRequest {
+    /// <p>the Amazon Resource Name (ARN)</p>
+    #[serde(rename = "ResourceArn")]
+    pub resource_arn: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListTagsResponse {
+    /// <p>The key-value pair for the resource tag.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
 /// <p>Returns a list of all ActiveMQ users.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct ListUsersOutput {
@@ -892,7 +962,7 @@ pub struct LogsSummary {
     #[serde(rename = "Audit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audit: Option<bool>,
-    /// <p>Location of CloudWatch Log group where audit logs will be sent.</p>
+    /// <p>The location of the CloudWatch Logs log group where audit logs are sent.</p>
     #[serde(rename = "AuditLogGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub audit_log_group: Option<String>,
@@ -900,7 +970,7 @@ pub struct LogsSummary {
     #[serde(rename = "General")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub general: Option<bool>,
-    /// <p>Location of CloudWatch Log group where general logs will be sent.</p>
+    /// <p>The location of the CloudWatch Logs log group where general logs are sent.</p>
     #[serde(rename = "GeneralLogGroup")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub general_log_group: Option<String>,
@@ -953,11 +1023,22 @@ pub struct SanitizationWarning {
     pub reason: Option<String>,
 }
 
+/// <p>A map of the key-value pairs for the resource tag.</p>
+#[derive(Default, Debug, Clone, PartialEq)]
+pub struct Tags {
+    /// <p>The key-value pair for the resource tag.</p>
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+}
+
 /// <p>Updates the broker using the specified properties.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateBrokerInput {
+    /// <p>Enables automatic upgrades to new minor versions for brokers, as Apache releases the versions. The automatic upgrades occur during the maintenance window of the broker or after a manual broker reboot.</p>
+    pub auto_minor_version_upgrade: Option<bool>,
     /// <p>A list of information about the configuration.</p>
     pub configuration: Option<ConfigurationId>,
+    /// <p>The version of the broker engine. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
+    pub engine_version: Option<String>,
     /// <p>Enables Amazon CloudWatch logging for brokers.</p>
     pub logs: Option<Logs>,
 }
@@ -965,10 +1046,14 @@ pub struct UpdateBrokerInput {
 /// <p>Returns information about the updated broker.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct UpdateBrokerOutput {
+    /// <p>The new value of automatic upgrades to new minor version for brokers.</p>
+    pub auto_minor_version_upgrade: Option<bool>,
     /// <p>Required. The unique ID that Amazon MQ generates for the broker.</p>
     pub broker_id: Option<String>,
     /// <p>The ID of the updated configuration.</p>
     pub configuration: Option<ConfigurationId>,
+    /// <p>The version of the broker engine to upgrade to. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
+    pub engine_version: Option<String>,
     /// <p>The list of information about logs to be enabled for the specified broker.</p>
     pub logs: Option<Logs>,
 }
@@ -976,6 +1061,10 @@ pub struct UpdateBrokerOutput {
 /// <p>Updates the broker using the specified properties.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateBrokerRequest {
+    /// <p>Enables automatic upgrades to new minor versions for brokers, as Apache releases the versions. The automatic upgrades occur during the maintenance window of the broker or after a manual broker reboot.</p>
+    #[serde(rename = "AutoMinorVersionUpgrade")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_minor_version_upgrade: Option<bool>,
     /// <p>The name of the broker. This value must be unique in your AWS account, 1-50 characters long, must contain only letters, numbers, dashes, and underscores, and must not contain whitespaces, brackets, wildcard characters, or special characters.</p>
     #[serde(rename = "BrokerId")]
     pub broker_id: String,
@@ -983,6 +1072,10 @@ pub struct UpdateBrokerRequest {
     #[serde(rename = "Configuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration: Option<ConfigurationId>,
+    /// <p>The version of the broker engine. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
+    #[serde(rename = "EngineVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine_version: Option<String>,
     /// <p>Enables Amazon CloudWatch logging for brokers.</p>
     #[serde(rename = "Logs")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -992,6 +1085,10 @@ pub struct UpdateBrokerRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct UpdateBrokerResponse {
+    /// <p>The new value of automatic upgrades to new minor version for brokers.</p>
+    #[serde(rename = "AutoMinorVersionUpgrade")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub auto_minor_version_upgrade: Option<bool>,
     /// <p>Required. The unique ID that Amazon MQ generates for the broker.</p>
     #[serde(rename = "BrokerId")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1000,6 +1097,10 @@ pub struct UpdateBrokerResponse {
     #[serde(rename = "Configuration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub configuration: Option<ConfigurationId>,
+    /// <p>The version of the broker engine to upgrade to. For a list of supported engine versions, see https://docs.aws.amazon.com/amazon-mq/latest/developer-guide/broker-engine.html</p>
+    #[serde(rename = "EngineVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine_version: Option<String>,
     /// <p>The list of information about logs to be enabled for the specified broker.</p>
     #[serde(rename = "Logs")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1419,6 +1520,118 @@ impl Error for CreateConfigurationError {
         }
     }
 }
+/// Errors returned by CreateTags
+#[derive(Debug, PartialEq)]
+pub enum CreateTagsError {
+    /// <p>Returns information about an error.</p>
+    BadRequest(String),
+    /// <p>Returns information about an error.</p>
+    Forbidden(String),
+    /// <p>Returns information about an error.</p>
+    InternalServerError(String),
+    /// <p>Returns information about an error.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl CreateTagsError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> CreateTagsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "BadRequestException" => {
+                    return CreateTagsError::BadRequest(String::from(error_message));
+                }
+                "ForbiddenException" => {
+                    return CreateTagsError::Forbidden(String::from(error_message));
+                }
+                "InternalServerErrorException" => {
+                    return CreateTagsError::InternalServerError(String::from(error_message));
+                }
+                "NotFoundException" => {
+                    return CreateTagsError::NotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return CreateTagsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return CreateTagsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for CreateTagsError {
+    fn from(err: serde_json::error::Error) -> CreateTagsError {
+        CreateTagsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateTagsError {
+    fn from(err: CredentialsError) -> CreateTagsError {
+        CreateTagsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateTagsError {
+    fn from(err: HttpDispatchError) -> CreateTagsError {
+        CreateTagsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateTagsError {
+    fn from(err: io::Error) -> CreateTagsError {
+        CreateTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateTagsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateTagsError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateTagsError::BadRequest(ref cause) => cause,
+            CreateTagsError::Forbidden(ref cause) => cause,
+            CreateTagsError::InternalServerError(ref cause) => cause,
+            CreateTagsError::NotFound(ref cause) => cause,
+            CreateTagsError::Validation(ref cause) => cause,
+            CreateTagsError::Credentials(ref err) => err.description(),
+            CreateTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CreateTagsError::ParseError(ref cause) => cause,
+            CreateTagsError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by CreateUser
 #[derive(Debug, PartialEq)]
 pub enum CreateUserError {
@@ -1646,6 +1859,118 @@ impl Error for DeleteBrokerError {
             DeleteBrokerError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             DeleteBrokerError::ParseError(ref cause) => cause,
             DeleteBrokerError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DeleteTags
+#[derive(Debug, PartialEq)]
+pub enum DeleteTagsError {
+    /// <p>Returns information about an error.</p>
+    BadRequest(String),
+    /// <p>Returns information about an error.</p>
+    Forbidden(String),
+    /// <p>Returns information about an error.</p>
+    InternalServerError(String),
+    /// <p>Returns information about an error.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DeleteTagsError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteTagsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "BadRequestException" => {
+                    return DeleteTagsError::BadRequest(String::from(error_message));
+                }
+                "ForbiddenException" => {
+                    return DeleteTagsError::Forbidden(String::from(error_message));
+                }
+                "InternalServerErrorException" => {
+                    return DeleteTagsError::InternalServerError(String::from(error_message));
+                }
+                "NotFoundException" => {
+                    return DeleteTagsError::NotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return DeleteTagsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DeleteTagsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteTagsError {
+    fn from(err: serde_json::error::Error) -> DeleteTagsError {
+        DeleteTagsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteTagsError {
+    fn from(err: CredentialsError) -> DeleteTagsError {
+        DeleteTagsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteTagsError {
+    fn from(err: HttpDispatchError) -> DeleteTagsError {
+        DeleteTagsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteTagsError {
+    fn from(err: io::Error) -> DeleteTagsError {
+        DeleteTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteTagsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteTagsError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteTagsError::BadRequest(ref cause) => cause,
+            DeleteTagsError::Forbidden(ref cause) => cause,
+            DeleteTagsError::InternalServerError(ref cause) => cause,
+            DeleteTagsError::NotFound(ref cause) => cause,
+            DeleteTagsError::Validation(ref cause) => cause,
+            DeleteTagsError::Credentials(ref err) => err.description(),
+            DeleteTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            DeleteTagsError::ParseError(ref cause) => cause,
+            DeleteTagsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2551,6 +2876,116 @@ impl Error for ListConfigurationsError {
         }
     }
 }
+/// Errors returned by ListTags
+#[derive(Debug, PartialEq)]
+pub enum ListTagsError {
+    /// <p>Returns information about an error.</p>
+    BadRequest(String),
+    /// <p>Returns information about an error.</p>
+    Forbidden(String),
+    /// <p>Returns information about an error.</p>
+    InternalServerError(String),
+    /// <p>Returns information about an error.</p>
+    NotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListTagsError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> ListTagsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "BadRequestException" => {
+                    return ListTagsError::BadRequest(String::from(error_message));
+                }
+                "ForbiddenException" => {
+                    return ListTagsError::Forbidden(String::from(error_message));
+                }
+                "InternalServerErrorException" => {
+                    return ListTagsError::InternalServerError(String::from(error_message));
+                }
+                "NotFoundException" => return ListTagsError::NotFound(String::from(error_message)),
+                "ValidationException" => {
+                    return ListTagsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ListTagsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListTagsError {
+    fn from(err: serde_json::error::Error) -> ListTagsError {
+        ListTagsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListTagsError {
+    fn from(err: CredentialsError) -> ListTagsError {
+        ListTagsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListTagsError {
+    fn from(err: HttpDispatchError) -> ListTagsError {
+        ListTagsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListTagsError {
+    fn from(err: io::Error) -> ListTagsError {
+        ListTagsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListTagsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListTagsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListTagsError::BadRequest(ref cause) => cause,
+            ListTagsError::Forbidden(ref cause) => cause,
+            ListTagsError::InternalServerError(ref cause) => cause,
+            ListTagsError::NotFound(ref cause) => cause,
+            ListTagsError::Validation(ref cause) => cause,
+            ListTagsError::Credentials(ref err) => err.description(),
+            ListTagsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ListTagsError::ParseError(ref cause) => cause,
+            ListTagsError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by ListUsers
 #[derive(Debug, PartialEq)]
 pub enum ListUsersError {
@@ -2779,6 +3214,8 @@ pub enum UpdateBrokerError {
     /// <p>Returns information about an error.</p>
     BadRequest(String),
     /// <p>Returns information about an error.</p>
+    Conflict(String),
+    /// <p>Returns information about an error.</p>
     Forbidden(String),
     /// <p>Returns information about an error.</p>
     InternalServerError(String),
@@ -2825,6 +3262,9 @@ impl UpdateBrokerError {
             match error_type {
                 "BadRequestException" => {
                     return UpdateBrokerError::BadRequest(String::from(error_message));
+                }
+                "ConflictException" => {
+                    return UpdateBrokerError::Conflict(String::from(error_message));
                 }
                 "ForbiddenException" => {
                     return UpdateBrokerError::Forbidden(String::from(error_message));
@@ -2874,6 +3314,7 @@ impl Error for UpdateBrokerError {
     fn description(&self) -> &str {
         match *self {
             UpdateBrokerError::BadRequest(ref cause) => cause,
+            UpdateBrokerError::Conflict(ref cause) => cause,
             UpdateBrokerError::Forbidden(ref cause) => cause,
             UpdateBrokerError::InternalServerError(ref cause) => cause,
             UpdateBrokerError::NotFound(ref cause) => cause,
@@ -3139,6 +3580,9 @@ pub trait MQ {
         input: CreateConfigurationRequest,
     ) -> RusotoFuture<CreateConfigurationResponse, CreateConfigurationError>;
 
+    /// <p>Add a tag to a resource.</p>
+    fn create_tags(&self, input: CreateTagsRequest) -> RusotoFuture<(), CreateTagsError>;
+
     /// <p>Creates an ActiveMQ user.</p>
     fn create_user(
         &self,
@@ -3150,6 +3594,9 @@ pub trait MQ {
         &self,
         input: DeleteBrokerRequest,
     ) -> RusotoFuture<DeleteBrokerResponse, DeleteBrokerError>;
+
+    /// <p>Remove a tag from a resource.</p>
+    fn delete_tags(&self, input: DeleteTagsRequest) -> RusotoFuture<(), DeleteTagsError>;
 
     /// <p>Deletes an ActiveMQ user.</p>
     fn delete_user(
@@ -3198,6 +3645,9 @@ pub trait MQ {
         &self,
         input: ListConfigurationsRequest,
     ) -> RusotoFuture<ListConfigurationsResponse, ListConfigurationsError>;
+
+    /// <p>Lists tags for a resource.</p>
+    fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError>;
 
     /// <p>Returns a list of all ActiveMQ users.</p>
     fn list_users(
@@ -3344,6 +3794,34 @@ impl MQ for MQClient {
         })
     }
 
+    /// <p>Add a tag to a resource.</p>
+    fn create_tags(&self, input: CreateTagsRequest) -> RusotoFuture<(), CreateTagsError> {
+        let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("POST", "mq", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 204 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CreateTagsError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Creates an ActiveMQ user.</p>
     fn create_user(
         &self,
@@ -3418,6 +3896,37 @@ impl MQ for MQClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(DeleteBrokerError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Remove a tag from a resource.</p>
+    fn delete_tags(&self, input: DeleteTagsRequest) -> RusotoFuture<(), DeleteTagsError> {
+        let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("DELETE", "mq", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        for item in input.tag_keys.iter() {
+            params.put("tagKeys", item);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 204 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let result = ::std::mem::drop(response);
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(DeleteTagsError::from_response(response))),
                 )
             }
         })
@@ -3751,6 +4260,39 @@ impl MQ for MQClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(ListConfigurationsError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Lists tags for a resource.</p>
+    fn list_tags(&self, input: ListTagsRequest) -> RusotoFuture<ListTagsResponse, ListTagsError> {
+        let request_uri = format!("/v1/tags/{resource_arn}", resource_arn = input.resource_arn);
+
+        let mut request = SignedRequest::new("GET", "mq", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<ListTagsResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListTagsError::from_response(response))),
                 )
             }
         })

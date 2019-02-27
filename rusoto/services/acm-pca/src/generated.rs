@@ -199,6 +199,10 @@ pub struct CreateCertificateAuthorityRequest {
     #[serde(rename = "RevocationConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub revocation_configuration: Option<RevocationConfiguration>,
+    /// <p>Key-value pairs that will be attached to the new private CA. You can associate up to 50 tags with a private CA.</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -551,6 +555,8 @@ pub enum CreateCertificateAuthorityError {
     InvalidArgs(String),
     /// <p>The S3 bucket policy is not valid. The policy must give ACM PCA rights to read from and write to the bucket and find the bucket location.</p>
     InvalidPolicy(String),
+    /// <p>The tag associated with the CA is not valid. The invalid argument is contained in the message field.</p>
+    InvalidTag(String),
     /// <p>An ACM PCA limit has been exceeded. See the exception message returned to determine the limit that was exceeded.</p>
     LimitExceeded(String),
     /// An error occurred dispatching the HTTP request
@@ -585,6 +591,9 @@ impl CreateCertificateAuthorityError {
                     return CreateCertificateAuthorityError::InvalidPolicy(String::from(
                         error_message,
                     ));
+                }
+                "InvalidTagException" => {
+                    return CreateCertificateAuthorityError::InvalidTag(String::from(error_message));
                 }
                 "LimitExceededException" => {
                     return CreateCertificateAuthorityError::LimitExceeded(String::from(
@@ -631,6 +640,7 @@ impl Error for CreateCertificateAuthorityError {
         match *self {
             CreateCertificateAuthorityError::InvalidArgs(ref cause) => cause,
             CreateCertificateAuthorityError::InvalidPolicy(ref cause) => cause,
+            CreateCertificateAuthorityError::InvalidTag(ref cause) => cause,
             CreateCertificateAuthorityError::LimitExceeded(ref cause) => cause,
             CreateCertificateAuthorityError::Validation(ref cause) => cause,
             CreateCertificateAuthorityError::Credentials(ref err) => err.description(),
@@ -649,7 +659,7 @@ pub enum CreateCertificateAuthorityAuditReportError {
     InvalidArgs(String),
     /// <p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
     InvalidArn(String),
-    /// <p>The private CA is in a state during which a report cannot be generated.</p>
+    /// <p>The private CA is in a state during which a report or certificate cannot be generated.</p>
     InvalidState(String),
     /// <p>The request has failed for an unspecified reason.</p>
     RequestFailed(String),
@@ -775,7 +785,7 @@ pub enum DeleteCertificateAuthorityError {
     ConcurrentModification(String),
     /// <p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
     InvalidArn(String),
-    /// <p>The private CA is in a state during which a report cannot be generated.</p>
+    /// <p>The private CA is in a state during which a report or certificate cannot be generated.</p>
     InvalidState(String),
     /// <p>A resource such as a private CA, S3 bucket, certificate, or audit report cannot be found.</p>
     ResourceNotFound(String),
@@ -1075,7 +1085,7 @@ impl Error for DescribeCertificateAuthorityAuditReportError {
 pub enum GetCertificateError {
     /// <p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
     InvalidArn(String),
-    /// <p>The private CA is in a state during which a report cannot be generated.</p>
+    /// <p>The private CA is in a state during which a report or certificate cannot be generated.</p>
     InvalidState(String),
     /// <p>The request has failed for an unspecified reason.</p>
     RequestFailed(String),
@@ -1179,7 +1189,7 @@ impl Error for GetCertificateError {
 pub enum GetCertificateAuthorityCertificateError {
     /// <p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
     InvalidArn(String),
-    /// <p>The private CA is in a state during which a report cannot be generated.</p>
+    /// <p>The private CA is in a state during which a report or certificate cannot be generated.</p>
     InvalidState(String),
     /// <p>A resource such as a private CA, S3 bucket, certificate, or audit report cannot be found.</p>
     ResourceNotFound(String),
@@ -1281,7 +1291,7 @@ impl Error for GetCertificateAuthorityCertificateError {
 pub enum GetCertificateAuthorityCsrError {
     /// <p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
     InvalidArn(String),
-    /// <p>The private CA is in a state during which a report cannot be generated.</p>
+    /// <p>The private CA is in a state during which a report or certificate cannot be generated.</p>
     InvalidState(String),
     /// <p>The request has failed for an unspecified reason.</p>
     RequestFailed(String),
@@ -1399,7 +1409,7 @@ pub enum ImportCertificateAuthorityCertificateError {
     ConcurrentModification(String),
     /// <p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
     InvalidArn(String),
-    /// <p>The private CA is in a state during which a report cannot be generated.</p>
+    /// <p>The private CA is in a state during which a report or certificate cannot be generated.</p>
     InvalidState(String),
     /// <p>One or more fields in the certificate are invalid.</p>
     MalformedCertificate(String),
@@ -1539,7 +1549,7 @@ pub enum IssueCertificateError {
     InvalidArgs(String),
     /// <p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
     InvalidArn(String),
-    /// <p>The private CA is in a state during which a report cannot be generated.</p>
+    /// <p>The private CA is in a state during which a report or certificate cannot be generated.</p>
     InvalidState(String),
     /// <p>An ACM PCA limit has been exceeded. See the exception message returned to determine the limit that was exceeded.</p>
     LimitExceeded(String),
@@ -1817,7 +1827,7 @@ impl Error for ListTagsError {
 pub enum RestoreCertificateAuthorityError {
     /// <p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
     InvalidArn(String),
-    /// <p>The private CA is in a state during which a report cannot be generated.</p>
+    /// <p>The private CA is in a state during which a report or certificate cannot be generated.</p>
     InvalidState(String),
     /// <p>A resource such as a private CA, S3 bucket, certificate, or audit report cannot be found.</p>
     ResourceNotFound(String),
@@ -1917,8 +1927,10 @@ pub enum RevokeCertificateError {
     ConcurrentModification(String),
     /// <p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
     InvalidArn(String),
-    /// <p>The private CA is in a state during which a report cannot be generated.</p>
+    /// <p>The private CA is in a state during which a report or certificate cannot be generated.</p>
     InvalidState(String),
+    /// <p>An ACM PCA limit has been exceeded. See the exception message returned to determine the limit that was exceeded.</p>
+    LimitExceeded(String),
     /// <p>Your request has already been completed.</p>
     RequestAlreadyProcessed(String),
     /// <p>The request has failed for an unspecified reason.</p>
@@ -1962,6 +1974,9 @@ impl RevokeCertificateError {
                 }
                 "InvalidStateException" => {
                     return RevokeCertificateError::InvalidState(String::from(error_message));
+                }
+                "LimitExceededException" => {
+                    return RevokeCertificateError::LimitExceeded(String::from(error_message));
                 }
                 "RequestAlreadyProcessedException" => {
                     return RevokeCertificateError::RequestAlreadyProcessed(String::from(
@@ -2018,6 +2033,7 @@ impl Error for RevokeCertificateError {
             RevokeCertificateError::ConcurrentModification(ref cause) => cause,
             RevokeCertificateError::InvalidArn(ref cause) => cause,
             RevokeCertificateError::InvalidState(ref cause) => cause,
+            RevokeCertificateError::LimitExceeded(ref cause) => cause,
             RevokeCertificateError::RequestAlreadyProcessed(ref cause) => cause,
             RevokeCertificateError::RequestFailed(ref cause) => cause,
             RevokeCertificateError::RequestInProgress(ref cause) => cause,
@@ -2037,7 +2053,7 @@ impl Error for RevokeCertificateError {
 pub enum TagCertificateAuthorityError {
     /// <p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
     InvalidArn(String),
-    /// <p>The private CA is in a state during which a report cannot be generated.</p>
+    /// <p>The private CA is in a state during which a report or certificate cannot be generated.</p>
     InvalidState(String),
     /// <p>The tag associated with the CA is not valid. The invalid argument is contained in the message field.</p>
     InvalidTag(String),
@@ -2145,7 +2161,7 @@ impl Error for TagCertificateAuthorityError {
 pub enum UntagCertificateAuthorityError {
     /// <p>The requested Amazon Resource Name (ARN) does not refer to an existing resource.</p>
     InvalidArn(String),
-    /// <p>The private CA is in a state during which a report cannot be generated.</p>
+    /// <p>The private CA is in a state during which a report or certificate cannot be generated.</p>
     InvalidState(String),
     /// <p>The tag associated with the CA is not valid. The invalid argument is contained in the message field.</p>
     InvalidTag(String),
@@ -2253,7 +2269,7 @@ pub enum UpdateCertificateAuthorityError {
     InvalidArn(String),
     /// <p>The S3 bucket policy is not valid. The policy must give ACM PCA rights to read from and write to the bucket and find the bucket location.</p>
     InvalidPolicy(String),
-    /// <p>The private CA is in a state during which a report cannot be generated.</p>
+    /// <p>The private CA is in a state during which a report or certificate cannot be generated.</p>
     InvalidState(String),
     /// <p>A resource such as a private CA, S3 bucket, certificate, or audit report cannot be found.</p>
     ResourceNotFound(String),
@@ -2385,7 +2401,7 @@ pub trait AcmPca {
         input: DeleteCertificateAuthorityRequest,
     ) -> RusotoFuture<(), DeleteCertificateAuthorityError>;
 
-    /// <p><p>Lists information about your private certificate authority (CA). You specify the private CA on input by its ARN (Amazon Resource Name). The output contains the status of your CA. This can be any of the following: </p> <ul> <li> <p> <code>CREATING</code> - ACM PCA is creating your private certificate authority.</p> </li> <li> <p> <code>PENDING_CERTIFICATE</code> - The certificate is pending. You must use your on-premises root or subordinate CA to sign your private CA CSR and then import it into PCA. </p> </li> <li> <p> <code>ACTIVE</code> - Your private CA is active.</p> </li> <li> <p> <code>DISABLED</code> - Your private CA has been disabled.</p> </li> <li> <p> <code>EXPIRED</code> - Your private CA certificate has expired.</p> </li> <li> <p> <code>FAILED</code> - Your private CA has failed. Your CA can fail because of problems such a network outage or backend AWS failure or other errors. A failed CA can never return to the pending state. You must create a new CA. </p> </li> <li> <p> <code>DELETED</code> - Your private CA is within the restoration period, after which it will be permanently deleted. The length of time remaining in the CA&#39;s restoration period will also be included in this operation&#39;s output.</p> </li> </ul></p>
+    /// <p><p>Lists information about your private certificate authority (CA). You specify the private CA on input by its ARN (Amazon Resource Name). The output contains the status of your CA. This can be any of the following: </p> <ul> <li> <p> <code>CREATING</code> - ACM PCA is creating your private certificate authority.</p> </li> <li> <p> <code>PENDING_CERTIFICATE</code> - The certificate is pending. You must use your on-premises root or subordinate CA to sign your private CA CSR and then import it into PCA. </p> </li> <li> <p> <code>ACTIVE</code> - Your private CA is active.</p> </li> <li> <p> <code>DISABLED</code> - Your private CA has been disabled.</p> </li> <li> <p> <code>EXPIRED</code> - Your private CA certificate has expired.</p> </li> <li> <p> <code>FAILED</code> - Your private CA has failed. Your CA can fail because of problems such a network outage or backend AWS failure or other errors. A failed CA can never return to the pending state. You must create a new CA. </p> </li> <li> <p> <code>DELETED</code> - Your private CA is within the restoration period, after which it is permanently deleted. The length of time remaining in the CA&#39;s restoration period is also included in this operation&#39;s output.</p> </li> </ul></p>
     fn describe_certificate_authority(
         &self,
         input: DescribeCertificateAuthorityRequest,
@@ -2608,7 +2624,7 @@ impl AcmPca for AcmPcaClient {
         })
     }
 
-    /// <p><p>Lists information about your private certificate authority (CA). You specify the private CA on input by its ARN (Amazon Resource Name). The output contains the status of your CA. This can be any of the following: </p> <ul> <li> <p> <code>CREATING</code> - ACM PCA is creating your private certificate authority.</p> </li> <li> <p> <code>PENDING_CERTIFICATE</code> - The certificate is pending. You must use your on-premises root or subordinate CA to sign your private CA CSR and then import it into PCA. </p> </li> <li> <p> <code>ACTIVE</code> - Your private CA is active.</p> </li> <li> <p> <code>DISABLED</code> - Your private CA has been disabled.</p> </li> <li> <p> <code>EXPIRED</code> - Your private CA certificate has expired.</p> </li> <li> <p> <code>FAILED</code> - Your private CA has failed. Your CA can fail because of problems such a network outage or backend AWS failure or other errors. A failed CA can never return to the pending state. You must create a new CA. </p> </li> <li> <p> <code>DELETED</code> - Your private CA is within the restoration period, after which it will be permanently deleted. The length of time remaining in the CA&#39;s restoration period will also be included in this operation&#39;s output.</p> </li> </ul></p>
+    /// <p><p>Lists information about your private certificate authority (CA). You specify the private CA on input by its ARN (Amazon Resource Name). The output contains the status of your CA. This can be any of the following: </p> <ul> <li> <p> <code>CREATING</code> - ACM PCA is creating your private certificate authority.</p> </li> <li> <p> <code>PENDING_CERTIFICATE</code> - The certificate is pending. You must use your on-premises root or subordinate CA to sign your private CA CSR and then import it into PCA. </p> </li> <li> <p> <code>ACTIVE</code> - Your private CA is active.</p> </li> <li> <p> <code>DISABLED</code> - Your private CA has been disabled.</p> </li> <li> <p> <code>EXPIRED</code> - Your private CA certificate has expired.</p> </li> <li> <p> <code>FAILED</code> - Your private CA has failed. Your CA can fail because of problems such a network outage or backend AWS failure or other errors. A failed CA can never return to the pending state. You must create a new CA. </p> </li> <li> <p> <code>DELETED</code> - Your private CA is within the restoration period, after which it is permanently deleted. The length of time remaining in the CA&#39;s restoration period is also included in this operation&#39;s output.</p> </li> </ul></p>
     fn describe_certificate_authority(
         &self,
         input: DescribeCertificateAuthorityRequest,

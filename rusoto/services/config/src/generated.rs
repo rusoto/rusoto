@@ -114,6 +114,27 @@ pub struct AggregateEvaluationResult {
     pub result_recorded_time: Option<f64>,
 }
 
+/// <p>The details that identify a resource that is collected by AWS Config aggregator, including the resource type, ID, (if available) the custom resource name, the source account, and source region.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AggregateResourceIdentifier {
+    /// <p>The ID of the AWS resource.</p>
+    #[serde(rename = "ResourceId")]
+    pub resource_id: String,
+    /// <p>The name of the AWS resource.</p>
+    #[serde(rename = "ResourceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_name: Option<String>,
+    /// <p>The type of the AWS resource.</p>
+    #[serde(rename = "ResourceType")]
+    pub resource_type: String,
+    /// <p>The 12-digit account ID of the source account.</p>
+    #[serde(rename = "SourceAccountId")]
+    pub source_account_id: String,
+    /// <p>The source region where data is aggregated.</p>
+    #[serde(rename = "SourceRegion")]
+    pub source_region: String,
+}
+
 /// <p>The current sync status between the source and the aggregator account.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -174,7 +195,7 @@ pub struct AggregationAuthorization {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct BaseConfigurationItem {
-    /// <p>The 12 digit AWS account ID associated with the resource.</p>
+    /// <p>The 12-digit AWS account ID associated with the resource.</p>
     #[serde(rename = "accountId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub account_id: Option<String>,
@@ -230,6 +251,29 @@ pub struct BaseConfigurationItem {
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct BatchGetAggregateResourceConfigRequest {
+    /// <p>The name of the configuration aggregator.</p>
+    #[serde(rename = "ConfigurationAggregatorName")]
+    pub configuration_aggregator_name: String,
+    /// <p>A list of aggregate ResourceIdentifiers objects. </p>
+    #[serde(rename = "ResourceIdentifiers")]
+    pub resource_identifiers: Vec<AggregateResourceIdentifier>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct BatchGetAggregateResourceConfigResponse {
+    /// <p>A list that contains the current configuration of one or more resources.</p>
+    #[serde(rename = "BaseConfigurationItems")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub base_configuration_items: Option<Vec<BaseConfigurationItem>>,
+    /// <p>A list of resource identifiers that were not processed with current scope. The list is empty if all the resources are processed.</p>
+    #[serde(rename = "UnprocessedResourceIdentifiers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unprocessed_resource_identifiers: Option<Vec<AggregateResourceIdentifier>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -393,6 +437,10 @@ pub struct ConfigRule {
     #[serde(rename = "ConfigRuleState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub config_rule_state: Option<String>,
+    /// <p><p>Service principal name of the service that created the rule.</p> <note> <p>The field is populated only if the service linked rule is created by a service. The field is empty if you create your own rule.</p> </note></p>
+    #[serde(rename = "CreatedBy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_by: Option<String>,
     /// <p>The description that you provide for the AWS Config rule.</p>
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1364,6 +1412,68 @@ pub struct GetAggregateConfigRuleComplianceSummaryResponse {
     pub next_token: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetAggregateDiscoveredResourceCountsRequest {
+    /// <p>The name of the configuration aggregator.</p>
+    #[serde(rename = "ConfigurationAggregatorName")]
+    pub configuration_aggregator_name: String,
+    /// <p>Filters the results based on the <code>ResourceCountFilters</code> object.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<ResourceCountFilters>,
+    /// <p>The key to group the resource counts.</p>
+    #[serde(rename = "GroupByKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_by_key: Option<String>,
+    /// <p>The maximum number of <a>GroupedResourceCount</a> objects returned on each page. The default is 1000. You cannot specify a number greater than 1000. If you specify 0, AWS Config uses the default.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetAggregateDiscoveredResourceCountsResponse {
+    /// <p>The key passed into the request object. If <code>GroupByKey</code> is not provided, the result will be empty.</p>
+    #[serde(rename = "GroupByKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_by_key: Option<String>,
+    /// <p>Returns a list of GroupedResourceCount objects.</p>
+    #[serde(rename = "GroupedResourceCounts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub grouped_resource_counts: Option<Vec<GroupedResourceCount>>,
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The total number of resources that are present in an aggregator with the filters that you provide.</p>
+    #[serde(rename = "TotalDiscoveredResources")]
+    pub total_discovered_resources: i64,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetAggregateResourceConfigRequest {
+    /// <p>The name of the configuration aggregator.</p>
+    #[serde(rename = "ConfigurationAggregatorName")]
+    pub configuration_aggregator_name: String,
+    /// <p>An object that identifies aggregate resource.</p>
+    #[serde(rename = "ResourceIdentifier")]
+    pub resource_identifier: AggregateResourceIdentifier,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetAggregateResourceConfigResponse {
+    /// <p>Returns a <code>ConfigurationItem</code> object.</p>
+    #[serde(rename = "ConfigurationItem")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub configuration_item: Option<ConfigurationItem>,
+}
+
 /// <p><p/></p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetComplianceDetailsByConfigRuleRequest {
@@ -1536,6 +1646,53 @@ pub struct GetResourceConfigHistoryResponse {
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
+}
+
+/// <p>The count of resources that are grouped by the group name.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GroupedResourceCount {
+    /// <p>The name of the group that can be region, account ID, or resource type. For example, region1, region2 if the region was chosen as <code>GroupByKey</code>.</p>
+    #[serde(rename = "GroupName")]
+    pub group_name: String,
+    /// <p>The number of resources in the group.</p>
+    #[serde(rename = "ResourceCount")]
+    pub resource_count: i64,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListAggregateDiscoveredResourcesRequest {
+    /// <p>The name of the configuration aggregator. </p>
+    #[serde(rename = "ConfigurationAggregatorName")]
+    pub configuration_aggregator_name: String,
+    /// <p>Filters the results based on the <code>ResourceFilters</code> object.</p>
+    #[serde(rename = "Filters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub filters: Option<ResourceFilters>,
+    /// <p>The maximum number of resource identifiers returned on each page. The default is 100. You cannot specify a number greater than 100. If you specify 0, AWS Config uses the default.</p>
+    #[serde(rename = "Limit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub limit: Option<i64>,
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The type of resources that you want AWS Config to list in the response.</p>
+    #[serde(rename = "ResourceType")]
+    pub resource_type: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListAggregateDiscoveredResourcesResponse {
+    /// <p>The <code>nextToken</code> string returned on a previous page that you use to get the next page of results in a paginated response.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Returns a list of <code>ResourceIdentifiers</code> objects.</p>
+    #[serde(rename = "ResourceIdentifiers")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_identifiers: Option<Vec<AggregateResourceIdentifier>>,
 }
 
 /// <p><p/></p>
@@ -1771,6 +1928,44 @@ pub struct ResourceCount {
     pub resource_type: Option<String>,
 }
 
+/// <p>Filters the resource count based on account ID, region, and resource type.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ResourceCountFilters {
+    /// <p>The 12-digit ID of the account.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// <p>The region where the account is located.</p>
+    #[serde(rename = "Region")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub region: Option<String>,
+    /// <p>The type of the AWS resource.</p>
+    #[serde(rename = "ResourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+}
+
+/// <p>Filters the results by resource account ID, region, resource ID, and resource name.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ResourceFilters {
+    /// <p>The 12-digit source account ID.</p>
+    #[serde(rename = "AccountId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// <p>The source region.</p>
+    #[serde(rename = "Region")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub region: Option<String>,
+    /// <p>The ID of the resource.</p>
+    #[serde(rename = "ResourceId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_id: Option<String>,
+    /// <p>The name of the resource.</p>
+    #[serde(rename = "ResourceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_name: Option<String>,
+}
+
 /// <p>The details that identify a resource that is discovered by AWS Config, including the resource type, ID, and (if available) the custom resource name.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -1899,6 +2094,92 @@ pub struct StopConfigurationRecorderRequest {
     pub configuration_recorder_name: String,
 }
 
+/// Errors returned by BatchGetAggregateResourceConfig
+#[derive(Debug, PartialEq)]
+pub enum BatchGetAggregateResourceConfigError {
+    /// <p>You have specified a configuration aggregator that does not exist.</p>
+    NoSuchConfigurationAggregator(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl BatchGetAggregateResourceConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> BatchGetAggregateResourceConfigError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "NoSuchConfigurationAggregatorException" => {
+                    return BatchGetAggregateResourceConfigError::NoSuchConfigurationAggregator(
+                        String::from(error_message),
+                    );
+                }
+                "ValidationException" => {
+                    return BatchGetAggregateResourceConfigError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return BatchGetAggregateResourceConfigError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for BatchGetAggregateResourceConfigError {
+    fn from(err: serde_json::error::Error) -> BatchGetAggregateResourceConfigError {
+        BatchGetAggregateResourceConfigError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for BatchGetAggregateResourceConfigError {
+    fn from(err: CredentialsError) -> BatchGetAggregateResourceConfigError {
+        BatchGetAggregateResourceConfigError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for BatchGetAggregateResourceConfigError {
+    fn from(err: HttpDispatchError) -> BatchGetAggregateResourceConfigError {
+        BatchGetAggregateResourceConfigError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for BatchGetAggregateResourceConfigError {
+    fn from(err: io::Error) -> BatchGetAggregateResourceConfigError {
+        BatchGetAggregateResourceConfigError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for BatchGetAggregateResourceConfigError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for BatchGetAggregateResourceConfigError {
+    fn description(&self) -> &str {
+        match *self {
+            BatchGetAggregateResourceConfigError::NoSuchConfigurationAggregator(ref cause) => cause,
+            BatchGetAggregateResourceConfigError::Validation(ref cause) => cause,
+            BatchGetAggregateResourceConfigError::Credentials(ref err) => err.description(),
+            BatchGetAggregateResourceConfigError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            BatchGetAggregateResourceConfigError::ParseError(ref cause) => cause,
+            BatchGetAggregateResourceConfigError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by BatchGetResourceConfig
 #[derive(Debug, PartialEq)]
 pub enum BatchGetResourceConfigError {
@@ -4301,6 +4582,210 @@ impl Error for GetAggregateConfigRuleComplianceSummaryError {
         }
     }
 }
+/// Errors returned by GetAggregateDiscoveredResourceCounts
+#[derive(Debug, PartialEq)]
+pub enum GetAggregateDiscoveredResourceCountsError {
+    /// <p>The specified limit is outside the allowable range.</p>
+    InvalidLimit(String),
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
+    /// <p>You have specified a configuration aggregator that does not exist.</p>
+    NoSuchConfigurationAggregator(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetAggregateDiscoveredResourceCountsError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetAggregateDiscoveredResourceCountsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InvalidLimitException" => {
+                    return GetAggregateDiscoveredResourceCountsError::InvalidLimit(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidNextTokenException" => {
+                    return GetAggregateDiscoveredResourceCountsError::InvalidNextToken(
+                        String::from(error_message),
+                    );
+                }
+                "NoSuchConfigurationAggregatorException" => {
+                    return GetAggregateDiscoveredResourceCountsError::NoSuchConfigurationAggregator(
+                        String::from(error_message),
+                    );
+                }
+                "ValidationException" => {
+                    return GetAggregateDiscoveredResourceCountsError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return GetAggregateDiscoveredResourceCountsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetAggregateDiscoveredResourceCountsError {
+    fn from(err: serde_json::error::Error) -> GetAggregateDiscoveredResourceCountsError {
+        GetAggregateDiscoveredResourceCountsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetAggregateDiscoveredResourceCountsError {
+    fn from(err: CredentialsError) -> GetAggregateDiscoveredResourceCountsError {
+        GetAggregateDiscoveredResourceCountsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetAggregateDiscoveredResourceCountsError {
+    fn from(err: HttpDispatchError) -> GetAggregateDiscoveredResourceCountsError {
+        GetAggregateDiscoveredResourceCountsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetAggregateDiscoveredResourceCountsError {
+    fn from(err: io::Error) -> GetAggregateDiscoveredResourceCountsError {
+        GetAggregateDiscoveredResourceCountsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetAggregateDiscoveredResourceCountsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetAggregateDiscoveredResourceCountsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetAggregateDiscoveredResourceCountsError::InvalidLimit(ref cause) => cause,
+            GetAggregateDiscoveredResourceCountsError::InvalidNextToken(ref cause) => cause,
+            GetAggregateDiscoveredResourceCountsError::NoSuchConfigurationAggregator(ref cause) => {
+                cause
+            }
+            GetAggregateDiscoveredResourceCountsError::Validation(ref cause) => cause,
+            GetAggregateDiscoveredResourceCountsError::Credentials(ref err) => err.description(),
+            GetAggregateDiscoveredResourceCountsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetAggregateDiscoveredResourceCountsError::ParseError(ref cause) => cause,
+            GetAggregateDiscoveredResourceCountsError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetAggregateResourceConfig
+#[derive(Debug, PartialEq)]
+pub enum GetAggregateResourceConfigError {
+    /// <p>You have specified a configuration aggregator that does not exist.</p>
+    NoSuchConfigurationAggregator(String),
+    /// <p>The configuration item size is outside the allowable range.</p>
+    OversizedConfigurationItem(String),
+    /// <p>You have specified a resource that is either unknown or has not been discovered.</p>
+    ResourceNotDiscovered(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetAggregateResourceConfigError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetAggregateResourceConfigError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "NoSuchConfigurationAggregatorException" => {
+                    return GetAggregateResourceConfigError::NoSuchConfigurationAggregator(
+                        String::from(error_message),
+                    );
+                }
+                "OversizedConfigurationItemException" => {
+                    return GetAggregateResourceConfigError::OversizedConfigurationItem(
+                        String::from(error_message),
+                    );
+                }
+                "ResourceNotDiscoveredException" => {
+                    return GetAggregateResourceConfigError::ResourceNotDiscovered(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return GetAggregateResourceConfigError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetAggregateResourceConfigError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetAggregateResourceConfigError {
+    fn from(err: serde_json::error::Error) -> GetAggregateResourceConfigError {
+        GetAggregateResourceConfigError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetAggregateResourceConfigError {
+    fn from(err: CredentialsError) -> GetAggregateResourceConfigError {
+        GetAggregateResourceConfigError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetAggregateResourceConfigError {
+    fn from(err: HttpDispatchError) -> GetAggregateResourceConfigError {
+        GetAggregateResourceConfigError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetAggregateResourceConfigError {
+    fn from(err: io::Error) -> GetAggregateResourceConfigError {
+        GetAggregateResourceConfigError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetAggregateResourceConfigError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetAggregateResourceConfigError {
+    fn description(&self) -> &str {
+        match *self {
+            GetAggregateResourceConfigError::NoSuchConfigurationAggregator(ref cause) => cause,
+            GetAggregateResourceConfigError::OversizedConfigurationItem(ref cause) => cause,
+            GetAggregateResourceConfigError::ResourceNotDiscovered(ref cause) => cause,
+            GetAggregateResourceConfigError::Validation(ref cause) => cause,
+            GetAggregateResourceConfigError::Credentials(ref err) => err.description(),
+            GetAggregateResourceConfigError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetAggregateResourceConfigError::ParseError(ref cause) => cause,
+            GetAggregateResourceConfigError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by GetComplianceDetailsByConfigRule
 #[derive(Debug, PartialEq)]
 pub enum GetComplianceDetailsByConfigRuleError {
@@ -4859,6 +5344,110 @@ impl Error for GetResourceConfigHistoryError {
         }
     }
 }
+/// Errors returned by ListAggregateDiscoveredResources
+#[derive(Debug, PartialEq)]
+pub enum ListAggregateDiscoveredResourcesError {
+    /// <p>The specified limit is outside the allowable range.</p>
+    InvalidLimit(String),
+    /// <p>The specified next token is invalid. Specify the <code>nextToken</code> string that was returned in the previous response to get the next page of results.</p>
+    InvalidNextToken(String),
+    /// <p>You have specified a configuration aggregator that does not exist.</p>
+    NoSuchConfigurationAggregator(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListAggregateDiscoveredResourcesError {
+    pub fn from_response(res: BufferedHttpResponse) -> ListAggregateDiscoveredResourcesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InvalidLimitException" => {
+                    return ListAggregateDiscoveredResourcesError::InvalidLimit(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidNextTokenException" => {
+                    return ListAggregateDiscoveredResourcesError::InvalidNextToken(String::from(
+                        error_message,
+                    ));
+                }
+                "NoSuchConfigurationAggregatorException" => {
+                    return ListAggregateDiscoveredResourcesError::NoSuchConfigurationAggregator(
+                        String::from(error_message),
+                    );
+                }
+                "ValidationException" => {
+                    return ListAggregateDiscoveredResourcesError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return ListAggregateDiscoveredResourcesError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListAggregateDiscoveredResourcesError {
+    fn from(err: serde_json::error::Error) -> ListAggregateDiscoveredResourcesError {
+        ListAggregateDiscoveredResourcesError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListAggregateDiscoveredResourcesError {
+    fn from(err: CredentialsError) -> ListAggregateDiscoveredResourcesError {
+        ListAggregateDiscoveredResourcesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListAggregateDiscoveredResourcesError {
+    fn from(err: HttpDispatchError) -> ListAggregateDiscoveredResourcesError {
+        ListAggregateDiscoveredResourcesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListAggregateDiscoveredResourcesError {
+    fn from(err: io::Error) -> ListAggregateDiscoveredResourcesError {
+        ListAggregateDiscoveredResourcesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListAggregateDiscoveredResourcesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListAggregateDiscoveredResourcesError {
+    fn description(&self) -> &str {
+        match *self {
+            ListAggregateDiscoveredResourcesError::InvalidLimit(ref cause) => cause,
+            ListAggregateDiscoveredResourcesError::InvalidNextToken(ref cause) => cause,
+            ListAggregateDiscoveredResourcesError::NoSuchConfigurationAggregator(ref cause) => {
+                cause
+            }
+            ListAggregateDiscoveredResourcesError::Validation(ref cause) => cause,
+            ListAggregateDiscoveredResourcesError::Credentials(ref err) => err.description(),
+            ListAggregateDiscoveredResourcesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListAggregateDiscoveredResourcesError::ParseError(ref cause) => cause,
+            ListAggregateDiscoveredResourcesError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by ListDiscoveredResources
 #[derive(Debug, PartialEq)]
 pub enum ListDiscoveredResourcesError {
@@ -5156,7 +5745,7 @@ pub enum PutConfigurationAggregatorError {
     InvalidParameterValue(String),
     /// <p>You have provided a null or empty role ARN.</p>
     InvalidRole(String),
-    /// <p>This exception is thrown if an evaluation is in progress or if you call the <a>StartConfigRulesEvaluation</a> API more than once per minute.</p>
+    /// <p>For <code>StartConfigRulesEvaluation</code> API, this exception is thrown if an evaluation is in progress or if you call the <a>StartConfigRulesEvaluation</a> API more than once per minute.</p> <p>For <code>PutConfigurationAggregator</code> API, this exception is thrown if the number of accounts and aggregators exceeds the limit.</p>
     LimitExceeded(String),
     /// <p>Organization does is no longer available.</p>
     NoAvailableOrganization(String),
@@ -5686,7 +6275,7 @@ impl Error for PutRetentionConfigurationError {
 pub enum StartConfigRulesEvaluationError {
     /// <p>One or more of the specified parameters are invalid. Verify that your parameters are valid and try again.</p>
     InvalidParameterValue(String),
-    /// <p>This exception is thrown if an evaluation is in progress or if you call the <a>StartConfigRulesEvaluation</a> API more than once per minute.</p>
+    /// <p>For <code>StartConfigRulesEvaluation</code> API, this exception is thrown if an evaluation is in progress or if you call the <a>StartConfigRulesEvaluation</a> API more than once per minute.</p> <p>For <code>PutConfigurationAggregator</code> API, this exception is thrown if the number of accounts and aggregators exceeds the limit.</p>
     LimitExceeded(String),
     /// <p>One or more AWS Config rules in the request are invalid. Verify that the rule names are correct and try again.</p>
     NoSuchConfigRule(String),
@@ -5967,6 +6556,12 @@ impl Error for StopConfigurationRecorderError {
 }
 /// Trait representing the capabilities of the Config Service API. Config Service clients implement this trait.
 pub trait ConfigService {
+    /// <p><p>Returns the current configuration items for resources that are present in your AWS Config aggregator. The operation also returns a list of resources that are not processed in the current request. If there are no unprocessed resources, the operation returns an empty <code>unprocessedResourceIdentifiers</code> list. </p> <note> <ul> <li> <p>The API does not return results for deleted resources.</p> </li> <li> <p> The API does not return tags and relationships.</p> </li> </ul> </note></p>
+    fn batch_get_aggregate_resource_config(
+        &self,
+        input: BatchGetAggregateResourceConfigRequest,
+    ) -> RusotoFuture<BatchGetAggregateResourceConfigResponse, BatchGetAggregateResourceConfigError>;
+
     /// <p><p>Returns the current configuration for one or more requested resources. The operation also returns a list of resources that are not processed in the current request. If there are no unprocessed resources, the operation returns an empty unprocessedResourceKeys list. </p> <note> <ul> <li> <p>The API does not return results for deleted resources.</p> </li> <li> <p> The API does not return any tags for the requested resources. This information is filtered out of the supplementaryConfiguration section of the API response.</p> </li> </ul> </note></p>
     fn batch_get_resource_config(
         &self,
@@ -6147,6 +6742,21 @@ pub trait ConfigService {
         GetAggregateConfigRuleComplianceSummaryError,
     >;
 
+    /// <p>Returns the resource counts across accounts and regions that are present in your AWS Config aggregator. You can request the resource counts by providing filters and GroupByKey.</p> <p>For example, if the input contains accountID 12345678910 and region us-east-1 in filters, the API returns the count of resources in account ID 12345678910 and region us-east-1. If the input contains ACCOUNT_ID as a GroupByKey, the API returns resource counts for all source accounts that are present in your aggregator.</p>
+    fn get_aggregate_discovered_resource_counts(
+        &self,
+        input: GetAggregateDiscoveredResourceCountsRequest,
+    ) -> RusotoFuture<
+        GetAggregateDiscoveredResourceCountsResponse,
+        GetAggregateDiscoveredResourceCountsError,
+    >;
+
+    /// <p>Returns configuration item that is aggregated for your specific resource in a specific source account and region.</p>
+    fn get_aggregate_resource_config(
+        &self,
+        input: GetAggregateResourceConfigRequest,
+    ) -> RusotoFuture<GetAggregateResourceConfigResponse, GetAggregateResourceConfigError>;
+
     /// <p>Returns the evaluation results for the specified AWS Config rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule.</p>
     fn get_compliance_details_by_config_rule(
         &self,
@@ -6184,6 +6794,12 @@ pub trait ConfigService {
         &self,
         input: GetResourceConfigHistoryRequest,
     ) -> RusotoFuture<GetResourceConfigHistoryResponse, GetResourceConfigHistoryError>;
+
+    /// <p>Accepts a resource type and returns a list of resource identifiers that are aggregated for a specific resource type across accounts and regions. A resource identifier includes the resource type, ID, (if available) the custom resource name, source account, and source region. You can narrow the results to include only resources that have specific resource IDs, or a resource name, or source account ID, or source region.</p> <p>For example, if the input consists of accountID 12345678910 and the region is us-east-1 for resource type <code>AWS::EC2::Instance</code> then the API returns all the EC2 instance identifiers of accountID 12345678910 and region us-east-1.</p>
+    fn list_aggregate_discovered_resources(
+        &self,
+        input: ListAggregateDiscoveredResourcesRequest,
+    ) -> RusotoFuture<ListAggregateDiscoveredResourcesResponse, ListAggregateDiscoveredResourcesError>;
 
     /// <p>Accepts a resource type and returns a list of resource identifiers for the resources of that type. A resource identifier includes the resource type, ID, and (if available) the custom resource name. The results consist of resources that AWS Config has discovered, including those that AWS Config is not currently recording. You can narrow the results to include only resources that have specific resource IDs or a resource name.</p> <note> <p>You can specify either resource IDs or a resource name, but not both, in the same request.</p> </note> <p>The response is paginated. By default, AWS Config lists 100 resource identifiers on each page. You can customize this number with the <code>limit</code> parameter. The response includes a <code>nextToken</code> string. To get the next page of results, run the request again and specify the string for the <code>nextToken</code> parameter.</p>
     fn list_discovered_resources(
@@ -6285,6 +6901,46 @@ impl ConfigServiceClient {
 }
 
 impl ConfigService for ConfigServiceClient {
+    /// <p><p>Returns the current configuration items for resources that are present in your AWS Config aggregator. The operation also returns a list of resources that are not processed in the current request. If there are no unprocessed resources, the operation returns an empty <code>unprocessedResourceIdentifiers</code> list. </p> <note> <ul> <li> <p>The API does not return results for deleted resources.</p> </li> <li> <p> The API does not return tags and relationships.</p> </li> </ul> </note></p>
+    fn batch_get_aggregate_resource_config(
+        &self,
+        input: BatchGetAggregateResourceConfigRequest,
+    ) -> RusotoFuture<BatchGetAggregateResourceConfigResponse, BatchGetAggregateResourceConfigError>
+    {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.BatchGetAggregateResourceConfig",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<BatchGetAggregateResourceConfigResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(BatchGetAggregateResourceConfigError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
     /// <p><p>Returns the current configuration for one or more requested resources. The operation also returns a list of resources that are not processed in the current request. If there are no unprocessed resources, the operation returns an empty unprocessedResourceKeys list. </p> <note> <ul> <li> <p>The API does not return results for deleted resources.</p> </li> <li> <p> The API does not return any tags for the requested resources. This information is filtered out of the supplementaryConfiguration section of the API response.</p> </li> </ul> </note></p>
     fn batch_get_resource_config(
         &self,
@@ -7211,6 +7867,85 @@ impl ConfigService for ConfigServiceClient {
         })
     }
 
+    /// <p>Returns the resource counts across accounts and regions that are present in your AWS Config aggregator. You can request the resource counts by providing filters and GroupByKey.</p> <p>For example, if the input contains accountID 12345678910 and region us-east-1 in filters, the API returns the count of resources in account ID 12345678910 and region us-east-1. If the input contains ACCOUNT_ID as a GroupByKey, the API returns resource counts for all source accounts that are present in your aggregator.</p>
+    fn get_aggregate_discovered_resource_counts(
+        &self,
+        input: GetAggregateDiscoveredResourceCountsRequest,
+    ) -> RusotoFuture<
+        GetAggregateDiscoveredResourceCountsResponse,
+        GetAggregateDiscoveredResourceCountsError,
+    > {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.GetAggregateDiscoveredResourceCounts",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetAggregateDiscoveredResourceCountsResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetAggregateDiscoveredResourceCountsError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Returns configuration item that is aggregated for your specific resource in a specific source account and region.</p>
+    fn get_aggregate_resource_config(
+        &self,
+        input: GetAggregateResourceConfigRequest,
+    ) -> RusotoFuture<GetAggregateResourceConfigResponse, GetAggregateResourceConfigError> {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.GetAggregateResourceConfig",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetAggregateResourceConfigResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetAggregateResourceConfigError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Returns the evaluation results for the specified AWS Config rule. The results indicate which AWS resources were evaluated by the rule, when each resource was last evaluated, and whether each resource complies with the rule.</p>
     fn get_compliance_details_by_config_rule(
         &self,
@@ -7438,6 +8173,46 @@ impl ConfigService for ConfigServiceClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(GetResourceConfigHistoryError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Accepts a resource type and returns a list of resource identifiers that are aggregated for a specific resource type across accounts and regions. A resource identifier includes the resource type, ID, (if available) the custom resource name, source account, and source region. You can narrow the results to include only resources that have specific resource IDs, or a resource name, or source account ID, or source region.</p> <p>For example, if the input consists of accountID 12345678910 and the region is us-east-1 for resource type <code>AWS::EC2::Instance</code> then the API returns all the EC2 instance identifiers of accountID 12345678910 and region us-east-1.</p>
+    fn list_aggregate_discovered_resources(
+        &self,
+        input: ListAggregateDiscoveredResourcesRequest,
+    ) -> RusotoFuture<ListAggregateDiscoveredResourcesResponse, ListAggregateDiscoveredResourcesError>
+    {
+        let mut request = SignedRequest::new("POST", "config", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "StarlingDoveService.ListAggregateDiscoveredResources",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ListAggregateDiscoveredResourcesResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListAggregateDiscoveredResourcesError::from_response(
+                        response,
+                    ))
                 }))
             }
         })

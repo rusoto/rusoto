@@ -59,10 +59,23 @@ pub struct AlarmConfiguration {
     #[serde(rename = "enabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub enabled: Option<bool>,
-    /// <p><p>Indicates whether a deployment should continue if information about the current state of alarms cannot be retrieved from Amazon CloudWatch. The default value is false.</p> <ul> <li> <p>true: The deployment will proceed even if alarm status information can&#39;t be retrieved from Amazon CloudWatch.</p> </li> <li> <p>false: The deployment will stop if alarm status information can&#39;t be retrieved from Amazon CloudWatch.</p> </li> </ul></p>
+    /// <p><p>Indicates whether a deployment should continue if information about the current state of alarms cannot be retrieved from Amazon CloudWatch. The default value is false.</p> <ul> <li> <p>true: The deployment proceeds even if alarm status information can&#39;t be retrieved from Amazon CloudWatch.</p> </li> <li> <p>false: The deployment stops if alarm status information can&#39;t be retrieved from Amazon CloudWatch.</p> </li> </ul></p>
     #[serde(rename = "ignorePollAlarmFailure")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ignore_poll_alarm_failure: Option<bool>,
+}
+
+/// <p> A revision for an AWS Lambda or Amazon ECS deployment that is a YAML-formatted or JSON-formatted string. For AWS Lambda and Amazon ECS deployments, the revision is the same as the AppSpec file. This method replaces the deprecated <code>RawString</code> data type. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct AppSpecContent {
+    /// <p> The YAML-formatted or JSON-formatted revision string. </p> <p> For an AWS Lambda deployment, the content includes a Lambda function name, the alias for its original version, and the alias for its replacement version. The deployment shifts traffic from the original version of the Lambda function to the replacement version. </p> <p> For an Amazon ECS deployment, the content includes the task name, information about the load balancer that serves traffic to the container, and more. </p> <p> For both types of deployments, the content can specify Lambda functions that run at specified hooks, such as <code>BeforeInstall</code>, during a deployment. </p>
+    #[serde(rename = "content")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub content: Option<String>,
+    /// <p> The SHA256 hash value of the revision content. </p>
+    #[serde(rename = "sha256")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub sha_256: Option<String>,
 }
 
 /// <p>Information about an application.</p>
@@ -89,13 +102,13 @@ pub struct ApplicationInfo {
     #[serde(rename = "gitHubAccountName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub git_hub_account_name: Option<String>,
-    /// <p>True if the user has authenticated with GitHub for the specified application; otherwise, false.</p>
+    /// <p>True if the user has authenticated with GitHub for the specified application. Otherwise, false.</p>
     #[serde(rename = "linkedToGitHub")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub linked_to_git_hub: Option<bool>,
 }
 
-/// <p>Information about a configuration for automatically rolling back to a previous version of an application revision when a deployment doesn't complete successfully.</p>
+/// <p>Information about a configuration for automatically rolling back to a previous version of an application revision when a deployment is not completed successfully.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct AutoRollbackConfiguration {
     /// <p>Indicates whether a defined automatic rollback configuration is currently enabled.</p>
@@ -141,7 +154,7 @@ pub struct BatchGetApplicationRevisionsOutput {
     #[serde(rename = "applicationName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_name: Option<String>,
-    /// <p>Information about errors that may have occurred during the API call.</p>
+    /// <p>Information about errors that might have occurred during the API call.</p>
     #[serde(rename = "errorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
@@ -175,7 +188,7 @@ pub struct BatchGetDeploymentGroupsInput {
     /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
     pub application_name: String,
-    /// <p>The deployment groups' names.</p>
+    /// <p>The names of the deployment groups.</p>
     #[serde(rename = "deploymentGroupNames")]
     pub deployment_group_names: Vec<String>,
 }
@@ -188,19 +201,19 @@ pub struct BatchGetDeploymentGroupsOutput {
     #[serde(rename = "deploymentGroupsInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_groups_info: Option<Vec<DeploymentGroupInfo>>,
-    /// <p>Information about errors that may have occurred during the API call.</p>
+    /// <p>Information about errors that might have occurred during the API call.</p>
     #[serde(rename = "errorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
 }
 
-/// <p>Represents the input of a BatchGetDeploymentInstances operation.</p>
+/// <p> Represents the input of a BatchGetDeploymentInstances operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchGetDeploymentInstancesInput {
-    /// <p>The unique ID of a deployment.</p>
+    /// <p> The unique ID of a deployment. </p>
     #[serde(rename = "deploymentId")]
     pub deployment_id: String,
-    /// <p>The unique IDs of instances in the deployment group.</p>
+    /// <p>The unique IDs of instances used in the deployment.</p>
     #[serde(rename = "instanceIds")]
     pub instance_ids: Vec<String>,
 }
@@ -209,7 +222,7 @@ pub struct BatchGetDeploymentInstancesInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct BatchGetDeploymentInstancesOutput {
-    /// <p>Information about errors that may have occurred during the API call.</p>
+    /// <p>Information about errors that might have occurred during the API call.</p>
     #[serde(rename = "errorMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
@@ -219,19 +232,40 @@ pub struct BatchGetDeploymentInstancesOutput {
     pub instances_summary: Option<Vec<InstanceSummary>>,
 }
 
-/// <p>Represents the input of a BatchGetDeployments operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct BatchGetDeploymentTargetsInput {
+    /// <p> The unique ID of a deployment. </p>
+    #[serde(rename = "deploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_id: Option<String>,
+    /// <p><p> The unique IDs of the deployment targets. The compute platform of the deployment determines the type of the targets and their formats. </p> <ul> <li> <p> For deployments that use the EC2/On-premises compute platform, the target IDs are EC2 or on-premises instances IDs, and their target type is <code>instanceTarget</code>. </p> </li> <li> <p> For deployments that use the AWS Lambda compute platform, the target IDs are the names of Lambda functions, and their target type is <code>instanceTarget</code>. </p> </li> <li> <p> For deployments that use the Amazon ECS compute platform, the target IDs are pairs of Amazon ECS clusters and services specified using the format <code>&lt;clustername&gt;:&lt;servicename&gt;</code>. Their target type is <code>ecsTarget</code>. </p> </li> </ul></p>
+    #[serde(rename = "targetIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_ids: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct BatchGetDeploymentTargetsOutput {
+    /// <p><p> A list of target objects for a deployment. Each target object contains details about the target, such as its status and lifecycle events. The type of the target objects depends on the deployment&#39; compute platform. </p> <ul> <li> <p> <b>EC2/On-premises</b>: Each target object is an EC2 or on-premises instance. </p> </li> <li> <p> <b>AWS Lambda</b>: The target object is a specific version of an AWS Lambda function. </p> </li> <li> <p> <b>Amazon ECS</b>: The target object is an Amazon ECS service. </p> </li> </ul></p>
+    #[serde(rename = "deploymentTargets")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_targets: Option<Vec<DeploymentTarget>>,
+}
+
+/// <p> Represents the input of a BatchGetDeployments operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct BatchGetDeploymentsInput {
-    /// <p>A list of deployment IDs, separated by spaces.</p>
+    /// <p> A list of deployment IDs, separated by spaces. </p>
     #[serde(rename = "deploymentIds")]
     pub deployment_ids: Vec<String>,
 }
 
-/// <p>Represents the output of a BatchGetDeployments operation.</p>
+/// <p> Represents the output of a BatchGetDeployments operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct BatchGetDeploymentsOutput {
-    /// <p>Information about the deployments.</p>
+    /// <p> Information about the deployments. </p>
     #[serde(rename = "deploymentsInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployments_info: Option<Vec<DeploymentInfo>>,
@@ -287,10 +321,14 @@ pub struct BlueInstanceTerminationOption {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ContinueDeploymentInput {
-    /// <p>The deployment ID of the blue/green deployment for which you want to start rerouting traffic to the replacement environment.</p>
+    /// <p> The unique ID of a blue/green deployment for which you want to start rerouting traffic to the replacement environment. </p>
     #[serde(rename = "deploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
+    /// <p> The status of the deployment's waiting period. READY_WAIT indicates the deployment is ready to start shifting traffic. TERMINATION_WAIT indicates the traffic is shifted, but the original target is not terminated. </p>
+    #[serde(rename = "deploymentWaitType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_wait_type: Option<String>,
 }
 
 /// <p>Represents the input of a CreateApplication operation.</p>
@@ -329,7 +367,7 @@ pub struct CreateDeploymentConfigInput {
     #[serde(rename = "minimumHealthyHosts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub minimum_healthy_hosts: Option<MinimumHealthyHosts>,
-    /// <p>The configuration that specifies how the deployment traffic will be routed.</p>
+    /// <p>The configuration that specifies how the deployment traffic is routed.</p>
     #[serde(rename = "trafficRoutingConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub traffic_routing_config: Option<TrafficRoutingConfig>,
@@ -352,14 +390,14 @@ pub struct CreateDeploymentGroupInput {
     #[serde(rename = "alarmConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub alarm_configuration: Option<AlarmConfiguration>,
-    /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
+    /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
     pub application_name: String,
     /// <p>Configuration information for an automatic rollback that is added when a deployment group is created.</p>
     #[serde(rename = "autoRollbackConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_rollback_configuration: Option<AutoRollbackConfiguration>,
-    /// <p>A list of associated Auto Scaling groups.</p>
+    /// <p>A list of associated Amazon EC2 Auto Scaling groups.</p>
     #[serde(rename = "autoScalingGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_scaling_groups: Option<Vec<String>>,
@@ -367,7 +405,7 @@ pub struct CreateDeploymentGroupInput {
     #[serde(rename = "blueGreenDeploymentConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub blue_green_deployment_configuration: Option<BlueGreenDeploymentConfiguration>,
-    /// <p>If specified, the deployment configuration name can be either one of the predefined configurations provided with AWS CodeDeploy or a custom deployment configuration that you create by calling the create deployment configuration operation.</p> <p>CodeDeployDefault.OneAtATime is the default deployment configuration. It is used if a configuration isn't specified for the deployment or the deployment group.</p> <p>For more information about the predefined deployment configurations in AWS CodeDeploy, see <a href="http://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html">Working with Deployment Groups in AWS CodeDeploy</a> in the AWS CodeDeploy User Guide.</p>
+    /// <p>If specified, the deployment configuration name can be either one of the predefined configurations provided with AWS CodeDeploy or a custom deployment configuration that you create by calling the create deployment configuration operation.</p> <p>CodeDeployDefault.OneAtATime is the default deployment configuration. It is used if a configuration isn't specified for the deployment or deployment group.</p> <p>For more information about the predefined deployment configurations in AWS CodeDeploy, see <a href="http://docs.aws.amazon.com/codedeploy/latest/userguide/deployment-configurations.html">Working with Deployment Groups in AWS CodeDeploy</a> in the AWS CodeDeploy User Guide.</p>
     #[serde(rename = "deploymentConfigName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_config_name: Option<String>,
@@ -378,23 +416,27 @@ pub struct CreateDeploymentGroupInput {
     #[serde(rename = "deploymentStyle")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_style: Option<DeploymentStyle>,
-    /// <p>The Amazon EC2 tags on which to filter. The deployment group will include EC2 instances with any of the specified tags. Cannot be used in the same call as ec2TagSet.</p>
+    /// <p>The Amazon EC2 tags on which to filter. The deployment group includes EC2 instances with any of the specified tags. Cannot be used in the same call as ec2TagSet.</p>
     #[serde(rename = "ec2TagFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_tag_filters: Option<Vec<EC2TagFilter>>,
-    /// <p>Information about groups of tags applied to EC2 instances. The deployment group will include only EC2 instances identified by all the tag groups. Cannot be used in the same call as ec2TagFilters.</p>
+    /// <p>Information about groups of tags applied to EC2 instances. The deployment group includes only EC2 instances identified by all the tag groups. Cannot be used in the same call as ec2TagFilters.</p>
     #[serde(rename = "ec2TagSet")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_tag_set: Option<EC2TagSet>,
+    /// <p> The target Amazon ECS services in the deployment group. This applies only to deployment groups that use the Amazon ECS compute platform. A target Amazon ECS service is specified as an Amazon ECS cluster and service name pair using the format <code>&lt;clustername&gt;:&lt;servicename&gt;</code>. </p>
+    #[serde(rename = "ecsServices")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ecs_services: Option<Vec<ECSService>>,
     /// <p>Information about the load balancer used in a deployment.</p>
     #[serde(rename = "loadBalancerInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub load_balancer_info: Option<LoadBalancerInfo>,
-    /// <p>The on-premises instance tags on which to filter. The deployment group will include on-premises instances with any of the specified tags. Cannot be used in the same call as OnPremisesTagSet.</p>
+    /// <p>The on-premises instance tags on which to filter. The deployment group includes on-premises instances with any of the specified tags. Cannot be used in the same call as OnPremisesTagSet.</p>
     #[serde(rename = "onPremisesInstanceTagFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub on_premises_instance_tag_filters: Option<Vec<TagFilter>>,
-    /// <p>Information about groups of tags applied to on-premises instances. The deployment group will include only on-premises instances identified by all the tag groups. Cannot be used in the same call as onPremisesInstanceTagFilters.</p>
+    /// <p>Information about groups of tags applied to on-premises instances. The deployment group includes only on-premises instances identified by all of the tag groups. Cannot be used in the same call as onPremisesInstanceTagFilters.</p>
     #[serde(rename = "onPremisesTagSet")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub on_premises_tag_set: Option<OnPremisesTagSet>,
@@ -420,14 +462,14 @@ pub struct CreateDeploymentGroupOutput {
 /// <p>Represents the input of a CreateDeployment operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDeploymentInput {
-    /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
+    /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
     pub application_name: String,
     /// <p>Configuration information for an automatic rollback that is added when a deployment is created.</p>
     #[serde(rename = "autoRollbackConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_rollback_configuration: Option<AutoRollbackConfiguration>,
-    /// <p>The name of a deployment configuration associated with the applicable IAM user or AWS account.</p> <p>If not specified, the value configured in the deployment group will be used as the default. If the deployment group does not have a deployment configuration associated with it, then CodeDeployDefault.OneAtATime will be used by default.</p>
+    /// <p>The name of a deployment configuration associated with the IAM user or AWS account.</p> <p>If not specified, the value configured in the deployment group is used as the default. If the deployment group does not have a deployment configuration associated with it, CodeDeployDefault.OneAtATime is used by default.</p>
     #[serde(rename = "deploymentConfigName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_config_name: Option<String>,
@@ -443,29 +485,29 @@ pub struct CreateDeploymentInput {
     #[serde(rename = "fileExistsBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_exists_behavior: Option<String>,
-    /// <p>If set to true, then if the deployment causes the ApplicationStop deployment lifecycle event to an instance to fail, the deployment to that instance will not be considered to have failed at that point and will continue on to the BeforeInstall deployment lifecycle event.</p> <p>If set to false or not specified, then if the deployment causes the ApplicationStop deployment lifecycle event to fail to an instance, the deployment to that instance will stop, and the deployment to that instance will be considered to have failed.</p>
+    /// <p> If set to true, then if the deployment causes the ApplicationStop deployment lifecycle event to an instance to fail, the deployment to that instance is considered to have failed at that point and continues on to the BeforeInstall deployment lifecycle event. </p> <p> If set to false or not specified, then if the deployment causes the ApplicationStop deployment lifecycle event to fail to an instance, the deployment to that instance stops, and the deployment to that instance is considered to have failed. </p>
     #[serde(rename = "ignoreApplicationStopFailures")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ignore_application_stop_failures: Option<bool>,
-    /// <p>The type and location of the revision to deploy.</p>
+    /// <p> The type and location of the revision to deploy. </p>
     #[serde(rename = "revision")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub revision: Option<RevisionLocation>,
-    /// <p>Information about the instances that will belong to the replacement environment in a blue/green deployment.</p>
+    /// <p> Information about the instances that belong to the replacement environment in a blue/green deployment. </p>
     #[serde(rename = "targetInstances")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_instances: Option<TargetInstances>,
-    /// <p>Indicates whether to deploy to all instances or only to instances that are not running the latest application revision.</p>
+    /// <p> Indicates whether to deploy to all instances or only to instances that are not running the latest application revision. </p>
     #[serde(rename = "updateOutdatedInstancesOnly")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub update_outdated_instances_only: Option<bool>,
 }
 
-/// <p>Represents the output of a CreateDeployment operation.</p>
+/// <p> Represents the output of a CreateDeployment operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateDeploymentOutput {
-    /// <p>A unique deployment ID.</p>
+    /// <p> The unique ID of a deployment. </p>
     #[serde(rename = "deploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
@@ -474,7 +516,7 @@ pub struct CreateDeploymentOutput {
 /// <p>Represents the input of a DeleteApplication operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteApplicationInput {
-    /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
+    /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
     pub application_name: String,
 }
@@ -482,7 +524,7 @@ pub struct DeleteApplicationInput {
 /// <p>Represents the input of a DeleteDeploymentConfig operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDeploymentConfigInput {
-    /// <p>The name of a deployment configuration associated with the applicable IAM user or AWS account.</p>
+    /// <p>The name of a deployment configuration associated with the IAM user or AWS account.</p>
     #[serde(rename = "deploymentConfigName")]
     pub deployment_config_name: String,
 }
@@ -490,10 +532,10 @@ pub struct DeleteDeploymentConfigInput {
 /// <p>Represents the input of a DeleteDeploymentGroup operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDeploymentGroupInput {
-    /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
+    /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
     pub application_name: String,
-    /// <p>The name of an existing deployment group for the specified application.</p>
+    /// <p>The name of a deployment group for the specified application.</p>
     #[serde(rename = "deploymentGroupName")]
     pub deployment_group_name: String,
 }
@@ -551,7 +593,7 @@ pub struct DeploymentConfigInfo {
     #[serde(rename = "minimumHealthyHosts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub minimum_healthy_hosts: Option<MinimumHealthyHosts>,
-    /// <p>The configuration specifying how the deployment traffic will be routed. Only deployments with a Lambda compute platform can specify this.</p>
+    /// <p>The configuration that specifies how the deployment traffic is routed. Only deployments with a Lambda compute platform can specify this.</p>
     #[serde(rename = "trafficRoutingConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub traffic_routing_config: Option<TrafficRoutingConfig>,
@@ -605,10 +647,14 @@ pub struct DeploymentGroupInfo {
     #[serde(rename = "ec2TagFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_tag_filters: Option<Vec<EC2TagFilter>>,
-    /// <p>Information about groups of tags applied to an EC2 instance. The deployment group includes only EC2 instances identified by all the tag groups. Cannot be used in the same call as ec2TagFilters.</p>
+    /// <p>Information about groups of tags applied to an EC2 instance. The deployment group includes only EC2 instances identified by all of the tag groups. Cannot be used in the same call as ec2TagFilters.</p>
     #[serde(rename = "ec2TagSet")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_tag_set: Option<EC2TagSet>,
+    /// <p> The target Amazon ECS services in the deployment group. This applies only to deployment groups that use the Amazon ECS compute platform. A target Amazon ECS service is specified as an Amazon ECS cluster and service name pair using the format <code>&lt;clustername&gt;:&lt;servicename&gt;</code>. </p>
+    #[serde(rename = "ecsServices")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ecs_services: Option<Vec<ECSService>>,
     /// <p>Information about the most recent attempted deployment to the deployment group.</p>
     #[serde(rename = "lastAttemptedDeployment")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -663,31 +709,31 @@ pub struct DeploymentInfo {
     #[serde(rename = "blueGreenDeploymentConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub blue_green_deployment_configuration: Option<BlueGreenDeploymentConfiguration>,
-    /// <p>A timestamp indicating when the deployment was complete.</p>
+    /// <p>A timestamp that indicates when the deployment was complete.</p>
     #[serde(rename = "completeTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub complete_time: Option<f64>,
-    /// <p>The destination platform type for the deployment (<code>Lambda</code> or <code>Server</code>).</p>
+    /// <p> The destination platform type for the deployment (<code>Lambda</code> or <code>Server</code>). </p>
     #[serde(rename = "computePlatform")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compute_platform: Option<String>,
-    /// <p>A timestamp indicating when the deployment was created.</p>
+    /// <p>A timestamp that indicates when the deployment was created.</p>
     #[serde(rename = "createTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<f64>,
-    /// <p><p>The means by which the deployment was created:</p> <ul> <li> <p>user: A user created the deployment.</p> </li> <li> <p>autoscaling: Auto Scaling created the deployment.</p> </li> <li> <p>codeDeployRollback: A rollback process created the deployment.</p> </li> </ul></p>
+    /// <p><p>The means by which the deployment was created:</p> <ul> <li> <p>user: A user created the deployment.</p> </li> <li> <p>autoscaling: Amazon EC2 Auto Scaling created the deployment.</p> </li> <li> <p>codeDeployRollback: A rollback process created the deployment.</p> </li> </ul></p>
     #[serde(rename = "creator")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creator: Option<String>,
-    /// <p>The deployment configuration name.</p>
+    /// <p> The deployment configuration name. </p>
     #[serde(rename = "deploymentConfigName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_config_name: Option<String>,
-    /// <p>The deployment group name.</p>
+    /// <p> The deployment group name. </p>
     #[serde(rename = "deploymentGroupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_group_name: Option<String>,
-    /// <p>The deployment ID.</p>
+    /// <p> The unique ID of a deployment. </p>
     #[serde(rename = "deploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
@@ -715,11 +761,11 @@ pub struct DeploymentInfo {
     #[serde(rename = "fileExistsBehavior")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub file_exists_behavior: Option<String>,
-    /// <p>If true, then if the deployment causes the ApplicationStop deployment lifecycle event to an instance to fail, the deployment to that instance will not be considered to have failed at that point and will continue on to the BeforeInstall deployment lifecycle event.</p> <p>If false or not specified, then if the deployment causes the ApplicationStop deployment lifecycle event to an instance to fail, the deployment to that instance will stop, and the deployment to that instance will be considered to have failed.</p>
+    /// <p>If true, then if the deployment causes the ApplicationStop deployment lifecycle event to an instance to fail, the deployment to that instance is not considered to have failed at that point and continues on to the BeforeInstall deployment lifecycle event.</p> <p>If false or not specified, then if the deployment causes the ApplicationStop deployment lifecycle event to an instance to fail, the deployment to that instance stops, and the deployment to that instance is considered to have failed.</p>
     #[serde(rename = "ignoreApplicationStopFailures")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ignore_application_stop_failures: Option<bool>,
-    /// <p>Indicates whether the wait period set for the termination of instances in the original environment has started. Status is 'false' if the KEEP_ALIVE option is specified; otherwise, 'true' as soon as the termination wait period starts.</p>
+    /// <p>Indicates whether the wait period set for the termination of instances in the original environment has started. Status is 'false' if the KEEP_ALIVE option is specified. Otherwise, 'true' as soon as the termination wait period starts.</p>
     #[serde(rename = "instanceTerminationWaitTimeStarted")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_termination_wait_time_started: Option<bool>,
@@ -739,7 +785,7 @@ pub struct DeploymentInfo {
     #[serde(rename = "rollbackInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rollback_info: Option<RollbackInfo>,
-    /// <p>A timestamp indicating when the deployment was deployed to the deployment group.</p> <p>In some cases, the reported value of the start time may be later than the complete time. This is due to differences in the clock settings of back-end servers that participate in the deployment process.</p>
+    /// <p>A timestamp that indicates when the deployment was deployed to the deployment group.</p> <p>In some cases, the reported value of the start time might be later than the complete time. This is due to differences in the clock settings of backend servers that participate in the deployment process.</p>
     #[serde(rename = "startTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
@@ -794,7 +840,7 @@ pub struct DeploymentReadyOption {
     #[serde(rename = "actionOnTimeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub action_on_timeout: Option<String>,
-    /// <p>The number of minutes to wait before the status of a blue/green deployment changed to Stopped if rerouting is not started manually. Applies only to the STOP_DEPLOYMENT option for actionOnTimeout</p>
+    /// <p>The number of minutes to wait before the status of a blue/green deployment is changed to Stopped if rerouting is not started manually. Applies only to the STOP_DEPLOYMENT option for actionOnTimeout</p>
     #[serde(rename = "waitTimeInMinutes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub wait_time_in_minutes: Option<i64>,
@@ -811,6 +857,28 @@ pub struct DeploymentStyle {
     #[serde(rename = "deploymentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_type: Option<String>,
+}
+
+/// <p> Information about the deployment target. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeploymentTarget {
+    /// <p> The deployment type that is specific to the deployment's compute platform. </p>
+    #[serde(rename = "deploymentTargetType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_target_type: Option<String>,
+    /// <p> Information about the target for a deployment that uses the Amazon ECS compute platform. </p>
+    #[serde(rename = "ecsTarget")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ecs_target: Option<ECSTarget>,
+    /// <p> Information about the target for a deployment that uses the EC2/On-premises compute platform. </p>
+    #[serde(rename = "instanceTarget")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_target: Option<InstanceTarget>,
+    /// <p> Information about the target for a deployment that uses the AWS Lambda compute platform. </p>
+    #[serde(rename = "lambdaTarget")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lambda_target: Option<LambdaTarget>,
 }
 
 /// <p>Represents the input of a DeregisterOnPremisesInstance operation.</p>
@@ -863,16 +931,101 @@ pub struct EC2TagFilter {
 /// <p>Information about groups of EC2 instance tags.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct EC2TagSet {
-    /// <p>A list containing other lists of EC2 instance tag groups. In order for an instance to be included in the deployment group, it must be identified by all the tag groups in the list.</p>
+    /// <p>A list that contains other lists of EC2 instance tag groups. For an instance to be included in the deployment group, it must be identified by all of the tag groups in the list.</p>
     #[serde(rename = "ec2TagSetList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_tag_set_list: Option<Vec<Vec<EC2TagFilter>>>,
 }
 
+/// <p> Contains the service and cluster names used to identify an Amazon ECS deployment's target. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ECSService {
+    /// <p> The name of the cluster that the Amazon ECS service is associated with. </p>
+    #[serde(rename = "clusterName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cluster_name: Option<String>,
+    /// <p> The name of the target Amazon ECS service. </p>
+    #[serde(rename = "serviceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_name: Option<String>,
+}
+
+/// <p> Information about the target of an Amazon ECS deployment. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ECSTarget {
+    /// <p> The unique ID of a deployment. </p>
+    #[serde(rename = "deploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_id: Option<String>,
+    /// <p> The date and time when the target Amazon ECS application was updated by a deployment. </p>
+    #[serde(rename = "lastUpdatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_at: Option<f64>,
+    /// <p> The lifecycle events of the deployment to this target Amazon ECS application. </p>
+    #[serde(rename = "lifecycleEvents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lifecycle_events: Option<Vec<LifecycleEvent>>,
+    /// <p> The status an Amazon ECS deployment's target ECS application. </p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p> The ARN of the target. </p>
+    #[serde(rename = "targetArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_arn: Option<String>,
+    /// <p> The unique ID of a deployment target that has a type of <code>ecsTarget</code>. </p>
+    #[serde(rename = "targetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_id: Option<String>,
+    /// <p> The <code>ECSTaskSet</code> objects associated with the ECS target. </p>
+    #[serde(rename = "taskSetsInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_sets_info: Option<Vec<ECSTaskSet>>,
+}
+
+/// <p> Information about a set of Amazon ECS tasks in an AWS CodeDeploy deployment. An Amazon ECS task set includes details such as the desired number of tasks, how many tasks are running, and whether the task set serves production traffic. An AWS CodeDeploy application that uses the Amazon ECS compute platform deploys a containerized application in an Amazon ECS service as a task set. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ECSTaskSet {
+    /// <p> The number of tasks in a task set. During a deployment that uses the Amazon ECS compute type, CodeDeploy instructs Amazon ECS to create a new task set and uses this value to determine how many tasks to create. After the updated task set is created, CodeDeploy shifts traffic to the new task set. </p>
+    #[serde(rename = "desiredCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub desired_count: Option<i64>,
+    /// <p> A unique ID of an <code>ECSTaskSet</code>. </p>
+    #[serde(rename = "identifer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub identifer: Option<String>,
+    /// <p> The number of tasks in the task set that are in the <code>PENDING</code> status during an Amazon ECS deployment. A task in the <code>PENDING</code> state is preparing to enter the <code>RUNNING</code> state. A task set enters the <code>PENDING</code> status when it launches for the first time, or when it is restarted after being in the <code>STOPPED</code> state. </p>
+    #[serde(rename = "pendingCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pending_count: Option<i64>,
+    /// <p> The number of tasks in the task set that are in the <code>RUNNING</code> status during an Amazon ECS deployment. A task in the <code>RUNNING</code> state is running and ready for use. </p>
+    #[serde(rename = "runningCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub running_count: Option<i64>,
+    /// <p><p> The status of the task set. There are three valid task set statuses: </p> <ul> <li> <p> <code>PRIMARY</code>: Indicates the task set is serving production traffic. </p> </li> <li> <p> <code>ACTIVE</code>: Indicates the task set is not serving production traffic. </p> </li> <li> <p> <code>DRAINING</code>: Indicates the tasks in the task set are being stopped and their corresponding targets are being deregistered from their target group. </p> </li> </ul></p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p> The target group associated with the task set. The target group is used by AWS CodeDeploy to manage traffic to a task set. </p>
+    #[serde(rename = "targetGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_group: Option<TargetGroupInfo>,
+    /// <p> A label that identifies whether the ECS task set is an original target (<code>BLUE</code>) or a replacement target (<code>GREEN</code>). </p>
+    #[serde(rename = "taskSetLabel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub task_set_label: Option<String>,
+    /// <p> The percentage of traffic served by this task set. </p>
+    #[serde(rename = "trafficWeight")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub traffic_weight: Option<f64>,
+}
+
 /// <p>Information about a load balancer in Elastic Load Balancing to use in a deployment. Instances are registered directly with a load balancer, and traffic is routed to the load balancer.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ELBInfo {
-    /// <p>For blue/green deployments, the name of the load balancer that will be used to route traffic from original instances to replacement instances in a blue/green deployment. For in-place deployments, the name of the load balancer that instances are deregistered from so they are not serving traffic during a deployment, and then re-registered with after the deployment completes.</p>
+    /// <p>For blue/green deployments, the name of the load balancer that is used to route traffic from original instances to replacement instances in a blue/green deployment. For in-place deployments, the name of the load balancer that instances are deregistered from so they are not serving traffic during a deployment, and then re-registered with after the deployment is complete.</p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -882,7 +1035,7 @@ pub struct ELBInfo {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ErrorInformation {
-    /// <p><p>For information about additional error codes, see <a href="http://docs.aws.amazon.com/codedeploy/latest/userguide/error-codes.html">Error Codes for AWS CodeDeploy</a> in the <a href="http://docs.aws.amazon.com/codedeploy/latest/userguide">AWS CodeDeploy User Guide</a>.</p> <p>The error code:</p> <ul> <li> <p>APPLICATION<em>MISSING: The application was missing. This error code will most likely be raised if the application is deleted after the deployment is created but before it is started.</p> </li> <li> <p>DEPLOYMENT</em>GROUP<em>MISSING: The deployment group was missing. This error code will most likely be raised if the deployment group is deleted after the deployment is created but before it is started.</p> </li> <li> <p>HEALTH</em>CONSTRAINTS: The deployment failed on too many instances to be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>HEALTH<em>CONSTRAINTS</em>INVALID: The revision cannot be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>IAM<em>ROLE</em>MISSING: The service role cannot be accessed.</p> </li> <li> <p>IAM<em>ROLE</em>PERMISSIONS: The service role does not have the correct permissions.</p> </li> <li> <p>INTERNAL<em>ERROR: There was an internal error.</p> </li> <li> <p>NO</em>EC2<em>SUBSCRIPTION: The calling account is not subscribed to the Amazon EC2 service.</p> </li> <li> <p>NO</em>INSTANCES: No instance were specified, or no instance can be found.</p> </li> <li> <p>OVER<em>MAX</em>INSTANCES: The maximum number of instance was exceeded.</p> </li> <li> <p>THROTTLED: The operation was throttled because the calling account exceeded the throttling limits of one or more AWS services.</p> </li> <li> <p>TIMEOUT: The deployment has timed out.</p> </li> <li> <p>REVISION_MISSING: The revision ID was missing. This error code will most likely be raised if the revision is deleted after the deployment is created but before it is started.</p> </li> </ul></p>
+    /// <p><p>For more information, see <a href="http://docs.aws.amazon.com/codedeploy/latest/userguide/error-codes.html">Error Codes for AWS CodeDeploy</a> in the <a href="http://docs.aws.amazon.com/codedeploy/latest/userguide">AWS CodeDeploy User Guide</a>.</p> <p>The error code:</p> <ul> <li> <p>APPLICATION<em>MISSING: The application was missing. This error code is most likely raised if the application is deleted after the deployment is created, but before it is started.</p> </li> <li> <p>DEPLOYMENT</em>GROUP<em>MISSING: The deployment group was missing. This error code is most likely raised if the deployment group is deleted after the deployment is created, but before it is started.</p> </li> <li> <p>HEALTH</em>CONSTRAINTS: The deployment failed on too many instances to be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>HEALTH<em>CONSTRAINTS</em>INVALID: The revision cannot be successfully deployed within the instance health constraints specified.</p> </li> <li> <p>IAM<em>ROLE</em>MISSING: The service role cannot be accessed.</p> </li> <li> <p>IAM<em>ROLE</em>PERMISSIONS: The service role does not have the correct permissions.</p> </li> <li> <p>INTERNAL<em>ERROR: There was an internal error.</p> </li> <li> <p>NO</em>EC2<em>SUBSCRIPTION: The calling account is not subscribed to Amazon EC2.</p> </li> <li> <p>NO</em>INSTANCES: No instances were specified, or no instances can be found.</p> </li> <li> <p>OVER<em>MAX</em>INSTANCES: The maximum number of instances was exceeded.</p> </li> <li> <p>THROTTLED: The operation was throttled because the calling account exceeded the throttling limits of one or more AWS services.</p> </li> <li> <p>TIMEOUT: The deployment has timed out.</p> </li> <li> <p>REVISION_MISSING: The revision ID was missing. This error code is most likely raised if the revision is deleted after the deployment is created, but before it is started.</p> </li> </ul></p>
     #[serde(rename = "code")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub code: Option<String>,
@@ -921,7 +1074,7 @@ pub struct GenericRevisionInfo {
 /// <p>Represents the input of a GetApplication operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetApplicationInput {
-    /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
+    /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
     pub application_name: String,
 }
@@ -968,7 +1121,7 @@ pub struct GetApplicationRevisionOutput {
 /// <p>Represents the input of a GetDeploymentConfig operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDeploymentConfigInput {
-    /// <p>The name of a deployment configuration associated with the applicable IAM user or AWS account.</p>
+    /// <p>The name of a deployment configuration associated with the IAM user or AWS account.</p>
     #[serde(rename = "deploymentConfigName")]
     pub deployment_config_name: String,
 }
@@ -986,10 +1139,10 @@ pub struct GetDeploymentConfigOutput {
 /// <p>Represents the input of a GetDeploymentGroup operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDeploymentGroupInput {
-    /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
+    /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
     pub application_name: String,
-    /// <p>The name of an existing deployment group for the specified application.</p>
+    /// <p>The name of a deployment group for the specified application.</p>
     #[serde(rename = "deploymentGroupName")]
     pub deployment_group_name: String,
 }
@@ -1007,27 +1160,27 @@ pub struct GetDeploymentGroupOutput {
 /// <p>Represents the input of a GetDeployment operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDeploymentInput {
-    /// <p>A deployment ID associated with the applicable IAM user or AWS account.</p>
+    /// <p> The unique ID of a deployment associated with the IAM user or AWS account. </p>
     #[serde(rename = "deploymentId")]
     pub deployment_id: String,
 }
 
-/// <p>Represents the input of a GetDeploymentInstance operation.</p>
+/// <p> Represents the input of a GetDeploymentInstance operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetDeploymentInstanceInput {
-    /// <p>The unique ID of a deployment.</p>
+    /// <p> The unique ID of a deployment. </p>
     #[serde(rename = "deploymentId")]
     pub deployment_id: String,
-    /// <p>The unique ID of an instance in the deployment group.</p>
+    /// <p> The unique ID of an instance in the deployment group. </p>
     #[serde(rename = "instanceId")]
     pub instance_id: String,
 }
 
-/// <p>Represents the output of a GetDeploymentInstance operation.</p>
+/// <p> Represents the output of a GetDeploymentInstance operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetDeploymentInstanceOutput {
-    /// <p>Information about the instance.</p>
+    /// <p> Information about the instance. </p>
     #[serde(rename = "instanceSummary")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_summary: Option<InstanceSummary>,
@@ -1043,19 +1196,40 @@ pub struct GetDeploymentOutput {
     pub deployment_info: Option<DeploymentInfo>,
 }
 
-/// <p>Represents the input of a GetOnPremisesInstance operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetDeploymentTargetInput {
+    /// <p> The unique ID of a deployment. </p>
+    #[serde(rename = "deploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_id: Option<String>,
+    /// <p> The unique ID of a deployment target. </p>
+    #[serde(rename = "targetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetDeploymentTargetOutput {
+    /// <p> A deployment target that contains information about a deployment such as its status, lifecyle events, and when it was last updated. It also contains metadata about the deployment target. The deployment target metadata depends on the deployment target's type (<code>instanceTarget</code>, <code>lambdaTarget</code>, or <code>ecsTarget</code>). </p>
+    #[serde(rename = "deploymentTarget")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_target: Option<DeploymentTarget>,
+}
+
+/// <p> Represents the input of a GetOnPremisesInstance operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetOnPremisesInstanceInput {
-    /// <p>The name of the on-premises instance about which to get information.</p>
+    /// <p> The name of the on-premises instance about which to get information. </p>
     #[serde(rename = "instanceName")]
     pub instance_name: String,
 }
 
-/// <p>Represents the output of a GetOnPremisesInstance operation.</p>
+/// <p> Represents the output of a GetOnPremisesInstance operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetOnPremisesInstanceOutput {
-    /// <p>Information about the on-premises instance.</p>
+    /// <p> Information about the on-premises instance. </p>
     #[serde(rename = "instanceInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_info: Option<InstanceInfo>,
@@ -1121,7 +1295,7 @@ pub struct InstanceInfo {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct InstanceSummary {
-    /// <p>The deployment ID.</p>
+    /// <p> The unique ID of a deployment. </p>
     #[serde(rename = "deploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
@@ -1133,7 +1307,7 @@ pub struct InstanceSummary {
     #[serde(rename = "instanceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_type: Option<String>,
-    /// <p>A timestamp indicating when the instance information was last updated.</p>
+    /// <p>A timestamp that indicaties when the instance information was last updated.</p>
     #[serde(rename = "lastUpdatedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub last_updated_at: Option<f64>,
@@ -1147,19 +1321,83 @@ pub struct InstanceSummary {
     pub status: Option<String>,
 }
 
+/// <p> A target Amazon EC2 or on-premises instance during a deployment that uses the EC2/On-premises compute platform. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct InstanceTarget {
+    /// <p> The unique ID of a deployment. </p>
+    #[serde(rename = "deploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_id: Option<String>,
+    /// <p> A label that identifies whether the instance is an original target (<code>BLUE</code>) or a replacement target (<code>GREEN</code>). </p>
+    #[serde(rename = "instanceLabel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_label: Option<String>,
+    /// <p> The date and time when the target instance was updated by a deployment. </p>
+    #[serde(rename = "lastUpdatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_at: Option<f64>,
+    /// <p> The lifecycle events of the deployment to this target instance. </p>
+    #[serde(rename = "lifecycleEvents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lifecycle_events: Option<Vec<LifecycleEvent>>,
+    /// <p> The status an EC2/On-premises deployment's target instance. </p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p> The ARN of the target. </p>
+    #[serde(rename = "targetArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_arn: Option<String>,
+    /// <p> The unique ID of a deployment target that has a type of <code>instanceTarget</code>. </p>
+    #[serde(rename = "targetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_id: Option<String>,
+}
+
+/// <p> Information about the target AWS Lambda function during an AWS Lambda deployment. </p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct LambdaTarget {
+    /// <p> The unique ID of a deployment. </p>
+    #[serde(rename = "deploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_id: Option<String>,
+    /// <p> The date and time when the target Lambda function was updated by a deployment. </p>
+    #[serde(rename = "lastUpdatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_at: Option<f64>,
+    /// <p> The lifecycle events of the deployment to this target Lambda function. </p>
+    #[serde(rename = "lifecycleEvents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub lifecycle_events: Option<Vec<LifecycleEvent>>,
+    /// <p> The status an AWS Lambda deployment's target Lambda function. </p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
+    /// <p> The ARN of the target. </p>
+    #[serde(rename = "targetArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_arn: Option<String>,
+    /// <p> The unique ID of a deployment target that has a type of <code>lambdaTarget</code>. </p>
+    #[serde(rename = "targetId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_id: Option<String>,
+}
+
 /// <p>Information about the most recent attempted or successful deployment to a deployment group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct LastDeploymentInfo {
-    /// <p>A timestamp indicating when the most recent deployment to the deployment group started.</p>
+    /// <p>A timestamp that indicates when the most recent deployment to the deployment group started.</p>
     #[serde(rename = "createTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time: Option<f64>,
-    /// <p>The deployment ID.</p>
+    /// <p> The unique ID of a deployment. </p>
     #[serde(rename = "deploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
-    /// <p>A timestamp indicating when the most recent deployment to the deployment group completed.</p>
+    /// <p>A timestamp that indicates when the most recent deployment to the deployment group was complete.</p>
     #[serde(rename = "endTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
@@ -1177,7 +1415,7 @@ pub struct LifecycleEvent {
     #[serde(rename = "diagnostics")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub diagnostics: Option<Diagnostics>,
-    /// <p>A timestamp indicating when the deployment lifecycle event ended.</p>
+    /// <p>A timestamp that indicates when the deployment lifecycle event ended.</p>
     #[serde(rename = "endTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<f64>,
@@ -1185,7 +1423,7 @@ pub struct LifecycleEvent {
     #[serde(rename = "lifecycleEventName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lifecycle_event_name: Option<String>,
-    /// <p>A timestamp indicating when the deployment lifecycle event started.</p>
+    /// <p>A timestamp that indicates when the deployment lifecycle event started.</p>
     #[serde(rename = "startTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub start_time: Option<f64>,
@@ -1195,33 +1433,33 @@ pub struct LifecycleEvent {
     pub status: Option<String>,
 }
 
-/// <p>Represents the input of a ListApplicationRevisions operation.</p>
+/// <p> Represents the input of a ListApplicationRevisions operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListApplicationRevisionsInput {
-    /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
+    /// <p> The name of an AWS CodeDeploy application associated with the IAM user or AWS account. </p>
     #[serde(rename = "applicationName")]
     pub application_name: String,
-    /// <p><p>Whether to list revisions based on whether the revision is the target revision of an deployment group:</p> <ul> <li> <p>include: List revisions that are target revisions of a deployment group.</p> </li> <li> <p>exclude: Do not list revisions that are target revisions of a deployment group.</p> </li> <li> <p>ignore: List all revisions.</p> </li> </ul></p>
+    /// <p><p> Whether to list revisions based on whether the revision is the target revision of an deployment group: </p> <ul> <li> <p>include: List revisions that are target revisions of a deployment group.</p> </li> <li> <p>exclude: Do not list revisions that are target revisions of a deployment group.</p> </li> <li> <p>ignore: List all revisions.</p> </li> </ul></p>
     #[serde(rename = "deployed")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployed: Option<String>,
-    /// <p>An identifier returned from the previous list application revisions call. It can be used to return the next set of applications in the list.</p>
+    /// <p>An identifier returned from the previous <code>ListApplicationRevisions</code> call. It can be used to return the next set of applications in the list.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>An Amazon S3 bucket name to limit the search for revisions.</p> <p>If set to null, all of the user's buckets will be searched.</p>
+    /// <p> An Amazon S3 bucket name to limit the search for revisions. </p> <p> If set to null, all of the user's buckets are searched. </p>
     #[serde(rename = "s3Bucket")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s_3_bucket: Option<String>,
-    /// <p>A key prefix for the set of Amazon S3 objects to limit the search for revisions.</p>
+    /// <p> A key prefix for the set of Amazon S3 objects to limit the search for revisions. </p>
     #[serde(rename = "s3KeyPrefix")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s_3_key_prefix: Option<String>,
-    /// <p>The column name to use to sort the list results:</p> <ul> <li> <p>registerTime: Sort by the time the revisions were registered with AWS CodeDeploy.</p> </li> <li> <p>firstUsedTime: Sort by the time the revisions were first used in a deployment.</p> </li> <li> <p>lastUsedTime: Sort by the time the revisions were last used in a deployment.</p> </li> </ul> <p>If not specified or set to null, the results will be returned in an arbitrary order.</p>
+    /// <p>The column name to use to sort the list results:</p> <ul> <li> <p>registerTime: Sort by the time the revisions were registered with AWS CodeDeploy.</p> </li> <li> <p>firstUsedTime: Sort by the time the revisions were first used in a deployment.</p> </li> <li> <p>lastUsedTime: Sort by the time the revisions were last used in a deployment.</p> </li> </ul> <p> If not specified or set to null, the results are returned in an arbitrary order. </p>
     #[serde(rename = "sortBy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_by: Option<String>,
-    /// <p>The order in which to sort the list results:</p> <ul> <li> <p>ascending: ascending order.</p> </li> <li> <p>descending: descending order.</p> </li> </ul> <p>If not specified, the results will be sorted in ascending order.</p> <p>If set to null, the results will be sorted in an arbitrary order.</p>
+    /// <p> The order in which to sort the list results: </p> <ul> <li> <p>ascending: ascending order.</p> </li> <li> <p>descending: descending order.</p> </li> </ul> <p>If not specified, the results are sorted in ascending order.</p> <p>If set to null, the results are sorted in an arbitrary order.</p>
     #[serde(rename = "sortOrder")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sort_order: Option<String>,
@@ -1231,7 +1469,7 @@ pub struct ListApplicationRevisionsInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ListApplicationRevisionsOutput {
-    /// <p>If a large amount of information is returned, an identifier will also be returned. It can be used in a subsequent list application revisions call to return the next set of application revisions in the list.</p>
+    /// <p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list application revisions call to return the next set of application revisions in the list.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1258,7 +1496,7 @@ pub struct ListApplicationsOutput {
     #[serde(rename = "applications")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub applications: Option<Vec<String>>,
-    /// <p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list applications call to return the next set of applications, will also be returned. in the list.</p>
+    /// <p>If a large amount of information is returned, an identifier is also returned. It can be used in a subsequent list applications call to return the next set of applications in the list.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1267,7 +1505,7 @@ pub struct ListApplicationsOutput {
 /// <p>Represents the input of a ListDeploymentConfigs operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListDeploymentConfigsInput {
-    /// <p>An identifier returned from the previous list deployment configurations call. It can be used to return the next set of deployment configurations in the list. </p>
+    /// <p>An identifier returned from the previous <code>ListDeploymentConfigs</code> call. It can be used to return the next set of deployment configurations in the list. </p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1290,7 +1528,7 @@ pub struct ListDeploymentConfigsOutput {
 /// <p>Represents the input of a ListDeploymentGroups operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListDeploymentGroupsInput {
-    /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
+    /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
     pub application_name: String,
     /// <p>An identifier returned from the previous list deployment groups call. It can be used to return the next set of deployment groups in the list.</p>
@@ -1307,7 +1545,7 @@ pub struct ListDeploymentGroupsOutput {
     #[serde(rename = "applicationName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_name: Option<String>,
-    /// <p>A list of corresponding deployment group names.</p>
+    /// <p>A list of deployment group names.</p>
     #[serde(rename = "deploymentGroups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_groups: Option<Vec<String>>,
@@ -1317,13 +1555,13 @@ pub struct ListDeploymentGroupsOutput {
     pub next_token: Option<String>,
 }
 
-/// <p>Represents the input of a ListDeploymentInstances operation.</p>
+/// <p> Represents the input of a ListDeploymentInstances operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListDeploymentInstancesInput {
-    /// <p>The unique ID of a deployment.</p>
+    /// <p> The unique ID of a deployment. </p>
     #[serde(rename = "deploymentId")]
     pub deployment_id: String,
-    /// <p><p>A subset of instances to list by status:</p> <ul> <li> <p>Pending: Include those instance with pending deployments.</p> </li> <li> <p>InProgress: Include those instance where deployments are still in progress.</p> </li> <li> <p>Succeeded: Include those instances with successful deployments.</p> </li> <li> <p>Failed: Include those instance with failed deployments.</p> </li> <li> <p>Skipped: Include those instance with skipped deployments.</p> </li> <li> <p>Unknown: Include those instance with deployments in an unknown state.</p> </li> </ul></p>
+    /// <p><p>A subset of instances to list by status:</p> <ul> <li> <p>Pending: Include those instances with pending deployments.</p> </li> <li> <p>InProgress: Include those instances where deployments are still in progress.</p> </li> <li> <p>Succeeded: Include those instances with successful deployments.</p> </li> <li> <p>Failed: Include those instances with failed deployments.</p> </li> <li> <p>Skipped: Include those instances with skipped deployments.</p> </li> <li> <p>Unknown: Include those instances with deployments in an unknown state.</p> </li> </ul></p>
     #[serde(rename = "instanceStatusFilter")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub instance_status_filter: Option<Vec<String>>,
@@ -1351,10 +1589,39 @@ pub struct ListDeploymentInstancesOutput {
     pub next_token: Option<String>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListDeploymentTargetsInput {
+    /// <p> The unique ID of a deployment. </p>
+    #[serde(rename = "deploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_id: Option<String>,
+    /// <p> A token identifier returned from the previous <code>ListDeploymentTargets</code> call. It can be used to return the next set of deployment targets in the list. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p> A key used to filter the returned targets. </p>
+    #[serde(rename = "targetFilters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_filters: Option<::std::collections::HashMap<String, Vec<String>>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListDeploymentTargetsOutput {
+    /// <p> If a large amount of information is returned, a token identifier is also returned. It can be used in a subsequent <code>ListDeploymentTargets</code> call to return the next set of deployment targets in the list. </p>
+    #[serde(rename = "nextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p> The unique IDs of deployment targets. </p>
+    #[serde(rename = "targetIds")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_ids: Option<Vec<String>>,
+}
+
 /// <p>Represents the input of a ListDeployments operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListDeploymentsInput {
-    /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
+    /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub application_name: Option<String>,
@@ -1362,7 +1629,7 @@ pub struct ListDeploymentsInput {
     #[serde(rename = "createTimeRange")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub create_time_range: Option<TimeRange>,
-    /// <p>The name of an existing deployment group for the specified application.</p>
+    /// <p>The name of a deployment group for the specified application.</p>
     #[serde(rename = "deploymentGroupName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_group_name: Option<String>,
@@ -1424,13 +1691,13 @@ pub struct ListOnPremisesInstancesInput {
     #[serde(rename = "registrationStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub registration_status: Option<String>,
-    /// <p>The on-premises instance tags that will be used to restrict the corresponding on-premises instance names returned.</p>
+    /// <p>The on-premises instance tags that are used to restrict the on-premises instance names returned.</p>
     #[serde(rename = "tagFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_filters: Option<Vec<TagFilter>>,
 }
 
-/// <p>Represents the output of list on-premises instances operation.</p>
+/// <p>Represents the output of the list on-premises instances operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ListOnPremisesInstancesOutput {
@@ -1447,20 +1714,24 @@ pub struct ListOnPremisesInstancesOutput {
 /// <p>Information about the Elastic Load Balancing load balancer or target group used in a deployment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LoadBalancerInfo {
-    /// <p><p>An array containing information about the load balancer to use for load balancing in a deployment. In Elastic Load Balancing, load balancers are used with Classic Load Balancers.</p> <note> <p> Adding more than one load balancer to the array is not supported. </p> </note></p>
+    /// <p><p>An array that contains information about the load balancer to use for load balancing in a deployment. In Elastic Load Balancing, load balancers are used with Classic Load Balancers.</p> <note> <p> Adding more than one load balancer to the array is not supported. </p> </note></p>
     #[serde(rename = "elbInfoList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub elb_info_list: Option<Vec<ELBInfo>>,
-    /// <p><p>An array containing information about the target group to use for load balancing in a deployment. In Elastic Load Balancing, target groups are used with Application Load Balancers.</p> <note> <p> Adding more than one target group to the array is not supported. </p> </note></p>
+    /// <p><p>An array that contains information about the target group to use for load balancing in a deployment. In Elastic Load Balancing, target groups are used with Application Load Balancers.</p> <note> <p> Adding more than one target group to the array is not supported. </p> </note></p>
     #[serde(rename = "targetGroupInfoList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_group_info_list: Option<Vec<TargetGroupInfo>>,
+    /// <p> The target group pair information. This is an array of <code>TargeGroupPairInfo</code> objects with a maximum size of one. </p>
+    #[serde(rename = "targetGroupPairInfoList")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_group_pair_info_list: Option<Vec<TargetGroupPairInfo>>,
 }
 
 /// <p>Information about minimum healthy instance.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MinimumHealthyHosts {
-    /// <p>The minimum healthy instance type:</p> <ul> <li> <p>HOST_COUNT: The minimum number of healthy instance as an absolute value.</p> </li> <li> <p>FLEET_PERCENT: The minimum number of healthy instance as a percentage of the total number of instance in the deployment.</p> </li> </ul> <p>In an example of nine instance, if a HOST_COUNT of six is specified, deploy to up to three instances at a time. The deployment will be successful if six or more instances are deployed to successfully; otherwise, the deployment fails. If a FLEET_PERCENT of 40 is specified, deploy to up to five instance at a time. The deployment will be successful if four or more instance are deployed to successfully; otherwise, the deployment fails.</p> <note> <p>In a call to the get deployment configuration operation, CodeDeployDefault.OneAtATime will return a minimum healthy instance type of MOST_CONCURRENCY and a value of 1. This means a deployment to only one instance at a time. (You cannot set the type to MOST_CONCURRENCY, only to HOST_COUNT or FLEET_PERCENT.) In addition, with CodeDeployDefault.OneAtATime, AWS CodeDeploy will try to ensure that all instances but one are kept in a healthy state during the deployment. Although this allows one instance at a time to be taken offline for a new deployment, it also means that if the deployment to the last instance fails, the overall deployment still succeeds.</p> </note> <p>For more information, see <a href="http://docs.aws.amazon.com/codedeploy/latest/userguide/instances-health.html">AWS CodeDeploy Instance Health</a> in the <i>AWS CodeDeploy User Guide</i>.</p>
+    /// <p>The minimum healthy instance type:</p> <ul> <li> <p>HOST_COUNT: The minimum number of healthy instance as an absolute value.</p> </li> <li> <p>FLEET_PERCENT: The minimum number of healthy instance as a percentage of the total number of instance in the deployment.</p> </li> </ul> <p>In an example of nine instance, if a HOST_COUNT of six is specified, deploy to up to three instances at a time. The deployment is successful if six or more instances are deployed to successfully. Otherwise, the deployment fails. If a FLEET_PERCENT of 40 is specified, deploy to up to five instance at a time. The deployment is successful if four or more instance are deployed to successfully. Otherwise, the deployment fails.</p> <note> <p>In a call to the get deployment configuration operation, CodeDeployDefault.OneAtATime returns a minimum healthy instance type of MOST_CONCURRENCY and a value of 1. This means a deployment to only one instance at a time. (You cannot set the type to MOST_CONCURRENCY, only to HOST_COUNT or FLEET_PERCENT.) In addition, with CodeDeployDefault.OneAtATime, AWS CodeDeploy attempts to ensure that all instances but one are kept in a healthy state during the deployment. Although this allows one instance at a time to be taken offline for a new deployment, it also means that if the deployment to the last instance fails, the overall deployment is still successful.</p> </note> <p>For more information, see <a href="http://docs.aws.amazon.com/codedeploy/latest/userguide/instances-health.html">AWS CodeDeploy Instance Health</a> in the <i>AWS CodeDeploy User Guide</i>.</p>
     #[serde(rename = "type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -1473,7 +1744,7 @@ pub struct MinimumHealthyHosts {
 /// <p>Information about groups of on-premises instance tags.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct OnPremisesTagSet {
-    /// <p>A list containing other lists of on-premises instance tag groups. In order for an instance to be included in the deployment group, it must be identified by all the tag groups in the list.</p>
+    /// <p>A list that contains other lists of on-premises instance tag groups. For an instance to be included in the deployment group, it must be identified by all of the tag groups in the list.</p>
     #[serde(rename = "onPremisesTagSetList")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub on_premises_tag_set_list: Option<Vec<Vec<TagFilter>>>,
@@ -1481,11 +1752,11 @@ pub struct OnPremisesTagSet {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PutLifecycleEventHookExecutionStatusInput {
-    /// <p>The ID of the deployment. Pass this ID to a Lambda function that validates a deployment lifecycle event.</p>
+    /// <p> The unique ID of a deployment. Pass this ID to a Lambda function that validates a deployment lifecycle event. </p>
     #[serde(rename = "deploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
-    /// <p>The execution ID of a deployment's lifecycle hook. A deployment lifecycle hook is specified in the <code>hooks</code> section of the AppSpec file.</p>
+    /// <p> The execution ID of a deployment's lifecycle hook. A deployment lifecycle hook is specified in the <code>hooks</code> section of the AppSpec file. </p>
     #[serde(rename = "lifecycleEventHookExecutionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lifecycle_event_hook_execution_id: Option<String>,
@@ -1511,7 +1782,7 @@ pub struct RawString {
     #[serde(rename = "content")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content: Option<String>,
-    /// <p>The SHA256 hash value of the revision that is specified as a RawString.</p>
+    /// <p>The SHA256 hash value of the revision content.</p>
     #[serde(rename = "sha256")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sha_256: Option<String>,
@@ -1520,7 +1791,7 @@ pub struct RawString {
 /// <p>Represents the input of a RegisterApplicationRevision operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RegisterApplicationRevisionInput {
-    /// <p>The name of an AWS CodeDeploy application associated with the applicable IAM user or AWS account.</p>
+    /// <p>The name of an AWS CodeDeploy application associated with the IAM user or AWS account.</p>
     #[serde(rename = "applicationName")]
     pub application_name: String,
     /// <p>A comment about the revision.</p>
@@ -1576,11 +1847,15 @@ pub struct RevisionInfo {
 /// <p>Information about the location of an application revision.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RevisionLocation {
+    /// <p> The content of an AppSpec file for an AWS Lambda or Amazon ECS deployment. The content is formatted as JSON or YAML and stored as a RawString. </p>
+    #[serde(rename = "appSpecContent")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub app_spec_content: Option<AppSpecContent>,
     /// <p>Information about the location of application artifacts stored in GitHub.</p>
     #[serde(rename = "gitHubLocation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub git_hub_location: Option<GitHubLocation>,
-    /// <p><p>The type of application revision:</p> <ul> <li> <p>S3: An application revision stored in Amazon S3.</p> </li> <li> <p>GitHub: An application revision stored in GitHub (EC2/On-premises deployments only)</p> </li> <li> <p>String: A YAML-formatted or JSON-formatted string (AWS Lambda deployments only)</p> </li> </ul></p>
+    /// <p><p>The type of application revision:</p> <ul> <li> <p>S3: An application revision stored in Amazon S3.</p> </li> <li> <p>GitHub: An application revision stored in GitHub (EC2/On-premises deployments only).</p> </li> <li> <p>String: A YAML-formatted or JSON-formatted string (AWS Lambda deployments only).</p> </li> </ul></p>
     #[serde(rename = "revisionType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub revision_type: Option<String>,
@@ -1602,7 +1877,7 @@ pub struct RollbackInfo {
     #[serde(rename = "rollbackDeploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rollback_deployment_id: Option<String>,
-    /// <p>Information describing the status of a deployment rollback; for example, whether the deployment can't be rolled back, is in progress, failed, or succeeded. </p>
+    /// <p>Information that describes the status of a deployment rollback (for example, whether the deployment can't be rolled back, is in progress, failed, or succeeded). </p>
     #[serde(rename = "rollbackMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub rollback_message: Option<String>,
@@ -1623,7 +1898,7 @@ pub struct S3Location {
     #[serde(rename = "bundleType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bundle_type: Option<String>,
-    /// <p>The ETag of the Amazon S3 object that represents the bundled artifacts for the application revision.</p> <p>If the ETag is not specified as an input parameter, ETag validation of the object will be skipped.</p>
+    /// <p>The ETag of the Amazon S3 object that represents the bundled artifacts for the application revision.</p> <p>If the ETag is not specified as an input parameter, ETag validation of the object is skipped.</p>
     #[serde(rename = "eTag")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub e_tag: Option<String>,
@@ -1631,7 +1906,7 @@ pub struct S3Location {
     #[serde(rename = "key")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key: Option<String>,
-    /// <p>A specific version of the Amazon S3 object that represents the bundled artifacts for the application revision.</p> <p>If the version is not specified, the system will use the most recent version by default.</p>
+    /// <p>A specific version of the Amazon S3 object that represents the bundled artifacts for the application revision.</p> <p>If the version is not specified, the system uses the most recent version by default.</p>
     #[serde(rename = "version")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
@@ -1639,25 +1914,25 @@ pub struct S3Location {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct SkipWaitTimeForInstanceTerminationInput {
-    /// <p>The ID of the blue/green deployment for which you want to skip the instance termination wait time.</p>
+    /// <p> The unique ID of a blue/green deployment for which you want to skip the instance termination wait time. </p>
     #[serde(rename = "deploymentId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_id: Option<String>,
 }
 
-/// <p>Represents the input of a StopDeployment operation.</p>
+/// <p> Represents the input of a StopDeployment operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StopDeploymentInput {
-    /// <p>Indicates, when a deployment is stopped, whether instances that have been updated should be rolled back to the previous version of the application revision.</p>
+    /// <p> Indicates, when a deployment is stopped, whether instances that have been updated should be rolled back to the previous version of the application revision. </p>
     #[serde(rename = "autoRollbackEnabled")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_rollback_enabled: Option<bool>,
-    /// <p>The unique ID of a deployment.</p>
+    /// <p> The unique ID of a deployment. </p>
     #[serde(rename = "deploymentId")]
     pub deployment_id: String,
 }
 
-/// <p>Represents the output of a StopDeployment operation.</p>
+/// <p> Represents the output of a StopDeployment operation. </p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct StopDeploymentOutput {
@@ -1704,10 +1979,27 @@ pub struct TagFilter {
 /// <p>Information about a target group in Elastic Load Balancing to use in a deployment. Instances are registered as targets in a target group, and traffic is routed to the target group.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TargetGroupInfo {
-    /// <p>For blue/green deployments, the name of the target group that instances in the original environment are deregistered from, and instances in the replacement environment registered with. For in-place deployments, the name of the target group that instances are deregistered from, so they are not serving traffic during a deployment, and then re-registered with after the deployment completes. </p>
+    /// <p>For blue/green deployments, the name of the target group that instances in the original environment are deregistered from, and instances in the replacement environment are registered with. For in-place deployments, the name of the target group that instances are deregistered from, so they are not serving traffic during a deployment, and then re-registered with after the deployment is complete. </p>
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+}
+
+/// <p> Information about two target groups and how traffic is routed during an Amazon ECS deployment. An optional test traffic route can be specified. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TargetGroupPairInfo {
+    /// <p> The path used by a load balancer to route production traffic when an Amazon ECS deployment is complete. </p>
+    #[serde(rename = "prodTrafficRoute")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prod_traffic_route: Option<TrafficRoute>,
+    /// <p> One pair of target groups. One is associated with the original task set. The second is associated with the task set that serves traffic after the deployment is complete. </p>
+    #[serde(rename = "targetGroups")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub target_groups: Option<Vec<TargetGroupInfo>>,
+    /// <p> An optional path used by a load balancer to route test traffic after an Amazon ECS deployment. Validation can occur while test traffic is served during a deployment. </p>
+    #[serde(rename = "testTrafficRoute")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub test_traffic_route: Option<TrafficRoute>,
 }
 
 /// <p>Information about the instances to be used in the replacement environment in a blue/green deployment.</p>
@@ -1766,6 +2058,15 @@ pub struct TimeRange {
     pub start: Option<f64>,
 }
 
+/// <p> Information about a listener. The listener contains the path used to route traffic that is received from the load balancer to a target group. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct TrafficRoute {
+    /// <p> The ARN of one listener. The listener identifies the route between a target group and a load balancer. This is an array of strings with a maximum size of one. </p>
+    #[serde(rename = "listenerArns")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub listener_arns: Option<Vec<String>>,
+}
+
 /// <p>The configuration that specifies how traffic is shifted from one version of a Lambda function to another version during an AWS Lambda deployment.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TrafficRoutingConfig {
@@ -1820,7 +2121,7 @@ pub struct UpdateDeploymentGroupInput {
     #[serde(rename = "alarmConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub alarm_configuration: Option<AlarmConfiguration>,
-    /// <p>The application name corresponding to the deployment group to update.</p>
+    /// <p>The application name that corresponds to the deployment group to update.</p>
     #[serde(rename = "applicationName")]
     pub application_name: String,
     /// <p>Information for an automatic rollback configuration that is added or changed when a deployment group is updated.</p>
@@ -1850,10 +2151,14 @@ pub struct UpdateDeploymentGroupInput {
     #[serde(rename = "ec2TagFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_tag_filters: Option<Vec<EC2TagFilter>>,
-    /// <p>Information about groups of tags applied to on-premises instances. The deployment group will include only EC2 instances identified by all the tag groups.</p>
+    /// <p>Information about groups of tags applied to on-premises instances. The deployment group includes only EC2 instances identified by all the tag groups.</p>
     #[serde(rename = "ec2TagSet")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub ec_2_tag_set: Option<EC2TagSet>,
+    /// <p> The target Amazon ECS services in the deployment group. This applies only to deployment groups that use the Amazon ECS compute platform. A target Amazon ECS service is specified as an Amazon ECS cluster and service name pair using the format <code>&lt;clustername&gt;:&lt;servicename&gt;</code>. </p>
+    #[serde(rename = "ecsServices")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ecs_services: Option<Vec<ECSService>>,
     /// <p>Information about the load balancer used in a deployment.</p>
     #[serde(rename = "loadBalancerInfo")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1866,7 +2171,7 @@ pub struct UpdateDeploymentGroupInput {
     #[serde(rename = "onPremisesInstanceTagFilters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub on_premises_instance_tag_filters: Option<Vec<TagFilter>>,
-    /// <p>Information about an on-premises instance tag set. The deployment group will include only on-premises instances identified by all the tag groups.</p>
+    /// <p>Information about an on-premises instance tag set. The deployment group includes only on-premises instances identified by all the tag groups.</p>
     #[serde(rename = "onPremisesTagSet")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub on_premises_tag_set: Option<OnPremisesTagSet>,
@@ -1899,9 +2204,9 @@ pub enum AddTagsToOnPremisesInstancesError {
     InstanceNameRequired(String),
     /// <p>The specified on-premises instance is not registered.</p>
     InstanceNotRegistered(String),
-    /// <p>The specified on-premises instance name was specified in an invalid format.</p>
+    /// <p>The on-premises instance name was specified in an invalid format.</p>
     InvalidInstanceName(String),
-    /// <p>The specified tag was specified in an invalid format.</p>
+    /// <p>The tag was specified in an invalid format.</p>
     InvalidTag(String),
     /// <p>The maximum allowed number of tags was exceeded.</p>
     TagLimitExceeded(String),
@@ -2025,7 +2330,7 @@ impl Error for AddTagsToOnPremisesInstancesError {
 /// Errors returned by BatchGetApplicationRevisions
 #[derive(Debug, PartialEq)]
 pub enum BatchGetApplicationRevisionsError {
-    /// <p>The application does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The application does not exist with the IAM user or AWS account.</p>
     ApplicationDoesNotExist(String),
     /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
@@ -2149,7 +2454,7 @@ impl Error for BatchGetApplicationRevisionsError {
 /// Errors returned by BatchGetApplications
 #[derive(Debug, PartialEq)]
 pub enum BatchGetApplicationsError {
-    /// <p>The application does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The application does not exist with the IAM user or AWS account.</p>
     ApplicationDoesNotExist(String),
     /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
@@ -2257,12 +2562,14 @@ impl Error for BatchGetApplicationsError {
 /// Errors returned by BatchGetDeploymentGroups
 #[derive(Debug, PartialEq)]
 pub enum BatchGetDeploymentGroupsError {
-    /// <p>The application does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The application does not exist with the IAM user or AWS account.</p>
     ApplicationDoesNotExist(String),
     /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
     /// <p>The maximum number of names or IDs allowed for this request (100) was exceeded.</p>
     BatchLimitExceeded(String),
+    /// <p>The deployment configuration does not exist with the IAM user or AWS account.</p>
+    DeploymentConfigDoesNotExist(String),
     /// <p>The deployment group name was not specified.</p>
     DeploymentGroupNameRequired(String),
     /// <p>The application name was specified in an invalid format.</p>
@@ -2308,6 +2615,11 @@ impl BatchGetDeploymentGroupsError {
                     return BatchGetDeploymentGroupsError::BatchLimitExceeded(String::from(
                         error_message,
                     ));
+                }
+                "DeploymentConfigDoesNotExistException" => {
+                    return BatchGetDeploymentGroupsError::DeploymentConfigDoesNotExist(
+                        String::from(error_message),
+                    );
                 }
                 "DeploymentGroupNameRequiredException" => {
                     return BatchGetDeploymentGroupsError::DeploymentGroupNameRequired(String::from(
@@ -2365,6 +2677,7 @@ impl Error for BatchGetDeploymentGroupsError {
             BatchGetDeploymentGroupsError::ApplicationDoesNotExist(ref cause) => cause,
             BatchGetDeploymentGroupsError::ApplicationNameRequired(ref cause) => cause,
             BatchGetDeploymentGroupsError::BatchLimitExceeded(ref cause) => cause,
+            BatchGetDeploymentGroupsError::DeploymentConfigDoesNotExist(ref cause) => cause,
             BatchGetDeploymentGroupsError::DeploymentGroupNameRequired(ref cause) => cause,
             BatchGetDeploymentGroupsError::InvalidApplicationName(ref cause) => cause,
             BatchGetDeploymentGroupsError::InvalidDeploymentGroupName(ref cause) => cause,
@@ -2383,15 +2696,17 @@ impl Error for BatchGetDeploymentGroupsError {
 pub enum BatchGetDeploymentInstancesError {
     /// <p>The maximum number of names or IDs allowed for this request (100) was exceeded.</p>
     BatchLimitExceeded(String),
-    /// <p>The deployment does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The deployment with the IAM user or AWS account does not exist.</p>
     DeploymentDoesNotExist(String),
     /// <p>At least one deployment ID must be specified.</p>
     DeploymentIdRequired(String),
     /// <p>The instance ID was not specified.</p>
     InstanceIdRequired(String),
+    /// <p>The computePlatform is invalid. The computePlatform should be <code>Lambda</code> or <code>Server</code>.</p>
+    InvalidComputePlatform(String),
     /// <p>At least one of the deployment IDs was specified in an invalid format.</p>
     InvalidDeploymentId(String),
-    /// <p>The specified on-premises instance name was specified in an invalid format.</p>
+    /// <p>The on-premises instance name was specified in an invalid format.</p>
     InvalidInstanceName(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2435,6 +2750,11 @@ impl BatchGetDeploymentInstancesError {
                 }
                 "InstanceIdRequiredException" => {
                     return BatchGetDeploymentInstancesError::InstanceIdRequired(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidComputePlatformException" => {
+                    return BatchGetDeploymentInstancesError::InvalidComputePlatform(String::from(
                         error_message,
                     ));
                 }
@@ -2490,6 +2810,7 @@ impl Error for BatchGetDeploymentInstancesError {
             BatchGetDeploymentInstancesError::DeploymentDoesNotExist(ref cause) => cause,
             BatchGetDeploymentInstancesError::DeploymentIdRequired(ref cause) => cause,
             BatchGetDeploymentInstancesError::InstanceIdRequired(ref cause) => cause,
+            BatchGetDeploymentInstancesError::InvalidComputePlatform(ref cause) => cause,
             BatchGetDeploymentInstancesError::InvalidDeploymentId(ref cause) => cause,
             BatchGetDeploymentInstancesError::InvalidInstanceName(ref cause) => cause,
             BatchGetDeploymentInstancesError::Validation(ref cause) => cause,
@@ -2499,6 +2820,138 @@ impl Error for BatchGetDeploymentInstancesError {
             }
             BatchGetDeploymentInstancesError::ParseError(ref cause) => cause,
             BatchGetDeploymentInstancesError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by BatchGetDeploymentTargets
+#[derive(Debug, PartialEq)]
+pub enum BatchGetDeploymentTargetsError {
+    /// <p>The deployment with the IAM user or AWS account does not exist.</p>
+    DeploymentDoesNotExist(String),
+    /// <p>At least one deployment ID must be specified.</p>
+    DeploymentIdRequired(String),
+    /// <p> The provided target ID does not belong to the attempted deployment. </p>
+    DeploymentTargetDoesNotExist(String),
+    /// <p> A deployment target ID was not provided. </p>
+    DeploymentTargetIdRequired(String),
+    /// <p> The maximum number of targets that can be associated with an Amazon ECS or AWS Lambda deployment was exceeded. The target list of both types of deployments must have exactly one item. This exception does not apply to EC2/On-premises deployments. </p>
+    DeploymentTargetListSizeExceeded(String),
+    /// <p>At least one of the deployment IDs was specified in an invalid format.</p>
+    InvalidDeploymentId(String),
+    /// <p> The target ID provided was not valid. </p>
+    InvalidDeploymentTargetId(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl BatchGetDeploymentTargetsError {
+    pub fn from_response(res: BufferedHttpResponse) -> BatchGetDeploymentTargetsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "DeploymentDoesNotExistException" => {
+                    return BatchGetDeploymentTargetsError::DeploymentDoesNotExist(String::from(
+                        error_message,
+                    ));
+                }
+                "DeploymentIdRequiredException" => {
+                    return BatchGetDeploymentTargetsError::DeploymentIdRequired(String::from(
+                        error_message,
+                    ));
+                }
+                "DeploymentTargetDoesNotExistException" => {
+                    return BatchGetDeploymentTargetsError::DeploymentTargetDoesNotExist(
+                        String::from(error_message),
+                    );
+                }
+                "DeploymentTargetIdRequiredException" => {
+                    return BatchGetDeploymentTargetsError::DeploymentTargetIdRequired(String::from(
+                        error_message,
+                    ));
+                }
+                "DeploymentTargetListSizeExceededException" => {
+                    return BatchGetDeploymentTargetsError::DeploymentTargetListSizeExceeded(
+                        String::from(error_message),
+                    );
+                }
+                "InvalidDeploymentIdException" => {
+                    return BatchGetDeploymentTargetsError::InvalidDeploymentId(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidDeploymentTargetIdException" => {
+                    return BatchGetDeploymentTargetsError::InvalidDeploymentTargetId(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return BatchGetDeploymentTargetsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return BatchGetDeploymentTargetsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for BatchGetDeploymentTargetsError {
+    fn from(err: serde_json::error::Error) -> BatchGetDeploymentTargetsError {
+        BatchGetDeploymentTargetsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for BatchGetDeploymentTargetsError {
+    fn from(err: CredentialsError) -> BatchGetDeploymentTargetsError {
+        BatchGetDeploymentTargetsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for BatchGetDeploymentTargetsError {
+    fn from(err: HttpDispatchError) -> BatchGetDeploymentTargetsError {
+        BatchGetDeploymentTargetsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for BatchGetDeploymentTargetsError {
+    fn from(err: io::Error) -> BatchGetDeploymentTargetsError {
+        BatchGetDeploymentTargetsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for BatchGetDeploymentTargetsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for BatchGetDeploymentTargetsError {
+    fn description(&self) -> &str {
+        match *self {
+            BatchGetDeploymentTargetsError::DeploymentDoesNotExist(ref cause) => cause,
+            BatchGetDeploymentTargetsError::DeploymentIdRequired(ref cause) => cause,
+            BatchGetDeploymentTargetsError::DeploymentTargetDoesNotExist(ref cause) => cause,
+            BatchGetDeploymentTargetsError::DeploymentTargetIdRequired(ref cause) => cause,
+            BatchGetDeploymentTargetsError::DeploymentTargetListSizeExceeded(ref cause) => cause,
+            BatchGetDeploymentTargetsError::InvalidDeploymentId(ref cause) => cause,
+            BatchGetDeploymentTargetsError::InvalidDeploymentTargetId(ref cause) => cause,
+            BatchGetDeploymentTargetsError::Validation(ref cause) => cause,
+            BatchGetDeploymentTargetsError::Credentials(ref err) => err.description(),
+            BatchGetDeploymentTargetsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            BatchGetDeploymentTargetsError::ParseError(ref cause) => cause,
+            BatchGetDeploymentTargetsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2607,7 +3060,7 @@ pub enum BatchGetOnPremisesInstancesError {
     BatchLimitExceeded(String),
     /// <p>An on-premises instance name was not specified.</p>
     InstanceNameRequired(String),
-    /// <p>The specified on-premises instance name was specified in an invalid format.</p>
+    /// <p>The on-premises instance name was specified in an invalid format.</p>
     InvalidInstanceName(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2705,7 +3158,7 @@ impl Error for BatchGetOnPremisesInstancesError {
 pub enum ContinueDeploymentError {
     /// <p>The deployment is already complete.</p>
     DeploymentAlreadyCompleted(String),
-    /// <p>The deployment does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The deployment with the IAM user or AWS account does not exist.</p>
     DeploymentDoesNotExist(String),
     /// <p>At least one deployment ID must be specified.</p>
     DeploymentIdRequired(String),
@@ -2713,6 +3166,10 @@ pub enum ContinueDeploymentError {
     DeploymentIsNotInReadyState(String),
     /// <p>At least one of the deployment IDs was specified in an invalid format.</p>
     InvalidDeploymentId(String),
+    /// <p>The specified deployment status doesn't exist or cannot be determined.</p>
+    InvalidDeploymentStatus(String),
+    /// <p> The wait type is invalid. </p>
+    InvalidDeploymentWaitType(String),
     /// <p>A call was submitted that is not supported for the specified deployment type.</p>
     UnsupportedActionForDeploymentType(String),
     /// An error occurred dispatching the HTTP request
@@ -2763,6 +3220,16 @@ impl ContinueDeploymentError {
                 "InvalidDeploymentIdException" => {
                     return ContinueDeploymentError::InvalidDeploymentId(String::from(error_message));
                 }
+                "InvalidDeploymentStatusException" => {
+                    return ContinueDeploymentError::InvalidDeploymentStatus(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidDeploymentWaitTypeException" => {
+                    return ContinueDeploymentError::InvalidDeploymentWaitType(String::from(
+                        error_message,
+                    ));
+                }
                 "UnsupportedActionForDeploymentTypeException" => {
                     return ContinueDeploymentError::UnsupportedActionForDeploymentType(
                         String::from(error_message),
@@ -2811,6 +3278,8 @@ impl Error for ContinueDeploymentError {
             ContinueDeploymentError::DeploymentIdRequired(ref cause) => cause,
             ContinueDeploymentError::DeploymentIsNotInReadyState(ref cause) => cause,
             ContinueDeploymentError::InvalidDeploymentId(ref cause) => cause,
+            ContinueDeploymentError::InvalidDeploymentStatus(ref cause) => cause,
+            ContinueDeploymentError::InvalidDeploymentWaitType(ref cause) => cause,
             ContinueDeploymentError::UnsupportedActionForDeploymentType(ref cause) => cause,
             ContinueDeploymentError::Validation(ref cause) => cause,
             ContinueDeploymentError::Credentials(ref err) => err.description(),
@@ -2825,7 +3294,7 @@ impl Error for ContinueDeploymentError {
 /// Errors returned by CreateApplication
 #[derive(Debug, PartialEq)]
 pub enum CreateApplicationError {
-    /// <p>An application with the specified name already exists with the applicable IAM user or AWS account.</p>
+    /// <p>An application with the specified name with the IAM user or AWS account already exists.</p>
     ApplicationAlreadyExists(String),
     /// <p>More applications were attempted to be created than are allowed.</p>
     ApplicationLimitExceeded(String),
@@ -2941,13 +3410,13 @@ impl Error for CreateApplicationError {
 /// Errors returned by CreateDeployment
 #[derive(Debug, PartialEq)]
 pub enum CreateDeploymentError {
-    /// <p>The application does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The application does not exist with the IAM user or AWS account.</p>
     ApplicationDoesNotExist(String),
     /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
-    /// <p>The deployment configuration does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The deployment configuration does not exist with the IAM user or AWS account.</p>
     DeploymentConfigDoesNotExist(String),
-    /// <p>The named deployment group does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The named deployment group with the IAM user or AWS account does not exist.</p>
     DeploymentGroupDoesNotExist(String),
     /// <p>The deployment group name was not specified.</p>
     DeploymentGroupNameRequired(String),
@@ -2957,7 +3426,7 @@ pub enum CreateDeploymentError {
     DescriptionTooLong(String),
     /// <p>The application name was specified in an invalid format.</p>
     InvalidApplicationName(String),
-    /// <p>The automatic rollback configuration was specified in an invalid format. For example, automatic rollback is enabled but an invalid triggering event type or no event types were listed.</p>
+    /// <p>The automatic rollback configuration was specified in an invalid format. For example, automatic rollback is enabled, but an invalid triggering event type or no event types were listed.</p>
     InvalidAutoRollbackConfig(String),
     /// <p>The Auto Scaling group was specified in an invalid format or does not exist.</p>
     InvalidAutoScalingGroup(String),
@@ -2965,7 +3434,7 @@ pub enum CreateDeploymentError {
     InvalidDeploymentConfigName(String),
     /// <p>The deployment group name was specified in an invalid format.</p>
     InvalidDeploymentGroupName(String),
-    /// <p>An invalid fileExistsBehavior option was specified to determine how AWS CodeDeploy handles files or directories that already exist in a deployment target location but weren't part of the previous successful deployment. Valid values include "DISALLOW", "OVERWRITE", and "RETAIN".</p>
+    /// <p>An invalid fileExistsBehavior option was specified to determine how AWS CodeDeploy handles files or directories that already exist in a deployment target location, but weren't part of the previous successful deployment. Valid values include "DISALLOW," "OVERWRITE," and "RETAIN."</p>
     InvalidFileExistsBehavior(String),
     /// <p>The GitHub token is not valid.</p>
     InvalidGitHubAccountToken(String),
@@ -2975,13 +3444,13 @@ pub enum CreateDeploymentError {
     InvalidLoadBalancerInfo(String),
     /// <p>The revision was specified in an invalid format.</p>
     InvalidRevision(String),
-    /// <p>The service role ARN was specified in an invalid format. Or, if an Auto Scaling group was specified, the specified service role does not grant the appropriate permissions to Auto Scaling.</p>
+    /// <p>The service role ARN was specified in an invalid format. Or, if an Auto Scaling group was specified, the specified service role does not grant the appropriate permissions to Amazon EC2 Auto Scaling.</p>
     InvalidRole(String),
     /// <p><p>The target instance configuration is invalid. Possible causes include:</p> <ul> <li> <p>Configuration data for target instances was entered for an in-place deployment.</p> </li> <li> <p>The limit of 10 tags for a tag type was exceeded.</p> </li> <li> <p>The combined length of the tag names exceeded the limit. </p> </li> <li> <p>A specified tag is not currently applied to any instances.</p> </li> </ul></p>
     InvalidTargetInstances(String),
     /// <p>The UpdateOutdatedInstancesOnly value is invalid. For AWS Lambda deployments, <code>false</code> is expected. For EC2/On-premises deployments, <code>true</code> or <code>false</code> is expected.</p>
     InvalidUpdateOutdatedInstancesOnlyValue(String),
-    /// <p>The named revision does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The named revision does not exist with the IAM user or AWS account.</p>
     RevisionDoesNotExist(String),
     /// <p>The revision ID was not specified.</p>
     RevisionRequired(String),
@@ -3187,7 +3656,7 @@ impl Error for CreateDeploymentError {
 /// Errors returned by CreateDeploymentConfig
 #[derive(Debug, PartialEq)]
 pub enum CreateDeploymentConfigError {
-    /// <p>A deployment configuration with the specified name already exists with the applicable IAM user or AWS account.</p>
+    /// <p>A deployment configuration with the specified name with the IAM user or AWS account already exists .</p>
     DeploymentConfigAlreadyExists(String),
     /// <p>The deployment configurations limit was exceeded.</p>
     DeploymentConfigLimitExceeded(String),
@@ -3321,23 +3790,25 @@ impl Error for CreateDeploymentConfigError {
 pub enum CreateDeploymentGroupError {
     /// <p>The maximum number of alarms for a deployment group (10) was exceeded.</p>
     AlarmsLimitExceeded(String),
-    /// <p>The application does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The application does not exist with the IAM user or AWS account.</p>
     ApplicationDoesNotExist(String),
     /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
-    /// <p>The deployment configuration does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The deployment configuration does not exist with the IAM user or AWS account.</p>
     DeploymentConfigDoesNotExist(String),
-    /// <p>A deployment group with the specified name already exists with the applicable IAM user or AWS account.</p>
+    /// <p>A deployment group with the specified name with the IAM user or AWS account already exists.</p>
     DeploymentGroupAlreadyExists(String),
     /// <p> The deployment groups limit was exceeded.</p>
     DeploymentGroupLimitExceeded(String),
     /// <p>The deployment group name was not specified.</p>
     DeploymentGroupNameRequired(String),
-    /// <p><p>The format of the alarm configuration is invalid. Possible causes include:</p> <ul> <li> <p>The alarm list is null.</p> </li> <li> <p>The alarm object is null.</p> </li> <li> <p>The alarm name is empty or null or exceeds the 255 character limit.</p> </li> <li> <p>Two alarms with the same name have been specified.</p> </li> <li> <p>The alarm configuration is enabled but the alarm list is empty.</p> </li> </ul></p>
+    /// <p> The Amazon ECS service is associated with more than one deployment groups. An Amazon ECS service can be associated with only one deployment group. </p>
+    ECSServiceMappingLimitExceeded(String),
+    /// <p><p>The format of the alarm configuration is invalid. Possible causes include:</p> <ul> <li> <p>The alarm list is null.</p> </li> <li> <p>The alarm object is null.</p> </li> <li> <p>The alarm name is empty or null or exceeds the limit of 255 characters.</p> </li> <li> <p>Two alarms with the same name have been specified.</p> </li> <li> <p>The alarm configuration is enabled, but the alarm list is empty.</p> </li> </ul></p>
     InvalidAlarmConfig(String),
     /// <p>The application name was specified in an invalid format.</p>
     InvalidApplicationName(String),
-    /// <p>The automatic rollback configuration was specified in an invalid format. For example, automatic rollback is enabled but an invalid triggering event type or no event types were listed.</p>
+    /// <p>The automatic rollback configuration was specified in an invalid format. For example, automatic rollback is enabled, but an invalid triggering event type or no event types were listed.</p>
     InvalidAutoRollbackConfig(String),
     /// <p>The Auto Scaling group was specified in an invalid format or does not exist.</p>
     InvalidAutoScalingGroup(String),
@@ -3347,22 +3818,26 @@ pub enum CreateDeploymentGroupError {
     InvalidDeploymentConfigName(String),
     /// <p>The deployment group name was specified in an invalid format.</p>
     InvalidDeploymentGroupName(String),
-    /// <p>An invalid deployment style was specified. Valid deployment types include "IN_PLACE" and "BLUE_GREEN". Valid deployment options include "WITH_TRAFFIC_CONTROL" and "WITHOUT_TRAFFIC_CONTROL".</p>
+    /// <p>An invalid deployment style was specified. Valid deployment types include "IN_PLACE" and "BLUE_GREEN." Valid deployment options include "WITH_TRAFFIC_CONTROL" and "WITHOUT_TRAFFIC_CONTROL."</p>
     InvalidDeploymentStyle(String),
     /// <p>A call was submitted that specified both Ec2TagFilters and Ec2TagSet, but only one of these data types can be used in a single call.</p>
     InvalidEC2TagCombination(String),
     /// <p>The tag was specified in an invalid format.</p>
     InvalidEC2Tag(String),
-    /// <p>The specified input was specified in an invalid format.</p>
+    /// <p> The Amazon ECS service identifier is not valid. </p>
+    InvalidECSService(String),
+    /// <p>The input was specified in an invalid format.</p>
     InvalidInput(String),
     /// <p>An invalid load balancer name, or no load balancer name, was specified.</p>
     InvalidLoadBalancerInfo(String),
     /// <p>A call was submitted that specified both OnPremisesTagFilters and OnPremisesTagSet, but only one of these data types can be used in a single call.</p>
     InvalidOnPremisesTagCombination(String),
-    /// <p>The service role ARN was specified in an invalid format. Or, if an Auto Scaling group was specified, the specified service role does not grant the appropriate permissions to Auto Scaling.</p>
+    /// <p>The service role ARN was specified in an invalid format. Or, if an Auto Scaling group was specified, the specified service role does not grant the appropriate permissions to Amazon EC2 Auto Scaling.</p>
     InvalidRole(String),
-    /// <p>The specified tag was specified in an invalid format.</p>
+    /// <p>The tag was specified in an invalid format.</p>
     InvalidTag(String),
+    /// <p> A target group pair associated with this deployment is not valid. </p>
+    InvalidTargetGroupPair(String),
     /// <p>The trigger was specified in an invalid format.</p>
     InvalidTriggerConfig(String),
     /// <p>The limit for lifecycle hooks was exceeded.</p>
@@ -3371,6 +3846,8 @@ pub enum CreateDeploymentGroupError {
     RoleRequired(String),
     /// <p>The number of tag groups included in the tag set list exceeded the maximum allowed limit of 3.</p>
     TagSetListLimitExceeded(String),
+    /// <p>An API function was called too frequently.</p>
+    Throttling(String),
     /// <p>The maximum allowed number of triggers was exceeded.</p>
     TriggerTargetsLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
@@ -3433,6 +3910,11 @@ impl CreateDeploymentGroupError {
                         error_message,
                     ));
                 }
+                "ECSServiceMappingLimitExceededException" => {
+                    return CreateDeploymentGroupError::ECSServiceMappingLimitExceeded(String::from(
+                        error_message,
+                    ));
+                }
                 "InvalidAlarmConfigException" => {
                     return CreateDeploymentGroupError::InvalidAlarmConfig(String::from(
                         error_message,
@@ -3481,6 +3963,11 @@ impl CreateDeploymentGroupError {
                 "InvalidEC2TagException" => {
                     return CreateDeploymentGroupError::InvalidEC2Tag(String::from(error_message));
                 }
+                "InvalidECSServiceException" => {
+                    return CreateDeploymentGroupError::InvalidECSService(String::from(
+                        error_message,
+                    ));
+                }
                 "InvalidInputException" => {
                     return CreateDeploymentGroupError::InvalidInput(String::from(error_message));
                 }
@@ -3500,6 +3987,11 @@ impl CreateDeploymentGroupError {
                 "InvalidTagException" => {
                     return CreateDeploymentGroupError::InvalidTag(String::from(error_message));
                 }
+                "InvalidTargetGroupPairException" => {
+                    return CreateDeploymentGroupError::InvalidTargetGroupPair(String::from(
+                        error_message,
+                    ));
+                }
                 "InvalidTriggerConfigException" => {
                     return CreateDeploymentGroupError::InvalidTriggerConfig(String::from(
                         error_message,
@@ -3517,6 +4009,9 @@ impl CreateDeploymentGroupError {
                     return CreateDeploymentGroupError::TagSetListLimitExceeded(String::from(
                         error_message,
                     ));
+                }
+                "ThrottlingException" => {
+                    return CreateDeploymentGroupError::Throttling(String::from(error_message));
                 }
                 "TriggerTargetsLimitExceededException" => {
                     return CreateDeploymentGroupError::TriggerTargetsLimitExceeded(String::from(
@@ -3568,6 +4063,7 @@ impl Error for CreateDeploymentGroupError {
             CreateDeploymentGroupError::DeploymentGroupAlreadyExists(ref cause) => cause,
             CreateDeploymentGroupError::DeploymentGroupLimitExceeded(ref cause) => cause,
             CreateDeploymentGroupError::DeploymentGroupNameRequired(ref cause) => cause,
+            CreateDeploymentGroupError::ECSServiceMappingLimitExceeded(ref cause) => cause,
             CreateDeploymentGroupError::InvalidAlarmConfig(ref cause) => cause,
             CreateDeploymentGroupError::InvalidApplicationName(ref cause) => cause,
             CreateDeploymentGroupError::InvalidAutoRollbackConfig(ref cause) => cause,
@@ -3578,15 +4074,18 @@ impl Error for CreateDeploymentGroupError {
             CreateDeploymentGroupError::InvalidDeploymentStyle(ref cause) => cause,
             CreateDeploymentGroupError::InvalidEC2TagCombination(ref cause) => cause,
             CreateDeploymentGroupError::InvalidEC2Tag(ref cause) => cause,
+            CreateDeploymentGroupError::InvalidECSService(ref cause) => cause,
             CreateDeploymentGroupError::InvalidInput(ref cause) => cause,
             CreateDeploymentGroupError::InvalidLoadBalancerInfo(ref cause) => cause,
             CreateDeploymentGroupError::InvalidOnPremisesTagCombination(ref cause) => cause,
             CreateDeploymentGroupError::InvalidRole(ref cause) => cause,
             CreateDeploymentGroupError::InvalidTag(ref cause) => cause,
+            CreateDeploymentGroupError::InvalidTargetGroupPair(ref cause) => cause,
             CreateDeploymentGroupError::InvalidTriggerConfig(ref cause) => cause,
             CreateDeploymentGroupError::LifecycleHookLimitExceeded(ref cause) => cause,
             CreateDeploymentGroupError::RoleRequired(ref cause) => cause,
             CreateDeploymentGroupError::TagSetListLimitExceeded(ref cause) => cause,
+            CreateDeploymentGroupError::Throttling(ref cause) => cause,
             CreateDeploymentGroupError::TriggerTargetsLimitExceeded(ref cause) => cause,
             CreateDeploymentGroupError::Validation(ref cause) => cause,
             CreateDeploymentGroupError::Credentials(ref err) => err.description(),
@@ -3809,7 +4308,7 @@ pub enum DeleteDeploymentGroupError {
     InvalidApplicationName(String),
     /// <p>The deployment group name was specified in an invalid format.</p>
     InvalidDeploymentGroupName(String),
-    /// <p>The service role ARN was specified in an invalid format. Or, if an Auto Scaling group was specified, the specified service role does not grant the appropriate permissions to Auto Scaling.</p>
+    /// <p>The service role ARN was specified in an invalid format. Or, if an Auto Scaling group was specified, the specified service role does not grant the appropriate permissions to Amazon EC2 Auto Scaling.</p>
     InvalidRole(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4033,7 +4532,7 @@ impl Error for DeleteGitHubAccountTokenError {
 pub enum DeregisterOnPremisesInstanceError {
     /// <p>An on-premises instance name was not specified.</p>
     InstanceNameRequired(String),
-    /// <p>The specified on-premises instance name was specified in an invalid format.</p>
+    /// <p>The on-premises instance name was specified in an invalid format.</p>
     InvalidInstanceName(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4123,7 +4622,7 @@ impl Error for DeregisterOnPremisesInstanceError {
 /// Errors returned by GetApplication
 #[derive(Debug, PartialEq)]
 pub enum GetApplicationError {
-    /// <p>The application does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The application does not exist with the IAM user or AWS account.</p>
     ApplicationDoesNotExist(String),
     /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
@@ -4215,7 +4714,7 @@ impl Error for GetApplicationError {
 /// Errors returned by GetApplicationRevision
 #[derive(Debug, PartialEq)]
 pub enum GetApplicationRevisionError {
-    /// <p>The application does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The application does not exist with the IAM user or AWS account.</p>
     ApplicationDoesNotExist(String),
     /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
@@ -4223,7 +4722,7 @@ pub enum GetApplicationRevisionError {
     InvalidApplicationName(String),
     /// <p>The revision was specified in an invalid format.</p>
     InvalidRevision(String),
-    /// <p>The named revision does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The named revision does not exist with the IAM user or AWS account.</p>
     RevisionDoesNotExist(String),
     /// <p>The revision ID was not specified.</p>
     RevisionRequired(String),
@@ -4337,7 +4836,7 @@ impl Error for GetApplicationRevisionError {
 /// Errors returned by GetDeployment
 #[derive(Debug, PartialEq)]
 pub enum GetDeploymentError {
-    /// <p>The deployment does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The deployment with the IAM user or AWS account does not exist.</p>
     DeploymentDoesNotExist(String),
     /// <p>At least one deployment ID must be specified.</p>
     DeploymentIdRequired(String),
@@ -4429,10 +4928,12 @@ impl Error for GetDeploymentError {
 /// Errors returned by GetDeploymentConfig
 #[derive(Debug, PartialEq)]
 pub enum GetDeploymentConfigError {
-    /// <p>The deployment configuration does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The deployment configuration does not exist with the IAM user or AWS account.</p>
     DeploymentConfigDoesNotExist(String),
     /// <p>The deployment configuration name was not specified.</p>
     DeploymentConfigNameRequired(String),
+    /// <p>The computePlatform is invalid. The computePlatform should be <code>Lambda</code> or <code>Server</code>.</p>
+    InvalidComputePlatform(String),
     /// <p>The deployment configuration name was specified in an invalid format.</p>
     InvalidDeploymentConfigName(String),
     /// An error occurred dispatching the HTTP request
@@ -4467,6 +4968,11 @@ impl GetDeploymentConfigError {
                 }
                 "DeploymentConfigNameRequiredException" => {
                     return GetDeploymentConfigError::DeploymentConfigNameRequired(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidComputePlatformException" => {
+                    return GetDeploymentConfigError::InvalidComputePlatform(String::from(
                         error_message,
                     ));
                 }
@@ -4515,6 +5021,7 @@ impl Error for GetDeploymentConfigError {
         match *self {
             GetDeploymentConfigError::DeploymentConfigDoesNotExist(ref cause) => cause,
             GetDeploymentConfigError::DeploymentConfigNameRequired(ref cause) => cause,
+            GetDeploymentConfigError::InvalidComputePlatform(ref cause) => cause,
             GetDeploymentConfigError::InvalidDeploymentConfigName(ref cause) => cause,
             GetDeploymentConfigError::Validation(ref cause) => cause,
             GetDeploymentConfigError::Credentials(ref err) => err.description(),
@@ -4529,11 +5036,13 @@ impl Error for GetDeploymentConfigError {
 /// Errors returned by GetDeploymentGroup
 #[derive(Debug, PartialEq)]
 pub enum GetDeploymentGroupError {
-    /// <p>The application does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The application does not exist with the IAM user or AWS account.</p>
     ApplicationDoesNotExist(String),
     /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
-    /// <p>The named deployment group does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The deployment configuration does not exist with the IAM user or AWS account.</p>
+    DeploymentConfigDoesNotExist(String),
+    /// <p>The named deployment group with the IAM user or AWS account does not exist.</p>
     DeploymentGroupDoesNotExist(String),
     /// <p>The deployment group name was not specified.</p>
     DeploymentGroupNameRequired(String),
@@ -4573,6 +5082,11 @@ impl GetDeploymentGroupError {
                 }
                 "ApplicationNameRequiredException" => {
                     return GetDeploymentGroupError::ApplicationNameRequired(String::from(
+                        error_message,
+                    ));
+                }
+                "DeploymentConfigDoesNotExistException" => {
+                    return GetDeploymentGroupError::DeploymentConfigDoesNotExist(String::from(
                         error_message,
                     ));
                 }
@@ -4636,6 +5150,7 @@ impl Error for GetDeploymentGroupError {
         match *self {
             GetDeploymentGroupError::ApplicationDoesNotExist(ref cause) => cause,
             GetDeploymentGroupError::ApplicationNameRequired(ref cause) => cause,
+            GetDeploymentGroupError::DeploymentConfigDoesNotExist(ref cause) => cause,
             GetDeploymentGroupError::DeploymentGroupDoesNotExist(ref cause) => cause,
             GetDeploymentGroupError::DeploymentGroupNameRequired(ref cause) => cause,
             GetDeploymentGroupError::InvalidApplicationName(ref cause) => cause,
@@ -4653,7 +5168,7 @@ impl Error for GetDeploymentGroupError {
 /// Errors returned by GetDeploymentInstance
 #[derive(Debug, PartialEq)]
 pub enum GetDeploymentInstanceError {
-    /// <p>The deployment does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The deployment with the IAM user or AWS account does not exist.</p>
     DeploymentDoesNotExist(String),
     /// <p>At least one deployment ID must be specified.</p>
     DeploymentIdRequired(String),
@@ -4661,9 +5176,11 @@ pub enum GetDeploymentInstanceError {
     InstanceDoesNotExist(String),
     /// <p>The instance ID was not specified.</p>
     InstanceIdRequired(String),
+    /// <p>The computePlatform is invalid. The computePlatform should be <code>Lambda</code> or <code>Server</code>.</p>
+    InvalidComputePlatform(String),
     /// <p>At least one of the deployment IDs was specified in an invalid format.</p>
     InvalidDeploymentId(String),
-    /// <p>The specified on-premises instance name was specified in an invalid format.</p>
+    /// <p>The on-premises instance name was specified in an invalid format.</p>
     InvalidInstanceName(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4707,6 +5224,11 @@ impl GetDeploymentInstanceError {
                 }
                 "InstanceIdRequiredException" => {
                     return GetDeploymentInstanceError::InstanceIdRequired(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidComputePlatformException" => {
+                    return GetDeploymentInstanceError::InvalidComputePlatform(String::from(
                         error_message,
                     ));
                 }
@@ -4762,6 +5284,7 @@ impl Error for GetDeploymentInstanceError {
             GetDeploymentInstanceError::DeploymentIdRequired(ref cause) => cause,
             GetDeploymentInstanceError::InstanceDoesNotExist(ref cause) => cause,
             GetDeploymentInstanceError::InstanceIdRequired(ref cause) => cause,
+            GetDeploymentInstanceError::InvalidComputePlatform(ref cause) => cause,
             GetDeploymentInstanceError::InvalidDeploymentId(ref cause) => cause,
             GetDeploymentInstanceError::InvalidInstanceName(ref cause) => cause,
             GetDeploymentInstanceError::Validation(ref cause) => cause,
@@ -4774,6 +5297,138 @@ impl Error for GetDeploymentInstanceError {
         }
     }
 }
+/// Errors returned by GetDeploymentTarget
+#[derive(Debug, PartialEq)]
+pub enum GetDeploymentTargetError {
+    /// <p>The deployment with the IAM user or AWS account does not exist.</p>
+    DeploymentDoesNotExist(String),
+    /// <p>At least one deployment ID must be specified.</p>
+    DeploymentIdRequired(String),
+    /// <p> The provided target ID does not belong to the attempted deployment. </p>
+    DeploymentTargetDoesNotExist(String),
+    /// <p> A deployment target ID was not provided. </p>
+    DeploymentTargetIdRequired(String),
+    /// <p>At least one of the deployment IDs was specified in an invalid format.</p>
+    InvalidDeploymentId(String),
+    /// <p> The target ID provided was not valid. </p>
+    InvalidDeploymentTargetId(String),
+    /// <p>The on-premises instance name was specified in an invalid format.</p>
+    InvalidInstanceName(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetDeploymentTargetError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetDeploymentTargetError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "DeploymentDoesNotExistException" => {
+                    return GetDeploymentTargetError::DeploymentDoesNotExist(String::from(
+                        error_message,
+                    ));
+                }
+                "DeploymentIdRequiredException" => {
+                    return GetDeploymentTargetError::DeploymentIdRequired(String::from(
+                        error_message,
+                    ));
+                }
+                "DeploymentTargetDoesNotExistException" => {
+                    return GetDeploymentTargetError::DeploymentTargetDoesNotExist(String::from(
+                        error_message,
+                    ));
+                }
+                "DeploymentTargetIdRequiredException" => {
+                    return GetDeploymentTargetError::DeploymentTargetIdRequired(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidDeploymentIdException" => {
+                    return GetDeploymentTargetError::InvalidDeploymentId(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidDeploymentTargetIdException" => {
+                    return GetDeploymentTargetError::InvalidDeploymentTargetId(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidInstanceNameException" => {
+                    return GetDeploymentTargetError::InvalidInstanceName(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return GetDeploymentTargetError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetDeploymentTargetError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetDeploymentTargetError {
+    fn from(err: serde_json::error::Error) -> GetDeploymentTargetError {
+        GetDeploymentTargetError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetDeploymentTargetError {
+    fn from(err: CredentialsError) -> GetDeploymentTargetError {
+        GetDeploymentTargetError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetDeploymentTargetError {
+    fn from(err: HttpDispatchError) -> GetDeploymentTargetError {
+        GetDeploymentTargetError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetDeploymentTargetError {
+    fn from(err: io::Error) -> GetDeploymentTargetError {
+        GetDeploymentTargetError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetDeploymentTargetError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetDeploymentTargetError {
+    fn description(&self) -> &str {
+        match *self {
+            GetDeploymentTargetError::DeploymentDoesNotExist(ref cause) => cause,
+            GetDeploymentTargetError::DeploymentIdRequired(ref cause) => cause,
+            GetDeploymentTargetError::DeploymentTargetDoesNotExist(ref cause) => cause,
+            GetDeploymentTargetError::DeploymentTargetIdRequired(ref cause) => cause,
+            GetDeploymentTargetError::InvalidDeploymentId(ref cause) => cause,
+            GetDeploymentTargetError::InvalidDeploymentTargetId(ref cause) => cause,
+            GetDeploymentTargetError::InvalidInstanceName(ref cause) => cause,
+            GetDeploymentTargetError::Validation(ref cause) => cause,
+            GetDeploymentTargetError::Credentials(ref err) => err.description(),
+            GetDeploymentTargetError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetDeploymentTargetError::ParseError(ref cause) => cause,
+            GetDeploymentTargetError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by GetOnPremisesInstance
 #[derive(Debug, PartialEq)]
 pub enum GetOnPremisesInstanceError {
@@ -4781,7 +5436,7 @@ pub enum GetOnPremisesInstanceError {
     InstanceNameRequired(String),
     /// <p>The specified on-premises instance is not registered.</p>
     InstanceNotRegistered(String),
-    /// <p>The specified on-premises instance name was specified in an invalid format.</p>
+    /// <p>The on-premises instance name was specified in an invalid format.</p>
     InvalidInstanceName(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4877,7 +5532,7 @@ impl Error for GetOnPremisesInstanceError {
 /// Errors returned by ListApplicationRevisions
 #[derive(Debug, PartialEq)]
 pub enum ListApplicationRevisionsError {
-    /// <p>The application does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The application does not exist with the IAM user or AWS account.</p>
     ApplicationDoesNotExist(String),
     /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
@@ -5193,7 +5848,7 @@ impl Error for ListDeploymentConfigsError {
 /// Errors returned by ListDeploymentGroups
 #[derive(Debug, PartialEq)]
 pub enum ListDeploymentGroupsError {
-    /// <p>The application does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The application does not exist with the IAM user or AWS account.</p>
     ApplicationDoesNotExist(String),
     /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
@@ -5299,12 +5954,14 @@ impl Error for ListDeploymentGroupsError {
 /// Errors returned by ListDeploymentInstances
 #[derive(Debug, PartialEq)]
 pub enum ListDeploymentInstancesError {
-    /// <p>The deployment does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The deployment with the IAM user or AWS account does not exist.</p>
     DeploymentDoesNotExist(String),
     /// <p>At least one deployment ID must be specified.</p>
     DeploymentIdRequired(String),
     /// <p>The specified deployment has not started.</p>
     DeploymentNotStarted(String),
+    /// <p>The computePlatform is invalid. The computePlatform should be <code>Lambda</code> or <code>Server</code>.</p>
+    InvalidComputePlatform(String),
     /// <p>At least one of the deployment IDs was specified in an invalid format.</p>
     InvalidDeploymentId(String),
     /// <p>An instance type was specified for an in-place deployment. Instance types are supported for blue/green deployments only.</p>
@@ -5315,6 +5972,8 @@ pub enum ListDeploymentInstancesError {
     InvalidInstanceType(String),
     /// <p>The next token was specified in an invalid format.</p>
     InvalidNextToken(String),
+    /// <p> The target filter name is invalid. </p>
+    InvalidTargetFilterName(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -5355,6 +6014,11 @@ impl ListDeploymentInstancesError {
                         error_message,
                     ));
                 }
+                "InvalidComputePlatformException" => {
+                    return ListDeploymentInstancesError::InvalidComputePlatform(String::from(
+                        error_message,
+                    ));
+                }
                 "InvalidDeploymentIdException" => {
                     return ListDeploymentInstancesError::InvalidDeploymentId(String::from(
                         error_message,
@@ -5377,6 +6041,11 @@ impl ListDeploymentInstancesError {
                 }
                 "InvalidNextTokenException" => {
                     return ListDeploymentInstancesError::InvalidNextToken(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidTargetFilterNameException" => {
+                    return ListDeploymentInstancesError::InvalidTargetFilterName(String::from(
                         error_message,
                     ));
                 }
@@ -5421,11 +6090,13 @@ impl Error for ListDeploymentInstancesError {
             ListDeploymentInstancesError::DeploymentDoesNotExist(ref cause) => cause,
             ListDeploymentInstancesError::DeploymentIdRequired(ref cause) => cause,
             ListDeploymentInstancesError::DeploymentNotStarted(ref cause) => cause,
+            ListDeploymentInstancesError::InvalidComputePlatform(ref cause) => cause,
             ListDeploymentInstancesError::InvalidDeploymentId(ref cause) => cause,
             ListDeploymentInstancesError::InvalidDeploymentInstanceType(ref cause) => cause,
             ListDeploymentInstancesError::InvalidInstanceStatus(ref cause) => cause,
             ListDeploymentInstancesError::InvalidInstanceType(ref cause) => cause,
             ListDeploymentInstancesError::InvalidNextToken(ref cause) => cause,
+            ListDeploymentInstancesError::InvalidTargetFilterName(ref cause) => cause,
             ListDeploymentInstancesError::Validation(ref cause) => cause,
             ListDeploymentInstancesError::Credentials(ref err) => err.description(),
             ListDeploymentInstancesError::HttpDispatch(ref dispatch_error) => {
@@ -5436,14 +6107,152 @@ impl Error for ListDeploymentInstancesError {
         }
     }
 }
+/// Errors returned by ListDeploymentTargets
+#[derive(Debug, PartialEq)]
+pub enum ListDeploymentTargetsError {
+    /// <p>The deployment with the IAM user or AWS account does not exist.</p>
+    DeploymentDoesNotExist(String),
+    /// <p>At least one deployment ID must be specified.</p>
+    DeploymentIdRequired(String),
+    /// <p>The specified deployment has not started.</p>
+    DeploymentNotStarted(String),
+    /// <p>At least one of the deployment IDs was specified in an invalid format.</p>
+    InvalidDeploymentId(String),
+    /// <p>An instance type was specified for an in-place deployment. Instance types are supported for blue/green deployments only.</p>
+    InvalidDeploymentInstanceType(String),
+    /// <p>The specified instance status does not exist.</p>
+    InvalidInstanceStatus(String),
+    /// <p>An invalid instance type was specified for instances in a blue/green deployment. Valid values include "Blue" for an original environment and "Green" for a replacement environment.</p>
+    InvalidInstanceType(String),
+    /// <p>The next token was specified in an invalid format.</p>
+    InvalidNextToken(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListDeploymentTargetsError {
+    pub fn from_response(res: BufferedHttpResponse) -> ListDeploymentTargetsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "DeploymentDoesNotExistException" => {
+                    return ListDeploymentTargetsError::DeploymentDoesNotExist(String::from(
+                        error_message,
+                    ));
+                }
+                "DeploymentIdRequiredException" => {
+                    return ListDeploymentTargetsError::DeploymentIdRequired(String::from(
+                        error_message,
+                    ));
+                }
+                "DeploymentNotStartedException" => {
+                    return ListDeploymentTargetsError::DeploymentNotStarted(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidDeploymentIdException" => {
+                    return ListDeploymentTargetsError::InvalidDeploymentId(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidDeploymentInstanceTypeException" => {
+                    return ListDeploymentTargetsError::InvalidDeploymentInstanceType(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidInstanceStatusException" => {
+                    return ListDeploymentTargetsError::InvalidInstanceStatus(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidInstanceTypeException" => {
+                    return ListDeploymentTargetsError::InvalidInstanceType(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidNextTokenException" => {
+                    return ListDeploymentTargetsError::InvalidNextToken(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return ListDeploymentTargetsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ListDeploymentTargetsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListDeploymentTargetsError {
+    fn from(err: serde_json::error::Error) -> ListDeploymentTargetsError {
+        ListDeploymentTargetsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListDeploymentTargetsError {
+    fn from(err: CredentialsError) -> ListDeploymentTargetsError {
+        ListDeploymentTargetsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListDeploymentTargetsError {
+    fn from(err: HttpDispatchError) -> ListDeploymentTargetsError {
+        ListDeploymentTargetsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListDeploymentTargetsError {
+    fn from(err: io::Error) -> ListDeploymentTargetsError {
+        ListDeploymentTargetsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListDeploymentTargetsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListDeploymentTargetsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListDeploymentTargetsError::DeploymentDoesNotExist(ref cause) => cause,
+            ListDeploymentTargetsError::DeploymentIdRequired(ref cause) => cause,
+            ListDeploymentTargetsError::DeploymentNotStarted(ref cause) => cause,
+            ListDeploymentTargetsError::InvalidDeploymentId(ref cause) => cause,
+            ListDeploymentTargetsError::InvalidDeploymentInstanceType(ref cause) => cause,
+            ListDeploymentTargetsError::InvalidInstanceStatus(ref cause) => cause,
+            ListDeploymentTargetsError::InvalidInstanceType(ref cause) => cause,
+            ListDeploymentTargetsError::InvalidNextToken(ref cause) => cause,
+            ListDeploymentTargetsError::Validation(ref cause) => cause,
+            ListDeploymentTargetsError::Credentials(ref err) => err.description(),
+            ListDeploymentTargetsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListDeploymentTargetsError::ParseError(ref cause) => cause,
+            ListDeploymentTargetsError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by ListDeployments
 #[derive(Debug, PartialEq)]
 pub enum ListDeploymentsError {
-    /// <p>The application does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The application does not exist with the IAM user or AWS account.</p>
     ApplicationDoesNotExist(String),
     /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
-    /// <p>The named deployment group does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The named deployment group with the IAM user or AWS account does not exist.</p>
     DeploymentGroupDoesNotExist(String),
     /// <p>The deployment group name was not specified.</p>
     DeploymentGroupNameRequired(String),
@@ -5683,7 +6492,7 @@ pub enum ListOnPremisesInstancesError {
     InvalidNextToken(String),
     /// <p>The registration status was specified in an invalid format.</p>
     InvalidRegistrationStatus(String),
-    /// <p>The specified tag filter was specified in an invalid format.</p>
+    /// <p>The tag filter was specified in an invalid format.</p>
     InvalidTagFilter(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5779,7 +6588,7 @@ impl Error for ListOnPremisesInstancesError {
 /// Errors returned by PutLifecycleEventHookExecutionStatus
 #[derive(Debug, PartialEq)]
 pub enum PutLifecycleEventHookExecutionStatusError {
-    /// <p>The deployment does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The deployment with the IAM user or AWS account does not exist.</p>
     DeploymentDoesNotExist(String),
     /// <p>At least one deployment ID must be specified.</p>
     DeploymentIdRequired(String),
@@ -5889,7 +6698,7 @@ impl Error for PutLifecycleEventHookExecutionStatusError {
 /// Errors returned by RegisterApplicationRevision
 #[derive(Debug, PartialEq)]
 pub enum RegisterApplicationRevisionError {
-    /// <p>The application does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The application does not exist with the IAM user or AWS account.</p>
     ApplicationDoesNotExist(String),
     /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
@@ -6029,7 +6838,7 @@ pub enum RegisterOnPremisesInstanceError {
     InvalidIamSessionArn(String),
     /// <p>The IAM user ARN was specified in an invalid format.</p>
     InvalidIamUserArn(String),
-    /// <p>The specified on-premises instance name was specified in an invalid format.</p>
+    /// <p>The on-premises instance name was specified in an invalid format.</p>
     InvalidInstanceName(String),
     /// <p>Both an IAM user ARN and an IAM session ARN were included in the request. Use only one ARN type.</p>
     MultipleIamArnsProvided(String),
@@ -6175,9 +6984,9 @@ pub enum RemoveTagsFromOnPremisesInstancesError {
     InstanceNameRequired(String),
     /// <p>The specified on-premises instance is not registered.</p>
     InstanceNotRegistered(String),
-    /// <p>The specified on-premises instance name was specified in an invalid format.</p>
+    /// <p>The on-premises instance name was specified in an invalid format.</p>
     InvalidInstanceName(String),
-    /// <p>The specified tag was specified in an invalid format.</p>
+    /// <p>The tag was specified in an invalid format.</p>
     InvalidTag(String),
     /// <p>The maximum allowed number of tags was exceeded.</p>
     TagLimitExceeded(String),
@@ -6305,7 +7114,7 @@ impl Error for RemoveTagsFromOnPremisesInstancesError {
 pub enum SkipWaitTimeForInstanceTerminationError {
     /// <p>The deployment is already complete.</p>
     DeploymentAlreadyCompleted(String),
-    /// <p>The deployment does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The deployment with the IAM user or AWS account does not exist.</p>
     DeploymentDoesNotExist(String),
     /// <p>At least one deployment ID must be specified.</p>
     DeploymentIdRequired(String),
@@ -6405,8 +7214,10 @@ impl Error for SkipWaitTimeForInstanceTerminationError {
 pub enum StopDeploymentError {
     /// <p>The deployment is already complete.</p>
     DeploymentAlreadyCompleted(String),
-    /// <p>The deployment does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The deployment with the IAM user or AWS account does not exist.</p>
     DeploymentDoesNotExist(String),
+    /// <p>The named deployment group with the IAM user or AWS account does not exist.</p>
+    DeploymentGroupDoesNotExist(String),
     /// <p>At least one deployment ID must be specified.</p>
     DeploymentIdRequired(String),
     /// <p>At least one of the deployment IDs was specified in an invalid format.</p>
@@ -6443,6 +7254,11 @@ impl StopDeploymentError {
                 }
                 "DeploymentDoesNotExistException" => {
                     return StopDeploymentError::DeploymentDoesNotExist(String::from(error_message));
+                }
+                "DeploymentGroupDoesNotExistException" => {
+                    return StopDeploymentError::DeploymentGroupDoesNotExist(String::from(
+                        error_message,
+                    ));
                 }
                 "DeploymentIdRequiredException" => {
                     return StopDeploymentError::DeploymentIdRequired(String::from(error_message));
@@ -6490,6 +7306,7 @@ impl Error for StopDeploymentError {
         match *self {
             StopDeploymentError::DeploymentAlreadyCompleted(ref cause) => cause,
             StopDeploymentError::DeploymentDoesNotExist(ref cause) => cause,
+            StopDeploymentError::DeploymentGroupDoesNotExist(ref cause) => cause,
             StopDeploymentError::DeploymentIdRequired(ref cause) => cause,
             StopDeploymentError::InvalidDeploymentId(ref cause) => cause,
             StopDeploymentError::Validation(ref cause) => cause,
@@ -6503,9 +7320,9 @@ impl Error for StopDeploymentError {
 /// Errors returned by UpdateApplication
 #[derive(Debug, PartialEq)]
 pub enum UpdateApplicationError {
-    /// <p>An application with the specified name already exists with the applicable IAM user or AWS account.</p>
+    /// <p>An application with the specified name with the IAM user or AWS account already exists.</p>
     ApplicationAlreadyExists(String),
-    /// <p>The application does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The application does not exist with the IAM user or AWS account.</p>
     ApplicationDoesNotExist(String),
     /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
@@ -6613,23 +7430,25 @@ impl Error for UpdateApplicationError {
 pub enum UpdateDeploymentGroupError {
     /// <p>The maximum number of alarms for a deployment group (10) was exceeded.</p>
     AlarmsLimitExceeded(String),
-    /// <p>The application does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The application does not exist with the IAM user or AWS account.</p>
     ApplicationDoesNotExist(String),
     /// <p>The minimum number of required application names was not specified.</p>
     ApplicationNameRequired(String),
-    /// <p>The deployment configuration does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The deployment configuration does not exist with the IAM user or AWS account.</p>
     DeploymentConfigDoesNotExist(String),
-    /// <p>A deployment group with the specified name already exists with the applicable IAM user or AWS account.</p>
+    /// <p>A deployment group with the specified name with the IAM user or AWS account already exists.</p>
     DeploymentGroupAlreadyExists(String),
-    /// <p>The named deployment group does not exist with the applicable IAM user or AWS account.</p>
+    /// <p>The named deployment group with the IAM user or AWS account does not exist.</p>
     DeploymentGroupDoesNotExist(String),
     /// <p>The deployment group name was not specified.</p>
     DeploymentGroupNameRequired(String),
-    /// <p><p>The format of the alarm configuration is invalid. Possible causes include:</p> <ul> <li> <p>The alarm list is null.</p> </li> <li> <p>The alarm object is null.</p> </li> <li> <p>The alarm name is empty or null or exceeds the 255 character limit.</p> </li> <li> <p>Two alarms with the same name have been specified.</p> </li> <li> <p>The alarm configuration is enabled but the alarm list is empty.</p> </li> </ul></p>
+    /// <p> The Amazon ECS service is associated with more than one deployment groups. An Amazon ECS service can be associated with only one deployment group. </p>
+    ECSServiceMappingLimitExceeded(String),
+    /// <p><p>The format of the alarm configuration is invalid. Possible causes include:</p> <ul> <li> <p>The alarm list is null.</p> </li> <li> <p>The alarm object is null.</p> </li> <li> <p>The alarm name is empty or null or exceeds the limit of 255 characters.</p> </li> <li> <p>Two alarms with the same name have been specified.</p> </li> <li> <p>The alarm configuration is enabled, but the alarm list is empty.</p> </li> </ul></p>
     InvalidAlarmConfig(String),
     /// <p>The application name was specified in an invalid format.</p>
     InvalidApplicationName(String),
-    /// <p>The automatic rollback configuration was specified in an invalid format. For example, automatic rollback is enabled but an invalid triggering event type or no event types were listed.</p>
+    /// <p>The automatic rollback configuration was specified in an invalid format. For example, automatic rollback is enabled, but an invalid triggering event type or no event types were listed.</p>
     InvalidAutoRollbackConfig(String),
     /// <p>The Auto Scaling group was specified in an invalid format or does not exist.</p>
     InvalidAutoScalingGroup(String),
@@ -6639,28 +7458,34 @@ pub enum UpdateDeploymentGroupError {
     InvalidDeploymentConfigName(String),
     /// <p>The deployment group name was specified in an invalid format.</p>
     InvalidDeploymentGroupName(String),
-    /// <p>An invalid deployment style was specified. Valid deployment types include "IN_PLACE" and "BLUE_GREEN". Valid deployment options include "WITH_TRAFFIC_CONTROL" and "WITHOUT_TRAFFIC_CONTROL".</p>
+    /// <p>An invalid deployment style was specified. Valid deployment types include "IN_PLACE" and "BLUE_GREEN." Valid deployment options include "WITH_TRAFFIC_CONTROL" and "WITHOUT_TRAFFIC_CONTROL."</p>
     InvalidDeploymentStyle(String),
     /// <p>A call was submitted that specified both Ec2TagFilters and Ec2TagSet, but only one of these data types can be used in a single call.</p>
     InvalidEC2TagCombination(String),
     /// <p>The tag was specified in an invalid format.</p>
     InvalidEC2Tag(String),
-    /// <p>The specified input was specified in an invalid format.</p>
+    /// <p> The Amazon ECS service identifier is not valid. </p>
+    InvalidECSService(String),
+    /// <p>The input was specified in an invalid format.</p>
     InvalidInput(String),
     /// <p>An invalid load balancer name, or no load balancer name, was specified.</p>
     InvalidLoadBalancerInfo(String),
     /// <p>A call was submitted that specified both OnPremisesTagFilters and OnPremisesTagSet, but only one of these data types can be used in a single call.</p>
     InvalidOnPremisesTagCombination(String),
-    /// <p>The service role ARN was specified in an invalid format. Or, if an Auto Scaling group was specified, the specified service role does not grant the appropriate permissions to Auto Scaling.</p>
+    /// <p>The service role ARN was specified in an invalid format. Or, if an Auto Scaling group was specified, the specified service role does not grant the appropriate permissions to Amazon EC2 Auto Scaling.</p>
     InvalidRole(String),
-    /// <p>The specified tag was specified in an invalid format.</p>
+    /// <p>The tag was specified in an invalid format.</p>
     InvalidTag(String),
+    /// <p> A target group pair associated with this deployment is not valid. </p>
+    InvalidTargetGroupPair(String),
     /// <p>The trigger was specified in an invalid format.</p>
     InvalidTriggerConfig(String),
     /// <p>The limit for lifecycle hooks was exceeded.</p>
     LifecycleHookLimitExceeded(String),
     /// <p>The number of tag groups included in the tag set list exceeded the maximum allowed limit of 3.</p>
     TagSetListLimitExceeded(String),
+    /// <p>An API function was called too frequently.</p>
+    Throttling(String),
     /// <p>The maximum allowed number of triggers was exceeded.</p>
     TriggerTargetsLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
@@ -6723,6 +7548,11 @@ impl UpdateDeploymentGroupError {
                         error_message,
                     ));
                 }
+                "ECSServiceMappingLimitExceededException" => {
+                    return UpdateDeploymentGroupError::ECSServiceMappingLimitExceeded(String::from(
+                        error_message,
+                    ));
+                }
                 "InvalidAlarmConfigException" => {
                     return UpdateDeploymentGroupError::InvalidAlarmConfig(String::from(
                         error_message,
@@ -6771,6 +7601,11 @@ impl UpdateDeploymentGroupError {
                 "InvalidEC2TagException" => {
                     return UpdateDeploymentGroupError::InvalidEC2Tag(String::from(error_message));
                 }
+                "InvalidECSServiceException" => {
+                    return UpdateDeploymentGroupError::InvalidECSService(String::from(
+                        error_message,
+                    ));
+                }
                 "InvalidInputException" => {
                     return UpdateDeploymentGroupError::InvalidInput(String::from(error_message));
                 }
@@ -6790,6 +7625,11 @@ impl UpdateDeploymentGroupError {
                 "InvalidTagException" => {
                     return UpdateDeploymentGroupError::InvalidTag(String::from(error_message));
                 }
+                "InvalidTargetGroupPairException" => {
+                    return UpdateDeploymentGroupError::InvalidTargetGroupPair(String::from(
+                        error_message,
+                    ));
+                }
                 "InvalidTriggerConfigException" => {
                     return UpdateDeploymentGroupError::InvalidTriggerConfig(String::from(
                         error_message,
@@ -6804,6 +7644,9 @@ impl UpdateDeploymentGroupError {
                     return UpdateDeploymentGroupError::TagSetListLimitExceeded(String::from(
                         error_message,
                     ));
+                }
+                "ThrottlingException" => {
+                    return UpdateDeploymentGroupError::Throttling(String::from(error_message));
                 }
                 "TriggerTargetsLimitExceededException" => {
                     return UpdateDeploymentGroupError::TriggerTargetsLimitExceeded(String::from(
@@ -6855,6 +7698,7 @@ impl Error for UpdateDeploymentGroupError {
             UpdateDeploymentGroupError::DeploymentGroupAlreadyExists(ref cause) => cause,
             UpdateDeploymentGroupError::DeploymentGroupDoesNotExist(ref cause) => cause,
             UpdateDeploymentGroupError::DeploymentGroupNameRequired(ref cause) => cause,
+            UpdateDeploymentGroupError::ECSServiceMappingLimitExceeded(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidAlarmConfig(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidApplicationName(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidAutoRollbackConfig(ref cause) => cause,
@@ -6865,14 +7709,17 @@ impl Error for UpdateDeploymentGroupError {
             UpdateDeploymentGroupError::InvalidDeploymentStyle(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidEC2TagCombination(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidEC2Tag(ref cause) => cause,
+            UpdateDeploymentGroupError::InvalidECSService(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidInput(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidLoadBalancerInfo(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidOnPremisesTagCombination(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidRole(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidTag(ref cause) => cause,
+            UpdateDeploymentGroupError::InvalidTargetGroupPair(ref cause) => cause,
             UpdateDeploymentGroupError::InvalidTriggerConfig(ref cause) => cause,
             UpdateDeploymentGroupError::LifecycleHookLimitExceeded(ref cause) => cause,
             UpdateDeploymentGroupError::TagSetListLimitExceeded(ref cause) => cause,
+            UpdateDeploymentGroupError::Throttling(ref cause) => cause,
             UpdateDeploymentGroupError::TriggerTargetsLimitExceeded(ref cause) => cause,
             UpdateDeploymentGroupError::Validation(ref cause) => cause,
             UpdateDeploymentGroupError::Credentials(ref err) => err.description(),
@@ -6910,11 +7757,17 @@ pub trait CodeDeploy {
         input: BatchGetDeploymentGroupsInput,
     ) -> RusotoFuture<BatchGetDeploymentGroupsOutput, BatchGetDeploymentGroupsError>;
 
-    /// <p>Gets information about one or more instance that are part of a deployment group.</p>
+    /// <p><note> <p> This method works, but is deprecated. Use <code>BatchGetDeploymentTargets</code> instead. </p> </note> <p> Returns an array of instances associated with a deployment. This method works with EC2/On-premises and AWS Lambda compute platforms. The newer <code>BatchGetDeploymentTargets</code> works with all compute platforms. </p></p>
     fn batch_get_deployment_instances(
         &self,
         input: BatchGetDeploymentInstancesInput,
     ) -> RusotoFuture<BatchGetDeploymentInstancesOutput, BatchGetDeploymentInstancesError>;
+
+    /// <p><p> Returns an array of targets associated with a deployment. This method works with all compute types and should be used instead of the deprecated <code>BatchGetDeploymentInstances</code>. </p> <p> The type of targets returned depends on the deployment&#39;s compute platform: </p> <ul> <li> <p> <b>EC2/On-premises</b>: Information about EC2 instance targets. </p> </li> <li> <p> <b>AWS Lambda</b>: Information about Lambda functions targets. </p> </li> <li> <p> <b>Amazon ECS</b>: Information about Amazon ECS service targets. </p> </li> </ul></p>
+    fn batch_get_deployment_targets(
+        &self,
+        input: BatchGetDeploymentTargetsInput,
+    ) -> RusotoFuture<BatchGetDeploymentTargetsOutput, BatchGetDeploymentTargetsError>;
 
     /// <p>Gets information about one or more deployments.</p>
     fn batch_get_deployments(
@@ -6946,13 +7799,13 @@ pub trait CodeDeploy {
         input: CreateDeploymentInput,
     ) -> RusotoFuture<CreateDeploymentOutput, CreateDeploymentError>;
 
-    /// <p>Creates a deployment configuration.</p>
+    /// <p> Creates a deployment configuration. </p>
     fn create_deployment_config(
         &self,
         input: CreateDeploymentConfigInput,
     ) -> RusotoFuture<CreateDeploymentConfigOutput, CreateDeploymentConfigError>;
 
-    /// <p>Creates a deployment group to which application revisions will be deployed.</p>
+    /// <p>Creates a deployment group to which application revisions are deployed.</p>
     fn create_deployment_group(
         &self,
         input: CreateDeploymentGroupInput,
@@ -7024,7 +7877,13 @@ pub trait CodeDeploy {
         input: GetDeploymentInstanceInput,
     ) -> RusotoFuture<GetDeploymentInstanceOutput, GetDeploymentInstanceError>;
 
-    /// <p>Gets information about an on-premises instance.</p>
+    /// <p> Returns information about a deployment target. </p>
+    fn get_deployment_target(
+        &self,
+        input: GetDeploymentTargetInput,
+    ) -> RusotoFuture<GetDeploymentTargetOutput, GetDeploymentTargetError>;
+
+    /// <p> Gets information about an on-premises instance. </p>
     fn get_on_premises_instance(
         &self,
         input: GetOnPremisesInstanceInput,
@@ -7036,31 +7895,37 @@ pub trait CodeDeploy {
         input: ListApplicationRevisionsInput,
     ) -> RusotoFuture<ListApplicationRevisionsOutput, ListApplicationRevisionsError>;
 
-    /// <p>Lists the applications registered with the applicable IAM user or AWS account.</p>
+    /// <p>Lists the applications registered with the IAM user or AWS account.</p>
     fn list_applications(
         &self,
         input: ListApplicationsInput,
     ) -> RusotoFuture<ListApplicationsOutput, ListApplicationsError>;
 
-    /// <p>Lists the deployment configurations with the applicable IAM user or AWS account.</p>
+    /// <p>Lists the deployment configurations with the IAM user or AWS account.</p>
     fn list_deployment_configs(
         &self,
         input: ListDeploymentConfigsInput,
     ) -> RusotoFuture<ListDeploymentConfigsOutput, ListDeploymentConfigsError>;
 
-    /// <p>Lists the deployment groups for an application registered with the applicable IAM user or AWS account.</p>
+    /// <p>Lists the deployment groups for an application registered with the IAM user or AWS account.</p>
     fn list_deployment_groups(
         &self,
         input: ListDeploymentGroupsInput,
     ) -> RusotoFuture<ListDeploymentGroupsOutput, ListDeploymentGroupsError>;
 
-    /// <p>Lists the instance for a deployment associated with the applicable IAM user or AWS account.</p>
+    /// <p><note> <p> The newer BatchGetDeploymentTargets should be used instead because it works with all compute types. <code>ListDeploymentInstances</code> throws an exception if it is used with a compute platform other than EC2/On-premises or AWS Lambda. </p> </note> <p> Lists the instance for a deployment associated with the IAM user or AWS account. </p></p>
     fn list_deployment_instances(
         &self,
         input: ListDeploymentInstancesInput,
     ) -> RusotoFuture<ListDeploymentInstancesOutput, ListDeploymentInstancesError>;
 
-    /// <p>Lists the deployments in a deployment group for an application registered with the applicable IAM user or AWS account.</p>
+    /// <p> Returns an array of target IDs that are associated a deployment. </p>
+    fn list_deployment_targets(
+        &self,
+        input: ListDeploymentTargetsInput,
+    ) -> RusotoFuture<ListDeploymentTargetsOutput, ListDeploymentTargetsError>;
+
+    /// <p>Lists the deployments in a deployment group for an application registered with the IAM user or AWS account.</p>
     fn list_deployments(
         &self,
         input: ListDeploymentsInput,
@@ -7072,13 +7937,13 @@ pub trait CodeDeploy {
         input: ListGitHubAccountTokenNamesInput,
     ) -> RusotoFuture<ListGitHubAccountTokenNamesOutput, ListGitHubAccountTokenNamesError>;
 
-    /// <p>Gets a list of names for one or more on-premises instances.</p> <p>Unless otherwise specified, both registered and deregistered on-premises instance names will be listed. To list only registered or deregistered on-premises instance names, use the registration status parameter.</p>
+    /// <p>Gets a list of names for one or more on-premises instances.</p> <p>Unless otherwise specified, both registered and deregistered on-premises instance names are listed. To list only registered or deregistered on-premises instance names, use the registration status parameter.</p>
     fn list_on_premises_instances(
         &self,
         input: ListOnPremisesInstancesInput,
     ) -> RusotoFuture<ListOnPremisesInstancesOutput, ListOnPremisesInstancesError>;
 
-    /// <p>Sets the result of a Lambda validation function. The function validates one or both lifecycle events (<code>BeforeAllowTraffic</code> and <code>AfterAllowTraffic</code>) and returns <code>Succeeded</code> or <code>Failed</code>.</p>
+    /// <p> Sets the result of a Lambda validation function. The function validates one or both lifecycle events (<code>BeforeAllowTraffic</code> and <code>AfterAllowTraffic</code>) and returns <code>Succeeded</code> or <code>Failed</code>. </p>
     fn put_lifecycle_event_hook_execution_status(
         &self,
         input: PutLifecycleEventHookExecutionStatusInput,
@@ -7105,7 +7970,7 @@ pub trait CodeDeploy {
         input: RemoveTagsFromOnPremisesInstancesInput,
     ) -> RusotoFuture<(), RemoveTagsFromOnPremisesInstancesError>;
 
-    /// <p>In a blue/green deployment, overrides any specified wait time and starts terminating instances immediately after the traffic routing is completed.</p>
+    /// <p>In a blue/green deployment, overrides any specified wait time and starts terminating instances immediately after the traffic routing is complete.</p>
     fn skip_wait_time_for_instance_termination(
         &self,
         input: SkipWaitTimeForInstanceTerminationInput,
@@ -7302,7 +8167,7 @@ impl CodeDeploy for CodeDeployClient {
         })
     }
 
-    /// <p>Gets information about one or more instance that are part of a deployment group.</p>
+    /// <p><note> <p> This method works, but is deprecated. Use <code>BatchGetDeploymentTargets</code> instead. </p> </note> <p> Returns an array of instances associated with a deployment. This method works with EC2/On-premises and AWS Lambda compute platforms. The newer <code>BatchGetDeploymentTargets</code> works with all compute platforms. </p></p>
     fn batch_get_deployment_instances(
         &self,
         input: BatchGetDeploymentInstancesInput,
@@ -7334,6 +8199,43 @@ impl CodeDeploy for CodeDeployClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(BatchGetDeploymentInstancesError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p><p> Returns an array of targets associated with a deployment. This method works with all compute types and should be used instead of the deprecated <code>BatchGetDeploymentInstances</code>. </p> <p> The type of targets returned depends on the deployment&#39;s compute platform: </p> <ul> <li> <p> <b>EC2/On-premises</b>: Information about EC2 instance targets. </p> </li> <li> <p> <b>AWS Lambda</b>: Information about Lambda functions targets. </p> </li> <li> <p> <b>Amazon ECS</b>: Information about Amazon ECS service targets. </p> </li> </ul></p>
+    fn batch_get_deployment_targets(
+        &self,
+        input: BatchGetDeploymentTargetsInput,
+    ) -> RusotoFuture<BatchGetDeploymentTargetsOutput, BatchGetDeploymentTargetsError> {
+        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "CodeDeploy_20141006.BatchGetDeploymentTargets",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<BatchGetDeploymentTargetsOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(BatchGetDeploymentTargetsError::from_response(response))
                 }))
             }
         })
@@ -7512,7 +8414,7 @@ impl CodeDeploy for CodeDeployClient {
         })
     }
 
-    /// <p>Creates a deployment configuration.</p>
+    /// <p> Creates a deployment configuration. </p>
     fn create_deployment_config(
         &self,
         input: CreateDeploymentConfigInput,
@@ -7548,7 +8450,7 @@ impl CodeDeploy for CodeDeployClient {
         })
     }
 
-    /// <p>Creates a deployment group to which application revisions will be deployed.</p>
+    /// <p>Creates a deployment group to which application revisions are deployed.</p>
     fn create_deployment_group(
         &self,
         input: CreateDeploymentGroupInput,
@@ -7953,7 +8855,43 @@ impl CodeDeploy for CodeDeployClient {
         })
     }
 
-    /// <p>Gets information about an on-premises instance.</p>
+    /// <p> Returns information about a deployment target. </p>
+    fn get_deployment_target(
+        &self,
+        input: GetDeploymentTargetInput,
+    ) -> RusotoFuture<GetDeploymentTargetOutput, GetDeploymentTargetError> {
+        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeDeploy_20141006.GetDeploymentTarget");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetDeploymentTargetOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetDeploymentTargetError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p> Gets information about an on-premises instance. </p>
     fn get_on_premises_instance(
         &self,
         input: GetOnPremisesInstanceInput,
@@ -8026,7 +8964,7 @@ impl CodeDeploy for CodeDeployClient {
         })
     }
 
-    /// <p>Lists the applications registered with the applicable IAM user or AWS account.</p>
+    /// <p>Lists the applications registered with the IAM user or AWS account.</p>
     fn list_applications(
         &self,
         input: ListApplicationsInput,
@@ -8063,7 +9001,7 @@ impl CodeDeploy for CodeDeployClient {
         })
     }
 
-    /// <p>Lists the deployment configurations with the applicable IAM user or AWS account.</p>
+    /// <p>Lists the deployment configurations with the IAM user or AWS account.</p>
     fn list_deployment_configs(
         &self,
         input: ListDeploymentConfigsInput,
@@ -8099,7 +9037,7 @@ impl CodeDeploy for CodeDeployClient {
         })
     }
 
-    /// <p>Lists the deployment groups for an application registered with the applicable IAM user or AWS account.</p>
+    /// <p>Lists the deployment groups for an application registered with the IAM user or AWS account.</p>
     fn list_deployment_groups(
         &self,
         input: ListDeploymentGroupsInput,
@@ -8135,7 +9073,7 @@ impl CodeDeploy for CodeDeployClient {
         })
     }
 
-    /// <p>Lists the instance for a deployment associated with the applicable IAM user or AWS account.</p>
+    /// <p><note> <p> The newer BatchGetDeploymentTargets should be used instead because it works with all compute types. <code>ListDeploymentInstances</code> throws an exception if it is used with a compute platform other than EC2/On-premises or AWS Lambda. </p> </note> <p> Lists the instance for a deployment associated with the IAM user or AWS account. </p></p>
     fn list_deployment_instances(
         &self,
         input: ListDeploymentInstancesInput,
@@ -8172,7 +9110,43 @@ impl CodeDeploy for CodeDeployClient {
         })
     }
 
-    /// <p>Lists the deployments in a deployment group for an application registered with the applicable IAM user or AWS account.</p>
+    /// <p> Returns an array of target IDs that are associated a deployment. </p>
+    fn list_deployment_targets(
+        &self,
+        input: ListDeploymentTargetsInput,
+    ) -> RusotoFuture<ListDeploymentTargetsOutput, ListDeploymentTargetsError> {
+        let mut request = SignedRequest::new("POST", "codedeploy", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "CodeDeploy_20141006.ListDeploymentTargets");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ListDeploymentTargetsOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListDeploymentTargetsError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Lists the deployments in a deployment group for an application registered with the IAM user or AWS account.</p>
     fn list_deployments(
         &self,
         input: ListDeploymentsInput,
@@ -8246,7 +9220,7 @@ impl CodeDeploy for CodeDeployClient {
         })
     }
 
-    /// <p>Gets a list of names for one or more on-premises instances.</p> <p>Unless otherwise specified, both registered and deregistered on-premises instance names will be listed. To list only registered or deregistered on-premises instance names, use the registration status parameter.</p>
+    /// <p>Gets a list of names for one or more on-premises instances.</p> <p>Unless otherwise specified, both registered and deregistered on-premises instance names are listed. To list only registered or deregistered on-premises instance names, use the registration status parameter.</p>
     fn list_on_premises_instances(
         &self,
         input: ListOnPremisesInstancesInput,
@@ -8283,7 +9257,7 @@ impl CodeDeploy for CodeDeployClient {
         })
     }
 
-    /// <p>Sets the result of a Lambda validation function. The function validates one or both lifecycle events (<code>BeforeAllowTraffic</code> and <code>AfterAllowTraffic</code>) and returns <code>Succeeded</code> or <code>Failed</code>.</p>
+    /// <p> Sets the result of a Lambda validation function. The function validates one or both lifecycle events (<code>BeforeAllowTraffic</code> and <code>AfterAllowTraffic</code>) and returns <code>Succeeded</code> or <code>Failed</code>. </p>
     fn put_lifecycle_event_hook_execution_status(
         &self,
         input: PutLifecycleEventHookExecutionStatusInput,
@@ -8405,7 +9379,7 @@ impl CodeDeploy for CodeDeployClient {
         })
     }
 
-    /// <p>In a blue/green deployment, overrides any specified wait time and starts terminating instances immediately after the traffic routing is completed.</p>
+    /// <p>In a blue/green deployment, overrides any specified wait time and starts terminating instances immediately after the traffic routing is complete.</p>
     fn skip_wait_time_for_instance_termination(
         &self,
         input: SkipWaitTimeForInstanceTerminationInput,

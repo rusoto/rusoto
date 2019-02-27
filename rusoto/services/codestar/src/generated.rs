@@ -58,35 +58,87 @@ pub struct AssociateTeamMemberResult {
     pub client_request_token: Option<String>,
 }
 
+/// <p>Location and destination information about the source code files provided with the project request. The source code is uploaded to the new project source repository after project creation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct Code {
+    /// <p>The repository to be created in AWS CodeStar. Valid values are AWS CodeCommit or GitHub. After AWS CodeStar provisions the new repository, the source code files provided with the project request are placed in the repository.</p>
+    #[serde(rename = "destination")]
+    pub destination: CodeDestination,
+    /// <p>The location where the source code files provided with the project request are stored. AWS CodeStar retrieves the files during project creation.</p>
+    #[serde(rename = "source")]
+    pub source: CodeSource,
+}
+
+/// <p>Information about the AWS CodeCommit repository to be created in AWS CodeStar. This is where the source code files provided with the project request will be uploaded after project creation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CodeCommitCodeDestination {
+    /// <p>The name of the AWS CodeCommit repository to be created in AWS CodeStar.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+}
+
+/// <p>The repository to be created in AWS CodeStar. Valid values are AWS CodeCommit or GitHub. After AWS CodeStar provisions the new repository, the source code files provided with the project request are placed in the repository.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CodeDestination {
+    /// <p>Information about the AWS CodeCommit repository to be created in AWS CodeStar. This is where the source code files provided with the project request will be uploaded after project creation.</p>
+    #[serde(rename = "codeCommit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub code_commit: Option<CodeCommitCodeDestination>,
+    /// <p>Information about the GitHub repository to be created in AWS CodeStar. This is where the source code files provided with the project request will be uploaded after project creation.</p>
+    #[serde(rename = "gitHub")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub git_hub: Option<GitHubCodeDestination>,
+}
+
+/// <p>The location where the source code files provided with the project request are stored. AWS CodeStar retrieves the files during project creation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CodeSource {
+    /// <p>Information about the Amazon S3 location where the source code files provided with the project request are stored. </p>
+    #[serde(rename = "s3")]
+    pub s_3: S3Location,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateProjectRequest {
-    /// <p>Reserved for future use.</p>
+    /// <p>A user- or system-generated token that identifies the entity that requested project creation. This token can be used to repeat the request.</p>
     #[serde(rename = "clientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
-    /// <p>Reserved for future use.</p>
+    /// <p>The description of the project, if any.</p>
     #[serde(rename = "description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p>Reserved for future use.</p>
+    /// <p>The ID of the project to be created in AWS CodeStar.</p>
     #[serde(rename = "id")]
     pub id: String,
-    /// <p>Reserved for future use.</p>
+    /// <p>The display name for the project to be created in AWS CodeStar.</p>
     #[serde(rename = "name")]
     pub name: String,
+    /// <p>A list of the Code objects submitted with the project request. If this parameter is specified, the request must also include the toolchain parameter.</p>
+    #[serde(rename = "sourceCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_code: Option<Vec<Code>>,
+    /// <p>The tags created for the project.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The name of the toolchain template file submitted with the project request. If this parameter is specified, the request must also include the sourceCode parameter.</p>
+    #[serde(rename = "toolchain")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub toolchain: Option<Toolchain>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateProjectResult {
-    /// <p>Reserved for future use.</p>
+    /// <p>The Amazon Resource Name (ARN) of the created project.</p>
     #[serde(rename = "arn")]
     pub arn: String,
-    /// <p>Reserved for future use.</p>
+    /// <p>A user- or system-generated token that identifies the entity that requested project creation.</p>
     #[serde(rename = "clientRequestToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub client_request_token: Option<String>,
-    /// <p>Reserved for future use.</p>
+    /// <p>The ID of the project.</p>
     #[serde(rename = "id")]
     pub id: String,
     /// <p>Reserved for future use.</p>
@@ -225,6 +277,10 @@ pub struct DescribeProjectResult {
     #[serde(rename = "stackId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stack_id: Option<String>,
+    /// <p>The project creation or deletion status.</p>
+    #[serde(rename = "status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<ProjectStatus>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -273,6 +329,33 @@ pub struct DisassociateTeamMemberRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateTeamMemberResult {}
+
+/// <p>Information about the GitHub repository to be created in AWS CodeStar. This is where the source code files provided with the project request will be uploaded after project creation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GitHubCodeDestination {
+    /// <p>Description for the GitHub repository to be created in AWS CodeStar. This description displays in GitHub after the repository is created.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>Whether to enable issues for the GitHub repository.</p>
+    #[serde(rename = "issuesEnabled")]
+    pub issues_enabled: bool,
+    /// <p>Name of the GitHub repository to be created in AWS CodeStar.</p>
+    #[serde(rename = "name")]
+    pub name: String,
+    /// <p>The GitHub username for the owner of the GitHub repository to be created in AWS CodeStar. If this repository should be owned by a GitHub organization, provide its name.</p>
+    #[serde(rename = "owner")]
+    pub owner: String,
+    /// <p>Whether the GitHub repository is to be a private repository.</p>
+    #[serde(rename = "privateRepository")]
+    pub private_repository: bool,
+    /// <p>The GitHub user's personal access token for the GitHub repository.</p>
+    #[serde(rename = "token")]
+    pub token: String,
+    /// <p>The type of GitHub repository to be created in AWS CodeStar. Valid values are User or Organization.</p>
+    #[serde(rename = "type")]
+    pub type_: String,
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListProjectsRequest {
@@ -405,6 +488,19 @@ pub struct ListUserProfilesResult {
     pub user_profiles: Vec<UserProfileSummary>,
 }
 
+/// <p>An indication of whether a project creation or deletion is failed or successful.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ProjectStatus {
+    /// <p>In the case of a project creation or deletion failure, a reason for the failure.</p>
+    #[serde(rename = "reason")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub reason: Option<String>,
+    /// <p>The phase of completion for a project creation or deletion.</p>
+    #[serde(rename = "state")]
+    pub state: String,
+}
+
 /// <p>Information about the metadata for a project.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -426,6 +522,19 @@ pub struct Resource {
     /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     #[serde(rename = "id")]
     pub id: String,
+}
+
+/// <p>The Amazon S3 location where the source code files provided with the project request are stored.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct S3Location {
+    /// <p>The Amazon S3 object key where the source code files provided with the project request are stored.</p>
+    #[serde(rename = "bucketKey")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bucket_key: Option<String>,
+    /// <p>The Amazon S3 bucket name where the source code files provided with the project request are stored.</p>
+    #[serde(rename = "bucketName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bucket_name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -461,6 +570,30 @@ pub struct TeamMember {
     /// <p>The Amazon Resource Name (ARN) of the user in IAM.</p>
     #[serde(rename = "userArn")]
     pub user_arn: String,
+}
+
+/// <p>The toolchain template file provided with the project request. AWS CodeStar uses the template to provision the toolchain stack in AWS CloudFormation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct Toolchain {
+    /// <p>The service role ARN for AWS CodeStar to use for the toolchain template during stack provisioning.</p>
+    #[serde(rename = "roleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub role_arn: Option<String>,
+    /// <p>The Amazon S3 location where the toolchain template file provided with the project request is stored. AWS CodeStar retrieves the file during project creation.</p>
+    #[serde(rename = "source")]
+    pub source: ToolchainSource,
+    /// <p>The list of parameter overrides to be passed into the toolchain template during stack provisioning, if any.</p>
+    #[serde(rename = "stackParameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stack_parameters: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>The Amazon S3 location where the toolchain template file provided with the project request is stored. AWS CodeStar retrieves the file during project creation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ToolchainSource {
+    /// <p>The Amazon S3 bucket where the toolchain template file provided with the project request is stored.</p>
+    #[serde(rename = "s3")]
+    pub s_3: S3Location,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2240,7 +2373,7 @@ pub trait CodeStar {
         input: AssociateTeamMemberRequest,
     ) -> RusotoFuture<AssociateTeamMemberResult, AssociateTeamMemberError>;
 
-    /// <p>Reserved for future use. To create a project, use the AWS CodeStar console.</p>
+    /// <p>Creates a project, including project resources. This action creates a project based on a submitted project request. A set of source code files and a toolchain template file can be included with the project request. If these are not provided, an empty project is created.</p>
     fn create_project(
         &self,
         input: CreateProjectRequest,
@@ -2415,7 +2548,7 @@ impl CodeStar for CodeStarClient {
         })
     }
 
-    /// <p>Reserved for future use. To create a project, use the AWS CodeStar console.</p>
+    /// <p>Creates a project, including project resources. This action creates a project based on a submitted project request. A set of source code files and a toolchain template file can be included with the project request. If these are not provided, an empty project is created.</p>
     fn create_project(
         &self,
         input: CreateProjectRequest,

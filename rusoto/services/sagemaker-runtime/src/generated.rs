@@ -34,7 +34,7 @@ pub struct InvokeEndpointInput {
     #[serde(rename = "Accept")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept: Option<String>,
-    /// <p>Provides input data, in the format specified in the <code>ContentType</code> request header. Amazon SageMaker passes all of the data in the body to the model. </p>
+    /// <p>Provides input data, in the format specified in the <code>ContentType</code> request header. Amazon SageMaker passes all of the data in the body to the model. </p> <p>For information about the format of the request body, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/cdf-inference.html">Common Data Formats—Inference</a>.</p>
     #[serde(rename = "Body")]
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
@@ -46,6 +46,10 @@ pub struct InvokeEndpointInput {
     #[serde(rename = "ContentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub content_type: Option<String>,
+    /// <p><p/></p>
+    #[serde(rename = "CustomAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub custom_attributes: Option<String>,
     /// <p>The name of the endpoint that you specified when you created the endpoint using the <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/API_CreateEndpoint.html">CreateEndpoint</a> API. </p>
     #[serde(rename = "EndpointName")]
     pub endpoint_name: String,
@@ -53,10 +57,12 @@ pub struct InvokeEndpointInput {
 
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct InvokeEndpointOutput {
-    /// <p>Includes the inference provided by the model.</p>
+    /// <p>Includes the inference provided by the model.</p> <p>For information about the format of the response body, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/cdf-inference.html">Common Data Formats—Inference</a>.</p>
     pub body: Vec<u8>,
     /// <p>The MIME type of the inference returned in the response body.</p>
     pub content_type: Option<String>,
+    /// <p><p/></p>
+    pub custom_attributes: Option<String>,
     /// <p>Identifies the production variant that was invoked.</p>
     pub invoked_production_variant: Option<String>,
 }
@@ -64,11 +70,11 @@ pub struct InvokeEndpointOutput {
 /// Errors returned by InvokeEndpoint
 #[derive(Debug, PartialEq)]
 pub enum InvokeEndpointError {
-    /// <p> Internal failure occurred. </p>
+    /// <p> An internal failure occurred. </p>
     InternalFailure(String),
     /// <p> Model (owned by the customer in the container) returned an error 500. </p>
     ModelError(String),
-    /// <p> Service is unavailable. Try your call again. </p>
+    /// <p> The service is unavailable. Try your call again. </p>
     ServiceUnavailable(String),
     /// <p> Inspect your request and try again. </p>
     ValidationError(String),
@@ -173,7 +179,7 @@ impl Error for InvokeEndpointError {
 }
 /// Trait representing the capabilities of the Amazon SageMaker Runtime API. Amazon SageMaker Runtime clients implement this trait.
 pub trait SageMakerRuntime {
-    /// <p>After you deploy a model into production using Amazon SageMaker hosting services, your client applications use this API to get inferences from the model hosted at the specified endpoint. </p> <p>For an overview of Amazon SageMaker, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a> </p> <p> Amazon SageMaker strips all POST headers except those supported by the API. Amazon SageMaker might add additional headers. You should not rely on the behavior of headers outside those enumerated in the request syntax. </p>
+    /// <p><p>After you deploy a model into production using Amazon SageMaker hosting services, your client applications use this API to get inferences from the model hosted at the specified endpoint. </p> <p>For an overview of Amazon SageMaker, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a>. </p> <p>Amazon SageMaker strips all POST headers except those supported by the API. Amazon SageMaker might add additional headers. You should not rely on the behavior of headers outside those enumerated in the request syntax. </p> <p>Cals to <code>InvokeEndpoint</code> are authenticated by using AWS Signature Version 4. For information, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html">Authenticating Requests (AWS Signature Version 4)</a> in the <i>Amazon S3 API Reference</i>.</p> <note> <p>Endpoints are scoped to an individual account, and are not public. The URL does not contain the account ID, but Amazon SageMaker determines the account ID from the authentication token that is supplied by the caller.</p> </note></p>
     fn invoke_endpoint(
         &self,
         input: InvokeEndpointInput,
@@ -216,7 +222,7 @@ impl SageMakerRuntimeClient {
 }
 
 impl SageMakerRuntime for SageMakerRuntimeClient {
-    /// <p>After you deploy a model into production using Amazon SageMaker hosting services, your client applications use this API to get inferences from the model hosted at the specified endpoint. </p> <p>For an overview of Amazon SageMaker, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a> </p> <p> Amazon SageMaker strips all POST headers except those supported by the API. Amazon SageMaker might add additional headers. You should not rely on the behavior of headers outside those enumerated in the request syntax. </p>
+    /// <p><p>After you deploy a model into production using Amazon SageMaker hosting services, your client applications use this API to get inferences from the model hosted at the specified endpoint. </p> <p>For an overview of Amazon SageMaker, see <a href="http://docs.aws.amazon.com/sagemaker/latest/dg/how-it-works.html">How It Works</a>. </p> <p>Amazon SageMaker strips all POST headers except those supported by the API. Amazon SageMaker might add additional headers. You should not rely on the behavior of headers outside those enumerated in the request syntax. </p> <p>Cals to <code>InvokeEndpoint</code> are authenticated by using AWS Signature Version 4. For information, see <a href="http://docs.aws.amazon.com/AmazonS3/latest/API/sig-v4-authenticating-requests.html">Authenticating Requests (AWS Signature Version 4)</a> in the <i>Amazon S3 API Reference</i>.</p> <note> <p>Endpoints are scoped to an individual account, and are not public. The URL does not contain the account ID, but Amazon SageMaker determines the account ID from the authentication token that is supplied by the caller.</p> </note></p>
     fn invoke_endpoint(
         &self,
         input: InvokeEndpointInput,
@@ -243,6 +249,13 @@ impl SageMakerRuntime for SageMakerRuntimeClient {
             request.add_header("Content-Type", &content_type.to_string());
         }
 
+        if let Some(ref custom_attributes) = input.custom_attributes {
+            request.add_header(
+                "X-Amzn-SageMaker-Custom-Attributes",
+                &custom_attributes.to_string(),
+            );
+        }
+
         self.client.sign_and_dispatch(request, |response| {
             if response.status.is_success() {
                 Box::new(response.buffer().from_err().map(|response| {
@@ -252,6 +265,12 @@ impl SageMakerRuntime for SageMakerRuntimeClient {
                     if let Some(content_type) = response.headers.get("Content-Type") {
                         let value = content_type.to_owned();
                         result.content_type = Some(value)
+                    };
+                    if let Some(custom_attributes) =
+                        response.headers.get("X-Amzn-SageMaker-Custom-Attributes")
+                    {
+                        let value = custom_attributes.to_owned();
+                        result.custom_attributes = Some(value)
                     };
                     if let Some(invoked_production_variant) =
                         response.headers.get("x-Amzn-Invoked-Production-Variant")

@@ -31,7 +31,7 @@ use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateRoleToGroupRequest {
-    /// <p>The ID of the AWS Greengrass group.</p>
+    /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
     /// <p>The ARN of the role you wish to associate with this group.</p>
@@ -66,6 +66,80 @@ pub struct AssociateServiceRoleToAccountResponse {
     pub associated_at: Option<String>,
 }
 
+/// <p>Information about a bulk deployment. You cannot start a new bulk deployment while another one is still running or in a non-terminal state.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct BulkDeployment {
+    /// <p>The ARN of the bulk deployment.</p>
+    #[serde(rename = "BulkDeploymentArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bulk_deployment_arn: Option<String>,
+    /// <p>The ID of the bulk deployment.</p>
+    #[serde(rename = "BulkDeploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bulk_deployment_id: Option<String>,
+    /// <p>The time, in ISO format, when the deployment was created.</p>
+    #[serde(rename = "CreatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<String>,
+}
+
+/// <p>Relevant metrics on input records processed during bulk deployment.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct BulkDeploymentMetrics {
+    /// <p>The total number of records that returned a non-retryable error. For example, this can occur if a group record from the input file uses an invalid format or specifies a nonexistent group version, or if the execution role doesn&#39;t grant permission to deploy a group or group version.</p>
+    #[serde(rename = "InvalidInputRecords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub invalid_input_records: Option<i64>,
+    /// <p>The total number of group records from the input file that have been processed so far, or attempted.</p>
+    #[serde(rename = "RecordsProcessed")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub records_processed: Option<i64>,
+    /// <p>The total number of deployment attempts that returned a retryable error. For example, a retry is triggered if the attempt to deploy a group returns a throttling error. &#39;&#39;StartBulkDeployment&#39;&#39; retries a group deployment up to five times.</p>
+    #[serde(rename = "RetryAttempts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub retry_attempts: Option<i64>,
+}
+
+/// <p>Information about an individual group deployment in a bulk deployment operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct BulkDeploymentResult {
+    /// <p>The time, in ISO format, when the deployment was created.</p>
+    #[serde(rename = "CreatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<String>,
+    /// <p>The ARN of the group deployment.</p>
+    #[serde(rename = "DeploymentArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_arn: Option<String>,
+    /// <p>The ID of the group deployment.</p>
+    #[serde(rename = "DeploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_id: Option<String>,
+    /// <p>The current status of the group deployment: &#39;&#39;Pending&#39;&#39;, &#39;&#39;InProgress&#39;&#39;, &#39;&#39;Success&#39;&#39;, or &#39;&#39;Failure&#39;&#39;.</p>
+    #[serde(rename = "DeploymentStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_status: Option<String>,
+    /// <p>The type of the deployment.</p>
+    #[serde(rename = "DeploymentType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployment_type: Option<String>,
+    /// <p>Details about the error.</p>
+    #[serde(rename = "ErrorDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_details: Option<Vec<ErrorDetail>>,
+    /// <p>The error message for a failed deployment</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    /// <p>The ARN of the Greengrass group.</p>
+    #[serde(rename = "GroupArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub group_arn: Option<String>,
+}
+
 /// <p>Information about a Greengrass core&#39;s connectivity.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ConnectivityInfo {
@@ -87,6 +161,32 @@ pub struct ConnectivityInfo {
     pub port_number: Option<i64>,
 }
 
+/// <p>Information about a connector. Connectors run on the Greengrass core and contain built-in integration with local infrastructure, device protocols, AWS, and other cloud services.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Connector {
+    /// <p>The ARN of the connector.</p>
+    #[serde(rename = "ConnectorArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connector_arn: Option<String>,
+    /// <p>A descriptive or arbitrary ID for the connector. This value must be unique within the connector definition version. Max length is 128 characters with pattern [a-zA-Z0-9:_-]+.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The parameters or configuration that the connector uses.</p>
+    #[serde(rename = "Parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameters: Option<::std::collections::HashMap<String, String>>,
+}
+
+/// <p>Information about the connector definition version, which is a container for connectors.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct ConnectorDefinitionVersion {
+    /// <p>A list of references to connectors in this version, with their corresponding configuration settings.</p>
+    #[serde(rename = "Connectors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connectors: Option<Vec<Connector>>,
+}
+
 /// <p>Information about a core.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Core {
@@ -94,7 +194,7 @@ pub struct Core {
     #[serde(rename = "CertificateArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_arn: Option<String>,
-    /// <p>The ID of the core.</p>
+    /// <p>A descriptive or arbitrary ID for the core. This value must be unique within the core definition version. Max length is 128 characters with pattern &#39;&#39;[a-zA-Z0-9:_-]+&#39;&#39;.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
@@ -115,6 +215,91 @@ pub struct CoreDefinitionVersion {
     #[serde(rename = "Cores")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cores: Option<Vec<Core>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateConnectorDefinitionRequest {
+    /// <p>A client token used to correlate requests and responses.</p>
+    #[serde(rename = "AmznClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub amzn_client_token: Option<String>,
+    /// <p>Information about the initial version of the connector definition.</p>
+    #[serde(rename = "InitialVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub initial_version: Option<ConnectorDefinitionVersion>,
+    /// <p>The name of the connector definition.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateConnectorDefinitionResponse {
+    /// <p>The ARN of the definition.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The time, in milliseconds since the epoch, when the definition was created.</p>
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_timestamp: Option<String>,
+    /// <p>The ID of the definition.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The time, in milliseconds since the epoch, when the definition was last updated.</p>
+    #[serde(rename = "LastUpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_timestamp: Option<String>,
+    /// <p>The latest version of the definition.</p>
+    #[serde(rename = "LatestVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_version: Option<String>,
+    /// <p>The ARN of the latest version of the definition.</p>
+    #[serde(rename = "LatestVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_version_arn: Option<String>,
+    /// <p>The name of the definition.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateConnectorDefinitionVersionRequest {
+    /// <p>A client token used to correlate requests and responses.</p>
+    #[serde(rename = "AmznClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub amzn_client_token: Option<String>,
+    /// <p>The ID of the connector definition.</p>
+    #[serde(rename = "ConnectorDefinitionId")]
+    pub connector_definition_id: String,
+    /// <p>A list of references to connectors in this version, with their corresponding configuration settings.</p>
+    #[serde(rename = "Connectors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connectors: Option<Vec<Connector>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateConnectorDefinitionVersionResponse {
+    /// <p>The ARN of the version.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The time, in milliseconds since the epoch, when the version was created.</p>
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_timestamp: Option<String>,
+    /// <p>The ID of the version.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The unique ID of the version.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
 }
 
 /// <p>Information needed to create a core definition.</p>
@@ -217,7 +402,7 @@ pub struct CreateDeploymentRequest {
     #[serde(rename = "DeploymentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_type: Option<String>,
-    /// <p>The ID of the AWS Greengrass group.</p>
+    /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
     /// <p>The ID of the group version to be deployed.</p>
@@ -380,6 +565,10 @@ pub struct CreateFunctionDefinitionVersionRequest {
     #[serde(rename = "AmznClientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amzn_client_token: Option<String>,
+    /// <p>Default configuration that will apply to all Lambda functions in this function definition version</p>
+    #[serde(rename = "DefaultConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_config: Option<FunctionDefaultConfig>,
     /// <p>The ID of the Lambda function definition.</p>
     #[serde(rename = "FunctionDefinitionId")]
     pub function_definition_id: String,
@@ -416,7 +605,7 @@ pub struct CreateGroupCertificateAuthorityRequest {
     #[serde(rename = "AmznClientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amzn_client_token: Option<String>,
-    /// <p>The ID of the AWS Greengrass group.</p>
+    /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
 }
@@ -485,6 +674,10 @@ pub struct CreateGroupVersionRequest {
     #[serde(rename = "AmznClientToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amzn_client_token: Option<String>,
+    /// <p>The ARN of the connector definition version for this group.</p>
+    #[serde(rename = "ConnectorDefinitionVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connector_definition_version_arn: Option<String>,
     /// <p>The ARN of the core definition version for this group.</p>
     #[serde(rename = "CoreDefinitionVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -497,14 +690,14 @@ pub struct CreateGroupVersionRequest {
     #[serde(rename = "FunctionDefinitionVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub function_definition_version_arn: Option<String>,
-    /// <p>The ID of the AWS Greengrass group.</p>
+    /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
     /// <p>The ARN of the logger definition version for this group.</p>
     #[serde(rename = "LoggerDefinitionVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logger_definition_version_arn: Option<String>,
-    /// <p>The resource definition version ARN for this group.</p>
+    /// <p>The ARN of the resource definition version for this group.</p>
     #[serde(rename = "ResourceDefinitionVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_definition_version_arn: Option<String>,
@@ -864,6 +1057,17 @@ pub struct DefinitionInformation {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteConnectorDefinitionRequest {
+    /// <p>The ID of the connector definition.</p>
+    #[serde(rename = "ConnectorDefinitionId")]
+    pub connector_definition_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteConnectorDefinitionResponse {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteCoreDefinitionRequest {
     /// <p>The ID of the core definition.</p>
     #[serde(rename = "CoreDefinitionId")]
@@ -898,7 +1102,7 @@ pub struct DeleteFunctionDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteGroupRequest {
-    /// <p>The ID of the AWS Greengrass group.</p>
+    /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
 }
@@ -973,7 +1177,7 @@ pub struct Device {
     #[serde(rename = "CertificateArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_arn: Option<String>,
-    /// <p>The ID of the device.</p>
+    /// <p>A descriptive or arbitrary ID for the device. This value must be unique within the device definition version. Max length is 128 characters with pattern &#39;&#39;[a-zA-Z0-9:_-]+&#39;&#39;.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
@@ -998,7 +1202,7 @@ pub struct DeviceDefinitionVersion {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisassociateRoleFromGroupRequest {
-    /// <p>The ID of the AWS Greengrass group.</p>
+    /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
 }
@@ -1053,7 +1257,7 @@ pub struct Function {
     #[serde(rename = "FunctionConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub function_configuration: Option<FunctionConfiguration>,
-    /// <p>The ID of the Lambda function.</p>
+    /// <p>A descriptive or arbitrary ID for the function. This value must be unique within the function definition version. Max length is 128 characters with pattern &#39;&#39;[a-zA-Z0-9:_-]+&#39;&#39;.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
@@ -1078,7 +1282,7 @@ pub struct FunctionConfiguration {
     #[serde(rename = "Executable")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub executable: Option<String>,
-    /// <p>The memory size, in KB, which the function requires.</p>
+    /// <p>The memory size, in KB, which the function requires. This setting is not applicable and should be cleared when you run the Lambda function without containerization.</p>
     #[serde(rename = "MemorySize")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub memory_size: Option<i64>,
@@ -1086,7 +1290,7 @@ pub struct FunctionConfiguration {
     #[serde(rename = "Pinned")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub pinned: Option<bool>,
-    /// <p>The allowed function execution time, after which Lambda should terminate the function. This timeout still applies to pinned lambdas for each request.</p>
+    /// <p>The allowed function execution time, after which Lambda should terminate the function. This timeout still applies to pinned Lambda functions for each request.</p>
     #[serde(rename = "Timeout")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timeout: Option<i64>,
@@ -1095,11 +1299,15 @@ pub struct FunctionConfiguration {
 /// <p>The environment configuration of the function.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FunctionConfigurationEnvironment {
-    /// <p>If true, the Lambda function is allowed to access the host&#39;s /sys folder. Use this when the Lambda function needs to read device information from /sys.</p>
+    /// <p>If true, the Lambda function is allowed to access the host&#39;s /sys folder. Use this when the Lambda function needs to read device information from /sys. This setting applies only when you run the Lambda function in a Greengrass container.</p>
     #[serde(rename = "AccessSysfs")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub access_sysfs: Option<bool>,
-    /// <p>A list of the resources, with their permissions, to which the Lambda function will be granted access. A Lambda function can have at most 10 resources.</p>
+    /// <p>Configuration related to executing the Lambda function</p>
+    #[serde(rename = "Execution")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub execution: Option<FunctionExecutionConfig>,
+    /// <p>A list of the resources, with their permissions, to which the Lambda function will be granted access. A Lambda function can have at most 10 resources. ResourceAccessPolicies apply only when you run the Lambda function in a Greengrass container.</p>
     #[serde(rename = "ResourceAccessPolicies")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_access_policies: Option<Vec<ResourceAccessPolicy>>,
@@ -1109,13 +1317,57 @@ pub struct FunctionConfigurationEnvironment {
     pub variables: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// <p>Default configuration that will apply to all Lambda functions in the group.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct FunctionDefaultConfig {
+    #[serde(rename = "Execution")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub execution: Option<FunctionDefaultExecutionConfig>,
+}
+
+/// <p>Configuration that defines the default containerization used for when running Lambda functions in the group. Individual Lambda functions can be override this setting.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct FunctionDefaultExecutionConfig {
+    #[serde(rename = "IsolationMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub isolation_mode: Option<String>,
+}
+
 /// <p>Information about a function definition version.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct FunctionDefinitionVersion {
+    /// <p>Default configuration that will apply to all Lambda functions in this function definition version</p>
+    #[serde(rename = "DefaultConfig")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub default_config: Option<FunctionDefaultConfig>,
     /// <p>A list of Lambda functions in this function definition version.</p>
     #[serde(rename = "Functions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub functions: Option<Vec<Function>>,
+}
+
+/// <p>Configuration information that specifies how the Lambda function runs. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct FunctionExecutionConfig {
+    #[serde(rename = "IsolationMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub isolation_mode: Option<String>,
+    #[serde(rename = "RunAs")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub run_as: Option<FunctionRunAsConfig>,
+}
+
+/// <p>Specifies the user and/or group whose permissions are used when running the Lambda function. You can specify one or both values to override the default values (ggc<em>user/ggc</em>group). We recommend that you avoid running as root unless absolutely necessary to minimize the risk of unintended changes or malicious attacks. To run as root, you must set IsolationMode to NoContainer and you must update config.json in greengrass-root/config to set allowFunctionsToRunAsRoot to yes.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct FunctionRunAsConfig {
+    /// <p>The Group ID whose permissions are used to run a Lambda function.</p>
+    #[serde(rename = "Gid")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub gid: Option<i64>,
+    /// <p>The User ID whose permissions are used to run a Lambda function.</p>
+    #[serde(rename = "Uid")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub uid: Option<i64>,
 }
 
 /// <p>General error information.</p>
@@ -1129,7 +1381,7 @@ pub struct GeneralError {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetAssociatedRoleRequest {
-    /// <p>The ID of the AWS Greengrass group.</p>
+    /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
 }
@@ -1145,6 +1397,38 @@ pub struct GetAssociatedRoleResponse {
     #[serde(rename = "RoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub role_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetBulkDeploymentStatusRequest {
+    /// <p>The ID of the bulk deployment.</p>
+    #[serde(rename = "BulkDeploymentId")]
+    pub bulk_deployment_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetBulkDeploymentStatusResponse {
+    /// <p>Relevant metrics on input records processed during bulk deployment.</p>
+    #[serde(rename = "BulkDeploymentMetrics")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bulk_deployment_metrics: Option<BulkDeploymentMetrics>,
+    /// <p>The status of the bulk deployment.</p>
+    #[serde(rename = "BulkDeploymentStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bulk_deployment_status: Option<String>,
+    /// <p>The time, in ISO format, when the deployment was created.</p>
+    #[serde(rename = "CreatedAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<String>,
+    /// <p>Error details</p>
+    #[serde(rename = "ErrorDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_details: Option<Vec<ErrorDetail>>,
+    /// <p>Error message</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1165,6 +1449,89 @@ pub struct GetConnectivityInfoResponse {
     #[serde(rename = "Message")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetConnectorDefinitionRequest {
+    /// <p>The ID of the connector definition.</p>
+    #[serde(rename = "ConnectorDefinitionId")]
+    pub connector_definition_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetConnectorDefinitionResponse {
+    /// <p>The ARN of the definition.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The time, in milliseconds since the epoch, when the definition was created.</p>
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_timestamp: Option<String>,
+    /// <p>The ID of the definition.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The time, in milliseconds since the epoch, when the definition was last updated.</p>
+    #[serde(rename = "LastUpdatedTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub last_updated_timestamp: Option<String>,
+    /// <p>The latest version of the definition.</p>
+    #[serde(rename = "LatestVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_version: Option<String>,
+    /// <p>The ARN of the latest version of the definition.</p>
+    #[serde(rename = "LatestVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_version_arn: Option<String>,
+    /// <p>The name of the definition.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetConnectorDefinitionVersionRequest {
+    /// <p>The ID of the connector definition.</p>
+    #[serde(rename = "ConnectorDefinitionId")]
+    pub connector_definition_id: String,
+    /// <p>The ID of the connector definition version.</p>
+    #[serde(rename = "ConnectorDefinitionVersionId")]
+    pub connector_definition_version_id: String,
+    /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetConnectorDefinitionVersionResponse {
+    /// <p>The ARN of the connector definition version.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The time, in milliseconds since the epoch, when the connector definition version was created.</p>
+    #[serde(rename = "CreationTimestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub creation_timestamp: Option<String>,
+    /// <p>Information about the connector definition version.</p>
+    #[serde(rename = "Definition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub definition: Option<ConnectorDefinitionVersion>,
+    /// <p>The ID of the connector definition version.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The version of the connector definition version.</p>
+    #[serde(rename = "Version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1236,6 +1603,10 @@ pub struct GetCoreDefinitionVersionResponse {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
     /// <p>The version of the core definition version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1247,7 +1618,7 @@ pub struct GetDeploymentStatusRequest {
     /// <p>The ID of the deployment.</p>
     #[serde(rename = "DeploymentId")]
     pub deployment_id: String,
-    /// <p>The ID of the AWS Greengrass group.</p>
+    /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
 }
@@ -1255,7 +1626,7 @@ pub struct GetDeploymentStatusRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct GetDeploymentStatusResponse {
-    /// <p>The status of the deployment.</p>
+    /// <p>The status of the deployment: &#39;&#39;Pending&#39;&#39;, &#39;&#39;InProgress&#39;&#39;, &#39;&#39;Success&#39;&#39;, or &#39;&#39;Failure&#39;&#39;.</p>
     #[serde(rename = "DeploymentStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub deployment_status: Option<String>,
@@ -1325,6 +1696,10 @@ pub struct GetDeviceDefinitionVersionRequest {
     /// <p>The ID of the device definition version.</p>
     #[serde(rename = "DeviceDefinitionVersionId")]
     pub device_definition_version_id: String,
+    /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1346,6 +1721,10 @@ pub struct GetDeviceDefinitionVersionResponse {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
     /// <p>The version of the device definition version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1400,6 +1779,10 @@ pub struct GetFunctionDefinitionVersionRequest {
     /// <p>The ID of the function definition version.</p>
     #[serde(rename = "FunctionDefinitionVersionId")]
     pub function_definition_version_id: String,
+    /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1421,6 +1804,10 @@ pub struct GetFunctionDefinitionVersionResponse {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
     /// <p>The version of the function definition version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1432,7 +1819,7 @@ pub struct GetGroupCertificateAuthorityRequest {
     /// <p>The ID of the certificate authority.</p>
     #[serde(rename = "CertificateAuthorityId")]
     pub certificate_authority_id: String,
-    /// <p>The ID of the AWS Greengrass group.</p>
+    /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
 }
@@ -1456,7 +1843,7 @@ pub struct GetGroupCertificateAuthorityResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetGroupCertificateConfigurationRequest {
-    /// <p>The ID of the AWS Greengrass group.</p>
+    /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
 }
@@ -1480,7 +1867,7 @@ pub struct GetGroupCertificateConfigurationResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetGroupRequest {
-    /// <p>The ID of the AWS Greengrass group.</p>
+    /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
 }
@@ -1520,7 +1907,7 @@ pub struct GetGroupResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetGroupVersionRequest {
-    /// <p>The ID of the AWS Greengrass group.</p>
+    /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
     /// <p>The ID of the group version.</p>
@@ -1601,6 +1988,10 @@ pub struct GetLoggerDefinitionVersionRequest {
     /// <p>The ID of the logger definition version.</p>
     #[serde(rename = "LoggerDefinitionVersionId")]
     pub logger_definition_version_id: String,
+    /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1761,6 +2152,10 @@ pub struct GetSubscriptionDefinitionResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetSubscriptionDefinitionVersionRequest {
+    /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
     /// <p>The ID of the subscription definition.</p>
     #[serde(rename = "SubscriptionDefinitionId")]
     pub subscription_definition_id: String,
@@ -1788,6 +2183,10 @@ pub struct GetSubscriptionDefinitionVersionResponse {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
+    /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
     /// <p>The version of the subscription definition version.</p>
     #[serde(rename = "Version")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1856,7 +2255,7 @@ pub struct GroupInformation {
 /// <p>Group owner related settings for local resources.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GroupOwnerSetting {
-    /// <p>If true, GreenGrass automatically adds the specified Linux OS group owner of the resource to the Lambda process privileges. Thus the Lambda process will have the file access permissions of the added Linux group.</p>
+    /// <p>If true, AWS IoT Greengrass automatically adds the specified Linux OS group owner of the resource to the Lambda process privileges. Thus the Lambda process will have the file access permissions of the added Linux group.</p>
     #[serde(rename = "AutoAddGroupOwner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auto_add_group_owner: Option<bool>,
@@ -1869,6 +2268,10 @@ pub struct GroupOwnerSetting {
 /// <p>Information about a group version.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct GroupVersion {
+    /// <p>The ARN of the connector definition version for this group.</p>
+    #[serde(rename = "ConnectorDefinitionVersionArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub connector_definition_version_arn: Option<String>,
     /// <p>The ARN of the core definition version for this group.</p>
     #[serde(rename = "CoreDefinitionVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1885,7 +2288,7 @@ pub struct GroupVersion {
     #[serde(rename = "LoggerDefinitionVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub logger_definition_version_arn: Option<String>,
-    /// <p>The resource definition version ARN for this group.</p>
+    /// <p>The ARN of the resource definition version for this group.</p>
     #[serde(rename = "ResourceDefinitionVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_definition_version_arn: Option<String>,
@@ -1893,6 +2296,112 @@ pub struct GroupVersion {
     #[serde(rename = "SubscriptionDefinitionVersionArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subscription_definition_version_arn: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListBulkDeploymentDetailedReportsRequest {
+    /// <p>The ID of the bulk deployment.</p>
+    #[serde(rename = "BulkDeploymentId")]
+    pub bulk_deployment_id: String,
+    /// <p>The maximum number of results to be returned per request.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<String>,
+    /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListBulkDeploymentDetailedReportsResponse {
+    /// <p>A list of the individual group deployments in the bulk deployment operation.</p>
+    #[serde(rename = "Deployments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deployments: Option<Vec<BulkDeploymentResult>>,
+    /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListBulkDeploymentsRequest {
+    /// <p>The maximum number of results to be returned per request.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<String>,
+    /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListBulkDeploymentsResponse {
+    /// <p>A list of bulk deployments.</p>
+    #[serde(rename = "BulkDeployments")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bulk_deployments: Option<Vec<BulkDeployment>>,
+    /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListConnectorDefinitionVersionsRequest {
+    /// <p>The ID of the connector definition.</p>
+    #[serde(rename = "ConnectorDefinitionId")]
+    pub connector_definition_id: String,
+    /// <p>The maximum number of results to be returned per request.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<String>,
+    /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListConnectorDefinitionVersionsResponse {
+    /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>Information about a version.</p>
+    #[serde(rename = "Versions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub versions: Option<Vec<VersionInformation>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListConnectorDefinitionsRequest {
+    /// <p>The maximum number of results to be returned per request.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<String>,
+    /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListConnectorDefinitionsResponse {
+    /// <p>Information about a definition.</p>
+    #[serde(rename = "Definitions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub definitions: Option<Vec<DefinitionInformation>>,
+    /// <p>The token for the next set of results, or &#39;&#39;null&#39;&#39; if there are no additional results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1959,7 +2468,7 @@ pub struct ListDefinitionsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListDeploymentsRequest {
-    /// <p>The ID of the AWS Greengrass group.</p>
+    /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
     /// <p>The maximum number of results to be returned per request.</p>
@@ -2093,7 +2602,7 @@ pub struct ListFunctionDefinitionsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListGroupCertificateAuthoritiesRequest {
-    /// <p>The ID of the AWS Greengrass group.</p>
+    /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
 }
@@ -2109,7 +2618,7 @@ pub struct ListGroupCertificateAuthoritiesResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListGroupVersionsRequest {
-    /// <p>The ID of the AWS Greengrass group.</p>
+    /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
     /// <p>The maximum number of results to be returned per request.</p>
@@ -2344,7 +2853,7 @@ pub struct LocalDeviceResourceData {
 /// <p>Attributes that define a local volume resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct LocalVolumeResourceData {
-    /// <p>The absolute local path of the resource inside the lambda environment.</p>
+    /// <p>The absolute local path of the resource inside the Lambda environment.</p>
     #[serde(rename = "DestinationPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_path: Option<String>,
@@ -2365,7 +2874,7 @@ pub struct Logger {
     #[serde(rename = "Component")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub component: Option<String>,
-    /// <p>The id of the logger.</p>
+    /// <p>A descriptive or arbitrary ID for the logger. This value must be unique within the logger definition version. Max length is 128 characters with pattern &#39;&#39;[a-zA-Z0-9:_-]+&#39;&#39;.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
@@ -2403,7 +2912,7 @@ pub struct ResetDeploymentsRequest {
     #[serde(rename = "Force")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub force: Option<bool>,
-    /// <p>The ID of the AWS Greengrass group.</p>
+    /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
 }
@@ -2428,7 +2937,7 @@ pub struct Resource {
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The descriptive resource name, which is displayed on the Greengrass console. Max length 128 characters with pattern &#39;&#39;[a-zA-Z0-9:_-]+&#39;&#39;. This must be unique within a Greengrass group.</p>
+    /// <p>The descriptive resource name, which is displayed on the AWS IoT Greengrass console. Max length 128 characters with pattern &#39;&#39;[a-zA-Z0-9:_-]+&#39;&#39;. This must be unique within a Greengrass group.</p>
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
@@ -2451,7 +2960,7 @@ pub struct ResourceAccessPolicy {
     pub resource_id: Option<String>,
 }
 
-/// <p>A container for resource data. The container takes only one of the following supported resource data types: &#39;&#39;LocalDeviceResourceData&#39;&#39;, &#39;&#39;LocalVolumeResourceData&#39;&#39;, &#39;&#39;SageMakerMachineLearningModelResourceData&#39;&#39;, &#39;&#39;S3MachineLearningModelResourceData&#39;&#39;.</p>
+/// <p>A container for resource data. The container takes only one of the following supported resource data types: &#39;&#39;LocalDeviceResourceData&#39;&#39;, &#39;&#39;LocalVolumeResourceData&#39;&#39;, &#39;&#39;SageMakerMachineLearningModelResourceData&#39;&#39;, &#39;&#39;S3MachineLearningModelResourceData&#39;&#39;, &#39;&#39;SecretsManagerSecretResourceData&#39;&#39;.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ResourceDataContainer {
     /// <p>Attributes that define the local device resource.</p>
@@ -2462,15 +2971,19 @@ pub struct ResourceDataContainer {
     #[serde(rename = "LocalVolumeResourceData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub local_volume_resource_data: Option<LocalVolumeResourceData>,
-    /// <p>Attributes that define an S3 machine learning resource.</p>
+    /// <p>Attributes that define an Amazon S3 machine learning resource.</p>
     #[serde(rename = "S3MachineLearningModelResourceData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub s3_machine_learning_model_resource_data: Option<S3MachineLearningModelResourceData>,
-    /// <p>Attributes that define an SageMaker machine learning resource.</p>
+    /// <p>Attributes that define an Amazon SageMaker machine learning resource.</p>
     #[serde(rename = "SageMakerMachineLearningModelResourceData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sage_maker_machine_learning_model_resource_data:
         Option<SageMakerMachineLearningModelResourceData>,
+    /// <p>Attributes that define a secret resource, which references a secret from AWS Secrets Manager.</p>
+    #[serde(rename = "SecretsManagerSecretResourceData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub secrets_manager_secret_resource_data: Option<SecretsManagerSecretResourceData>,
 }
 
 /// <p>Information about a resource definition version.</p>
@@ -2482,7 +2995,7 @@ pub struct ResourceDefinitionVersion {
     pub resources: Option<Vec<Resource>>,
 }
 
-/// <p>Attributes that define an S3 machine learning resource.</p>
+/// <p>Attributes that define an Amazon S3 machine learning resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct S3MachineLearningModelResourceData {
     /// <p>The absolute local path of the resource inside the Lambda environment.</p>
@@ -2495,27 +3008,80 @@ pub struct S3MachineLearningModelResourceData {
     pub s3_uri: Option<String>,
 }
 
-/// <p>Attributes that define an SageMaker machine learning resource.</p>
+/// <p>Attributes that define an Amazon SageMaker machine learning resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct SageMakerMachineLearningModelResourceData {
     /// <p>The absolute local path of the resource inside the Lambda environment.</p>
     #[serde(rename = "DestinationPath")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub destination_path: Option<String>,
-    /// <p>The ARN of the SageMaker training job that represents the source model.</p>
+    /// <p>The ARN of the Amazon SageMaker training job that represents the source model.</p>
     #[serde(rename = "SageMakerJobArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub sage_maker_job_arn: Option<String>,
 }
 
+/// <p>Attributes that define a secret resource, which references a secret from AWS Secrets Manager. AWS IoT Greengrass stores a local, encrypted copy of the secret on the Greengrass core, where it can be securely accessed by connectors and Lambda functions.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct SecretsManagerSecretResourceData {
+    /// <p>The ARN of the Secrets Manager secret to make available on the core. The value of the secret&#39;s latest version (represented by the &#39;&#39;AWSCURRENT&#39;&#39; staging label) is included by default.</p>
+    #[serde(rename = "ARN")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>Optional. The staging labels whose values you want to make available on the core, in addition to &#39;&#39;AWSCURRENT&#39;&#39;.</p>
+    #[serde(rename = "AdditionalStagingLabelsToDownload")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub additional_staging_labels_to_download: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StartBulkDeploymentRequest {
+    /// <p>A client token used to correlate requests and responses.</p>
+    #[serde(rename = "AmznClientToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub amzn_client_token: Option<String>,
+    /// <p>The ARN of the execution role to associate with the bulk deployment operation. This IAM role must allow the &#39;&#39;greengrass:CreateDeployment&#39;&#39; action for all group versions that are listed in the input file. This IAM role must have access to the S3 bucket containing the input file.</p>
+    #[serde(rename = "ExecutionRoleArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub execution_role_arn: Option<String>,
+    /// <p>The URI of the input file contained in the S3 bucket. The execution role must have &#39;&#39;getObject&#39;&#39; permissions on this bucket to access the input file. The input file is a JSON-serialized, line delimited file with UTF-8 encoding that provides a list of group and version IDs and the deployment type. This file must be less than 100 MB. Currently, AWS IoT Greengrass supports only &#39;&#39;NewDeployment&#39;&#39; deployment types.</p>
+    #[serde(rename = "InputFileUri")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_file_uri: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StartBulkDeploymentResponse {
+    /// <p>The ARN of the bulk deployment.</p>
+    #[serde(rename = "BulkDeploymentArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bulk_deployment_arn: Option<String>,
+    /// <p>The ID of the bulk deployment.</p>
+    #[serde(rename = "BulkDeploymentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bulk_deployment_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StopBulkDeploymentRequest {
+    /// <p>The ID of the bulk deployment.</p>
+    #[serde(rename = "BulkDeploymentId")]
+    pub bulk_deployment_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StopBulkDeploymentResponse {}
+
 /// <p>Information about a subscription.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Subscription {
-    /// <p>The id of the subscription.</p>
+    /// <p>A descriptive or arbitrary ID for the subscription. This value must be unique within the subscription definition version. Max length is 128 characters with pattern &#39;&#39;[a-zA-Z0-9:_-]+&#39;&#39;.</p>
     #[serde(rename = "Id")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<String>,
-    /// <p>The source of the subscription. Can be a thing ARN, a Lambda function ARN, &#39;cloud&#39; (which represents the IoT cloud), or &#39;GGShadowService&#39;.</p>
+    /// <p>The source of the subscription. Can be a thing ARN, a Lambda function ARN, a connector ARN, &#39;cloud&#39; (which represents the AWS IoT cloud), or &#39;GGShadowService&#39;.</p>
     #[serde(rename = "Source")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub source: Option<String>,
@@ -2523,7 +3089,7 @@ pub struct Subscription {
     #[serde(rename = "Subject")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub subject: Option<String>,
-    /// <p>Where the message is sent to. Can be a thing ARN, a Lambda function ARN, &#39;cloud&#39; (which represents the IoT cloud), or &#39;GGShadowService&#39;.</p>
+    /// <p>Where the message is sent to. Can be a thing ARN, a Lambda function ARN, a connector ARN, &#39;cloud&#39; (which represents the AWS IoT cloud), or &#39;GGShadowService&#39;.</p>
     #[serde(rename = "Target")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target: Option<String>,
@@ -2562,6 +3128,21 @@ pub struct UpdateConnectivityInfoResponse {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub version: Option<String>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateConnectorDefinitionRequest {
+    /// <p>The ID of the connector definition.</p>
+    #[serde(rename = "ConnectorDefinitionId")]
+    pub connector_definition_id: String,
+    /// <p>The name of the definition.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateConnectorDefinitionResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateCoreDefinitionRequest {
@@ -2614,7 +3195,7 @@ pub struct UpdateGroupCertificateConfigurationRequest {
     #[serde(rename = "CertificateExpiryInMilliseconds")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub certificate_expiry_in_milliseconds: Option<String>,
-    /// <p>The ID of the AWS Greengrass group.</p>
+    /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
 }
@@ -2638,7 +3219,7 @@ pub struct UpdateGroupCertificateConfigurationResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateGroupRequest {
-    /// <p>The ID of the AWS Greengrass group.</p>
+    /// <p>The ID of the Greengrass group.</p>
     #[serde(rename = "GroupId")]
     pub group_id: String,
     /// <p>The name of the definition.</p>
@@ -2925,6 +3506,202 @@ impl Error for AssociateServiceRoleToAccountError {
             }
             AssociateServiceRoleToAccountError::ParseError(ref cause) => cause,
             AssociateServiceRoleToAccountError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by CreateConnectorDefinition
+#[derive(Debug, PartialEq)]
+pub enum CreateConnectorDefinitionError {
+    /// <p>General error information.</p>
+    BadRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl CreateConnectorDefinitionError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> CreateConnectorDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "BadRequestException" => {
+                    return CreateConnectorDefinitionError::BadRequest(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return CreateConnectorDefinitionError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return CreateConnectorDefinitionError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for CreateConnectorDefinitionError {
+    fn from(err: serde_json::error::Error) -> CreateConnectorDefinitionError {
+        CreateConnectorDefinitionError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateConnectorDefinitionError {
+    fn from(err: CredentialsError) -> CreateConnectorDefinitionError {
+        CreateConnectorDefinitionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateConnectorDefinitionError {
+    fn from(err: HttpDispatchError) -> CreateConnectorDefinitionError {
+        CreateConnectorDefinitionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateConnectorDefinitionError {
+    fn from(err: io::Error) -> CreateConnectorDefinitionError {
+        CreateConnectorDefinitionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateConnectorDefinitionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateConnectorDefinitionError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateConnectorDefinitionError::BadRequest(ref cause) => cause,
+            CreateConnectorDefinitionError::Validation(ref cause) => cause,
+            CreateConnectorDefinitionError::Credentials(ref err) => err.description(),
+            CreateConnectorDefinitionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateConnectorDefinitionError::ParseError(ref cause) => cause,
+            CreateConnectorDefinitionError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by CreateConnectorDefinitionVersion
+#[derive(Debug, PartialEq)]
+pub enum CreateConnectorDefinitionVersionError {
+    /// <p>General error information.</p>
+    BadRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl CreateConnectorDefinitionVersionError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> CreateConnectorDefinitionVersionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "BadRequestException" => {
+                    return CreateConnectorDefinitionVersionError::BadRequest(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return CreateConnectorDefinitionVersionError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return CreateConnectorDefinitionVersionError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for CreateConnectorDefinitionVersionError {
+    fn from(err: serde_json::error::Error) -> CreateConnectorDefinitionVersionError {
+        CreateConnectorDefinitionVersionError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateConnectorDefinitionVersionError {
+    fn from(err: CredentialsError) -> CreateConnectorDefinitionVersionError {
+        CreateConnectorDefinitionVersionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateConnectorDefinitionVersionError {
+    fn from(err: HttpDispatchError) -> CreateConnectorDefinitionVersionError {
+        CreateConnectorDefinitionVersionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateConnectorDefinitionVersionError {
+    fn from(err: io::Error) -> CreateConnectorDefinitionVersionError {
+        CreateConnectorDefinitionVersionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateConnectorDefinitionVersionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateConnectorDefinitionVersionError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateConnectorDefinitionVersionError::BadRequest(ref cause) => cause,
+            CreateConnectorDefinitionVersionError::Validation(ref cause) => cause,
+            CreateConnectorDefinitionVersionError::Credentials(ref err) => err.description(),
+            CreateConnectorDefinitionVersionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateConnectorDefinitionVersionError::ParseError(ref cause) => cause,
+            CreateConnectorDefinitionVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4594,6 +5371,102 @@ impl Error for CreateSubscriptionDefinitionVersionError {
         }
     }
 }
+/// Errors returned by DeleteConnectorDefinition
+#[derive(Debug, PartialEq)]
+pub enum DeleteConnectorDefinitionError {
+    /// <p>General error information.</p>
+    BadRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DeleteConnectorDefinitionError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteConnectorDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "BadRequestException" => {
+                    return DeleteConnectorDefinitionError::BadRequest(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return DeleteConnectorDefinitionError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DeleteConnectorDefinitionError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteConnectorDefinitionError {
+    fn from(err: serde_json::error::Error) -> DeleteConnectorDefinitionError {
+        DeleteConnectorDefinitionError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteConnectorDefinitionError {
+    fn from(err: CredentialsError) -> DeleteConnectorDefinitionError {
+        DeleteConnectorDefinitionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteConnectorDefinitionError {
+    fn from(err: HttpDispatchError) -> DeleteConnectorDefinitionError {
+        DeleteConnectorDefinitionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteConnectorDefinitionError {
+    fn from(err: io::Error) -> DeleteConnectorDefinitionError {
+        DeleteConnectorDefinitionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteConnectorDefinitionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteConnectorDefinitionError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteConnectorDefinitionError::BadRequest(ref cause) => cause,
+            DeleteConnectorDefinitionError::Validation(ref cause) => cause,
+            DeleteConnectorDefinitionError::Credentials(ref err) => err.description(),
+            DeleteConnectorDefinitionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteConnectorDefinitionError::ParseError(ref cause) => cause,
+            DeleteConnectorDefinitionError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by DeleteCoreDefinition
 #[derive(Debug, PartialEq)]
 pub enum DeleteCoreDefinitionError {
@@ -5572,6 +6445,102 @@ impl Error for GetAssociatedRoleError {
         }
     }
 }
+/// Errors returned by GetBulkDeploymentStatus
+#[derive(Debug, PartialEq)]
+pub enum GetBulkDeploymentStatusError {
+    /// <p>General error information.</p>
+    BadRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetBulkDeploymentStatusError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> GetBulkDeploymentStatusError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "BadRequestException" => {
+                    return GetBulkDeploymentStatusError::BadRequest(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return GetBulkDeploymentStatusError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetBulkDeploymentStatusError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetBulkDeploymentStatusError {
+    fn from(err: serde_json::error::Error) -> GetBulkDeploymentStatusError {
+        GetBulkDeploymentStatusError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetBulkDeploymentStatusError {
+    fn from(err: CredentialsError) -> GetBulkDeploymentStatusError {
+        GetBulkDeploymentStatusError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetBulkDeploymentStatusError {
+    fn from(err: HttpDispatchError) -> GetBulkDeploymentStatusError {
+        GetBulkDeploymentStatusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetBulkDeploymentStatusError {
+    fn from(err: io::Error) -> GetBulkDeploymentStatusError {
+        GetBulkDeploymentStatusError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetBulkDeploymentStatusError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetBulkDeploymentStatusError {
+    fn description(&self) -> &str {
+        match *self {
+            GetBulkDeploymentStatusError::BadRequest(ref cause) => cause,
+            GetBulkDeploymentStatusError::Validation(ref cause) => cause,
+            GetBulkDeploymentStatusError::Credentials(ref err) => err.description(),
+            GetBulkDeploymentStatusError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetBulkDeploymentStatusError::ParseError(ref cause) => cause,
+            GetBulkDeploymentStatusError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by GetConnectivityInfo
 #[derive(Debug, PartialEq)]
 pub enum GetConnectivityInfoError {
@@ -5673,6 +6642,200 @@ impl Error for GetConnectivityInfoError {
             }
             GetConnectivityInfoError::ParseError(ref cause) => cause,
             GetConnectivityInfoError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetConnectorDefinition
+#[derive(Debug, PartialEq)]
+pub enum GetConnectorDefinitionError {
+    /// <p>General error information.</p>
+    BadRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetConnectorDefinitionError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> GetConnectorDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "BadRequestException" => {
+                    return GetConnectorDefinitionError::BadRequest(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return GetConnectorDefinitionError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetConnectorDefinitionError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetConnectorDefinitionError {
+    fn from(err: serde_json::error::Error) -> GetConnectorDefinitionError {
+        GetConnectorDefinitionError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetConnectorDefinitionError {
+    fn from(err: CredentialsError) -> GetConnectorDefinitionError {
+        GetConnectorDefinitionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetConnectorDefinitionError {
+    fn from(err: HttpDispatchError) -> GetConnectorDefinitionError {
+        GetConnectorDefinitionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetConnectorDefinitionError {
+    fn from(err: io::Error) -> GetConnectorDefinitionError {
+        GetConnectorDefinitionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetConnectorDefinitionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetConnectorDefinitionError {
+    fn description(&self) -> &str {
+        match *self {
+            GetConnectorDefinitionError::BadRequest(ref cause) => cause,
+            GetConnectorDefinitionError::Validation(ref cause) => cause,
+            GetConnectorDefinitionError::Credentials(ref err) => err.description(),
+            GetConnectorDefinitionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetConnectorDefinitionError::ParseError(ref cause) => cause,
+            GetConnectorDefinitionError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetConnectorDefinitionVersion
+#[derive(Debug, PartialEq)]
+pub enum GetConnectorDefinitionVersionError {
+    /// <p>General error information.</p>
+    BadRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetConnectorDefinitionVersionError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> GetConnectorDefinitionVersionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "BadRequestException" => {
+                    return GetConnectorDefinitionVersionError::BadRequest(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return GetConnectorDefinitionVersionError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetConnectorDefinitionVersionError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetConnectorDefinitionVersionError {
+    fn from(err: serde_json::error::Error) -> GetConnectorDefinitionVersionError {
+        GetConnectorDefinitionVersionError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetConnectorDefinitionVersionError {
+    fn from(err: CredentialsError) -> GetConnectorDefinitionVersionError {
+        GetConnectorDefinitionVersionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetConnectorDefinitionVersionError {
+    fn from(err: HttpDispatchError) -> GetConnectorDefinitionVersionError {
+        GetConnectorDefinitionVersionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetConnectorDefinitionVersionError {
+    fn from(err: io::Error) -> GetConnectorDefinitionVersionError {
+        GetConnectorDefinitionVersionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetConnectorDefinitionVersionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetConnectorDefinitionVersionError {
+    fn description(&self) -> &str {
+        match *self {
+            GetConnectorDefinitionVersionError::BadRequest(ref cause) => cause,
+            GetConnectorDefinitionVersionError::Validation(ref cause) => cause,
+            GetConnectorDefinitionVersionError::Credentials(ref err) => err.description(),
+            GetConnectorDefinitionVersionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetConnectorDefinitionVersionError::ParseError(ref cause) => cause,
+            GetConnectorDefinitionVersionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7432,6 +8595,392 @@ impl Error for GetSubscriptionDefinitionVersionError {
         }
     }
 }
+/// Errors returned by ListBulkDeploymentDetailedReports
+#[derive(Debug, PartialEq)]
+pub enum ListBulkDeploymentDetailedReportsError {
+    /// <p>General error information.</p>
+    BadRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListBulkDeploymentDetailedReportsError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> ListBulkDeploymentDetailedReportsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "BadRequestException" => {
+                    return ListBulkDeploymentDetailedReportsError::BadRequest(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return ListBulkDeploymentDetailedReportsError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return ListBulkDeploymentDetailedReportsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListBulkDeploymentDetailedReportsError {
+    fn from(err: serde_json::error::Error) -> ListBulkDeploymentDetailedReportsError {
+        ListBulkDeploymentDetailedReportsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListBulkDeploymentDetailedReportsError {
+    fn from(err: CredentialsError) -> ListBulkDeploymentDetailedReportsError {
+        ListBulkDeploymentDetailedReportsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListBulkDeploymentDetailedReportsError {
+    fn from(err: HttpDispatchError) -> ListBulkDeploymentDetailedReportsError {
+        ListBulkDeploymentDetailedReportsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListBulkDeploymentDetailedReportsError {
+    fn from(err: io::Error) -> ListBulkDeploymentDetailedReportsError {
+        ListBulkDeploymentDetailedReportsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListBulkDeploymentDetailedReportsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListBulkDeploymentDetailedReportsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListBulkDeploymentDetailedReportsError::BadRequest(ref cause) => cause,
+            ListBulkDeploymentDetailedReportsError::Validation(ref cause) => cause,
+            ListBulkDeploymentDetailedReportsError::Credentials(ref err) => err.description(),
+            ListBulkDeploymentDetailedReportsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListBulkDeploymentDetailedReportsError::ParseError(ref cause) => cause,
+            ListBulkDeploymentDetailedReportsError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by ListBulkDeployments
+#[derive(Debug, PartialEq)]
+pub enum ListBulkDeploymentsError {
+    /// <p>General error information.</p>
+    BadRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListBulkDeploymentsError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> ListBulkDeploymentsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "BadRequestException" => {
+                    return ListBulkDeploymentsError::BadRequest(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return ListBulkDeploymentsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ListBulkDeploymentsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListBulkDeploymentsError {
+    fn from(err: serde_json::error::Error) -> ListBulkDeploymentsError {
+        ListBulkDeploymentsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListBulkDeploymentsError {
+    fn from(err: CredentialsError) -> ListBulkDeploymentsError {
+        ListBulkDeploymentsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListBulkDeploymentsError {
+    fn from(err: HttpDispatchError) -> ListBulkDeploymentsError {
+        ListBulkDeploymentsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListBulkDeploymentsError {
+    fn from(err: io::Error) -> ListBulkDeploymentsError {
+        ListBulkDeploymentsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListBulkDeploymentsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListBulkDeploymentsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListBulkDeploymentsError::BadRequest(ref cause) => cause,
+            ListBulkDeploymentsError::Validation(ref cause) => cause,
+            ListBulkDeploymentsError::Credentials(ref err) => err.description(),
+            ListBulkDeploymentsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListBulkDeploymentsError::ParseError(ref cause) => cause,
+            ListBulkDeploymentsError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by ListConnectorDefinitionVersions
+#[derive(Debug, PartialEq)]
+pub enum ListConnectorDefinitionVersionsError {
+    /// <p>General error information.</p>
+    BadRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListConnectorDefinitionVersionsError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> ListConnectorDefinitionVersionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "BadRequestException" => {
+                    return ListConnectorDefinitionVersionsError::BadRequest(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return ListConnectorDefinitionVersionsError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return ListConnectorDefinitionVersionsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListConnectorDefinitionVersionsError {
+    fn from(err: serde_json::error::Error) -> ListConnectorDefinitionVersionsError {
+        ListConnectorDefinitionVersionsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListConnectorDefinitionVersionsError {
+    fn from(err: CredentialsError) -> ListConnectorDefinitionVersionsError {
+        ListConnectorDefinitionVersionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListConnectorDefinitionVersionsError {
+    fn from(err: HttpDispatchError) -> ListConnectorDefinitionVersionsError {
+        ListConnectorDefinitionVersionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListConnectorDefinitionVersionsError {
+    fn from(err: io::Error) -> ListConnectorDefinitionVersionsError {
+        ListConnectorDefinitionVersionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListConnectorDefinitionVersionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListConnectorDefinitionVersionsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListConnectorDefinitionVersionsError::BadRequest(ref cause) => cause,
+            ListConnectorDefinitionVersionsError::Validation(ref cause) => cause,
+            ListConnectorDefinitionVersionsError::Credentials(ref err) => err.description(),
+            ListConnectorDefinitionVersionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListConnectorDefinitionVersionsError::ParseError(ref cause) => cause,
+            ListConnectorDefinitionVersionsError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by ListConnectorDefinitions
+#[derive(Debug, PartialEq)]
+pub enum ListConnectorDefinitionsError {
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListConnectorDefinitionsError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> ListConnectorDefinitionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "ValidationException" => {
+                    return ListConnectorDefinitionsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ListConnectorDefinitionsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListConnectorDefinitionsError {
+    fn from(err: serde_json::error::Error) -> ListConnectorDefinitionsError {
+        ListConnectorDefinitionsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListConnectorDefinitionsError {
+    fn from(err: CredentialsError) -> ListConnectorDefinitionsError {
+        ListConnectorDefinitionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListConnectorDefinitionsError {
+    fn from(err: HttpDispatchError) -> ListConnectorDefinitionsError {
+        ListConnectorDefinitionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListConnectorDefinitionsError {
+    fn from(err: io::Error) -> ListConnectorDefinitionsError {
+        ListConnectorDefinitionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListConnectorDefinitionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListConnectorDefinitionsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListConnectorDefinitionsError::Validation(ref cause) => cause,
+            ListConnectorDefinitionsError::Credentials(ref err) => err.description(),
+            ListConnectorDefinitionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListConnectorDefinitionsError::ParseError(ref cause) => cause,
+            ListConnectorDefinitionsError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by ListCoreDefinitionVersions
 #[derive(Debug, PartialEq)]
 pub enum ListCoreDefinitionVersionsError {
@@ -9044,6 +10593,198 @@ impl Error for ResetDeploymentsError {
         }
     }
 }
+/// Errors returned by StartBulkDeployment
+#[derive(Debug, PartialEq)]
+pub enum StartBulkDeploymentError {
+    /// <p>General error information.</p>
+    BadRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl StartBulkDeploymentError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> StartBulkDeploymentError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "BadRequestException" => {
+                    return StartBulkDeploymentError::BadRequest(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return StartBulkDeploymentError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return StartBulkDeploymentError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for StartBulkDeploymentError {
+    fn from(err: serde_json::error::Error) -> StartBulkDeploymentError {
+        StartBulkDeploymentError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for StartBulkDeploymentError {
+    fn from(err: CredentialsError) -> StartBulkDeploymentError {
+        StartBulkDeploymentError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for StartBulkDeploymentError {
+    fn from(err: HttpDispatchError) -> StartBulkDeploymentError {
+        StartBulkDeploymentError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StartBulkDeploymentError {
+    fn from(err: io::Error) -> StartBulkDeploymentError {
+        StartBulkDeploymentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for StartBulkDeploymentError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartBulkDeploymentError {
+    fn description(&self) -> &str {
+        match *self {
+            StartBulkDeploymentError::BadRequest(ref cause) => cause,
+            StartBulkDeploymentError::Validation(ref cause) => cause,
+            StartBulkDeploymentError::Credentials(ref err) => err.description(),
+            StartBulkDeploymentError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            StartBulkDeploymentError::ParseError(ref cause) => cause,
+            StartBulkDeploymentError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by StopBulkDeployment
+#[derive(Debug, PartialEq)]
+pub enum StopBulkDeploymentError {
+    /// <p>General error information.</p>
+    BadRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl StopBulkDeploymentError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> StopBulkDeploymentError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "BadRequestException" => {
+                    return StopBulkDeploymentError::BadRequest(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return StopBulkDeploymentError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return StopBulkDeploymentError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for StopBulkDeploymentError {
+    fn from(err: serde_json::error::Error) -> StopBulkDeploymentError {
+        StopBulkDeploymentError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for StopBulkDeploymentError {
+    fn from(err: CredentialsError) -> StopBulkDeploymentError {
+        StopBulkDeploymentError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for StopBulkDeploymentError {
+    fn from(err: HttpDispatchError) -> StopBulkDeploymentError {
+        StopBulkDeploymentError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StopBulkDeploymentError {
+    fn from(err: io::Error) -> StopBulkDeploymentError {
+        StopBulkDeploymentError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for StopBulkDeploymentError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StopBulkDeploymentError {
+    fn description(&self) -> &str {
+        match *self {
+            StopBulkDeploymentError::BadRequest(ref cause) => cause,
+            StopBulkDeploymentError::Validation(ref cause) => cause,
+            StopBulkDeploymentError::Credentials(ref err) => err.description(),
+            StopBulkDeploymentError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            StopBulkDeploymentError::ParseError(ref cause) => cause,
+            StopBulkDeploymentError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by UpdateConnectivityInfo
 #[derive(Debug, PartialEq)]
 pub enum UpdateConnectivityInfoError {
@@ -9145,6 +10886,102 @@ impl Error for UpdateConnectivityInfoError {
             }
             UpdateConnectivityInfoError::ParseError(ref cause) => cause,
             UpdateConnectivityInfoError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by UpdateConnectorDefinition
+#[derive(Debug, PartialEq)]
+pub enum UpdateConnectorDefinitionError {
+    /// <p>General error information.</p>
+    BadRequest(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl UpdateConnectorDefinitionError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateConnectorDefinitionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "BadRequestException" => {
+                    return UpdateConnectorDefinitionError::BadRequest(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return UpdateConnectorDefinitionError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return UpdateConnectorDefinitionError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateConnectorDefinitionError {
+    fn from(err: serde_json::error::Error) -> UpdateConnectorDefinitionError {
+        UpdateConnectorDefinitionError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateConnectorDefinitionError {
+    fn from(err: CredentialsError) -> UpdateConnectorDefinitionError {
+        UpdateConnectorDefinitionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateConnectorDefinitionError {
+    fn from(err: HttpDispatchError) -> UpdateConnectorDefinitionError {
+        UpdateConnectorDefinitionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateConnectorDefinitionError {
+    fn from(err: io::Error) -> UpdateConnectorDefinitionError {
+        UpdateConnectorDefinitionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateConnectorDefinitionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateConnectorDefinitionError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateConnectorDefinitionError::BadRequest(ref cause) => cause,
+            UpdateConnectorDefinitionError::Validation(ref cause) => cause,
+            UpdateConnectorDefinitionError::Credentials(ref err) => err.description(),
+            UpdateConnectorDefinitionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateConnectorDefinitionError::ParseError(ref cause) => cause,
+            UpdateConnectorDefinitionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9930,31 +11767,43 @@ impl Error for UpdateSubscriptionDefinitionError {
 }
 /// Trait representing the capabilities of the AWS Greengrass API. AWS Greengrass clients implement this trait.
 pub trait GreenGrass {
-    /// <p>Associates a role with a group. Your AWS Greengrass core will use the role to access AWS cloud services. The role&#39;s permissions should allow Greengrass core Lambda functions to perform actions against the cloud.</p>
+    /// <p>Associates a role with a group. Your Greengrass core will use the role to access AWS cloud services. The role&#39;s permissions should allow Greengrass core Lambda functions to perform actions against the cloud.</p>
     fn associate_role_to_group(
         &self,
         input: AssociateRoleToGroupRequest,
     ) -> RusotoFuture<AssociateRoleToGroupResponse, AssociateRoleToGroupError>;
 
-    /// <p>Associates a role with your account. AWS Greengrass will use the role to access your Lambda functions and AWS IoT resources. This is necessary for deployments to succeed. The role must have at least minimum permissions in the policy &#39;&#39;AWSGreengrassResourceAccessRolePolicy&#39;&#39;.</p>
+    /// <p>Associates a role with your account. AWS IoT Greengrass will use the role to access your Lambda functions and AWS IoT resources. This is necessary for deployments to succeed. The role must have at least minimum permissions in the policy &#39;&#39;AWSGreengrassResourceAccessRolePolicy&#39;&#39;.</p>
     fn associate_service_role_to_account(
         &self,
         input: AssociateServiceRoleToAccountRequest,
     ) -> RusotoFuture<AssociateServiceRoleToAccountResponse, AssociateServiceRoleToAccountError>;
 
-    /// <p>Creates a core definition. You may provide the initial version of the core definition now or use &#39;&#39;CreateCoreDefinitionVersion&#39;&#39; at a later time. AWS Greengrass groups must each contain exactly one AWS Greengrass core.</p>
+    /// <p>Creates a connector definition. You may provide the initial version of the connector definition now or use &#39;&#39;CreateConnectorDefinitionVersion&#39;&#39; at a later time.</p>
+    fn create_connector_definition(
+        &self,
+        input: CreateConnectorDefinitionRequest,
+    ) -> RusotoFuture<CreateConnectorDefinitionResponse, CreateConnectorDefinitionError>;
+
+    /// <p>Creates a version of a connector definition which has already been defined.</p>
+    fn create_connector_definition_version(
+        &self,
+        input: CreateConnectorDefinitionVersionRequest,
+    ) -> RusotoFuture<CreateConnectorDefinitionVersionResponse, CreateConnectorDefinitionVersionError>;
+
+    /// <p>Creates a core definition. You may provide the initial version of the core definition now or use &#39;&#39;CreateCoreDefinitionVersion&#39;&#39; at a later time. Greengrass groups must each contain exactly one Greengrass core.</p>
     fn create_core_definition(
         &self,
         input: CreateCoreDefinitionRequest,
     ) -> RusotoFuture<CreateCoreDefinitionResponse, CreateCoreDefinitionError>;
 
-    /// <p>Creates a version of a core definition that has already been defined. AWS Greengrass groups must each contain exactly one AWS Greengrass core.</p>
+    /// <p>Creates a version of a core definition that has already been defined. Greengrass groups must each contain exactly one Greengrass core.</p>
     fn create_core_definition_version(
         &self,
         input: CreateCoreDefinitionVersionRequest,
     ) -> RusotoFuture<CreateCoreDefinitionVersionResponse, CreateCoreDefinitionVersionError>;
 
-    /// <p>Creates a deployment.</p>
+    /// <p>Creates a deployment. &#39;&#39;CreateDeployment&#39;&#39; requests are idempotent with respect to the &#39;&#39;X-Amzn-Client-Token&#39;&#39; token and the request parameters.</p>
     fn create_deployment(
         &self,
         input: CreateDeploymentRequest,
@@ -9984,7 +11833,7 @@ pub trait GreenGrass {
         input: CreateFunctionDefinitionVersionRequest,
     ) -> RusotoFuture<CreateFunctionDefinitionVersionResponse, CreateFunctionDefinitionVersionError>;
 
-    /// <p>Creates a group. You may provide the initial version of the group or use &#39;&#39;CreateGroupVersion&#39;&#39; at a later time.</p>
+    /// <p>Creates a group. You may provide the initial version of the group or use &#39;&#39;CreateGroupVersion&#39;&#39; at a later time. Tip: You can use the &#39;&#39;gg<em>group</em>setup&#39;&#39; package (https://github.com/awslabs/aws-greengrass-group-setup) as a library or command-line application to create and deploy Greengrass groups.</p>
     fn create_group(
         &self,
         input: CreateGroupRequest,
@@ -10046,6 +11895,12 @@ pub trait GreenGrass {
         CreateSubscriptionDefinitionVersionResponse,
         CreateSubscriptionDefinitionVersionError,
     >;
+
+    /// <p>Deletes a connector definition.</p>
+    fn delete_connector_definition(
+        &self,
+        input: DeleteConnectorDefinitionRequest,
+    ) -> RusotoFuture<DeleteConnectorDefinitionResponse, DeleteConnectorDefinitionError>;
 
     /// <p>Deletes a core definition.</p>
     fn delete_core_definition(
@@ -10109,11 +11964,29 @@ pub trait GreenGrass {
         input: GetAssociatedRoleRequest,
     ) -> RusotoFuture<GetAssociatedRoleResponse, GetAssociatedRoleError>;
 
+    /// <p>Returns the status of a bulk deployment.</p>
+    fn get_bulk_deployment_status(
+        &self,
+        input: GetBulkDeploymentStatusRequest,
+    ) -> RusotoFuture<GetBulkDeploymentStatusResponse, GetBulkDeploymentStatusError>;
+
     /// <p>Retrieves the connectivity information for a core.</p>
     fn get_connectivity_info(
         &self,
         input: GetConnectivityInfoRequest,
     ) -> RusotoFuture<GetConnectivityInfoResponse, GetConnectivityInfoError>;
+
+    /// <p>Retrieves information about a connector definition.</p>
+    fn get_connector_definition(
+        &self,
+        input: GetConnectorDefinitionRequest,
+    ) -> RusotoFuture<GetConnectorDefinitionResponse, GetConnectorDefinitionError>;
+
+    /// <p>Retrieves information about a connector definition version, including the connectors that the version contains. Connectors are prebuilt modules that interact with local infrastructure, device protocols, AWS, and other cloud services.</p>
+    fn get_connector_definition_version(
+        &self,
+        input: GetConnectorDefinitionVersionRequest,
+    ) -> RusotoFuture<GetConnectorDefinitionVersionResponse, GetConnectorDefinitionVersionError>;
 
     /// <p>Retrieves information about a core definition version.</p>
     fn get_core_definition(
@@ -10218,6 +12091,33 @@ pub trait GreenGrass {
         &self,
         input: GetSubscriptionDefinitionVersionRequest,
     ) -> RusotoFuture<GetSubscriptionDefinitionVersionResponse, GetSubscriptionDefinitionVersionError>;
+
+    /// <p>Gets a paginated list of the deployments that have been started in a bulk deployment operation, and their current deployment status.</p>
+    fn list_bulk_deployment_detailed_reports(
+        &self,
+        input: ListBulkDeploymentDetailedReportsRequest,
+    ) -> RusotoFuture<
+        ListBulkDeploymentDetailedReportsResponse,
+        ListBulkDeploymentDetailedReportsError,
+    >;
+
+    /// <p>Returns a list of bulk deployments.</p>
+    fn list_bulk_deployments(
+        &self,
+        input: ListBulkDeploymentsRequest,
+    ) -> RusotoFuture<ListBulkDeploymentsResponse, ListBulkDeploymentsError>;
+
+    /// <p>Lists the versions of a connector definition, which are containers for connectors. Connectors run on the Greengrass core and contain built-in integration with local infrastructure, device protocols, AWS, and other cloud services.</p>
+    fn list_connector_definition_versions(
+        &self,
+        input: ListConnectorDefinitionVersionsRequest,
+    ) -> RusotoFuture<ListConnectorDefinitionVersionsResponse, ListConnectorDefinitionVersionsError>;
+
+    /// <p>Retrieves a list of connector definitions.</p>
+    fn list_connector_definitions(
+        &self,
+        input: ListConnectorDefinitionsRequest,
+    ) -> RusotoFuture<ListConnectorDefinitionsResponse, ListConnectorDefinitionsError>;
 
     /// <p>Lists the versions of a core definition.</p>
     fn list_core_definition_versions(
@@ -10324,11 +12224,29 @@ pub trait GreenGrass {
         input: ResetDeploymentsRequest,
     ) -> RusotoFuture<ResetDeploymentsResponse, ResetDeploymentsError>;
 
+    /// <p>Deploys multiple groups in one operation. This action starts the bulk deployment of a specified set of group versions. Each group version deployment will be triggered with an adaptive rate that has a fixed upper limit. We recommend that you include an &#39;&#39;X-Amzn-Client-Token&#39;&#39; token in every &#39;&#39;StartBulkDeployment&#39;&#39; request. These requests are idempotent with respect to the token and the request parameters.</p>
+    fn start_bulk_deployment(
+        &self,
+        input: StartBulkDeploymentRequest,
+    ) -> RusotoFuture<StartBulkDeploymentResponse, StartBulkDeploymentError>;
+
+    /// <p>Stops the execution of a bulk deployment. This action returns a status of &#39;&#39;Stopping&#39;&#39; until the deployment is stopped. You cannot start a new bulk deployment while a previous deployment is in the &#39;&#39;Stopping&#39;&#39; state. This action doesn&#39;t rollback completed deployments or cancel pending deployments.</p>
+    fn stop_bulk_deployment(
+        &self,
+        input: StopBulkDeploymentRequest,
+    ) -> RusotoFuture<StopBulkDeploymentResponse, StopBulkDeploymentError>;
+
     /// <p>Updates the connectivity information for the core. Any devices that belong to the group which has this core will receive this information in order to find the location of the core and connect to it.</p>
     fn update_connectivity_info(
         &self,
         input: UpdateConnectivityInfoRequest,
     ) -> RusotoFuture<UpdateConnectivityInfoResponse, UpdateConnectivityInfoError>;
+
+    /// <p>Updates a connector definition.</p>
+    fn update_connector_definition(
+        &self,
+        input: UpdateConnectorDefinitionRequest,
+    ) -> RusotoFuture<UpdateConnectorDefinitionResponse, UpdateConnectorDefinitionError>;
 
     /// <p>Updates a core definition.</p>
     fn update_core_definition(
@@ -10418,7 +12336,7 @@ impl GreenGrassClient {
 }
 
 impl GreenGrass for GreenGrassClient {
-    /// <p>Associates a role with a group. Your AWS Greengrass core will use the role to access AWS cloud services. The role&#39;s permissions should allow Greengrass core Lambda functions to perform actions against the cloud.</p>
+    /// <p>Associates a role with a group. Your Greengrass core will use the role to access AWS cloud services. The role&#39;s permissions should allow Greengrass core Lambda functions to perform actions against the cloud.</p>
     fn associate_role_to_group(
         &self,
         input: AssociateRoleToGroupRequest,
@@ -10460,7 +12378,7 @@ impl GreenGrass for GreenGrassClient {
         })
     }
 
-    /// <p>Associates a role with your account. AWS Greengrass will use the role to access your Lambda functions and AWS IoT resources. This is necessary for deployments to succeed. The role must have at least minimum permissions in the policy &#39;&#39;AWSGreengrassResourceAccessRolePolicy&#39;&#39;.</p>
+    /// <p>Associates a role with your account. AWS IoT Greengrass will use the role to access your Lambda functions and AWS IoT resources. This is necessary for deployments to succeed. The role must have at least minimum permissions in the policy &#39;&#39;AWSGreengrassResourceAccessRolePolicy&#39;&#39;.</p>
     fn associate_service_role_to_account(
         &self,
         input: AssociateServiceRoleToAccountRequest,
@@ -10499,7 +12417,96 @@ impl GreenGrass for GreenGrassClient {
         })
     }
 
-    /// <p>Creates a core definition. You may provide the initial version of the core definition now or use &#39;&#39;CreateCoreDefinitionVersion&#39;&#39; at a later time. AWS Greengrass groups must each contain exactly one AWS Greengrass core.</p>
+    /// <p>Creates a connector definition. You may provide the initial version of the connector definition now or use &#39;&#39;CreateConnectorDefinitionVersion&#39;&#39; at a later time.</p>
+    fn create_connector_definition(
+        &self,
+        input: CreateConnectorDefinitionRequest,
+    ) -> RusotoFuture<CreateConnectorDefinitionResponse, CreateConnectorDefinitionError> {
+        let request_uri = "/greengrass/definition/connectors";
+
+        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        if let Some(ref amzn_client_token) = input.amzn_client_token {
+            request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
+        }
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<CreateConnectorDefinitionResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateConnectorDefinitionError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Creates a version of a connector definition which has already been defined.</p>
+    fn create_connector_definition_version(
+        &self,
+        input: CreateConnectorDefinitionVersionRequest,
+    ) -> RusotoFuture<CreateConnectorDefinitionVersionResponse, CreateConnectorDefinitionVersionError>
+    {
+        let request_uri = format!(
+            "/greengrass/definition/connectors/{connector_definition_id}/versions",
+            connector_definition_id = input.connector_definition_id
+        );
+
+        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        if let Some(ref amzn_client_token) = input.amzn_client_token {
+            request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
+        }
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<CreateConnectorDefinitionVersionResponse>(&body)
+                            .unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateConnectorDefinitionVersionError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Creates a core definition. You may provide the initial version of the core definition now or use &#39;&#39;CreateCoreDefinitionVersion&#39;&#39; at a later time. Greengrass groups must each contain exactly one Greengrass core.</p>
     fn create_core_definition(
         &self,
         input: CreateCoreDefinitionRequest,
@@ -10542,7 +12549,7 @@ impl GreenGrass for GreenGrassClient {
         })
     }
 
-    /// <p>Creates a version of a core definition that has already been defined. AWS Greengrass groups must each contain exactly one AWS Greengrass core.</p>
+    /// <p>Creates a version of a core definition that has already been defined. Greengrass groups must each contain exactly one Greengrass core.</p>
     fn create_core_definition_version(
         &self,
         input: CreateCoreDefinitionVersionRequest,
@@ -10587,7 +12594,7 @@ impl GreenGrass for GreenGrassClient {
         })
     }
 
-    /// <p>Creates a deployment.</p>
+    /// <p>Creates a deployment. &#39;&#39;CreateDeployment&#39;&#39; requests are idempotent with respect to the &#39;&#39;X-Amzn-Client-Token&#39;&#39; token and the request parameters.</p>
     fn create_deployment(
         &self,
         input: CreateDeploymentRequest,
@@ -10811,7 +12818,7 @@ impl GreenGrass for GreenGrassClient {
         })
     }
 
-    /// <p>Creates a group. You may provide the initial version of the group or use &#39;&#39;CreateGroupVersion&#39;&#39; at a later time.</p>
+    /// <p>Creates a group. You may provide the initial version of the group or use &#39;&#39;CreateGroupVersion&#39;&#39; at a later time. Tip: You can use the &#39;&#39;gg<em>group</em>setup&#39;&#39; package (https://github.com/awslabs/aws-greengrass-group-setup) as a library or command-line application to create and deploy Greengrass groups.</p>
     fn create_group(
         &self,
         input: CreateGroupRequest,
@@ -11258,6 +13265,43 @@ impl GreenGrass for GreenGrassClient {
         })
     }
 
+    /// <p>Deletes a connector definition.</p>
+    fn delete_connector_definition(
+        &self,
+        input: DeleteConnectorDefinitionRequest,
+    ) -> RusotoFuture<DeleteConnectorDefinitionResponse, DeleteConnectorDefinitionError> {
+        let request_uri = format!(
+            "/greengrass/definition/connectors/{connector_definition_id}",
+            connector_definition_id = input.connector_definition_id
+        );
+
+        let mut request = SignedRequest::new("DELETE", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<DeleteConnectorDefinitionResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteConnectorDefinitionError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Deletes a core definition.</p>
     fn delete_core_definition(
         &self,
@@ -11639,6 +13683,43 @@ impl GreenGrass for GreenGrassClient {
         })
     }
 
+    /// <p>Returns the status of a bulk deployment.</p>
+    fn get_bulk_deployment_status(
+        &self,
+        input: GetBulkDeploymentStatusRequest,
+    ) -> RusotoFuture<GetBulkDeploymentStatusResponse, GetBulkDeploymentStatusError> {
+        let request_uri = format!(
+            "/greengrass/bulk/deployments/{bulk_deployment_id}/status",
+            bulk_deployment_id = input.bulk_deployment_id
+        );
+
+        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetBulkDeploymentStatusResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetBulkDeploymentStatusError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Retrieves the connectivity information for a core.</p>
     fn get_connectivity_info(
         &self,
@@ -11674,6 +13755,87 @@ impl GreenGrass for GreenGrassClient {
                         Err(GetConnectivityInfoError::from_response(response))
                     }),
                 )
+            }
+        })
+    }
+
+    /// <p>Retrieves information about a connector definition.</p>
+    fn get_connector_definition(
+        &self,
+        input: GetConnectorDefinitionRequest,
+    ) -> RusotoFuture<GetConnectorDefinitionResponse, GetConnectorDefinitionError> {
+        let request_uri = format!(
+            "/greengrass/definition/connectors/{connector_definition_id}",
+            connector_definition_id = input.connector_definition_id
+        );
+
+        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetConnectorDefinitionResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetConnectorDefinitionError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Retrieves information about a connector definition version, including the connectors that the version contains. Connectors are prebuilt modules that interact with local infrastructure, device protocols, AWS, and other cloud services.</p>
+    fn get_connector_definition_version(
+        &self,
+        input: GetConnectorDefinitionVersionRequest,
+    ) -> RusotoFuture<GetConnectorDefinitionVersionResponse, GetConnectorDefinitionVersionError>
+    {
+        let request_uri = format!("/greengrass/definition/connectors/{connector_definition_id}/versions/{connector_definition_version_id}", connector_definition_id = input.connector_definition_id, connector_definition_version_id = input.connector_definition_version_id);
+
+        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.next_token {
+            params.put("NextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetConnectorDefinitionVersionResponse>(&body)
+                            .unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetConnectorDefinitionVersionError::from_response(response))
+                }))
             }
         })
     }
@@ -11841,6 +14003,12 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+        let mut params = Params::new();
+        if let Some(ref x) = input.next_token {
+            params.put("NextToken", x);
+        }
+        request.set_params(params);
+
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().map(|response| {
@@ -11914,6 +14082,12 @@ impl GreenGrass for GreenGrassClient {
 
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.next_token {
+            params.put("NextToken", x);
+        }
+        request.set_params(params);
 
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
@@ -12142,6 +14316,12 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+        let mut params = Params::new();
+        if let Some(ref x) = input.next_token {
+            params.put("NextToken", x);
+        }
+        request.set_params(params);
+
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().map(|response| {
@@ -12322,6 +14502,12 @@ impl GreenGrass for GreenGrassClient {
         let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
         request.set_content_type("application/x-amz-json-1.1".to_owned());
 
+        let mut params = Params::new();
+        if let Some(ref x) = input.next_token {
+            params.put("NextToken", x);
+        }
+        request.set_params(params);
+
         self.client.sign_and_dispatch(request, |response| {
             if response.status.as_u16() == 200 {
                 Box::new(response.buffer().from_err().map(|response| {
@@ -12344,6 +14530,196 @@ impl GreenGrass for GreenGrassClient {
                     Err(GetSubscriptionDefinitionVersionError::from_response(
                         response,
                     ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Gets a paginated list of the deployments that have been started in a bulk deployment operation, and their current deployment status.</p>
+    fn list_bulk_deployment_detailed_reports(
+        &self,
+        input: ListBulkDeploymentDetailedReportsRequest,
+    ) -> RusotoFuture<
+        ListBulkDeploymentDetailedReportsResponse,
+        ListBulkDeploymentDetailedReportsError,
+    > {
+        let request_uri = format!(
+            "/greengrass/bulk/deployments/{bulk_deployment_id}/detailed-reports",
+            bulk_deployment_id = input.bulk_deployment_id
+        );
+
+        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("MaxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("NextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListBulkDeploymentDetailedReportsResponse>(&body)
+                            .unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListBulkDeploymentDetailedReportsError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Returns a list of bulk deployments.</p>
+    fn list_bulk_deployments(
+        &self,
+        input: ListBulkDeploymentsRequest,
+    ) -> RusotoFuture<ListBulkDeploymentsResponse, ListBulkDeploymentsError> {
+        let request_uri = "/greengrass/bulk/deployments";
+
+        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("MaxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("NextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListBulkDeploymentsResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(ListBulkDeploymentsError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Lists the versions of a connector definition, which are containers for connectors. Connectors run on the Greengrass core and contain built-in integration with local infrastructure, device protocols, AWS, and other cloud services.</p>
+    fn list_connector_definition_versions(
+        &self,
+        input: ListConnectorDefinitionVersionsRequest,
+    ) -> RusotoFuture<ListConnectorDefinitionVersionsResponse, ListConnectorDefinitionVersionsError>
+    {
+        let request_uri = format!(
+            "/greengrass/definition/connectors/{connector_definition_id}/versions",
+            connector_definition_id = input.connector_definition_id
+        );
+
+        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("MaxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("NextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListConnectorDefinitionVersionsResponse>(&body)
+                            .unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListConnectorDefinitionVersionsError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Retrieves a list of connector definitions.</p>
+    fn list_connector_definitions(
+        &self,
+        input: ListConnectorDefinitionsRequest,
+    ) -> RusotoFuture<ListConnectorDefinitionsResponse, ListConnectorDefinitionsError> {
+        let request_uri = "/greengrass/definition/connectors";
+
+        let mut request = SignedRequest::new("GET", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let mut params = Params::new();
+        if let Some(ref x) = input.max_results {
+            params.put("MaxResults", x);
+        }
+        if let Some(ref x) = input.next_token {
+            params.put("NextToken", x);
+        }
+        request.set_params(params);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<ListConnectorDefinitionsResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListConnectorDefinitionsError::from_response(response))
                 }))
             }
         })
@@ -13132,6 +15508,89 @@ impl GreenGrass for GreenGrassClient {
         })
     }
 
+    /// <p>Deploys multiple groups in one operation. This action starts the bulk deployment of a specified set of group versions. Each group version deployment will be triggered with an adaptive rate that has a fixed upper limit. We recommend that you include an &#39;&#39;X-Amzn-Client-Token&#39;&#39; token in every &#39;&#39;StartBulkDeployment&#39;&#39; request. These requests are idempotent with respect to the token and the request parameters.</p>
+    fn start_bulk_deployment(
+        &self,
+        input: StartBulkDeploymentRequest,
+    ) -> RusotoFuture<StartBulkDeploymentResponse, StartBulkDeploymentError> {
+        let request_uri = "/greengrass/bulk/deployments";
+
+        let mut request = SignedRequest::new("POST", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        if let Some(ref amzn_client_token) = input.amzn_client_token {
+            request.add_header("X-Amzn-Client-Token", &amzn_client_token.to_string());
+        }
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<StartBulkDeploymentResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(StartBulkDeploymentError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Stops the execution of a bulk deployment. This action returns a status of &#39;&#39;Stopping&#39;&#39; until the deployment is stopped. You cannot start a new bulk deployment while a previous deployment is in the &#39;&#39;Stopping&#39;&#39; state. This action doesn&#39;t rollback completed deployments or cancel pending deployments.</p>
+    fn stop_bulk_deployment(
+        &self,
+        input: StopBulkDeploymentRequest,
+    ) -> RusotoFuture<StopBulkDeploymentResponse, StopBulkDeploymentError> {
+        let request_uri = format!(
+            "/greengrass/bulk/deployments/{bulk_deployment_id}/$stop",
+            bulk_deployment_id = input.bulk_deployment_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<StopBulkDeploymentResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(StopBulkDeploymentError::from_response(response))),
+                )
+            }
+        })
+    }
+
     /// <p>Updates the connectivity information for the core. Any devices that belong to the group which has this core will receive this information in order to find the location of the core and connect to it.</p>
     fn update_connectivity_info(
         &self,
@@ -13170,6 +15629,46 @@ impl GreenGrass for GreenGrassClient {
                         Err(UpdateConnectivityInfoError::from_response(response))
                     }),
                 )
+            }
+        })
+    }
+
+    /// <p>Updates a connector definition.</p>
+    fn update_connector_definition(
+        &self,
+        input: UpdateConnectorDefinitionRequest,
+    ) -> RusotoFuture<UpdateConnectorDefinitionResponse, UpdateConnectorDefinitionError> {
+        let request_uri = format!(
+            "/greengrass/definition/connectors/{connector_definition_id}",
+            connector_definition_id = input.connector_definition_id
+        );
+
+        let mut request = SignedRequest::new("PUT", "greengrass", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.as_u16() == 200 {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<UpdateConnectorDefinitionResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateConnectorDefinitionError::from_response(response))
+                }))
             }
         })
     }

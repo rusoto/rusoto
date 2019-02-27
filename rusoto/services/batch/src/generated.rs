@@ -85,6 +85,10 @@ pub struct AttemptContainerDetail {
     #[serde(rename = "logStreamName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub log_stream_name: Option<String>,
+    /// <p>The network interfaces associated with the job attempt.</p>
+    #[serde(rename = "networkInterfaces")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_interfaces: Option<Vec<NetworkInterface>>,
     /// <p>A short (255 max characters) human-readable string to provide additional details about a running or stopped container.</p>
     #[serde(rename = "reason")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -103,7 +107,7 @@ pub struct AttemptDetail {
     #[serde(rename = "container")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub container: Option<AttemptContainerDetail>,
-    /// <p>The Unix time stamp (in seconds and milliseconds) for when the attempt was started (when the attempt transitioned from the <code>STARTING</code> state to the <code>RUNNING</code> state).</p>
+    /// <p>The Unix timestamp (in seconds and milliseconds) for when the attempt was started (when the attempt transitioned from the <code>STARTING</code> state to the <code>RUNNING</code> state).</p>
     #[serde(rename = "startedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub started_at: Option<i64>,
@@ -111,7 +115,7 @@ pub struct AttemptDetail {
     #[serde(rename = "statusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_reason: Option<String>,
-    /// <p>The Unix time stamp (in seconds and milliseconds) for when the attempt was stopped (when the attempt transitioned from the <code>RUNNING</code> state to a terminal state, such as <code>SUCCEEDED</code> or <code>FAILED</code>).</p>
+    /// <p>The Unix timestamp (in seconds and milliseconds) for when the attempt was stopped (when the attempt transitioned from the <code>RUNNING</code> state to a terminal state, such as <code>SUCCEEDED</code> or <code>FAILED</code>).</p>
     #[serde(rename = "stoppedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stopped_at: Option<i64>,
@@ -152,7 +156,7 @@ pub struct ComputeEnvironmentDetail {
     #[serde(rename = "serviceRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub service_role: Option<String>,
-    /// <p>The state of the compute environment. The valid values are <code>ENABLED</code> or <code>DISABLED</code>. An <code>ENABLED</code> state indicates that you can register instances with the compute environment and that the associated instances can accept jobs. </p>
+    /// <p>The state of the compute environment. The valid values are <code>ENABLED</code> or <code>DISABLED</code>. </p> <p>If the state is <code>ENABLED</code>, then the AWS Batch scheduler can attempt to place jobs from an associated job queue on the compute resources within the environment. If the compute environment is managed, then it can scale its instances out or in automatically, based on the job queue demand.</p> <p>If the state is <code>DISABLED</code>, then the AWS Batch scheduler does not attempt to place jobs within the environment. Jobs in a <code>STARTING</code> or <code>RUNNING</code> state continue to progress normally. Managed compute environments in the <code>DISABLED</code> state do not scale out. However, they scale in to <code>minvCpus</code> value after instances become idle.</p>
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
@@ -184,7 +188,7 @@ pub struct ComputeEnvironmentOrder {
 /// <p>An object representing an AWS Batch compute resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ComputeResource {
-    /// <p>The minimum percentage that a Spot Instance price must be when compared with the On-Demand price for that instance type before instances are launched. For example, if your bid percentage is 20%, then the Spot price must be below 20% of the current On-Demand price for that EC2 instance.</p>
+    /// <p>The maximum percentage that a Spot Instance price can be when compared with the On-Demand price for that instance type before instances are launched. For example, if your maximum percentage is 20%, then the Spot price must be below 20% of the current On-Demand price for that EC2 instance. You always pay the lowest (market) price and never more than your maximum percentage. If you leave this field empty, the default value is 100% of the On-Demand price.</p>
     #[serde(rename = "bidPercentage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bid_percentage: Option<i64>,
@@ -206,15 +210,24 @@ pub struct ComputeResource {
     /// <p>The instances types that may be launched. You can specify instance families to launch any instance type within those families (for example, <code>c4</code> or <code>p3</code>), or you can specify specific sizes within a family (such as <code>c4.8xlarge</code>). You can also choose <code>optimal</code> to pick instance types (from the latest C, M, and R instance families) on the fly that match the demand of your job queues.</p>
     #[serde(rename = "instanceTypes")]
     pub instance_types: Vec<String>,
+    /// <p>The launch template to use for your compute resources. Any other compute resource parameters that you specify in a <a>CreateComputeEnvironment</a> API operation override the same parameters in the launch template. You must specify either the launch template ID or launch template name in the request, but not both. </p>
+    #[serde(rename = "launchTemplate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub launch_template: Option<LaunchTemplateSpecification>,
     /// <p>The maximum number of EC2 vCPUs that an environment can reach. </p>
     #[serde(rename = "maxvCpus")]
     pub maxv_cpus: i64,
-    /// <p>The minimum number of EC2 vCPUs that an environment should maintain. </p>
+    /// <p>The minimum number of EC2 vCPUs that an environment should maintain (even if the compute environment is <code>DISABLED</code>). </p>
     #[serde(rename = "minvCpus")]
     pub minv_cpus: i64,
+    /// <p>The Amazon EC2 placement group to associate with your compute resources. If you intend to submit multi-node parallel jobs to your compute environment, you should consider creating a cluster placement group and associate it with your compute resources. This keeps your multi-node parallel job on a logical grouping of instances within a single Availability Zone with high network flow potential. For more information, see <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html">Placement Groups</a> in the <i>Amazon EC2 User Guide for Linux Instances</i>.</p>
+    #[serde(rename = "placementGroup")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub placement_group: Option<String>,
     /// <p>The EC2 security group that is associated with instances launched in the compute environment. </p>
     #[serde(rename = "securityGroupIds")]
-    pub security_group_ids: Vec<String>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub security_group_ids: Option<Vec<String>>,
     /// <p>The Amazon Resource Name (ARN) of the Amazon EC2 Spot Fleet IAM role applied to a <code>SPOT</code> compute environment.</p>
     #[serde(rename = "spotIamFleetRole")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -272,6 +285,10 @@ pub struct ContainerDetail {
     #[serde(rename = "image")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub image: Option<String>,
+    /// <p>The instance type of the underlying host infrastructure of a multi-node parallel job.</p>
+    #[serde(rename = "instanceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_type: Option<String>,
     /// <p>The Amazon Resource Name (ARN) associated with the job upon execution. </p>
     #[serde(rename = "jobRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -288,6 +305,10 @@ pub struct ContainerDetail {
     #[serde(rename = "mountPoints")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub mount_points: Option<Vec<MountPoint>>,
+    /// <p>The network interfaces associated with the job.</p>
+    #[serde(rename = "networkInterfaces")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub network_interfaces: Option<Vec<NetworkInterface>>,
     /// <p>When this parameter is true, the container is given elevated privileges on the host container instance (similar to the <code>root</code> user).</p>
     #[serde(rename = "privileged")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -333,6 +354,10 @@ pub struct ContainerOverrides {
     #[serde(rename = "environment")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub environment: Option<Vec<KeyValuePair>>,
+    /// <p>The instance type to use for a multi-node parallel job. This parameter is not valid for single-node container jobs.</p>
+    #[serde(rename = "instanceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_type: Option<String>,
     /// <p>The number of MiB of memory reserved for the job. This value overrides the value set in the job definition.</p>
     #[serde(rename = "memory")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -356,14 +381,20 @@ pub struct ContainerProperties {
     pub environment: Option<Vec<KeyValuePair>>,
     /// <p><p>The image used to start a container. This string is passed directly to the Docker daemon. Images in the Docker Hub registry are available by default. Other repositories are specified with <code> <i>repository-url</i>/<i>image</i>:<i>tag</i> </code>. Up to 255 letters (uppercase and lowercase), numbers, hyphens, underscores, colons, periods, forward slashes, and number signs are allowed. This parameter maps to <code>Image</code> in the <a href="https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container">Create a container</a> section of the <a href="https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/">Docker Remote API</a> and the <code>IMAGE</code> parameter of <a href="https://docs.docker.com/engine/reference/run/">docker run</a>.</p> <ul> <li> <p>Images in Amazon ECR repositories use the full registry and repository URI (for example, <code>012345678910.dkr.ecr.&lt;region-name&gt;.amazonaws.com/&lt;repository-name&gt;</code>). </p> </li> <li> <p>Images in official repositories on Docker Hub use a single name (for example, <code>ubuntu</code> or <code>mongo</code>).</p> </li> <li> <p>Images in other repositories on Docker Hub are qualified with an organization name (for example, <code>amazon/amazon-ecs-agent</code>).</p> </li> <li> <p>Images in other online repositories are qualified further by a domain name (for example, <code>quay.io/assemblyline/ubuntu</code>).</p> </li> </ul></p>
     #[serde(rename = "image")]
-    pub image: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub image: Option<String>,
+    /// <p>The instance type to use for a multi-node parallel job. Currently all node groups in a multi-node parallel job must use the same instance type. This parameter is not valid for single-node container jobs.</p>
+    #[serde(rename = "instanceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_type: Option<String>,
     /// <p>The Amazon Resource Name (ARN) of the IAM role that the container can assume for AWS permissions.</p>
     #[serde(rename = "jobRoleArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub job_role_arn: Option<String>,
     /// <p><p>The hard limit (in MiB) of memory to present to the container. If your container attempts to exceed the memory specified here, the container is killed. This parameter maps to <code>Memory</code> in the <a href="https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container">Create a container</a> section of the <a href="https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/">Docker Remote API</a> and the <code>--memory</code> option to <a href="https://docs.docker.com/engine/reference/run/">docker run</a>. You must specify at least 4 MiB of memory for a job.</p> <note> <p>If you are trying to maximize your resource utilization by providing your jobs as much memory as possible for a particular instance type, see <a href="http://docs.aws.amazon.com/batch/latest/userguide/memory-management.html">Memory Management</a> in the <i>AWS Batch User Guide</i>.</p> </note></p>
     #[serde(rename = "memory")]
-    pub memory: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub memory: Option<i64>,
     /// <p>The mount points for data volumes in your container. This parameter maps to <code>Volumes</code> in the <a href="https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container">Create a container</a> section of the <a href="https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/">Docker Remote API</a> and the <code>--volume</code> option to <a href="https://docs.docker.com/engine/reference/run/">docker run</a>.</p>
     #[serde(rename = "mountPoints")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -386,7 +417,8 @@ pub struct ContainerProperties {
     pub user: Option<String>,
     /// <p>The number of vCPUs reserved for the container. This parameter maps to <code>CpuShares</code> in the <a href="https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/#create-a-container">Create a container</a> section of the <a href="https://docs.docker.com/engine/reference/api/docker_remote_api_v1.23/">Docker Remote API</a> and the <code>--cpu-shares</code> option to <a href="https://docs.docker.com/engine/reference/run/">docker run</a>. Each vCPU is equivalent to 1,024 CPU shares. You must specify at least one vCPU.</p>
     #[serde(rename = "vcpus")]
-    pub vcpus: i64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub vcpus: Option<i64>,
     /// <p>A list of data volumes used in a job.</p>
     #[serde(rename = "volumes")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -423,7 +455,7 @@ pub struct CreateComputeEnvironmentRequest {
     #[serde(rename = "state")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state: Option<String>,
-    /// <p>The type of the compute environment. </p>
+    /// <p>The type of the compute environment. For more information, see <a href="http://docs.aws.amazon.com/batch/latest/userguide/compute_environments.html">Compute Environments</a> in the <i>AWS Batch User Guide</i>.</p>
     #[serde(rename = "type")]
     pub type_: String,
 }
@@ -449,7 +481,7 @@ pub struct CreateJobQueueRequest {
     /// <p>The name of the job queue.</p>
     #[serde(rename = "jobQueueName")]
     pub job_queue_name: String,
-    /// <p>The priority of the job queue. Job queues with a higher priority (or a higher integer value for the <code>priority</code> parameter) are evaluated first when associated with same compute environment. Priority is determined in descending order, for example, a job queue with a priority value of <code>10</code> is given scheduling preference over a job queue with a priority value of <code>1</code>.</p>
+    /// <p>The priority of the job queue. Job queues with a higher priority (or a higher integer value for the <code>priority</code> parameter) are evaluated first when associated with the same compute environment. Priority is determined in descending order, for example, a job queue with a priority value of <code>10</code> is given scheduling preference over a job queue with a priority value of <code>1</code>.</p>
     #[serde(rename = "priority")]
     pub priority: i64,
     /// <p>The state of the job queue. If the job queue state is <code>ENABLED</code>, it is able to accept jobs.</p>
@@ -636,6 +668,10 @@ pub struct JobDefinition {
     /// <p>The name of the job definition. </p>
     #[serde(rename = "jobDefinitionName")]
     pub job_definition_name: String,
+    /// <p>An object with various properties specific to multi-node parallel jobs.</p>
+    #[serde(rename = "nodeProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub node_properties: Option<NodeProperties>,
     /// <p>Default parameters or parameter substitution placeholders that are set in the job definition. Parameters are specified as a key-value pair mapping. Parameters in a <code>SubmitJob</code> request override any corresponding parameter defaults from the job definition.</p>
     #[serde(rename = "parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -689,7 +725,7 @@ pub struct JobDetail {
     #[serde(rename = "container")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub container: Option<ContainerDetail>,
-    /// <p>The Unix time stamp (in seconds and milliseconds) for when the job was created. For non-array jobs and parent array jobs, this is when the job entered the <code>SUBMITTED</code> state (at the time <a>SubmitJob</a> was called). For array child jobs, this is when the child job was spawned by its parent and entered the <code>PENDING</code> state.</p>
+    /// <p>The Unix timestamp (in seconds and milliseconds) for when the job was created. For non-array jobs and parent array jobs, this is when the job entered the <code>SUBMITTED</code> state (at the time <a>SubmitJob</a> was called). For array child jobs, this is when the child job was spawned by its parent and entered the <code>PENDING</code> state.</p>
     #[serde(rename = "createdAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
@@ -709,6 +745,14 @@ pub struct JobDetail {
     /// <p>The Amazon Resource Name (ARN) of the job queue with which the job is associated.</p>
     #[serde(rename = "jobQueue")]
     pub job_queue: String,
+    /// <p>An object representing the details of a node that is associated with a multi-node parallel job.</p>
+    #[serde(rename = "nodeDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub node_details: Option<NodeDetails>,
+    /// <p>An object representing the node properties of a multi-node parallel job.</p>
+    #[serde(rename = "nodeProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub node_properties: Option<NodeProperties>,
     /// <p>Additional parameters passed to the job that replace parameter substitution placeholders or override any corresponding parameter defaults from the job definition. </p>
     #[serde(rename = "parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -717,17 +761,17 @@ pub struct JobDetail {
     #[serde(rename = "retryStrategy")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub retry_strategy: Option<RetryStrategy>,
-    /// <p>The Unix time stamp (in seconds and milliseconds) for when the job was started (when the job transitioned from the <code>STARTING</code> state to the <code>RUNNING</code> state).</p>
+    /// <p>The Unix timestamp (in seconds and milliseconds) for when the job was started (when the job transitioned from the <code>STARTING</code> state to the <code>RUNNING</code> state).</p>
     #[serde(rename = "startedAt")]
     pub started_at: i64,
-    /// <p>The current status for the job.</p>
+    /// <p><p>The current status for the job. </p> <note> <p>If your jobs do not progress to <code>STARTING</code>, see <a href="http://docs.aws.amazon.com/batch/latest/userguide/troubleshooting.html#job_stuck_in_runnable">Jobs Stuck in <code>RUNNABLE</code> Status</a> in the troubleshooting section of the <i>AWS Batch User Guide</i>.</p> </note></p>
     #[serde(rename = "status")]
     pub status: String,
     /// <p>A short, human-readable string to provide additional details about the current status of the job. </p>
     #[serde(rename = "statusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_reason: Option<String>,
-    /// <p>The Unix time stamp (in seconds and milliseconds) for when the job was stopped (when the job transitioned from the <code>RUNNING</code> state to a terminal state, such as <code>SUCCEEDED</code> or <code>FAILED</code>).</p>
+    /// <p>The Unix timestamp (in seconds and milliseconds) for when the job was stopped (when the job transitioned from the <code>RUNNING</code> state to a terminal state, such as <code>SUCCEEDED</code> or <code>FAILED</code>).</p>
     #[serde(rename = "stoppedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stopped_at: Option<i64>,
@@ -778,7 +822,7 @@ pub struct JobSummary {
     #[serde(rename = "container")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub container: Option<ContainerSummary>,
-    /// <p>The Unix time stamp for when the job was created. For non-array jobs and parent array jobs, this is when the job entered the <code>SUBMITTED</code> state (at the time <a>SubmitJob</a> was called). For array child jobs, this is when the child job was spawned by its parent and entered the <code>PENDING</code> state.</p>
+    /// <p>The Unix timestamp for when the job was created. For non-array jobs and parent array jobs, this is when the job entered the <code>SUBMITTED</code> state (at the time <a>SubmitJob</a> was called). For array child jobs, this is when the child job was spawned by its parent and entered the <code>PENDING</code> state.</p>
     #[serde(rename = "createdAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<i64>,
@@ -788,7 +832,11 @@ pub struct JobSummary {
     /// <p>The name of the job.</p>
     #[serde(rename = "jobName")]
     pub job_name: String,
-    /// <p>The Unix time stamp for when the job was started (when the job transitioned from the <code>STARTING</code> state to the <code>RUNNING</code> state).</p>
+    /// <p>The node properties for a single node in a job summary list.</p>
+    #[serde(rename = "nodeProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub node_properties: Option<NodePropertiesSummary>,
+    /// <p>The Unix timestamp for when the job was started (when the job transitioned from the <code>STARTING</code> state to the <code>RUNNING</code> state).</p>
     #[serde(rename = "startedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub started_at: Option<i64>,
@@ -800,7 +848,7 @@ pub struct JobSummary {
     #[serde(rename = "statusReason")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_reason: Option<String>,
-    /// <p>The Unix time stamp for when the job was stopped (when the job transitioned from the <code>RUNNING</code> state to a terminal state, such as <code>SUCCEEDED</code> or <code>FAILED</code>).</p>
+    /// <p>The Unix timestamp for when the job was stopped (when the job transitioned from the <code>RUNNING</code> state to a terminal state, such as <code>SUCCEEDED</code> or <code>FAILED</code>).</p>
     #[serde(rename = "stoppedAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub stopped_at: Option<i64>,
@@ -828,6 +876,23 @@ pub struct KeyValuePair {
     pub value: Option<String>,
 }
 
+/// <p>An object representing a launch template associated with a compute resource. You must specify either the launch template ID or launch template name in the request, but not both. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct LaunchTemplateSpecification {
+    /// <p>The ID of the launch template.</p>
+    #[serde(rename = "launchTemplateId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub launch_template_id: Option<String>,
+    /// <p>The name of the launch template.</p>
+    #[serde(rename = "launchTemplateName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub launch_template_name: Option<String>,
+    /// <p>The version number of the launch template.</p> <p>Default: The default version of the launch template.</p>
+    #[serde(rename = "version")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub version: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListJobsRequest {
     /// <p>The job ID for an array job. Specifying an array job ID with this parameter lists all child jobs from within the specified array.</p>
@@ -846,6 +911,10 @@ pub struct ListJobsRequest {
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
+    /// <p>The job ID for a multi-node parallel job. Specifying a multi-node parallel job ID with this parameter lists all nodes that are associated with the specified job.</p>
+    #[serde(rename = "multiNodeJobId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub multi_node_job_id: Option<String>,
     /// <p><p>The <code>nextToken</code> value returned from a previous paginated <code>ListJobs</code> request where <code>maxResults</code> was used and the results exceeded the value of that parameter. Pagination continues from the end of the previous results that returned the <code>nextToken</code> value. This value is <code>null</code> when there are no more results to return.</p> <note> <p>This token should be treated as an opaque identifier that is only used to retrieve the next items in a list and not for other programmatic purposes.</p> </note></p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -881,15 +950,116 @@ pub struct MountPoint {
     pub source_volume: Option<String>,
 }
 
+/// <p>An object representing the elastic network interface for a multi-node parallel job node.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct NetworkInterface {
+    /// <p>The attachment ID for the network interface.</p>
+    #[serde(rename = "attachmentId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attachment_id: Option<String>,
+    /// <p>The private IPv6 address for the network interface.</p>
+    #[serde(rename = "ipv6Address")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ipv_6_address: Option<String>,
+    /// <p>The private IPv4 address for the network interface.</p>
+    #[serde(rename = "privateIpv4Address")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub private_ipv_4_address: Option<String>,
+}
+
+/// <p>An object representing the details of a multi-node parallel job node.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct NodeDetails {
+    /// <p>Specifies whether the current node is the main node for a multi-node parallel job.</p>
+    #[serde(rename = "isMainNode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_main_node: Option<bool>,
+    /// <p>The node index for the node. Node index numbering begins at zero. This index is also available on the node with the <code>AWS_BATCH_JOB_NODE_INDEX</code> environment variable.</p>
+    #[serde(rename = "nodeIndex")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub node_index: Option<i64>,
+}
+
+/// <p>Object representing any node overrides to a job definition that is used in a <a>SubmitJob</a> API operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct NodeOverrides {
+    /// <p>The node property overrides for the job.</p>
+    #[serde(rename = "nodePropertyOverrides")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub node_property_overrides: Option<Vec<NodePropertyOverride>>,
+}
+
+/// <p>An object representing the node properties of a multi-node parallel job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct NodeProperties {
+    /// <p>Specifies the node index for the main node of a multi-node parallel job.</p>
+    #[serde(rename = "mainNode")]
+    pub main_node: i64,
+    /// <p>A list of node ranges and their properties associated with a multi-node parallel job.</p>
+    #[serde(rename = "nodeRangeProperties")]
+    pub node_range_properties: Vec<NodeRangeProperty>,
+    /// <p>The number of nodes associated with a multi-node parallel job.</p>
+    #[serde(rename = "numNodes")]
+    pub num_nodes: i64,
+}
+
+/// <p>An object representing the properties of a node that is associated with a multi-node parallel job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct NodePropertiesSummary {
+    /// <p>Specifies whether the current node is the main node for a multi-node parallel job.</p>
+    #[serde(rename = "isMainNode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_main_node: Option<bool>,
+    /// <p>The node index for the node. Node index numbering begins at zero. This index is also available on the node with the <code>AWS_BATCH_JOB_NODE_INDEX</code> environment variable.</p>
+    #[serde(rename = "nodeIndex")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub node_index: Option<i64>,
+    /// <p>The number of nodes associated with a multi-node parallel job.</p>
+    #[serde(rename = "numNodes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub num_nodes: Option<i64>,
+}
+
+/// <p>Object representing any node overrides to a job definition that is used in a <a>SubmitJob</a> API operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct NodePropertyOverride {
+    /// <p>The overrides that should be sent to a node range.</p>
+    #[serde(rename = "containerOverrides")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container_overrides: Option<ContainerOverrides>,
+    /// <p>The range of nodes, using node index values, with which to override. A range of <code>0:3</code> indicates nodes with index values of <code>0</code> through <code>3</code>. If the starting range value is omitted (<code>:n</code>), then <code>0</code> is used to start the range. If the ending range value is omitted (<code>n:</code>), then the highest possible node index is used to end the range.</p>
+    #[serde(rename = "targetNodes")]
+    pub target_nodes: String,
+}
+
+/// <p>An object representing the properties of the node range for a multi-node parallel job.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct NodeRangeProperty {
+    /// <p>The container details for the node range.</p>
+    #[serde(rename = "container")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub container: Option<ContainerProperties>,
+    /// <p>The range of nodes, using node index values. A range of <code>0:3</code> indicates nodes with index values of <code>0</code> through <code>3</code>. If the starting range value is omitted (<code>:n</code>), then <code>0</code> is used to start the range. If the ending range value is omitted (<code>n:</code>), then the highest possible node index is used to end the range. Your accumulative node ranges must account for all nodes (0:n). You may nest node ranges, for example 0:10 and 4:5, in which case the 4:5 range properties override the 0:10 properties. </p>
+    #[serde(rename = "targetNodes")]
+    pub target_nodes: String,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct RegisterJobDefinitionRequest {
-    /// <p>An object with various properties specific for container-based jobs. This parameter is required if the <code>type</code> parameter is <code>container</code>.</p>
+    /// <p>An object with various properties specific to single-node container-based jobs. If the job definition's <code>type</code> parameter is <code>container</code>, then you must specify either <code>containerProperties</code> or <code>nodeProperties</code>.</p>
     #[serde(rename = "containerProperties")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub container_properties: Option<ContainerProperties>,
     /// <p>The name of the job definition to register. Up to 128 letters (uppercase and lowercase), numbers, hyphens, and underscores are allowed.</p>
     #[serde(rename = "jobDefinitionName")]
     pub job_definition_name: String,
+    /// <p>An object with various properties specific to multi-node parallel jobs. If you specify node properties for a job, it becomes a multi-node parallel job. For more information, see <a href="http://docs.aws.amazon.com/batch/latest/userguide/multi-node-parallel-jobs.html">Multi-node Parallel Jobs</a> in the <i>AWS Batch User Guide</i>. If the job definition's <code>type</code> parameter is <code>container</code>, then you must specify either <code>containerProperties</code> or <code>nodeProperties</code>.</p>
+    #[serde(rename = "nodeProperties")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub node_properties: Option<NodeProperties>,
     /// <p>Default parameter substitution placeholders to set in the job definition. Parameters are specified as a key-value pair mapping. Parameters in a <code>SubmitJob</code> request override any corresponding parameter defaults from the job definition.</p>
     #[serde(rename = "parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -924,7 +1094,7 @@ pub struct RegisterJobDefinitionResponse {
 /// <p>The retry strategy associated with a job.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RetryStrategy {
-    /// <p>The number of times to move a job to the <code>RUNNABLE</code> status. You may specify between 1 and 10 attempts. If the value of <code>attempts</code> is greater than one, the job is retried if it fails until it has moved to <code>RUNNABLE</code> that many times.</p>
+    /// <p>The number of times to move a job to the <code>RUNNABLE</code> status. You may specify between 1 and 10 attempts. If the value of <code>attempts</code> is greater than one, the job is retried on failure the same number of attempts as the value.</p>
     #[serde(rename = "attempts")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attempts: Option<i64>,
@@ -940,7 +1110,7 @@ pub struct SubmitJobRequest {
     #[serde(rename = "containerOverrides")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub container_overrides: Option<ContainerOverrides>,
-    /// <p>A list of dependencies for the job. A job can depend upon a maximum of 20 jobs. You can specify a <code>SEQUENTIAL</code> type dependency without specifying a job ID for array jobs so that each child array job completes sequentially, starting at index 0. You can also specify an <code>N_TO_N</code> type dependency with a job ID for array jobs so that each index child of this job must wait for the corresponding index child of each dependency to complete before it can begin.</p>
+    /// <p>A list of dependencies for the job. A job can depend upon a maximum of 20 jobs. You can specify a <code>SEQUENTIAL</code> type dependency without specifying a job ID for array jobs so that each child array job completes sequentially, starting at index 0. You can also specify an <code>N_TO_N</code> type dependency with a job ID for array jobs. In that case, each index child of this job must wait for the corresponding index child of each dependency to complete before it can begin.</p>
     #[serde(rename = "dependsOn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub depends_on: Option<Vec<JobDependency>>,
@@ -953,6 +1123,10 @@ pub struct SubmitJobRequest {
     /// <p>The job queue into which the job is submitted. You can specify either the name or the Amazon Resource Name (ARN) of the queue. </p>
     #[serde(rename = "jobQueue")]
     pub job_queue: String,
+    /// <p>A list of node overrides in JSON format that specify the node range to target and the container overrides for that node range.</p>
+    #[serde(rename = "nodeOverrides")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub node_overrides: Option<NodeOverrides>,
     /// <p>Additional parameters passed to the job that replace parameter substitution placeholders that are set in the job definition. Parameters are specified as a key and value pair mapping. Parameters in a <code>SubmitJob</code> request override any corresponding parameter defaults from the job definition.</p>
     #[serde(rename = "parameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1032,7 +1206,7 @@ pub struct UpdateComputeEnvironmentResponse {
     #[serde(rename = "computeEnvironmentArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compute_environment_arn: Option<String>,
-    /// <p>The name of compute environment.</p>
+    /// <p>The name of the compute environment.</p>
     #[serde(rename = "computeEnvironmentName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub compute_environment_name: Option<String>,
@@ -1047,7 +1221,7 @@ pub struct UpdateJobQueueRequest {
     /// <p>The name or the Amazon Resource Name (ARN) of the job queue.</p>
     #[serde(rename = "jobQueue")]
     pub job_queue: String,
-    /// <p>The priority of the job queue. Job queues with a higher priority (or a higher integer value for the <code>priority</code> parameter) are evaluated first when associated with same compute environment. Priority is determined in descending order, for example, a job queue with a priority value of <code>10</code> is given scheduling preference over a job queue with a priority value of <code>1</code>.</p>
+    /// <p>The priority of the job queue. Job queues with a higher priority (or a higher integer value for the <code>priority</code> parameter) are evaluated first when associated with the same compute environment. Priority is determined in descending order, for example, a job queue with a priority value of <code>10</code> is given scheduling preference over a job queue with a priority value of <code>1</code>.</p>
     #[serde(rename = "priority")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub priority: Option<i64>,
@@ -2687,7 +2861,7 @@ pub trait Batch {
         input: CancelJobRequest,
     ) -> RusotoFuture<CancelJobResponse, CancelJobError>;
 
-    /// <p>Creates an AWS Batch compute environment. You can create <code>MANAGED</code> or <code>UNMANAGED</code> compute environments.</p> <p>In a managed compute environment, AWS Batch manages the compute resources within the environment, based on the compute resources that you specify. Instances launched into a managed compute environment use a recent, approved version of the Amazon ECS-optimized AMI. You can choose to use Amazon EC2 On-Demand Instances in your managed compute environment, or you can use Amazon EC2 Spot Instances that only launch when the Spot bid price is below a specified percentage of the On-Demand price.</p> <p>In an unmanaged compute environment, you can manage your own compute resources. This provides more compute resource configuration options, such as using a custom AMI, but you must ensure that your AMI meets the Amazon ECS container instance AMI specification. For more information, see <a href="http://docs.aws.amazon.com/AmazonECS/latest/developerguide/container_instance_AMIs.html">Container Instance AMIs</a> in the <i>Amazon Elastic Container Service Developer Guide</i>. After you have created your unmanaged compute environment, you can use the <a>DescribeComputeEnvironments</a> operation to find the Amazon ECS cluster that is associated with it and then manually launch your container instances into that Amazon ECS cluster. For more information, see <a href="http://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_container_instance.html">Launching an Amazon ECS Container Instance</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
+    /// <p><p>Creates an AWS Batch compute environment. You can create <code>MANAGED</code> or <code>UNMANAGED</code> compute environments.</p> <p>In a managed compute environment, AWS Batch manages the capacity and instance types of the compute resources within the environment. This is based on the compute resource specification that you define or the <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html">launch template</a> that you specify when you create the compute environment. You can choose to use Amazon EC2 On-Demand Instances or Spot Instances in your managed compute environment. You can optionally set a maximum price so that Spot Instances only launch when the Spot Instance price is below a specified percentage of the On-Demand price.</p> <note> <p>Multi-node parallel jobs are not supported on Spot Instances.</p> </note> <p>In an unmanaged compute environment, you can manage your own compute resources. This provides more compute resource configuration options, such as using a custom AMI, but you must ensure that your AMI meets the Amazon ECS container instance AMI specification. For more information, see <a href="http://docs.aws.amazon.com/AmazonECS/latest/developerguide/container_instance_AMIs.html">Container Instance AMIs</a> in the <i>Amazon Elastic Container Service Developer Guide</i>. After you have created your unmanaged compute environment, you can use the <a>DescribeComputeEnvironments</a> operation to find the Amazon ECS cluster that is associated with it. Then, manually launch your container instances into that Amazon ECS cluster. For more information, see <a href="http://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_container_instance.html">Launching an Amazon ECS Container Instance</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <note> <p>AWS Batch does not upgrade the AMIs in a compute environment after it is created (for example, when a newer version of the Amazon ECS-optimized AMI is available). You are responsible for the management of the guest operating system (including updates and security patches) and any additional application software or utilities that you install on the compute resources. To use a new AMI for your AWS Batch jobs:</p> <ol> <li> <p>Create a new compute environment with the new AMI.</p> </li> <li> <p>Add the compute environment to an existing job queue.</p> </li> <li> <p>Remove the old compute environment from your job queue.</p> </li> <li> <p>Delete the old compute environment.</p> </li> </ol> </note></p>
     fn create_compute_environment(
         &self,
         input: CreateComputeEnvironmentRequest,
@@ -2741,7 +2915,7 @@ pub trait Batch {
         input: DescribeJobsRequest,
     ) -> RusotoFuture<DescribeJobsResponse, DescribeJobsError>;
 
-    /// <p>Returns a list of task jobs for a specified job queue. You can filter the results by job status with the <code>jobStatus</code> parameter. If you do not specify a status, only <code>RUNNING</code> jobs are returned.</p>
+    /// <p>Returns a list of AWS Batch jobs.</p> <p>You must specify only one of the following:</p> <ul> <li> <p>a job queue ID to return a list of jobs in that job queue</p> </li> <li> <p>a multi-node parallel job ID to return a list of that job's nodes</p> </li> <li> <p>an array job ID to return a list of that job's children</p> </li> </ul> <p>You can filter the results by job status with the <code>jobStatus</code> parameter. If you do not specify a status, only <code>RUNNING</code> jobs are returned.</p>
     fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResponse, ListJobsError>;
 
     /// <p>Registers an AWS Batch job definition. </p>
@@ -2850,7 +3024,7 @@ impl Batch for BatchClient {
         })
     }
 
-    /// <p>Creates an AWS Batch compute environment. You can create <code>MANAGED</code> or <code>UNMANAGED</code> compute environments.</p> <p>In a managed compute environment, AWS Batch manages the compute resources within the environment, based on the compute resources that you specify. Instances launched into a managed compute environment use a recent, approved version of the Amazon ECS-optimized AMI. You can choose to use Amazon EC2 On-Demand Instances in your managed compute environment, or you can use Amazon EC2 Spot Instances that only launch when the Spot bid price is below a specified percentage of the On-Demand price.</p> <p>In an unmanaged compute environment, you can manage your own compute resources. This provides more compute resource configuration options, such as using a custom AMI, but you must ensure that your AMI meets the Amazon ECS container instance AMI specification. For more information, see <a href="http://docs.aws.amazon.com/AmazonECS/latest/developerguide/container_instance_AMIs.html">Container Instance AMIs</a> in the <i>Amazon Elastic Container Service Developer Guide</i>. After you have created your unmanaged compute environment, you can use the <a>DescribeComputeEnvironments</a> operation to find the Amazon ECS cluster that is associated with it and then manually launch your container instances into that Amazon ECS cluster. For more information, see <a href="http://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_container_instance.html">Launching an Amazon ECS Container Instance</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p>
+    /// <p><p>Creates an AWS Batch compute environment. You can create <code>MANAGED</code> or <code>UNMANAGED</code> compute environments.</p> <p>In a managed compute environment, AWS Batch manages the capacity and instance types of the compute resources within the environment. This is based on the compute resource specification that you define or the <a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-launch-templates.html">launch template</a> that you specify when you create the compute environment. You can choose to use Amazon EC2 On-Demand Instances or Spot Instances in your managed compute environment. You can optionally set a maximum price so that Spot Instances only launch when the Spot Instance price is below a specified percentage of the On-Demand price.</p> <note> <p>Multi-node parallel jobs are not supported on Spot Instances.</p> </note> <p>In an unmanaged compute environment, you can manage your own compute resources. This provides more compute resource configuration options, such as using a custom AMI, but you must ensure that your AMI meets the Amazon ECS container instance AMI specification. For more information, see <a href="http://docs.aws.amazon.com/AmazonECS/latest/developerguide/container_instance_AMIs.html">Container Instance AMIs</a> in the <i>Amazon Elastic Container Service Developer Guide</i>. After you have created your unmanaged compute environment, you can use the <a>DescribeComputeEnvironments</a> operation to find the Amazon ECS cluster that is associated with it. Then, manually launch your container instances into that Amazon ECS cluster. For more information, see <a href="http://docs.aws.amazon.com/AmazonECS/latest/developerguide/launch_container_instance.html">Launching an Amazon ECS Container Instance</a> in the <i>Amazon Elastic Container Service Developer Guide</i>.</p> <note> <p>AWS Batch does not upgrade the AMIs in a compute environment after it is created (for example, when a newer version of the Amazon ECS-optimized AMI is available). You are responsible for the management of the guest operating system (including updates and security patches) and any additional application software or utilities that you install on the compute resources. To use a new AMI for your AWS Batch jobs:</p> <ol> <li> <p>Create a new compute environment with the new AMI.</p> </li> <li> <p>Add the compute environment to an existing job queue.</p> </li> <li> <p>Remove the old compute environment from your job queue.</p> </li> <li> <p>Delete the old compute environment.</p> </li> </ol> </note></p>
     fn create_compute_environment(
         &self,
         input: CreateComputeEnvironmentRequest,
@@ -3195,7 +3369,7 @@ impl Batch for BatchClient {
         })
     }
 
-    /// <p>Returns a list of task jobs for a specified job queue. You can filter the results by job status with the <code>jobStatus</code> parameter. If you do not specify a status, only <code>RUNNING</code> jobs are returned.</p>
+    /// <p>Returns a list of AWS Batch jobs.</p> <p>You must specify only one of the following:</p> <ul> <li> <p>a job queue ID to return a list of jobs in that job queue</p> </li> <li> <p>a multi-node parallel job ID to return a list of that job's nodes</p> </li> <li> <p>an array job ID to return a list of that job's children</p> </li> </ul> <p>You can filter the results by job status with the <code>jobStatus</code> parameter. If you do not specify a status, only <code>RUNNING</code> jobs are returned.</p>
     fn list_jobs(&self, input: ListJobsRequest) -> RusotoFuture<ListJobsResponse, ListJobsError> {
         let request_uri = "/v1/listjobs";
 

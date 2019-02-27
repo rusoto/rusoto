@@ -37,6 +37,10 @@ pub struct AcceptPortfolioShareInput {
     /// <p>The portfolio identifier.</p>
     #[serde(rename = "PortfolioId")]
     pub portfolio_id: String,
+    /// <p>The type of shared portfolios to accept. The default is to accept imported portfolios.</p> <ul> <li> <p> <code>AWS_ORGANIZATIONS</code> - Accept portfolios shared by the master account of your organization.</p> </li> <li> <p> <code>IMPORTED</code> - Accept imported portfolios.</p> </li> <li> <p> <code>AWS_SERVICECATALOG</code> - Not supported. (Throws ResourceNotFoundException.)</p> </li> </ul> <p>For example, <code>aws servicecatalog accept-portfolio-share --portfolio-id "port-2qwzkwxt3y5fk" --portfolio-share-type AWS_ORGANIZATIONS</code> </p>
+    #[serde(rename = "PortfolioShareType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub portfolio_share_type: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -100,6 +104,27 @@ pub struct AssociateProductWithPortfolioInput {
 pub struct AssociateProductWithPortfolioOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct AssociateServiceActionWithProvisioningArtifactInput {
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accept_language: Option<String>,
+    /// <p>The product identifier. For example, <code>prod-abcdzk7xy33qa</code>.</p>
+    #[serde(rename = "ProductId")]
+    pub product_id: String,
+    /// <p>The identifier of the provisioning artifact. For example, <code>pa-4abcdjnxjj6ne</code>.</p>
+    #[serde(rename = "ProvisioningArtifactId")]
+    pub provisioning_artifact_id: String,
+    /// <p>The self-service action identifier. For example, <code>act-fs7abcd89wxyz</code>.</p>
+    #[serde(rename = "ServiceActionId")]
+    pub service_action_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct AssociateServiceActionWithProvisioningArtifactOutput {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateTagOptionWithResourceInput {
     /// <p>The resource identifier.</p>
     #[serde(rename = "ResourceId")]
@@ -112,6 +137,46 @@ pub struct AssociateTagOptionWithResourceInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct AssociateTagOptionWithResourceOutput {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct BatchAssociateServiceActionWithProvisioningArtifactInput {
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accept_language: Option<String>,
+    /// <p>One or more associations, each consisting of the Action ID, the Product ID, and the Provisioning Artifact ID.</p>
+    #[serde(rename = "ServiceActionAssociations")]
+    pub service_action_associations: Vec<ServiceActionAssociation>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct BatchAssociateServiceActionWithProvisioningArtifactOutput {
+    /// <p>An object that contains a list of errors, along with information to help you identify the self-service action.</p>
+    #[serde(rename = "FailedServiceActionAssociations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failed_service_action_associations: Option<Vec<FailedServiceActionAssociation>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct BatchDisassociateServiceActionFromProvisioningArtifactInput {
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accept_language: Option<String>,
+    /// <p>One or more associations, each consisting of the Action ID, the Product ID, and the Provisioning Artifact ID.</p>
+    #[serde(rename = "ServiceActionAssociations")]
+    pub service_action_associations: Vec<ServiceActionAssociation>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct BatchDisassociateServiceActionFromProvisioningArtifactOutput {
+    /// <p>An object that contains a list of errors, along with information to help you identify the self-service action.</p>
+    #[serde(rename = "FailedServiceActionAssociations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub failed_service_action_associations: Option<Vec<FailedServiceActionAssociation>>,
+}
 
 /// <p>Information about a CloudWatch dashboard.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -139,7 +204,7 @@ pub struct ConstraintDetail {
     #[serde(rename = "Owner")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner: Option<String>,
-    /// <p><p>The type of constraint.</p> <ul> <li> <p> <code>LAUNCH</code> </p> </li> <li> <p> <code>NOTIFICATION</code> </p> </li> <li> <p> <code>TEMPLATE</code> </p> </li> </ul></p>
+    /// <p><p>The type of constraint.</p> <ul> <li> <p> <code>LAUNCH</code> </p> </li> <li> <p> <code>NOTIFICATION</code> </p> </li> <li> <p>STACKSET</p> </li> <li> <p> <code>TEMPLATE</code> </p> </li> </ul></p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -153,7 +218,7 @@ pub struct ConstraintSummary {
     #[serde(rename = "Description")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub description: Option<String>,
-    /// <p><p>The type of constraint.</p> <ul> <li> <p> <code>LAUNCH</code> </p> </li> <li> <p> <code>NOTIFICATION</code> </p> </li> <li> <p> <code>TEMPLATE</code> </p> </li> </ul></p>
+    /// <p><p>The type of constraint.</p> <ul> <li> <p> <code>LAUNCH</code> </p> </li> <li> <p> <code>NOTIFICATION</code> </p> </li> <li> <p>STACKSET</p> </li> <li> <p> <code>TEMPLATE</code> </p> </li> </ul></p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -212,7 +277,7 @@ pub struct CreateConstraintInput {
     /// <p>A unique identifier that you provide to ensure idempotency. If multiple requests differ only by the idempotency token, the same response is returned for each repeated request.</p>
     #[serde(rename = "IdempotencyToken")]
     pub idempotency_token: String,
-    /// <p><p>The constraint parameters, in JSON format. The syntax depends on the constraint type as follows:</p> <dl> <dt>LAUNCH</dt> <dd> <p>Specify the <code>RoleArn</code> property as follows:</p> <p>&quot;RoleArn&quot; : &quot;arn:aws:iam::123456789012:role/LaunchRole&quot;</p> </dd> <dt>NOTIFICATION</dt> <dd> <p>Specify the <code>NotificationArns</code> property as follows:</p> <p>&quot;NotificationArns&quot; : [&quot;arn:aws:sns:us-east-1:123456789012:Topic&quot;]</p> </dd> <dt>TEMPLATE</dt> <dd> <p>Specify the <code>Rules</code> property. For more information, see <a href="http://docs.aws.amazon.com/servicecatalog/latest/adminguide/reference-template_constraint_rules.html">Template Constraint Rules</a>.</p> </dd> </dl></p>
+    /// <p><p>The constraint parameters, in JSON format. The syntax depends on the constraint type as follows:</p> <dl> <dt>LAUNCH</dt> <dd> <p>Specify the <code>RoleArn</code> property as follows:</p> <p> <code>{&quot;RoleArn&quot; : &quot;arn:aws:iam::123456789012:role/LaunchRole&quot;}</code> </p> <p>You cannot have both a <code>LAUNCH</code> and a <code>STACKSET</code> constraint.</p> <p>You also cannot have more than one <code>LAUNCH</code> constraint on a product and portfolio.</p> </dd> <dt>NOTIFICATION</dt> <dd> <p>Specify the <code>NotificationArns</code> property as follows:</p> <p> <code>{&quot;NotificationArns&quot; : [&quot;arn:aws:sns:us-east-1:123456789012:Topic&quot;]}</code> </p> </dd> <dt>STACKSET</dt> <dd> <p>Specify the <code>Parameters</code> property as follows:</p> <p> <code>{&quot;Version&quot;: &quot;String&quot;, &quot;Properties&quot;: {&quot;AccountList&quot;: [ &quot;String&quot; ], &quot;RegionList&quot;: [ &quot;String&quot; ], &quot;AdminRole&quot;: &quot;String&quot;, &quot;ExecutionRole&quot;: &quot;String&quot;}}</code> </p> <p>You cannot have both a <code>LAUNCH</code> and a <code>STACKSET</code> constraint.</p> <p>You also cannot have more than one <code>STACKSET</code> constraint on a product and portfolio.</p> <p>Products with a <code>STACKSET</code> constraint will launch an AWS CloudFormation stack set.</p> </dd> <dt>TEMPLATE</dt> <dd> <p>Specify the <code>Rules</code> property. For more information, see <a href="http://docs.aws.amazon.com/servicecatalog/latest/adminguide/reference-template_constraint_rules.html">Template Constraint Rules</a>.</p> </dd> </dl></p>
     #[serde(rename = "Parameters")]
     pub parameters: String,
     /// <p>The portfolio identifier.</p>
@@ -221,7 +286,7 @@ pub struct CreateConstraintInput {
     /// <p>The product identifier.</p>
     #[serde(rename = "ProductId")]
     pub product_id: String,
-    /// <p><p>The type of constraint.</p> <ul> <li> <p> <code>LAUNCH</code> </p> </li> <li> <p> <code>NOTIFICATION</code> </p> </li> <li> <p> <code>TEMPLATE</code> </p> </li> </ul></p>
+    /// <p><p>The type of constraint.</p> <ul> <li> <p> <code>LAUNCH</code> </p> </li> <li> <p> <code>NOTIFICATION</code> </p> </li> <li> <p> <code>STACKSET</code> </p> </li> <li> <p> <code>TEMPLATE</code> </p> </li> </ul></p>
     #[serde(rename = "Type")]
     pub type_: String,
 }
@@ -287,9 +352,14 @@ pub struct CreatePortfolioShareInput {
     #[serde(rename = "AcceptLanguage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub accept_language: Option<String>,
-    /// <p>The AWS account ID.</p>
+    /// <p>The AWS account ID. For example, <code>123456789012</code>.</p>
     #[serde(rename = "AccountId")]
-    pub account_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// <p>The organization node to whom you are going to share. If <code>OrganizationNode</code> is passed in, <code>PortfolioShare</code> will be created for the node and its children (when applies), and a <code>PortfolioShareToken</code> will be returned in the output in order for the administrator to monitor the status of the <code>PortfolioShare</code> creation process.</p>
+    #[serde(rename = "OrganizationNode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_node: Option<OrganizationNode>,
     /// <p>The portfolio identifier.</p>
     #[serde(rename = "PortfolioId")]
     pub portfolio_id: String,
@@ -297,7 +367,12 @@ pub struct CreatePortfolioShareInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct CreatePortfolioShareOutput {}
+pub struct CreatePortfolioShareOutput {
+    /// <p>The portfolio share unique identifier. This will only be returned if portfolio is shared to an organization node.</p>
+    #[serde(rename = "PortfolioShareToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub portfolio_share_token: Option<String>,
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateProductInput {
@@ -465,6 +540,39 @@ pub struct CreateProvisioningArtifactOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateServiceActionInput {
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accept_language: Option<String>,
+    /// <p><p>The self-service action definition. Can be one of the following:</p> <dl> <dt>Name</dt> <dd> <p>The name of the AWS Systems Manager Document. For example, <code>AWS-RestartEC2Instance</code>.</p> </dd> <dt>Version</dt> <dd> <p>The AWS Systems Manager automation document version. For example, <code>&quot;Version&quot;: &quot;1&quot;</code> </p> </dd> <dt>AssumeRole</dt> <dd> <p>The Amazon Resource Name (ARN) of the role that performs the self-service actions on your behalf. For example, <code>&quot;AssumeRole&quot;: &quot;arn:aws:iam::12345678910:role/ActionRole&quot;</code>.</p> <p>To reuse the provisioned product launch role, set to <code>&quot;AssumeRole&quot;: &quot;LAUNCH_ROLE&quot;</code>.</p> </dd> <dt>Parameters</dt> <dd> <p>The list of parameters in JSON format.</p> <p>For example: <code>[{&quot;Name&quot;:&quot;InstanceId&quot;,&quot;Type&quot;:&quot;TARGET&quot;}]</code>.</p> </dd> </dl></p>
+    #[serde(rename = "Definition")]
+    pub definition: ::std::collections::HashMap<String, String>,
+    /// <p>The service action definition type. For example, <code>SSM_AUTOMATION</code>.</p>
+    #[serde(rename = "DefinitionType")]
+    pub definition_type: String,
+    /// <p>The self-service action description.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>A unique identifier that you provide to ensure idempotency. If multiple requests differ only by the idempotency token, the same response is returned for each repeated request.</p>
+    #[serde(rename = "IdempotencyToken")]
+    pub idempotency_token: String,
+    /// <p>The self-service action name.</p>
+    #[serde(rename = "Name")]
+    pub name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateServiceActionOutput {
+    /// <p>An object containing information about the self-service action.</p>
+    #[serde(rename = "ServiceActionDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_action_detail: Option<ServiceActionDetail>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateTagOptionInput {
     /// <p>The TagOption key.</p>
     #[serde(rename = "Key")]
@@ -521,7 +629,12 @@ pub struct DeletePortfolioShareInput {
     pub accept_language: Option<String>,
     /// <p>The AWS account ID.</p>
     #[serde(rename = "AccountId")]
-    pub account_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub account_id: Option<String>,
+    /// <p>The organization node to whom you are going to stop sharing.</p>
+    #[serde(rename = "OrganizationNode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_node: Option<OrganizationNode>,
     /// <p>The portfolio identifier.</p>
     #[serde(rename = "PortfolioId")]
     pub portfolio_id: String,
@@ -529,7 +642,12 @@ pub struct DeletePortfolioShareInput {
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
-pub struct DeletePortfolioShareOutput {}
+pub struct DeletePortfolioShareOutput {
+    /// <p>The portfolio share unique identifier. This will only be returned if delete is made to an organization node.</p>
+    #[serde(rename = "PortfolioShareToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub portfolio_share_token: Option<String>,
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteProductInput {
@@ -582,6 +700,21 @@ pub struct DeleteProvisioningArtifactInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeleteProvisioningArtifactOutput {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteServiceActionInput {
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accept_language: Option<String>,
+    /// <p>The self-service action identifier. For example, <code>act-fs7abcd89wxyz</code>.</p>
+    #[serde(rename = "Id")]
+    pub id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteServiceActionOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteTagOptionInput {
@@ -676,6 +809,38 @@ pub struct DescribePortfolioOutput {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribePortfolioShareStatusInput {
+    /// <p>The token for the portfolio share operation. This token is returned either by CreatePortfolioShare or by DeletePortfolioShare.</p>
+    #[serde(rename = "PortfolioShareToken")]
+    pub portfolio_share_token: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribePortfolioShareStatusOutput {
+    /// <p>Organization node identifier. It can be either account id, organizational unit id or organization id.</p>
+    #[serde(rename = "OrganizationNodeValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_node_value: Option<String>,
+    /// <p>The portfolio identifier.</p>
+    #[serde(rename = "PortfolioId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub portfolio_id: Option<String>,
+    /// <p>The token for the portfolio share operation. For example, <code>share-6v24abcdefghi</code>.</p>
+    #[serde(rename = "PortfolioShareToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub portfolio_share_token: Option<String>,
+    /// <p>Information about the portfolio share operation.</p>
+    #[serde(rename = "ShareDetails")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub share_details: Option<ShareDetails>,
+    /// <p>Status of the portfolio share operation.</p>
+    #[serde(rename = "Status")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub status: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -882,6 +1047,10 @@ pub struct DescribeProvisioningParametersOutput {
     #[serde(rename = "ProvisioningArtifactParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_artifact_parameters: Option<Vec<ProvisioningArtifactParameter>>,
+    /// <p>An object that contains information about preferences, such as regions and accounts, for the provisioning artifact.</p>
+    #[serde(rename = "ProvisioningArtifactPreferences")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioning_artifact_preferences: Option<ProvisioningArtifactPreferences>,
     /// <p>Information about the TagOptions associated with the resource.</p>
     #[serde(rename = "TagOptions")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -929,6 +1098,26 @@ pub struct DescribeRecordOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DescribeServiceActionInput {
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accept_language: Option<String>,
+    /// <p>The self-service action identifier.</p>
+    #[serde(rename = "Id")]
+    pub id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DescribeServiceActionOutput {
+    /// <p>Detailed information about the self-service action.</p>
+    #[serde(rename = "ServiceActionDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_action_detail: Option<ServiceActionDetail>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeTagOptionInput {
     /// <p>The TagOption identifier.</p>
     #[serde(rename = "Id")]
@@ -943,6 +1132,13 @@ pub struct DescribeTagOptionOutput {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_option_detail: Option<TagOptionDetail>,
 }
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DisableAWSOrganizationsAccessInput {}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DisableAWSOrganizationsAccessOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisassociatePrincipalFromPortfolioInput {
@@ -981,6 +1177,27 @@ pub struct DisassociateProductFromPortfolioInput {
 pub struct DisassociateProductFromPortfolioOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DisassociateServiceActionFromProvisioningArtifactInput {
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accept_language: Option<String>,
+    /// <p>The product identifier. For example, <code>prod-abcdzk7xy33qa</code>.</p>
+    #[serde(rename = "ProductId")]
+    pub product_id: String,
+    /// <p>The identifier of the provisioning artifact. For example, <code>pa-4abcdjnxjj6ne</code>.</p>
+    #[serde(rename = "ProvisioningArtifactId")]
+    pub provisioning_artifact_id: String,
+    /// <p>The self-service action identifier. For example, <code>act-fs7abcd89wxyz</code>.</p>
+    #[serde(rename = "ServiceActionId")]
+    pub service_action_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DisassociateServiceActionFromProvisioningArtifactOutput {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisassociateTagOptionFromResourceInput {
     /// <p>The resource identifier.</p>
     #[serde(rename = "ResourceId")]
@@ -993,6 +1210,13 @@ pub struct DisassociateTagOptionFromResourceInput {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DisassociateTagOptionFromResourceOutput {}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct EnableAWSOrganizationsAccessInput {}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct EnableAWSOrganizationsAccessOutput {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ExecuteProvisionedProductPlanInput {
@@ -1015,6 +1239,70 @@ pub struct ExecuteProvisionedProductPlanOutput {
     #[serde(rename = "RecordDetail")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub record_detail: Option<RecordDetail>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ExecuteProvisionedProductServiceActionInput {
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accept_language: Option<String>,
+    /// <p>An idempotency token that uniquely identifies the execute request.</p>
+    #[serde(rename = "ExecuteToken")]
+    pub execute_token: String,
+    /// <p>The identifier of the provisioned product.</p>
+    #[serde(rename = "ProvisionedProductId")]
+    pub provisioned_product_id: String,
+    /// <p>The self-service action identifier. For example, <code>act-fs7abcd89wxyz</code>.</p>
+    #[serde(rename = "ServiceActionId")]
+    pub service_action_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ExecuteProvisionedProductServiceActionOutput {
+    /// <p>An object containing detailed information about the result of provisioning the product.</p>
+    #[serde(rename = "RecordDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub record_detail: Option<RecordDetail>,
+}
+
+/// <p>An object containing information about the error, along with identifying information about the self-service action and its associations.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct FailedServiceActionAssociation {
+    /// <p>The error code. Valid values are listed below.</p>
+    #[serde(rename = "ErrorCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_code: Option<String>,
+    /// <p>A text description of the error.</p>
+    #[serde(rename = "ErrorMessage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error_message: Option<String>,
+    /// <p>The product identifier. For example, <code>prod-abcdzk7xy33qa</code>.</p>
+    #[serde(rename = "ProductId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub product_id: Option<String>,
+    /// <p>The identifier of the provisioning artifact. For example, <code>pa-4abcdjnxjj6ne</code>.</p>
+    #[serde(rename = "ProvisioningArtifactId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioning_artifact_id: Option<String>,
+    /// <p>The self-service action identifier. For example, <code>act-fs7abcd89wxyz</code>.</p>
+    #[serde(rename = "ServiceActionId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_action_id: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetAWSOrganizationsAccessStatusInput {}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetAWSOrganizationsAccessStatusOutput {
+    /// <p>The status of the portfolio share feature.</p>
+    #[serde(rename = "AccessStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub access_status: Option<String>,
 }
 
 /// <p>Summary information about a product path for a user.</p>
@@ -1053,7 +1341,7 @@ pub struct ListAcceptedPortfolioSharesInput {
     #[serde(rename = "PageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub page_token: Option<String>,
-    /// <p><p>The type of shared portfolios to list. The default is to list imported portfolios.</p> <ul> <li> <p> <code>AWS_SERVICECATALOG</code> - List default portfolios</p> </li> <li> <p> <code>IMPORTED</code> - List imported portfolios</p> </li> </ul></p>
+    /// <p><p>The type of shared portfolios to list. The default is to list imported portfolios.</p> <ul> <li> <p> <code>AWS<em>ORGANIZATIONS</code> - List portfolios shared by the master account of your organization</p> </li> <li> <p> <code>AWS</em>SERVICECATALOG</code> - List default portfolios</p> </li> <li> <p> <code>IMPORTED</code> - List imported portfolios</p> </li> </ul></p>
     #[serde(rename = "PortfolioShareType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub portfolio_share_type: Option<String>,
@@ -1138,6 +1426,41 @@ pub struct ListLaunchPathsOutput {
     #[serde(rename = "NextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListOrganizationPortfolioAccessInput {
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accept_language: Option<String>,
+    /// <p><p>The organization node type that will be returned in the output.</p> <ul> <li> <p> <code>ORGANIZATION</code> - Organization that has access to the portfolio. </p> </li> <li> <p> <code>ORGANIZATIONAL_UNIT</code> - Organizational unit that has access to the portfolio within your organization.</p> </li> <li> <p> <code>ACCOUNT</code> - Account that has access to the portfolio within your organization.</p> </li> </ul></p>
+    #[serde(rename = "OrganizationNodeType")]
+    pub organization_node_type: String,
+    /// <p>The maximum number of items to return with this call.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i64>,
+    /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
+    #[serde(rename = "PageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+    /// <p>The portfolio identifier. For example, <code>port-2abcdext3y5fk</code>.</p>
+    #[serde(rename = "PortfolioId")]
+    pub portfolio_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListOrganizationPortfolioAccessOutput {
+    /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+    /// <p>Displays information about the organization nodes.</p>
+    #[serde(rename = "OrganizationNodes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub organization_nodes: Option<Vec<OrganizationNode>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1295,6 +1618,38 @@ pub struct ListProvisionedProductPlansOutput {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListProvisioningArtifactsForServiceActionInput {
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accept_language: Option<String>,
+    /// <p>The maximum number of items to return with this call.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i64>,
+    /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
+    #[serde(rename = "PageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+    /// <p>The self-service action identifier. For example, <code>act-fs7abcd89wxyz</code>.</p>
+    #[serde(rename = "ServiceActionId")]
+    pub service_action_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListProvisioningArtifactsForServiceActionOutput {
+    /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+    /// <p>An array of objects with information about product views and provisioning artifacts.</p>
+    #[serde(rename = "ProvisioningArtifactViews")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioning_artifact_views: Option<Vec<ProvisioningArtifactView>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListProvisioningArtifactsInput {
     /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
     #[serde(rename = "AcceptLanguage")]
@@ -1400,6 +1755,70 @@ pub struct ListResourcesForTagOptionOutput {
     pub resource_details: Option<Vec<ResourceDetail>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListServiceActionsForProvisioningArtifactInput {
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accept_language: Option<String>,
+    /// <p>The maximum number of items to return with this call.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i64>,
+    /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
+    #[serde(rename = "PageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+    /// <p>The product identifier. For example, <code>prod-abcdzk7xy33qa</code>.</p>
+    #[serde(rename = "ProductId")]
+    pub product_id: String,
+    /// <p>The identifier of the provisioning artifact. For example, <code>pa-4abcdjnxjj6ne</code>.</p>
+    #[serde(rename = "ProvisioningArtifactId")]
+    pub provisioning_artifact_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListServiceActionsForProvisioningArtifactOutput {
+    /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+    /// <p>An object containing information about the self-service actions associated with the provisioning artifact.</p>
+    #[serde(rename = "ServiceActionSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_action_summaries: Option<Vec<ServiceActionSummary>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ListServiceActionsInput {
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accept_language: Option<String>,
+    /// <p>The maximum number of items to return with this call.</p>
+    #[serde(rename = "PageSize")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_size: Option<i64>,
+    /// <p>The page token for the next set of results. To retrieve the first set of results, use null.</p>
+    #[serde(rename = "PageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ListServiceActionsOutput {
+    /// <p>The page token to use to retrieve the next set of results. If there are no additional results, this value is null.</p>
+    #[serde(rename = "NextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+    /// <p>An object containing information about the service actions associated with the provisioning artifact.</p>
+    #[serde(rename = "ServiceActionSummaries")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_action_summaries: Option<Vec<ServiceActionSummary>>,
+}
+
 /// <p>Filters to use when listing TagOptions.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListTagOptionsFilters {
@@ -1444,6 +1863,19 @@ pub struct ListTagOptionsOutput {
     #[serde(rename = "TagOptionDetails")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tag_option_details: Option<Vec<TagOptionDetail>>,
+}
+
+/// <p>Information about the organization node.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct OrganizationNode {
+    /// <p>The organization node type.</p>
+    #[serde(rename = "Type")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub type_: Option<String>,
+    /// <p>The identifier of the organization node.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
 }
 
 /// <p>The constraints that the administrator has put on the parameter.</p>
@@ -1616,6 +2048,10 @@ pub struct ProvisionProductInput {
     #[serde(rename = "ProvisioningParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_parameters: Option<Vec<ProvisioningParameter>>,
+    /// <p>An object that contains information about the provisioning preferences for a stack set.</p>
+    #[serde(rename = "ProvisioningPreferences")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioning_preferences: Option<ProvisioningPreferences>,
     /// <p>One or more tags.</p>
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1671,7 +2107,7 @@ pub struct ProvisionedProductAttribute {
     #[serde(rename = "ProvisioningArtifactId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_artifact_id: Option<String>,
-    /// <p><p>The current status of the provisioned product.</p> <ul> <li> <p> <code>AVAILABLE</code> - Stable state, ready to perform any operation. The most recent operation succeeded and completed.</p> </li> <li> <p> <code>UNDER_CHANGE</code> - Transitive state, operations performed might not have valid results. Wait for an <code>AVAILABLE</code> status before performing operations.</p> </li> <li> <p> <code>TAINTED</code> - Stable state, ready to perform any operation. The stack has completed the requested operation but is not exactly what was requested. For example, a request to update to a new version failed and the stack rolled back to the current version.</p> </li> <li> <p> <code>ERROR</code> - An unexpected error occurred, the provisioned product exists but the stack is not running. For example, CloudFormation received a parameter value that was not valid and could not launch the stack.</p> </li> </ul></p>
+    /// <p><p>The current status of the provisioned product.</p> <ul> <li> <p> <code>AVAILABLE</code> - Stable state, ready to perform any operation. The most recent operation succeeded and completed.</p> </li> <li> <p> <code>UNDER<em>CHANGE</code> - Transitive state. Operations performed might not have valid results. Wait for an <code>AVAILABLE</code> status before performing operations.</p> </li> <li> <p> <code>TAINTED</code> - Stable state, ready to perform any operation. The stack has completed the requested operation but is not exactly what was requested. For example, a request to update to a new version failed and the stack rolled back to the current version.</p> </li> <li> <p> <code>ERROR</code> - An unexpected error occurred. The provisioned product exists but the stack is not running. For example, CloudFormation received a parameter value that was not valid and could not launch the stack.</p> </li> <li> <p> <code>PLAN</em>IN_PROGRESS</code> - Transitive state. The plan operations were performed to provision a new product, but resources have not yet been created. After reviewing the list of resources to be created, execute the plan. Wait for an <code>AVAILABLE</code> status before performing operations.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1683,7 +2119,7 @@ pub struct ProvisionedProductAttribute {
     #[serde(rename = "Tags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub tags: Option<Vec<Tag>>,
-    /// <p>The type of provisioned product. The supported value is <code>CFN_STACK</code>.</p>
+    /// <p>The type of provisioned product. The supported values are <code>CFN_STACK</code> and <code>CFN_STACKSET</code>.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -1725,7 +2161,15 @@ pub struct ProvisionedProductDetail {
     #[serde(rename = "Name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
-    /// <p><p>The current status of the provisioned product.</p> <ul> <li> <p> <code>AVAILABLE</code> - Stable state, ready to perform any operation. The most recent operation succeeded and completed.</p> </li> <li> <p> <code>UNDER_CHANGE</code> - Transitive state, operations performed might not have valid results. Wait for an <code>AVAILABLE</code> status before performing operations.</p> </li> <li> <p> <code>TAINTED</code> - Stable state, ready to perform any operation. The stack has completed the requested operation but is not exactly what was requested. For example, a request to update to a new version failed and the stack rolled back to the current version.</p> </li> <li> <p> <code>ERROR</code> - An unexpected error occurred, the provisioned product exists but the stack is not running. For example, CloudFormation received a parameter value that was not valid and could not launch the stack.</p> </li> </ul></p>
+    /// <p>The product identifier. For example, <code>prod-abcdzk7xy33qa</code>.</p>
+    #[serde(rename = "ProductId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub product_id: Option<String>,
+    /// <p>The identifier of the provisioning artifact. For example, <code>pa-4abcdjnxjj6ne</code>.</p>
+    #[serde(rename = "ProvisioningArtifactId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioning_artifact_id: Option<String>,
+    /// <p><p>The current status of the provisioned product.</p> <ul> <li> <p> <code>AVAILABLE</code> - Stable state, ready to perform any operation. The most recent operation succeeded and completed.</p> </li> <li> <p> <code>UNDER<em>CHANGE</code> - Transitive state. Operations performed might not have valid results. Wait for an <code>AVAILABLE</code> status before performing operations.</p> </li> <li> <p> <code>TAINTED</code> - Stable state, ready to perform any operation. The stack has completed the requested operation but is not exactly what was requested. For example, a request to update to a new version failed and the stack rolled back to the current version.</p> </li> <li> <p> <code>ERROR</code> - An unexpected error occurred. The provisioned product exists but the stack is not running. For example, CloudFormation received a parameter value that was not valid and could not launch the stack.</p> </li> <li> <p> <code>PLAN</em>IN_PROGRESS</code> - Transitive state. The plan operations were performed to provision a new product, but resources have not yet been created. After reviewing the list of resources to be created, execute the plan. Wait for an <code>AVAILABLE</code> status before performing operations.</p> </li> </ul></p>
     #[serde(rename = "Status")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status: Option<String>,
@@ -1733,7 +2177,7 @@ pub struct ProvisionedProductDetail {
     #[serde(rename = "StatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_message: Option<String>,
-    /// <p>The type of provisioned product. The supported value is <code>CFN_STACK</code>.</p>
+    /// <p>The type of provisioned product. The supported values are <code>CFN_STACK</code> and <code>CFN_STACKSET</code>.</p>
     #[serde(rename = "Type")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub type_: Option<String>,
@@ -1917,6 +2361,20 @@ pub struct ProvisioningArtifactParameter {
     pub parameter_type: Option<String>,
 }
 
+/// <p>The user-defined preferences that will be applied during product provisioning, unless overridden by <code>ProvisioningPreferences</code> or <code>UpdateProvisioningPreferences</code>.</p> <p>For more information on maximum concurrent accounts and failure tolerance, see <a href="https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/stacksets-concepts.html#stackset-ops-options">Stack set operation options</a> in the <i>AWS CloudFormation User Guide</i>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ProvisioningArtifactPreferences {
+    /// <p>One or more AWS accounts where stack instances are deployed from the stack set. These accounts can be scoped in <code>ProvisioningPreferences$StackSetAccounts</code> and <code>UpdateProvisioningPreferences$StackSetAccounts</code>.</p> <p>Applicable only to a <code>CFN_STACKSET</code> provisioned product type.</p>
+    #[serde(rename = "StackSetAccounts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stack_set_accounts: Option<Vec<String>>,
+    /// <p>One or more AWS Regions where stack instances are deployed from the stack set. These regions can be scoped in <code>ProvisioningPreferences$StackSetRegions</code> and <code>UpdateProvisioningPreferences$StackSetRegions</code>.</p> <p>Applicable only to a <code>CFN_STACKSET</code> provisioned product type.</p>
+    #[serde(rename = "StackSetRegions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stack_set_regions: Option<Vec<String>>,
+}
+
 /// <p>Information about a provisioning artifact (also known as a version) for a product.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ProvisioningArtifactProperties {
@@ -1963,6 +2421,20 @@ pub struct ProvisioningArtifactSummary {
     pub provisioning_artifact_metadata: Option<::std::collections::HashMap<String, String>>,
 }
 
+/// <p>An object that contains summary information about a product view and a provisioning artifact.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ProvisioningArtifactView {
+    /// <p>Summary information about a product view.</p>
+    #[serde(rename = "ProductViewSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub product_view_summary: Option<ProductViewSummary>,
+    /// <p>Information about a provisioning artifact. A provisioning artifact is also known as a product version.</p>
+    #[serde(rename = "ProvisioningArtifact")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioning_artifact: Option<ProvisioningArtifact>,
+}
+
 /// <p>Information about a parameter used to provision a product.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ProvisioningParameter {
@@ -1974,6 +2446,35 @@ pub struct ProvisioningParameter {
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+/// <p>The user-defined preferences that will be applied when updating a provisioned product. Not all preferences are applicable to all provisioned product types.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ProvisioningPreferences {
+    /// <p>One or more AWS accounts that will have access to the provisioned product.</p> <p>Applicable only to a <code>CFN_STACKSET</code> provisioned product type.</p> <p>The AWS accounts specified should be within the list of accounts in the <code>STACKSET</code> constraint. To get the list of accounts in the <code>STACKSET</code> constraint, use the <code>DescribeProvisioningParameters</code> operation.</p> <p>If no values are specified, the default value is all accounts from the <code>STACKSET</code> constraint.</p>
+    #[serde(rename = "StackSetAccounts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stack_set_accounts: Option<Vec<String>>,
+    /// <p>The number of accounts, per region, for which this operation can fail before AWS Service Catalog stops the operation in that region. If the operation is stopped in a region, AWS Service Catalog doesn't attempt the operation in any subsequent regions.</p> <p>Applicable only to a <code>CFN_STACKSET</code> provisioned product type.</p> <p>Conditional: You must specify either <code>StackSetFailureToleranceCount</code> or <code>StackSetFailureTolerancePercentage</code>, but not both.</p> <p>The default value is <code>0</code> if no value is specified.</p>
+    #[serde(rename = "StackSetFailureToleranceCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stack_set_failure_tolerance_count: Option<i64>,
+    /// <p>The percentage of accounts, per region, for which this stack operation can fail before AWS Service Catalog stops the operation in that region. If the operation is stopped in a region, AWS Service Catalog doesn't attempt the operation in any subsequent regions.</p> <p>When calculating the number of accounts based on the specified percentage, AWS Service Catalog rounds down to the next whole number.</p> <p>Applicable only to a <code>CFN_STACKSET</code> provisioned product type.</p> <p>Conditional: You must specify either <code>StackSetFailureToleranceCount</code> or <code>StackSetFailureTolerancePercentage</code>, but not both.</p>
+    #[serde(rename = "StackSetFailureTolerancePercentage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stack_set_failure_tolerance_percentage: Option<i64>,
+    /// <p>The maximum number of accounts in which to perform this operation at one time. This is dependent on the value of <code>StackSetFailureToleranceCount</code>. <code>StackSetMaxConcurrentCount</code> is at most one more than the <code>StackSetFailureToleranceCount</code>.</p> <p>Note that this setting lets you specify the maximum for operations. For large deployments, under certain circumstances the actual number of accounts acted upon concurrently may be lower due to service throttling.</p> <p>Applicable only to a <code>CFN_STACKSET</code> provisioned product type.</p> <p>Conditional: You must specify either <code>StackSetMaxConcurrentCount</code> or <code>StackSetMaxConcurrentPercentage</code>, but not both.</p>
+    #[serde(rename = "StackSetMaxConcurrencyCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stack_set_max_concurrency_count: Option<i64>,
+    /// <p>The maximum percentage of accounts in which to perform this operation at one time.</p> <p>When calculating the number of accounts based on the specified percentage, AWS Service Catalog rounds down to the next whole number. This is true except in cases where rounding down would result is zero. In this case, AWS Service Catalog sets the number as <code>1</code> instead.</p> <p>Note that this setting lets you specify the maximum for operations. For large deployments, under certain circumstances the actual number of accounts acted upon concurrently may be lower due to service throttling.</p> <p>Applicable only to a <code>CFN_STACKSET</code> provisioned product type.</p> <p>Conditional: You must specify either <code>StackSetMaxConcurrentCount</code> or <code>StackSetMaxConcurrentPercentage</code>, but not both.</p>
+    #[serde(rename = "StackSetMaxConcurrencyPercentage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stack_set_max_concurrency_percentage: Option<i64>,
+    /// <p>One or more AWS Regions where the provisioned product will be available.</p> <p>Applicable only to a <code>CFN_STACKSET</code> provisioned product type.</p> <p>The specified regions should be within the list of regions from the <code>STACKSET</code> constraint. To get the list of regions in the <code>STACKSET</code> constraint, use the <code>DescribeProvisioningParameters</code> operation.</p> <p>If no values are specified, the default value is all regions from the <code>STACKSET</code> constraint.</p>
+    #[serde(rename = "StackSetRegions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stack_set_regions: Option<Vec<String>>,
 }
 
 /// <p>Information about a request operation.</p>
@@ -2000,7 +2501,7 @@ pub struct RecordDetail {
     #[serde(rename = "ProvisionedProductName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_product_name: Option<String>,
-    /// <p>The type of provisioned product. The supported value is <code>CFN_STACK</code>.</p>
+    /// <p>The type of provisioned product. The supported values are <code>CFN_STACK</code> and <code>CFN_STACKSET</code>.</p>
     #[serde(rename = "ProvisionedProductType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioned_product_type: Option<String>,
@@ -2089,6 +2590,10 @@ pub struct RejectPortfolioShareInput {
     /// <p>The portfolio identifier.</p>
     #[serde(rename = "PortfolioId")]
     pub portfolio_id: String,
+    /// <p>The type of shared portfolios to reject. The default is to reject imported portfolios.</p> <ul> <li> <p> <code>AWS_ORGANIZATIONS</code> - Reject portfolios shared by the master account of your organization.</p> </li> <li> <p> <code>IMPORTED</code> - Reject imported portfolios.</p> </li> <li> <p> <code>AWS_SERVICECATALOG</code> - Not supported. (Throws ResourceNotFoundException.)</p> </li> </ul> <p>For example, <code>aws servicecatalog reject-portfolio-share --portfolio-id "port-2qwzkwxt3y5fk" --portfolio-share-type AWS_ORGANIZATIONS</code> </p>
+    #[serde(rename = "PortfolioShareType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub portfolio_share_type: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -2368,6 +2873,88 @@ pub struct SearchProvisionedProductsOutput {
     pub total_results_count: Option<i64>,
 }
 
+/// <p>A self-service action association consisting of the Action ID, the Product ID, and the Provisioning Artifact ID.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ServiceActionAssociation {
+    /// <p>The product identifier. For example, <code>prod-abcdzk7xy33qa</code>.</p>
+    #[serde(rename = "ProductId")]
+    pub product_id: String,
+    /// <p>The identifier of the provisioning artifact. For example, <code>pa-4abcdjnxjj6ne</code>.</p>
+    #[serde(rename = "ProvisioningArtifactId")]
+    pub provisioning_artifact_id: String,
+    /// <p>The self-service action identifier. For example, <code>act-fs7abcd89wxyz</code>.</p>
+    #[serde(rename = "ServiceActionId")]
+    pub service_action_id: String,
+}
+
+/// <p>An object containing detailed information about the self-service action.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ServiceActionDetail {
+    /// <p>A map that defines the self-service action.</p>
+    #[serde(rename = "Definition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub definition: Option<::std::collections::HashMap<String, String>>,
+    /// <p>Summary information about the self-service action.</p>
+    #[serde(rename = "ServiceActionSummary")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_action_summary: Option<ServiceActionSummary>,
+}
+
+/// <p>Detailed information about the self-service action.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ServiceActionSummary {
+    /// <p>The self-service action definition type. For example, <code>SSM_AUTOMATION</code>.</p>
+    #[serde(rename = "DefinitionType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub definition_type: Option<String>,
+    /// <p>The self-service action description.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The self-service action identifier.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The self-service action name.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+/// <p>Information about the portfolio share operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ShareDetails {
+    /// <p>List of errors.</p>
+    #[serde(rename = "ShareErrors")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub share_errors: Option<Vec<ShareError>>,
+    /// <p>List of accounts for whom the operation succeeded.</p>
+    #[serde(rename = "SuccessfulShares")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub successful_shares: Option<Vec<String>>,
+}
+
+/// <p>Errors that occurred during the portfolio share operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ShareError {
+    /// <p>List of accounts impacted by the error.</p>
+    #[serde(rename = "Accounts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accounts: Option<Vec<String>>,
+    /// <p>Error type that happened when processing the operation.</p>
+    #[serde(rename = "Error")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub error: Option<String>,
+    /// <p>Information about the error.</p>
+    #[serde(rename = "Message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+}
+
 /// <p>Information about a tag. A tag is a key-value pair. Tags are propagated to the resources created when provisioning a product.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Tag {
@@ -2593,7 +3180,7 @@ pub struct UpdateProvisionedProductInput {
     #[serde(rename = "PathId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub path_id: Option<String>,
-    /// <p>The identifier of the provisioned product.</p>
+    /// <p>The identifier of the product.</p>
     #[serde(rename = "ProductId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub product_id: Option<String>,
@@ -2613,6 +3200,10 @@ pub struct UpdateProvisionedProductInput {
     #[serde(rename = "ProvisioningParameters")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provisioning_parameters: Option<Vec<UpdateProvisioningParameter>>,
+    /// <p>An object that contains information about the provisioning preferences for a stack set.</p>
+    #[serde(rename = "ProvisioningPreferences")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub provisioning_preferences: Option<UpdateProvisioningPreferences>,
     /// <p>The idempotency token that uniquely identifies the provisioning update request.</p>
     #[serde(rename = "UpdateToken")]
     pub update_token: String,
@@ -2685,6 +3276,71 @@ pub struct UpdateProvisioningParameter {
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+/// <p>The user-defined preferences that will be applied when updating a provisioned product. Not all preferences are applicable to all provisioned product types.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateProvisioningPreferences {
+    /// <p>One or more AWS accounts that will have access to the provisioned product.</p> <p>Applicable only to a <code>CFN_STACKSET</code> provisioned product type.</p> <p>The AWS accounts specified should be within the list of accounts in the <code>STACKSET</code> constraint. To get the list of accounts in the <code>STACKSET</code> constraint, use the <code>DescribeProvisioningParameters</code> operation.</p> <p>If no values are specified, the default value is all accounts from the <code>STACKSET</code> constraint.</p>
+    #[serde(rename = "StackSetAccounts")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stack_set_accounts: Option<Vec<String>>,
+    /// <p>The number of accounts, per region, for which this operation can fail before AWS Service Catalog stops the operation in that region. If the operation is stopped in a region, AWS Service Catalog doesn't attempt the operation in any subsequent regions.</p> <p>Applicable only to a <code>CFN_STACKSET</code> provisioned product type.</p> <p>Conditional: You must specify either <code>StackSetFailureToleranceCount</code> or <code>StackSetFailureTolerancePercentage</code>, but not both.</p> <p>The default value is <code>0</code> if no value is specified.</p>
+    #[serde(rename = "StackSetFailureToleranceCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stack_set_failure_tolerance_count: Option<i64>,
+    /// <p>The percentage of accounts, per region, for which this stack operation can fail before AWS Service Catalog stops the operation in that region. If the operation is stopped in a region, AWS Service Catalog doesn't attempt the operation in any subsequent regions.</p> <p>When calculating the number of accounts based on the specified percentage, AWS Service Catalog rounds down to the next whole number.</p> <p>Applicable only to a <code>CFN_STACKSET</code> provisioned product type.</p> <p>Conditional: You must specify either <code>StackSetFailureToleranceCount</code> or <code>StackSetFailureTolerancePercentage</code>, but not both.</p>
+    #[serde(rename = "StackSetFailureTolerancePercentage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stack_set_failure_tolerance_percentage: Option<i64>,
+    /// <p>The maximum number of accounts in which to perform this operation at one time. This is dependent on the value of <code>StackSetFailureToleranceCount</code>. <code>StackSetMaxConcurrentCount</code> is at most one more than the <code>StackSetFailureToleranceCount</code>.</p> <p>Note that this setting lets you specify the maximum for operations. For large deployments, under certain circumstances the actual number of accounts acted upon concurrently may be lower due to service throttling.</p> <p>Applicable only to a <code>CFN_STACKSET</code> provisioned product type.</p> <p>Conditional: You must specify either <code>StackSetMaxConcurrentCount</code> or <code>StackSetMaxConcurrentPercentage</code>, but not both.</p>
+    #[serde(rename = "StackSetMaxConcurrencyCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stack_set_max_concurrency_count: Option<i64>,
+    /// <p>The maximum percentage of accounts in which to perform this operation at one time.</p> <p>When calculating the number of accounts based on the specified percentage, AWS Service Catalog rounds down to the next whole number. This is true except in cases where rounding down would result is zero. In this case, AWS Service Catalog sets the number as <code>1</code> instead.</p> <p>Note that this setting lets you specify the maximum for operations. For large deployments, under certain circumstances the actual number of accounts acted upon concurrently may be lower due to service throttling.</p> <p>Applicable only to a <code>CFN_STACKSET</code> provisioned product type.</p> <p>Conditional: You must specify either <code>StackSetMaxConcurrentCount</code> or <code>StackSetMaxConcurrentPercentage</code>, but not both.</p>
+    #[serde(rename = "StackSetMaxConcurrencyPercentage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stack_set_max_concurrency_percentage: Option<i64>,
+    /// <p><p>Determines what action AWS Service Catalog performs to a stack set or a stack instance represented by the provisioned product. The default value is <code>UPDATE</code> if nothing is specified.</p> <p>Applicable only to a <code>CFN_STACKSET</code> provisioned product type.</p> <dl> <dt>CREATE</dt> <dd> <p>Creates a new stack instance in the stack set represented by the provisioned product. In this case, only new stack instances are created based on accounts and regions; if new ProductId or ProvisioningArtifactID are passed, they will be ignored.</p> </dd> <dt>UPDATE</dt> <dd> <p>Updates the stack set represented by the provisioned product and also its stack instances.</p> </dd> <dt>DELETE</dt> <dd> <p>Deletes a stack instance in the stack set represented by the provisioned product.</p> </dd> </dl></p>
+    #[serde(rename = "StackSetOperationType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stack_set_operation_type: Option<String>,
+    /// <p>One or more AWS Regions where the provisioned product will be available.</p> <p>Applicable only to a <code>CFN_STACKSET</code> provisioned product type.</p> <p>The specified regions should be within the list of regions from the <code>STACKSET</code> constraint. To get the list of regions in the <code>STACKSET</code> constraint, use the <code>DescribeProvisioningParameters</code> operation.</p> <p>If no values are specified, the default value is all regions from the <code>STACKSET</code> constraint.</p>
+    #[serde(rename = "StackSetRegions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub stack_set_regions: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateServiceActionInput {
+    /// <p><p>The language code.</p> <ul> <li> <p> <code>en</code> - English (default)</p> </li> <li> <p> <code>jp</code> - Japanese</p> </li> <li> <p> <code>zh</code> - Chinese</p> </li> </ul></p>
+    #[serde(rename = "AcceptLanguage")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub accept_language: Option<String>,
+    /// <p>A map that defines the self-service action.</p>
+    #[serde(rename = "Definition")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub definition: Option<::std::collections::HashMap<String, String>>,
+    /// <p>The self-service action description.</p>
+    #[serde(rename = "Description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>The self-service action identifier.</p>
+    #[serde(rename = "Id")]
+    pub id: String,
+    /// <p>The self-service action name.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateServiceActionOutput {
+    /// <p>Detailed information about the self-service action.</p>
+    #[serde(rename = "ServiceActionDetail")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service_action_detail: Option<ServiceActionDetail>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -3021,6 +3677,120 @@ impl Error for AssociateProductWithPortfolioError {
         }
     }
 }
+/// Errors returned by AssociateServiceActionWithProvisioningArtifact
+#[derive(Debug, PartialEq)]
+pub enum AssociateServiceActionWithProvisioningArtifactError {
+    /// <p>The specified resource is a duplicate.</p>
+    DuplicateResource(String),
+    /// <p>The current limits of the service would have been exceeded by this operation. Decrease your resource use or increase your service limits and retry the operation.</p>
+    LimitExceeded(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl AssociateServiceActionWithProvisioningArtifactError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> AssociateServiceActionWithProvisioningArtifactError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "DuplicateResourceException" => {
+                    return AssociateServiceActionWithProvisioningArtifactError::DuplicateResource(
+                        String::from(error_message),
+                    );
+                }
+                "LimitExceededException" => {
+                    return AssociateServiceActionWithProvisioningArtifactError::LimitExceeded(
+                        String::from(error_message),
+                    );
+                }
+                "ResourceNotFoundException" => {
+                    return AssociateServiceActionWithProvisioningArtifactError::ResourceNotFound(
+                        String::from(error_message),
+                    );
+                }
+                "ValidationException" => {
+                    return AssociateServiceActionWithProvisioningArtifactError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return AssociateServiceActionWithProvisioningArtifactError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for AssociateServiceActionWithProvisioningArtifactError {
+    fn from(err: serde_json::error::Error) -> AssociateServiceActionWithProvisioningArtifactError {
+        AssociateServiceActionWithProvisioningArtifactError::ParseError(
+            err.description().to_string(),
+        )
+    }
+}
+impl From<CredentialsError> for AssociateServiceActionWithProvisioningArtifactError {
+    fn from(err: CredentialsError) -> AssociateServiceActionWithProvisioningArtifactError {
+        AssociateServiceActionWithProvisioningArtifactError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for AssociateServiceActionWithProvisioningArtifactError {
+    fn from(err: HttpDispatchError) -> AssociateServiceActionWithProvisioningArtifactError {
+        AssociateServiceActionWithProvisioningArtifactError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for AssociateServiceActionWithProvisioningArtifactError {
+    fn from(err: io::Error) -> AssociateServiceActionWithProvisioningArtifactError {
+        AssociateServiceActionWithProvisioningArtifactError::HttpDispatch(HttpDispatchError::from(
+            err,
+        ))
+    }
+}
+impl fmt::Display for AssociateServiceActionWithProvisioningArtifactError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for AssociateServiceActionWithProvisioningArtifactError {
+    fn description(&self) -> &str {
+        match *self {
+            AssociateServiceActionWithProvisioningArtifactError::DuplicateResource(ref cause) => {
+                cause
+            }
+            AssociateServiceActionWithProvisioningArtifactError::LimitExceeded(ref cause) => cause,
+            AssociateServiceActionWithProvisioningArtifactError::ResourceNotFound(ref cause) => {
+                cause
+            }
+            AssociateServiceActionWithProvisioningArtifactError::Validation(ref cause) => cause,
+            AssociateServiceActionWithProvisioningArtifactError::Credentials(ref err) => {
+                err.description()
+            }
+            AssociateServiceActionWithProvisioningArtifactError::HttpDispatch(
+                ref dispatch_error,
+            ) => dispatch_error.description(),
+            AssociateServiceActionWithProvisioningArtifactError::ParseError(ref cause) => cause,
+            AssociateServiceActionWithProvisioningArtifactError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by AssociateTagOptionWithResource
 #[derive(Debug, PartialEq)]
 pub enum AssociateTagOptionWithResourceError {
@@ -3144,6 +3914,198 @@ impl Error for AssociateTagOptionWithResourceError {
             }
             AssociateTagOptionWithResourceError::ParseError(ref cause) => cause,
             AssociateTagOptionWithResourceError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by BatchAssociateServiceActionWithProvisioningArtifact
+#[derive(Debug, PartialEq)]
+pub enum BatchAssociateServiceActionWithProvisioningArtifactError {
+    /// <p>One or more parameters provided to the operation are not valid.</p>
+    InvalidParameters(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl BatchAssociateServiceActionWithProvisioningArtifactError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> BatchAssociateServiceActionWithProvisioningArtifactError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                                "InvalidParametersException" => return BatchAssociateServiceActionWithProvisioningArtifactError::InvalidParameters(String::from(error_message)),
+"ValidationException" => return BatchAssociateServiceActionWithProvisioningArtifactError::Validation(error_message.to_string()),
+_ => {}
+                            }
+        }
+        return BatchAssociateServiceActionWithProvisioningArtifactError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for BatchAssociateServiceActionWithProvisioningArtifactError {
+    fn from(
+        err: serde_json::error::Error,
+    ) -> BatchAssociateServiceActionWithProvisioningArtifactError {
+        BatchAssociateServiceActionWithProvisioningArtifactError::ParseError(
+            err.description().to_string(),
+        )
+    }
+}
+impl From<CredentialsError> for BatchAssociateServiceActionWithProvisioningArtifactError {
+    fn from(err: CredentialsError) -> BatchAssociateServiceActionWithProvisioningArtifactError {
+        BatchAssociateServiceActionWithProvisioningArtifactError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for BatchAssociateServiceActionWithProvisioningArtifactError {
+    fn from(err: HttpDispatchError) -> BatchAssociateServiceActionWithProvisioningArtifactError {
+        BatchAssociateServiceActionWithProvisioningArtifactError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for BatchAssociateServiceActionWithProvisioningArtifactError {
+    fn from(err: io::Error) -> BatchAssociateServiceActionWithProvisioningArtifactError {
+        BatchAssociateServiceActionWithProvisioningArtifactError::HttpDispatch(
+            HttpDispatchError::from(err),
+        )
+    }
+}
+impl fmt::Display for BatchAssociateServiceActionWithProvisioningArtifactError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for BatchAssociateServiceActionWithProvisioningArtifactError {
+    fn description(&self) -> &str {
+        match *self {
+            BatchAssociateServiceActionWithProvisioningArtifactError::InvalidParameters(
+                ref cause,
+            ) => cause,
+            BatchAssociateServiceActionWithProvisioningArtifactError::Validation(ref cause) => {
+                cause
+            }
+            BatchAssociateServiceActionWithProvisioningArtifactError::Credentials(ref err) => {
+                err.description()
+            }
+            BatchAssociateServiceActionWithProvisioningArtifactError::HttpDispatch(
+                ref dispatch_error,
+            ) => dispatch_error.description(),
+            BatchAssociateServiceActionWithProvisioningArtifactError::ParseError(ref cause) => {
+                cause
+            }
+            BatchAssociateServiceActionWithProvisioningArtifactError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by BatchDisassociateServiceActionFromProvisioningArtifact
+#[derive(Debug, PartialEq)]
+pub enum BatchDisassociateServiceActionFromProvisioningArtifactError {
+    /// <p>One or more parameters provided to the operation are not valid.</p>
+    InvalidParameters(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl BatchDisassociateServiceActionFromProvisioningArtifactError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> BatchDisassociateServiceActionFromProvisioningArtifactError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                                "InvalidParametersException" => return BatchDisassociateServiceActionFromProvisioningArtifactError::InvalidParameters(String::from(error_message)),
+"ValidationException" => return BatchDisassociateServiceActionFromProvisioningArtifactError::Validation(error_message.to_string()),
+_ => {}
+                            }
+        }
+        return BatchDisassociateServiceActionFromProvisioningArtifactError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error>
+    for BatchDisassociateServiceActionFromProvisioningArtifactError
+{
+    fn from(
+        err: serde_json::error::Error,
+    ) -> BatchDisassociateServiceActionFromProvisioningArtifactError {
+        BatchDisassociateServiceActionFromProvisioningArtifactError::ParseError(
+            err.description().to_string(),
+        )
+    }
+}
+impl From<CredentialsError> for BatchDisassociateServiceActionFromProvisioningArtifactError {
+    fn from(err: CredentialsError) -> BatchDisassociateServiceActionFromProvisioningArtifactError {
+        BatchDisassociateServiceActionFromProvisioningArtifactError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for BatchDisassociateServiceActionFromProvisioningArtifactError {
+    fn from(err: HttpDispatchError) -> BatchDisassociateServiceActionFromProvisioningArtifactError {
+        BatchDisassociateServiceActionFromProvisioningArtifactError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for BatchDisassociateServiceActionFromProvisioningArtifactError {
+    fn from(err: io::Error) -> BatchDisassociateServiceActionFromProvisioningArtifactError {
+        BatchDisassociateServiceActionFromProvisioningArtifactError::HttpDispatch(
+            HttpDispatchError::from(err),
+        )
+    }
+}
+impl fmt::Display for BatchDisassociateServiceActionFromProvisioningArtifactError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for BatchDisassociateServiceActionFromProvisioningArtifactError {
+    fn description(&self) -> &str {
+        match *self {
+            BatchDisassociateServiceActionFromProvisioningArtifactError::InvalidParameters(
+                ref cause,
+            ) => cause,
+            BatchDisassociateServiceActionFromProvisioningArtifactError::Validation(ref cause) => {
+                cause
+            }
+            BatchDisassociateServiceActionFromProvisioningArtifactError::Credentials(ref err) => {
+                err.description()
+            }
+            BatchDisassociateServiceActionFromProvisioningArtifactError::HttpDispatch(
+                ref dispatch_error,
+            ) => dispatch_error.description(),
+            BatchDisassociateServiceActionFromProvisioningArtifactError::ParseError(ref cause) => {
+                cause
+            }
+            BatchDisassociateServiceActionFromProvisioningArtifactError::Unknown(_) => {
+                "unknown error"
+            }
         }
     }
 }
@@ -3430,6 +4392,8 @@ pub enum CreatePortfolioShareError {
     InvalidParameters(String),
     /// <p>The current limits of the service would have been exceeded by this operation. Decrease your resource use or increase your service limits and retry the operation.</p>
     LimitExceeded(String),
+    /// <p>The operation is not supported.</p>
+    OperationNotSupported(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
@@ -3462,6 +4426,11 @@ impl CreatePortfolioShareError {
                 }
                 "LimitExceededException" => {
                     return CreatePortfolioShareError::LimitExceeded(String::from(error_message));
+                }
+                "OperationNotSupportedException" => {
+                    return CreatePortfolioShareError::OperationNotSupported(String::from(
+                        error_message,
+                    ));
                 }
                 "ResourceNotFoundException" => {
                     return CreatePortfolioShareError::ResourceNotFound(String::from(error_message));
@@ -3506,6 +4475,7 @@ impl Error for CreatePortfolioShareError {
         match *self {
             CreatePortfolioShareError::InvalidParameters(ref cause) => cause,
             CreatePortfolioShareError::LimitExceeded(ref cause) => cause,
+            CreatePortfolioShareError::OperationNotSupported(ref cause) => cause,
             CreatePortfolioShareError::ResourceNotFound(ref cause) => cause,
             CreatePortfolioShareError::Validation(ref cause) => cause,
             CreatePortfolioShareError::Credentials(ref err) => err.description(),
@@ -3809,6 +4779,94 @@ impl Error for CreateProvisioningArtifactError {
         }
     }
 }
+/// Errors returned by CreateServiceAction
+#[derive(Debug, PartialEq)]
+pub enum CreateServiceActionError {
+    /// <p>One or more parameters provided to the operation are not valid.</p>
+    InvalidParameters(String),
+    /// <p>The current limits of the service would have been exceeded by this operation. Decrease your resource use or increase your service limits and retry the operation.</p>
+    LimitExceeded(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl CreateServiceActionError {
+    pub fn from_response(res: BufferedHttpResponse) -> CreateServiceActionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InvalidParametersException" => {
+                    return CreateServiceActionError::InvalidParameters(String::from(error_message));
+                }
+                "LimitExceededException" => {
+                    return CreateServiceActionError::LimitExceeded(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return CreateServiceActionError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return CreateServiceActionError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for CreateServiceActionError {
+    fn from(err: serde_json::error::Error) -> CreateServiceActionError {
+        CreateServiceActionError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateServiceActionError {
+    fn from(err: CredentialsError) -> CreateServiceActionError {
+        CreateServiceActionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateServiceActionError {
+    fn from(err: HttpDispatchError) -> CreateServiceActionError {
+        CreateServiceActionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateServiceActionError {
+    fn from(err: io::Error) -> CreateServiceActionError {
+        CreateServiceActionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateServiceActionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateServiceActionError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateServiceActionError::InvalidParameters(ref cause) => cause,
+            CreateServiceActionError::LimitExceeded(ref cause) => cause,
+            CreateServiceActionError::Validation(ref cause) => cause,
+            CreateServiceActionError::Credentials(ref err) => err.description(),
+            CreateServiceActionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateServiceActionError::ParseError(ref cause) => cause,
+            CreateServiceActionError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by CreateTagOption
 #[derive(Debug, PartialEq)]
 pub enum CreateTagOptionError {
@@ -4088,6 +5146,10 @@ impl Error for DeletePortfolioError {
 /// Errors returned by DeletePortfolioShare
 #[derive(Debug, PartialEq)]
 pub enum DeletePortfolioShareError {
+    /// <p>One or more parameters provided to the operation are not valid.</p>
+    InvalidParameters(String),
+    /// <p>The operation is not supported.</p>
+    OperationNotSupported(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
@@ -4115,6 +5177,14 @@ impl DeletePortfolioShareError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "InvalidParametersException" => {
+                    return DeletePortfolioShareError::InvalidParameters(String::from(error_message));
+                }
+                "OperationNotSupportedException" => {
+                    return DeletePortfolioShareError::OperationNotSupported(String::from(
+                        error_message,
+                    ));
+                }
                 "ResourceNotFoundException" => {
                     return DeletePortfolioShareError::ResourceNotFound(String::from(error_message));
                 }
@@ -4156,6 +5226,8 @@ impl fmt::Display for DeletePortfolioShareError {
 impl Error for DeletePortfolioShareError {
     fn description(&self) -> &str {
         match *self {
+            DeletePortfolioShareError::InvalidParameters(ref cause) => cause,
+            DeletePortfolioShareError::OperationNotSupported(ref cause) => cause,
             DeletePortfolioShareError::ResourceNotFound(ref cause) => cause,
             DeletePortfolioShareError::Validation(ref cause) => cause,
             DeletePortfolioShareError::Credentials(ref err) => err.description(),
@@ -4454,6 +5526,94 @@ impl Error for DeleteProvisioningArtifactError {
             }
             DeleteProvisioningArtifactError::ParseError(ref cause) => cause,
             DeleteProvisioningArtifactError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DeleteServiceAction
+#[derive(Debug, PartialEq)]
+pub enum DeleteServiceActionError {
+    /// <p>A resource that is currently in use. Ensure that the resource is not in use and retry the operation.</p>
+    ResourceInUse(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DeleteServiceActionError {
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteServiceActionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ResourceInUseException" => {
+                    return DeleteServiceActionError::ResourceInUse(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return DeleteServiceActionError::ResourceNotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return DeleteServiceActionError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DeleteServiceActionError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteServiceActionError {
+    fn from(err: serde_json::error::Error) -> DeleteServiceActionError {
+        DeleteServiceActionError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteServiceActionError {
+    fn from(err: CredentialsError) -> DeleteServiceActionError {
+        DeleteServiceActionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteServiceActionError {
+    fn from(err: HttpDispatchError) -> DeleteServiceActionError {
+        DeleteServiceActionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteServiceActionError {
+    fn from(err: io::Error) -> DeleteServiceActionError {
+        DeleteServiceActionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteServiceActionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteServiceActionError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteServiceActionError::ResourceInUse(ref cause) => cause,
+            DeleteServiceActionError::ResourceNotFound(ref cause) => cause,
+            DeleteServiceActionError::Validation(ref cause) => cause,
+            DeleteServiceActionError::Credentials(ref err) => err.description(),
+            DeleteServiceActionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteServiceActionError::ParseError(ref cause) => cause,
+            DeleteServiceActionError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4794,6 +5954,106 @@ impl Error for DescribePortfolioError {
             }
             DescribePortfolioError::ParseError(ref cause) => cause,
             DescribePortfolioError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DescribePortfolioShareStatus
+#[derive(Debug, PartialEq)]
+pub enum DescribePortfolioShareStatusError {
+    /// <p>One or more parameters provided to the operation are not valid.</p>
+    InvalidParameters(String),
+    /// <p>The operation is not supported.</p>
+    OperationNotSupported(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DescribePortfolioShareStatusError {
+    pub fn from_response(res: BufferedHttpResponse) -> DescribePortfolioShareStatusError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InvalidParametersException" => {
+                    return DescribePortfolioShareStatusError::InvalidParameters(String::from(
+                        error_message,
+                    ));
+                }
+                "OperationNotSupportedException" => {
+                    return DescribePortfolioShareStatusError::OperationNotSupported(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceNotFoundException" => {
+                    return DescribePortfolioShareStatusError::ResourceNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return DescribePortfolioShareStatusError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DescribePortfolioShareStatusError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DescribePortfolioShareStatusError {
+    fn from(err: serde_json::error::Error) -> DescribePortfolioShareStatusError {
+        DescribePortfolioShareStatusError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribePortfolioShareStatusError {
+    fn from(err: CredentialsError) -> DescribePortfolioShareStatusError {
+        DescribePortfolioShareStatusError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribePortfolioShareStatusError {
+    fn from(err: HttpDispatchError) -> DescribePortfolioShareStatusError {
+        DescribePortfolioShareStatusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribePortfolioShareStatusError {
+    fn from(err: io::Error) -> DescribePortfolioShareStatusError {
+        DescribePortfolioShareStatusError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribePortfolioShareStatusError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribePortfolioShareStatusError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribePortfolioShareStatusError::InvalidParameters(ref cause) => cause,
+            DescribePortfolioShareStatusError::OperationNotSupported(ref cause) => cause,
+            DescribePortfolioShareStatusError::ResourceNotFound(ref cause) => cause,
+            DescribePortfolioShareStatusError::Validation(ref cause) => cause,
+            DescribePortfolioShareStatusError::Credentials(ref err) => err.description(),
+            DescribePortfolioShareStatusError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribePortfolioShareStatusError::ParseError(ref cause) => cause,
+            DescribePortfolioShareStatusError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5491,6 +6751,88 @@ impl Error for DescribeRecordError {
         }
     }
 }
+/// Errors returned by DescribeServiceAction
+#[derive(Debug, PartialEq)]
+pub enum DescribeServiceActionError {
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DescribeServiceActionError {
+    pub fn from_response(res: BufferedHttpResponse) -> DescribeServiceActionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ResourceNotFoundException" => {
+                    return DescribeServiceActionError::ResourceNotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return DescribeServiceActionError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DescribeServiceActionError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DescribeServiceActionError {
+    fn from(err: serde_json::error::Error) -> DescribeServiceActionError {
+        DescribeServiceActionError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DescribeServiceActionError {
+    fn from(err: CredentialsError) -> DescribeServiceActionError {
+        DescribeServiceActionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DescribeServiceActionError {
+    fn from(err: HttpDispatchError) -> DescribeServiceActionError {
+        DescribeServiceActionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DescribeServiceActionError {
+    fn from(err: io::Error) -> DescribeServiceActionError {
+        DescribeServiceActionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DescribeServiceActionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DescribeServiceActionError {
+    fn description(&self) -> &str {
+        match *self {
+            DescribeServiceActionError::ResourceNotFound(ref cause) => cause,
+            DescribeServiceActionError::Validation(ref cause) => cause,
+            DescribeServiceActionError::Credentials(ref err) => err.description(),
+            DescribeServiceActionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DescribeServiceActionError::ParseError(ref cause) => cause,
+            DescribeServiceActionError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by DescribeTagOption
 #[derive(Debug, PartialEq)]
 pub enum DescribeTagOptionError {
@@ -5576,6 +6918,106 @@ impl Error for DescribeTagOptionError {
             }
             DescribeTagOptionError::ParseError(ref cause) => cause,
             DescribeTagOptionError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DisableAWSOrganizationsAccess
+#[derive(Debug, PartialEq)]
+pub enum DisableAWSOrganizationsAccessError {
+    /// <p>An attempt was made to modify a resource that is in a state that is not valid. Check your resources to ensure that they are in valid states before retrying the operation.</p>
+    InvalidState(String),
+    /// <p>The operation is not supported.</p>
+    OperationNotSupported(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DisableAWSOrganizationsAccessError {
+    pub fn from_response(res: BufferedHttpResponse) -> DisableAWSOrganizationsAccessError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InvalidStateException" => {
+                    return DisableAWSOrganizationsAccessError::InvalidState(String::from(
+                        error_message,
+                    ));
+                }
+                "OperationNotSupportedException" => {
+                    return DisableAWSOrganizationsAccessError::OperationNotSupported(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceNotFoundException" => {
+                    return DisableAWSOrganizationsAccessError::ResourceNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return DisableAWSOrganizationsAccessError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DisableAWSOrganizationsAccessError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DisableAWSOrganizationsAccessError {
+    fn from(err: serde_json::error::Error) -> DisableAWSOrganizationsAccessError {
+        DisableAWSOrganizationsAccessError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DisableAWSOrganizationsAccessError {
+    fn from(err: CredentialsError) -> DisableAWSOrganizationsAccessError {
+        DisableAWSOrganizationsAccessError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DisableAWSOrganizationsAccessError {
+    fn from(err: HttpDispatchError) -> DisableAWSOrganizationsAccessError {
+        DisableAWSOrganizationsAccessError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DisableAWSOrganizationsAccessError {
+    fn from(err: io::Error) -> DisableAWSOrganizationsAccessError {
+        DisableAWSOrganizationsAccessError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DisableAWSOrganizationsAccessError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DisableAWSOrganizationsAccessError {
+    fn description(&self) -> &str {
+        match *self {
+            DisableAWSOrganizationsAccessError::InvalidState(ref cause) => cause,
+            DisableAWSOrganizationsAccessError::OperationNotSupported(ref cause) => cause,
+            DisableAWSOrganizationsAccessError::ResourceNotFound(ref cause) => cause,
+            DisableAWSOrganizationsAccessError::Validation(ref cause) => cause,
+            DisableAWSOrganizationsAccessError::Credentials(ref err) => err.description(),
+            DisableAWSOrganizationsAccessError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DisableAWSOrganizationsAccessError::ParseError(ref cause) => cause,
+            DisableAWSOrganizationsAccessError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5775,6 +7217,104 @@ impl Error for DisassociateProductFromPortfolioError {
         }
     }
 }
+/// Errors returned by DisassociateServiceActionFromProvisioningArtifact
+#[derive(Debug, PartialEq)]
+pub enum DisassociateServiceActionFromProvisioningArtifactError {
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DisassociateServiceActionFromProvisioningArtifactError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> DisassociateServiceActionFromProvisioningArtifactError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "ResourceNotFoundException" => {
+                    return DisassociateServiceActionFromProvisioningArtifactError::ResourceNotFound(
+                        String::from(error_message),
+                    );
+                }
+                "ValidationException" => {
+                    return DisassociateServiceActionFromProvisioningArtifactError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return DisassociateServiceActionFromProvisioningArtifactError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DisassociateServiceActionFromProvisioningArtifactError {
+    fn from(
+        err: serde_json::error::Error,
+    ) -> DisassociateServiceActionFromProvisioningArtifactError {
+        DisassociateServiceActionFromProvisioningArtifactError::ParseError(
+            err.description().to_string(),
+        )
+    }
+}
+impl From<CredentialsError> for DisassociateServiceActionFromProvisioningArtifactError {
+    fn from(err: CredentialsError) -> DisassociateServiceActionFromProvisioningArtifactError {
+        DisassociateServiceActionFromProvisioningArtifactError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DisassociateServiceActionFromProvisioningArtifactError {
+    fn from(err: HttpDispatchError) -> DisassociateServiceActionFromProvisioningArtifactError {
+        DisassociateServiceActionFromProvisioningArtifactError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DisassociateServiceActionFromProvisioningArtifactError {
+    fn from(err: io::Error) -> DisassociateServiceActionFromProvisioningArtifactError {
+        DisassociateServiceActionFromProvisioningArtifactError::HttpDispatch(
+            HttpDispatchError::from(err),
+        )
+    }
+}
+impl fmt::Display for DisassociateServiceActionFromProvisioningArtifactError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DisassociateServiceActionFromProvisioningArtifactError {
+    fn description(&self) -> &str {
+        match *self {
+            DisassociateServiceActionFromProvisioningArtifactError::ResourceNotFound(ref cause) => {
+                cause
+            }
+            DisassociateServiceActionFromProvisioningArtifactError::Validation(ref cause) => cause,
+            DisassociateServiceActionFromProvisioningArtifactError::Credentials(ref err) => {
+                err.description()
+            }
+            DisassociateServiceActionFromProvisioningArtifactError::HttpDispatch(
+                ref dispatch_error,
+            ) => dispatch_error.description(),
+            DisassociateServiceActionFromProvisioningArtifactError::ParseError(ref cause) => cause,
+            DisassociateServiceActionFromProvisioningArtifactError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by DisassociateTagOptionFromResource
 #[derive(Debug, PartialEq)]
 pub enum DisassociateTagOptionFromResourceError {
@@ -5866,6 +7406,106 @@ impl Error for DisassociateTagOptionFromResourceError {
             }
             DisassociateTagOptionFromResourceError::ParseError(ref cause) => cause,
             DisassociateTagOptionFromResourceError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by EnableAWSOrganizationsAccess
+#[derive(Debug, PartialEq)]
+pub enum EnableAWSOrganizationsAccessError {
+    /// <p>An attempt was made to modify a resource that is in a state that is not valid. Check your resources to ensure that they are in valid states before retrying the operation.</p>
+    InvalidState(String),
+    /// <p>The operation is not supported.</p>
+    OperationNotSupported(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl EnableAWSOrganizationsAccessError {
+    pub fn from_response(res: BufferedHttpResponse) -> EnableAWSOrganizationsAccessError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InvalidStateException" => {
+                    return EnableAWSOrganizationsAccessError::InvalidState(String::from(
+                        error_message,
+                    ));
+                }
+                "OperationNotSupportedException" => {
+                    return EnableAWSOrganizationsAccessError::OperationNotSupported(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceNotFoundException" => {
+                    return EnableAWSOrganizationsAccessError::ResourceNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return EnableAWSOrganizationsAccessError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return EnableAWSOrganizationsAccessError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for EnableAWSOrganizationsAccessError {
+    fn from(err: serde_json::error::Error) -> EnableAWSOrganizationsAccessError {
+        EnableAWSOrganizationsAccessError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for EnableAWSOrganizationsAccessError {
+    fn from(err: CredentialsError) -> EnableAWSOrganizationsAccessError {
+        EnableAWSOrganizationsAccessError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for EnableAWSOrganizationsAccessError {
+    fn from(err: HttpDispatchError) -> EnableAWSOrganizationsAccessError {
+        EnableAWSOrganizationsAccessError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for EnableAWSOrganizationsAccessError {
+    fn from(err: io::Error) -> EnableAWSOrganizationsAccessError {
+        EnableAWSOrganizationsAccessError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for EnableAWSOrganizationsAccessError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for EnableAWSOrganizationsAccessError {
+    fn description(&self) -> &str {
+        match *self {
+            EnableAWSOrganizationsAccessError::InvalidState(ref cause) => cause,
+            EnableAWSOrganizationsAccessError::OperationNotSupported(ref cause) => cause,
+            EnableAWSOrganizationsAccessError::ResourceNotFound(ref cause) => cause,
+            EnableAWSOrganizationsAccessError::Validation(ref cause) => cause,
+            EnableAWSOrganizationsAccessError::Credentials(ref err) => err.description(),
+            EnableAWSOrganizationsAccessError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            EnableAWSOrganizationsAccessError::ParseError(ref cause) => cause,
+            EnableAWSOrganizationsAccessError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -5969,11 +7609,209 @@ impl Error for ExecuteProvisionedProductPlanError {
         }
     }
 }
+/// Errors returned by ExecuteProvisionedProductServiceAction
+#[derive(Debug, PartialEq)]
+pub enum ExecuteProvisionedProductServiceActionError {
+    /// <p>One or more parameters provided to the operation are not valid.</p>
+    InvalidParameters(String),
+    /// <p>An attempt was made to modify a resource that is in a state that is not valid. Check your resources to ensure that they are in valid states before retrying the operation.</p>
+    InvalidState(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ExecuteProvisionedProductServiceActionError {
+    pub fn from_response(res: BufferedHttpResponse) -> ExecuteProvisionedProductServiceActionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InvalidParametersException" => {
+                    return ExecuteProvisionedProductServiceActionError::InvalidParameters(
+                        String::from(error_message),
+                    );
+                }
+                "InvalidStateException" => {
+                    return ExecuteProvisionedProductServiceActionError::InvalidState(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceNotFoundException" => {
+                    return ExecuteProvisionedProductServiceActionError::ResourceNotFound(
+                        String::from(error_message),
+                    );
+                }
+                "ValidationException" => {
+                    return ExecuteProvisionedProductServiceActionError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return ExecuteProvisionedProductServiceActionError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ExecuteProvisionedProductServiceActionError {
+    fn from(err: serde_json::error::Error) -> ExecuteProvisionedProductServiceActionError {
+        ExecuteProvisionedProductServiceActionError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ExecuteProvisionedProductServiceActionError {
+    fn from(err: CredentialsError) -> ExecuteProvisionedProductServiceActionError {
+        ExecuteProvisionedProductServiceActionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ExecuteProvisionedProductServiceActionError {
+    fn from(err: HttpDispatchError) -> ExecuteProvisionedProductServiceActionError {
+        ExecuteProvisionedProductServiceActionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ExecuteProvisionedProductServiceActionError {
+    fn from(err: io::Error) -> ExecuteProvisionedProductServiceActionError {
+        ExecuteProvisionedProductServiceActionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ExecuteProvisionedProductServiceActionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ExecuteProvisionedProductServiceActionError {
+    fn description(&self) -> &str {
+        match *self {
+            ExecuteProvisionedProductServiceActionError::InvalidParameters(ref cause) => cause,
+            ExecuteProvisionedProductServiceActionError::InvalidState(ref cause) => cause,
+            ExecuteProvisionedProductServiceActionError::ResourceNotFound(ref cause) => cause,
+            ExecuteProvisionedProductServiceActionError::Validation(ref cause) => cause,
+            ExecuteProvisionedProductServiceActionError::Credentials(ref err) => err.description(),
+            ExecuteProvisionedProductServiceActionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ExecuteProvisionedProductServiceActionError::ParseError(ref cause) => cause,
+            ExecuteProvisionedProductServiceActionError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetAWSOrganizationsAccessStatus
+#[derive(Debug, PartialEq)]
+pub enum GetAWSOrganizationsAccessStatusError {
+    /// <p>The operation is not supported.</p>
+    OperationNotSupported(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetAWSOrganizationsAccessStatusError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetAWSOrganizationsAccessStatusError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "OperationNotSupportedException" => {
+                    return GetAWSOrganizationsAccessStatusError::OperationNotSupported(
+                        String::from(error_message),
+                    );
+                }
+                "ResourceNotFoundException" => {
+                    return GetAWSOrganizationsAccessStatusError::ResourceNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return GetAWSOrganizationsAccessStatusError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return GetAWSOrganizationsAccessStatusError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetAWSOrganizationsAccessStatusError {
+    fn from(err: serde_json::error::Error) -> GetAWSOrganizationsAccessStatusError {
+        GetAWSOrganizationsAccessStatusError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetAWSOrganizationsAccessStatusError {
+    fn from(err: CredentialsError) -> GetAWSOrganizationsAccessStatusError {
+        GetAWSOrganizationsAccessStatusError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetAWSOrganizationsAccessStatusError {
+    fn from(err: HttpDispatchError) -> GetAWSOrganizationsAccessStatusError {
+        GetAWSOrganizationsAccessStatusError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetAWSOrganizationsAccessStatusError {
+    fn from(err: io::Error) -> GetAWSOrganizationsAccessStatusError {
+        GetAWSOrganizationsAccessStatusError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetAWSOrganizationsAccessStatusError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetAWSOrganizationsAccessStatusError {
+    fn description(&self) -> &str {
+        match *self {
+            GetAWSOrganizationsAccessStatusError::OperationNotSupported(ref cause) => cause,
+            GetAWSOrganizationsAccessStatusError::ResourceNotFound(ref cause) => cause,
+            GetAWSOrganizationsAccessStatusError::Validation(ref cause) => cause,
+            GetAWSOrganizationsAccessStatusError::Credentials(ref err) => err.description(),
+            GetAWSOrganizationsAccessStatusError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetAWSOrganizationsAccessStatusError::ParseError(ref cause) => cause,
+            GetAWSOrganizationsAccessStatusError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by ListAcceptedPortfolioShares
 #[derive(Debug, PartialEq)]
 pub enum ListAcceptedPortfolioSharesError {
     /// <p>One or more parameters provided to the operation are not valid.</p>
     InvalidParameters(String),
+    /// <p>The operation is not supported.</p>
+    OperationNotSupported(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -6001,6 +7839,11 @@ impl ListAcceptedPortfolioSharesError {
             match *error_type {
                 "InvalidParametersException" => {
                     return ListAcceptedPortfolioSharesError::InvalidParameters(String::from(
+                        error_message,
+                    ));
+                }
+                "OperationNotSupportedException" => {
+                    return ListAcceptedPortfolioSharesError::OperationNotSupported(String::from(
                         error_message,
                     ));
                 }
@@ -6043,6 +7886,7 @@ impl Error for ListAcceptedPortfolioSharesError {
     fn description(&self) -> &str {
         match *self {
             ListAcceptedPortfolioSharesError::InvalidParameters(ref cause) => cause,
+            ListAcceptedPortfolioSharesError::OperationNotSupported(ref cause) => cause,
             ListAcceptedPortfolioSharesError::Validation(ref cause) => cause,
             ListAcceptedPortfolioSharesError::Credentials(ref err) => err.description(),
             ListAcceptedPortfolioSharesError::HttpDispatch(ref dispatch_error) => {
@@ -6228,6 +8072,108 @@ impl Error for ListLaunchPathsError {
             ListLaunchPathsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             ListLaunchPathsError::ParseError(ref cause) => cause,
             ListLaunchPathsError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by ListOrganizationPortfolioAccess
+#[derive(Debug, PartialEq)]
+pub enum ListOrganizationPortfolioAccessError {
+    /// <p>One or more parameters provided to the operation are not valid.</p>
+    InvalidParameters(String),
+    /// <p>The operation is not supported.</p>
+    OperationNotSupported(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListOrganizationPortfolioAccessError {
+    pub fn from_response(res: BufferedHttpResponse) -> ListOrganizationPortfolioAccessError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InvalidParametersException" => {
+                    return ListOrganizationPortfolioAccessError::InvalidParameters(String::from(
+                        error_message,
+                    ));
+                }
+                "OperationNotSupportedException" => {
+                    return ListOrganizationPortfolioAccessError::OperationNotSupported(
+                        String::from(error_message),
+                    );
+                }
+                "ResourceNotFoundException" => {
+                    return ListOrganizationPortfolioAccessError::ResourceNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return ListOrganizationPortfolioAccessError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return ListOrganizationPortfolioAccessError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListOrganizationPortfolioAccessError {
+    fn from(err: serde_json::error::Error) -> ListOrganizationPortfolioAccessError {
+        ListOrganizationPortfolioAccessError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListOrganizationPortfolioAccessError {
+    fn from(err: CredentialsError) -> ListOrganizationPortfolioAccessError {
+        ListOrganizationPortfolioAccessError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListOrganizationPortfolioAccessError {
+    fn from(err: HttpDispatchError) -> ListOrganizationPortfolioAccessError {
+        ListOrganizationPortfolioAccessError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListOrganizationPortfolioAccessError {
+    fn from(err: io::Error) -> ListOrganizationPortfolioAccessError {
+        ListOrganizationPortfolioAccessError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListOrganizationPortfolioAccessError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListOrganizationPortfolioAccessError {
+    fn description(&self) -> &str {
+        match *self {
+            ListOrganizationPortfolioAccessError::InvalidParameters(ref cause) => cause,
+            ListOrganizationPortfolioAccessError::OperationNotSupported(ref cause) => cause,
+            ListOrganizationPortfolioAccessError::ResourceNotFound(ref cause) => cause,
+            ListOrganizationPortfolioAccessError::Validation(ref cause) => cause,
+            ListOrganizationPortfolioAccessError::Credentials(ref err) => err.description(),
+            ListOrganizationPortfolioAccessError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListOrganizationPortfolioAccessError::ParseError(ref cause) => cause,
+            ListOrganizationPortfolioAccessError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -6761,6 +8707,104 @@ impl Error for ListProvisioningArtifactsError {
         }
     }
 }
+/// Errors returned by ListProvisioningArtifactsForServiceAction
+#[derive(Debug, PartialEq)]
+pub enum ListProvisioningArtifactsForServiceActionError {
+    /// <p>One or more parameters provided to the operation are not valid.</p>
+    InvalidParameters(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListProvisioningArtifactsForServiceActionError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> ListProvisioningArtifactsForServiceActionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InvalidParametersException" => {
+                    return ListProvisioningArtifactsForServiceActionError::InvalidParameters(
+                        String::from(error_message),
+                    );
+                }
+                "ResourceNotFoundException" => {
+                    return ListProvisioningArtifactsForServiceActionError::ResourceNotFound(
+                        String::from(error_message),
+                    );
+                }
+                "ValidationException" => {
+                    return ListProvisioningArtifactsForServiceActionError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return ListProvisioningArtifactsForServiceActionError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListProvisioningArtifactsForServiceActionError {
+    fn from(err: serde_json::error::Error) -> ListProvisioningArtifactsForServiceActionError {
+        ListProvisioningArtifactsForServiceActionError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListProvisioningArtifactsForServiceActionError {
+    fn from(err: CredentialsError) -> ListProvisioningArtifactsForServiceActionError {
+        ListProvisioningArtifactsForServiceActionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListProvisioningArtifactsForServiceActionError {
+    fn from(err: HttpDispatchError) -> ListProvisioningArtifactsForServiceActionError {
+        ListProvisioningArtifactsForServiceActionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListProvisioningArtifactsForServiceActionError {
+    fn from(err: io::Error) -> ListProvisioningArtifactsForServiceActionError {
+        ListProvisioningArtifactsForServiceActionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListProvisioningArtifactsForServiceActionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListProvisioningArtifactsForServiceActionError {
+    fn description(&self) -> &str {
+        match *self {
+            ListProvisioningArtifactsForServiceActionError::InvalidParameters(ref cause) => cause,
+            ListProvisioningArtifactsForServiceActionError::ResourceNotFound(ref cause) => cause,
+            ListProvisioningArtifactsForServiceActionError::Validation(ref cause) => cause,
+            ListProvisioningArtifactsForServiceActionError::Credentials(ref err) => {
+                err.description()
+            }
+            ListProvisioningArtifactsForServiceActionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListProvisioningArtifactsForServiceActionError::ParseError(ref cause) => cause,
+            ListProvisioningArtifactsForServiceActionError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by ListRecordHistory
 #[derive(Debug, PartialEq)]
 pub enum ListRecordHistoryError {
@@ -6940,6 +8984,186 @@ impl Error for ListResourcesForTagOptionError {
             }
             ListResourcesForTagOptionError::ParseError(ref cause) => cause,
             ListResourcesForTagOptionError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by ListServiceActions
+#[derive(Debug, PartialEq)]
+pub enum ListServiceActionsError {
+    /// <p>One or more parameters provided to the operation are not valid.</p>
+    InvalidParameters(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListServiceActionsError {
+    pub fn from_response(res: BufferedHttpResponse) -> ListServiceActionsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InvalidParametersException" => {
+                    return ListServiceActionsError::InvalidParameters(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return ListServiceActionsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ListServiceActionsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListServiceActionsError {
+    fn from(err: serde_json::error::Error) -> ListServiceActionsError {
+        ListServiceActionsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListServiceActionsError {
+    fn from(err: CredentialsError) -> ListServiceActionsError {
+        ListServiceActionsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListServiceActionsError {
+    fn from(err: HttpDispatchError) -> ListServiceActionsError {
+        ListServiceActionsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListServiceActionsError {
+    fn from(err: io::Error) -> ListServiceActionsError {
+        ListServiceActionsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListServiceActionsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListServiceActionsError {
+    fn description(&self) -> &str {
+        match *self {
+            ListServiceActionsError::InvalidParameters(ref cause) => cause,
+            ListServiceActionsError::Validation(ref cause) => cause,
+            ListServiceActionsError::Credentials(ref err) => err.description(),
+            ListServiceActionsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListServiceActionsError::ParseError(ref cause) => cause,
+            ListServiceActionsError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by ListServiceActionsForProvisioningArtifact
+#[derive(Debug, PartialEq)]
+pub enum ListServiceActionsForProvisioningArtifactError {
+    /// <p>One or more parameters provided to the operation are not valid.</p>
+    InvalidParameters(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ListServiceActionsForProvisioningArtifactError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> ListServiceActionsForProvisioningArtifactError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InvalidParametersException" => {
+                    return ListServiceActionsForProvisioningArtifactError::InvalidParameters(
+                        String::from(error_message),
+                    );
+                }
+                "ResourceNotFoundException" => {
+                    return ListServiceActionsForProvisioningArtifactError::ResourceNotFound(
+                        String::from(error_message),
+                    );
+                }
+                "ValidationException" => {
+                    return ListServiceActionsForProvisioningArtifactError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return ListServiceActionsForProvisioningArtifactError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ListServiceActionsForProvisioningArtifactError {
+    fn from(err: serde_json::error::Error) -> ListServiceActionsForProvisioningArtifactError {
+        ListServiceActionsForProvisioningArtifactError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ListServiceActionsForProvisioningArtifactError {
+    fn from(err: CredentialsError) -> ListServiceActionsForProvisioningArtifactError {
+        ListServiceActionsForProvisioningArtifactError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ListServiceActionsForProvisioningArtifactError {
+    fn from(err: HttpDispatchError) -> ListServiceActionsForProvisioningArtifactError {
+        ListServiceActionsForProvisioningArtifactError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ListServiceActionsForProvisioningArtifactError {
+    fn from(err: io::Error) -> ListServiceActionsForProvisioningArtifactError {
+        ListServiceActionsForProvisioningArtifactError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ListServiceActionsForProvisioningArtifactError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ListServiceActionsForProvisioningArtifactError {
+    fn description(&self) -> &str {
+        match *self {
+            ListServiceActionsForProvisioningArtifactError::InvalidParameters(ref cause) => cause,
+            ListServiceActionsForProvisioningArtifactError::ResourceNotFound(ref cause) => cause,
+            ListServiceActionsForProvisioningArtifactError::Validation(ref cause) => cause,
+            ListServiceActionsForProvisioningArtifactError::Credentials(ref err) => {
+                err.description()
+            }
+            ListServiceActionsForProvisioningArtifactError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ListServiceActionsForProvisioningArtifactError::ParseError(ref cause) => cause,
+            ListServiceActionsForProvisioningArtifactError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -8085,6 +10309,94 @@ impl Error for UpdateProvisioningArtifactError {
         }
     }
 }
+/// Errors returned by UpdateServiceAction
+#[derive(Debug, PartialEq)]
+pub enum UpdateServiceActionError {
+    /// <p>One or more parameters provided to the operation are not valid.</p>
+    InvalidParameters(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl UpdateServiceActionError {
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateServiceActionError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InvalidParametersException" => {
+                    return UpdateServiceActionError::InvalidParameters(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return UpdateServiceActionError::ResourceNotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return UpdateServiceActionError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return UpdateServiceActionError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateServiceActionError {
+    fn from(err: serde_json::error::Error) -> UpdateServiceActionError {
+        UpdateServiceActionError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateServiceActionError {
+    fn from(err: CredentialsError) -> UpdateServiceActionError {
+        UpdateServiceActionError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateServiceActionError {
+    fn from(err: HttpDispatchError) -> UpdateServiceActionError {
+        UpdateServiceActionError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateServiceActionError {
+    fn from(err: io::Error) -> UpdateServiceActionError {
+        UpdateServiceActionError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateServiceActionError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateServiceActionError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateServiceActionError::InvalidParameters(ref cause) => cause,
+            UpdateServiceActionError::ResourceNotFound(ref cause) => cause,
+            UpdateServiceActionError::Validation(ref cause) => cause,
+            UpdateServiceActionError::Credentials(ref err) => err.description(),
+            UpdateServiceActionError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateServiceActionError::ParseError(ref cause) => cause,
+            UpdateServiceActionError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by UpdateTagOption
 #[derive(Debug, PartialEq)]
 pub enum UpdateTagOptionError {
@@ -8203,11 +10515,38 @@ pub trait ServiceCatalog {
         input: AssociateProductWithPortfolioInput,
     ) -> RusotoFuture<AssociateProductWithPortfolioOutput, AssociateProductWithPortfolioError>;
 
+    /// <p>Associates a self-service action with a provisioning artifact.</p>
+    fn associate_service_action_with_provisioning_artifact(
+        &self,
+        input: AssociateServiceActionWithProvisioningArtifactInput,
+    ) -> RusotoFuture<
+        AssociateServiceActionWithProvisioningArtifactOutput,
+        AssociateServiceActionWithProvisioningArtifactError,
+    >;
+
     /// <p>Associate the specified TagOption with the specified portfolio or product.</p>
     fn associate_tag_option_with_resource(
         &self,
         input: AssociateTagOptionWithResourceInput,
     ) -> RusotoFuture<AssociateTagOptionWithResourceOutput, AssociateTagOptionWithResourceError>;
+
+    /// <p>Associates multiple self-service actions with provisioning artifacts.</p>
+    fn batch_associate_service_action_with_provisioning_artifact(
+        &self,
+        input: BatchAssociateServiceActionWithProvisioningArtifactInput,
+    ) -> RusotoFuture<
+        BatchAssociateServiceActionWithProvisioningArtifactOutput,
+        BatchAssociateServiceActionWithProvisioningArtifactError,
+    >;
+
+    /// <p>Disassociates a batch of self-service actions from the specified provisioning artifact.</p>
+    fn batch_disassociate_service_action_from_provisioning_artifact(
+        &self,
+        input: BatchDisassociateServiceActionFromProvisioningArtifactInput,
+    ) -> RusotoFuture<
+        BatchDisassociateServiceActionFromProvisioningArtifactOutput,
+        BatchDisassociateServiceActionFromProvisioningArtifactError,
+    >;
 
     /// <p>Copies the specified source product to the specified target product or a new product.</p> <p>You can copy a product to the same account or another account. You can copy a product to the same region or another region.</p> <p>This operation is performed asynchronously. To track the progress of the operation, use <a>DescribeCopyProductStatus</a>.</p>
     fn copy_product(
@@ -8227,7 +10566,7 @@ pub trait ServiceCatalog {
         input: CreatePortfolioInput,
     ) -> RusotoFuture<CreatePortfolioOutput, CreatePortfolioError>;
 
-    /// <p>Shares the specified portfolio with the specified account.</p>
+    /// <p>Shares the specified portfolio with the specified account or organization node. Shares to an organization node can only be created by the master account of an Organization. AWSOrganizationsAccess must be enabled in order to create a portfolio share to an organization node.</p>
     fn create_portfolio_share(
         &self,
         input: CreatePortfolioShareInput,
@@ -8251,6 +10590,12 @@ pub trait ServiceCatalog {
         input: CreateProvisioningArtifactInput,
     ) -> RusotoFuture<CreateProvisioningArtifactOutput, CreateProvisioningArtifactError>;
 
+    /// <p>Creates a self-service action.</p>
+    fn create_service_action(
+        &self,
+        input: CreateServiceActionInput,
+    ) -> RusotoFuture<CreateServiceActionOutput, CreateServiceActionError>;
+
     /// <p>Creates a TagOption.</p>
     fn create_tag_option(
         &self,
@@ -8269,7 +10614,7 @@ pub trait ServiceCatalog {
         input: DeletePortfolioInput,
     ) -> RusotoFuture<DeletePortfolioOutput, DeletePortfolioError>;
 
-    /// <p>Stops sharing the specified portfolio with the specified account.</p>
+    /// <p>Stops sharing the specified portfolio with the specified account or organization node. Shares to an organization node can only be deleted by the master account of an Organization.</p>
     fn delete_portfolio_share(
         &self,
         input: DeletePortfolioShareInput,
@@ -8292,6 +10637,12 @@ pub trait ServiceCatalog {
         &self,
         input: DeleteProvisioningArtifactInput,
     ) -> RusotoFuture<DeleteProvisioningArtifactOutput, DeleteProvisioningArtifactError>;
+
+    /// <p>Deletes a self-service action.</p>
+    fn delete_service_action(
+        &self,
+        input: DeleteServiceActionInput,
+    ) -> RusotoFuture<DeleteServiceActionOutput, DeleteServiceActionError>;
 
     /// <p>Deletes the specified TagOption.</p> <p>You cannot delete a TagOption if it is associated with a product or portfolio.</p>
     fn delete_tag_option(
@@ -8316,6 +10667,12 @@ pub trait ServiceCatalog {
         &self,
         input: DescribePortfolioInput,
     ) -> RusotoFuture<DescribePortfolioOutput, DescribePortfolioError>;
+
+    /// <p>Gets the status of the specified portfolio share operation. This API can only be called by the master account in the organization.</p>
+    fn describe_portfolio_share_status(
+        &self,
+        input: DescribePortfolioShareStatusInput,
+    ) -> RusotoFuture<DescribePortfolioShareStatusOutput, DescribePortfolioShareStatusError>;
 
     /// <p>Gets information about the specified product.</p>
     fn describe_product(
@@ -8365,11 +10722,22 @@ pub trait ServiceCatalog {
         input: DescribeRecordInput,
     ) -> RusotoFuture<DescribeRecordOutput, DescribeRecordError>;
 
+    /// <p>Describes a self-service action.</p>
+    fn describe_service_action(
+        &self,
+        input: DescribeServiceActionInput,
+    ) -> RusotoFuture<DescribeServiceActionOutput, DescribeServiceActionError>;
+
     /// <p>Gets information about the specified TagOption.</p>
     fn describe_tag_option(
         &self,
         input: DescribeTagOptionInput,
     ) -> RusotoFuture<DescribeTagOptionOutput, DescribeTagOptionError>;
+
+    /// <p>Disable portfolio sharing through AWS Organizations feature. This feature will not delete your current shares but it will prevent you from creating new shares throughout your organization. Current shares will not be in sync with your organization structure if it changes after calling this API. This API can only be called by the master account in the organization.</p>
+    fn disable_aws_organizations_access(
+        &self,
+    ) -> RusotoFuture<DisableAWSOrganizationsAccessOutput, DisableAWSOrganizationsAccessError>;
 
     /// <p>Disassociates a previously associated principal ARN from a specified portfolio.</p>
     fn disassociate_principal_from_portfolio(
@@ -8386,17 +10754,45 @@ pub trait ServiceCatalog {
         input: DisassociateProductFromPortfolioInput,
     ) -> RusotoFuture<DisassociateProductFromPortfolioOutput, DisassociateProductFromPortfolioError>;
 
+    /// <p>Disassociates the specified self-service action association from the specified provisioning artifact.</p>
+    fn disassociate_service_action_from_provisioning_artifact(
+        &self,
+        input: DisassociateServiceActionFromProvisioningArtifactInput,
+    ) -> RusotoFuture<
+        DisassociateServiceActionFromProvisioningArtifactOutput,
+        DisassociateServiceActionFromProvisioningArtifactError,
+    >;
+
     /// <p>Disassociates the specified TagOption from the specified resource.</p>
     fn disassociate_tag_option_from_resource(
         &self,
         input: DisassociateTagOptionFromResourceInput,
     ) -> RusotoFuture<DisassociateTagOptionFromResourceOutput, DisassociateTagOptionFromResourceError>;
 
+    /// <p>Enable portfolio sharing feature through AWS Organizations. This API will allow Service Catalog to receive updates on your organization in order to sync your shares with the current structure. This API can only be called by the master account in the organization.</p> <p>By calling this API Service Catalog will make a call to organizations:EnableAWSServiceAccess on your behalf so that your shares can be in sync with any changes in your AWS Organizations structure.</p>
+    fn enable_aws_organizations_access(
+        &self,
+    ) -> RusotoFuture<EnableAWSOrganizationsAccessOutput, EnableAWSOrganizationsAccessError>;
+
     /// <p>Provisions or modifies a product based on the resource changes for the specified plan.</p>
     fn execute_provisioned_product_plan(
         &self,
         input: ExecuteProvisionedProductPlanInput,
     ) -> RusotoFuture<ExecuteProvisionedProductPlanOutput, ExecuteProvisionedProductPlanError>;
+
+    /// <p>Executes a self-service action against a provisioned product.</p>
+    fn execute_provisioned_product_service_action(
+        &self,
+        input: ExecuteProvisionedProductServiceActionInput,
+    ) -> RusotoFuture<
+        ExecuteProvisionedProductServiceActionOutput,
+        ExecuteProvisionedProductServiceActionError,
+    >;
+
+    /// <p>Get the Access Status for AWS Organization portfolio share feature. This API can only be called by the master account in the organization.</p>
+    fn get_aws_organizations_access_status(
+        &self,
+    ) -> RusotoFuture<GetAWSOrganizationsAccessStatusOutput, GetAWSOrganizationsAccessStatusError>;
 
     /// <p>Lists all portfolios for which sharing was accepted by this account.</p>
     fn list_accepted_portfolio_shares(
@@ -8415,6 +10811,12 @@ pub trait ServiceCatalog {
         &self,
         input: ListLaunchPathsInput,
     ) -> RusotoFuture<ListLaunchPathsOutput, ListLaunchPathsError>;
+
+    /// <p>Lists the organization nodes that have access to the specified portfolio. This API can only be called by the master account in the organization.</p>
+    fn list_organization_portfolio_access(
+        &self,
+        input: ListOrganizationPortfolioAccessInput,
+    ) -> RusotoFuture<ListOrganizationPortfolioAccessOutput, ListOrganizationPortfolioAccessError>;
 
     /// <p>Lists the account IDs that have access to the specified portfolio.</p>
     fn list_portfolio_access(
@@ -8452,6 +10854,15 @@ pub trait ServiceCatalog {
         input: ListProvisioningArtifactsInput,
     ) -> RusotoFuture<ListProvisioningArtifactsOutput, ListProvisioningArtifactsError>;
 
+    /// <p>Lists all provisioning artifacts (also known as versions) for the specified self-service action.</p>
+    fn list_provisioning_artifacts_for_service_action(
+        &self,
+        input: ListProvisioningArtifactsForServiceActionInput,
+    ) -> RusotoFuture<
+        ListProvisioningArtifactsForServiceActionOutput,
+        ListProvisioningArtifactsForServiceActionError,
+    >;
+
     /// <p>Lists the specified requests or all performed requests.</p>
     fn list_record_history(
         &self,
@@ -8463,6 +10874,21 @@ pub trait ServiceCatalog {
         &self,
         input: ListResourcesForTagOptionInput,
     ) -> RusotoFuture<ListResourcesForTagOptionOutput, ListResourcesForTagOptionError>;
+
+    /// <p>Lists all self-service actions.</p>
+    fn list_service_actions(
+        &self,
+        input: ListServiceActionsInput,
+    ) -> RusotoFuture<ListServiceActionsOutput, ListServiceActionsError>;
+
+    /// <p>Returns a paginated list of self-service actions associated with the specified Product ID and Provisioning Artifact ID.</p>
+    fn list_service_actions_for_provisioning_artifact(
+        &self,
+        input: ListServiceActionsForProvisioningArtifactInput,
+    ) -> RusotoFuture<
+        ListServiceActionsForProvisioningArtifactOutput,
+        ListServiceActionsForProvisioningArtifactError,
+    >;
 
     /// <p>Lists the specified TagOptions or all TagOptions.</p>
     fn list_tag_options(
@@ -8541,6 +10967,12 @@ pub trait ServiceCatalog {
         &self,
         input: UpdateProvisioningArtifactInput,
     ) -> RusotoFuture<UpdateProvisioningArtifactOutput, UpdateProvisioningArtifactError>;
+
+    /// <p>Updates a self-service action.</p>
+    fn update_service_action(
+        &self,
+        input: UpdateServiceActionInput,
+    ) -> RusotoFuture<UpdateServiceActionOutput, UpdateServiceActionError>;
 
     /// <p>Updates the specified TagOption.</p>
     fn update_tag_option(
@@ -8701,6 +11133,50 @@ impl ServiceCatalog for ServiceCatalogClient {
         })
     }
 
+    /// <p>Associates a self-service action with a provisioning artifact.</p>
+    fn associate_service_action_with_provisioning_artifact(
+        &self,
+        input: AssociateServiceActionWithProvisioningArtifactInput,
+    ) -> RusotoFuture<
+        AssociateServiceActionWithProvisioningArtifactOutput,
+        AssociateServiceActionWithProvisioningArtifactError,
+    > {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.AssociateServiceActionWithProvisioningArtifact",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<AssociateServiceActionWithProvisioningArtifactOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(
+                        AssociateServiceActionWithProvisioningArtifactError::from_response(
+                            response,
+                        ),
+                    )
+                }))
+            }
+        })
+    }
+
     /// <p>Associate the specified TagOption with the specified portfolio or product.</p>
     fn associate_tag_option_with_resource(
         &self,
@@ -8734,6 +11210,96 @@ impl ServiceCatalog for ServiceCatalogClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(AssociateTagOptionWithResourceError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Associates multiple self-service actions with provisioning artifacts.</p>
+    fn batch_associate_service_action_with_provisioning_artifact(
+        &self,
+        input: BatchAssociateServiceActionWithProvisioningArtifactInput,
+    ) -> RusotoFuture<
+        BatchAssociateServiceActionWithProvisioningArtifactOutput,
+        BatchAssociateServiceActionWithProvisioningArtifactError,
+    > {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.BatchAssociateServiceActionWithProvisioningArtifact",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(
+                    response.buffer().from_err().map(|response| {
+                        let mut body = response.body;
+
+                        if body.is_empty() || body == b"null" {
+                            body = b"{}".to_vec();
+                        }
+
+                        serde_json::from_str::<
+                            BatchAssociateServiceActionWithProvisioningArtifactOutput,
+                        >(String::from_utf8_lossy(body.as_ref()).as_ref())
+                        .unwrap()
+                    }),
+                )
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(
+                        BatchAssociateServiceActionWithProvisioningArtifactError::from_response(
+                            response,
+                        ),
+                    )
+                }))
+            }
+        })
+    }
+
+    /// <p>Disassociates a batch of self-service actions from the specified provisioning artifact.</p>
+    fn batch_disassociate_service_action_from_provisioning_artifact(
+        &self,
+        input: BatchDisassociateServiceActionFromProvisioningArtifactInput,
+    ) -> RusotoFuture<
+        BatchDisassociateServiceActionFromProvisioningArtifactOutput,
+        BatchDisassociateServiceActionFromProvisioningArtifactError,
+    > {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.BatchDisassociateServiceActionFromProvisioningArtifact",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<
+                        BatchDisassociateServiceActionFromProvisioningArtifactOutput,
+                    >(String::from_utf8_lossy(body.as_ref()).as_ref())
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(
+                        BatchDisassociateServiceActionFromProvisioningArtifactError::from_response(
+                            response,
+                        ),
+                    )
                 }))
             }
         })
@@ -8856,7 +11422,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         })
     }
 
-    /// <p>Shares the specified portfolio with the specified account.</p>
+    /// <p>Shares the specified portfolio with the specified account or organization node. Shares to an organization node can only be created by the master account of an Organization. AWSOrganizationsAccess must be enabled in order to create a portfolio share to an organization node.</p>
     fn create_portfolio_share(
         &self,
         input: CreatePortfolioShareInput,
@@ -9006,6 +11572,45 @@ impl ServiceCatalog for ServiceCatalogClient {
         })
     }
 
+    /// <p>Creates a self-service action.</p>
+    fn create_service_action(
+        &self,
+        input: CreateServiceActionInput,
+    ) -> RusotoFuture<CreateServiceActionOutput, CreateServiceActionError> {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.CreateServiceAction",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<CreateServiceActionOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(CreateServiceActionError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>Creates a TagOption.</p>
     fn create_tag_option(
         &self,
@@ -9126,7 +11731,7 @@ impl ServiceCatalog for ServiceCatalogClient {
         })
     }
 
-    /// <p>Stops sharing the specified portfolio with the specified account.</p>
+    /// <p>Stops sharing the specified portfolio with the specified account or organization node. Shares to an organization node can only be deleted by the master account of an Organization.</p>
     fn delete_portfolio_share(
         &self,
         input: DeletePortfolioShareInput,
@@ -9272,6 +11877,45 @@ impl ServiceCatalog for ServiceCatalogClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(DeleteProvisioningArtifactError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p>Deletes a self-service action.</p>
+    fn delete_service_action(
+        &self,
+        input: DeleteServiceActionInput,
+    ) -> RusotoFuture<DeleteServiceActionOutput, DeleteServiceActionError> {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.DeleteServiceAction",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DeleteServiceActionOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DeleteServiceActionError::from_response(response))
+                    }),
+                )
             }
         })
     }
@@ -9429,6 +12073,43 @@ impl ServiceCatalog for ServiceCatalogClient {
                         .from_err()
                         .and_then(|response| Err(DescribePortfolioError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p>Gets the status of the specified portfolio share operation. This API can only be called by the master account in the organization.</p>
+    fn describe_portfolio_share_status(
+        &self,
+        input: DescribePortfolioShareStatusInput,
+    ) -> RusotoFuture<DescribePortfolioShareStatusOutput, DescribePortfolioShareStatusError> {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.DescribePortfolioShareStatus",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribePortfolioShareStatusOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DescribePortfolioShareStatusError::from_response(response))
+                }))
             }
         })
     }
@@ -9738,6 +12419,45 @@ impl ServiceCatalog for ServiceCatalogClient {
         })
     }
 
+    /// <p>Describes a self-service action.</p>
+    fn describe_service_action(
+        &self,
+        input: DescribeServiceActionInput,
+    ) -> RusotoFuture<DescribeServiceActionOutput, DescribeServiceActionError> {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.DescribeServiceAction",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DescribeServiceActionOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(DescribeServiceActionError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>Gets information about the specified TagOption.</p>
     fn describe_tag_option(
         &self,
@@ -9774,6 +12494,41 @@ impl ServiceCatalog for ServiceCatalogClient {
                         .from_err()
                         .and_then(|response| Err(DescribeTagOptionError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p>Disable portfolio sharing through AWS Organizations feature. This feature will not delete your current shares but it will prevent you from creating new shares throughout your organization. Current shares will not be in sync with your organization structure if it changes after calling this API. This API can only be called by the master account in the organization.</p>
+    fn disable_aws_organizations_access(
+        &self,
+    ) -> RusotoFuture<DisableAWSOrganizationsAccessOutput, DisableAWSOrganizationsAccessError> {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.DisableAWSOrganizationsAccess",
+        );
+        request.set_payload(Some(b"{}".to_vec()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DisableAWSOrganizationsAccessOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DisableAWSOrganizationsAccessError::from_response(response))
+                }))
             }
         })
     }
@@ -9860,6 +12615,50 @@ impl ServiceCatalog for ServiceCatalogClient {
         })
     }
 
+    /// <p>Disassociates the specified self-service action association from the specified provisioning artifact.</p>
+    fn disassociate_service_action_from_provisioning_artifact(
+        &self,
+        input: DisassociateServiceActionFromProvisioningArtifactInput,
+    ) -> RusotoFuture<
+        DisassociateServiceActionFromProvisioningArtifactOutput,
+        DisassociateServiceActionFromProvisioningArtifactError,
+    > {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.DisassociateServiceActionFromProvisioningArtifact",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DisassociateServiceActionFromProvisioningArtifactOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(
+                        DisassociateServiceActionFromProvisioningArtifactError::from_response(
+                            response,
+                        ),
+                    )
+                }))
+            }
+        })
+    }
+
     /// <p>Disassociates the specified TagOption from the specified resource.</p>
     fn disassociate_tag_option_from_resource(
         &self,
@@ -9900,6 +12699,41 @@ impl ServiceCatalog for ServiceCatalogClient {
         })
     }
 
+    /// <p>Enable portfolio sharing feature through AWS Organizations. This API will allow Service Catalog to receive updates on your organization in order to sync your shares with the current structure. This API can only be called by the master account in the organization.</p> <p>By calling this API Service Catalog will make a call to organizations:EnableAWSServiceAccess on your behalf so that your shares can be in sync with any changes in your AWS Organizations structure.</p>
+    fn enable_aws_organizations_access(
+        &self,
+    ) -> RusotoFuture<EnableAWSOrganizationsAccessOutput, EnableAWSOrganizationsAccessError> {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.EnableAWSOrganizationsAccess",
+        );
+        request.set_payload(Some(b"{}".to_vec()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<EnableAWSOrganizationsAccessOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(EnableAWSOrganizationsAccessError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Provisions or modifies a product based on the resource changes for the specified plan.</p>
     fn execute_provisioned_product_plan(
         &self,
@@ -9932,6 +12766,86 @@ impl ServiceCatalog for ServiceCatalogClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ExecuteProvisionedProductPlanError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Executes a self-service action against a provisioned product.</p>
+    fn execute_provisioned_product_service_action(
+        &self,
+        input: ExecuteProvisionedProductServiceActionInput,
+    ) -> RusotoFuture<
+        ExecuteProvisionedProductServiceActionOutput,
+        ExecuteProvisionedProductServiceActionError,
+    > {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.ExecuteProvisionedProductServiceAction",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ExecuteProvisionedProductServiceActionOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ExecuteProvisionedProductServiceActionError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Get the Access Status for AWS Organization portfolio share feature. This API can only be called by the master account in the organization.</p>
+    fn get_aws_organizations_access_status(
+        &self,
+    ) -> RusotoFuture<GetAWSOrganizationsAccessStatusOutput, GetAWSOrganizationsAccessStatusError>
+    {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.GetAWSOrganizationsAccessStatus",
+        );
+        request.set_payload(Some(b"{}".to_vec()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetAWSOrganizationsAccessStatusOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetAWSOrganizationsAccessStatusError::from_response(
+                        response,
+                    ))
                 }))
             }
         })
@@ -10047,6 +12961,46 @@ impl ServiceCatalog for ServiceCatalogClient {
                         .from_err()
                         .and_then(|response| Err(ListLaunchPathsError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p>Lists the organization nodes that have access to the specified portfolio. This API can only be called by the master account in the organization.</p>
+    fn list_organization_portfolio_access(
+        &self,
+        input: ListOrganizationPortfolioAccessInput,
+    ) -> RusotoFuture<ListOrganizationPortfolioAccessOutput, ListOrganizationPortfolioAccessError>
+    {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.ListOrganizationPortfolioAccess",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ListOrganizationPortfolioAccessOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListOrganizationPortfolioAccessError::from_response(
+                        response,
+                    ))
+                }))
             }
         })
     }
@@ -10275,6 +13229,46 @@ impl ServiceCatalog for ServiceCatalogClient {
         })
     }
 
+    /// <p>Lists all provisioning artifacts (also known as versions) for the specified self-service action.</p>
+    fn list_provisioning_artifacts_for_service_action(
+        &self,
+        input: ListProvisioningArtifactsForServiceActionInput,
+    ) -> RusotoFuture<
+        ListProvisioningArtifactsForServiceActionOutput,
+        ListProvisioningArtifactsForServiceActionError,
+    > {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.ListProvisioningArtifactsForServiceAction",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ListProvisioningArtifactsForServiceActionOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListProvisioningArtifactsForServiceActionError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Lists the specified requests or all performed requests.</p>
     fn list_record_history(
         &self,
@@ -10347,6 +13341,86 @@ impl ServiceCatalog for ServiceCatalogClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(ListResourcesForTagOptionError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Lists all self-service actions.</p>
+    fn list_service_actions(
+        &self,
+        input: ListServiceActionsInput,
+    ) -> RusotoFuture<ListServiceActionsOutput, ListServiceActionsError> {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.ListServiceActions",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ListServiceActionsOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ListServiceActionsError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Returns a paginated list of self-service actions associated with the specified Product ID and Provisioning Artifact ID.</p>
+    fn list_service_actions_for_provisioning_artifact(
+        &self,
+        input: ListServiceActionsForProvisioningArtifactInput,
+    ) -> RusotoFuture<
+        ListServiceActionsForProvisioningArtifactOutput,
+        ListServiceActionsForProvisioningArtifactError,
+    > {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.ListServiceActionsForProvisioningArtifact",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ListServiceActionsForProvisioningArtifactOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ListServiceActionsForProvisioningArtifactError::from_response(response))
                 }))
             }
         })
@@ -10842,6 +13916,45 @@ impl ServiceCatalog for ServiceCatalogClient {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateProvisioningArtifactError::from_response(response))
                 }))
+            }
+        })
+    }
+
+    /// <p>Updates a self-service action.</p>
+    fn update_service_action(
+        &self,
+        input: UpdateServiceActionInput,
+    ) -> RusotoFuture<UpdateServiceActionOutput, UpdateServiceActionError> {
+        let mut request = SignedRequest::new("POST", "servicecatalog", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AWS242ServiceCatalogService.UpdateServiceAction",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<UpdateServiceActionOutput>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(UpdateServiceActionError::from_response(response))
+                    }),
+                )
             }
         })
     }

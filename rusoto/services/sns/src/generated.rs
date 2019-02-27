@@ -462,6 +462,8 @@ impl CreatePlatformEndpointInputSerializer {
 /// <p>Input for CreateTopic action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct CreateTopicInput {
+    /// <p><p>A map of attributes with their corresponding values.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>CreateTopic</code> action uses:</p> <ul> <li> <p> <code>DeliveryPolicy</code> – The policy that defines how Amazon SNS retries failed deliveries to HTTP/S endpoints.</p> </li> <li> <p> <code>DisplayName</code> – The display name to use for a topic with SMS subscriptions.</p> </li> <li> <p> <code>Policy</code> – The policy that defines who can access your topic. By default, only the topic owner can publish or subscribe to the topic.</p> </li> </ul></p>
+    pub attributes: Option<::std::collections::HashMap<String, String>>,
     /// <p>The name of the topic you want to create.</p> <p>Constraints: Topic names must be made up of only uppercase and lowercase ASCII letters, numbers, underscores, and hyphens, and must be between 1 and 256 characters long.</p>
     pub name: String,
 }
@@ -475,6 +477,13 @@ impl CreateTopicInputSerializer {
             prefix.push_str(".");
         }
 
+        if let Some(ref field_value) = obj.attributes {
+            TopicAttributesMapSerializer::serialize(
+                params,
+                &format!("{}{}", prefix, "Attributes"),
+                field_value,
+            );
+        }
         params.put(&format!("{}{}", prefix, "Name"), &obj.name);
     }
 }
@@ -636,7 +645,7 @@ impl GetEndpointAttributesInputSerializer {
 /// <p>Response from GetEndpointAttributes of the EndpointArn.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetEndpointAttributesResponse {
-    /// <p><p>Attributes include the following:</p> <ul> <li> <p> <code>CustomUserData</code> -- arbitrary user data to associate with the endpoint. Amazon SNS does not use this data. The data must be in UTF-8 format and less than 2KB.</p> </li> <li> <p> <code>Enabled</code> -- flag that enables/disables delivery to the endpoint. Amazon SNS will set this to false when a notification service indicates to Amazon SNS that the endpoint is invalid. Users can set it back to true, typically after updating Token.</p> </li> <li> <p> <code>Token</code> -- device token, also referred to as a registration id, for an app and mobile device. This is returned from the notification service when an app and mobile device are registered with the notification service.</p> </li> </ul></p>
+    /// <p><p>Attributes include the following:</p> <ul> <li> <p> <code>CustomUserData</code> – arbitrary user data to associate with the endpoint. Amazon SNS does not use this data. The data must be in UTF-8 format and less than 2KB.</p> </li> <li> <p> <code>Enabled</code> – flag that enables/disables delivery to the endpoint. Amazon SNS will set this to false when a notification service indicates to Amazon SNS that the endpoint is invalid. Users can set it back to true, typically after updating Token.</p> </li> <li> <p> <code>Token</code> – device token, also referred to as a registration id, for an app and mobile device. This is returned from the notification service when an app and mobile device are registered with the notification service.</p> </li> </ul></p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
 }
 
@@ -708,7 +717,7 @@ impl GetPlatformApplicationAttributesInputSerializer {
 /// <p>Response for GetPlatformApplicationAttributes action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetPlatformApplicationAttributesResponse {
-    /// <p><p>Attributes include the following:</p> <ul> <li> <p> <code>EventEndpointCreated</code> -- Topic ARN to which EndpointCreated event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointDeleted</code> -- Topic ARN to which EndpointDeleted event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointUpdated</code> -- Topic ARN to which EndpointUpdate event notifications should be sent.</p> </li> <li> <p> <code>EventDeliveryFailure</code> -- Topic ARN to which DeliveryFailure event notifications should be sent upon Direct Publish delivery failure (permanent) to one of the application&#39;s endpoints.</p> </li> </ul></p>
+    /// <p><p>Attributes include the following:</p> <ul> <li> <p> <code>EventEndpointCreated</code> – Topic ARN to which EndpointCreated event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointDeleted</code> – Topic ARN to which EndpointDeleted event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointUpdated</code> – Topic ARN to which EndpointUpdate event notifications should be sent.</p> </li> <li> <p> <code>EventDeliveryFailure</code> – Topic ARN to which DeliveryFailure event notifications should be sent upon Direct Publish delivery failure (permanent) to one of the application&#39;s endpoints.</p> </li> </ul></p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
 }
 
@@ -855,7 +864,7 @@ impl GetSubscriptionAttributesInputSerializer {
 /// <p>Response for GetSubscriptionAttributes action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetSubscriptionAttributesResponse {
-    /// <p><p>A map of the subscription&#39;s attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>ConfirmationWasAuthenticated</code> -- <code>true</code> if the subscription confirmation request was authenticated.</p> </li> <li> <p> <code>DeliveryPolicy</code> -- The JSON serialization of the subscription&#39;s delivery policy.</p> </li> <li> <p> <code>EffectiveDeliveryPolicy</code> -- The JSON serialization of the effective delivery policy that takes into account the topic delivery policy and account system defaults.</p> </li> <li> <p> <code>FilterPolicy</code> -- The filter policy JSON that is assigned to the subscription.</p> </li> <li> <p> <code>Owner</code> -- The AWS account ID of the subscription&#39;s owner.</p> </li> <li> <p> <code>PendingConfirmation</code> -- <code>true</code> if the subscription hasn&#39;t been confirmed. To confirm a pending subscription, call the <code>ConfirmSubscription</code> action with a confirmation token.</p> </li> <li> <p> <code>RawMessageDelivery</code> -- <code>true</code> if raw message delivery is enabled for the subscription. Raw messages are free of JSON formatting and can be sent to HTTP/S and Amazon SQS endpoints.</p> </li> <li> <p> <code>SubscriptionArn</code> -- The subscription&#39;s ARN.</p> </li> <li> <p> <code>TopicArn</code> -- The topic ARN that the subscription is associated with.</p> </li> </ul></p>
+    /// <p><p>A map of the subscription&#39;s attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>ConfirmationWasAuthenticated</code> – <code>true</code> if the subscription confirmation request was authenticated.</p> </li> <li> <p> <code>DeliveryPolicy</code> – The JSON serialization of the subscription&#39;s delivery policy.</p> </li> <li> <p> <code>EffectiveDeliveryPolicy</code> – The JSON serialization of the effective delivery policy that takes into account the topic delivery policy and account system defaults.</p> </li> <li> <p> <code>FilterPolicy</code> – The filter policy JSON that is assigned to the subscription.</p> </li> <li> <p> <code>Owner</code> – The AWS account ID of the subscription&#39;s owner.</p> </li> <li> <p> <code>PendingConfirmation</code> – <code>true</code> if the subscription hasn&#39;t been confirmed. To confirm a pending subscription, call the <code>ConfirmSubscription</code> action with a confirmation token.</p> </li> <li> <p> <code>RawMessageDelivery</code> – <code>true</code> if raw message delivery is enabled for the subscription. Raw messages are free of JSON formatting and can be sent to HTTP/S and Amazon SQS endpoints.</p> </li> <li> <p> <code>SubscriptionArn</code> – The subscription&#39;s ARN.</p> </li> <li> <p> <code>TopicArn</code> – The topic ARN that the subscription is associated with.</p> </li> </ul></p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
 }
 
@@ -924,7 +933,7 @@ impl GetTopicAttributesInputSerializer {
 /// <p>Response for GetTopicAttributes action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct GetTopicAttributesResponse {
-    /// <p><p>A map of the topic&#39;s attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>TopicArn</code> -- the topic&#39;s ARN</p> </li> <li> <p> <code>Owner</code> -- the AWS account ID of the topic&#39;s owner</p> </li> <li> <p> <code>Policy</code> -- the JSON serialization of the topic&#39;s access control policy</p> </li> <li> <p> <code>DisplayName</code> -- the human-readable name used in the &quot;From&quot; field for notifications to email and email-json endpoints</p> </li> <li> <p> <code>SubscriptionsPending</code> -- the number of subscriptions pending confirmation on this topic</p> </li> <li> <p> <code>SubscriptionsConfirmed</code> -- the number of confirmed subscriptions on this topic</p> </li> <li> <p> <code>SubscriptionsDeleted</code> -- the number of deleted subscriptions on this topic</p> </li> <li> <p> <code>DeliveryPolicy</code> -- the JSON serialization of the topic&#39;s delivery policy</p> </li> <li> <p> <code>EffectiveDeliveryPolicy</code> -- the JSON serialization of the effective delivery policy that takes into account system defaults</p> </li> </ul></p>
+    /// <p><p>A map of the topic&#39;s attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>TopicArn</code> – the topic&#39;s ARN</p> </li> <li> <p> <code>Owner</code> – the AWS account ID of the topic&#39;s owner</p> </li> <li> <p> <code>Policy</code> – the JSON serialization of the topic&#39;s access control policy</p> </li> <li> <p> <code>DisplayName</code> – the human-readable name used in the &quot;From&quot; field for notifications to email and email-json endpoints</p> </li> <li> <p> <code>SubscriptionsPending</code> – the number of subscriptions pending confirmation on this topic</p> </li> <li> <p> <code>SubscriptionsConfirmed</code> – the number of confirmed subscriptions on this topic</p> </li> <li> <p> <code>SubscriptionsDeleted</code> – the number of deleted subscriptions on this topic</p> </li> <li> <p> <code>DeliveryPolicy</code> – the JSON serialization of the topic&#39;s delivery policy</p> </li> <li> <p> <code>EffectiveDeliveryPolicy</code> – the JSON serialization of the effective delivery policy that takes into account system defaults</p> </li> </ul></p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
 }
 
@@ -1871,7 +1880,7 @@ impl ProtocolDeserializer {
 /// <p>Input for Publish action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct PublishInput {
-    /// <p><p>The message you want to send.</p> <p>If you are publishing to a topic and you want to send the same message to all transport protocols, include the text of the message as a String value. If you want to send different messages for each transport protocol, set the value of the <code>MessageStructure</code> parameter to <code>json</code> and use a JSON object for the <code>Message</code> parameter. </p> <p/> <p>Constraints:</p> <ul> <li> <p>With the exception of SMS, messages must be UTF-8 encoded strings and at most 256 KB in size (262144 bytes, not 262144 characters).</p> </li> <li> <p>For SMS, each message can contain up to 140 bytes, and the character limit depends on the encoding scheme. For example, an SMS message can contain 160 GSM characters, 140 ASCII characters, or 70 UCS-2 characters. If you publish a message that exceeds the size limit, Amazon SNS sends it as multiple messages, each fitting within the size limit. Messages are not cut off in the middle of a word but on whole-word boundaries. The total size limit for a single SMS publish action is 1600 bytes.</p> </li> </ul> <p>JSON-specific constraints:</p> <ul> <li> <p>Keys in the JSON object that correspond to supported transport protocols must have simple JSON string values.</p> </li> <li> <p>The values will be parsed (unescaped) before they are used in outgoing messages.</p> </li> <li> <p>Outbound notifications are JSON encoded (meaning that the characters will be reescaped for sending).</p> </li> <li> <p>Values have a minimum length of 0 (the empty string, &quot;&quot;, is allowed).</p> </li> <li> <p>Values have a maximum length bounded by the overall message size (so, including multiple protocols may limit message sizes).</p> </li> <li> <p>Non-string values will cause the key to be ignored.</p> </li> <li> <p>Keys that do not correspond to supported transport protocols are ignored.</p> </li> <li> <p>Duplicate keys are not allowed.</p> </li> <li> <p>Failure to parse or validate any key or value in the message will cause the <code>Publish</code> call to return an error (no partial delivery).</p> </li> </ul></p>
+    /// <p><p>The message you want to send.</p> <important> <p>The <code>Message</code> parameter is always a string. If you set <code>MessageStructure</code> to <code>json</code>, you must string-encode the <code>Message</code> parameter.</p> </important> <p>If you are publishing to a topic and you want to send the same message to all transport protocols, include the text of the message as a String value. If you want to send different messages for each transport protocol, set the value of the <code>MessageStructure</code> parameter to <code>json</code> and use a JSON object for the <code>Message</code> parameter. </p> <p/> <p>Constraints:</p> <ul> <li> <p>With the exception of SMS, messages must be UTF-8 encoded strings and at most 256 KB in size (262,144 bytes, not 262,144 characters).</p> </li> <li> <p>For SMS, each message can contain up to 140 characters. This character limit depends on the encoding schema. For example, an SMS message can contain 160 GSM characters, 140 ASCII characters, or 70 UCS-2 characters.</p> <p>If you publish a message that exceeds this size limit, Amazon SNS sends the message as multiple messages, each fitting within the size limit. Messages aren&#39;t truncated mid-word but are cut off at whole-word boundaries.</p> <p>The total size limit for a single SMS <code>Publish</code> action is 1,600 characters.</p> </li> </ul> <p>JSON-specific constraints:</p> <ul> <li> <p>Keys in the JSON object that correspond to supported transport protocols must have simple JSON string values.</p> </li> <li> <p>The values will be parsed (unescaped) before they are used in outgoing messages.</p> </li> <li> <p>Outbound notifications are JSON encoded (meaning that the characters will be reescaped for sending).</p> </li> <li> <p>Values have a minimum length of 0 (the empty string, &quot;&quot;, is allowed).</p> </li> <li> <p>Values have a maximum length bounded by the overall message size (so, including multiple protocols may limit message sizes).</p> </li> <li> <p>Non-string values will cause the key to be ignored.</p> </li> <li> <p>Keys that do not correspond to supported transport protocols are ignored.</p> </li> <li> <p>Duplicate keys are not allowed.</p> </li> <li> <p>Failure to parse or validate any key or value in the message will cause the <code>Publish</code> call to return an error (no partial delivery).</p> </li> </ul></p>
     pub message: String,
     /// <p>Message attributes for Publish action.</p>
     pub message_attributes: Option<::std::collections::HashMap<String, MessageAttributeValue>>,
@@ -1995,7 +2004,7 @@ impl RemovePermissionInputSerializer {
 /// <p>Input for SetEndpointAttributes action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SetEndpointAttributesInput {
-    /// <p><p>A map of the endpoint attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>CustomUserData</code> -- arbitrary user data to associate with the endpoint. Amazon SNS does not use this data. The data must be in UTF-8 format and less than 2KB.</p> </li> <li> <p> <code>Enabled</code> -- flag that enables/disables delivery to the endpoint. Amazon SNS will set this to false when a notification service indicates to Amazon SNS that the endpoint is invalid. Users can set it back to true, typically after updating Token.</p> </li> <li> <p> <code>Token</code> -- device token, also referred to as a registration id, for an app and mobile device. This is returned from the notification service when an app and mobile device are registered with the notification service.</p> </li> </ul></p>
+    /// <p><p>A map of the endpoint attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>CustomUserData</code> – arbitrary user data to associate with the endpoint. Amazon SNS does not use this data. The data must be in UTF-8 format and less than 2KB.</p> </li> <li> <p> <code>Enabled</code> – flag that enables/disables delivery to the endpoint. Amazon SNS will set this to false when a notification service indicates to Amazon SNS that the endpoint is invalid. Users can set it back to true, typically after updating Token.</p> </li> <li> <p> <code>Token</code> – device token, also referred to as a registration id, for an app and mobile device. This is returned from the notification service when an app and mobile device are registered with the notification service.</p> </li> </ul></p>
     pub attributes: ::std::collections::HashMap<String, String>,
     /// <p>EndpointArn used for SetEndpointAttributes action.</p>
     pub endpoint_arn: String,
@@ -2022,7 +2031,7 @@ impl SetEndpointAttributesInputSerializer {
 /// <p>Input for SetPlatformApplicationAttributes action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SetPlatformApplicationAttributesInput {
-    /// <p><p>A map of the platform application attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>PlatformCredential</code> -- The credential received from the notification service. For APNS/APNS<em>SANDBOX, PlatformCredential is private key. For GCM, PlatformCredential is &quot;API key&quot;. For ADM, PlatformCredential is &quot;client secret&quot;.</p> </li> <li> <p> <code>PlatformPrincipal</code> -- The principal received from the notification service. For APNS/APNS</em>SANDBOX, PlatformPrincipal is SSL certificate. For GCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is &quot;client id&quot;.</p> </li> <li> <p> <code>EventEndpointCreated</code> -- Topic ARN to which EndpointCreated event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointDeleted</code> -- Topic ARN to which EndpointDeleted event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointUpdated</code> -- Topic ARN to which EndpointUpdate event notifications should be sent.</p> </li> <li> <p> <code>EventDeliveryFailure</code> -- Topic ARN to which DeliveryFailure event notifications should be sent upon Direct Publish delivery failure (permanent) to one of the application&#39;s endpoints.</p> </li> <li> <p> <code>SuccessFeedbackRoleArn</code> -- IAM role ARN used to give Amazon SNS write access to use CloudWatch Logs on your behalf.</p> </li> <li> <p> <code>FailureFeedbackRoleArn</code> -- IAM role ARN used to give Amazon SNS write access to use CloudWatch Logs on your behalf.</p> </li> <li> <p> <code>SuccessFeedbackSampleRate</code> -- Sample rate percentage (0-100) of successfully delivered messages.</p> </li> </ul></p>
+    /// <p><p>A map of the platform application attributes. Attributes in this map include the following:</p> <ul> <li> <p> <code>PlatformCredential</code> – The credential received from the notification service. For APNS/APNS<em>SANDBOX, PlatformCredential is private key. For GCM, PlatformCredential is &quot;API key&quot;. For ADM, PlatformCredential is &quot;client secret&quot;.</p> </li> <li> <p> <code>PlatformPrincipal</code> – The principal received from the notification service. For APNS/APNS</em>SANDBOX, PlatformPrincipal is SSL certificate. For GCM, PlatformPrincipal is not applicable. For ADM, PlatformPrincipal is &quot;client id&quot;.</p> </li> <li> <p> <code>EventEndpointCreated</code> – Topic ARN to which EndpointCreated event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointDeleted</code> – Topic ARN to which EndpointDeleted event notifications should be sent.</p> </li> <li> <p> <code>EventEndpointUpdated</code> – Topic ARN to which EndpointUpdate event notifications should be sent.</p> </li> <li> <p> <code>EventDeliveryFailure</code> – Topic ARN to which DeliveryFailure event notifications should be sent upon Direct Publish delivery failure (permanent) to one of the application&#39;s endpoints.</p> </li> <li> <p> <code>SuccessFeedbackRoleArn</code> – IAM role ARN used to give Amazon SNS write access to use CloudWatch Logs on your behalf.</p> </li> <li> <p> <code>FailureFeedbackRoleArn</code> – IAM role ARN used to give Amazon SNS write access to use CloudWatch Logs on your behalf.</p> </li> <li> <p> <code>SuccessFeedbackSampleRate</code> – Sample rate percentage (0-100) of successfully delivered messages.</p> </li> </ul></p>
     pub attributes: ::std::collections::HashMap<String, String>,
     /// <p>PlatformApplicationArn for SetPlatformApplicationAttributes action.</p>
     pub platform_application_arn: String,
@@ -2096,7 +2105,7 @@ impl SetSMSAttributesResponseDeserializer {
 /// <p>Input for SetSubscriptionAttributes action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SetSubscriptionAttributesInput {
-    /// <p>The name of the attribute you want to set. Only a subset of the subscriptions attributes are mutable.</p> <p>Valid values: <code>DeliveryPolicy</code> | <code>FilterPolicy</code> | <code>RawMessageDelivery</code> </p>
+    /// <p><p>A map of attributes with their corresponding values.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>SetTopicAttributes</code> action uses:</p> <ul> <li> <p> <code>DeliveryPolicy</code> – The policy that defines how Amazon SNS retries failed deliveries to HTTP/S endpoints.</p> </li> <li> <p> <code>FilterPolicy</code> – The simple JSON object that lets your subscriber receive only a subset of messages, rather than receiving every message published to the topic.</p> </li> <li> <p> <code>RawMessageDelivery</code> – When set to <code>true</code>, enables raw message delivery to Amazon SQS or HTTP/S endpoints. This eliminates the need for the endpoints to process JSON formatting, which is otherwise created for Amazon SNS metadata.</p> </li> </ul></p>
     pub attribute_name: String,
     /// <p>The new value for the attribute in JSON format.</p>
     pub attribute_value: Option<String>,
@@ -2130,7 +2139,7 @@ impl SetSubscriptionAttributesInputSerializer {
 /// <p>Input for SetTopicAttributes action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SetTopicAttributesInput {
-    /// <p>The name of the attribute you want to set. Only a subset of the topic's attributes are mutable.</p> <p>Valid values: <code>Policy</code> | <code>DisplayName</code> | <code>DeliveryPolicy</code> </p>
+    /// <p><p>A map of attributes with their corresponding values.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>SetTopicAttributes</code> action uses:</p> <ul> <li> <p> <code>DeliveryPolicy</code> – The policy that defines how Amazon SNS retries failed deliveries to HTTP/S endpoints.</p> </li> <li> <p> <code>DisplayName</code> – The display name to use for a topic with SMS subscriptions.</p> </li> <li> <p> <code>Policy</code> – The policy that defines who can access your topic. By default, only the topic owner can publish or subscribe to the topic.</p> </li> </ul></p>
     pub attribute_name: String,
     /// <p>The new value for the attribute.</p>
     pub attribute_value: Option<String>,
@@ -2175,11 +2184,11 @@ impl StringDeserializer {
 /// <p>Input for Subscribe action.</p>
 #[derive(Default, Debug, Clone, PartialEq)]
 pub struct SubscribeInput {
-    /// <p>Assigns attributes to the subscription as a map of key-value pairs. You can assign any attribute that is supported by the <code>SetSubscriptionAttributes</code> action.</p>
+    /// <p><p>A map of attributes with their corresponding values.</p> <p>The following lists the names, descriptions, and values of the special request parameters that the <code>SetTopicAttributes</code> action uses:</p> <ul> <li> <p> <code>DeliveryPolicy</code> – The policy that defines how Amazon SNS retries failed deliveries to HTTP/S endpoints.</p> </li> <li> <p> <code>FilterPolicy</code> – The simple JSON object that lets your subscriber receive only a subset of messages, rather than receiving every message published to the topic.</p> </li> <li> <p> <code>RawMessageDelivery</code> – When set to <code>true</code>, enables raw message delivery to Amazon SQS or HTTP/S endpoints. This eliminates the need for the endpoints to process JSON formatting, which is otherwise created for Amazon SNS metadata.</p> </li> </ul></p>
     pub attributes: Option<::std::collections::HashMap<String, String>>,
     /// <p><p>The endpoint that you want to receive notifications. Endpoints vary by protocol:</p> <ul> <li> <p>For the <code>http</code> protocol, the endpoint is an URL beginning with &quot;http://&quot;</p> </li> <li> <p>For the <code>https</code> protocol, the endpoint is a URL beginning with &quot;https://&quot;</p> </li> <li> <p>For the <code>email</code> protocol, the endpoint is an email address</p> </li> <li> <p>For the <code>email-json</code> protocol, the endpoint is an email address</p> </li> <li> <p>For the <code>sms</code> protocol, the endpoint is a phone number of an SMS-enabled device</p> </li> <li> <p>For the <code>sqs</code> protocol, the endpoint is the ARN of an Amazon SQS queue</p> </li> <li> <p>For the <code>application</code> protocol, the endpoint is the EndpointArn of a mobile app and device.</p> </li> <li> <p>For the <code>lambda</code> protocol, the endpoint is the ARN of an AWS Lambda function.</p> </li> </ul></p>
     pub endpoint: Option<String>,
-    /// <p><p>The protocol you want to use. Supported protocols include:</p> <ul> <li> <p> <code>http</code> -- delivery of JSON-encoded message via HTTP POST</p> </li> <li> <p> <code>https</code> -- delivery of JSON-encoded message via HTTPS POST</p> </li> <li> <p> <code>email</code> -- delivery of message via SMTP</p> </li> <li> <p> <code>email-json</code> -- delivery of JSON-encoded message via SMTP</p> </li> <li> <p> <code>sms</code> -- delivery of message via SMS</p> </li> <li> <p> <code>sqs</code> -- delivery of JSON-encoded message to an Amazon SQS queue</p> </li> <li> <p> <code>application</code> -- delivery of JSON-encoded message to an EndpointArn for a mobile app and device.</p> </li> <li> <p> <code>lambda</code> -- delivery of JSON-encoded message to an AWS Lambda function.</p> </li> </ul></p>
+    /// <p><p>The protocol you want to use. Supported protocols include:</p> <ul> <li> <p> <code>http</code> – delivery of JSON-encoded message via HTTP POST</p> </li> <li> <p> <code>https</code> – delivery of JSON-encoded message via HTTPS POST</p> </li> <li> <p> <code>email</code> – delivery of message via SMTP</p> </li> <li> <p> <code>email-json</code> – delivery of JSON-encoded message via SMTP</p> </li> <li> <p> <code>sms</code> – delivery of message via SMS</p> </li> <li> <p> <code>sqs</code> – delivery of JSON-encoded message to an Amazon SQS queue</p> </li> <li> <p> <code>application</code> – delivery of JSON-encoded message to an EndpointArn for a mobile app and device.</p> </li> <li> <p> <code>lambda</code> – delivery of JSON-encoded message to an AWS Lambda function.</p> </li> </ul></p>
     pub protocol: String,
     /// <p>Sets whether the response from the <code>Subscribe</code> request includes the subscription ARN, even if the subscription is not yet confirmed.</p> <p>If you set this parameter to <code>false</code>, the response includes the ARN for confirmed subscriptions, but it includes an ARN value of "pending subscription" for subscriptions that are not yet confirmed. A subscription becomes confirmed when the subscriber calls the <code>ConfirmSubscription</code> action with a confirmation token.</p> <p>If you set this parameter to <code>true</code>, the response includes the ARN in all cases, even if the subscription is not yet confirmed.</p> <p>The default value is <code>false</code>.</p>
     pub return_subscription_arn: Option<bool>,
@@ -2512,6 +2521,23 @@ impl TopicAttributesMapDeserializer {
         Ok(obj)
     }
 }
+
+/// Serialize `TopicAttributesMap` contents to a `SignedRequest`.
+struct TopicAttributesMapSerializer;
+impl TopicAttributesMapSerializer {
+    fn serialize(
+        params: &mut Params,
+        name: &str,
+        obj: &::std::collections::HashMap<String, String>,
+    ) {
+        for (index, (key, value)) in obj.iter().enumerate() {
+            let prefix = format!("{}.{}", name, index + 1);
+            params.put(&format!("{}.{}", prefix, "key"), &key);
+            params.put(&format!("{}.{}", prefix, "Value"), &value);
+        }
+    }
+}
+
 struct TopicsListDeserializer;
 impl TopicsListDeserializer {
     #[allow(unused_variables)]
@@ -3128,6 +3154,8 @@ pub enum CreateTopicError {
     InternalError(String),
     /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
+    /// <p>The credential signature isn't valid. You must use an HTTPS endpoint and sign your request using Signature Version 4.</p>
+    InvalidSecurity(String),
     /// <p>Indicates that the customer already owns the maximum allowed number of topics.</p>
     TopicLimitExceeded(String),
     /// An error occurred dispatching the HTTP request
@@ -3162,6 +3190,9 @@ impl CreateTopicError {
                         return CreateTopicError::InvalidParameter(String::from(
                             parsed_error.message,
                         ));
+                    }
+                    "InvalidSecurity" => {
+                        return CreateTopicError::InvalidSecurity(String::from(parsed_error.message));
                     }
                     "TopicLimitExceeded" => {
                         return CreateTopicError::TopicLimitExceeded(String::from(
@@ -3216,6 +3247,7 @@ impl Error for CreateTopicError {
             CreateTopicError::AuthorizationError(ref cause) => cause,
             CreateTopicError::InternalError(ref cause) => cause,
             CreateTopicError::InvalidParameter(ref cause) => cause,
+            CreateTopicError::InvalidSecurity(ref cause) => cause,
             CreateTopicError::TopicLimitExceeded(ref cause) => cause,
             CreateTopicError::Validation(ref cause) => cause,
             CreateTopicError::Credentials(ref err) => err.description(),
@@ -3976,6 +4008,8 @@ pub enum GetTopicAttributesError {
     InternalError(String),
     /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
+    /// <p>The credential signature isn't valid. You must use an HTTPS endpoint and sign your request using Signature Version 4.</p>
+    InvalidSecurity(String),
     /// <p>Indicates that the requested resource does not exist.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
@@ -4010,6 +4044,11 @@ impl GetTopicAttributesError {
                     }
                     "InvalidParameter" => {
                         return GetTopicAttributesError::InvalidParameter(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    "InvalidSecurity" => {
+                        return GetTopicAttributesError::InvalidSecurity(String::from(
                             parsed_error.message,
                         ));
                     }
@@ -4064,6 +4103,7 @@ impl Error for GetTopicAttributesError {
             GetTopicAttributesError::AuthorizationError(ref cause) => cause,
             GetTopicAttributesError::InternalError(ref cause) => cause,
             GetTopicAttributesError::InvalidParameter(ref cause) => cause,
+            GetTopicAttributesError::InvalidSecurity(ref cause) => cause,
             GetTopicAttributesError::NotFound(ref cause) => cause,
             GetTopicAttributesError::Validation(ref cause) => cause,
             GetTopicAttributesError::Credentials(ref err) => err.description(),
@@ -4824,6 +4864,20 @@ pub enum PublishError {
     InvalidParameter(String),
     /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameterValue(String),
+    /// <p>The credential signature isn't valid. You must use an HTTPS endpoint and sign your request using Signature Version 4.</p>
+    InvalidSecurity(String),
+    /// <p>The ciphertext references a key that doesn't exist or that you don't have access to.</p>
+    KMSAccessDenied(String),
+    /// <p>The request was rejected because the specified customer master key (CMK) isn't enabled.</p>
+    KMSDisabled(String),
+    /// <p>The request was rejected because the state of the specified resource isn't valid for this request. For more information, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/key-state.html">How Key State Affects Use of a Customer Master Key</a> in the <i>AWS Key Management Service Developer Guide</i>.</p>
+    KMSInvalidState(String),
+    /// <p>The request was rejected because the specified entity or resource can't be found.</p>
+    KMSNotFound(String),
+    /// <p>The AWS access key ID needs a subscription for the service.</p>
+    KMSOptInRequired(String),
+    /// <p>The request was denied due to request throttling. For more information about throttling, see <a href="http://docs.aws.amazon.com/kms/latest/developerguide/limits.html#requests-per-second">Limits</a> in the <i>AWS Key Management Service Developer Guide.</i> </p>
+    KMSThrottling(String),
     /// <p>Indicates that the requested resource does not exist.</p>
     NotFound(String),
     /// <p>Exception error indicating platform application disabled.</p>
@@ -4864,6 +4918,27 @@ impl PublishError {
                         return PublishError::InvalidParameterValue(String::from(
                             parsed_error.message,
                         ));
+                    }
+                    "InvalidSecurity" => {
+                        return PublishError::InvalidSecurity(String::from(parsed_error.message));
+                    }
+                    "KMSAccessDenied" => {
+                        return PublishError::KMSAccessDenied(String::from(parsed_error.message));
+                    }
+                    "KMSDisabled" => {
+                        return PublishError::KMSDisabled(String::from(parsed_error.message));
+                    }
+                    "KMSInvalidState" => {
+                        return PublishError::KMSInvalidState(String::from(parsed_error.message));
+                    }
+                    "KMSNotFound" => {
+                        return PublishError::KMSNotFound(String::from(parsed_error.message));
+                    }
+                    "KMSOptInRequired" => {
+                        return PublishError::KMSOptInRequired(String::from(parsed_error.message));
+                    }
+                    "KMSThrottling" => {
+                        return PublishError::KMSThrottling(String::from(parsed_error.message));
                     }
                     "NotFound" => return PublishError::NotFound(String::from(parsed_error.message)),
                     "PlatformApplicationDisabled" => {
@@ -4921,6 +4996,13 @@ impl Error for PublishError {
             PublishError::InternalError(ref cause) => cause,
             PublishError::InvalidParameter(ref cause) => cause,
             PublishError::InvalidParameterValue(ref cause) => cause,
+            PublishError::InvalidSecurity(ref cause) => cause,
+            PublishError::KMSAccessDenied(ref cause) => cause,
+            PublishError::KMSDisabled(ref cause) => cause,
+            PublishError::KMSInvalidState(ref cause) => cause,
+            PublishError::KMSNotFound(ref cause) => cause,
+            PublishError::KMSOptInRequired(ref cause) => cause,
+            PublishError::KMSThrottling(ref cause) => cause,
             PublishError::NotFound(ref cause) => cause,
             PublishError::PlatformApplicationDisabled(ref cause) => cause,
             PublishError::Validation(ref cause) => cause,
@@ -5490,6 +5572,8 @@ pub enum SetTopicAttributesError {
     InternalError(String),
     /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
+    /// <p>The credential signature isn't valid. You must use an HTTPS endpoint and sign your request using Signature Version 4.</p>
+    InvalidSecurity(String),
     /// <p>Indicates that the requested resource does not exist.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
@@ -5524,6 +5608,11 @@ impl SetTopicAttributesError {
                     }
                     "InvalidParameter" => {
                         return SetTopicAttributesError::InvalidParameter(String::from(
+                            parsed_error.message,
+                        ));
+                    }
+                    "InvalidSecurity" => {
+                        return SetTopicAttributesError::InvalidSecurity(String::from(
                             parsed_error.message,
                         ));
                     }
@@ -5578,6 +5667,7 @@ impl Error for SetTopicAttributesError {
             SetTopicAttributesError::AuthorizationError(ref cause) => cause,
             SetTopicAttributesError::InternalError(ref cause) => cause,
             SetTopicAttributesError::InvalidParameter(ref cause) => cause,
+            SetTopicAttributesError::InvalidSecurity(ref cause) => cause,
             SetTopicAttributesError::NotFound(ref cause) => cause,
             SetTopicAttributesError::Validation(ref cause) => cause,
             SetTopicAttributesError::Credentials(ref err) => err.description(),
@@ -5600,6 +5690,8 @@ pub enum SubscribeError {
     InternalError(String),
     /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
+    /// <p>The credential signature isn't valid. You must use an HTTPS endpoint and sign your request using Signature Version 4.</p>
+    InvalidSecurity(String),
     /// <p>Indicates that the requested resource does not exist.</p>
     NotFound(String),
     /// <p>Indicates that the customer already owns the maximum allowed number of subscriptions.</p>
@@ -5639,6 +5731,9 @@ impl SubscribeError {
                     }
                     "InvalidParameter" => {
                         return SubscribeError::InvalidParameter(String::from(parsed_error.message));
+                    }
+                    "InvalidSecurity" => {
+                        return SubscribeError::InvalidSecurity(String::from(parsed_error.message));
                     }
                     "NotFound" => {
                         return SubscribeError::NotFound(String::from(parsed_error.message));
@@ -5697,6 +5792,7 @@ impl Error for SubscribeError {
             SubscribeError::FilterPolicyLimitExceeded(ref cause) => cause,
             SubscribeError::InternalError(ref cause) => cause,
             SubscribeError::InvalidParameter(ref cause) => cause,
+            SubscribeError::InvalidSecurity(ref cause) => cause,
             SubscribeError::NotFound(ref cause) => cause,
             SubscribeError::SubscriptionLimitExceeded(ref cause) => cause,
             SubscribeError::Validation(ref cause) => cause,
@@ -5716,6 +5812,8 @@ pub enum UnsubscribeError {
     InternalError(String),
     /// <p>Indicates that a request parameter does not comply with the associated constraints.</p>
     InvalidParameter(String),
+    /// <p>The credential signature isn't valid. You must use an HTTPS endpoint and sign your request using Signature Version 4.</p>
+    InvalidSecurity(String),
     /// <p>Indicates that the requested resource does not exist.</p>
     NotFound(String),
     /// An error occurred dispatching the HTTP request
@@ -5750,6 +5848,9 @@ impl UnsubscribeError {
                         return UnsubscribeError::InvalidParameter(String::from(
                             parsed_error.message,
                         ));
+                    }
+                    "InvalidSecurity" => {
+                        return UnsubscribeError::InvalidSecurity(String::from(parsed_error.message));
                     }
                     "NotFound" => {
                         return UnsubscribeError::NotFound(String::from(parsed_error.message));
@@ -5802,6 +5903,7 @@ impl Error for UnsubscribeError {
             UnsubscribeError::AuthorizationError(ref cause) => cause,
             UnsubscribeError::InternalError(ref cause) => cause,
             UnsubscribeError::InvalidParameter(ref cause) => cause,
+            UnsubscribeError::InvalidSecurity(ref cause) => cause,
             UnsubscribeError::NotFound(ref cause) => cause,
             UnsubscribeError::Validation(ref cause) => cause,
             UnsubscribeError::Credentials(ref err) => err.description(),
@@ -6086,7 +6188,7 @@ impl Sns for SnsClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -6138,7 +6240,7 @@ impl Sns for SnsClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -6188,7 +6290,7 @@ impl Sns for SnsClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -6238,7 +6340,7 @@ impl Sns for SnsClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -6291,7 +6393,7 @@ impl Sns for SnsClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -6424,7 +6526,7 @@ impl Sns for SnsClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -6477,7 +6579,7 @@ impl Sns for SnsClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -6530,7 +6632,7 @@ impl Sns for SnsClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -6580,7 +6682,7 @@ impl Sns for SnsClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -6633,7 +6735,7 @@ impl Sns for SnsClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -6688,7 +6790,7 @@ impl Sns for SnsClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -6738,7 +6840,7 @@ impl Sns for SnsClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -6788,7 +6890,7 @@ impl Sns for SnsClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -6841,7 +6943,7 @@ impl Sns for SnsClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -6891,7 +6993,7 @@ impl Sns for SnsClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -6944,7 +7046,7 @@ impl Sns for SnsClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -6997,7 +7099,7 @@ impl Sns for SnsClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -7044,7 +7146,7 @@ impl Sns for SnsClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -7185,7 +7287,7 @@ impl Sns for SnsClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -7290,7 +7392,7 @@ impl Sns for SnsClient {
                     skip_tree(&mut stack);
                     end_element(&actual_tag_name, &mut stack)?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })

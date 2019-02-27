@@ -301,6 +301,12 @@ fn mutate_type_name(service: &Service, type_name: &str) -> String {
         // RDS has a conveniently named "Option" type
         "Option" => "RDSOption".to_owned(),
 
+        // Discovery has an BatchDeleteImportDataError struct, avoid collision with our error enum
+        "BatchDeleteImportDataError" => "DiscoveryBatchDeleteImportDataError".to_owned(),
+
+        // EC2 has an CreateFleetError struct, avoid collision with our error enum
+        "CreateFleetError" => "EC2CreateFleetError".to_owned(),
+
         // otherwise make sure it's rust-idiomatic and capitalized
         _ => without_underscores,
     }
@@ -319,7 +325,9 @@ where
 
     for (name, shape) in service.shapes().iter() {
         // We generate enums for error types, so no need to create model objects for them
-        if shape.exception() {
+        // Kinesis is a special case in that some operations return
+        // responses whose struct fields refer to expecific error shapes
+        if shape.exception() && service.name() != "Kinesis" {
             continue;
         }
 

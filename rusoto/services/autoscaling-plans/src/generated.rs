@@ -31,7 +31,7 @@ use serde_json::Value as SerdeJsonValue;
 /// <p>Represents an application source.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ApplicationSource {
-    /// <p>The Amazon Resource Name (ARN) of a CloudFormation stack.</p>
+    /// <p>The Amazon Resource Name (ARN) of a AWS CloudFormation stack.</p>
     #[serde(rename = "CloudFormationStackARN")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cloud_formation_stack_arn: Option<String>,
@@ -57,12 +57,34 @@ pub struct CreateScalingPlanRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateScalingPlanResponse {
-    /// <p>The version of the scaling plan. This value is always 1.</p>
+    /// <p>The version number of the scaling plan. This value is always 1.</p> <p>Currently, you cannot specify multiple scaling plan versions.</p>
     #[serde(rename = "ScalingPlanVersion")]
     pub scaling_plan_version: i64,
 }
 
-/// <p>Represents a customized metric for a target tracking policy.</p>
+/// <p>Represents a CloudWatch metric of your choosing that can be used for predictive scaling. </p> <p>For predictive scaling to work with a customized load metric specification, AWS Auto Scaling needs access to the <code>Sum</code> and <code>Average</code> statistics that CloudWatch computes from metric data. Statistics are calculations used to aggregate data over specified time periods. For more information, see the <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/WhatIsCloudWatch.html">Amazon CloudWatch User Guide</a>. </p> <p>When you choose a load metric, make sure that the required <code>Sum</code> and <code>Average</code> statistics for your metric are available in CloudWatch and that they provide relevant data for predictive scaling. The <code>Sum</code> statistic must represent the total load on the resource, and the <code>Average</code> statistic must represent the average load per capacity unit of the resource. For example, there is a metric that counts the number of requests processed by your Auto Scaling group. If the <code>Sum</code> statistic represents the total request count processed by the group, then the <code>Average</code> statistic for the specified metric must represent the average request count processed by each instance of the group.</p> <p>For information about terminology, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html">Amazon CloudWatch Concepts</a>. </p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CustomizedLoadMetricSpecification {
+    /// <p>The dimensions of the metric.</p>
+    #[serde(rename = "Dimensions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dimensions: Option<Vec<MetricDimension>>,
+    /// <p>The name of the metric.</p>
+    #[serde(rename = "MetricName")]
+    pub metric_name: String,
+    /// <p>The namespace of the metric.</p>
+    #[serde(rename = "Namespace")]
+    pub namespace: String,
+    /// <p>The statistic of the metric. Currently, the value must always be <code>Sum</code>. </p>
+    #[serde(rename = "Statistic")]
+    pub statistic: String,
+    /// <p>The unit of the metric.</p>
+    #[serde(rename = "Unit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unit: Option<String>,
+}
+
+/// <p>Represents a CloudWatch metric of your choosing that can be used for dynamic scaling as part of a target tracking scaling policy. </p> <p>For information about terminology, see <a href="http://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/cloudwatch_concepts.html">Amazon CloudWatch Concepts</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct CustomizedScalingMetricSpecification {
     /// <p>The dimensions of the metric.</p>
@@ -78,10 +100,24 @@ pub struct CustomizedScalingMetricSpecification {
     /// <p>The statistic of the metric.</p>
     #[serde(rename = "Statistic")]
     pub statistic: String,
-    /// <p>The unit of the metric.</p>
+    /// <p>The unit of the metric. </p>
     #[serde(rename = "Unit")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub unit: Option<String>,
+}
+
+/// <p>Represents a single value in the forecast data used for predictive scaling.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct Datapoint {
+    /// <p>The time stamp for the data point in UTC format.</p>
+    #[serde(rename = "Timestamp")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub timestamp: Option<f64>,
+    /// <p>The value of the data point.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<f64>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -89,7 +125,7 @@ pub struct DeleteScalingPlanRequest {
     /// <p>The name of the scaling plan.</p>
     #[serde(rename = "ScalingPlanName")]
     pub scaling_plan_name: String,
-    /// <p>The version of the scaling plan.</p>
+    /// <p>The version number of the scaling plan.</p>
     #[serde(rename = "ScalingPlanVersion")]
     pub scaling_plan_version: i64,
 }
@@ -100,7 +136,7 @@ pub struct DeleteScalingPlanResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeScalingPlanResourcesRequest {
-    /// <p>The maximum number of scalable resources to return. This value can be between 1 and 50. The default value is 50.</p>
+    /// <p>The maximum number of scalable resources to return. The value must be between 1 and 50. The default value is 50.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -111,7 +147,7 @@ pub struct DescribeScalingPlanResourcesRequest {
     /// <p>The name of the scaling plan.</p>
     #[serde(rename = "ScalingPlanName")]
     pub scaling_plan_name: String,
-    /// <p>The version of the scaling plan.</p>
+    /// <p>The version number of the scaling plan.</p>
     #[serde(rename = "ScalingPlanVersion")]
     pub scaling_plan_version: i64,
 }
@@ -147,7 +183,7 @@ pub struct DescribeScalingPlansRequest {
     #[serde(rename = "ScalingPlanNames")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scaling_plan_names: Option<Vec<String>>,
-    /// <p>The version of the scaling plan. If you specify a scaling plan version, you must also specify a scaling plan name.</p>
+    /// <p>The version number of the scaling plan. If you specify a scaling plan version, you must also specify a scaling plan name.</p>
     #[serde(rename = "ScalingPlanVersion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scaling_plan_version: Option<i64>,
@@ -166,6 +202,42 @@ pub struct DescribeScalingPlansResponse {
     pub scaling_plans: Option<Vec<ScalingPlan>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetScalingPlanResourceForecastDataRequest {
+    /// <p>The exclusive end time of the time range for the forecast data to get. The maximum time duration between the start and end time is seven days. </p> <p>Although this parameter can accept a date and time that is more than two days in the future, the availability of forecast data has limits. AWS Auto Scaling only issues forecasts for periods of two days in advance.</p>
+    #[serde(rename = "EndTime")]
+    pub end_time: f64,
+    /// <p><p>The type of forecast data to get.</p> <ul> <li> <p> <code>LoadForecast</code>: The load metric forecast. </p> </li> <li> <p> <code>CapacityForecast</code>: The capacity forecast. </p> </li> <li> <p> <code>ScheduledActionMinCapacity</code>: The minimum capacity for each scheduled scaling action. This data is calculated as the larger of two values: the capacity forecast or the minimum capacity in the scaling instruction.</p> </li> <li> <p> <code>ScheduledActionMaxCapacity</code>: The maximum capacity for each scheduled scaling action. The calculation used is determined by the predictive scaling maximum capacity behavior setting in the scaling instruction.</p> </li> </ul></p>
+    #[serde(rename = "ForecastDataType")]
+    pub forecast_data_type: String,
+    /// <p><p>The ID of the resource. This string consists of the resource type and unique identifier. </p> <ul> <li> <p>Auto Scaling group - The resource type is <code>autoScalingGroup</code> and the unique identifier is the name of the Auto Scaling group. Example: <code>autoScalingGroup/my-asg</code>.</p> </li> <li> <p>ECS service - The resource type is <code>service</code> and the unique identifier is the cluster name and service name. Example: <code>service/default/sample-webapp</code>.</p> </li> <li> <p>Spot Fleet request - The resource type is <code>spot-fleet-request</code> and the unique identifier is the Spot Fleet request ID. Example: <code>spot-fleet-request/sfr-73fbd2ce-aa30-494c-8788-1cee4EXAMPLE</code>.</p> </li> <li> <p>DynamoDB table - The resource type is <code>table</code> and the unique identifier is the resource ID. Example: <code>table/my-table</code>.</p> </li> <li> <p>DynamoDB global secondary index - The resource type is <code>index</code> and the unique identifier is the resource ID. Example: <code>table/my-table/index/my-table-index</code>.</p> </li> <li> <p>Aurora DB cluster - The resource type is <code>cluster</code> and the unique identifier is the cluster name. Example: <code>cluster:my-db-cluster</code>.</p> </li> </ul></p>
+    #[serde(rename = "ResourceId")]
+    pub resource_id: String,
+    /// <p>The scalable dimension for the resource.</p>
+    #[serde(rename = "ScalableDimension")]
+    pub scalable_dimension: String,
+    /// <p>The name of the scaling plan.</p>
+    #[serde(rename = "ScalingPlanName")]
+    pub scaling_plan_name: String,
+    /// <p>The version number of the scaling plan.</p>
+    #[serde(rename = "ScalingPlanVersion")]
+    pub scaling_plan_version: i64,
+    /// <p>The namespace of the AWS service.</p>
+    #[serde(rename = "ServiceNamespace")]
+    pub service_namespace: String,
+    /// <p>The inclusive start time of the time range for the forecast data to get. The date and time can be at most 56 days before the current date and time. </p>
+    #[serde(rename = "StartTime")]
+    pub start_time: f64,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetScalingPlanResourceForecastDataResponse {
+    /// <p>The data points to return.</p>
+    #[serde(rename = "Datapoints")]
+    pub datapoints: Vec<Datapoint>,
+}
+
 /// <p>Represents a dimension for a customized metric.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct MetricDimension {
@@ -177,37 +249,81 @@ pub struct MetricDimension {
     pub value: String,
 }
 
-/// <p>Represents a predefined metric for a target tracking policy.</p>
+/// <p>Represents a predefined metric that can be used for predictive scaling. </p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
-pub struct PredefinedScalingMetricSpecification {
-    /// <p>The metric type. The <code>ALBRequestCountPerTarget</code> metric type applies only to Auto Scaling groups, Sport Fleet requests, and ECS services.</p>
-    #[serde(rename = "PredefinedScalingMetricType")]
-    pub predefined_scaling_metric_type: String,
-    /// <p><p>Identifies the resource associated with the metric type. You can&#39;t specify a resource label unless the metric type is <code>ALBRequestCountPerTarget</code> and there is a target group for an Application Load Balancer attached to the Auto Scaling group, Spot Fleet request, or ECS service.</p> <p>The format is app/&lt;load-balancer-name&gt;/&lt;load-balancer-id&gt;/targetgroup/&lt;target-group-name&gt;/&lt;target-group-id&gt;, where:</p> <ul> <li> <p>app/&lt;load-balancer-name&gt;/&lt;load-balancer-id&gt; is the final portion of the load balancer ARN</p> </li> <li> <p>targetgroup/&lt;target-group-name&gt;/&lt;target-group-id&gt; is the final portion of the target group ARN.</p> </li> </ul></p>
+pub struct PredefinedLoadMetricSpecification {
+    /// <p>The metric type.</p>
+    #[serde(rename = "PredefinedLoadMetricType")]
+    pub predefined_load_metric_type: String,
+    /// <p><p>Identifies the resource associated with the metric type. You can&#39;t specify a resource label unless the metric type is <code>ALBRequestCountPerTarget</code> and there is a target group for an Application Load Balancer attached to the Auto Scaling group.</p> <p>The format is app/&lt;load-balancer-name&gt;/&lt;load-balancer-id&gt;/targetgroup/&lt;target-group-name&gt;/&lt;target-group-id&gt;, where:</p> <ul> <li> <p>app/&lt;load-balancer-name&gt;/&lt;load-balancer-id&gt; is the final portion of the load balancer ARN.</p> </li> <li> <p>targetgroup/&lt;target-group-name&gt;/&lt;target-group-id&gt; is the final portion of the target group ARN.</p> </li> </ul></p>
     #[serde(rename = "ResourceLabel")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_label: Option<String>,
 }
 
-/// <p>Specifies the scaling configuration for a scalable resource.</p>
+/// <p>Represents a predefined metric that can be used for dynamic scaling as part of a target tracking scaling policy.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct PredefinedScalingMetricSpecification {
+    /// <p>The metric type. The <code>ALBRequestCountPerTarget</code> metric type applies only to Auto Scaling groups, Spot Fleet requests, and ECS services.</p>
+    #[serde(rename = "PredefinedScalingMetricType")]
+    pub predefined_scaling_metric_type: String,
+    /// <p><p>Identifies the resource associated with the metric type. You can&#39;t specify a resource label unless the metric type is <code>ALBRequestCountPerTarget</code> and there is a target group for an Application Load Balancer attached to the Auto Scaling group, Spot Fleet request, or ECS service.</p> <p>The format is app/&lt;load-balancer-name&gt;/&lt;load-balancer-id&gt;/targetgroup/&lt;target-group-name&gt;/&lt;target-group-id&gt;, where:</p> <ul> <li> <p>app/&lt;load-balancer-name&gt;/&lt;load-balancer-id&gt; is the final portion of the load balancer ARN.</p> </li> <li> <p>targetgroup/&lt;target-group-name&gt;/&lt;target-group-id&gt; is the final portion of the target group ARN.</p> </li> </ul></p>
+    #[serde(rename = "ResourceLabel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_label: Option<String>,
+}
+
+/// <p>Describes a scaling instruction for a scalable resource.</p> <p>The scaling instruction is used in combination with a scaling plan, which is a set of instructions for configuring dynamic scaling and predictive scaling for the scalable resources in your application. Each scaling instruction applies to one resource.</p> <p>AWS Auto Scaling creates target tracking scaling policies based on the scaling instructions. Target tracking scaling policies adjust the capacity of your scalable resource as required to maintain resource utilization at the target value that you specified. </p> <p>AWS Auto Scaling also configures predictive scaling for your Amazon EC2 Auto Scaling groups using a subset of parameters, including the load metric, the scaling metric, the target value for the scaling metric, the predictive scaling mode (forecast and scale or forecast only), and the desired behavior when the forecast capacity exceeds the maximum capacity of the resource. With predictive scaling, AWS Auto Scaling generates forecasts with traffic predictions for the two days ahead and schedules scaling actions that proactively add and remove resource capacity to match the forecast. </p> <p>For more information, see the <a href="http://docs.aws.amazon.com/autoscaling/plans/userguide/what-is-aws-auto-scaling.html">AWS Auto Scaling User Guide</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct ScalingInstruction {
-    /// <p>The maximum value to scale to in response to a scale out event.</p>
+    /// <p>The customized load metric to use for predictive scaling. This parameter or a <b>PredefinedLoadMetricSpecification</b> is required when configuring predictive scaling, and cannot be used otherwise. </p>
+    #[serde(rename = "CustomizedLoadMetricSpecification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub customized_load_metric_specification: Option<CustomizedLoadMetricSpecification>,
+    /// <p>Controls whether dynamic scaling by AWS Auto Scaling is disabled. When dynamic scaling is enabled, AWS Auto Scaling creates target tracking scaling policies based on the specified target tracking configurations. </p> <p>The default is enabled (<code>false</code>). </p>
+    #[serde(rename = "DisableDynamicScaling")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disable_dynamic_scaling: Option<bool>,
+    /// <p>The maximum capacity of the resource. The exception to this upper limit is if you specify a non-default setting for <b>PredictiveScalingMaxCapacityBehavior</b>. </p>
     #[serde(rename = "MaxCapacity")]
     pub max_capacity: i64,
-    /// <p>The minimum value to scale to in response to a scale in event.</p>
+    /// <p>The minimum capacity of the resource. </p>
     #[serde(rename = "MinCapacity")]
     pub min_capacity: i64,
-    /// <p><p>The ID of the resource. This string consists of the resource type and unique identifier.</p> <ul> <li> <p>Auto Scaling group - The resource type is <code>autoScalingGroup</code> and the unique identifier is the name of the Auto Scaling group. Example: <code>autoScalingGroup/my-asg</code>.</p> </li> <li> <p>ECS service - The resource type is <code>service</code> and the unique identifier is the cluster name and service name. Example: <code>service/default/sample-webapp</code>.</p> </li> <li> <p>Spot fleet request - The resource type is <code>spot-fleet-request</code> and the unique identifier is the Spot fleet request ID. Example: <code>spot-fleet-request/sfr-73fbd2ce-aa30-494c-8788-1cee4EXAMPLE</code>.</p> </li> <li> <p>DynamoDB table - The resource type is <code>table</code> and the unique identifier is the resource ID. Example: <code>table/my-table</code>.</p> </li> <li> <p>DynamoDB global secondary index - The resource type is <code>index</code> and the unique identifier is the resource ID. Example: <code>table/my-table/index/my-table-index</code>.</p> </li> <li> <p>Aurora DB cluster - The resource type is <code>cluster</code> and the unique identifier is the cluster name. Example: <code>cluster:my-db-cluster</code>.</p> </li> </ul></p>
+    /// <p>The predefined load metric to use for predictive scaling. This parameter or a <b>CustomizedLoadMetricSpecification</b> is required when configuring predictive scaling, and cannot be used otherwise. </p>
+    #[serde(rename = "PredefinedLoadMetricSpecification")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub predefined_load_metric_specification: Option<PredefinedLoadMetricSpecification>,
+    /// <p>Defines the behavior that should be applied if the forecast capacity approaches or exceeds the maximum capacity specified for the resource. The default value is <code>SetForecastCapacityToMaxCapacity</code>.</p> <p>The following are possible values:</p> <ul> <li> <p> <code>SetForecastCapacityToMaxCapacity</code> - AWS Auto Scaling cannot scale resource capacity higher than the maximum capacity. The maximum capacity is enforced as a hard limit. </p> </li> <li> <p> <code>SetMaxCapacityToForecastCapacity</code> - AWS Auto Scaling may scale resource capacity higher than the maximum capacity to equal but not exceed forecast capacity.</p> </li> <li> <p> <code>SetMaxCapacityAboveForecastCapacity</code> - AWS Auto Scaling may scale resource capacity higher than the maximum capacity by a specified buffer value. The intention is to give the target tracking scaling policy extra capacity if unexpected traffic occurs. </p> </li> </ul> <p>Only valid when configuring predictive scaling.</p>
+    #[serde(rename = "PredictiveScalingMaxCapacityBehavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub predictive_scaling_max_capacity_behavior: Option<String>,
+    /// <p>The size of the capacity buffer to use when the forecast capacity is close to or exceeds the maximum capacity. The value is specified as a percentage relative to the forecast capacity. For example, if the buffer is 10, this means a 10 percent buffer, such that if the forecast capacity is 50, and the maximum capacity is 40, then the effective maximum capacity is 55.</p> <p>Only valid when configuring predictive scaling. Required if the <b>PredictiveScalingMaxCapacityBehavior</b> is set to <code>SetMaxCapacityAboveForecastCapacity</code>, and cannot be used otherwise.</p> <p>The range is 1-100.</p>
+    #[serde(rename = "PredictiveScalingMaxCapacityBuffer")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub predictive_scaling_max_capacity_buffer: Option<i64>,
+    /// <p>The predictive scaling mode. The default value is <code>ForecastAndScale</code>. Otherwise, AWS Auto Scaling forecasts capacity but does not create any scheduled scaling actions based on the capacity forecast. </p>
+    #[serde(rename = "PredictiveScalingMode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub predictive_scaling_mode: Option<String>,
+    /// <p><p>The ID of the resource. This string consists of the resource type and unique identifier.</p> <ul> <li> <p>Auto Scaling group - The resource type is <code>autoScalingGroup</code> and the unique identifier is the name of the Auto Scaling group. Example: <code>autoScalingGroup/my-asg</code>.</p> </li> <li> <p>ECS service - The resource type is <code>service</code> and the unique identifier is the cluster name and service name. Example: <code>service/default/sample-webapp</code>.</p> </li> <li> <p>Spot Fleet request - The resource type is <code>spot-fleet-request</code> and the unique identifier is the Spot Fleet request ID. Example: <code>spot-fleet-request/sfr-73fbd2ce-aa30-494c-8788-1cee4EXAMPLE</code>.</p> </li> <li> <p>DynamoDB table - The resource type is <code>table</code> and the unique identifier is the resource ID. Example: <code>table/my-table</code>.</p> </li> <li> <p>DynamoDB global secondary index - The resource type is <code>index</code> and the unique identifier is the resource ID. Example: <code>table/my-table/index/my-table-index</code>.</p> </li> <li> <p>Aurora DB cluster - The resource type is <code>cluster</code> and the unique identifier is the cluster name. Example: <code>cluster:my-db-cluster</code>.</p> </li> </ul></p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
-    /// <p><p>The scalable dimension associated with the resource.</p> <ul> <li> <p> <code>autoscaling:autoScalingGroup:DesiredCapacity</code> - The desired capacity of an Auto Scaling group.</p> </li> <li> <p> <code>ecs:service:DesiredCount</code> - The desired task count of an ECS service.</p> </li> <li> <p> <code>ec2:spot-fleet-request:TargetCapacity</code> - The target capacity of a Spot fleet request.</p> </li> <li> <p> <code>dynamodb:table:ReadCapacityUnits</code> - The provisioned read capacity for a DynamoDB table.</p> </li> <li> <p> <code>dynamodb:table:WriteCapacityUnits</code> - The provisioned write capacity for a DynamoDB table.</p> </li> <li> <p> <code>dynamodb:index:ReadCapacityUnits</code> - The provisioned read capacity for a DynamoDB global secondary index.</p> </li> <li> <p> <code>dynamodb:index:WriteCapacityUnits</code> - The provisioned write capacity for a DynamoDB global secondary index.</p> </li> <li> <p> <code>rds:cluster:ReadReplicaCount</code> - The count of Aurora Replicas in an Aurora DB cluster. Available for Aurora MySQL-compatible edition.</p> </li> </ul></p>
+    /// <p><p>The scalable dimension associated with the resource.</p> <ul> <li> <p> <code>autoscaling:autoScalingGroup:DesiredCapacity</code> - The desired capacity of an Auto Scaling group.</p> </li> <li> <p> <code>ecs:service:DesiredCount</code> - The desired task count of an ECS service.</p> </li> <li> <p> <code>ec2:spot-fleet-request:TargetCapacity</code> - The target capacity of a Spot Fleet request.</p> </li> <li> <p> <code>dynamodb:table:ReadCapacityUnits</code> - The provisioned read capacity for a DynamoDB table.</p> </li> <li> <p> <code>dynamodb:table:WriteCapacityUnits</code> - The provisioned write capacity for a DynamoDB table.</p> </li> <li> <p> <code>dynamodb:index:ReadCapacityUnits</code> - The provisioned read capacity for a DynamoDB global secondary index.</p> </li> <li> <p> <code>dynamodb:index:WriteCapacityUnits</code> - The provisioned write capacity for a DynamoDB global secondary index.</p> </li> <li> <p> <code>rds:cluster:ReadReplicaCount</code> - The count of Aurora Replicas in an Aurora DB cluster. Available for Aurora MySQL-compatible edition.</p> </li> </ul></p>
     #[serde(rename = "ScalableDimension")]
     pub scalable_dimension: String,
+    /// <p>Controls whether a resource's externally created scaling policies are kept or replaced. </p> <p>The default value is <code>KeepExternalPolicies</code>. If the parameter is set to <code>ReplaceExternalPolicies</code>, any scaling policies that are external to AWS Auto Scaling are deleted and new target tracking scaling policies created. </p> <p>Only valid when configuring dynamic scaling. </p> <p>Condition: The number of existing policies to be replaced must be less than or equal to 50. If there are more than 50 policies to be replaced, AWS Auto Scaling keeps all existing policies and does not create new ones.</p>
+    #[serde(rename = "ScalingPolicyUpdateBehavior")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scaling_policy_update_behavior: Option<String>,
+    /// <p>The amount of time, in seconds, to buffer the run time of scheduled scaling actions when scaling out. For example, if the forecast says to add capacity at 10:00 AM, and the buffer time is 5 minutes, then the run time of the corresponding scheduled scaling action will be 9:55 AM. The intention is to give resources time to be provisioned. For example, it can take a few minutes to launch an EC2 instance. The actual amount of time required depends on several factors, such as the size of the instance and whether there are startup scripts to complete. </p> <p>The value must be less than the forecast interval duration of 3600 seconds (60 minutes). The default is 300 seconds. </p> <p>Only valid when configuring predictive scaling. </p>
+    #[serde(rename = "ScheduledActionBufferTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub scheduled_action_buffer_time: Option<i64>,
     /// <p>The namespace of the AWS service.</p>
     #[serde(rename = "ServiceNamespace")]
     pub service_namespace: String,
-    /// <p>The target tracking scaling policies (up to 10).</p>
+    /// <p>The structure that defines new target tracking configurations (up to 10). Each of these structures includes a specific scaling metric and a target value for the metric, along with various parameters to use with dynamic scaling. </p> <p>With predictive scaling and dynamic scaling, the resource scales based on the target tracking configuration that provides the largest capacity for both scale in and scale out. </p> <p>Condition: The scaling metric must be unique across target tracking configurations.</p>
     #[serde(rename = "TargetTrackingConfigurations")]
     pub target_tracking_configurations: Vec<TargetTrackingConfiguration>,
 }
@@ -219,7 +335,7 @@ pub struct ScalingPlan {
     /// <p>The application source.</p>
     #[serde(rename = "ApplicationSource")]
     pub application_source: ApplicationSource,
-    /// <p>The Unix timestamp when the scaling plan was created.</p>
+    /// <p>The Unix time stamp when the scaling plan was created.</p>
     #[serde(rename = "CreationTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub creation_time: Option<f64>,
@@ -229,17 +345,17 @@ pub struct ScalingPlan {
     /// <p>The name of the scaling plan.</p>
     #[serde(rename = "ScalingPlanName")]
     pub scaling_plan_name: String,
-    /// <p>The version of the scaling plan.</p>
+    /// <p>The version number of the scaling plan.</p>
     #[serde(rename = "ScalingPlanVersion")]
     pub scaling_plan_version: i64,
-    /// <p><p>The status of the scaling plan.</p> <ul> <li> <p> <code>Active</code> - The scaling plan is active.</p> </li> <li> <p> <code>ActiveWithProblems</code> - The scaling plan is active, but the scaling configuration for one or more resources could not be applied.</p> </li> <li> <p> <code>CreationInProgress</code> - The scaling plan is being created.</p> </li> <li> <p> <code>CreationFailed</code> - The scaling plan could not be created.</p> </li> <li> <p> <code>DeletionInProgress</code> - The scaling plan is being deleted.</p> </li> <li> <p> <code>DeletionFailed</code> - The scaling plan could not be deleted.</p> </li> </ul></p>
+    /// <p><p>The status of the scaling plan.</p> <ul> <li> <p> <code>Active</code> - The scaling plan is active.</p> </li> <li> <p> <code>ActiveWithProblems</code> - The scaling plan is active, but the scaling configuration for one or more resources could not be applied.</p> </li> <li> <p> <code>CreationInProgress</code> - The scaling plan is being created.</p> </li> <li> <p> <code>CreationFailed</code> - The scaling plan could not be created.</p> </li> <li> <p> <code>DeletionInProgress</code> - The scaling plan is being deleted.</p> </li> <li> <p> <code>DeletionFailed</code> - The scaling plan could not be deleted.</p> </li> <li> <p> <code>UpdateInProgress</code> - The scaling plan is being updated.</p> </li> <li> <p> <code>UpdateFailed</code> - The scaling plan could not be updated.</p> </li> </ul></p>
     #[serde(rename = "StatusCode")]
     pub status_code: String,
     /// <p>A simple message about the current status of the scaling plan.</p>
     #[serde(rename = "StatusMessage")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_message: Option<String>,
-    /// <p>The Unix timestamp when the scaling plan entered the current status.</p>
+    /// <p>The Unix time stamp when the scaling plan entered the current status.</p>
     #[serde(rename = "StatusStartTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub status_start_time: Option<f64>,
@@ -249,16 +365,16 @@ pub struct ScalingPlan {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ScalingPlanResource {
-    /// <p><p>The ID of the resource. This string consists of the resource type and unique identifier.</p> <ul> <li> <p>Auto Scaling group - The resource type is <code>autoScalingGroup</code> and the unique identifier is the name of the Auto Scaling group. Example: <code>autoScalingGroup/my-asg</code>.</p> </li> <li> <p>ECS service - The resource type is <code>service</code> and the unique identifier is the cluster name and service name. Example: <code>service/default/sample-webapp</code>.</p> </li> <li> <p>Spot fleet request - The resource type is <code>spot-fleet-request</code> and the unique identifier is the Spot fleet request ID. Example: <code>spot-fleet-request/sfr-73fbd2ce-aa30-494c-8788-1cee4EXAMPLE</code>.</p> </li> <li> <p>DynamoDB table - The resource type is <code>table</code> and the unique identifier is the resource ID. Example: <code>table/my-table</code>.</p> </li> <li> <p>DynamoDB global secondary index - The resource type is <code>index</code> and the unique identifier is the resource ID. Example: <code>table/my-table/index/my-table-index</code>.</p> </li> <li> <p>Aurora DB cluster - The resource type is <code>cluster</code> and the unique identifier is the cluster name. Example: <code>cluster:my-db-cluster</code>.</p> </li> </ul></p>
+    /// <p><p>The ID of the resource. This string consists of the resource type and unique identifier.</p> <ul> <li> <p>Auto Scaling group - The resource type is <code>autoScalingGroup</code> and the unique identifier is the name of the Auto Scaling group. Example: <code>autoScalingGroup/my-asg</code>.</p> </li> <li> <p>ECS service - The resource type is <code>service</code> and the unique identifier is the cluster name and service name. Example: <code>service/default/sample-webapp</code>.</p> </li> <li> <p>Spot Fleet request - The resource type is <code>spot-fleet-request</code> and the unique identifier is the Spot Fleet request ID. Example: <code>spot-fleet-request/sfr-73fbd2ce-aa30-494c-8788-1cee4EXAMPLE</code>.</p> </li> <li> <p>DynamoDB table - The resource type is <code>table</code> and the unique identifier is the resource ID. Example: <code>table/my-table</code>.</p> </li> <li> <p>DynamoDB global secondary index - The resource type is <code>index</code> and the unique identifier is the resource ID. Example: <code>table/my-table/index/my-table-index</code>.</p> </li> <li> <p>Aurora DB cluster - The resource type is <code>cluster</code> and the unique identifier is the cluster name. Example: <code>cluster:my-db-cluster</code>.</p> </li> </ul></p>
     #[serde(rename = "ResourceId")]
     pub resource_id: String,
-    /// <p><p>The scalable dimension for the resource.</p> <ul> <li> <p> <code>autoscaling:autoScalingGroup:DesiredCapacity</code> - The desired capacity of an Auto Scaling group.</p> </li> <li> <p> <code>ecs:service:DesiredCount</code> - The desired task count of an ECS service.</p> </li> <li> <p> <code>ec2:spot-fleet-request:TargetCapacity</code> - The target capacity of a Spot fleet request.</p> </li> <li> <p> <code>dynamodb:table:ReadCapacityUnits</code> - The provisioned read capacity for a DynamoDB table.</p> </li> <li> <p> <code>dynamodb:table:WriteCapacityUnits</code> - The provisioned write capacity for a DynamoDB table.</p> </li> <li> <p> <code>dynamodb:index:ReadCapacityUnits</code> - The provisioned read capacity for a DynamoDB global secondary index.</p> </li> <li> <p> <code>dynamodb:index:WriteCapacityUnits</code> - The provisioned write capacity for a DynamoDB global secondary index.</p> </li> <li> <p> <code>rds:cluster:ReadReplicaCount</code> - The count of Aurora Replicas in an Aurora DB cluster. Available for Aurora MySQL-compatible edition.</p> </li> </ul></p>
+    /// <p><p>The scalable dimension for the resource.</p> <ul> <li> <p> <code>autoscaling:autoScalingGroup:DesiredCapacity</code> - The desired capacity of an Auto Scaling group.</p> </li> <li> <p> <code>ecs:service:DesiredCount</code> - The desired task count of an ECS service.</p> </li> <li> <p> <code>ec2:spot-fleet-request:TargetCapacity</code> - The target capacity of a Spot Fleet request.</p> </li> <li> <p> <code>dynamodb:table:ReadCapacityUnits</code> - The provisioned read capacity for a DynamoDB table.</p> </li> <li> <p> <code>dynamodb:table:WriteCapacityUnits</code> - The provisioned write capacity for a DynamoDB table.</p> </li> <li> <p> <code>dynamodb:index:ReadCapacityUnits</code> - The provisioned read capacity for a DynamoDB global secondary index.</p> </li> <li> <p> <code>dynamodb:index:WriteCapacityUnits</code> - The provisioned write capacity for a DynamoDB global secondary index.</p> </li> <li> <p> <code>rds:cluster:ReadReplicaCount</code> - The count of Aurora Replicas in an Aurora DB cluster. Available for Aurora MySQL-compatible edition.</p> </li> </ul></p>
     #[serde(rename = "ScalableDimension")]
     pub scalable_dimension: String,
     /// <p>The name of the scaling plan.</p>
     #[serde(rename = "ScalingPlanName")]
     pub scaling_plan_name: String,
-    /// <p>The version of the scaling plan.</p>
+    /// <p>The version number of the scaling plan.</p>
     #[serde(rename = "ScalingPlanVersion")]
     pub scaling_plan_version: i64,
     /// <p>The scaling policies.</p>
@@ -287,7 +403,7 @@ pub struct ScalingPolicy {
     /// <p>The type of scaling policy.</p>
     #[serde(rename = "PolicyType")]
     pub policy_type: String,
-    /// <p>The target tracking scaling policy.</p>
+    /// <p>The target tracking scaling policy. </p>
     #[serde(rename = "TargetTrackingConfiguration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub target_tracking_configuration: Option<TargetTrackingConfiguration>,
@@ -306,14 +422,14 @@ pub struct TagFilter {
     pub values: Option<Vec<String>>,
 }
 
-/// <p>Represents a target tracking scaling policy.</p>
+/// <p>Describes a target tracking configuration. Used with <a>ScalingInstruction</a> and <a>ScalingPolicy</a>.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct TargetTrackingConfiguration {
     /// <p>A customized metric.</p>
     #[serde(rename = "CustomizedScalingMetricSpecification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customized_scaling_metric_specification: Option<CustomizedScalingMetricSpecification>,
-    /// <p>Indicates whether scale in by the target tracking policy is disabled. If the value is <code>true</code>, scale in is disabled and the target tracking policy won't remove capacity from the scalable resource. Otherwise, scale in is enabled and the target tracking policy can remove capacity from the scalable resource. The default value is <code>false</code>.</p>
+    /// <p>Indicates whether scale in by the target tracking scaling policy is disabled. If the value is <code>true</code>, scale in is disabled and the target tracking scaling policy doesn't remove capacity from the scalable resource. Otherwise, scale in is enabled and the target tracking scaling policy can remove capacity from the scalable resource. </p> <p>The default value is <code>false</code>.</p>
     #[serde(rename = "DisableScaleIn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub disable_scale_in: Option<bool>,
@@ -325,11 +441,11 @@ pub struct TargetTrackingConfiguration {
     #[serde(rename = "PredefinedScalingMetricSpecification")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub predefined_scaling_metric_specification: Option<PredefinedScalingMetricSpecification>,
-    /// <p>The amount of time, in seconds, after a scale in activity completes before another scale in activity can start. This value is not used if the scalable resource is an Auto Scaling group.</p> <p>The cooldown period is used to block subsequent scale in requests until it has expired. The intention is to scale in conservatively to protect your application's availability. However, if another alarm triggers a scale out policy during the cooldown period after a scale-in, AWS Auto Scaling scales out your scalable target immediately.</p>
+    /// <p>The amount of time, in seconds, after a scale in activity completes before another scale in activity can start. This value is not used if the scalable resource is an Auto Scaling group.</p> <p>The cooldown period is used to block subsequent scale in requests until it has expired. The intention is to scale in conservatively to protect your application's availability. However, if another alarm triggers a scale-out policy during the cooldown period after a scale-in, AWS Auto Scaling scales out your scalable target immediately.</p>
     #[serde(rename = "ScaleInCooldown")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scale_in_cooldown: Option<i64>,
-    /// <p>The amount of time, in seconds, after a scale out activity completes before another scale out activity can start. This value is not used if the scalable resource is an Auto Scaling group.</p> <p>While the cooldown period is in effect, the capacity that has been added by the previous scale out event that initiated the cooldown is calculated as part of the desired capacity for the next scale out. The intention is to continuously (but not excessively) scale out.</p>
+    /// <p>The amount of time, in seconds, after a scale-out activity completes before another scale-out activity can start. This value is not used if the scalable resource is an Auto Scaling group.</p> <p>While the cooldown period is in effect, the capacity that has been added by the previous scale-out event that initiated the cooldown is calculated as part of the desired capacity for the next scale out. The intention is to continuously (but not excessively) scale out.</p>
     #[serde(rename = "ScaleOutCooldown")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub scale_out_cooldown: Option<i64>,
@@ -351,7 +467,7 @@ pub struct UpdateScalingPlanRequest {
     /// <p>The name of the scaling plan.</p>
     #[serde(rename = "ScalingPlanName")]
     pub scaling_plan_name: String,
-    /// <p>The version number.</p>
+    /// <p>The version number of the scaling plan.</p>
     #[serde(rename = "ScalingPlanVersion")]
     pub scaling_plan_version: i64,
 }
@@ -742,6 +858,92 @@ impl Error for DescribeScalingPlansError {
         }
     }
 }
+/// Errors returned by GetScalingPlanResourceForecastData
+#[derive(Debug, PartialEq)]
+pub enum GetScalingPlanResourceForecastDataError {
+    /// <p>The service encountered an internal error.</p>
+    InternalService(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetScalingPlanResourceForecastDataError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetScalingPlanResourceForecastDataError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InternalServiceException" => {
+                    return GetScalingPlanResourceForecastDataError::InternalService(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return GetScalingPlanResourceForecastDataError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return GetScalingPlanResourceForecastDataError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetScalingPlanResourceForecastDataError {
+    fn from(err: serde_json::error::Error) -> GetScalingPlanResourceForecastDataError {
+        GetScalingPlanResourceForecastDataError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetScalingPlanResourceForecastDataError {
+    fn from(err: CredentialsError) -> GetScalingPlanResourceForecastDataError {
+        GetScalingPlanResourceForecastDataError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetScalingPlanResourceForecastDataError {
+    fn from(err: HttpDispatchError) -> GetScalingPlanResourceForecastDataError {
+        GetScalingPlanResourceForecastDataError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetScalingPlanResourceForecastDataError {
+    fn from(err: io::Error) -> GetScalingPlanResourceForecastDataError {
+        GetScalingPlanResourceForecastDataError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetScalingPlanResourceForecastDataError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetScalingPlanResourceForecastDataError {
+    fn description(&self) -> &str {
+        match *self {
+            GetScalingPlanResourceForecastDataError::InternalService(ref cause) => cause,
+            GetScalingPlanResourceForecastDataError::Validation(ref cause) => cause,
+            GetScalingPlanResourceForecastDataError::Credentials(ref err) => err.description(),
+            GetScalingPlanResourceForecastDataError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetScalingPlanResourceForecastDataError::ParseError(ref cause) => cause,
+            GetScalingPlanResourceForecastDataError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by UpdateScalingPlan
 #[derive(Debug, PartialEq)]
 pub enum UpdateScalingPlanError {
@@ -838,13 +1040,13 @@ impl Error for UpdateScalingPlanError {
 }
 /// Trait representing the capabilities of the AWS Auto Scaling Plans API. AWS Auto Scaling Plans clients implement this trait.
 pub trait AutoscalingPlans {
-    /// <p>Creates a scaling plan.</p> <p>A scaling plan contains a set of instructions used to configure dynamic scaling for the scalable resources in your application. AWS Auto Scaling creates target tracking scaling policies based on the scaling instructions in your scaling plan.</p>
+    /// <p>Creates a scaling plan.</p>
     fn create_scaling_plan(
         &self,
         input: CreateScalingPlanRequest,
     ) -> RusotoFuture<CreateScalingPlanResponse, CreateScalingPlanError>;
 
-    /// <p>Deletes the specified scaling plan.</p>
+    /// <p>Deletes the specified scaling plan.</p> <p>Deleting a scaling plan deletes the underlying <a>ScalingInstruction</a> for all of the scalable resources that are covered by the plan.</p> <p>If the plan has launched resources or has scaling activities in progress, you must delete those resources separately.</p>
     fn delete_scaling_plan(
         &self,
         input: DeleteScalingPlanRequest,
@@ -856,13 +1058,22 @@ pub trait AutoscalingPlans {
         input: DescribeScalingPlanResourcesRequest,
     ) -> RusotoFuture<DescribeScalingPlanResourcesResponse, DescribeScalingPlanResourcesError>;
 
-    /// <p>Describes the specified scaling plans or all of your scaling plans.</p>
+    /// <p>Describes one or more of your scaling plans.</p>
     fn describe_scaling_plans(
         &self,
         input: DescribeScalingPlansRequest,
     ) -> RusotoFuture<DescribeScalingPlansResponse, DescribeScalingPlansError>;
 
-    /// <p>Updates the scaling plan for the specified scaling plan.</p> <p>You cannot update a scaling plan if it is in the process of being created, updated, or deleted.</p>
+    /// <p>Retrieves the forecast data for a scalable resource.</p> <p>Capacity forecasts are represented as predicted values, or data points, that are calculated using historical data points from a specified CloudWatch load metric. Data points are available for up to 56 days. </p>
+    fn get_scaling_plan_resource_forecast_data(
+        &self,
+        input: GetScalingPlanResourceForecastDataRequest,
+    ) -> RusotoFuture<
+        GetScalingPlanResourceForecastDataResponse,
+        GetScalingPlanResourceForecastDataError,
+    >;
+
+    /// <p>Updates the specified scaling plan.</p> <p>You cannot update a scaling plan if it is in the process of being created, updated, or deleted.</p>
     fn update_scaling_plan(
         &self,
         input: UpdateScalingPlanRequest,
@@ -905,7 +1116,7 @@ impl AutoscalingPlansClient {
 }
 
 impl AutoscalingPlans for AutoscalingPlansClient {
-    /// <p>Creates a scaling plan.</p> <p>A scaling plan contains a set of instructions used to configure dynamic scaling for the scalable resources in your application. AWS Auto Scaling creates target tracking scaling policies based on the scaling instructions in your scaling plan.</p>
+    /// <p>Creates a scaling plan.</p>
     fn create_scaling_plan(
         &self,
         input: CreateScalingPlanRequest,
@@ -945,7 +1156,7 @@ impl AutoscalingPlans for AutoscalingPlansClient {
         })
     }
 
-    /// <p>Deletes the specified scaling plan.</p>
+    /// <p>Deletes the specified scaling plan.</p> <p>Deleting a scaling plan deletes the underlying <a>ScalingInstruction</a> for all of the scalable resources that are covered by the plan.</p> <p>If the plan has launched resources or has scaling activities in progress, you must delete those resources separately.</p>
     fn delete_scaling_plan(
         &self,
         input: DeleteScalingPlanRequest,
@@ -1022,7 +1233,7 @@ impl AutoscalingPlans for AutoscalingPlansClient {
         })
     }
 
-    /// <p>Describes the specified scaling plans or all of your scaling plans.</p>
+    /// <p>Describes one or more of your scaling plans.</p>
     fn describe_scaling_plans(
         &self,
         input: DescribeScalingPlansRequest,
@@ -1061,7 +1272,49 @@ impl AutoscalingPlans for AutoscalingPlansClient {
         })
     }
 
-    /// <p>Updates the scaling plan for the specified scaling plan.</p> <p>You cannot update a scaling plan if it is in the process of being created, updated, or deleted.</p>
+    /// <p>Retrieves the forecast data for a scalable resource.</p> <p>Capacity forecasts are represented as predicted values, or data points, that are calculated using historical data points from a specified CloudWatch load metric. Data points are available for up to 56 days. </p>
+    fn get_scaling_plan_resource_forecast_data(
+        &self,
+        input: GetScalingPlanResourceForecastDataRequest,
+    ) -> RusotoFuture<
+        GetScalingPlanResourceForecastDataResponse,
+        GetScalingPlanResourceForecastDataError,
+    > {
+        let mut request = SignedRequest::new("POST", "autoscaling-plans", &self.region, "/");
+        request.set_endpoint_prefix("autoscaling".to_string());
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "AnyScaleScalingPlannerFrontendService.GetScalingPlanResourceForecastData",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetScalingPlanResourceForecastDataResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetScalingPlanResourceForecastDataError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Updates the specified scaling plan.</p> <p>You cannot update a scaling plan if it is in the process of being created, updated, or deleted.</p>
     fn update_scaling_plan(
         &self,
         input: UpdateScalingPlanRequest,

@@ -31,7 +31,7 @@ use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateUserRequest {
-    /// <p>The unique identifier for the user account in the directory service directory used for identity management. If Amazon Connect is unable to access the existing directory, you can use the <code>DirectoryUserId</code> to authenticate users. If you include the parameter, it is assumed that Amazon Connect cannot access the directory. If the parameter is not included, the UserIdentityInfo is used to authenticate users from your existing directory.</p> <p>This parameter is required if you are using an existing directory for identity management in Amazon Connect when Amazon Connect cannot access your directory to authenticate users. If you are using SAML for identity management and include this parameter, an <code>InvalidRequestException</code> is returned.</p>
+    /// <p>The unique identifier for the user account in the directory service directory used for identity management. If Amazon Connect is unable to access the existing directory, you can use the <code>DirectoryUserId</code> to authenticate users. If you include the parameter, it is assumed that Amazon Connect cannot access the directory. If the parameter is not included, the <code>UserIdentityInfo</code> is used to authenticate users from your existing directory.</p> <p>This parameter is required if you are using an existing directory for identity management in Amazon Connect when Amazon Connect cannot access your directory to authenticate users. If you are using SAML for identity management and include this parameter, an <code>InvalidRequestException</code> is returned.</p>
     #[serde(rename = "DirectoryUserId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub directory_user_id: Option<String>,
@@ -50,7 +50,7 @@ pub struct CreateUserRequest {
     #[serde(rename = "Password")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub password: Option<String>,
-    /// <p>Specifies the phone settings for the user, including AfterContactWorkTimeLimit, AutoAccept, DeskPhoneNumber, and PhoneType.</p>
+    /// <p>Specifies the phone settings for the user, including <code>AfterContactWorkTimeLimit</code>, <code>AutoAccept</code>, <code>DeskPhoneNumber</code>, and <code>PhoneType</code>.</p>
     #[serde(rename = "PhoneConfig")]
     pub phone_config: UserPhoneConfig,
     /// <p>The unique identifier for the routing profile to assign to the user created.</p>
@@ -59,7 +59,7 @@ pub struct CreateUserRequest {
     /// <p>The unique identifier of the security profile to assign to the user created.</p>
     #[serde(rename = "SecurityProfileIds")]
     pub security_profile_ids: Vec<String>,
-    /// <p>The user name in Amazon Connect for the user to create.</p>
+    /// <p>The user name in Amazon Connect for the account to create. If you are using SAML for identity management in your Amazon Connect, the value for <code>Username</code> can include up to 64 characters from [a-zA-Z0-9_-.\@]+.</p>
     #[serde(rename = "Username")]
     pub username: String,
 }
@@ -97,6 +97,47 @@ pub struct Credentials {
     #[serde(rename = "RefreshTokenExpiration")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub refresh_token_expiration: Option<f64>,
+}
+
+/// <p>A <code>CurrentMetric</code> object that contains the Name and Unit for the metric.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct CurrentMetric {
+    /// <p>The name of the metric.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The unit for the metric.</p>
+    #[serde(rename = "Unit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unit: Option<String>,
+}
+
+/// <p>A <code>CurrentMetricData</code> object.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CurrentMetricData {
+    /// <p>The metric in a <code>CurrentMetricData</code> object.</p>
+    #[serde(rename = "Metric")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metric: Option<CurrentMetric>,
+    /// <p>The value of the metric in the CurrentMetricData object.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<f64>,
+}
+
+/// <p>A <code>CurrentMetricResult</code> object.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CurrentMetricResult {
+    /// <p>The <code>Collections</code> for the <code>CurrentMetricResult</code> object.</p>
+    #[serde(rename = "Collections")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub collections: Option<Vec<CurrentMetricData>>,
+    /// <p>The <code>Dimensions</code> for the <code>CurrentMetricResult</code> object.</p>
+    #[serde(rename = "Dimensions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dimensions: Option<Dimensions>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -163,6 +204,94 @@ pub struct DescribeUserResponse {
     pub user: Option<User>,
 }
 
+/// <p>A <code>Dimensions</code> object that includes the Channel and Queue for the metric.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct Dimensions {
+    /// <p>The channel used for grouping and filters. Only VOICE is supported.</p>
+    #[serde(rename = "Channel")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channel: Option<String>,
+    /// <p>A <code>QueueReference</code> object used as one part of dimension for the metrics results.</p>
+    #[serde(rename = "Queue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub queue: Option<QueueReference>,
+}
+
+/// <p>The filter, either channel or queues, to apply to the metric results retrieved.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct Filters {
+    /// <p>The Channel to use as a filter for the metrics returned. Only VOICE is supported.</p>
+    #[serde(rename = "Channels")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub channels: Option<Vec<String>>,
+    /// <p>A list of up to 100 queue IDs or queue ARNs to use to filter the metrics retrieved. You can include both IDs and ARNs in a request.</p>
+    #[serde(rename = "Queues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub queues: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetContactAttributesRequest {
+    /// <p>The ID for the initial contact in Amazon Connect associated with the attributes to update.</p>
+    #[serde(rename = "InitialContactId")]
+    pub initial_contact_id: String,
+    /// <p>The instance ID for the instance from which to retrieve contact attributes.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetContactAttributesResponse {
+    /// <p>The attributes to update.</p>
+    #[serde(rename = "Attributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub attributes: Option<::std::collections::HashMap<String, String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetCurrentMetricDataRequest {
+    /// <p><p>A list of <code>CurrentMetric</code> objects for the metrics to retrieve. Each <code>CurrentMetric</code> includes a name of a metric to retrieve and the unit to use for it. You must list each metric to retrieve data for in the request.</p> <p>The following metrics are available:</p> <dl> <dt>AGENTS<em>AVAILABLE</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>AGENTS</em>ONLINE</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>AGENTS<em>ON</em>CALL</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>AGENTS<em>STAFFED</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>AGENTS</em>AFTER<em>CONTACT</em>WORK</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>AGENTS<em>NON</em>PRODUCTIVE</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>AGENTS<em>ERROR</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>CONTACTS</em>IN<em>QUEUE</dt> <dd> <p>Unit: COUNT</p> </dd> <dt>OLDEST</em>CONTACT<em>AGE</dt> <dd> <p>Unit: SECONDS</p> </dd> <dt>CONTACTS</em>SCHEDULED</dt> <dd> <p>Unit: COUNT</p> </dd> </dl></p>
+    #[serde(rename = "CurrentMetrics")]
+    pub current_metrics: Vec<CurrentMetric>,
+    /// <p>A <code>Filters</code> object that contains a list of queue IDs or queue ARNs, up to 100, or list of Channels to use to filter the metrics returned in the response. Metric data is retrieved only for the resources associated with the queue IDs, ARNs, or Channels included in the filter. You can include both IDs and ARNs in the same request. To retrieve metrics for all queues, add the queue ID or ARN for each queue in your instance. Only VOICE is supported for Channels.</p> <p>To find the ARN for a queue, open the queue you want to use in the Amazon Connect Queue editor. The ARN for the queue is displayed in the address bar as part of the URL. For example, the queue ARN is the set of characters at the end of the URL, after 'id=' such as <code>arn:aws:connect:us-east-1:270923740243:instance/78fb859d-1b7d-44b1-8aa3-12f0835c5855/queue/1d1a4575-9618-40ab-bbeb-81e45795fe61</code>. The queue ID is also included in the URL, and is the string after 'queue/'.</p>
+    #[serde(rename = "Filters")]
+    pub filters: Filters,
+    /// <p>The grouping applied to the metrics returned. For example, when grouped by QUEUE, the metrics returned apply to each queue rather than aggregated for all queues. If you group by CHANNEL, you should include a Channels filter. The only supported channel is VOICE.</p> <p>If no <code>Grouping</code> is included in the request, a summary of <code>CurrentMetrics</code> is returned.</p>
+    #[serde(rename = "Groupings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub groupings: Option<Vec<String>>,
+    /// <p>The identifier for your Amazon Connect instance. To find the ID of your instance, open the AWS console and select Amazon Connect. Select the alias of the instance in the Instance alias column. The instance ID is displayed in the Overview section of your instance settings. For example, the instance ID is the set of characters at the end of the instance ARN, after instance/, such as 10a4c4eb-f57e-4d4c-b602-bf39176ced07.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+    /// <p> <code>MaxResults</code> indicates the maximum number of results to return per page in the response, between 1 and 100.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results. Use the value returned in the previous response in the next request to retrieve the next set of results.</p> <p>The token expires after 5 minutes from the time it is created. Subsequent requests that use the <a href="">NextToken</a> must use the same request parameters as the request that generated the token.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetCurrentMetricDataResponse {
+    /// <p>The time at which <code>CurrentMetricData</code> was retrieved and cached for pagination.</p>
+    #[serde(rename = "DataSnapshotTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_snapshot_time: Option<f64>,
+    /// <p>A list of <code>CurrentMetricResult</code> objects organized by <code>Dimensions</code> combining with <code>CurrentMetricDataCollections</code>.</p> <p> <code>Dimensions</code> is the resourceId specified in the <code>Filters</code> of the request. </p> <p> <code>Collections</code> is a list of <code>CurrentMetricData</code> objects with corresponding values to the <code>CurrentMetrics</code> specified in the request.</p> <p>If no <code>Grouping</code> is specified in the request, <code>Collections</code> is a summary for the <code>CurrentMetric</code> returned.</p>
+    #[serde(rename = "MetricResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metric_results: Option<Vec<CurrentMetricResult>>,
+    /// <p>A string returned in the response. Use the value returned in the response as the value of the NextToken in a subsequent request to retrieve the next set of results.</p> <p>The token expires after 5 minutes from the time it is created. Subsequent requests that use the NextToken must use the same request parameters as the request that generated the token. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetFederationTokenRequest {
     /// <p>The identifier for your Amazon Connect instance. To find the ID of your instance, open the AWS console and select Amazon Connect. Select the alias of the instance in the Instance alias column. The instance ID is displayed in the Overview section of your instance settings. For example, the instance ID is the set of characters at the end of the instance ARN, after instance/, such as 10a4c4eb-f57e-4d4c-b602-bf39176ced07.</p>
@@ -177,6 +306,50 @@ pub struct GetFederationTokenResponse {
     #[serde(rename = "Credentials")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub credentials: Option<Credentials>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetMetricDataRequest {
+    /// <p>The timestamp, in UNIX Epoch time format, at which to end the reporting interval for the retrieval of historical metrics data. The time must be specified using an interval of 5 minutes, such as 11:00, 11:05, 11:10, and must be later than the <code>StartTime</code> timestamp.</p> <p>The time range between <code>StartTime</code> and <code>EndTime</code> must be less than 24 hours.</p>
+    #[serde(rename = "EndTime")]
+    pub end_time: f64,
+    /// <p>A <code>Filters</code> object that contains a list of queue IDs or queue ARNs, up to 100, or a list of Channels to use to filter the metrics returned in the response. Metric data is retrieved only for the resources associated with the IDs, ARNs, or Channels included in the filter. You can use both IDs and ARNs together in a request. Only VOICE is supported for Channel.</p> <p>To find the ARN for a queue, open the queue you want to use in the Amazon Connect Queue editor. The ARN for the queue is displayed in the address bar as part of the URL. For example, the queue ARN is the set of characters at the end of the URL, after 'id=' such as <code>arn:aws:connect:us-east-1:270923740243:instance/78fb859d-1b7d-44b1-8aa3-12f0835c5855/queue/1d1a4575-9618-40ab-bbeb-81e45795fe61</code>. The queue ID is also included in the URL, and is the string after 'queue/'.</p>
+    #[serde(rename = "Filters")]
+    pub filters: Filters,
+    /// <p>The grouping applied to the metrics returned. For example, when results are grouped by queueId, the metrics returned are grouped by queue. The values returned apply to the metrics for each queue rather than aggregated for all queues.</p> <p>The current version supports grouping by Queue</p> <p>If no <code>Grouping</code> is included in the request, a summary of <code>HistoricalMetrics</code> for all queues is returned.</p>
+    #[serde(rename = "Groupings")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub groupings: Option<Vec<String>>,
+    /// <p><p>A list of <code>HistoricalMetric</code> objects that contain the metrics to retrieve with the request.</p> <p>A <code>HistoricalMetric</code> object contains: <code>HistoricalMetricName</code>, <code>Statistic</code>, <code>Threshold</code>, and <code>Unit</code>.</p> <p>You must list each metric to retrieve data for in the request. For each historical metric you include in the request, you must include a <code>Unit</code> and a <code>Statistic</code>. </p> <p>The following historical metrics are available:</p> <dl> <dt>CONTACTS<em>QUEUED</dt> <dd> <p>Unit: COUNT</p> <p>Statistic: SUM</p> </dd> <dt>CONTACTS</em>HANDLED</dt> <dd> <p>Unit: COUNT</p> <p>Statistics: SUM</p> </dd> <dt>CONTACTS<em>ABANDONED</dt> <dd> <p>Unit: COUNT</p> <p>Statistics: SUM</p> </dd> <dt>CONTACTS</em>CONSULTED</dt> <dd> <p>Unit: COUNT</p> <p>Statistics: SUM</p> </dd> <dt>CONTACTS<em>AGENT</em>HUNG<em>UP</em>FIRST</dt> <dd> <p>Unit: COUNT</p> <p>Statistics: SUM</p> </dd> <dt>CONTACTS<em>HANDLED</em>INCOMING</dt> <dd> <p>Unit: COUNT</p> <p>Statistics: SUM</p> </dd> <dt>CONTACTS<em>HANDLED</em>OUTBOUND</dt> <dd> <p>Unit: COUNT</p> <p>Statistics: SUM</p> </dd> <dt>CONTACTS<em>HOLD</em>ABANDONS</dt> <dd> <p>Unit: COUNT</p> <p>Statistics: SUM</p> </dd> <dt>CONTACTS<em>TRANSFERRED</em>IN</dt> <dd> <p>Unit: COUNT</p> <p>Statistics: SUM</p> </dd> <dt>CONTACTS<em>TRANSFERRED</em>OUT</dt> <dd> <p>Unit: COUNT</p> <p>Statistics: SUM</p> </dd> <dt>CONTACTS<em>TRANSFERRED</em>IN<em>FROM</em>QUEUE</dt> <dd> <p>Unit: COUNT</p> <p>Statistics: SUM</p> </dd> <dt>CONTACTS<em>TRANSFERRED</em>OUT<em>FROM</em>QUEUE</dt> <dd> <p>Unit: COUNT</p> <p>Statistics: SUM</p> </dd> <dt>CALLBACK<em>CONTACTS</em>HANDLED</dt> <dd> <p>Unit: COUNT</p> <p>Statistics: SUM</p> </dd> <dt>CALLBACK<em>CONTACTS</em>HANDLED</dt> <dd> <p>Unit: COUNT</p> <p>Statistics: SUM</p> </dd> <dt>API<em>CONTACTS</em>HANDLED</dt> <dd> <p>Unit: COUNT</p> <p>Statistics: SUM</p> </dd> <dt>CONTACTS<em>MISSED</dt> <dd> <p>Unit: COUNT</p> <p>Statistics: SUM</p> </dd> <dt>OCCUPANCY</dt> <dd> <p>Unit: PERCENT</p> <p>Statistics: AVG</p> </dd> <dt>HANDLE</em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistics: AVG</p> </dd> <dt>AFTER<em>CONTACT</em>WORK<em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistics: AVG</p> </dd> <dt>QUEUED</em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistics: MAX</p> </dd> <dt>ABANDON<em>TIME</dt> <dd> <p>Unit: COUNT</p> <p>Statistics: SUM</p> </dd> <dt>QUEUE</em>ANSWER<em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistics: AVG</p> </dd> <dt>HOLD</em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistics: AVG</p> </dd> <dt>INTERACTION<em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistics: AVG</p> </dd> <dt>INTERACTION</em>AND<em>HOLD</em>TIME</dt> <dd> <p>Unit: SECONDS</p> <p>Statistics: AVG</p> </dd> <dt>SERVICE_LEVEL</dt> <dd> <p>Unit: PERCENT</p> <p>Statistics: AVG</p> <p>Threshold: Only &quot;Less than&quot; comparisons are supported, with the following service level thresholds: 15, 20, 25, 30, 45, 60, 90, 120, 180, 240, 300, 600</p> </dd> </dl></p>
+    #[serde(rename = "HistoricalMetrics")]
+    pub historical_metrics: Vec<HistoricalMetric>,
+    /// <p>The identifier for your Amazon Connect instance. To find the ID of your instance, open the AWS console and select Amazon Connect. Select the alias of the instance in the Instance alias column. The instance ID is displayed in the Overview section of your instance settings. For example, the instance ID is the set of characters at the end of the instance ARN, after instance/, such as 10a4c4eb-f57e-4d4c-b602-bf39176ced07.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+    /// <p>Indicates the maximum number of results to return per page in the response, between 1-100.</p>
+    #[serde(rename = "MaxResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub max_results: Option<i64>,
+    /// <p>The token for the next set of results. Use the value returned in the previous response in the next request to retrieve the next set of results.</p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
+    /// <p>The timestamp, in UNIX Epoch time format, at which to start the reporting interval for the retrieval of historical metrics data. The time must be specified using a multiple of 5 minutes, such as 10:05, 10:10, 10:15.</p> <p> <code>StartTime</code> cannot be earlier than 24 hours before the time of the request. Historical metrics are available in Amazon Connect only for 24 hours.</p>
+    #[serde(rename = "StartTime")]
+    pub start_time: f64,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetMetricDataResponse {
+    /// <p>A list of <code>HistoricalMetricResult</code> objects, organized by <code>Dimensions</code>, which is the ID of the resource specified in the <code>Filters</code> used for the request. The metrics are combined with the metrics included in <code>Collections</code>, which is a list of <code>HisotricalMetricData</code> objects.</p> <p>If no <code>Grouping</code> is specified in the request, <code>Collections</code> includes summary data for the <code>HistoricalMetrics</code>.</p>
+    #[serde(rename = "MetricResults")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metric_results: Option<Vec<HistoricalMetricResult>>,
+    /// <p>A string returned in the response. Use the value returned in the response as the value of the NextToken in a subsequent request to retrieve the next set of results.</p> <p>The token expires after 5 minutes from the time it is created. Subsequent requests that use the NextToken must use the same request parameters as the request that generated the token. </p>
+    #[serde(rename = "NextToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_token: Option<String>,
 }
 
 /// <p>A <code>HierarchyGroup</code> object that contains information about a hierarchy group in your Amazon Connect instance.</p>
@@ -293,6 +466,55 @@ pub struct HierarchyStructure {
     pub level_two: Option<HierarchyLevel>,
 }
 
+/// <p>A <code>HistoricalMetric</code> object that contains the Name, Unit, Statistic, and Threshold for the metric.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct HistoricalMetric {
+    /// <p>The name of the historical metric.</p>
+    #[serde(rename = "Name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The statistic for the metric.</p>
+    #[serde(rename = "Statistic")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub statistic: Option<String>,
+    /// <p>The threshold for the metric, used with service level metrics.</p>
+    #[serde(rename = "Threshold")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub threshold: Option<Threshold>,
+    /// <p>The unit for the metric.</p>
+    #[serde(rename = "Unit")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub unit: Option<String>,
+}
+
+/// <p>A <code>HistoricalMetricData</code> object than contains a <code>Metric</code> and a <code>Value</code>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct HistoricalMetricData {
+    /// <p>A <code>HistoricalMetric</code> object.</p>
+    #[serde(rename = "Metric")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metric: Option<HistoricalMetric>,
+    /// <p>The <code>Value</code> of the metric.</p>
+    #[serde(rename = "Value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<f64>,
+}
+
+/// <p>The metrics data returned from a <code>GetMetricData</code> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct HistoricalMetricResult {
+    /// <p>A list of <code>HistoricalMetricData</code> objects.</p>
+    #[serde(rename = "Collections")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub collections: Option<Vec<HistoricalMetricData>>,
+    /// <p>The <code>Dimensions</code> for the metrics.</p>
+    #[serde(rename = "Dimensions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub dimensions: Option<Dimensions>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListRoutingProfilesRequest {
     /// <p>The identifier for your Amazon Connect instance. To find the ID of your instance, open the AWS console and select Amazon Connect. Select the alias of the instance in the Instance alias column. The instance ID is displayed in the Overview section of your instance settings. For example, the instance ID is the set of characters at the end of the instance ARN, after instance/, such as 10a4c4eb-f57e-4d4c-b602-bf39176ced07.</p>
@@ -405,6 +627,20 @@ pub struct ListUsersResponse {
     pub user_summary_list: Option<Vec<UserSummary>>,
 }
 
+/// <p>A QueueReference object that contains the the QueueId and ARN for the queue resource for which metrics are returned.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct QueueReference {
+    /// <p>The Amazon Resource Name (ARN) of queue.</p>
+    #[serde(rename = "Arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The ID of the queue associated with the metrics returned.</p>
+    #[serde(rename = "Id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+}
+
 /// <p>A <code>RoutingProfileSummary</code> object that contains information about a routing profile, including ARN, Id, and Name.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -443,7 +679,7 @@ pub struct SecurityProfileSummary {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct StartOutboundVoiceContactRequest {
-    /// <p>Specify a custom key-value pair using an attribute map. The attributes are standard Amazon Connect attributes, and can be accessed in contact flows just like any other contact attributes.</p> <p>There can be up to 32,768 UTF-8 bytes across all key-value pairs. Attribute keys can include only alphanumeric, dash, and underscore characters.</p> <p>For example, if you want play a greeting when the customer answers the call, you can pass the customer name in attributes similar to the following:</p>
+    /// <p>Specify a custom key-value pair using an attribute map. The attributes are standard Amazon Connect attributes, and can be accessed in contact flows just like any other contact attributes.</p> <p>There can be up to 32,768 UTF-8 bytes across all key-value pairs per contact. Attribute keys can include only alphanumeric, dash, and underscore characters.</p> <p>For example, if you want play a greeting when the customer answers the call, you can pass the customer name in attributes similar to the following:</p>
     #[serde(rename = "Attributes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attributes: Option<::std::collections::HashMap<String, String>>,
@@ -492,6 +728,36 @@ pub struct StopContactRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct StopContactResponse {}
+
+/// <p>A <code>Threshold</code> object that includes a comparison and <code>ThresholdValue</code> to compare to. Used with service level metrics.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Threshold {
+    /// <p>The Threshold to use to compare service level metrics to. Only "Less than" (LT) comparisons are supported.</p>
+    #[serde(rename = "Comparison")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub comparison: Option<String>,
+    /// <p>The value of the threshold to compare the metric to. Only "Less than" (LT) comparisons are supported.</p>
+    #[serde(rename = "ThresholdValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub threshold_value: Option<f64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateContactAttributesRequest {
+    /// <p>Specify a custom key-value pair using an attribute map. The attributes are standard Amazon Connect attributes, and can be accessed in contact flows just like any other contact attributes.</p> <p>There can be up to 32,768 UTF-8 bytes across all key-value pairs per contact. Attribute keys can include only alphanumeric, dash, and underscore characters.</p>
+    #[serde(rename = "Attributes")]
+    pub attributes: ::std::collections::HashMap<String, String>,
+    /// <p>The unique identifier of the contact for which to update attributes. This is the identifier for the contact associated with the first interaction with the contact center.</p>
+    #[serde(rename = "InitialContactId")]
+    pub initial_contact_id: String,
+    /// <p>The identifier for your Amazon Connect instance. To find the ID of your instance, open the AWS console and select Amazon Connect. Select the alias of the instance in the Instance alias column. The instance ID is displayed in the Overview section of your instance settings. For example, the instance ID is the set of characters at the end of the instance ARN, after instance/, such as 10a4c4eb-f57e-4d4c-b602-bf39176ced07.</p>
+    #[serde(rename = "InstanceId")]
+    pub instance_id: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateContactAttributesResponse {}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateUserHierarchyRequest {
@@ -659,7 +925,7 @@ pub struct UserSummary {
 /// Errors returned by CreateUser
 #[derive(Debug, PartialEq)]
 pub enum CreateUserError {
-    /// <p>A resource with that name already exisits.</p>
+    /// <p>A resource with that name already exists.</p>
     DuplicateResource(String),
     /// <p>Request processing failed due to an error or failure with the service.</p>
     InternalService(String),
@@ -667,7 +933,7 @@ pub enum CreateUserError {
     InvalidParameter(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    /// <p>The limit exceeded the maximum allowed active calls in a queue.</p>
+    /// <p>The allowed limit for the resource has been reached.</p>
     LimitExceeded(String),
     /// <p>The specified resource was not found.</p>
     ResourceNotFound(String),
@@ -1282,10 +1548,238 @@ impl Error for DescribeUserHierarchyStructureError {
         }
     }
 }
+/// Errors returned by GetContactAttributes
+#[derive(Debug, PartialEq)]
+pub enum GetContactAttributesError {
+    /// <p>Request processing failed due to an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetContactAttributesError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> GetContactAttributesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InternalServiceException" => {
+                    return GetContactAttributesError::InternalService(String::from(error_message));
+                }
+                "InvalidRequestException" => {
+                    return GetContactAttributesError::InvalidRequest(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return GetContactAttributesError::ResourceNotFound(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return GetContactAttributesError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetContactAttributesError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetContactAttributesError {
+    fn from(err: serde_json::error::Error) -> GetContactAttributesError {
+        GetContactAttributesError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetContactAttributesError {
+    fn from(err: CredentialsError) -> GetContactAttributesError {
+        GetContactAttributesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetContactAttributesError {
+    fn from(err: HttpDispatchError) -> GetContactAttributesError {
+        GetContactAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetContactAttributesError {
+    fn from(err: io::Error) -> GetContactAttributesError {
+        GetContactAttributesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetContactAttributesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetContactAttributesError {
+    fn description(&self) -> &str {
+        match *self {
+            GetContactAttributesError::InternalService(ref cause) => cause,
+            GetContactAttributesError::InvalidRequest(ref cause) => cause,
+            GetContactAttributesError::ResourceNotFound(ref cause) => cause,
+            GetContactAttributesError::Validation(ref cause) => cause,
+            GetContactAttributesError::Credentials(ref err) => err.description(),
+            GetContactAttributesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetContactAttributesError::ParseError(ref cause) => cause,
+            GetContactAttributesError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetCurrentMetricData
+#[derive(Debug, PartialEq)]
+pub enum GetCurrentMetricDataError {
+    /// <p>Request processing failed due to an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>One or more of the parameters provided to the operation are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetCurrentMetricDataError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> GetCurrentMetricDataError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InternalServiceException" => {
+                    return GetCurrentMetricDataError::InternalService(String::from(error_message));
+                }
+                "InvalidParameterException" => {
+                    return GetCurrentMetricDataError::InvalidParameter(String::from(error_message));
+                }
+                "InvalidRequestException" => {
+                    return GetCurrentMetricDataError::InvalidRequest(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return GetCurrentMetricDataError::ResourceNotFound(String::from(error_message));
+                }
+                "ThrottlingException" => {
+                    return GetCurrentMetricDataError::Throttling(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return GetCurrentMetricDataError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetCurrentMetricDataError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetCurrentMetricDataError {
+    fn from(err: serde_json::error::Error) -> GetCurrentMetricDataError {
+        GetCurrentMetricDataError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetCurrentMetricDataError {
+    fn from(err: CredentialsError) -> GetCurrentMetricDataError {
+        GetCurrentMetricDataError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetCurrentMetricDataError {
+    fn from(err: HttpDispatchError) -> GetCurrentMetricDataError {
+        GetCurrentMetricDataError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetCurrentMetricDataError {
+    fn from(err: io::Error) -> GetCurrentMetricDataError {
+        GetCurrentMetricDataError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetCurrentMetricDataError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetCurrentMetricDataError {
+    fn description(&self) -> &str {
+        match *self {
+            GetCurrentMetricDataError::InternalService(ref cause) => cause,
+            GetCurrentMetricDataError::InvalidParameter(ref cause) => cause,
+            GetCurrentMetricDataError::InvalidRequest(ref cause) => cause,
+            GetCurrentMetricDataError::ResourceNotFound(ref cause) => cause,
+            GetCurrentMetricDataError::Throttling(ref cause) => cause,
+            GetCurrentMetricDataError::Validation(ref cause) => cause,
+            GetCurrentMetricDataError::Credentials(ref err) => err.description(),
+            GetCurrentMetricDataError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetCurrentMetricDataError::ParseError(ref cause) => cause,
+            GetCurrentMetricDataError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by GetFederationToken
 #[derive(Debug, PartialEq)]
 pub enum GetFederationTokenError {
-    /// <p>A resource with that name already exisits.</p>
+    /// <p>A resource with that name already exists.</p>
     DuplicateResource(String),
     /// <p>Request processing failed due to an error or failure with the service.</p>
     InternalService(String),
@@ -1405,6 +1899,124 @@ impl Error for GetFederationTokenError {
             }
             GetFederationTokenError::ParseError(ref cause) => cause,
             GetFederationTokenError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetMetricData
+#[derive(Debug, PartialEq)]
+pub enum GetMetricDataError {
+    /// <p>Request processing failed due to an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>One or more of the parameters provided to the operation are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// <p>The throttling limit has been exceeded.</p>
+    Throttling(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetMetricDataError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> GetMetricDataError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InternalServiceException" => {
+                    return GetMetricDataError::InternalService(String::from(error_message));
+                }
+                "InvalidParameterException" => {
+                    return GetMetricDataError::InvalidParameter(String::from(error_message));
+                }
+                "InvalidRequestException" => {
+                    return GetMetricDataError::InvalidRequest(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return GetMetricDataError::ResourceNotFound(String::from(error_message));
+                }
+                "ThrottlingException" => {
+                    return GetMetricDataError::Throttling(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return GetMetricDataError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetMetricDataError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetMetricDataError {
+    fn from(err: serde_json::error::Error) -> GetMetricDataError {
+        GetMetricDataError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetMetricDataError {
+    fn from(err: CredentialsError) -> GetMetricDataError {
+        GetMetricDataError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetMetricDataError {
+    fn from(err: HttpDispatchError) -> GetMetricDataError {
+        GetMetricDataError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetMetricDataError {
+    fn from(err: io::Error) -> GetMetricDataError {
+        GetMetricDataError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetMetricDataError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetMetricDataError {
+    fn description(&self) -> &str {
+        match *self {
+            GetMetricDataError::InternalService(ref cause) => cause,
+            GetMetricDataError::InvalidParameter(ref cause) => cause,
+            GetMetricDataError::InvalidRequest(ref cause) => cause,
+            GetMetricDataError::ResourceNotFound(ref cause) => cause,
+            GetMetricDataError::Throttling(ref cause) => cause,
+            GetMetricDataError::Validation(ref cause) => cause,
+            GetMetricDataError::Credentials(ref err) => err.description(),
+            GetMetricDataError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            GetMetricDataError::ParseError(ref cause) => cause,
+            GetMetricDataError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -1903,7 +2515,7 @@ pub enum StartOutboundVoiceContactError {
     InvalidParameter(String),
     /// <p>The request is not valid.</p>
     InvalidRequest(String),
-    /// <p>The limit exceeded the maximum allowed active calls in a queue.</p>
+    /// <p>The allowed limit for the resource has been reached.</p>
     LimitExceeded(String),
     /// <p>The contact is not permitted.</p>
     OutboundContactNotPermitted(String),
@@ -2153,6 +2765,126 @@ impl Error for StopContactError {
             StopContactError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             StopContactError::ParseError(ref cause) => cause,
             StopContactError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by UpdateContactAttributes
+#[derive(Debug, PartialEq)]
+pub enum UpdateContactAttributesError {
+    /// <p>Request processing failed due to an error or failure with the service.</p>
+    InternalService(String),
+    /// <p>One or more of the parameters provided to the operation are not valid.</p>
+    InvalidParameter(String),
+    /// <p>The request is not valid.</p>
+    InvalidRequest(String),
+    /// <p>The specified resource was not found.</p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl UpdateContactAttributesError {
+    // see boto RestJSONParser impl for parsing errors
+    // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L838-L850
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateContactAttributesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let error_type = match res.headers.get("x-amzn-errortype") {
+                Some(raw_error_type) => raw_error_type
+                    .split(':')
+                    .next()
+                    .unwrap_or_else(|| "Unknown"),
+                _ => json
+                    .get("code")
+                    .or_else(|| json.get("Code"))
+                    .and_then(|c| c.as_str())
+                    .unwrap_or_else(|| "Unknown"),
+            };
+
+            // message can come in either "message" or "Message"
+            // see boto BaseJSONParser impl for parsing message
+            // https://github.com/boto/botocore/blob/4dff78c840403d1d17db9b3f800b20d3bd9fbf9f/botocore/parsers.py#L595-L598
+            let error_message = json
+                .get("message")
+                .or_else(|| json.get("Message"))
+                .and_then(|m| m.as_str())
+                .unwrap_or("");
+
+            match error_type {
+                "InternalServiceException" => {
+                    return UpdateContactAttributesError::InternalService(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidParameterException" => {
+                    return UpdateContactAttributesError::InvalidParameter(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidRequestException" => {
+                    return UpdateContactAttributesError::InvalidRequest(String::from(error_message));
+                }
+                "ResourceNotFoundException" => {
+                    return UpdateContactAttributesError::ResourceNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return UpdateContactAttributesError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return UpdateContactAttributesError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateContactAttributesError {
+    fn from(err: serde_json::error::Error) -> UpdateContactAttributesError {
+        UpdateContactAttributesError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateContactAttributesError {
+    fn from(err: CredentialsError) -> UpdateContactAttributesError {
+        UpdateContactAttributesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateContactAttributesError {
+    fn from(err: HttpDispatchError) -> UpdateContactAttributesError {
+        UpdateContactAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateContactAttributesError {
+    fn from(err: io::Error) -> UpdateContactAttributesError {
+        UpdateContactAttributesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateContactAttributesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateContactAttributesError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateContactAttributesError::InternalService(ref cause) => cause,
+            UpdateContactAttributesError::InvalidParameter(ref cause) => cause,
+            UpdateContactAttributesError::InvalidRequest(ref cause) => cause,
+            UpdateContactAttributesError::ResourceNotFound(ref cause) => cause,
+            UpdateContactAttributesError::Validation(ref cause) => cause,
+            UpdateContactAttributesError::Credentials(ref err) => err.description(),
+            UpdateContactAttributesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateContactAttributesError::ParseError(ref cause) => cause,
+            UpdateContactAttributesError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -2805,11 +3537,29 @@ pub trait Connect {
         input: DescribeUserHierarchyStructureRequest,
     ) -> RusotoFuture<DescribeUserHierarchyStructureResponse, DescribeUserHierarchyStructureError>;
 
+    /// <p>Retrieves the contact attributes associated with a contact.</p>
+    fn get_contact_attributes(
+        &self,
+        input: GetContactAttributesRequest,
+    ) -> RusotoFuture<GetContactAttributesResponse, GetContactAttributesError>;
+
+    /// <p>The <code>GetCurrentMetricData</code> operation retrieves current metric data from your Amazon Connect instance.</p> <p>If you are using an IAM account, it must have permission to the <code>connect:GetCurrentMetricData</code> action.</p>
+    fn get_current_metric_data(
+        &self,
+        input: GetCurrentMetricDataRequest,
+    ) -> RusotoFuture<GetCurrentMetricDataResponse, GetCurrentMetricDataError>;
+
     /// <p>Retrieves a token for federation.</p>
     fn get_federation_token(
         &self,
         input: GetFederationTokenRequest,
     ) -> RusotoFuture<GetFederationTokenResponse, GetFederationTokenError>;
+
+    /// <p>The <code>GetMetricData</code> operation retrieves historical metrics data from your Amazon Connect instance.</p> <p>If you are using an IAM account, it must have permission to the <code>connect:GetMetricData</code> action.</p>
+    fn get_metric_data(
+        &self,
+        input: GetMetricDataRequest,
+    ) -> RusotoFuture<GetMetricDataResponse, GetMetricDataError>;
 
     /// <p>Returns an array of <code>RoutingProfileSummary</code> objects that includes information about the routing profiles in your instance.</p>
     fn list_routing_profiles(
@@ -2835,7 +3585,7 @@ pub trait Connect {
         input: ListUsersRequest,
     ) -> RusotoFuture<ListUsersResponse, ListUsersError>;
 
-    /// <p>The <code>StartOutboundVoiceContact</code> operation initiates a contact flow to place an outbound call to a customer.</p> <p>There is a throttling limit placed on usage of the API that includes a RateLimit of 2 per second, and a BurstLimit of 5 per second.</p> <p>If you are using an IAM account, it must have permission to the <code>connect:StartOutboundVoiceContact</code> action.</p>
+    /// <p>The <code>StartOutboundVoiceContact</code> operation initiates a contact flow to place an outbound call to a customer.</p> <p>If you are using an IAM account, it must have permission to the <code>connect:StartOutboundVoiceContact</code> action.</p> <p>There is a 60 second dialing timeout for this operation. If the call is not connected after 60 seconds, the call fails.</p>
     fn start_outbound_voice_contact(
         &self,
         input: StartOutboundVoiceContactRequest,
@@ -2846,6 +3596,12 @@ pub trait Connect {
         &self,
         input: StopContactRequest,
     ) -> RusotoFuture<StopContactResponse, StopContactError>;
+
+    /// <p>The <code>UpdateContactAttributes</code> operation lets you programmatically create new, or update existing, contact attributes associated with a contact. You can use the operation to add or update attributes for both ongoing and completed contacts. For example, you can update the customer's name or the reason the customer called while the call is active, or add notes about steps that the agent took during the call that are displayed to the next agent that takes the call. You can also use the <code>UpdateContactAttributes</code> operation to update attributes for a contact using data from your CRM application and save the data with the contact in Amazon Connect. You could also flag calls for additional analysis, such as legal review or identifying abusive callers.</p> <p>Contact attributes are available in Amazon Connect for 24 months, and are then deleted.</p> <p> <i>Important:</i> </p> <p>You cannot use the operation to update attributes for contacts that occurred prior to the release of the API, September 12, 2018. You can update attributes only for contacts that started after the release of the API. If you attempt to update attributes for a contact that occurred prior to the release of the API, a 400 error is returned. This applies also to queued callbacks that were initiated prior to the release of the API but are still active in your instance.</p>
+    fn update_contact_attributes(
+        &self,
+        input: UpdateContactAttributesRequest,
+    ) -> RusotoFuture<UpdateContactAttributesResponse, UpdateContactAttributesError>;
 
     /// <p>Assigns the specified hierarchy group to the user.</p>
     fn update_user_hierarchy(
@@ -2871,7 +3627,7 @@ pub trait Connect {
         input: UpdateUserRoutingProfileRequest,
     ) -> RusotoFuture<(), UpdateUserRoutingProfileError>;
 
-    /// <p>Update the security profiles assigned to the user.</p>
+    /// <p>Updates the security profiles assigned to the user.</p>
     fn update_user_security_profiles(
         &self,
         input: UpdateUserSecurityProfilesRequest,
@@ -3100,6 +3856,88 @@ impl Connect for ConnectClient {
         })
     }
 
+    /// <p>Retrieves the contact attributes associated with a contact.</p>
+    fn get_contact_attributes(
+        &self,
+        input: GetContactAttributesRequest,
+    ) -> RusotoFuture<GetContactAttributesResponse, GetContactAttributesError> {
+        let request_uri = format!(
+            "/contact/attributes/{instance_id}/{initial_contact_id}",
+            initial_contact_id = input.initial_contact_id,
+            instance_id = input.instance_id
+        );
+
+        let mut request = SignedRequest::new("GET", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetContactAttributesResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetContactAttributesError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>The <code>GetCurrentMetricData</code> operation retrieves current metric data from your Amazon Connect instance.</p> <p>If you are using an IAM account, it must have permission to the <code>connect:GetCurrentMetricData</code> action.</p>
+    fn get_current_metric_data(
+        &self,
+        input: GetCurrentMetricDataRequest,
+    ) -> RusotoFuture<GetCurrentMetricDataResponse, GetCurrentMetricDataError> {
+        let request_uri = format!(
+            "/metrics/current/{instance_id}",
+            instance_id = input.instance_id
+        );
+
+        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<GetCurrentMetricDataResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetCurrentMetricDataError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
     /// <p>Retrieves a token for federation.</p>
     fn get_federation_token(
         &self,
@@ -3135,6 +3973,48 @@ impl Connect for ConnectClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(GetFederationTokenError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>The <code>GetMetricData</code> operation retrieves historical metrics data from your Amazon Connect instance.</p> <p>If you are using an IAM account, it must have permission to the <code>connect:GetMetricData</code> action.</p>
+    fn get_metric_data(
+        &self,
+        input: GetMetricDataRequest,
+    ) -> RusotoFuture<GetMetricDataResponse, GetMetricDataError> {
+        let request_uri = format!(
+            "/metrics/historical/{instance_id}",
+            instance_id = input.instance_id
+        );
+
+        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result = serde_json::from_slice::<GetMetricDataResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(GetMetricDataError::from_response(response))),
                 )
             }
         })
@@ -3330,7 +4210,7 @@ impl Connect for ConnectClient {
         })
     }
 
-    /// <p>The <code>StartOutboundVoiceContact</code> operation initiates a contact flow to place an outbound call to a customer.</p> <p>There is a throttling limit placed on usage of the API that includes a RateLimit of 2 per second, and a BurstLimit of 5 per second.</p> <p>If you are using an IAM account, it must have permission to the <code>connect:StartOutboundVoiceContact</code> action.</p>
+    /// <p>The <code>StartOutboundVoiceContact</code> operation initiates a contact flow to place an outbound call to a customer.</p> <p>If you are using an IAM account, it must have permission to the <code>connect:StartOutboundVoiceContact</code> action.</p> <p>There is a 60 second dialing timeout for this operation. If the call is not connected after 60 seconds, the call fails.</p>
     fn start_outbound_voice_contact(
         &self,
         input: StartOutboundVoiceContactRequest,
@@ -3402,6 +4282,43 @@ impl Connect for ConnectClient {
                         .from_err()
                         .and_then(|response| Err(StopContactError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p>The <code>UpdateContactAttributes</code> operation lets you programmatically create new, or update existing, contact attributes associated with a contact. You can use the operation to add or update attributes for both ongoing and completed contacts. For example, you can update the customer's name or the reason the customer called while the call is active, or add notes about steps that the agent took during the call that are displayed to the next agent that takes the call. You can also use the <code>UpdateContactAttributes</code> operation to update attributes for a contact using data from your CRM application and save the data with the contact in Amazon Connect. You could also flag calls for additional analysis, such as legal review or identifying abusive callers.</p> <p>Contact attributes are available in Amazon Connect for 24 months, and are then deleted.</p> <p> <i>Important:</i> </p> <p>You cannot use the operation to update attributes for contacts that occurred prior to the release of the API, September 12, 2018. You can update attributes only for contacts that started after the release of the API. If you attempt to update attributes for a contact that occurred prior to the release of the API, a 400 error is returned. This applies also to queued callbacks that were initiated prior to the release of the API but are still active in your instance.</p>
+    fn update_contact_attributes(
+        &self,
+        input: UpdateContactAttributesRequest,
+    ) -> RusotoFuture<UpdateContactAttributesResponse, UpdateContactAttributesError> {
+        let request_uri = "/contact/attributes";
+
+        let mut request = SignedRequest::new("POST", "connect", &self.region, &request_uri);
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+
+        let encoded = Some(serde_json::to_vec(&input).unwrap());
+        request.set_payload(encoded);
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body == b"null" || body.is_empty() {
+                        body = b"{}".to_vec();
+                    }
+
+                    debug!("Response body: {:?}", body);
+                    debug!("Response status: {}", response.status);
+                    let result =
+                        serde_json::from_slice::<UpdateContactAttributesResponse>(&body).unwrap();
+
+                    result
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateContactAttributesError::from_response(response))
+                }))
             }
         })
     }
@@ -3540,7 +4457,7 @@ impl Connect for ConnectClient {
         })
     }
 
-    /// <p>Update the security profiles assigned to the user.</p>
+    /// <p>Updates the security profiles assigned to the user.</p>
     fn update_user_security_profiles(
         &self,
         input: UpdateUserSecurityProfilesRequest,

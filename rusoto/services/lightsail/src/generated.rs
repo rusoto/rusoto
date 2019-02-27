@@ -153,7 +153,7 @@ pub struct Blueprint {
     #[serde(rename = "group")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub group: Option<String>,
-    /// <p>A Boolean value indicating whether the blueprint is active. When you update your blueprints, you will inactivate old blueprints and keep the most recent versions active.</p>
+    /// <p>A Boolean value indicating whether the blueprint is active. Inactive blueprints are listed to support customers with existing instances but are not necessarily available for launch of new instances. Blueprints are marked inactive when they become outdated due to operating system updates or new application releases.</p>
     #[serde(rename = "isActive")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_active: Option<bool>,
@@ -260,6 +260,100 @@ pub struct CloseInstancePublicPortsResult {
     pub operation: Option<Operation>,
 }
 
+/// <p>Describes a CloudFormation stack record created as a result of the <code>create cloud formation stack</code> operation.</p> <p>A CloudFormation stack record provides information about the AWS CloudFormation stack used to create a new Amazon Elastic Compute Cloud instance from an exported Lightsail instance snapshot.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CloudFormationStackRecord {
+    /// <p>The Amazon Resource Name (ARN) of the CloudFormation stack record.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The date when the CloudFormation stack record was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>A list of objects describing the destination service, which is AWS CloudFormation, and the Amazon Resource Name (ARN) of the AWS CloudFormation stack.</p>
+    #[serde(rename = "destinationInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_info: Option<DestinationInfo>,
+    /// <p>A list of objects describing the Availability Zone and AWS Region of the CloudFormation stack record.</p>
+    #[serde(rename = "location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location: Option<ResourceLocation>,
+    /// <p>The name of the CloudFormation stack record. It starts with <code>CloudFormationStackRecord</code> followed by a GUID.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The Lightsail resource type (e.g., <code>CloudFormationStackRecord</code>).</p>
+    #[serde(rename = "resourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+    /// <p>A list of objects describing the source of the CloudFormation stack record.</p>
+    #[serde(rename = "sourceInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_info: Option<Vec<CloudFormationStackRecordSourceInfo>>,
+    /// <p>The current state of the CloudFormation stack record.</p>
+    #[serde(rename = "state")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+}
+
+/// <p>Describes the source of a CloudFormation stack record (i.e., the export snapshot record).</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CloudFormationStackRecordSourceInfo {
+    /// <p>The Amazon Resource Name (ARN) of the export snapshot record.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The name of the record.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The Lightsail resource type (e.g., <code>ExportSnapshotRecord</code>).</p>
+    #[serde(rename = "resourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CopySnapshotRequest {
+    /// <p>The AWS Region where the source snapshot is located.</p>
+    #[serde(rename = "sourceRegion")]
+    pub source_region: String,
+    /// <p>The name of the source instance or disk snapshot to be copied.</p>
+    #[serde(rename = "sourceSnapshotName")]
+    pub source_snapshot_name: String,
+    /// <p>The name of the new instance or disk snapshot to be created as a copy.</p>
+    #[serde(rename = "targetSnapshotName")]
+    pub target_snapshot_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CopySnapshotResult {
+    /// <p>A list of objects describing the API operation.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateCloudFormationStackRequest {
+    /// <p>An array of parameters that will be used to create the new Amazon EC2 instance. You can only pass one instance entry at a time in this array. You will get an invalid parameter error if you pass more than one instance entry in this array.</p>
+    #[serde(rename = "instances")]
+    pub instances: Vec<InstanceEntry>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateCloudFormationStackResult {
+    /// <p>A list of objects describing the API operation.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDiskFromSnapshotRequest {
     /// <p>The Availability Zone where you want to create the disk (e.g., <code>us-east-2a</code>). Choose the same Availability Zone as the Lightsail instance where you want to create the disk.</p> <p>Use the GetRegions operation to list the Availability Zones where Lightsail is currently available.</p>
@@ -274,6 +368,10 @@ pub struct CreateDiskFromSnapshotRequest {
     /// <p>The size of the disk in GB (e.g., <code>32</code>).</p>
     #[serde(rename = "sizeInGb")]
     pub size_in_gb: i64,
+    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>To tag a resource after it has been created, see the <code>tag resource</code> operation.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -296,6 +394,10 @@ pub struct CreateDiskRequest {
     /// <p>The size of the disk in GB (e.g., <code>32</code>).</p>
     #[serde(rename = "sizeInGb")]
     pub size_in_gb: i64,
+    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>To tag a resource after it has been created, see the <code>tag resource</code> operation.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -309,12 +411,21 @@ pub struct CreateDiskResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDiskSnapshotRequest {
-    /// <p>The unique name of the source disk (e.g., <code>my-source-disk</code>).</p>
+    /// <p><p>The unique name of the source disk (e.g., <code>Disk-Virginia-1</code>).</p> <note> <p>This parameter cannot be defined together with the <code>instance name</code> parameter. The <code>disk name</code> and <code>instance name</code> parameters are mutually exclusive.</p> </note></p>
     #[serde(rename = "diskName")]
-    pub disk_name: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disk_name: Option<String>,
     /// <p>The name of the destination disk snapshot (e.g., <code>my-disk-snapshot</code>) based on the source disk.</p>
     #[serde(rename = "diskSnapshotName")]
     pub disk_snapshot_name: String,
+    /// <p><p>The unique name of the source instance (e.g., <code>Amazon_Linux-512MB-Virginia-1</code>). When this is defined, a snapshot of the instance&#39;s system volume is created.</p> <note> <p>This parameter cannot be defined together with the <code>disk name</code> parameter. The <code>instance name</code> and <code>disk name</code> parameters are mutually exclusive.</p> </note></p>
+    #[serde(rename = "instanceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_name: Option<String>,
+    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>To tag a resource after it has been created, see the <code>tag resource</code> operation.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -350,6 +461,10 @@ pub struct CreateDomainRequest {
     /// <p><p>The domain name to manage (e.g., <code>example.com</code>).</p> <note> <p>You cannot register a new domain name using Lightsail. You must register a domain name using Amazon Route 53 or another domain name registrar. If you have already registered your domain, you can enter its name in this parameter to manage the DNS records for that domain.</p> </note></p>
     #[serde(rename = "domainName")]
     pub domain_name: String,
+    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>To tag a resource after it has been created, see the <code>tag resource</code> operation.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -369,6 +484,10 @@ pub struct CreateInstanceSnapshotRequest {
     /// <p>The name for your new snapshot.</p>
     #[serde(rename = "instanceSnapshotName")]
     pub instance_snapshot_name: String,
+    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>To tag a resource after it has been created, see the <code>tag resource</code> operation.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -386,7 +505,7 @@ pub struct CreateInstancesFromSnapshotRequest {
     #[serde(rename = "attachedDiskMapping")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attached_disk_mapping: Option<::std::collections::HashMap<String, Vec<DiskMap>>>,
-    /// <p>The Availability Zone where you want to create your instances. Use the following formatting: <code>us-east-2a</code> (case sensitive). You can get a list of availability zones by using the <a href="http://docs.aws.amazon.com/lightsail/2016-11-28/api-reference/API_GetRegions.html">get regions</a> operation. Be sure to add the <code>include availability zones</code> parameter to your request.</p>
+    /// <p>The Availability Zone where you want to create your instances. Use the following formatting: <code>us-east-2a</code> (case sensitive). You can get a list of Availability Zones by using the <a href="http://docs.aws.amazon.com/lightsail/2016-11-28/api-reference/API_GetRegions.html">get regions</a> operation. Be sure to add the <code>include Availability Zones</code> parameter to your request.</p>
     #[serde(rename = "availabilityZone")]
     pub availability_zone: String,
     /// <p>The bundle of specification information for your virtual private server (or <i>instance</i>), including the pricing plan (e.g., <code>micro_1_0</code>).</p>
@@ -402,7 +521,11 @@ pub struct CreateInstancesFromSnapshotRequest {
     #[serde(rename = "keyPairName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_pair_name: Option<String>,
-    /// <p><p>You can create a launch script that configures a server with additional user data. For example, <code>apt-get -y update</code>.</p> <note> <p>Depending on the machine image you choose, the command to get software on your instance varies. Amazon Linux and CentOS use <code>yum</code>, Debian and Ubuntu use <code>apt-get</code>, and FreeBSD uses <code>pkg</code>. For a complete list, see the <a href="http://lightsail.aws.amazon.com/ls/docs/getting-started/articles/pre-installed-apps">Dev Guide</a>.</p> </note></p>
+    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>To tag a resource after it has been created, see the <code>tag resource</code> operation.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p><p>You can create a launch script that configures a server with additional user data. For example, <code>apt-get -y update</code>.</p> <note> <p>Depending on the machine image you choose, the command to get software on your instance varies. Amazon Linux and CentOS use <code>yum</code>, Debian and Ubuntu use <code>apt-get</code>, and FreeBSD uses <code>pkg</code>. For a complete list, see the <a href="https://lightsail.aws.amazon.com/ls/docs/getting-started/article/compare-options-choose-lightsail-instance-image">Dev Guide</a>.</p> </note></p>
     #[serde(rename = "userData")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub user_data: Option<String>,
@@ -419,7 +542,7 @@ pub struct CreateInstancesFromSnapshotResult {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateInstancesRequest {
-    /// <p>The Availability Zone in which to create your instance. Use the following format: <code>us-east-2a</code> (case sensitive). You can get a list of availability zones by using the <a href="http://docs.aws.amazon.com/lightsail/2016-11-28/api-reference/API_GetRegions.html">get regions</a> operation. Be sure to add the <code>include availability zones</code> parameter to your request.</p>
+    /// <p>The Availability Zone in which to create your instance. Use the following format: <code>us-east-2a</code> (case sensitive). You can get a list of Availability Zones by using the <a href="http://docs.aws.amazon.com/lightsail/2016-11-28/api-reference/API_GetRegions.html">get regions</a> operation. Be sure to add the <code>include Availability Zones</code> parameter to your request.</p>
     #[serde(rename = "availabilityZone")]
     pub availability_zone: String,
     /// <p>The ID for a virtual private server image (e.g., <code>app_wordpress_4_4</code> or <code>app_lamp_7_0</code>). Use the get blueprints operation to return a list of available images (or <i>blueprints</i>).</p>
@@ -435,6 +558,10 @@ pub struct CreateInstancesRequest {
     #[serde(rename = "keyPairName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub key_pair_name: Option<String>,
+    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>To tag a resource after it has been created, see the <code>tag resource</code> operation.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p><p>A launch script you can create that configures a server with additional user data. For example, you might want to run <code>apt-get -y update</code>.</p> <note> <p>Depending on the machine image you choose, the command to get software on your instance varies. Amazon Linux and CentOS use <code>yum</code>, Debian and Ubuntu use <code>apt-get</code>, and FreeBSD uses <code>pkg</code>. For a complete list, see the <a href="https://lightsail.aws.amazon.com/ls/docs/getting-started/article/compare-options-choose-lightsail-instance-image">Dev Guide</a>.</p> </note></p>
     #[serde(rename = "userData")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -455,6 +582,10 @@ pub struct CreateKeyPairRequest {
     /// <p>The name for your new key pair.</p>
     #[serde(rename = "keyPairName")]
     pub key_pair_name: String,
+    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>To tag a resource after it has been created, see the <code>tag resource</code> operation.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -502,6 +633,10 @@ pub struct CreateLoadBalancerRequest {
     /// <p>The name of your load balancer.</p>
     #[serde(rename = "loadBalancerName")]
     pub load_balancer_name: String,
+    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>To tag a resource after it has been created, see the <code>tag resource</code> operation.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -528,12 +663,139 @@ pub struct CreateLoadBalancerTlsCertificateRequest {
     /// <p>The load balancer name where you want to create the SSL/TLS certificate.</p>
     #[serde(rename = "loadBalancerName")]
     pub load_balancer_name: String,
+    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>To tag a resource after it has been created, see the <code>tag resource</code> operation.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateLoadBalancerTlsCertificateResult {
     /// <p>An object containing information about the API operations.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateRelationalDatabaseFromSnapshotRequest {
+    /// <p>The Availability Zone in which to create your new database. Use the <code>us-east-2a</code> case-sensitive format.</p> <p>You can get a list of Availability Zones by using the <code>get regions</code> operation. Be sure to add the <code>include relational database Availability Zones</code> parameter to your request.</p>
+    #[serde(rename = "availabilityZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zone: Option<String>,
+    /// <p>Specifies the accessibility options for your new database. A value of <code>true</code> specifies a database that is available to resources outside of your Lightsail account. A value of <code>false</code> specifies a database that is available only to your Lightsail resources in the same region as your database.</p>
+    #[serde(rename = "publiclyAccessible")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub publicly_accessible: Option<bool>,
+    /// <p>The bundle ID for your new database. A bundle describes the performance specifications for your database.</p> <p>You can get a list of database bundle IDs by using the <code>get relational database bundles</code> operation.</p> <p>When creating a new database from a snapshot, you cannot choose a bundle that is smaller than the bundle of the source database.</p>
+    #[serde(rename = "relationalDatabaseBundleId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub relational_database_bundle_id: Option<String>,
+    /// <p><p>The name to use for your new database.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 2 to 255 alphanumeric characters, or hyphens.</p> </li> <li> <p>The first and last character must be a letter or number.</p> </li> </ul></p>
+    #[serde(rename = "relationalDatabaseName")]
+    pub relational_database_name: String,
+    /// <p>The name of the database snapshot from which to create your new database.</p>
+    #[serde(rename = "relationalDatabaseSnapshotName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub relational_database_snapshot_name: Option<String>,
+    /// <p><p>The date and time to restore your database from.</p> <p>Constraints:</p> <ul> <li> <p>Must be before the latest restorable time for the database.</p> </li> <li> <p>Cannot be specified if the <code>use latest restorable time</code> parameter is <code>true</code>.</p> </li> <li> <p>Specified in Universal Coordinated Time (UTC).</p> </li> <li> <p>Specified in the Unix time format.</p> <p>For example, if you wish to use a restore time of October 1, 2018, at 8 PM UTC, then you input <code>1538424000</code> as the restore time.</p> </li> </ul></p>
+    #[serde(rename = "restoreTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub restore_time: Option<f64>,
+    /// <p>The name of the source database.</p>
+    #[serde(rename = "sourceRelationalDatabaseName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_relational_database_name: Option<String>,
+    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>To tag a resource after it has been created, see the <code>tag resource</code> operation.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+    /// <p>Specifies whether your database is restored from the latest backup time. A value of <code>true</code> restores from the latest backup time. </p> <p>Default: <code>false</code> </p> <p>Constraints: Cannot be specified if the <code>restore time</code> parameter is provided.</p>
+    #[serde(rename = "useLatestRestorableTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub use_latest_restorable_time: Option<bool>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateRelationalDatabaseFromSnapshotResult {
+    /// <p>An object describing the result of your create relational database from snapshot request.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateRelationalDatabaseRequest {
+    /// <p>The Availability Zone in which to create your new database. Use the <code>us-east-2a</code> case-sensitive format.</p> <p>You can get a list of Availability Zones by using the <code>get regions</code> operation. Be sure to add the <code>include relational database Availability Zones</code> parameter to your request.</p>
+    #[serde(rename = "availabilityZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub availability_zone: Option<String>,
+    /// <p><p>The name of the master database created when the Lightsail database resource is created.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 1 to 64 alphanumeric characters.</p> </li> <li> <p>Cannot be a word reserved by the specified database engine</p> </li> </ul></p>
+    #[serde(rename = "masterDatabaseName")]
+    pub master_database_name: String,
+    /// <p>The password for the master user of your new database. The password can include any printable ASCII character except "/", """, or "@".</p> <p>Constraints: Must contain 8 to 41 characters.</p>
+    #[serde(rename = "masterUserPassword")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_user_password: Option<String>,
+    /// <p><p>The master user name for your new database.</p> <p>Constraints:</p> <ul> <li> <p>Master user name is required.</p> </li> <li> <p>Must contain from 1 to 16 alphanumeric characters.</p> </li> <li> <p>The first character must be a letter.</p> </li> <li> <p>Cannot be a reserved word for the database engine you choose.</p> <p>For more information about reserved words in MySQL 5.6 or 5.7, see the Keywords and Reserved Words articles for <a href="https://dev.mysql.com/doc/refman/5.6/en/keywords.html">MySQL 5.6</a> or <a href="https://dev.mysql.com/doc/refman/5.7/en/keywords.html">MySQL 5.7</a> respectively.</p> </li> </ul></p>
+    #[serde(rename = "masterUsername")]
+    pub master_username: String,
+    /// <p><p>The daily time range during which automated backups are created for your new database if automated backups are enabled.</p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region. For more information about the preferred backup window time blocks for each region, see the <a href="https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/USER_WorkingWithAutomatedBackups.html#USER_WorkingWithAutomatedBackups.BackupWindow">Working With Backups</a> guide in the Amazon Relational Database Service (Amazon RDS) documentation.</p> <p>Constraints:</p> <ul> <li> <p>Must be in the <code>hh24:mi-hh24:mi</code> format.</p> <p>Example: <code>16:00-16:30</code> </p> </li> <li> <p>Specified in Universal Coordinated Time (UTC).</p> </li> <li> <p>Must not conflict with the preferred maintenance window.</p> </li> <li> <p>Must be at least 30 minutes.</p> </li> </ul></p>
+    #[serde(rename = "preferredBackupWindow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preferred_backup_window: Option<String>,
+    /// <p><p>The weekly time range during which system maintenance can occur on your new database.</p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region, occurring on a random day of the week.</p> <p>Constraints:</p> <ul> <li> <p>Must be in the <code>ddd:hh24:mi-ddd:hh24:mi</code> format.</p> </li> <li> <p>Valid days: Mon, Tue, Wed, Thu, Fri, Sat, Sun.</p> </li> <li> <p>Must be at least 30 minutes.</p> </li> <li> <p>Specified in Universal Coordinated Time (UTC).</p> </li> <li> <p>Example: <code>Tue:17:00-Tue:17:30</code> </p> </li> </ul></p>
+    #[serde(rename = "preferredMaintenanceWindow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preferred_maintenance_window: Option<String>,
+    /// <p>Specifies the accessibility options for your new database. A value of <code>true</code> specifies a database that is available to resources outside of your Lightsail account. A value of <code>false</code> specifies a database that is available only to your Lightsail resources in the same region as your database.</p>
+    #[serde(rename = "publiclyAccessible")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub publicly_accessible: Option<bool>,
+    /// <p>The blueprint ID for your new database. A blueprint describes the major engine version of a database.</p> <p>You can get a list of database blueprints IDs by using the <code>get relational database blueprints</code> operation.</p>
+    #[serde(rename = "relationalDatabaseBlueprintId")]
+    pub relational_database_blueprint_id: String,
+    /// <p>The bundle ID for your new database. A bundle describes the performance specifications for your database.</p> <p>You can get a list of database bundle IDs by using the <code>get relational database bundles</code> operation.</p>
+    #[serde(rename = "relationalDatabaseBundleId")]
+    pub relational_database_bundle_id: String,
+    /// <p><p>The name to use for your new database.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 2 to 255 alphanumeric characters, or hyphens.</p> </li> <li> <p>The first and last character must be a letter or number.</p> </li> </ul></p>
+    #[serde(rename = "relationalDatabaseName")]
+    pub relational_database_name: String,
+    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>To tag a resource after it has been created, see the <code>tag resource</code> operation.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateRelationalDatabaseResult {
+    /// <p>An object describing the result of your create relational database request.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct CreateRelationalDatabaseSnapshotRequest {
+    /// <p>The name of the database on which to base your new snapshot.</p>
+    #[serde(rename = "relationalDatabaseName")]
+    pub relational_database_name: String,
+    /// <p><p>The name for your new database snapshot.</p> <p>Constraints:</p> <ul> <li> <p>Must contain from 2 to 255 alphanumeric characters, or hyphens.</p> </li> <li> <p>The first and last character must be a letter or number.</p> </li> </ul></p>
+    #[serde(rename = "relationalDatabaseSnapshotName")]
+    pub relational_database_snapshot_name: String,
+    /// <p>The tag keys and optional values to add to the resource during create.</p> <p>To tag a resource after it has been created, see the <code>tag resource</code> operation.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct CreateRelationalDatabaseSnapshotResult {
+    /// <p>An object describing the result of your create relational database snapshot request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -675,7 +937,7 @@ pub struct DeleteLoadBalancerTlsCertificateRequest {
     /// <p>The SSL/TLS certificate name.</p>
     #[serde(rename = "certificateName")]
     pub certificate_name: String,
-    /// <p>When <code>true</code>, forces the deletion of an SSL/TLS certificate.</p> <p>There can be two certificates associated with a Lightsail load balancer: the primary and the backup. The force parameter is required when the primary SSL/TLS certificate is in use by an instance attached to the load balancer.</p>
+    /// <p>When <code>true</code>, forces the deletion of an SSL/TLS certificate.</p> <p>There can be two certificates associated with a Lightsail load balancer: the primary and the backup. The <code>force</code> parameter is required when the primary SSL/TLS certificate is in use by an instance attached to the load balancer.</p>
     #[serde(rename = "force")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub force: Option<bool>,
@@ -691,6 +953,60 @@ pub struct DeleteLoadBalancerTlsCertificateResult {
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteRelationalDatabaseRequest {
+    /// <p><p>The name of the database snapshot created if <code>skip final snapshot</code> is <code>false</code>, which is the default value for that parameter.</p> <note> <p>Specifying this parameter and also specifying the <code>skip final snapshot</code> parameter to <code>true</code> results in an error.</p> </note> <p>Constraints:</p> <ul> <li> <p>Must contain from 2 to 255 alphanumeric characters, or hyphens.</p> </li> <li> <p>The first and last character must be a letter or number.</p> </li> </ul></p>
+    #[serde(rename = "finalRelationalDatabaseSnapshotName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub final_relational_database_snapshot_name: Option<String>,
+    /// <p>The name of the database that you are deleting.</p>
+    #[serde(rename = "relationalDatabaseName")]
+    pub relational_database_name: String,
+    /// <p>Determines whether a final database snapshot is created before your database is deleted. If <code>true</code> is specified, no database snapshot is created. If <code>false</code> is specified, a database snapshot is created before your database is deleted.</p> <p>You must specify the <code>final relational database snapshot name</code> parameter if the <code>skip final snapshot</code> parameter is <code>false</code>.</p> <p>Default: <code>false</code> </p>
+    #[serde(rename = "skipFinalSnapshot")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub skip_final_snapshot: Option<bool>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteRelationalDatabaseResult {
+    /// <p>An object describing the result of your delete relational database request.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct DeleteRelationalDatabaseSnapshotRequest {
+    /// <p>The name of the database snapshot that you are deleting.</p>
+    #[serde(rename = "relationalDatabaseSnapshotName")]
+    pub relational_database_snapshot_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DeleteRelationalDatabaseSnapshotResult {
+    /// <p>An object describing the result of your delete relational database snapshot request.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+/// <p>Describes the destination of a record.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DestinationInfo {
+    /// <p>The ID of the resource created at the destination.</p>
+    #[serde(rename = "id")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<String>,
+    /// <p>The destination service of the record.</p>
+    #[serde(rename = "service")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub service: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -800,6 +1116,32 @@ pub struct Disk {
     #[serde(rename = "supportCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub support_code: Option<String>,
+    /// <p>The tag keys and optional values for the resource. For more information about tags in Lightsail, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags">Lightsail Dev Guide</a>.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+/// <p>Describes a disk.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DiskInfo {
+    /// <p>A Boolean value indicating whether this disk is a system disk (has an operating system loaded on it).</p>
+    #[serde(rename = "isSystemDisk")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_system_disk: Option<bool>,
+    /// <p>The disk name.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The disk path.</p>
+    #[serde(rename = "path")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub path: Option<String>,
+    /// <p>The size of the disk in GB (e.g., <code>32</code>).</p>
+    #[serde(rename = "sizeInGb")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub size_in_gb: Option<i64>,
 }
 
 /// <p>Describes a block storage disk mapping.</p>
@@ -827,14 +1169,22 @@ pub struct DiskSnapshot {
     #[serde(rename = "createdAt")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub created_at: Option<f64>,
-    /// <p>The Amazon Resource Name (ARN) of the source disk from which you are creating the disk snapshot.</p>
+    /// <p>The Amazon Resource Name (ARN) of the source disk from which the disk snapshot was created.</p>
     #[serde(rename = "fromDiskArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub from_disk_arn: Option<String>,
-    /// <p>The unique name of the source disk from which you are creating the disk snapshot.</p>
+    /// <p>The unique name of the source disk from which the disk snapshot was created.</p>
     #[serde(rename = "fromDiskName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub from_disk_name: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the source instance from which the disk (system volume) snapshot was created.</p>
+    #[serde(rename = "fromInstanceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub from_instance_arn: Option<String>,
+    /// <p>The unique name of the source instance from which the disk (system volume) snapshot was created.</p>
+    #[serde(rename = "fromInstanceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub from_instance_name: Option<String>,
     /// <p>The AWS Region and Availability Zone where the disk snapshot was created.</p>
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -863,6 +1213,20 @@ pub struct DiskSnapshot {
     #[serde(rename = "supportCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub support_code: Option<String>,
+    /// <p>The tag keys and optional values for the resource. For more information about tags in Lightsail, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags">Lightsail Dev Guide</a>.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+/// <p>Describes a disk snapshot.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct DiskSnapshotInfo {
+    /// <p>The size of the disk in GB (e.g., <code>32</code>).</p>
+    #[serde(rename = "sizeInGb")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub size_in_gb: Option<i64>,
 }
 
 /// <p>Describes a domain where you are storing recordsets in Lightsail.</p>
@@ -897,6 +1261,10 @@ pub struct Domain {
     #[serde(rename = "supportCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub support_code: Option<String>,
+    /// <p>The tag keys and optional values for the resource. For more information about tags in Lightsail, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags">Lightsail Dev Guide</a>.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 /// <p>Describes a domain recordset entry.</p>
@@ -938,6 +1306,98 @@ pub struct DownloadDefaultKeyPairResult {
     #[serde(rename = "publicKeyBase64")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub public_key_base_64: Option<String>,
+}
+
+/// <p>Describes an export snapshot record.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ExportSnapshotRecord {
+    /// <p>The Amazon Resource Name (ARN) of the export snapshot record.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The date when the export snapshot record was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>A list of objects describing the destination of the export snapshot record.</p>
+    #[serde(rename = "destinationInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub destination_info: Option<DestinationInfo>,
+    /// <p>The AWS Region and Availability Zone where the export snapshot record is located.</p>
+    #[serde(rename = "location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location: Option<ResourceLocation>,
+    /// <p>The export snapshot record name.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The Lightsail resource type (e.g., <code>ExportSnapshotRecord</code>).</p>
+    #[serde(rename = "resourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+    /// <p>A list of objects describing the source of the export snapshot record.</p>
+    #[serde(rename = "sourceInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub source_info: Option<ExportSnapshotRecordSourceInfo>,
+    /// <p>The state of the export snapshot record.</p>
+    #[serde(rename = "state")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+}
+
+/// <p>Describes the source of an export snapshot record.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ExportSnapshotRecordSourceInfo {
+    /// <p>The Amazon Resource Name (ARN) of the source instance or disk snapshot.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The date when the source instance or disk snapshot was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>A list of objects describing a disk snapshot.</p>
+    #[serde(rename = "diskSnapshotInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disk_snapshot_info: Option<DiskSnapshotInfo>,
+    /// <p>The Amazon Resource Name (ARN) of the snapshot's source instance or disk.</p>
+    #[serde(rename = "fromResourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub from_resource_arn: Option<String>,
+    /// <p>The name of the snapshot's source instance or disk.</p>
+    #[serde(rename = "fromResourceName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub from_resource_name: Option<String>,
+    /// <p>A list of objects describing an instance snapshot.</p>
+    #[serde(rename = "instanceSnapshotInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub instance_snapshot_info: Option<InstanceSnapshotInfo>,
+    /// <p>The name of the source instance or disk snapshot.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The Lightsail resource type (e.g., <code>InstanceSnapshot</code> or <code>DiskSnapshot</code>).</p>
+    #[serde(rename = "resourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ExportSnapshotRequest {
+    /// <p>The name of the instance or disk snapshot to be exported to Amazon EC2.</p>
+    #[serde(rename = "sourceSnapshotName")]
+    pub source_snapshot_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ExportSnapshotResult {
+    /// <p>A list of objects describing the API operation.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1006,6 +1466,27 @@ pub struct GetBundlesResult {
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bundles: Option<Vec<Bundle>>,
     /// <p>A token used for advancing to the next page of results from your get active names request.</p>
+    #[serde(rename = "nextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetCloudFormationStackRecordsRequest {
+    /// <p>A token used for advancing to a specific page of results for your <code>get cloud formation stack records</code> request.</p>
+    #[serde(rename = "pageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetCloudFormationStackRecordsResult {
+    /// <p>A list of objects describing the CloudFormation stack records.</p>
+    #[serde(rename = "cloudFormationStackRecords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cloud_formation_stack_records: Option<Vec<CloudFormationStackRecord>>,
+    /// <p>A token used for advancing to the next page of results of your get relational database bundles request.</p>
     #[serde(rename = "nextPageToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_page_token: Option<String>,
@@ -1123,6 +1604,27 @@ pub struct GetDomainsResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetExportSnapshotRecordsRequest {
+    /// <p>A token used for advancing to a specific page of results for your <code>get export snapshot records</code> request.</p>
+    #[serde(rename = "pageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetExportSnapshotRecordsResult {
+    /// <p>A list of objects describing the export snapshot records.</p>
+    #[serde(rename = "exportSnapshotRecords")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub export_snapshot_records: Option<Vec<ExportSnapshotRecord>>,
+    /// <p>A token used for advancing to the next page of results of your get relational database bundles request.</p>
+    #[serde(rename = "nextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct GetInstanceAccessDetailsRequest {
     /// <p>The name of the instance to access.</p>
     #[serde(rename = "instanceName")]
@@ -1153,7 +1655,7 @@ pub struct GetInstanceMetricDataRequest {
     /// <p>The metric name to get data about. </p>
     #[serde(rename = "metricName")]
     pub metric_name: String,
-    /// <p>The time period for which you are requesting data.</p>
+    /// <p>The granularity, in seconds, of the returned data points.</p>
     #[serde(rename = "period")]
     pub period: i64,
     /// <p>The start time of the time period.</p>
@@ -1334,7 +1836,7 @@ pub struct GetLoadBalancerMetricDataRequest {
     /// <p><p>The metric about which you want to return information. Valid values are listed below, along with the most useful <code>statistics</code> to include in your request.</p> <ul> <li> <p> <b> <code>ClientTLSNegotiationErrorCount</code> </b> - The number of TLS connections initiated by the client that did not establish a session with the load balancer. Possible causes include a mismatch of ciphers or protocols.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> </li> <li> <p> <b> <code>HealthyHostCount</code> </b> - The number of target instances that are considered healthy.</p> <p> <code>Statistics</code>: The most useful statistic are <code>Average</code>, <code>Minimum</code>, and <code>Maximum</code>.</p> </li> <li> <p> <b> <code>UnhealthyHostCount</code> </b> - The number of target instances that are considered unhealthy.</p> <p> <code>Statistics</code>: The most useful statistic are <code>Average</code>, <code>Minimum</code>, and <code>Maximum</code>.</p> </li> <li> <p> <b> <code>HTTPCode<em>LB</em>4XX<em>Count</code> </b> - The number of HTTP 4XX client error codes that originate from the load balancer. Client errors are generated when requests are malformed or incomplete. These requests have not been received by the target instance. This count does not include any response codes generated by the target instances.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> </li> <li> <p> <b> <code>HTTPCode</em>LB<em>5XX</em>Count</code> </b> - The number of HTTP 5XX server error codes that originate from the load balancer. This count does not include any response codes generated by the target instances.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> </li> <li> <p> <b> <code>HTTPCode<em>Instance</em>2XX<em>Count</code> </b> - The number of HTTP response codes generated by the target instances. This does not include any response codes generated by the load balancer.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> </li> <li> <p> <b> <code>HTTPCode</em>Instance<em>3XX</em>Count</code> </b> - The number of HTTP response codes generated by the target instances. This does not include any response codes generated by the load balancer. </p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> </li> <li> <p> <b> <code>HTTPCode<em>Instance</em>4XX<em>Count</code> </b> - The number of HTTP response codes generated by the target instances. This does not include any response codes generated by the load balancer.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> </li> <li> <p> <b> <code>HTTPCode</em>Instance<em>5XX</em>Count</code> </b> - The number of HTTP response codes generated by the target instances. This does not include any response codes generated by the load balancer.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> </li> <li> <p> <b> <code>InstanceResponseTime</code> </b> - The time elapsed, in seconds, after the request leaves the load balancer until a response from the target instance is received.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Average</code>.</p> </li> <li> <p> <b> <code>RejectedConnectionCount</code> </b> - The number of connections that were rejected because the load balancer had reached its maximum number of connections.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>.</p> </li> <li> <p> <b> <code>RequestCount</code> </b> - The number of requests processed over IPv4. This count includes only the requests with a response generated by a target instance of the load balancer.</p> <p> <code>Statistics</code>: The most useful statistic is <code>Sum</code>. Note that <code>Minimum</code>, <code>Maximum</code>, and <code>Average</code> all return <code>1</code>.</p> </li> </ul></p>
     #[serde(rename = "metricName")]
     pub metric_name: String,
-    /// <p>The time period duration for your health data request.</p>
+    /// <p>The granularity, in seconds, of the returned data points.</p>
     #[serde(rename = "period")]
     pub period: i64,
     /// <p>The start time of the period.</p>
@@ -1481,6 +1983,10 @@ pub struct GetRegionsRequest {
     #[serde(rename = "includeAvailabilityZones")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub include_availability_zones: Option<bool>,
+    /// <p>&gt;A Boolean value indicating whether to also include Availability Zones for databases in your get regions request. Availability Zones are indicated with a letter (e.g., <code>us-east-2a</code>).</p>
+    #[serde(rename = "includeRelationalDatabaseAvailabilityZones")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub include_relational_database_availability_zones: Option<bool>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -1490,6 +1996,295 @@ pub struct GetRegionsResult {
     #[serde(rename = "regions")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub regions: Option<Vec<Region>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetRelationalDatabaseBlueprintsRequest {
+    /// <p>A token used for advancing to a specific page of results for your <code>get relational database blueprints</code> request.</p>
+    #[serde(rename = "pageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetRelationalDatabaseBlueprintsResult {
+    /// <p>An object describing the result of your get relational database blueprints request.</p>
+    #[serde(rename = "blueprints")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub blueprints: Option<Vec<RelationalDatabaseBlueprint>>,
+    /// <p>A token used for advancing to the next page of results of your get relational database blueprints request.</p>
+    #[serde(rename = "nextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetRelationalDatabaseBundlesRequest {
+    /// <p>A token used for advancing to a specific page of results for your <code>get relational database bundles</code> request.</p>
+    #[serde(rename = "pageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetRelationalDatabaseBundlesResult {
+    /// <p>An object describing the result of your get relational database bundles request.</p>
+    #[serde(rename = "bundles")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bundles: Option<Vec<RelationalDatabaseBundle>>,
+    /// <p>A token used for advancing to the next page of results of your get relational database bundles request.</p>
+    #[serde(rename = "nextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetRelationalDatabaseEventsRequest {
+    /// <p>The number of minutes in the past from which to retrieve events. For example, to get all events from the past 2 hours, enter 120.</p> <p>Default: <code>60</code> </p> <p>The minimum is 1 and the maximum is 14 days (20160 minutes).</p>
+    #[serde(rename = "durationInMinutes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub duration_in_minutes: Option<i64>,
+    /// <p>A token used for advancing to a specific page of results from for get relational database events request.</p>
+    #[serde(rename = "pageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+    /// <p>The name of the database from which to get events.</p>
+    #[serde(rename = "relationalDatabaseName")]
+    pub relational_database_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetRelationalDatabaseEventsResult {
+    /// <p>A token used for advancing to the next page of results from your get relational database events request.</p>
+    #[serde(rename = "nextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+    /// <p>An object describing the result of your get relational database events request.</p>
+    #[serde(rename = "relationalDatabaseEvents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub relational_database_events: Option<Vec<RelationalDatabaseEvent>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetRelationalDatabaseLogEventsRequest {
+    /// <p><p>The end of the time interval from which to get log events.</p> <p>Constraints:</p> <ul> <li> <p>Specified in Universal Coordinated Time (UTC).</p> </li> <li> <p>Specified in the Unix time format.</p> <p>For example, if you wish to use an end time of October 1, 2018, at 8 PM UTC, then you input <code>1538424000</code> as the end time.</p> </li> </ul></p>
+    #[serde(rename = "endTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub end_time: Option<f64>,
+    /// <p>The name of the log stream.</p> <p>Use the <code>get relational database log streams</code> operation to get a list of available log streams.</p>
+    #[serde(rename = "logStreamName")]
+    pub log_stream_name: String,
+    /// <p>A token used for advancing to a specific page of results for your <code>get relational database log events</code> request.</p>
+    #[serde(rename = "pageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+    /// <p>The name of your database for which to get log events.</p>
+    #[serde(rename = "relationalDatabaseName")]
+    pub relational_database_name: String,
+    /// <p>Parameter to specify if the log should start from head or tail. If <code>true</code> is specified, the log event starts from the head of the log. If <code>false</code> is specified, the log event starts from the tail of the log.</p> <p>Default: <code>false</code> </p>
+    #[serde(rename = "startFromHead")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_from_head: Option<bool>,
+    /// <p><p>The start of the time interval from which to get log events.</p> <p>Constraints:</p> <ul> <li> <p>Specified in Universal Coordinated Time (UTC).</p> </li> <li> <p>Specified in the Unix time format.</p> <p>For example, if you wish to use a start time of October 1, 2018, at 8 PM UTC, then you input <code>1538424000</code> as the start time.</p> </li> </ul></p>
+    #[serde(rename = "startTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub start_time: Option<f64>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetRelationalDatabaseLogEventsResult {
+    /// <p>A token used for advancing to the previous page of results from your get relational database log events request.</p>
+    #[serde(rename = "nextBackwardToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_backward_token: Option<String>,
+    /// <p>A token used for advancing to the next page of results from your get relational database log events request.</p>
+    #[serde(rename = "nextForwardToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_forward_token: Option<String>,
+    /// <p>An object describing the result of your get relational database log events request.</p>
+    #[serde(rename = "resourceLogEvents")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_log_events: Option<Vec<LogEvent>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetRelationalDatabaseLogStreamsRequest {
+    /// <p>The name of your database for which to get log streams.</p>
+    #[serde(rename = "relationalDatabaseName")]
+    pub relational_database_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetRelationalDatabaseLogStreamsResult {
+    /// <p>An object describing the result of your get relational database log streams request.</p>
+    #[serde(rename = "logStreams")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub log_streams: Option<Vec<String>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetRelationalDatabaseMasterUserPasswordRequest {
+    /// <p>The password version to return.</p> <p>Specifying <code>CURRENT</code> or <code>PREVIOUS</code> returns the current or previous passwords respectively. Specifying <code>PENDING</code> returns the newest version of the password that will rotate to <code>CURRENT</code>. After the <code>PENDING</code> password rotates to <code>CURRENT</code>, the <code>PENDING</code> password is no longer available.</p> <p>Default: <code>CURRENT</code> </p>
+    #[serde(rename = "passwordVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub password_version: Option<String>,
+    /// <p>The name of your database for which to get the master user password.</p>
+    #[serde(rename = "relationalDatabaseName")]
+    pub relational_database_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetRelationalDatabaseMasterUserPasswordResult {
+    /// <p>The timestamp when the specified version of the master user password was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>The master user password for the <code>password version</code> specified.</p>
+    #[serde(rename = "masterUserPassword")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_user_password: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetRelationalDatabaseMetricDataRequest {
+    /// <p><p>The end of the time interval from which to get metric data.</p> <p>Constraints:</p> <ul> <li> <p>Specified in Universal Coordinated Time (UTC).</p> </li> <li> <p>Specified in the Unix time format.</p> <p>For example, if you wish to use an end time of October 1, 2018, at 8 PM UTC, then you input <code>1538424000</code> as the end time.</p> </li> </ul></p>
+    #[serde(rename = "endTime")]
+    pub end_time: f64,
+    /// <p>The name of the metric data to return.</p>
+    #[serde(rename = "metricName")]
+    pub metric_name: String,
+    /// <p>The granularity, in seconds, of the returned data points.</p>
+    #[serde(rename = "period")]
+    pub period: i64,
+    /// <p>The name of your database from which to get metric data.</p>
+    #[serde(rename = "relationalDatabaseName")]
+    pub relational_database_name: String,
+    /// <p><p>The start of the time interval from which to get metric data.</p> <p>Constraints:</p> <ul> <li> <p>Specified in Universal Coordinated Time (UTC).</p> </li> <li> <p>Specified in the Unix time format.</p> <p>For example, if you wish to use a start time of October 1, 2018, at 8 PM UTC, then you input <code>1538424000</code> as the start time.</p> </li> </ul></p>
+    #[serde(rename = "startTime")]
+    pub start_time: f64,
+    /// <p>The array of statistics for your metric data request.</p>
+    #[serde(rename = "statistics")]
+    pub statistics: Vec<String>,
+    /// <p>The unit for the metric data request.</p>
+    #[serde(rename = "unit")]
+    pub unit: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetRelationalDatabaseMetricDataResult {
+    /// <p>An object describing the result of your get relational database metric data request.</p>
+    #[serde(rename = "metricData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metric_data: Option<Vec<MetricDatapoint>>,
+    /// <p>The name of the metric.</p>
+    #[serde(rename = "metricName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub metric_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetRelationalDatabaseParametersRequest {
+    /// <p>A token used for advancing to a specific page of results for your <code>get relational database parameters</code> request.</p>
+    #[serde(rename = "pageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+    /// <p>The name of your database for which to get parameters.</p>
+    #[serde(rename = "relationalDatabaseName")]
+    pub relational_database_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetRelationalDatabaseParametersResult {
+    /// <p>A token used for advancing to the next page of results from your get static IPs request.</p>
+    #[serde(rename = "nextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+    /// <p>An object describing the result of your get relational database parameters request.</p>
+    #[serde(rename = "parameters")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameters: Option<Vec<RelationalDatabaseParameter>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetRelationalDatabaseRequest {
+    /// <p>The name of the database that you are looking up.</p>
+    #[serde(rename = "relationalDatabaseName")]
+    pub relational_database_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetRelationalDatabaseResult {
+    /// <p>An object describing the specified database.</p>
+    #[serde(rename = "relationalDatabase")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub relational_database: Option<RelationalDatabase>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetRelationalDatabaseSnapshotRequest {
+    /// <p>The name of the database snapshot for which to get information.</p>
+    #[serde(rename = "relationalDatabaseSnapshotName")]
+    pub relational_database_snapshot_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetRelationalDatabaseSnapshotResult {
+    /// <p>An object describing the specified database snapshot.</p>
+    #[serde(rename = "relationalDatabaseSnapshot")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub relational_database_snapshot: Option<RelationalDatabaseSnapshot>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetRelationalDatabaseSnapshotsRequest {
+    /// <p>A token used for advancing to a specific page of results for your <code>get relational database snapshots</code> request.</p>
+    #[serde(rename = "pageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetRelationalDatabaseSnapshotsResult {
+    /// <p>A token used for advancing to the next page of results from your get relational database snapshots request.</p>
+    #[serde(rename = "nextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+    /// <p>An object describing the result of your get relational database snapshots request.</p>
+    #[serde(rename = "relationalDatabaseSnapshots")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub relational_database_snapshots: Option<Vec<RelationalDatabaseSnapshot>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct GetRelationalDatabasesRequest {
+    /// <p>A token used for advancing to a specific page of results for your <code>get relational database</code> request.</p>
+    #[serde(rename = "pageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub page_token: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct GetRelationalDatabasesResult {
+    /// <p>A token used for advancing to the next page of results from your get relational databases request.</p>
+    #[serde(rename = "nextPageToken")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub next_page_token: Option<String>,
+    /// <p>An object describing the result of your get relational databases request.</p>
+    #[serde(rename = "relationalDatabases")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub relational_databases: Option<Vec<RelationalDatabase>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1584,7 +2379,7 @@ pub struct Instance {
     #[serde(rename = "isStaticIp")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub is_static_ip: Option<bool>,
-    /// <p>The region name and availability zone where the instance is located.</p>
+    /// <p>The region name and Availability Zone where the instance is located.</p>
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<ResourceLocation>,
@@ -1620,6 +2415,10 @@ pub struct Instance {
     #[serde(rename = "supportCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub support_code: Option<String>,
+    /// <p>The tag keys and optional values for the resource. For more information about tags in Lightsail, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags">Lightsail Dev Guide</a>.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>The user name for connecting to the instance (e.g., <code>ec2-user</code>).</p>
     #[serde(rename = "username")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -1666,6 +2465,27 @@ pub struct InstanceAccessDetails {
     #[serde(rename = "username")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub username: Option<String>,
+}
+
+/// <p>Describes the Amazon Elastic Compute Cloud instance and related resources to be created using the <code>create cloud formation stack</code> operation.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct InstanceEntry {
+    /// <p>The Availability Zone for the new Amazon EC2 instance.</p>
+    #[serde(rename = "availabilityZone")]
+    pub availability_zone: String,
+    /// <p>The instance type (e.g., <code>t2.micro</code>) to use for the new Amazon EC2 instance.</p>
+    #[serde(rename = "instanceType")]
+    pub instance_type: String,
+    /// <p><p>The port configuration to use for the new Amazon EC2 instance.</p> <p>The following configuration options are available:</p> <ul> <li> <p>DEFAULT — Use the default firewall settings from the image.</p> </li> <li> <p>INSTANCE — Use the firewall settings from the source Lightsail instance.</p> </li> <li> <p>NONE — Default to Amazon EC2.</p> </li> <li> <p>CLOSED — All ports closed.</p> </li> </ul></p>
+    #[serde(rename = "portInfoSource")]
+    pub port_info_source: String,
+    /// <p>The name of the export snapshot record, which contains the exported Lightsail instance snapshot that will be used as the source of the new Amazon EC2 instance.</p> <p>Use the <code>get export snapshot records</code> operation to get a list of export snapshot records that you can use to create a CloudFormation stack.</p>
+    #[serde(rename = "sourceName")]
+    pub source_name: String,
+    /// <p><p>A launch script you can create that configures a server with additional user data. For example, you might want to run <code>apt-get -y update</code>.</p> <note> <p>Depending on the machine image you choose, the command to get software on your instance varies. Amazon Linux and CentOS use <code>yum</code>, Debian and Ubuntu use <code>apt-get</code>, and FreeBSD uses <code>pkg</code>.</p> </note></p>
+    #[serde(rename = "userData")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub user_data: Option<String>,
 }
 
 /// <p>Describes the hardware for the instance.</p>
@@ -1806,7 +2626,7 @@ pub struct InstanceSnapshot {
     #[serde(rename = "fromInstanceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub from_instance_name: Option<String>,
-    /// <p>The region name and availability zone where you created the snapshot.</p>
+    /// <p>The region name and Availability Zone where you created the snapshot.</p>
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<ResourceLocation>,
@@ -1834,6 +2654,28 @@ pub struct InstanceSnapshot {
     #[serde(rename = "supportCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub support_code: Option<String>,
+    /// <p>The tag keys and optional values for the resource. For more information about tags in Lightsail, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags">Lightsail Dev Guide</a>.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+/// <p>Describes an instance snapshot.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct InstanceSnapshotInfo {
+    /// <p>The blueprint ID from which the source instance (e.g., <code>os_debian_8_3</code>).</p>
+    #[serde(rename = "fromBlueprintId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub from_blueprint_id: Option<String>,
+    /// <p>The bundle ID from which the source instance was created (e.g., <code>micro_1_0</code>).</p>
+    #[serde(rename = "fromBundleId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub from_bundle_id: Option<String>,
+    /// <p>A list of objects describing the disks that were attached to the source instance.</p>
+    #[serde(rename = "fromDiskInfo")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub from_disk_info: Option<Vec<DiskInfo>>,
 }
 
 /// <p>Describes the virtual private server (or <i>instance</i>) status.</p>
@@ -1894,6 +2736,10 @@ pub struct KeyPair {
     #[serde(rename = "supportCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub support_code: Option<String>,
+    /// <p>The tag keys and optional values for the resource. For more information about tags in Lightsail, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags">Lightsail Dev Guide</a>.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 /// <p>Describes the Lightsail load balancer.</p>
@@ -1956,6 +2802,10 @@ pub struct LoadBalancer {
     #[serde(rename = "supportCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub support_code: Option<String>,
+    /// <p>The tag keys and optional values for the resource. For more information about tags in Lightsail, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags">Lightsail Dev Guide</a>.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
     /// <p>An array of LoadBalancerTlsCertificateSummary objects that provide additional information about the SSL/TLS certificates. For example, if <code>true</code>, the certificate is attached to the load balancer.</p>
     #[serde(rename = "tlsCertificateSummaries")]
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -2062,6 +2912,10 @@ pub struct LoadBalancerTlsCertificate {
     #[serde(rename = "supportCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub support_code: Option<String>,
+    /// <p>The tag keys and optional values for the resource. For more information about tags in Lightsail, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags">Lightsail Dev Guide</a>.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 /// <p>Contains information about the domain names on an SSL/TLS certificate that you will use to validate domain ownership.</p>
@@ -2130,6 +2984,20 @@ pub struct LoadBalancerTlsCertificateSummary {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+}
+
+/// <p>Describes a database log event.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct LogEvent {
+    /// <p>The timestamp when the database log event was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>The message of the database log event.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
 }
 
 /// <p>Describes the metric data point.</p>
@@ -2275,6 +3143,42 @@ pub struct PeerVpcResult {
     pub operation: Option<Operation>,
 }
 
+/// <p>Describes a pending database maintenance action.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PendingMaintenanceAction {
+    /// <p>The type of pending database maintenance action.</p>
+    #[serde(rename = "action")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub action: Option<String>,
+    /// <p>The effective date of the pending database maintenance action.</p>
+    #[serde(rename = "currentApplyDate")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub current_apply_date: Option<f64>,
+    /// <p>Additional detail about the pending database maintenance action.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+}
+
+/// <p>Describes a pending database value modification.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct PendingModifiedRelationalDatabaseValues {
+    /// <p>A Boolean value indicating whether automated backup retention is enabled.</p>
+    #[serde(rename = "backupRetentionEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_retention_enabled: Option<bool>,
+    /// <p>The database engine version.</p>
+    #[serde(rename = "engineVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine_version: Option<String>,
+    /// <p>The password for the master user of the database.</p>
+    #[serde(rename = "masterUserPassword")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_user_password: Option<String>,
+}
+
 /// <p>Describes information about the ports on your virtual private server (or <i>instance</i>).</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct PortInfo {
@@ -2327,6 +3231,22 @@ pub struct RebootInstanceResult {
     pub operations: Option<Vec<Operation>>,
 }
 
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct RebootRelationalDatabaseRequest {
+    /// <p>The name of your database to reboot.</p>
+    #[serde(rename = "relationalDatabaseName")]
+    pub relational_database_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RebootRelationalDatabaseResult {
+    /// <p>An object describing the result of your reboot relational database request.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
 /// <p>Describes the AWS Region.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
@@ -2351,6 +3271,345 @@ pub struct Region {
     #[serde(rename = "name")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub name: Option<String>,
+    /// <p>The Availability Zones for databases. Follows the format <code>us-east-2a</code> (case-sensitive).</p>
+    #[serde(rename = "relationalDatabaseAvailabilityZones")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub relational_database_availability_zones: Option<Vec<AvailabilityZone>>,
+}
+
+/// <p>Describes a database.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RelationalDatabase {
+    /// <p>The Amazon Resource Name (ARN) of the database.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>A Boolean value indicating whether automated backup retention is enabled for the database.</p>
+    #[serde(rename = "backupRetentionEnabled")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub backup_retention_enabled: Option<bool>,
+    /// <p>The timestamp when the database was created. Formatted in Unix time.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>The database software (for example, <code>MySQL</code>).</p>
+    #[serde(rename = "engine")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine: Option<String>,
+    /// <p>The database engine version (for example, <code>5.7.23</code>).</p>
+    #[serde(rename = "engineVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine_version: Option<String>,
+    /// <p>Describes the hardware of the database.</p>
+    #[serde(rename = "hardware")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub hardware: Option<RelationalDatabaseHardware>,
+    /// <p>The latest point in time to which the database can be restored. Formatted in Unix time.</p>
+    #[serde(rename = "latestRestorableTime")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub latest_restorable_time: Option<f64>,
+    /// <p>The Region name and Availability Zone where the database is located.</p>
+    #[serde(rename = "location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location: Option<ResourceLocation>,
+    /// <p>The name of the master database created when the Lightsail database resource is created.</p>
+    #[serde(rename = "masterDatabaseName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_database_name: Option<String>,
+    /// <p>The master endpoint for the database.</p>
+    #[serde(rename = "masterEndpoint")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_endpoint: Option<RelationalDatabaseEndpoint>,
+    /// <p>The master user name of the database.</p>
+    #[serde(rename = "masterUsername")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_username: Option<String>,
+    /// <p>The unique name of the database resource in Lightsail.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The status of parameter updates for the database.</p>
+    #[serde(rename = "parameterApplyStatus")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameter_apply_status: Option<String>,
+    /// <p>Describes the pending maintenance actions for the database.</p>
+    #[serde(rename = "pendingMaintenanceActions")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pending_maintenance_actions: Option<Vec<PendingMaintenanceAction>>,
+    /// <p>Describes pending database value modifications.</p>
+    #[serde(rename = "pendingModifiedValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub pending_modified_values: Option<PendingModifiedRelationalDatabaseValues>,
+    /// <p>The daily time range during which automated backups are created for the database (for example, <code>16:00-16:30</code>).</p>
+    #[serde(rename = "preferredBackupWindow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preferred_backup_window: Option<String>,
+    /// <p>The weekly time range during which system maintenance can occur on the database.</p> <p>In the format <code>ddd:hh24:mi-ddd:hh24:mi</code>. For example, <code>Tue:17:00-Tue:17:30</code>.</p>
+    #[serde(rename = "preferredMaintenanceWindow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preferred_maintenance_window: Option<String>,
+    /// <p>A Boolean value indicating whether the database is publicly accessible.</p>
+    #[serde(rename = "publiclyAccessible")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub publicly_accessible: Option<bool>,
+    /// <p>The blueprint ID for the database. A blueprint describes the major engine version of a database.</p>
+    #[serde(rename = "relationalDatabaseBlueprintId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub relational_database_blueprint_id: Option<String>,
+    /// <p>The bundle ID for the database. A bundle describes the performance specifications for your database.</p>
+    #[serde(rename = "relationalDatabaseBundleId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub relational_database_bundle_id: Option<String>,
+    /// <p>The Lightsail resource type for the database (for example, <code>RelationalDatabase</code>).</p>
+    #[serde(rename = "resourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+    /// <p>Describes the secondary Availability Zone of a high availability database.</p> <p>The secondary database is used for failover support of a high availability database.</p>
+    #[serde(rename = "secondaryAvailabilityZone")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub secondary_availability_zone: Option<String>,
+    /// <p>Describes the current state of the database.</p>
+    #[serde(rename = "state")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>The support code for the database. Include this code in your email to support when you have questions about a database in Lightsail. This code enables our support team to look up your Lightsail information more easily.</p>
+    #[serde(rename = "supportCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub support_code: Option<String>,
+    /// <p>The tag keys and optional values for the resource. For more information about tags in Lightsail, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags">Lightsail Dev Guide</a>.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
+}
+
+/// <p>Describes a database image, or blueprint. A blueprint describes the major engine version of a database.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RelationalDatabaseBlueprint {
+    /// <p>The ID for the database blueprint.</p>
+    #[serde(rename = "blueprintId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub blueprint_id: Option<String>,
+    /// <p>The database software of the database blueprint (for example, <code>MySQL</code>).</p>
+    #[serde(rename = "engine")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine: Option<String>,
+    /// <p>The description of the database engine for the database blueprint.</p>
+    #[serde(rename = "engineDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine_description: Option<String>,
+    /// <p>The database engine version for the database blueprint (for example, <code>5.7.23</code>).</p>
+    #[serde(rename = "engineVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine_version: Option<String>,
+    /// <p>The description of the database engine version for the database blueprint.</p>
+    #[serde(rename = "engineVersionDescription")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine_version_description: Option<String>,
+    /// <p>A Boolean value indicating whether the engine version is the default for the database blueprint.</p>
+    #[serde(rename = "isEngineDefault")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_engine_default: Option<bool>,
+}
+
+/// <p>Describes a database bundle. A bundle describes the performance specifications of the database.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RelationalDatabaseBundle {
+    /// <p>The ID for the database bundle.</p>
+    #[serde(rename = "bundleId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bundle_id: Option<String>,
+    /// <p>The number of virtual CPUs (vCPUs) for the database bundle.</p>
+    #[serde(rename = "cpuCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cpu_count: Option<i64>,
+    /// <p>The size of the disk for the database bundle.</p>
+    #[serde(rename = "diskSizeInGb")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disk_size_in_gb: Option<i64>,
+    /// <p>A Boolean value indicating whether the database bundle is active.</p>
+    #[serde(rename = "isActive")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_active: Option<bool>,
+    /// <p>A Boolean value indicating whether the database bundle is encrypted.</p>
+    #[serde(rename = "isEncrypted")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_encrypted: Option<bool>,
+    /// <p>The name for the database bundle.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The cost of the database bundle in US currency.</p>
+    #[serde(rename = "price")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub price: Option<f32>,
+    /// <p>The amount of RAM in GB (for example, <code>2.0</code>) for the database bundle.</p>
+    #[serde(rename = "ramSizeInGb")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ram_size_in_gb: Option<f32>,
+    /// <p>The data transfer rate per month in GB for the database bundle.</p>
+    #[serde(rename = "transferPerMonthInGb")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub transfer_per_month_in_gb: Option<i64>,
+}
+
+/// <p>Describes an endpoint for a database.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RelationalDatabaseEndpoint {
+    /// <p>Specifies the DNS address of the database.</p>
+    #[serde(rename = "address")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub address: Option<String>,
+    /// <p>Specifies the port that the database is listening on.</p>
+    #[serde(rename = "port")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub port: Option<i64>,
+}
+
+/// <p>Describes an event for a database.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RelationalDatabaseEvent {
+    /// <p>The timestamp when the database event was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>The category that the database event belongs to.</p>
+    #[serde(rename = "eventCategories")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub event_categories: Option<Vec<String>>,
+    /// <p>The message of the database event.</p>
+    #[serde(rename = "message")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub message: Option<String>,
+    /// <p>The database that the database event relates to.</p>
+    #[serde(rename = "resource")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource: Option<String>,
+}
+
+/// <p>Describes the hardware of a database.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RelationalDatabaseHardware {
+    /// <p>The number of vCPUs for the database.</p>
+    #[serde(rename = "cpuCount")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub cpu_count: Option<i64>,
+    /// <p>The size of the disk for the database.</p>
+    #[serde(rename = "diskSizeInGb")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disk_size_in_gb: Option<i64>,
+    /// <p>The amount of RAM in GB for the database.</p>
+    #[serde(rename = "ramSizeInGb")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub ram_size_in_gb: Option<f32>,
+}
+
+/// <p>Describes the parameters of a database.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct RelationalDatabaseParameter {
+    /// <p>Specifies the valid range of values for the parameter.</p>
+    #[serde(rename = "allowedValues")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub allowed_values: Option<String>,
+    /// <p>Indicates when parameter updates are applied.</p> <p>Can be <code>immediate</code> or <code>pending-reboot</code>.</p>
+    #[serde(rename = "applyMethod")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub apply_method: Option<String>,
+    /// <p>Specifies the engine-specific parameter type.</p>
+    #[serde(rename = "applyType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub apply_type: Option<String>,
+    /// <p>Specifies the valid data type for the parameter.</p>
+    #[serde(rename = "dataType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub data_type: Option<String>,
+    /// <p>Provides a description of the parameter.</p>
+    #[serde(rename = "description")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub description: Option<String>,
+    /// <p>A Boolean value indicating whether the parameter can be modified.</p>
+    #[serde(rename = "isModifiable")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub is_modifiable: Option<bool>,
+    /// <p>Specifies the name of the parameter.</p>
+    #[serde(rename = "parameterName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameter_name: Option<String>,
+    /// <p>Specifies the value of the parameter.</p>
+    #[serde(rename = "parameterValue")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub parameter_value: Option<String>,
+}
+
+/// <p>Describes a database snapshot.</p>
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct RelationalDatabaseSnapshot {
+    /// <p>The Amazon Resource Name (ARN) of the database snapshot.</p>
+    #[serde(rename = "arn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub arn: Option<String>,
+    /// <p>The timestamp when the database snapshot was created.</p>
+    #[serde(rename = "createdAt")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub created_at: Option<f64>,
+    /// <p>The software of the database snapshot (for example, <code>MySQL</code>)</p>
+    #[serde(rename = "engine")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine: Option<String>,
+    /// <p>The database engine version for the database snapshot (for example, <code>5.7.23</code>).</p>
+    #[serde(rename = "engineVersion")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine_version: Option<String>,
+    /// <p>The Amazon Resource Name (ARN) of the database from which the database snapshot was created.</p>
+    #[serde(rename = "fromRelationalDatabaseArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub from_relational_database_arn: Option<String>,
+    /// <p>The blueprint ID of the database from which the database snapshot was created. A blueprint describes the major engine version of a database.</p>
+    #[serde(rename = "fromRelationalDatabaseBlueprintId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub from_relational_database_blueprint_id: Option<String>,
+    /// <p>The bundle ID of the database from which the database snapshot was created.</p>
+    #[serde(rename = "fromRelationalDatabaseBundleId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub from_relational_database_bundle_id: Option<String>,
+    /// <p>The name of the source database from which the database snapshot was created.</p>
+    #[serde(rename = "fromRelationalDatabaseName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub from_relational_database_name: Option<String>,
+    /// <p>The Region name and Availability Zone where the database snapshot is located.</p>
+    #[serde(rename = "location")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub location: Option<ResourceLocation>,
+    /// <p>The name of the database snapshot.</p>
+    #[serde(rename = "name")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub name: Option<String>,
+    /// <p>The Lightsail resource type.</p>
+    #[serde(rename = "resourceType")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_type: Option<String>,
+    /// <p>The size of the disk in GB (for example, <code>32</code>) for the database snapshot.</p>
+    #[serde(rename = "sizeInGb")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub size_in_gb: Option<i64>,
+    /// <p>The state of the database snapshot.</p>
+    #[serde(rename = "state")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub state: Option<String>,
+    /// <p>The support code for the database snapshot. Include this code in your email to support when you have questions about a database snapshot in Lightsail. This code enables our support team to look up your Lightsail information more easily.</p>
+    #[serde(rename = "supportCode")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub support_code: Option<String>,
+    /// <p>The tag keys and optional values for the resource. For more information about tags in Lightsail, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags">Lightsail Dev Guide</a>.</p>
+    #[serde(rename = "tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<Vec<Tag>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2394,6 +3653,22 @@ pub struct StartInstanceRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct StartInstanceResult {
     /// <p>An array of key-value pairs containing information about the request operation.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StartRelationalDatabaseRequest {
+    /// <p>The name of your database to start.</p>
+    #[serde(rename = "relationalDatabaseName")]
+    pub relational_database_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StartRelationalDatabaseResult {
+    /// <p>An object describing the result of your start relational database request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -2462,6 +3737,58 @@ pub struct StopInstanceResult {
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct StopRelationalDatabaseRequest {
+    /// <p>The name of your database to stop.</p>
+    #[serde(rename = "relationalDatabaseName")]
+    pub relational_database_name: String,
+    /// <p>The name of your new database snapshot to be created before stopping your database.</p>
+    #[serde(rename = "relationalDatabaseSnapshotName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub relational_database_snapshot_name: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct StopRelationalDatabaseResult {
+    /// <p>An object describing the result of your stop relational database request.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+/// <p>Describes a tag key and optional value assigned to an Amazon Lightsail resource.</p> <p>For more information about tags in Lightsail, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags">Lightsail Dev Guide</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
+pub struct Tag {
+    /// <p>The key of the tag.</p> <p>Constraints: Tag keys accept a maximum of 128 letters, numbers, spaces in UTF-8, or the following characters: + - = . _ : / @</p>
+    #[serde(rename = "key")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub key: Option<String>,
+    /// <p>The value of the tag.</p> <p>Constraints: Tag values accept a maximum of 256 letters, numbers, spaces in UTF-8, or the following characters: + - = . _ : / @</p>
+    #[serde(rename = "value")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub value: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct TagResourceRequest {
+    /// <p>The name of the resource to which you are adding tags.</p>
+    #[serde(rename = "resourceName")]
+    pub resource_name: String,
+    /// <p>The tag key and optional value.</p>
+    #[serde(rename = "tags")]
+    pub tags: Vec<Tag>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct TagResourceResult {
+    /// <p>A list of objects describing the API operation.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UnpeerVpcRequest {}
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -2471,6 +3798,25 @@ pub struct UnpeerVpcResult {
     #[serde(rename = "operation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operation: Option<Operation>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UntagResourceRequest {
+    /// <p>The name of the resource from which you are removing a tag.</p>
+    #[serde(rename = "resourceName")]
+    pub resource_name: String,
+    /// <p>The tag keys to delete from the specified resource.</p>
+    #[serde(rename = "tagKeys")]
+    pub tag_keys: Vec<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UntagResourceResult {
+    /// <p>A list of objects describing the API operation.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -2509,6 +3855,73 @@ pub struct UpdateLoadBalancerAttributeRequest {
 #[cfg_attr(test, derive(Serialize))]
 pub struct UpdateLoadBalancerAttributeResult {
     /// <p>An object describing the API operations.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateRelationalDatabaseParametersRequest {
+    /// <p>The database parameters to update.</p>
+    #[serde(rename = "parameters")]
+    pub parameters: Vec<RelationalDatabaseParameter>,
+    /// <p>The name of your database for which to update parameters.</p>
+    #[serde(rename = "relationalDatabaseName")]
+    pub relational_database_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateRelationalDatabaseParametersResult {
+    /// <p>An object describing the result of your update relational database parameters request.</p>
+    #[serde(rename = "operations")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub operations: Option<Vec<Operation>>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateRelationalDatabaseRequest {
+    /// <p>When <code>true</code>, applies changes immediately. When <code>false</code>, applies changes during the preferred maintenance window. Some changes may cause an outage.</p> <p>Default: <code>false</code> </p>
+    #[serde(rename = "applyImmediately")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub apply_immediately: Option<bool>,
+    /// <p>When <code>true</code>, disables automated backup retention for your database.</p> <p>Disabling backup retention deletes all automated database backups. Before disabling this, you may want to create a snapshot of your database using the <code>create relational database snapshot</code> operation.</p> <p>Updates are applied during the next maintenance window because this can result in an outage.</p>
+    #[serde(rename = "disableBackupRetention")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub disable_backup_retention: Option<bool>,
+    /// <p>When <code>true</code>, enables automated backup retention for your database.</p> <p>Updates are applied during the next maintenance window because this can result in an outage.</p>
+    #[serde(rename = "enableBackupRetention")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub enable_backup_retention: Option<bool>,
+    /// <p>The password for the master user of your database. The password can include any printable ASCII character except "/", """, or "@".</p> <p>Constraints: Must contain 8 to 41 characters.</p>
+    #[serde(rename = "masterUserPassword")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub master_user_password: Option<String>,
+    /// <p><p>The daily time range during which automated backups are created for your database if automated backups are enabled.</p> <p>Constraints:</p> <ul> <li> <p>Must be in the <code>hh24:mi-hh24:mi</code> format.</p> <p>Example: <code>16:00-16:30</code> </p> </li> <li> <p>Specified in Universal Coordinated Time (UTC).</p> </li> <li> <p>Must not conflict with the preferred maintenance window.</p> </li> <li> <p>Must be at least 30 minutes.</p> </li> </ul></p>
+    #[serde(rename = "preferredBackupWindow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preferred_backup_window: Option<String>,
+    /// <p><p>The weekly time range during which system maintenance can occur on your database.</p> <p>The default is a 30-minute window selected at random from an 8-hour block of time for each AWS Region, occurring on a random day of the week.</p> <p>Constraints:</p> <ul> <li> <p>Must be in the <code>ddd:hh24:mi-ddd:hh24:mi</code> format.</p> </li> <li> <p>Valid days: Mon, Tue, Wed, Thu, Fri, Sat, Sun.</p> </li> <li> <p>Must be at least 30 minutes.</p> </li> <li> <p>Specified in Universal Coordinated Time (UTC).</p> </li> <li> <p>Example: <code>Tue:17:00-Tue:17:30</code> </p> </li> </ul></p>
+    #[serde(rename = "preferredMaintenanceWindow")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub preferred_maintenance_window: Option<String>,
+    /// <p>Specifies the accessibility options for your database. A value of <code>true</code> specifies a database that is available to resources outside of your Lightsail account. A value of <code>false</code> specifies a database that is available only to your Lightsail resources in the same region as your database.</p>
+    #[serde(rename = "publiclyAccessible")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub publicly_accessible: Option<bool>,
+    /// <p>The name of your database to update.</p>
+    #[serde(rename = "relationalDatabaseName")]
+    pub relational_database_name: String,
+    /// <p>When <code>true</code>, the master user password is changed to a new strong password generated by Lightsail.</p> <p>Use the <code>get relational database master user password</code> operation to get the new password.</p>
+    #[serde(rename = "rotateMasterUserPassword")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub rotate_master_user_password: Option<bool>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct UpdateRelationalDatabaseResult {
+    /// <p>An object describing the result of your update relational database request.</p>
     #[serde(rename = "operations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub operations: Option<Vec<Operation>>,
@@ -3245,6 +4658,246 @@ impl Error for CloseInstancePublicPortsError {
             }
             CloseInstancePublicPortsError::ParseError(ref cause) => cause,
             CloseInstancePublicPortsError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by CopySnapshot
+#[derive(Debug, PartialEq)]
+pub enum CopySnapshotError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl CopySnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> CopySnapshotError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return CopySnapshotError::AccessDenied(String::from(error_message));
+                }
+                "AccountSetupInProgressException" => {
+                    return CopySnapshotError::AccountSetupInProgress(String::from(error_message));
+                }
+                "InvalidInputException" => {
+                    return CopySnapshotError::InvalidInput(String::from(error_message));
+                }
+                "NotFoundException" => {
+                    return CopySnapshotError::NotFound(String::from(error_message));
+                }
+                "OperationFailureException" => {
+                    return CopySnapshotError::OperationFailure(String::from(error_message));
+                }
+                "ServiceException" => {
+                    return CopySnapshotError::Service(String::from(error_message));
+                }
+                "UnauthenticatedException" => {
+                    return CopySnapshotError::Unauthenticated(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return CopySnapshotError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return CopySnapshotError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for CopySnapshotError {
+    fn from(err: serde_json::error::Error) -> CopySnapshotError {
+        CopySnapshotError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CopySnapshotError {
+    fn from(err: CredentialsError) -> CopySnapshotError {
+        CopySnapshotError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CopySnapshotError {
+    fn from(err: HttpDispatchError) -> CopySnapshotError {
+        CopySnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CopySnapshotError {
+    fn from(err: io::Error) -> CopySnapshotError {
+        CopySnapshotError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CopySnapshotError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CopySnapshotError {
+    fn description(&self) -> &str {
+        match *self {
+            CopySnapshotError::AccessDenied(ref cause) => cause,
+            CopySnapshotError::AccountSetupInProgress(ref cause) => cause,
+            CopySnapshotError::InvalidInput(ref cause) => cause,
+            CopySnapshotError::NotFound(ref cause) => cause,
+            CopySnapshotError::OperationFailure(ref cause) => cause,
+            CopySnapshotError::Service(ref cause) => cause,
+            CopySnapshotError::Unauthenticated(ref cause) => cause,
+            CopySnapshotError::Validation(ref cause) => cause,
+            CopySnapshotError::Credentials(ref err) => err.description(),
+            CopySnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            CopySnapshotError::ParseError(ref cause) => cause,
+            CopySnapshotError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by CreateCloudFormationStack
+#[derive(Debug, PartialEq)]
+pub enum CreateCloudFormationStackError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl CreateCloudFormationStackError {
+    pub fn from_response(res: BufferedHttpResponse) -> CreateCloudFormationStackError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return CreateCloudFormationStackError::AccessDenied(String::from(error_message));
+                }
+                "AccountSetupInProgressException" => {
+                    return CreateCloudFormationStackError::AccountSetupInProgress(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidInputException" => {
+                    return CreateCloudFormationStackError::InvalidInput(String::from(error_message));
+                }
+                "NotFoundException" => {
+                    return CreateCloudFormationStackError::NotFound(String::from(error_message));
+                }
+                "OperationFailureException" => {
+                    return CreateCloudFormationStackError::OperationFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "ServiceException" => {
+                    return CreateCloudFormationStackError::Service(String::from(error_message));
+                }
+                "UnauthenticatedException" => {
+                    return CreateCloudFormationStackError::Unauthenticated(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return CreateCloudFormationStackError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return CreateCloudFormationStackError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for CreateCloudFormationStackError {
+    fn from(err: serde_json::error::Error) -> CreateCloudFormationStackError {
+        CreateCloudFormationStackError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateCloudFormationStackError {
+    fn from(err: CredentialsError) -> CreateCloudFormationStackError {
+        CreateCloudFormationStackError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateCloudFormationStackError {
+    fn from(err: HttpDispatchError) -> CreateCloudFormationStackError {
+        CreateCloudFormationStackError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateCloudFormationStackError {
+    fn from(err: io::Error) -> CreateCloudFormationStackError {
+        CreateCloudFormationStackError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateCloudFormationStackError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateCloudFormationStackError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateCloudFormationStackError::AccessDenied(ref cause) => cause,
+            CreateCloudFormationStackError::AccountSetupInProgress(ref cause) => cause,
+            CreateCloudFormationStackError::InvalidInput(ref cause) => cause,
+            CreateCloudFormationStackError::NotFound(ref cause) => cause,
+            CreateCloudFormationStackError::OperationFailure(ref cause) => cause,
+            CreateCloudFormationStackError::Service(ref cause) => cause,
+            CreateCloudFormationStackError::Unauthenticated(ref cause) => cause,
+            CreateCloudFormationStackError::Validation(ref cause) => cause,
+            CreateCloudFormationStackError::Credentials(ref err) => err.description(),
+            CreateCloudFormationStackError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateCloudFormationStackError::ParseError(ref cause) => cause,
+            CreateCloudFormationStackError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -4576,6 +6229,398 @@ impl Error for CreateLoadBalancerTlsCertificateError {
         }
     }
 }
+/// Errors returned by CreateRelationalDatabase
+#[derive(Debug, PartialEq)]
+pub enum CreateRelationalDatabaseError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl CreateRelationalDatabaseError {
+    pub fn from_response(res: BufferedHttpResponse) -> CreateRelationalDatabaseError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return CreateRelationalDatabaseError::AccessDenied(String::from(error_message));
+                }
+                "AccountSetupInProgressException" => {
+                    return CreateRelationalDatabaseError::AccountSetupInProgress(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidInputException" => {
+                    return CreateRelationalDatabaseError::InvalidInput(String::from(error_message));
+                }
+                "NotFoundException" => {
+                    return CreateRelationalDatabaseError::NotFound(String::from(error_message));
+                }
+                "OperationFailureException" => {
+                    return CreateRelationalDatabaseError::OperationFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "ServiceException" => {
+                    return CreateRelationalDatabaseError::Service(String::from(error_message));
+                }
+                "UnauthenticatedException" => {
+                    return CreateRelationalDatabaseError::Unauthenticated(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return CreateRelationalDatabaseError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return CreateRelationalDatabaseError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for CreateRelationalDatabaseError {
+    fn from(err: serde_json::error::Error) -> CreateRelationalDatabaseError {
+        CreateRelationalDatabaseError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateRelationalDatabaseError {
+    fn from(err: CredentialsError) -> CreateRelationalDatabaseError {
+        CreateRelationalDatabaseError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateRelationalDatabaseError {
+    fn from(err: HttpDispatchError) -> CreateRelationalDatabaseError {
+        CreateRelationalDatabaseError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateRelationalDatabaseError {
+    fn from(err: io::Error) -> CreateRelationalDatabaseError {
+        CreateRelationalDatabaseError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateRelationalDatabaseError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateRelationalDatabaseError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateRelationalDatabaseError::AccessDenied(ref cause) => cause,
+            CreateRelationalDatabaseError::AccountSetupInProgress(ref cause) => cause,
+            CreateRelationalDatabaseError::InvalidInput(ref cause) => cause,
+            CreateRelationalDatabaseError::NotFound(ref cause) => cause,
+            CreateRelationalDatabaseError::OperationFailure(ref cause) => cause,
+            CreateRelationalDatabaseError::Service(ref cause) => cause,
+            CreateRelationalDatabaseError::Unauthenticated(ref cause) => cause,
+            CreateRelationalDatabaseError::Validation(ref cause) => cause,
+            CreateRelationalDatabaseError::Credentials(ref err) => err.description(),
+            CreateRelationalDatabaseError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateRelationalDatabaseError::ParseError(ref cause) => cause,
+            CreateRelationalDatabaseError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by CreateRelationalDatabaseFromSnapshot
+#[derive(Debug, PartialEq)]
+pub enum CreateRelationalDatabaseFromSnapshotError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl CreateRelationalDatabaseFromSnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> CreateRelationalDatabaseFromSnapshotError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return CreateRelationalDatabaseFromSnapshotError::AccessDenied(String::from(
+                        error_message,
+                    ));
+                }
+                "AccountSetupInProgressException" => {
+                    return CreateRelationalDatabaseFromSnapshotError::AccountSetupInProgress(
+                        String::from(error_message),
+                    );
+                }
+                "InvalidInputException" => {
+                    return CreateRelationalDatabaseFromSnapshotError::InvalidInput(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return CreateRelationalDatabaseFromSnapshotError::NotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "OperationFailureException" => {
+                    return CreateRelationalDatabaseFromSnapshotError::OperationFailure(
+                        String::from(error_message),
+                    );
+                }
+                "ServiceException" => {
+                    return CreateRelationalDatabaseFromSnapshotError::Service(String::from(
+                        error_message,
+                    ));
+                }
+                "UnauthenticatedException" => {
+                    return CreateRelationalDatabaseFromSnapshotError::Unauthenticated(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return CreateRelationalDatabaseFromSnapshotError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return CreateRelationalDatabaseFromSnapshotError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for CreateRelationalDatabaseFromSnapshotError {
+    fn from(err: serde_json::error::Error) -> CreateRelationalDatabaseFromSnapshotError {
+        CreateRelationalDatabaseFromSnapshotError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateRelationalDatabaseFromSnapshotError {
+    fn from(err: CredentialsError) -> CreateRelationalDatabaseFromSnapshotError {
+        CreateRelationalDatabaseFromSnapshotError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateRelationalDatabaseFromSnapshotError {
+    fn from(err: HttpDispatchError) -> CreateRelationalDatabaseFromSnapshotError {
+        CreateRelationalDatabaseFromSnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateRelationalDatabaseFromSnapshotError {
+    fn from(err: io::Error) -> CreateRelationalDatabaseFromSnapshotError {
+        CreateRelationalDatabaseFromSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateRelationalDatabaseFromSnapshotError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateRelationalDatabaseFromSnapshotError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateRelationalDatabaseFromSnapshotError::AccessDenied(ref cause) => cause,
+            CreateRelationalDatabaseFromSnapshotError::AccountSetupInProgress(ref cause) => cause,
+            CreateRelationalDatabaseFromSnapshotError::InvalidInput(ref cause) => cause,
+            CreateRelationalDatabaseFromSnapshotError::NotFound(ref cause) => cause,
+            CreateRelationalDatabaseFromSnapshotError::OperationFailure(ref cause) => cause,
+            CreateRelationalDatabaseFromSnapshotError::Service(ref cause) => cause,
+            CreateRelationalDatabaseFromSnapshotError::Unauthenticated(ref cause) => cause,
+            CreateRelationalDatabaseFromSnapshotError::Validation(ref cause) => cause,
+            CreateRelationalDatabaseFromSnapshotError::Credentials(ref err) => err.description(),
+            CreateRelationalDatabaseFromSnapshotError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateRelationalDatabaseFromSnapshotError::ParseError(ref cause) => cause,
+            CreateRelationalDatabaseFromSnapshotError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by CreateRelationalDatabaseSnapshot
+#[derive(Debug, PartialEq)]
+pub enum CreateRelationalDatabaseSnapshotError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl CreateRelationalDatabaseSnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> CreateRelationalDatabaseSnapshotError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return CreateRelationalDatabaseSnapshotError::AccessDenied(String::from(
+                        error_message,
+                    ));
+                }
+                "AccountSetupInProgressException" => {
+                    return CreateRelationalDatabaseSnapshotError::AccountSetupInProgress(
+                        String::from(error_message),
+                    );
+                }
+                "InvalidInputException" => {
+                    return CreateRelationalDatabaseSnapshotError::InvalidInput(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return CreateRelationalDatabaseSnapshotError::NotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "OperationFailureException" => {
+                    return CreateRelationalDatabaseSnapshotError::OperationFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "ServiceException" => {
+                    return CreateRelationalDatabaseSnapshotError::Service(String::from(
+                        error_message,
+                    ));
+                }
+                "UnauthenticatedException" => {
+                    return CreateRelationalDatabaseSnapshotError::Unauthenticated(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return CreateRelationalDatabaseSnapshotError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return CreateRelationalDatabaseSnapshotError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for CreateRelationalDatabaseSnapshotError {
+    fn from(err: serde_json::error::Error) -> CreateRelationalDatabaseSnapshotError {
+        CreateRelationalDatabaseSnapshotError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for CreateRelationalDatabaseSnapshotError {
+    fn from(err: CredentialsError) -> CreateRelationalDatabaseSnapshotError {
+        CreateRelationalDatabaseSnapshotError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for CreateRelationalDatabaseSnapshotError {
+    fn from(err: HttpDispatchError) -> CreateRelationalDatabaseSnapshotError {
+        CreateRelationalDatabaseSnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for CreateRelationalDatabaseSnapshotError {
+    fn from(err: io::Error) -> CreateRelationalDatabaseSnapshotError {
+        CreateRelationalDatabaseSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for CreateRelationalDatabaseSnapshotError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for CreateRelationalDatabaseSnapshotError {
+    fn description(&self) -> &str {
+        match *self {
+            CreateRelationalDatabaseSnapshotError::AccessDenied(ref cause) => cause,
+            CreateRelationalDatabaseSnapshotError::AccountSetupInProgress(ref cause) => cause,
+            CreateRelationalDatabaseSnapshotError::InvalidInput(ref cause) => cause,
+            CreateRelationalDatabaseSnapshotError::NotFound(ref cause) => cause,
+            CreateRelationalDatabaseSnapshotError::OperationFailure(ref cause) => cause,
+            CreateRelationalDatabaseSnapshotError::Service(ref cause) => cause,
+            CreateRelationalDatabaseSnapshotError::Unauthenticated(ref cause) => cause,
+            CreateRelationalDatabaseSnapshotError::Validation(ref cause) => cause,
+            CreateRelationalDatabaseSnapshotError::Credentials(ref err) => err.description(),
+            CreateRelationalDatabaseSnapshotError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            CreateRelationalDatabaseSnapshotError::ParseError(ref cause) => cause,
+            CreateRelationalDatabaseSnapshotError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by DeleteDisk
 #[derive(Debug, PartialEq)]
 pub enum DeleteDiskError {
@@ -5654,6 +7699,264 @@ impl Error for DeleteLoadBalancerTlsCertificateError {
         }
     }
 }
+/// Errors returned by DeleteRelationalDatabase
+#[derive(Debug, PartialEq)]
+pub enum DeleteRelationalDatabaseError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DeleteRelationalDatabaseError {
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteRelationalDatabaseError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DeleteRelationalDatabaseError::AccessDenied(String::from(error_message));
+                }
+                "AccountSetupInProgressException" => {
+                    return DeleteRelationalDatabaseError::AccountSetupInProgress(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidInputException" => {
+                    return DeleteRelationalDatabaseError::InvalidInput(String::from(error_message));
+                }
+                "NotFoundException" => {
+                    return DeleteRelationalDatabaseError::NotFound(String::from(error_message));
+                }
+                "OperationFailureException" => {
+                    return DeleteRelationalDatabaseError::OperationFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "ServiceException" => {
+                    return DeleteRelationalDatabaseError::Service(String::from(error_message));
+                }
+                "UnauthenticatedException" => {
+                    return DeleteRelationalDatabaseError::Unauthenticated(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return DeleteRelationalDatabaseError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return DeleteRelationalDatabaseError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteRelationalDatabaseError {
+    fn from(err: serde_json::error::Error) -> DeleteRelationalDatabaseError {
+        DeleteRelationalDatabaseError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteRelationalDatabaseError {
+    fn from(err: CredentialsError) -> DeleteRelationalDatabaseError {
+        DeleteRelationalDatabaseError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteRelationalDatabaseError {
+    fn from(err: HttpDispatchError) -> DeleteRelationalDatabaseError {
+        DeleteRelationalDatabaseError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteRelationalDatabaseError {
+    fn from(err: io::Error) -> DeleteRelationalDatabaseError {
+        DeleteRelationalDatabaseError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteRelationalDatabaseError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteRelationalDatabaseError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteRelationalDatabaseError::AccessDenied(ref cause) => cause,
+            DeleteRelationalDatabaseError::AccountSetupInProgress(ref cause) => cause,
+            DeleteRelationalDatabaseError::InvalidInput(ref cause) => cause,
+            DeleteRelationalDatabaseError::NotFound(ref cause) => cause,
+            DeleteRelationalDatabaseError::OperationFailure(ref cause) => cause,
+            DeleteRelationalDatabaseError::Service(ref cause) => cause,
+            DeleteRelationalDatabaseError::Unauthenticated(ref cause) => cause,
+            DeleteRelationalDatabaseError::Validation(ref cause) => cause,
+            DeleteRelationalDatabaseError::Credentials(ref err) => err.description(),
+            DeleteRelationalDatabaseError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteRelationalDatabaseError::ParseError(ref cause) => cause,
+            DeleteRelationalDatabaseError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by DeleteRelationalDatabaseSnapshot
+#[derive(Debug, PartialEq)]
+pub enum DeleteRelationalDatabaseSnapshotError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl DeleteRelationalDatabaseSnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> DeleteRelationalDatabaseSnapshotError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return DeleteRelationalDatabaseSnapshotError::AccessDenied(String::from(
+                        error_message,
+                    ));
+                }
+                "AccountSetupInProgressException" => {
+                    return DeleteRelationalDatabaseSnapshotError::AccountSetupInProgress(
+                        String::from(error_message),
+                    );
+                }
+                "InvalidInputException" => {
+                    return DeleteRelationalDatabaseSnapshotError::InvalidInput(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return DeleteRelationalDatabaseSnapshotError::NotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "OperationFailureException" => {
+                    return DeleteRelationalDatabaseSnapshotError::OperationFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "ServiceException" => {
+                    return DeleteRelationalDatabaseSnapshotError::Service(String::from(
+                        error_message,
+                    ));
+                }
+                "UnauthenticatedException" => {
+                    return DeleteRelationalDatabaseSnapshotError::Unauthenticated(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return DeleteRelationalDatabaseSnapshotError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return DeleteRelationalDatabaseSnapshotError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for DeleteRelationalDatabaseSnapshotError {
+    fn from(err: serde_json::error::Error) -> DeleteRelationalDatabaseSnapshotError {
+        DeleteRelationalDatabaseSnapshotError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for DeleteRelationalDatabaseSnapshotError {
+    fn from(err: CredentialsError) -> DeleteRelationalDatabaseSnapshotError {
+        DeleteRelationalDatabaseSnapshotError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for DeleteRelationalDatabaseSnapshotError {
+    fn from(err: HttpDispatchError) -> DeleteRelationalDatabaseSnapshotError {
+        DeleteRelationalDatabaseSnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for DeleteRelationalDatabaseSnapshotError {
+    fn from(err: io::Error) -> DeleteRelationalDatabaseSnapshotError {
+        DeleteRelationalDatabaseSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for DeleteRelationalDatabaseSnapshotError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for DeleteRelationalDatabaseSnapshotError {
+    fn description(&self) -> &str {
+        match *self {
+            DeleteRelationalDatabaseSnapshotError::AccessDenied(ref cause) => cause,
+            DeleteRelationalDatabaseSnapshotError::AccountSetupInProgress(ref cause) => cause,
+            DeleteRelationalDatabaseSnapshotError::InvalidInput(ref cause) => cause,
+            DeleteRelationalDatabaseSnapshotError::NotFound(ref cause) => cause,
+            DeleteRelationalDatabaseSnapshotError::OperationFailure(ref cause) => cause,
+            DeleteRelationalDatabaseSnapshotError::Service(ref cause) => cause,
+            DeleteRelationalDatabaseSnapshotError::Unauthenticated(ref cause) => cause,
+            DeleteRelationalDatabaseSnapshotError::Validation(ref cause) => cause,
+            DeleteRelationalDatabaseSnapshotError::Credentials(ref err) => err.description(),
+            DeleteRelationalDatabaseSnapshotError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            DeleteRelationalDatabaseSnapshotError::ParseError(ref cause) => cause,
+            DeleteRelationalDatabaseSnapshotError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by DetachDisk
 #[derive(Debug, PartialEq)]
 pub enum DetachDiskError {
@@ -6140,6 +8443,122 @@ impl Error for DownloadDefaultKeyPairError {
         }
     }
 }
+/// Errors returned by ExportSnapshot
+#[derive(Debug, PartialEq)]
+pub enum ExportSnapshotError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ExportSnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> ExportSnapshotError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return ExportSnapshotError::AccessDenied(String::from(error_message));
+                }
+                "AccountSetupInProgressException" => {
+                    return ExportSnapshotError::AccountSetupInProgress(String::from(error_message));
+                }
+                "InvalidInputException" => {
+                    return ExportSnapshotError::InvalidInput(String::from(error_message));
+                }
+                "NotFoundException" => {
+                    return ExportSnapshotError::NotFound(String::from(error_message));
+                }
+                "OperationFailureException" => {
+                    return ExportSnapshotError::OperationFailure(String::from(error_message));
+                }
+                "ServiceException" => {
+                    return ExportSnapshotError::Service(String::from(error_message));
+                }
+                "UnauthenticatedException" => {
+                    return ExportSnapshotError::Unauthenticated(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return ExportSnapshotError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ExportSnapshotError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ExportSnapshotError {
+    fn from(err: serde_json::error::Error) -> ExportSnapshotError {
+        ExportSnapshotError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ExportSnapshotError {
+    fn from(err: CredentialsError) -> ExportSnapshotError {
+        ExportSnapshotError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ExportSnapshotError {
+    fn from(err: HttpDispatchError) -> ExportSnapshotError {
+        ExportSnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ExportSnapshotError {
+    fn from(err: io::Error) -> ExportSnapshotError {
+        ExportSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ExportSnapshotError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ExportSnapshotError {
+    fn description(&self) -> &str {
+        match *self {
+            ExportSnapshotError::AccessDenied(ref cause) => cause,
+            ExportSnapshotError::AccountSetupInProgress(ref cause) => cause,
+            ExportSnapshotError::InvalidInput(ref cause) => cause,
+            ExportSnapshotError::NotFound(ref cause) => cause,
+            ExportSnapshotError::OperationFailure(ref cause) => cause,
+            ExportSnapshotError::Service(ref cause) => cause,
+            ExportSnapshotError::Unauthenticated(ref cause) => cause,
+            ExportSnapshotError::Validation(ref cause) => cause,
+            ExportSnapshotError::Credentials(ref err) => err.description(),
+            ExportSnapshotError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            ExportSnapshotError::ParseError(ref cause) => cause,
+            ExportSnapshotError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by GetActiveNames
 #[derive(Debug, PartialEq)]
 pub enum GetActiveNamesError {
@@ -6483,6 +8902,134 @@ impl Error for GetBundlesError {
             GetBundlesError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             GetBundlesError::ParseError(ref cause) => cause,
             GetBundlesError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetCloudFormationStackRecords
+#[derive(Debug, PartialEq)]
+pub enum GetCloudFormationStackRecordsError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetCloudFormationStackRecordsError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetCloudFormationStackRecordsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return GetCloudFormationStackRecordsError::AccessDenied(String::from(
+                        error_message,
+                    ));
+                }
+                "AccountSetupInProgressException" => {
+                    return GetCloudFormationStackRecordsError::AccountSetupInProgress(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidInputException" => {
+                    return GetCloudFormationStackRecordsError::InvalidInput(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return GetCloudFormationStackRecordsError::NotFound(String::from(error_message));
+                }
+                "OperationFailureException" => {
+                    return GetCloudFormationStackRecordsError::OperationFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "ServiceException" => {
+                    return GetCloudFormationStackRecordsError::Service(String::from(error_message));
+                }
+                "UnauthenticatedException" => {
+                    return GetCloudFormationStackRecordsError::Unauthenticated(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return GetCloudFormationStackRecordsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetCloudFormationStackRecordsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetCloudFormationStackRecordsError {
+    fn from(err: serde_json::error::Error) -> GetCloudFormationStackRecordsError {
+        GetCloudFormationStackRecordsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetCloudFormationStackRecordsError {
+    fn from(err: CredentialsError) -> GetCloudFormationStackRecordsError {
+        GetCloudFormationStackRecordsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetCloudFormationStackRecordsError {
+    fn from(err: HttpDispatchError) -> GetCloudFormationStackRecordsError {
+        GetCloudFormationStackRecordsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetCloudFormationStackRecordsError {
+    fn from(err: io::Error) -> GetCloudFormationStackRecordsError {
+        GetCloudFormationStackRecordsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetCloudFormationStackRecordsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetCloudFormationStackRecordsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetCloudFormationStackRecordsError::AccessDenied(ref cause) => cause,
+            GetCloudFormationStackRecordsError::AccountSetupInProgress(ref cause) => cause,
+            GetCloudFormationStackRecordsError::InvalidInput(ref cause) => cause,
+            GetCloudFormationStackRecordsError::NotFound(ref cause) => cause,
+            GetCloudFormationStackRecordsError::OperationFailure(ref cause) => cause,
+            GetCloudFormationStackRecordsError::Service(ref cause) => cause,
+            GetCloudFormationStackRecordsError::Unauthenticated(ref cause) => cause,
+            GetCloudFormationStackRecordsError::Validation(ref cause) => cause,
+            GetCloudFormationStackRecordsError::Credentials(ref err) => err.description(),
+            GetCloudFormationStackRecordsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetCloudFormationStackRecordsError::ParseError(ref cause) => cause,
+            GetCloudFormationStackRecordsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -7165,6 +9712,130 @@ impl Error for GetDomainsError {
             GetDomainsError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             GetDomainsError::ParseError(ref cause) => cause,
             GetDomainsError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetExportSnapshotRecords
+#[derive(Debug, PartialEq)]
+pub enum GetExportSnapshotRecordsError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetExportSnapshotRecordsError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetExportSnapshotRecordsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return GetExportSnapshotRecordsError::AccessDenied(String::from(error_message));
+                }
+                "AccountSetupInProgressException" => {
+                    return GetExportSnapshotRecordsError::AccountSetupInProgress(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidInputException" => {
+                    return GetExportSnapshotRecordsError::InvalidInput(String::from(error_message));
+                }
+                "NotFoundException" => {
+                    return GetExportSnapshotRecordsError::NotFound(String::from(error_message));
+                }
+                "OperationFailureException" => {
+                    return GetExportSnapshotRecordsError::OperationFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "ServiceException" => {
+                    return GetExportSnapshotRecordsError::Service(String::from(error_message));
+                }
+                "UnauthenticatedException" => {
+                    return GetExportSnapshotRecordsError::Unauthenticated(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return GetExportSnapshotRecordsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetExportSnapshotRecordsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetExportSnapshotRecordsError {
+    fn from(err: serde_json::error::Error) -> GetExportSnapshotRecordsError {
+        GetExportSnapshotRecordsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetExportSnapshotRecordsError {
+    fn from(err: CredentialsError) -> GetExportSnapshotRecordsError {
+        GetExportSnapshotRecordsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetExportSnapshotRecordsError {
+    fn from(err: HttpDispatchError) -> GetExportSnapshotRecordsError {
+        GetExportSnapshotRecordsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetExportSnapshotRecordsError {
+    fn from(err: io::Error) -> GetExportSnapshotRecordsError {
+        GetExportSnapshotRecordsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetExportSnapshotRecordsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetExportSnapshotRecordsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetExportSnapshotRecordsError::AccessDenied(ref cause) => cause,
+            GetExportSnapshotRecordsError::AccountSetupInProgress(ref cause) => cause,
+            GetExportSnapshotRecordsError::InvalidInput(ref cause) => cause,
+            GetExportSnapshotRecordsError::NotFound(ref cause) => cause,
+            GetExportSnapshotRecordsError::OperationFailure(ref cause) => cause,
+            GetExportSnapshotRecordsError::Service(ref cause) => cause,
+            GetExportSnapshotRecordsError::Unauthenticated(ref cause) => cause,
+            GetExportSnapshotRecordsError::Validation(ref cause) => cause,
+            GetExportSnapshotRecordsError::Credentials(ref err) => err.description(),
+            GetExportSnapshotRecordsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetExportSnapshotRecordsError::ParseError(ref cause) => cause,
+            GetExportSnapshotRecordsError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -9308,6 +11979,1570 @@ impl Error for GetRegionsError {
         }
     }
 }
+/// Errors returned by GetRelationalDatabase
+#[derive(Debug, PartialEq)]
+pub enum GetRelationalDatabaseError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetRelationalDatabaseError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetRelationalDatabaseError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return GetRelationalDatabaseError::AccessDenied(String::from(error_message));
+                }
+                "AccountSetupInProgressException" => {
+                    return GetRelationalDatabaseError::AccountSetupInProgress(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidInputException" => {
+                    return GetRelationalDatabaseError::InvalidInput(String::from(error_message));
+                }
+                "NotFoundException" => {
+                    return GetRelationalDatabaseError::NotFound(String::from(error_message));
+                }
+                "OperationFailureException" => {
+                    return GetRelationalDatabaseError::OperationFailure(String::from(error_message));
+                }
+                "ServiceException" => {
+                    return GetRelationalDatabaseError::Service(String::from(error_message));
+                }
+                "UnauthenticatedException" => {
+                    return GetRelationalDatabaseError::Unauthenticated(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return GetRelationalDatabaseError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetRelationalDatabaseError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetRelationalDatabaseError {
+    fn from(err: serde_json::error::Error) -> GetRelationalDatabaseError {
+        GetRelationalDatabaseError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetRelationalDatabaseError {
+    fn from(err: CredentialsError) -> GetRelationalDatabaseError {
+        GetRelationalDatabaseError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetRelationalDatabaseError {
+    fn from(err: HttpDispatchError) -> GetRelationalDatabaseError {
+        GetRelationalDatabaseError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetRelationalDatabaseError {
+    fn from(err: io::Error) -> GetRelationalDatabaseError {
+        GetRelationalDatabaseError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetRelationalDatabaseError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetRelationalDatabaseError {
+    fn description(&self) -> &str {
+        match *self {
+            GetRelationalDatabaseError::AccessDenied(ref cause) => cause,
+            GetRelationalDatabaseError::AccountSetupInProgress(ref cause) => cause,
+            GetRelationalDatabaseError::InvalidInput(ref cause) => cause,
+            GetRelationalDatabaseError::NotFound(ref cause) => cause,
+            GetRelationalDatabaseError::OperationFailure(ref cause) => cause,
+            GetRelationalDatabaseError::Service(ref cause) => cause,
+            GetRelationalDatabaseError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseError::Validation(ref cause) => cause,
+            GetRelationalDatabaseError::Credentials(ref err) => err.description(),
+            GetRelationalDatabaseError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetRelationalDatabaseError::ParseError(ref cause) => cause,
+            GetRelationalDatabaseError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetRelationalDatabaseBlueprints
+#[derive(Debug, PartialEq)]
+pub enum GetRelationalDatabaseBlueprintsError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetRelationalDatabaseBlueprintsError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetRelationalDatabaseBlueprintsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return GetRelationalDatabaseBlueprintsError::AccessDenied(String::from(
+                        error_message,
+                    ));
+                }
+                "AccountSetupInProgressException" => {
+                    return GetRelationalDatabaseBlueprintsError::AccountSetupInProgress(
+                        String::from(error_message),
+                    );
+                }
+                "InvalidInputException" => {
+                    return GetRelationalDatabaseBlueprintsError::InvalidInput(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return GetRelationalDatabaseBlueprintsError::NotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "OperationFailureException" => {
+                    return GetRelationalDatabaseBlueprintsError::OperationFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "ServiceException" => {
+                    return GetRelationalDatabaseBlueprintsError::Service(String::from(
+                        error_message,
+                    ));
+                }
+                "UnauthenticatedException" => {
+                    return GetRelationalDatabaseBlueprintsError::Unauthenticated(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return GetRelationalDatabaseBlueprintsError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return GetRelationalDatabaseBlueprintsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetRelationalDatabaseBlueprintsError {
+    fn from(err: serde_json::error::Error) -> GetRelationalDatabaseBlueprintsError {
+        GetRelationalDatabaseBlueprintsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetRelationalDatabaseBlueprintsError {
+    fn from(err: CredentialsError) -> GetRelationalDatabaseBlueprintsError {
+        GetRelationalDatabaseBlueprintsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetRelationalDatabaseBlueprintsError {
+    fn from(err: HttpDispatchError) -> GetRelationalDatabaseBlueprintsError {
+        GetRelationalDatabaseBlueprintsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetRelationalDatabaseBlueprintsError {
+    fn from(err: io::Error) -> GetRelationalDatabaseBlueprintsError {
+        GetRelationalDatabaseBlueprintsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetRelationalDatabaseBlueprintsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetRelationalDatabaseBlueprintsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetRelationalDatabaseBlueprintsError::AccessDenied(ref cause) => cause,
+            GetRelationalDatabaseBlueprintsError::AccountSetupInProgress(ref cause) => cause,
+            GetRelationalDatabaseBlueprintsError::InvalidInput(ref cause) => cause,
+            GetRelationalDatabaseBlueprintsError::NotFound(ref cause) => cause,
+            GetRelationalDatabaseBlueprintsError::OperationFailure(ref cause) => cause,
+            GetRelationalDatabaseBlueprintsError::Service(ref cause) => cause,
+            GetRelationalDatabaseBlueprintsError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseBlueprintsError::Validation(ref cause) => cause,
+            GetRelationalDatabaseBlueprintsError::Credentials(ref err) => err.description(),
+            GetRelationalDatabaseBlueprintsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetRelationalDatabaseBlueprintsError::ParseError(ref cause) => cause,
+            GetRelationalDatabaseBlueprintsError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetRelationalDatabaseBundles
+#[derive(Debug, PartialEq)]
+pub enum GetRelationalDatabaseBundlesError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetRelationalDatabaseBundlesError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetRelationalDatabaseBundlesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return GetRelationalDatabaseBundlesError::AccessDenied(String::from(
+                        error_message,
+                    ));
+                }
+                "AccountSetupInProgressException" => {
+                    return GetRelationalDatabaseBundlesError::AccountSetupInProgress(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidInputException" => {
+                    return GetRelationalDatabaseBundlesError::InvalidInput(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return GetRelationalDatabaseBundlesError::NotFound(String::from(error_message));
+                }
+                "OperationFailureException" => {
+                    return GetRelationalDatabaseBundlesError::OperationFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "ServiceException" => {
+                    return GetRelationalDatabaseBundlesError::Service(String::from(error_message));
+                }
+                "UnauthenticatedException" => {
+                    return GetRelationalDatabaseBundlesError::Unauthenticated(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return GetRelationalDatabaseBundlesError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetRelationalDatabaseBundlesError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetRelationalDatabaseBundlesError {
+    fn from(err: serde_json::error::Error) -> GetRelationalDatabaseBundlesError {
+        GetRelationalDatabaseBundlesError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetRelationalDatabaseBundlesError {
+    fn from(err: CredentialsError) -> GetRelationalDatabaseBundlesError {
+        GetRelationalDatabaseBundlesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetRelationalDatabaseBundlesError {
+    fn from(err: HttpDispatchError) -> GetRelationalDatabaseBundlesError {
+        GetRelationalDatabaseBundlesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetRelationalDatabaseBundlesError {
+    fn from(err: io::Error) -> GetRelationalDatabaseBundlesError {
+        GetRelationalDatabaseBundlesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetRelationalDatabaseBundlesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetRelationalDatabaseBundlesError {
+    fn description(&self) -> &str {
+        match *self {
+            GetRelationalDatabaseBundlesError::AccessDenied(ref cause) => cause,
+            GetRelationalDatabaseBundlesError::AccountSetupInProgress(ref cause) => cause,
+            GetRelationalDatabaseBundlesError::InvalidInput(ref cause) => cause,
+            GetRelationalDatabaseBundlesError::NotFound(ref cause) => cause,
+            GetRelationalDatabaseBundlesError::OperationFailure(ref cause) => cause,
+            GetRelationalDatabaseBundlesError::Service(ref cause) => cause,
+            GetRelationalDatabaseBundlesError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseBundlesError::Validation(ref cause) => cause,
+            GetRelationalDatabaseBundlesError::Credentials(ref err) => err.description(),
+            GetRelationalDatabaseBundlesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetRelationalDatabaseBundlesError::ParseError(ref cause) => cause,
+            GetRelationalDatabaseBundlesError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetRelationalDatabaseEvents
+#[derive(Debug, PartialEq)]
+pub enum GetRelationalDatabaseEventsError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetRelationalDatabaseEventsError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetRelationalDatabaseEventsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return GetRelationalDatabaseEventsError::AccessDenied(String::from(
+                        error_message,
+                    ));
+                }
+                "AccountSetupInProgressException" => {
+                    return GetRelationalDatabaseEventsError::AccountSetupInProgress(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidInputException" => {
+                    return GetRelationalDatabaseEventsError::InvalidInput(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return GetRelationalDatabaseEventsError::NotFound(String::from(error_message));
+                }
+                "OperationFailureException" => {
+                    return GetRelationalDatabaseEventsError::OperationFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "ServiceException" => {
+                    return GetRelationalDatabaseEventsError::Service(String::from(error_message));
+                }
+                "UnauthenticatedException" => {
+                    return GetRelationalDatabaseEventsError::Unauthenticated(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return GetRelationalDatabaseEventsError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetRelationalDatabaseEventsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetRelationalDatabaseEventsError {
+    fn from(err: serde_json::error::Error) -> GetRelationalDatabaseEventsError {
+        GetRelationalDatabaseEventsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetRelationalDatabaseEventsError {
+    fn from(err: CredentialsError) -> GetRelationalDatabaseEventsError {
+        GetRelationalDatabaseEventsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetRelationalDatabaseEventsError {
+    fn from(err: HttpDispatchError) -> GetRelationalDatabaseEventsError {
+        GetRelationalDatabaseEventsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetRelationalDatabaseEventsError {
+    fn from(err: io::Error) -> GetRelationalDatabaseEventsError {
+        GetRelationalDatabaseEventsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetRelationalDatabaseEventsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetRelationalDatabaseEventsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetRelationalDatabaseEventsError::AccessDenied(ref cause) => cause,
+            GetRelationalDatabaseEventsError::AccountSetupInProgress(ref cause) => cause,
+            GetRelationalDatabaseEventsError::InvalidInput(ref cause) => cause,
+            GetRelationalDatabaseEventsError::NotFound(ref cause) => cause,
+            GetRelationalDatabaseEventsError::OperationFailure(ref cause) => cause,
+            GetRelationalDatabaseEventsError::Service(ref cause) => cause,
+            GetRelationalDatabaseEventsError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseEventsError::Validation(ref cause) => cause,
+            GetRelationalDatabaseEventsError::Credentials(ref err) => err.description(),
+            GetRelationalDatabaseEventsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetRelationalDatabaseEventsError::ParseError(ref cause) => cause,
+            GetRelationalDatabaseEventsError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetRelationalDatabaseLogEvents
+#[derive(Debug, PartialEq)]
+pub enum GetRelationalDatabaseLogEventsError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetRelationalDatabaseLogEventsError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetRelationalDatabaseLogEventsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return GetRelationalDatabaseLogEventsError::AccessDenied(String::from(
+                        error_message,
+                    ));
+                }
+                "AccountSetupInProgressException" => {
+                    return GetRelationalDatabaseLogEventsError::AccountSetupInProgress(
+                        String::from(error_message),
+                    );
+                }
+                "InvalidInputException" => {
+                    return GetRelationalDatabaseLogEventsError::InvalidInput(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return GetRelationalDatabaseLogEventsError::NotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "OperationFailureException" => {
+                    return GetRelationalDatabaseLogEventsError::OperationFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "ServiceException" => {
+                    return GetRelationalDatabaseLogEventsError::Service(String::from(error_message));
+                }
+                "UnauthenticatedException" => {
+                    return GetRelationalDatabaseLogEventsError::Unauthenticated(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return GetRelationalDatabaseLogEventsError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return GetRelationalDatabaseLogEventsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetRelationalDatabaseLogEventsError {
+    fn from(err: serde_json::error::Error) -> GetRelationalDatabaseLogEventsError {
+        GetRelationalDatabaseLogEventsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetRelationalDatabaseLogEventsError {
+    fn from(err: CredentialsError) -> GetRelationalDatabaseLogEventsError {
+        GetRelationalDatabaseLogEventsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetRelationalDatabaseLogEventsError {
+    fn from(err: HttpDispatchError) -> GetRelationalDatabaseLogEventsError {
+        GetRelationalDatabaseLogEventsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetRelationalDatabaseLogEventsError {
+    fn from(err: io::Error) -> GetRelationalDatabaseLogEventsError {
+        GetRelationalDatabaseLogEventsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetRelationalDatabaseLogEventsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetRelationalDatabaseLogEventsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetRelationalDatabaseLogEventsError::AccessDenied(ref cause) => cause,
+            GetRelationalDatabaseLogEventsError::AccountSetupInProgress(ref cause) => cause,
+            GetRelationalDatabaseLogEventsError::InvalidInput(ref cause) => cause,
+            GetRelationalDatabaseLogEventsError::NotFound(ref cause) => cause,
+            GetRelationalDatabaseLogEventsError::OperationFailure(ref cause) => cause,
+            GetRelationalDatabaseLogEventsError::Service(ref cause) => cause,
+            GetRelationalDatabaseLogEventsError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseLogEventsError::Validation(ref cause) => cause,
+            GetRelationalDatabaseLogEventsError::Credentials(ref err) => err.description(),
+            GetRelationalDatabaseLogEventsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetRelationalDatabaseLogEventsError::ParseError(ref cause) => cause,
+            GetRelationalDatabaseLogEventsError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetRelationalDatabaseLogStreams
+#[derive(Debug, PartialEq)]
+pub enum GetRelationalDatabaseLogStreamsError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetRelationalDatabaseLogStreamsError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetRelationalDatabaseLogStreamsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return GetRelationalDatabaseLogStreamsError::AccessDenied(String::from(
+                        error_message,
+                    ));
+                }
+                "AccountSetupInProgressException" => {
+                    return GetRelationalDatabaseLogStreamsError::AccountSetupInProgress(
+                        String::from(error_message),
+                    );
+                }
+                "InvalidInputException" => {
+                    return GetRelationalDatabaseLogStreamsError::InvalidInput(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return GetRelationalDatabaseLogStreamsError::NotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "OperationFailureException" => {
+                    return GetRelationalDatabaseLogStreamsError::OperationFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "ServiceException" => {
+                    return GetRelationalDatabaseLogStreamsError::Service(String::from(
+                        error_message,
+                    ));
+                }
+                "UnauthenticatedException" => {
+                    return GetRelationalDatabaseLogStreamsError::Unauthenticated(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return GetRelationalDatabaseLogStreamsError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return GetRelationalDatabaseLogStreamsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetRelationalDatabaseLogStreamsError {
+    fn from(err: serde_json::error::Error) -> GetRelationalDatabaseLogStreamsError {
+        GetRelationalDatabaseLogStreamsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetRelationalDatabaseLogStreamsError {
+    fn from(err: CredentialsError) -> GetRelationalDatabaseLogStreamsError {
+        GetRelationalDatabaseLogStreamsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetRelationalDatabaseLogStreamsError {
+    fn from(err: HttpDispatchError) -> GetRelationalDatabaseLogStreamsError {
+        GetRelationalDatabaseLogStreamsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetRelationalDatabaseLogStreamsError {
+    fn from(err: io::Error) -> GetRelationalDatabaseLogStreamsError {
+        GetRelationalDatabaseLogStreamsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetRelationalDatabaseLogStreamsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetRelationalDatabaseLogStreamsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetRelationalDatabaseLogStreamsError::AccessDenied(ref cause) => cause,
+            GetRelationalDatabaseLogStreamsError::AccountSetupInProgress(ref cause) => cause,
+            GetRelationalDatabaseLogStreamsError::InvalidInput(ref cause) => cause,
+            GetRelationalDatabaseLogStreamsError::NotFound(ref cause) => cause,
+            GetRelationalDatabaseLogStreamsError::OperationFailure(ref cause) => cause,
+            GetRelationalDatabaseLogStreamsError::Service(ref cause) => cause,
+            GetRelationalDatabaseLogStreamsError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseLogStreamsError::Validation(ref cause) => cause,
+            GetRelationalDatabaseLogStreamsError::Credentials(ref err) => err.description(),
+            GetRelationalDatabaseLogStreamsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetRelationalDatabaseLogStreamsError::ParseError(ref cause) => cause,
+            GetRelationalDatabaseLogStreamsError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetRelationalDatabaseMasterUserPassword
+#[derive(Debug, PartialEq)]
+pub enum GetRelationalDatabaseMasterUserPasswordError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetRelationalDatabaseMasterUserPasswordError {
+    pub fn from_response(
+        res: BufferedHttpResponse,
+    ) -> GetRelationalDatabaseMasterUserPasswordError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return GetRelationalDatabaseMasterUserPasswordError::AccessDenied(String::from(
+                        error_message,
+                    ));
+                }
+                "AccountSetupInProgressException" => {
+                    return GetRelationalDatabaseMasterUserPasswordError::AccountSetupInProgress(
+                        String::from(error_message),
+                    );
+                }
+                "InvalidInputException" => {
+                    return GetRelationalDatabaseMasterUserPasswordError::InvalidInput(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return GetRelationalDatabaseMasterUserPasswordError::NotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "OperationFailureException" => {
+                    return GetRelationalDatabaseMasterUserPasswordError::OperationFailure(
+                        String::from(error_message),
+                    );
+                }
+                "ServiceException" => {
+                    return GetRelationalDatabaseMasterUserPasswordError::Service(String::from(
+                        error_message,
+                    ));
+                }
+                "UnauthenticatedException" => {
+                    return GetRelationalDatabaseMasterUserPasswordError::Unauthenticated(
+                        String::from(error_message),
+                    );
+                }
+                "ValidationException" => {
+                    return GetRelationalDatabaseMasterUserPasswordError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return GetRelationalDatabaseMasterUserPasswordError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetRelationalDatabaseMasterUserPasswordError {
+    fn from(err: serde_json::error::Error) -> GetRelationalDatabaseMasterUserPasswordError {
+        GetRelationalDatabaseMasterUserPasswordError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetRelationalDatabaseMasterUserPasswordError {
+    fn from(err: CredentialsError) -> GetRelationalDatabaseMasterUserPasswordError {
+        GetRelationalDatabaseMasterUserPasswordError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetRelationalDatabaseMasterUserPasswordError {
+    fn from(err: HttpDispatchError) -> GetRelationalDatabaseMasterUserPasswordError {
+        GetRelationalDatabaseMasterUserPasswordError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetRelationalDatabaseMasterUserPasswordError {
+    fn from(err: io::Error) -> GetRelationalDatabaseMasterUserPasswordError {
+        GetRelationalDatabaseMasterUserPasswordError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetRelationalDatabaseMasterUserPasswordError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetRelationalDatabaseMasterUserPasswordError {
+    fn description(&self) -> &str {
+        match *self {
+            GetRelationalDatabaseMasterUserPasswordError::AccessDenied(ref cause) => cause,
+            GetRelationalDatabaseMasterUserPasswordError::AccountSetupInProgress(ref cause) => {
+                cause
+            }
+            GetRelationalDatabaseMasterUserPasswordError::InvalidInput(ref cause) => cause,
+            GetRelationalDatabaseMasterUserPasswordError::NotFound(ref cause) => cause,
+            GetRelationalDatabaseMasterUserPasswordError::OperationFailure(ref cause) => cause,
+            GetRelationalDatabaseMasterUserPasswordError::Service(ref cause) => cause,
+            GetRelationalDatabaseMasterUserPasswordError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseMasterUserPasswordError::Validation(ref cause) => cause,
+            GetRelationalDatabaseMasterUserPasswordError::Credentials(ref err) => err.description(),
+            GetRelationalDatabaseMasterUserPasswordError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetRelationalDatabaseMasterUserPasswordError::ParseError(ref cause) => cause,
+            GetRelationalDatabaseMasterUserPasswordError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetRelationalDatabaseMetricData
+#[derive(Debug, PartialEq)]
+pub enum GetRelationalDatabaseMetricDataError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetRelationalDatabaseMetricDataError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetRelationalDatabaseMetricDataError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return GetRelationalDatabaseMetricDataError::AccessDenied(String::from(
+                        error_message,
+                    ));
+                }
+                "AccountSetupInProgressException" => {
+                    return GetRelationalDatabaseMetricDataError::AccountSetupInProgress(
+                        String::from(error_message),
+                    );
+                }
+                "InvalidInputException" => {
+                    return GetRelationalDatabaseMetricDataError::InvalidInput(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return GetRelationalDatabaseMetricDataError::NotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "OperationFailureException" => {
+                    return GetRelationalDatabaseMetricDataError::OperationFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "ServiceException" => {
+                    return GetRelationalDatabaseMetricDataError::Service(String::from(
+                        error_message,
+                    ));
+                }
+                "UnauthenticatedException" => {
+                    return GetRelationalDatabaseMetricDataError::Unauthenticated(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return GetRelationalDatabaseMetricDataError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return GetRelationalDatabaseMetricDataError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetRelationalDatabaseMetricDataError {
+    fn from(err: serde_json::error::Error) -> GetRelationalDatabaseMetricDataError {
+        GetRelationalDatabaseMetricDataError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetRelationalDatabaseMetricDataError {
+    fn from(err: CredentialsError) -> GetRelationalDatabaseMetricDataError {
+        GetRelationalDatabaseMetricDataError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetRelationalDatabaseMetricDataError {
+    fn from(err: HttpDispatchError) -> GetRelationalDatabaseMetricDataError {
+        GetRelationalDatabaseMetricDataError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetRelationalDatabaseMetricDataError {
+    fn from(err: io::Error) -> GetRelationalDatabaseMetricDataError {
+        GetRelationalDatabaseMetricDataError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetRelationalDatabaseMetricDataError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetRelationalDatabaseMetricDataError {
+    fn description(&self) -> &str {
+        match *self {
+            GetRelationalDatabaseMetricDataError::AccessDenied(ref cause) => cause,
+            GetRelationalDatabaseMetricDataError::AccountSetupInProgress(ref cause) => cause,
+            GetRelationalDatabaseMetricDataError::InvalidInput(ref cause) => cause,
+            GetRelationalDatabaseMetricDataError::NotFound(ref cause) => cause,
+            GetRelationalDatabaseMetricDataError::OperationFailure(ref cause) => cause,
+            GetRelationalDatabaseMetricDataError::Service(ref cause) => cause,
+            GetRelationalDatabaseMetricDataError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseMetricDataError::Validation(ref cause) => cause,
+            GetRelationalDatabaseMetricDataError::Credentials(ref err) => err.description(),
+            GetRelationalDatabaseMetricDataError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetRelationalDatabaseMetricDataError::ParseError(ref cause) => cause,
+            GetRelationalDatabaseMetricDataError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetRelationalDatabaseParameters
+#[derive(Debug, PartialEq)]
+pub enum GetRelationalDatabaseParametersError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetRelationalDatabaseParametersError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetRelationalDatabaseParametersError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return GetRelationalDatabaseParametersError::AccessDenied(String::from(
+                        error_message,
+                    ));
+                }
+                "AccountSetupInProgressException" => {
+                    return GetRelationalDatabaseParametersError::AccountSetupInProgress(
+                        String::from(error_message),
+                    );
+                }
+                "InvalidInputException" => {
+                    return GetRelationalDatabaseParametersError::InvalidInput(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return GetRelationalDatabaseParametersError::NotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "OperationFailureException" => {
+                    return GetRelationalDatabaseParametersError::OperationFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "ServiceException" => {
+                    return GetRelationalDatabaseParametersError::Service(String::from(
+                        error_message,
+                    ));
+                }
+                "UnauthenticatedException" => {
+                    return GetRelationalDatabaseParametersError::Unauthenticated(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return GetRelationalDatabaseParametersError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return GetRelationalDatabaseParametersError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetRelationalDatabaseParametersError {
+    fn from(err: serde_json::error::Error) -> GetRelationalDatabaseParametersError {
+        GetRelationalDatabaseParametersError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetRelationalDatabaseParametersError {
+    fn from(err: CredentialsError) -> GetRelationalDatabaseParametersError {
+        GetRelationalDatabaseParametersError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetRelationalDatabaseParametersError {
+    fn from(err: HttpDispatchError) -> GetRelationalDatabaseParametersError {
+        GetRelationalDatabaseParametersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetRelationalDatabaseParametersError {
+    fn from(err: io::Error) -> GetRelationalDatabaseParametersError {
+        GetRelationalDatabaseParametersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetRelationalDatabaseParametersError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetRelationalDatabaseParametersError {
+    fn description(&self) -> &str {
+        match *self {
+            GetRelationalDatabaseParametersError::AccessDenied(ref cause) => cause,
+            GetRelationalDatabaseParametersError::AccountSetupInProgress(ref cause) => cause,
+            GetRelationalDatabaseParametersError::InvalidInput(ref cause) => cause,
+            GetRelationalDatabaseParametersError::NotFound(ref cause) => cause,
+            GetRelationalDatabaseParametersError::OperationFailure(ref cause) => cause,
+            GetRelationalDatabaseParametersError::Service(ref cause) => cause,
+            GetRelationalDatabaseParametersError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseParametersError::Validation(ref cause) => cause,
+            GetRelationalDatabaseParametersError::Credentials(ref err) => err.description(),
+            GetRelationalDatabaseParametersError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetRelationalDatabaseParametersError::ParseError(ref cause) => cause,
+            GetRelationalDatabaseParametersError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetRelationalDatabaseSnapshot
+#[derive(Debug, PartialEq)]
+pub enum GetRelationalDatabaseSnapshotError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetRelationalDatabaseSnapshotError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetRelationalDatabaseSnapshotError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return GetRelationalDatabaseSnapshotError::AccessDenied(String::from(
+                        error_message,
+                    ));
+                }
+                "AccountSetupInProgressException" => {
+                    return GetRelationalDatabaseSnapshotError::AccountSetupInProgress(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidInputException" => {
+                    return GetRelationalDatabaseSnapshotError::InvalidInput(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return GetRelationalDatabaseSnapshotError::NotFound(String::from(error_message));
+                }
+                "OperationFailureException" => {
+                    return GetRelationalDatabaseSnapshotError::OperationFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "ServiceException" => {
+                    return GetRelationalDatabaseSnapshotError::Service(String::from(error_message));
+                }
+                "UnauthenticatedException" => {
+                    return GetRelationalDatabaseSnapshotError::Unauthenticated(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return GetRelationalDatabaseSnapshotError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetRelationalDatabaseSnapshotError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetRelationalDatabaseSnapshotError {
+    fn from(err: serde_json::error::Error) -> GetRelationalDatabaseSnapshotError {
+        GetRelationalDatabaseSnapshotError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetRelationalDatabaseSnapshotError {
+    fn from(err: CredentialsError) -> GetRelationalDatabaseSnapshotError {
+        GetRelationalDatabaseSnapshotError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetRelationalDatabaseSnapshotError {
+    fn from(err: HttpDispatchError) -> GetRelationalDatabaseSnapshotError {
+        GetRelationalDatabaseSnapshotError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetRelationalDatabaseSnapshotError {
+    fn from(err: io::Error) -> GetRelationalDatabaseSnapshotError {
+        GetRelationalDatabaseSnapshotError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetRelationalDatabaseSnapshotError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetRelationalDatabaseSnapshotError {
+    fn description(&self) -> &str {
+        match *self {
+            GetRelationalDatabaseSnapshotError::AccessDenied(ref cause) => cause,
+            GetRelationalDatabaseSnapshotError::AccountSetupInProgress(ref cause) => cause,
+            GetRelationalDatabaseSnapshotError::InvalidInput(ref cause) => cause,
+            GetRelationalDatabaseSnapshotError::NotFound(ref cause) => cause,
+            GetRelationalDatabaseSnapshotError::OperationFailure(ref cause) => cause,
+            GetRelationalDatabaseSnapshotError::Service(ref cause) => cause,
+            GetRelationalDatabaseSnapshotError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseSnapshotError::Validation(ref cause) => cause,
+            GetRelationalDatabaseSnapshotError::Credentials(ref err) => err.description(),
+            GetRelationalDatabaseSnapshotError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetRelationalDatabaseSnapshotError::ParseError(ref cause) => cause,
+            GetRelationalDatabaseSnapshotError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetRelationalDatabaseSnapshots
+#[derive(Debug, PartialEq)]
+pub enum GetRelationalDatabaseSnapshotsError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetRelationalDatabaseSnapshotsError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetRelationalDatabaseSnapshotsError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return GetRelationalDatabaseSnapshotsError::AccessDenied(String::from(
+                        error_message,
+                    ));
+                }
+                "AccountSetupInProgressException" => {
+                    return GetRelationalDatabaseSnapshotsError::AccountSetupInProgress(
+                        String::from(error_message),
+                    );
+                }
+                "InvalidInputException" => {
+                    return GetRelationalDatabaseSnapshotsError::InvalidInput(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return GetRelationalDatabaseSnapshotsError::NotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "OperationFailureException" => {
+                    return GetRelationalDatabaseSnapshotsError::OperationFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "ServiceException" => {
+                    return GetRelationalDatabaseSnapshotsError::Service(String::from(error_message));
+                }
+                "UnauthenticatedException" => {
+                    return GetRelationalDatabaseSnapshotsError::Unauthenticated(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return GetRelationalDatabaseSnapshotsError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return GetRelationalDatabaseSnapshotsError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetRelationalDatabaseSnapshotsError {
+    fn from(err: serde_json::error::Error) -> GetRelationalDatabaseSnapshotsError {
+        GetRelationalDatabaseSnapshotsError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetRelationalDatabaseSnapshotsError {
+    fn from(err: CredentialsError) -> GetRelationalDatabaseSnapshotsError {
+        GetRelationalDatabaseSnapshotsError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetRelationalDatabaseSnapshotsError {
+    fn from(err: HttpDispatchError) -> GetRelationalDatabaseSnapshotsError {
+        GetRelationalDatabaseSnapshotsError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetRelationalDatabaseSnapshotsError {
+    fn from(err: io::Error) -> GetRelationalDatabaseSnapshotsError {
+        GetRelationalDatabaseSnapshotsError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetRelationalDatabaseSnapshotsError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetRelationalDatabaseSnapshotsError {
+    fn description(&self) -> &str {
+        match *self {
+            GetRelationalDatabaseSnapshotsError::AccessDenied(ref cause) => cause,
+            GetRelationalDatabaseSnapshotsError::AccountSetupInProgress(ref cause) => cause,
+            GetRelationalDatabaseSnapshotsError::InvalidInput(ref cause) => cause,
+            GetRelationalDatabaseSnapshotsError::NotFound(ref cause) => cause,
+            GetRelationalDatabaseSnapshotsError::OperationFailure(ref cause) => cause,
+            GetRelationalDatabaseSnapshotsError::Service(ref cause) => cause,
+            GetRelationalDatabaseSnapshotsError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabaseSnapshotsError::Validation(ref cause) => cause,
+            GetRelationalDatabaseSnapshotsError::Credentials(ref err) => err.description(),
+            GetRelationalDatabaseSnapshotsError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetRelationalDatabaseSnapshotsError::ParseError(ref cause) => cause,
+            GetRelationalDatabaseSnapshotsError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by GetRelationalDatabases
+#[derive(Debug, PartialEq)]
+pub enum GetRelationalDatabasesError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl GetRelationalDatabasesError {
+    pub fn from_response(res: BufferedHttpResponse) -> GetRelationalDatabasesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return GetRelationalDatabasesError::AccessDenied(String::from(error_message));
+                }
+                "AccountSetupInProgressException" => {
+                    return GetRelationalDatabasesError::AccountSetupInProgress(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidInputException" => {
+                    return GetRelationalDatabasesError::InvalidInput(String::from(error_message));
+                }
+                "NotFoundException" => {
+                    return GetRelationalDatabasesError::NotFound(String::from(error_message));
+                }
+                "OperationFailureException" => {
+                    return GetRelationalDatabasesError::OperationFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "ServiceException" => {
+                    return GetRelationalDatabasesError::Service(String::from(error_message));
+                }
+                "UnauthenticatedException" => {
+                    return GetRelationalDatabasesError::Unauthenticated(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return GetRelationalDatabasesError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return GetRelationalDatabasesError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for GetRelationalDatabasesError {
+    fn from(err: serde_json::error::Error) -> GetRelationalDatabasesError {
+        GetRelationalDatabasesError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for GetRelationalDatabasesError {
+    fn from(err: CredentialsError) -> GetRelationalDatabasesError {
+        GetRelationalDatabasesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for GetRelationalDatabasesError {
+    fn from(err: HttpDispatchError) -> GetRelationalDatabasesError {
+        GetRelationalDatabasesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for GetRelationalDatabasesError {
+    fn from(err: io::Error) -> GetRelationalDatabasesError {
+        GetRelationalDatabasesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for GetRelationalDatabasesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for GetRelationalDatabasesError {
+    fn description(&self) -> &str {
+        match *self {
+            GetRelationalDatabasesError::AccessDenied(ref cause) => cause,
+            GetRelationalDatabasesError::AccountSetupInProgress(ref cause) => cause,
+            GetRelationalDatabasesError::InvalidInput(ref cause) => cause,
+            GetRelationalDatabasesError::NotFound(ref cause) => cause,
+            GetRelationalDatabasesError::OperationFailure(ref cause) => cause,
+            GetRelationalDatabasesError::Service(ref cause) => cause,
+            GetRelationalDatabasesError::Unauthenticated(ref cause) => cause,
+            GetRelationalDatabasesError::Validation(ref cause) => cause,
+            GetRelationalDatabasesError::Credentials(ref err) => err.description(),
+            GetRelationalDatabasesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            GetRelationalDatabasesError::ParseError(ref cause) => cause,
+            GetRelationalDatabasesError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by GetStaticIp
 #[derive(Debug, PartialEq)]
 pub enum GetStaticIpError {
@@ -10240,6 +14475,130 @@ impl Error for RebootInstanceError {
         }
     }
 }
+/// Errors returned by RebootRelationalDatabase
+#[derive(Debug, PartialEq)]
+pub enum RebootRelationalDatabaseError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl RebootRelationalDatabaseError {
+    pub fn from_response(res: BufferedHttpResponse) -> RebootRelationalDatabaseError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return RebootRelationalDatabaseError::AccessDenied(String::from(error_message));
+                }
+                "AccountSetupInProgressException" => {
+                    return RebootRelationalDatabaseError::AccountSetupInProgress(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidInputException" => {
+                    return RebootRelationalDatabaseError::InvalidInput(String::from(error_message));
+                }
+                "NotFoundException" => {
+                    return RebootRelationalDatabaseError::NotFound(String::from(error_message));
+                }
+                "OperationFailureException" => {
+                    return RebootRelationalDatabaseError::OperationFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "ServiceException" => {
+                    return RebootRelationalDatabaseError::Service(String::from(error_message));
+                }
+                "UnauthenticatedException" => {
+                    return RebootRelationalDatabaseError::Unauthenticated(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return RebootRelationalDatabaseError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return RebootRelationalDatabaseError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for RebootRelationalDatabaseError {
+    fn from(err: serde_json::error::Error) -> RebootRelationalDatabaseError {
+        RebootRelationalDatabaseError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for RebootRelationalDatabaseError {
+    fn from(err: CredentialsError) -> RebootRelationalDatabaseError {
+        RebootRelationalDatabaseError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for RebootRelationalDatabaseError {
+    fn from(err: HttpDispatchError) -> RebootRelationalDatabaseError {
+        RebootRelationalDatabaseError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for RebootRelationalDatabaseError {
+    fn from(err: io::Error) -> RebootRelationalDatabaseError {
+        RebootRelationalDatabaseError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for RebootRelationalDatabaseError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for RebootRelationalDatabaseError {
+    fn description(&self) -> &str {
+        match *self {
+            RebootRelationalDatabaseError::AccessDenied(ref cause) => cause,
+            RebootRelationalDatabaseError::AccountSetupInProgress(ref cause) => cause,
+            RebootRelationalDatabaseError::InvalidInput(ref cause) => cause,
+            RebootRelationalDatabaseError::NotFound(ref cause) => cause,
+            RebootRelationalDatabaseError::OperationFailure(ref cause) => cause,
+            RebootRelationalDatabaseError::Service(ref cause) => cause,
+            RebootRelationalDatabaseError::Unauthenticated(ref cause) => cause,
+            RebootRelationalDatabaseError::Validation(ref cause) => cause,
+            RebootRelationalDatabaseError::Credentials(ref err) => err.description(),
+            RebootRelationalDatabaseError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            RebootRelationalDatabaseError::ParseError(ref cause) => cause,
+            RebootRelationalDatabaseError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by ReleaseStaticIp
 #[derive(Debug, PartialEq)]
 pub enum ReleaseStaticIpError {
@@ -10472,6 +14831,130 @@ impl Error for StartInstanceError {
         }
     }
 }
+/// Errors returned by StartRelationalDatabase
+#[derive(Debug, PartialEq)]
+pub enum StartRelationalDatabaseError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl StartRelationalDatabaseError {
+    pub fn from_response(res: BufferedHttpResponse) -> StartRelationalDatabaseError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return StartRelationalDatabaseError::AccessDenied(String::from(error_message));
+                }
+                "AccountSetupInProgressException" => {
+                    return StartRelationalDatabaseError::AccountSetupInProgress(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidInputException" => {
+                    return StartRelationalDatabaseError::InvalidInput(String::from(error_message));
+                }
+                "NotFoundException" => {
+                    return StartRelationalDatabaseError::NotFound(String::from(error_message));
+                }
+                "OperationFailureException" => {
+                    return StartRelationalDatabaseError::OperationFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "ServiceException" => {
+                    return StartRelationalDatabaseError::Service(String::from(error_message));
+                }
+                "UnauthenticatedException" => {
+                    return StartRelationalDatabaseError::Unauthenticated(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return StartRelationalDatabaseError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return StartRelationalDatabaseError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for StartRelationalDatabaseError {
+    fn from(err: serde_json::error::Error) -> StartRelationalDatabaseError {
+        StartRelationalDatabaseError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for StartRelationalDatabaseError {
+    fn from(err: CredentialsError) -> StartRelationalDatabaseError {
+        StartRelationalDatabaseError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for StartRelationalDatabaseError {
+    fn from(err: HttpDispatchError) -> StartRelationalDatabaseError {
+        StartRelationalDatabaseError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StartRelationalDatabaseError {
+    fn from(err: io::Error) -> StartRelationalDatabaseError {
+        StartRelationalDatabaseError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for StartRelationalDatabaseError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StartRelationalDatabaseError {
+    fn description(&self) -> &str {
+        match *self {
+            StartRelationalDatabaseError::AccessDenied(ref cause) => cause,
+            StartRelationalDatabaseError::AccountSetupInProgress(ref cause) => cause,
+            StartRelationalDatabaseError::InvalidInput(ref cause) => cause,
+            StartRelationalDatabaseError::NotFound(ref cause) => cause,
+            StartRelationalDatabaseError::OperationFailure(ref cause) => cause,
+            StartRelationalDatabaseError::Service(ref cause) => cause,
+            StartRelationalDatabaseError::Unauthenticated(ref cause) => cause,
+            StartRelationalDatabaseError::Validation(ref cause) => cause,
+            StartRelationalDatabaseError::Credentials(ref err) => err.description(),
+            StartRelationalDatabaseError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            StartRelationalDatabaseError::ParseError(ref cause) => cause,
+            StartRelationalDatabaseError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by StopInstance
 #[derive(Debug, PartialEq)]
 pub enum StopInstanceError {
@@ -10588,6 +15071,242 @@ impl Error for StopInstanceError {
         }
     }
 }
+/// Errors returned by StopRelationalDatabase
+#[derive(Debug, PartialEq)]
+pub enum StopRelationalDatabaseError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl StopRelationalDatabaseError {
+    pub fn from_response(res: BufferedHttpResponse) -> StopRelationalDatabaseError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return StopRelationalDatabaseError::AccessDenied(String::from(error_message));
+                }
+                "AccountSetupInProgressException" => {
+                    return StopRelationalDatabaseError::AccountSetupInProgress(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidInputException" => {
+                    return StopRelationalDatabaseError::InvalidInput(String::from(error_message));
+                }
+                "NotFoundException" => {
+                    return StopRelationalDatabaseError::NotFound(String::from(error_message));
+                }
+                "OperationFailureException" => {
+                    return StopRelationalDatabaseError::OperationFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "ServiceException" => {
+                    return StopRelationalDatabaseError::Service(String::from(error_message));
+                }
+                "UnauthenticatedException" => {
+                    return StopRelationalDatabaseError::Unauthenticated(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return StopRelationalDatabaseError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return StopRelationalDatabaseError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for StopRelationalDatabaseError {
+    fn from(err: serde_json::error::Error) -> StopRelationalDatabaseError {
+        StopRelationalDatabaseError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for StopRelationalDatabaseError {
+    fn from(err: CredentialsError) -> StopRelationalDatabaseError {
+        StopRelationalDatabaseError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for StopRelationalDatabaseError {
+    fn from(err: HttpDispatchError) -> StopRelationalDatabaseError {
+        StopRelationalDatabaseError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for StopRelationalDatabaseError {
+    fn from(err: io::Error) -> StopRelationalDatabaseError {
+        StopRelationalDatabaseError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for StopRelationalDatabaseError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for StopRelationalDatabaseError {
+    fn description(&self) -> &str {
+        match *self {
+            StopRelationalDatabaseError::AccessDenied(ref cause) => cause,
+            StopRelationalDatabaseError::AccountSetupInProgress(ref cause) => cause,
+            StopRelationalDatabaseError::InvalidInput(ref cause) => cause,
+            StopRelationalDatabaseError::NotFound(ref cause) => cause,
+            StopRelationalDatabaseError::OperationFailure(ref cause) => cause,
+            StopRelationalDatabaseError::Service(ref cause) => cause,
+            StopRelationalDatabaseError::Unauthenticated(ref cause) => cause,
+            StopRelationalDatabaseError::Validation(ref cause) => cause,
+            StopRelationalDatabaseError::Credentials(ref err) => err.description(),
+            StopRelationalDatabaseError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            StopRelationalDatabaseError::ParseError(ref cause) => cause,
+            StopRelationalDatabaseError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by TagResource
+#[derive(Debug, PartialEq)]
+pub enum TagResourceError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl TagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> TagResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return TagResourceError::AccessDenied(String::from(error_message));
+                }
+                "AccountSetupInProgressException" => {
+                    return TagResourceError::AccountSetupInProgress(String::from(error_message));
+                }
+                "InvalidInputException" => {
+                    return TagResourceError::InvalidInput(String::from(error_message));
+                }
+                "NotFoundException" => {
+                    return TagResourceError::NotFound(String::from(error_message));
+                }
+                "OperationFailureException" => {
+                    return TagResourceError::OperationFailure(String::from(error_message));
+                }
+                "ServiceException" => return TagResourceError::Service(String::from(error_message)),
+                "UnauthenticatedException" => {
+                    return TagResourceError::Unauthenticated(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return TagResourceError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return TagResourceError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for TagResourceError {
+    fn from(err: serde_json::error::Error) -> TagResourceError {
+        TagResourceError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for TagResourceError {
+    fn from(err: CredentialsError) -> TagResourceError {
+        TagResourceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for TagResourceError {
+    fn from(err: HttpDispatchError) -> TagResourceError {
+        TagResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for TagResourceError {
+    fn from(err: io::Error) -> TagResourceError {
+        TagResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for TagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for TagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            TagResourceError::AccessDenied(ref cause) => cause,
+            TagResourceError::AccountSetupInProgress(ref cause) => cause,
+            TagResourceError::InvalidInput(ref cause) => cause,
+            TagResourceError::NotFound(ref cause) => cause,
+            TagResourceError::OperationFailure(ref cause) => cause,
+            TagResourceError::Service(ref cause) => cause,
+            TagResourceError::Unauthenticated(ref cause) => cause,
+            TagResourceError::Validation(ref cause) => cause,
+            TagResourceError::Credentials(ref err) => err.description(),
+            TagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            TagResourceError::ParseError(ref cause) => cause,
+            TagResourceError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by UnpeerVpc
 #[derive(Debug, PartialEq)]
 pub enum UnpeerVpcError {
@@ -10697,6 +15416,122 @@ impl Error for UnpeerVpcError {
             UnpeerVpcError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
             UnpeerVpcError::ParseError(ref cause) => cause,
             UnpeerVpcError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by UntagResource
+#[derive(Debug, PartialEq)]
+pub enum UntagResourceError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl UntagResourceError {
+    pub fn from_response(res: BufferedHttpResponse) -> UntagResourceError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return UntagResourceError::AccessDenied(String::from(error_message));
+                }
+                "AccountSetupInProgressException" => {
+                    return UntagResourceError::AccountSetupInProgress(String::from(error_message));
+                }
+                "InvalidInputException" => {
+                    return UntagResourceError::InvalidInput(String::from(error_message));
+                }
+                "NotFoundException" => {
+                    return UntagResourceError::NotFound(String::from(error_message));
+                }
+                "OperationFailureException" => {
+                    return UntagResourceError::OperationFailure(String::from(error_message));
+                }
+                "ServiceException" => {
+                    return UntagResourceError::Service(String::from(error_message));
+                }
+                "UnauthenticatedException" => {
+                    return UntagResourceError::Unauthenticated(String::from(error_message));
+                }
+                "ValidationException" => {
+                    return UntagResourceError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return UntagResourceError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for UntagResourceError {
+    fn from(err: serde_json::error::Error) -> UntagResourceError {
+        UntagResourceError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UntagResourceError {
+    fn from(err: CredentialsError) -> UntagResourceError {
+        UntagResourceError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UntagResourceError {
+    fn from(err: HttpDispatchError) -> UntagResourceError {
+        UntagResourceError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UntagResourceError {
+    fn from(err: io::Error) -> UntagResourceError {
+        UntagResourceError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UntagResourceError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UntagResourceError {
+    fn description(&self) -> &str {
+        match *self {
+            UntagResourceError::AccessDenied(ref cause) => cause,
+            UntagResourceError::AccountSetupInProgress(ref cause) => cause,
+            UntagResourceError::InvalidInput(ref cause) => cause,
+            UntagResourceError::NotFound(ref cause) => cause,
+            UntagResourceError::OperationFailure(ref cause) => cause,
+            UntagResourceError::Service(ref cause) => cause,
+            UntagResourceError::Unauthenticated(ref cause) => cause,
+            UntagResourceError::Validation(ref cause) => cause,
+            UntagResourceError::Credentials(ref err) => err.description(),
+            UntagResourceError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
+            UntagResourceError::ParseError(ref cause) => cause,
+            UntagResourceError::Unknown(_) => "unknown error",
         }
     }
 }
@@ -10948,6 +15783,264 @@ impl Error for UpdateLoadBalancerAttributeError {
         }
     }
 }
+/// Errors returned by UpdateRelationalDatabase
+#[derive(Debug, PartialEq)]
+pub enum UpdateRelationalDatabaseError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl UpdateRelationalDatabaseError {
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateRelationalDatabaseError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return UpdateRelationalDatabaseError::AccessDenied(String::from(error_message));
+                }
+                "AccountSetupInProgressException" => {
+                    return UpdateRelationalDatabaseError::AccountSetupInProgress(String::from(
+                        error_message,
+                    ));
+                }
+                "InvalidInputException" => {
+                    return UpdateRelationalDatabaseError::InvalidInput(String::from(error_message));
+                }
+                "NotFoundException" => {
+                    return UpdateRelationalDatabaseError::NotFound(String::from(error_message));
+                }
+                "OperationFailureException" => {
+                    return UpdateRelationalDatabaseError::OperationFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "ServiceException" => {
+                    return UpdateRelationalDatabaseError::Service(String::from(error_message));
+                }
+                "UnauthenticatedException" => {
+                    return UpdateRelationalDatabaseError::Unauthenticated(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return UpdateRelationalDatabaseError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return UpdateRelationalDatabaseError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateRelationalDatabaseError {
+    fn from(err: serde_json::error::Error) -> UpdateRelationalDatabaseError {
+        UpdateRelationalDatabaseError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateRelationalDatabaseError {
+    fn from(err: CredentialsError) -> UpdateRelationalDatabaseError {
+        UpdateRelationalDatabaseError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateRelationalDatabaseError {
+    fn from(err: HttpDispatchError) -> UpdateRelationalDatabaseError {
+        UpdateRelationalDatabaseError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateRelationalDatabaseError {
+    fn from(err: io::Error) -> UpdateRelationalDatabaseError {
+        UpdateRelationalDatabaseError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateRelationalDatabaseError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateRelationalDatabaseError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateRelationalDatabaseError::AccessDenied(ref cause) => cause,
+            UpdateRelationalDatabaseError::AccountSetupInProgress(ref cause) => cause,
+            UpdateRelationalDatabaseError::InvalidInput(ref cause) => cause,
+            UpdateRelationalDatabaseError::NotFound(ref cause) => cause,
+            UpdateRelationalDatabaseError::OperationFailure(ref cause) => cause,
+            UpdateRelationalDatabaseError::Service(ref cause) => cause,
+            UpdateRelationalDatabaseError::Unauthenticated(ref cause) => cause,
+            UpdateRelationalDatabaseError::Validation(ref cause) => cause,
+            UpdateRelationalDatabaseError::Credentials(ref err) => err.description(),
+            UpdateRelationalDatabaseError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateRelationalDatabaseError::ParseError(ref cause) => cause,
+            UpdateRelationalDatabaseError::Unknown(_) => "unknown error",
+        }
+    }
+}
+/// Errors returned by UpdateRelationalDatabaseParameters
+#[derive(Debug, PartialEq)]
+pub enum UpdateRelationalDatabaseParametersError {
+    /// <p>Lightsail throws this exception when the user cannot be authenticated or uses invalid credentials to access a resource.</p>
+    AccessDenied(String),
+    /// <p>Lightsail throws this exception when an account is still in the setup in progress state.</p>
+    AccountSetupInProgress(String),
+    /// <p><p>Lightsail throws this exception when user input does not conform to the validation rules of an input field.</p> <note> <p>Domain-related APIs are only available in the N. Virginia (us-east-1) Region. Please set your AWS Region configuration to us-east-1 to create, view, or edit these resources.</p> </note></p>
+    InvalidInput(String),
+    /// <p>Lightsail throws this exception when it cannot find a resource.</p>
+    NotFound(String),
+    /// <p>Lightsail throws this exception when an operation fails to execute.</p>
+    OperationFailure(String),
+    /// <p>A general service exception.</p>
+    Service(String),
+    /// <p>Lightsail throws this exception when the user has not been authenticated.</p>
+    Unauthenticated(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl UpdateRelationalDatabaseParametersError {
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateRelationalDatabaseParametersError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "AccessDeniedException" => {
+                    return UpdateRelationalDatabaseParametersError::AccessDenied(String::from(
+                        error_message,
+                    ));
+                }
+                "AccountSetupInProgressException" => {
+                    return UpdateRelationalDatabaseParametersError::AccountSetupInProgress(
+                        String::from(error_message),
+                    );
+                }
+                "InvalidInputException" => {
+                    return UpdateRelationalDatabaseParametersError::InvalidInput(String::from(
+                        error_message,
+                    ));
+                }
+                "NotFoundException" => {
+                    return UpdateRelationalDatabaseParametersError::NotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "OperationFailureException" => {
+                    return UpdateRelationalDatabaseParametersError::OperationFailure(String::from(
+                        error_message,
+                    ));
+                }
+                "ServiceException" => {
+                    return UpdateRelationalDatabaseParametersError::Service(String::from(
+                        error_message,
+                    ));
+                }
+                "UnauthenticatedException" => {
+                    return UpdateRelationalDatabaseParametersError::Unauthenticated(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return UpdateRelationalDatabaseParametersError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return UpdateRelationalDatabaseParametersError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateRelationalDatabaseParametersError {
+    fn from(err: serde_json::error::Error) -> UpdateRelationalDatabaseParametersError {
+        UpdateRelationalDatabaseParametersError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateRelationalDatabaseParametersError {
+    fn from(err: CredentialsError) -> UpdateRelationalDatabaseParametersError {
+        UpdateRelationalDatabaseParametersError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateRelationalDatabaseParametersError {
+    fn from(err: HttpDispatchError) -> UpdateRelationalDatabaseParametersError {
+        UpdateRelationalDatabaseParametersError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateRelationalDatabaseParametersError {
+    fn from(err: io::Error) -> UpdateRelationalDatabaseParametersError {
+        UpdateRelationalDatabaseParametersError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateRelationalDatabaseParametersError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateRelationalDatabaseParametersError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateRelationalDatabaseParametersError::AccessDenied(ref cause) => cause,
+            UpdateRelationalDatabaseParametersError::AccountSetupInProgress(ref cause) => cause,
+            UpdateRelationalDatabaseParametersError::InvalidInput(ref cause) => cause,
+            UpdateRelationalDatabaseParametersError::NotFound(ref cause) => cause,
+            UpdateRelationalDatabaseParametersError::OperationFailure(ref cause) => cause,
+            UpdateRelationalDatabaseParametersError::Service(ref cause) => cause,
+            UpdateRelationalDatabaseParametersError::Unauthenticated(ref cause) => cause,
+            UpdateRelationalDatabaseParametersError::Validation(ref cause) => cause,
+            UpdateRelationalDatabaseParametersError::Credentials(ref err) => err.description(),
+            UpdateRelationalDatabaseParametersError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateRelationalDatabaseParametersError::ParseError(ref cause) => cause,
+            UpdateRelationalDatabaseParametersError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Trait representing the capabilities of the Amazon Lightsail API. Amazon Lightsail clients implement this trait.
 pub trait Lightsail {
     /// <p>Allocates a static IP address.</p>
@@ -10956,19 +16049,19 @@ pub trait Lightsail {
         input: AllocateStaticIpRequest,
     ) -> RusotoFuture<AllocateStaticIpResult, AllocateStaticIpError>;
 
-    /// <p>Attaches a block storage disk to a running or stopped Lightsail instance and exposes it to the instance with the specified disk name.</p>
+    /// <p>Attaches a block storage disk to a running or stopped Lightsail instance and exposes it to the instance with the specified disk name.</p> <p>The <code>attach disk</code> operation supports tag-based access control via resource tags applied to the resource identified by diskName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn attach_disk(
         &self,
         input: AttachDiskRequest,
     ) -> RusotoFuture<AttachDiskResult, AttachDiskError>;
 
-    /// <p>Attaches one or more Lightsail instances to a load balancer.</p> <p>After some time, the instances are attached to the load balancer and the health check status is available.</p>
+    /// <p>Attaches one or more Lightsail instances to a load balancer.</p> <p>After some time, the instances are attached to the load balancer and the health check status is available.</p> <p>The <code>attach instances to load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn attach_instances_to_load_balancer(
         &self,
         input: AttachInstancesToLoadBalancerRequest,
     ) -> RusotoFuture<AttachInstancesToLoadBalancerResult, AttachInstancesToLoadBalancerError>;
 
-    /// <p>Attaches a Transport Layer Security (TLS) certificate to your load balancer. TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>Once you create and validate your certificate, you can attach it to your load balancer. You can also use this API to rotate the certificates on your account. Use the <code>AttachLoadBalancerTlsCertificate</code> operation with the non-attached certificate, and it will replace the existing one and become the attached certificate.</p>
+    /// <p>Attaches a Transport Layer Security (TLS) certificate to your load balancer. TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>Once you create and validate your certificate, you can attach it to your load balancer. You can also use this API to rotate the certificates on your account. Use the <code>AttachLoadBalancerTlsCertificate</code> operation with the non-attached certificate, and it will replace the existing one and become the attached certificate.</p> <p>The <code>attach load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn attach_load_balancer_tls_certificate(
         &self,
         input: AttachLoadBalancerTlsCertificateRequest,
@@ -10980,139 +16073,184 @@ pub trait Lightsail {
         input: AttachStaticIpRequest,
     ) -> RusotoFuture<AttachStaticIpResult, AttachStaticIpError>;
 
-    /// <p>Closes the public ports on a specific Amazon Lightsail instance.</p>
+    /// <p>Closes the public ports on a specific Amazon Lightsail instance.</p> <p>The <code>close instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn close_instance_public_ports(
         &self,
         input: CloseInstancePublicPortsRequest,
     ) -> RusotoFuture<CloseInstancePublicPortsResult, CloseInstancePublicPortsError>;
 
-    /// <p>Creates a block storage disk that can be attached to a Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>). The disk is created in the regional endpoint that you send the HTTP request to. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail">Regions and Availability Zones in Lightsail</a>.</p>
+    /// <p>Copies an instance or disk snapshot from one AWS Region to another in Amazon Lightsail.</p>
+    fn copy_snapshot(
+        &self,
+        input: CopySnapshotRequest,
+    ) -> RusotoFuture<CopySnapshotResult, CopySnapshotError>;
+
+    /// <p><p>Creates an AWS CloudFormation stack, which creates a new Amazon EC2 instance from an exported Amazon Lightsail snapshot. This operation results in a CloudFormation stack record that can be used to track the AWS CloudFormation stack created. Use the <code>get cloud formation stack records</code> operation to get a list of the CloudFormation stacks created.</p> <important> <p>Wait until after your new Amazon EC2 instance is created before running the <code>create cloud formation stack</code> operation again with the same export snapshot record.</p> </important></p>
+    fn create_cloud_formation_stack(
+        &self,
+        input: CreateCloudFormationStackRequest,
+    ) -> RusotoFuture<CreateCloudFormationStackResult, CreateCloudFormationStackError>;
+
+    /// <p>Creates a block storage disk that can be attached to a Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>). The disk is created in the regional endpoint that you send the HTTP request to. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail">Regions and Availability Zones in Lightsail</a>.</p> <p>The <code>create disk</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_disk(
         &self,
         input: CreateDiskRequest,
     ) -> RusotoFuture<CreateDiskResult, CreateDiskError>;
 
-    /// <p>Creates a block storage disk from a disk snapshot that can be attached to a Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>). The disk is created in the regional endpoint that you send the HTTP request to. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail">Regions and Availability Zones in Lightsail</a>.</p>
+    /// <p>Creates a block storage disk from a disk snapshot that can be attached to a Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>). The disk is created in the regional endpoint that you send the HTTP request to. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail">Regions and Availability Zones in Lightsail</a>.</p> <p>The <code>create disk from snapshot</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by diskSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_disk_from_snapshot(
         &self,
         input: CreateDiskFromSnapshotRequest,
     ) -> RusotoFuture<CreateDiskFromSnapshotResult, CreateDiskFromSnapshotError>;
 
-    /// <p>Creates a snapshot of a block storage disk. You can use snapshots for backups, to make copies of disks, and to save data before shutting down a Lightsail instance.</p> <p>You can take a snapshot of an attached disk that is in use; however, snapshots only capture data that has been written to your disk at the time the snapshot command is issued. This may exclude any data that has been cached by any applications or the operating system. If you can pause any file systems on the disk long enough to take a snapshot, your snapshot should be complete. Nevertheless, if you cannot pause all file writes to the disk, you should unmount the disk from within the Lightsail instance, issue the create disk snapshot command, and then remount the disk to ensure a consistent and complete snapshot. You may remount and use your disk while the snapshot status is pending.</p>
+    /// <p>Creates a snapshot of a block storage disk. You can use snapshots for backups, to make copies of disks, and to save data before shutting down a Lightsail instance.</p> <p>You can take a snapshot of an attached disk that is in use; however, snapshots only capture data that has been written to your disk at the time the snapshot command is issued. This may exclude any data that has been cached by any applications or the operating system. If you can pause any file systems on the disk long enough to take a snapshot, your snapshot should be complete. Nevertheless, if you cannot pause all file writes to the disk, you should unmount the disk from within the Lightsail instance, issue the create disk snapshot command, and then remount the disk to ensure a consistent and complete snapshot. You may remount and use your disk while the snapshot status is pending.</p> <p>You can also use this operation to create a snapshot of an instance's system volume. You might want to do this, for example, to recover data from the system volume of a botched instance or to create a backup of the system volume like you would for a block storage disk. To create a snapshot of a system volume, just define the <code>instance name</code> parameter when issuing the snapshot command, and a snapshot of the defined instance's system volume will be created. After the snapshot is available, you can create a block storage disk from the snapshot and attach it to a running instance to access the data on the disk.</p> <p>The <code>create disk snapshot</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_disk_snapshot(
         &self,
         input: CreateDiskSnapshotRequest,
     ) -> RusotoFuture<CreateDiskSnapshotResult, CreateDiskSnapshotError>;
 
-    /// <p>Creates a domain resource for the specified domain (e.g., example.com).</p>
+    /// <p>Creates a domain resource for the specified domain (e.g., example.com).</p> <p>The <code>create domain</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_domain(
         &self,
         input: CreateDomainRequest,
     ) -> RusotoFuture<CreateDomainResult, CreateDomainError>;
 
-    /// <p>Creates one of the following entry records associated with the domain: A record, CNAME record, TXT record, or MX record.</p>
+    /// <p>Creates one of the following entry records associated with the domain: A record, CNAME record, TXT record, or MX record.</p> <p>The <code>create domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_domain_entry(
         &self,
         input: CreateDomainEntryRequest,
     ) -> RusotoFuture<CreateDomainEntryResult, CreateDomainEntryError>;
 
-    /// <p>Creates a snapshot of a specific virtual private server, or <i>instance</i>. You can use a snapshot to create a new instance that is based on that snapshot.</p>
+    /// <p>Creates a snapshot of a specific virtual private server, or <i>instance</i>. You can use a snapshot to create a new instance that is based on that snapshot.</p> <p>The <code>create instance snapshot</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_instance_snapshot(
         &self,
         input: CreateInstanceSnapshotRequest,
     ) -> RusotoFuture<CreateInstanceSnapshotResult, CreateInstanceSnapshotError>;
 
-    /// <p>Creates one or more Amazon Lightsail virtual private servers, or <i>instances</i>.</p>
+    /// <p>Creates one or more Amazon Lightsail virtual private servers, or <i>instances</i>. Create instances using active blueprints. Inactive blueprints are listed to support customers with existing instances but are not necessarily available for launch of new instances. Blueprints are marked inactive when they become outdated due to operating system updates or new application releases. Use the get blueprints operation to return a list of available blueprints.</p> <p>The <code>create instances</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_instances(
         &self,
         input: CreateInstancesRequest,
     ) -> RusotoFuture<CreateInstancesResult, CreateInstancesError>;
 
-    /// <p>Uses a specific snapshot as a blueprint for creating one or more new instances that are based on that identical configuration.</p>
+    /// <p>Uses a specific snapshot as a blueprint for creating one or more new instances that are based on that identical configuration.</p> <p>The <code>create instances from snapshot</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by instanceSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_instances_from_snapshot(
         &self,
         input: CreateInstancesFromSnapshotRequest,
     ) -> RusotoFuture<CreateInstancesFromSnapshotResult, CreateInstancesFromSnapshotError>;
 
-    /// <p>Creates sn SSH key pair.</p>
+    /// <p>Creates an SSH key pair.</p> <p>The <code>create key pair</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_key_pair(
         &self,
         input: CreateKeyPairRequest,
     ) -> RusotoFuture<CreateKeyPairResult, CreateKeyPairError>;
 
-    /// <p>Creates a Lightsail load balancer. To learn more about deciding whether to load balance your application, see <a href="https://lightsail.aws.amazon.com/ls/docs/how-to/article/configure-lightsail-instances-for-load-balancing">Configure your Lightsail instances for load balancing</a>. You can create up to 5 load balancers per AWS Region in your account.</p> <p>When you create a load balancer, you can specify a unique name and port settings. To change additional load balancer settings, use the <code>UpdateLoadBalancerAttribute</code> operation.</p>
+    /// <p>Creates a Lightsail load balancer. To learn more about deciding whether to load balance your application, see <a href="https://lightsail.aws.amazon.com/ls/docs/how-to/article/configure-lightsail-instances-for-load-balancing">Configure your Lightsail instances for load balancing</a>. You can create up to 5 load balancers per AWS Region in your account.</p> <p>When you create a load balancer, you can specify a unique name and port settings. To change additional load balancer settings, use the <code>UpdateLoadBalancerAttribute</code> operation.</p> <p>The <code>create load balancer</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_load_balancer(
         &self,
         input: CreateLoadBalancerRequest,
     ) -> RusotoFuture<CreateLoadBalancerResult, CreateLoadBalancerError>;
 
-    /// <p>Creates a Lightsail load balancer TLS certificate.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p>
+    /// <p>Creates a Lightsail load balancer TLS certificate.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>The <code>create load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_load_balancer_tls_certificate(
         &self,
         input: CreateLoadBalancerTlsCertificateRequest,
     ) -> RusotoFuture<CreateLoadBalancerTlsCertificateResult, CreateLoadBalancerTlsCertificateError>;
 
-    /// <p><p>Deletes the specified block storage disk. The disk must be in the <code>available</code> state (not attached to a Lightsail instance).</p> <note> <p>The disk may remain in the <code>deleting</code> state for several minutes.</p> </note></p>
+    /// <p>Creates a new database in Amazon Lightsail.</p> <p>The <code>create relational database</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn create_relational_database(
+        &self,
+        input: CreateRelationalDatabaseRequest,
+    ) -> RusotoFuture<CreateRelationalDatabaseResult, CreateRelationalDatabaseError>;
+
+    /// <p>Creates a new database from an existing database snapshot in Amazon Lightsail.</p> <p>You can create a new database from a snapshot in if something goes wrong with your original database, or to change it to a different plan, such as a high availability or standard plan.</p> <p>The <code>create relational database from snapshot</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by relationalDatabaseSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn create_relational_database_from_snapshot(
+        &self,
+        input: CreateRelationalDatabaseFromSnapshotRequest,
+    ) -> RusotoFuture<
+        CreateRelationalDatabaseFromSnapshotResult,
+        CreateRelationalDatabaseFromSnapshotError,
+    >;
+
+    /// <p>Creates a snapshot of your database in Amazon Lightsail. You can use snapshots for backups, to make copies of a database, and to save data before deleting a database.</p> <p>The <code>create relational database snapshot</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn create_relational_database_snapshot(
+        &self,
+        input: CreateRelationalDatabaseSnapshotRequest,
+    ) -> RusotoFuture<CreateRelationalDatabaseSnapshotResult, CreateRelationalDatabaseSnapshotError>;
+
+    /// <p>Deletes the specified block storage disk. The disk must be in the <code>available</code> state (not attached to a Lightsail instance).</p> <note> <p>The disk may remain in the <code>deleting</code> state for several minutes.</p> </note> <p>The <code>delete disk</code> operation supports tag-based access control via resource tags applied to the resource identified by diskName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_disk(
         &self,
         input: DeleteDiskRequest,
     ) -> RusotoFuture<DeleteDiskResult, DeleteDiskError>;
 
-    /// <p>Deletes the specified disk snapshot.</p> <p>When you make periodic snapshots of a disk, the snapshots are incremental, and only the blocks on the device that have changed since your last snapshot are saved in the new snapshot. When you delete a snapshot, only the data not needed for any other snapshot is removed. So regardless of which prior snapshots have been deleted, all active snapshots will have access to all the information needed to restore the disk.</p>
+    /// <p>Deletes the specified disk snapshot.</p> <p>When you make periodic snapshots of a disk, the snapshots are incremental, and only the blocks on the device that have changed since your last snapshot are saved in the new snapshot. When you delete a snapshot, only the data not needed for any other snapshot is removed. So regardless of which prior snapshots have been deleted, all active snapshots will have access to all the information needed to restore the disk.</p> <p>The <code>delete disk snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by diskSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_disk_snapshot(
         &self,
         input: DeleteDiskSnapshotRequest,
     ) -> RusotoFuture<DeleteDiskSnapshotResult, DeleteDiskSnapshotError>;
 
-    /// <p>Deletes the specified domain recordset and all of its domain records.</p>
+    /// <p>Deletes the specified domain recordset and all of its domain records.</p> <p>The <code>delete domain</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_domain(
         &self,
         input: DeleteDomainRequest,
     ) -> RusotoFuture<DeleteDomainResult, DeleteDomainError>;
 
-    /// <p>Deletes a specific domain entry.</p>
+    /// <p>Deletes a specific domain entry.</p> <p>The <code>delete domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_domain_entry(
         &self,
         input: DeleteDomainEntryRequest,
     ) -> RusotoFuture<DeleteDomainEntryResult, DeleteDomainEntryError>;
 
-    /// <p>Deletes a specific Amazon Lightsail virtual private server, or <i>instance</i>.</p>
+    /// <p>Deletes a specific Amazon Lightsail virtual private server, or <i>instance</i>.</p> <p>The <code>delete instance</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_instance(
         &self,
         input: DeleteInstanceRequest,
     ) -> RusotoFuture<DeleteInstanceResult, DeleteInstanceError>;
 
-    /// <p>Deletes a specific snapshot of a virtual private server (or <i>instance</i>).</p>
+    /// <p>Deletes a specific snapshot of a virtual private server (or <i>instance</i>).</p> <p>The <code>delete instance snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_instance_snapshot(
         &self,
         input: DeleteInstanceSnapshotRequest,
     ) -> RusotoFuture<DeleteInstanceSnapshotResult, DeleteInstanceSnapshotError>;
 
-    /// <p>Deletes a specific SSH key pair.</p>
+    /// <p>Deletes a specific SSH key pair.</p> <p>The <code>delete key pair</code> operation supports tag-based access control via resource tags applied to the resource identified by keyPairName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_key_pair(
         &self,
         input: DeleteKeyPairRequest,
     ) -> RusotoFuture<DeleteKeyPairResult, DeleteKeyPairError>;
 
-    /// <p>Deletes a Lightsail load balancer and all its associated SSL/TLS certificates. Once the load balancer is deleted, you will need to create a new load balancer, create a new certificate, and verify domain ownership again.</p>
+    /// <p>Deletes a Lightsail load balancer and all its associated SSL/TLS certificates. Once the load balancer is deleted, you will need to create a new load balancer, create a new certificate, and verify domain ownership again.</p> <p>The <code>delete load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_load_balancer(
         &self,
         input: DeleteLoadBalancerRequest,
     ) -> RusotoFuture<DeleteLoadBalancerResult, DeleteLoadBalancerError>;
 
-    /// <p>Deletes an SSL/TLS certificate associated with a Lightsail load balancer.</p>
+    /// <p>Deletes an SSL/TLS certificate associated with a Lightsail load balancer.</p> <p>The <code>delete load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_load_balancer_tls_certificate(
         &self,
         input: DeleteLoadBalancerTlsCertificateRequest,
     ) -> RusotoFuture<DeleteLoadBalancerTlsCertificateResult, DeleteLoadBalancerTlsCertificateError>;
 
-    /// <p>Detaches a stopped block storage disk from a Lightsail instance. Make sure to unmount any file systems on the device within your operating system before stopping the instance and detaching the disk.</p>
+    /// <p>Deletes a database in Amazon Lightsail.</p> <p>The <code>delete relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn delete_relational_database(
+        &self,
+        input: DeleteRelationalDatabaseRequest,
+    ) -> RusotoFuture<DeleteRelationalDatabaseResult, DeleteRelationalDatabaseError>;
+
+    /// <p>Deletes a database snapshot in Amazon Lightsail.</p> <p>The <code>delete relational database snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn delete_relational_database_snapshot(
+        &self,
+        input: DeleteRelationalDatabaseSnapshotRequest,
+    ) -> RusotoFuture<DeleteRelationalDatabaseSnapshotResult, DeleteRelationalDatabaseSnapshotError>;
+
+    /// <p>Detaches a stopped block storage disk from a Lightsail instance. Make sure to unmount any file systems on the device within your operating system before stopping the instance and detaching the disk.</p> <p>The <code>detach disk</code> operation supports tag-based access control via resource tags applied to the resource identified by diskName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn detach_disk(
         &self,
         input: DetachDiskRequest,
     ) -> RusotoFuture<DetachDiskResult, DetachDiskError>;
 
-    /// <p>Detaches the specified instances from a Lightsail load balancer.</p> <p>This operation waits until the instances are no longer needed before they are detached from the load balancer.</p>
+    /// <p>Detaches the specified instances from a Lightsail load balancer.</p> <p>This operation waits until the instances are no longer needed before they are detached from the load balancer.</p> <p>The <code>detach instances from load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn detach_instances_from_load_balancer(
         &self,
         input: DetachInstancesFromLoadBalancerRequest,
@@ -11128,6 +16266,12 @@ pub trait Lightsail {
     fn download_default_key_pair(
         &self,
     ) -> RusotoFuture<DownloadDefaultKeyPairResult, DownloadDefaultKeyPairError>;
+
+    /// <p><p>Exports an Amazon Lightsail instance or block storage disk snapshot to Amazon Elastic Compute Cloud (Amazon EC2). This operation results in an export snapshot record that can be used with the <code>create cloud formation stack</code> operation to create new Amazon EC2 instances.</p> <p>Exported instance snapshots appear in Amazon EC2 as Amazon Machine Images (AMIs), and the instance system disk appears as an Amazon Elastic Block Store (Amazon EBS) volume. Exported disk snapshots appear in Amazon EC2 as Amazon EBS volumes. Snapshots are exported to the same Amazon Web Services Region in Amazon EC2 as the source Lightsail snapshot.</p> <p/> <p>The <code>export snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by sourceSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p> <note> <p>Use the <code>get instance snapshots</code> or <code>get disk snapshots</code> operations to get a list of snapshots that you can export to Amazon EC2.</p> </note></p>
+    fn export_snapshot(
+        &self,
+        input: ExportSnapshotRequest,
+    ) -> RusotoFuture<ExportSnapshotResult, ExportSnapshotError>;
 
     /// <p>Returns the names of all active (not deleted) resources.</p>
     fn get_active_names(
@@ -11146,6 +16290,12 @@ pub trait Lightsail {
         &self,
         input: GetBundlesRequest,
     ) -> RusotoFuture<GetBundlesResult, GetBundlesError>;
+
+    /// <p>Returns the CloudFormation stack record created as a result of the <code>create cloud formation stack</code> operation.</p> <p>An AWS CloudFormation stack is used to create a new Amazon EC2 instance from an exported Lightsail snapshot.</p>
+    fn get_cloud_formation_stack_records(
+        &self,
+        input: GetCloudFormationStackRecordsRequest,
+    ) -> RusotoFuture<GetCloudFormationStackRecordsResult, GetCloudFormationStackRecordsError>;
 
     /// <p>Returns information about a specific block storage disk.</p>
     fn get_disk(&self, input: GetDiskRequest) -> RusotoFuture<GetDiskResult, GetDiskError>;
@@ -11174,13 +16324,19 @@ pub trait Lightsail {
         input: GetDomainsRequest,
     ) -> RusotoFuture<GetDomainsResult, GetDomainsError>;
 
+    /// <p>Returns the export snapshot record created as a result of the <code>export snapshot</code> operation.</p> <p>An export snapshot record can be used to create a new Amazon EC2 instance and its related resources with the <code>create cloud formation stack</code> operation.</p>
+    fn get_export_snapshot_records(
+        &self,
+        input: GetExportSnapshotRecordsRequest,
+    ) -> RusotoFuture<GetExportSnapshotRecordsResult, GetExportSnapshotRecordsError>;
+
     /// <p>Returns information about a specific Amazon Lightsail instance, which is a virtual private server.</p>
     fn get_instance(
         &self,
         input: GetInstanceRequest,
     ) -> RusotoFuture<GetInstanceResult, GetInstanceError>;
 
-    /// <p>Returns temporary SSH keys you can use to connect to a specific virtual private server, or <i>instance</i>.</p>
+    /// <p>Returns temporary SSH keys you can use to connect to a specific virtual private server, or <i>instance</i>.</p> <p>The <code>get instance access details</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn get_instance_access_details(
         &self,
         input: GetInstanceAccessDetailsRequest,
@@ -11276,11 +16432,86 @@ pub trait Lightsail {
         input: GetOperationsForResourceRequest,
     ) -> RusotoFuture<GetOperationsForResourceResult, GetOperationsForResourceError>;
 
-    /// <p>Returns a list of all valid regions for Amazon Lightsail. Use the <code>include availability zones</code> parameter to also return the availability zones in a region.</p>
+    /// <p>Returns a list of all valid regions for Amazon Lightsail. Use the <code>include availability zones</code> parameter to also return the Availability Zones in a region.</p>
     fn get_regions(
         &self,
         input: GetRegionsRequest,
     ) -> RusotoFuture<GetRegionsResult, GetRegionsError>;
+
+    /// <p>Returns information about a specific database in Amazon Lightsail.</p>
+    fn get_relational_database(
+        &self,
+        input: GetRelationalDatabaseRequest,
+    ) -> RusotoFuture<GetRelationalDatabaseResult, GetRelationalDatabaseError>;
+
+    /// <p>Returns a list of available database blueprints in Amazon Lightsail. A blueprint describes the major engine version of a database.</p> <p>You can use a blueprint ID to create a new database that runs a specific database engine.</p>
+    fn get_relational_database_blueprints(
+        &self,
+        input: GetRelationalDatabaseBlueprintsRequest,
+    ) -> RusotoFuture<GetRelationalDatabaseBlueprintsResult, GetRelationalDatabaseBlueprintsError>;
+
+    /// <p>Returns the list of bundles that are available in Amazon Lightsail. A bundle describes the performance specifications for a database.</p> <p>You can use a bundle ID to create a new database with explicit performance specifications.</p>
+    fn get_relational_database_bundles(
+        &self,
+        input: GetRelationalDatabaseBundlesRequest,
+    ) -> RusotoFuture<GetRelationalDatabaseBundlesResult, GetRelationalDatabaseBundlesError>;
+
+    /// <p>Returns a list of events for a specific database in Amazon Lightsail.</p>
+    fn get_relational_database_events(
+        &self,
+        input: GetRelationalDatabaseEventsRequest,
+    ) -> RusotoFuture<GetRelationalDatabaseEventsResult, GetRelationalDatabaseEventsError>;
+
+    /// <p>Returns a list of log events for a database in Amazon Lightsail.</p>
+    fn get_relational_database_log_events(
+        &self,
+        input: GetRelationalDatabaseLogEventsRequest,
+    ) -> RusotoFuture<GetRelationalDatabaseLogEventsResult, GetRelationalDatabaseLogEventsError>;
+
+    /// <p>Returns a list of available log streams for a specific database in Amazon Lightsail.</p>
+    fn get_relational_database_log_streams(
+        &self,
+        input: GetRelationalDatabaseLogStreamsRequest,
+    ) -> RusotoFuture<GetRelationalDatabaseLogStreamsResult, GetRelationalDatabaseLogStreamsError>;
+
+    /// <p>Returns the current, previous, or pending versions of the master user password for a Lightsail database.</p> <p>The <code>asdf</code> operation GetRelationalDatabaseMasterUserPassword supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName.</p>
+    fn get_relational_database_master_user_password(
+        &self,
+        input: GetRelationalDatabaseMasterUserPasswordRequest,
+    ) -> RusotoFuture<
+        GetRelationalDatabaseMasterUserPasswordResult,
+        GetRelationalDatabaseMasterUserPasswordError,
+    >;
+
+    /// <p>Returns the data points of the specified metric for a database in Amazon Lightsail.</p>
+    fn get_relational_database_metric_data(
+        &self,
+        input: GetRelationalDatabaseMetricDataRequest,
+    ) -> RusotoFuture<GetRelationalDatabaseMetricDataResult, GetRelationalDatabaseMetricDataError>;
+
+    /// <p>Returns all of the runtime parameters offered by the underlying database software, or engine, for a specific database in Amazon Lightsail.</p> <p>In addition to the parameter names and values, this operation returns other information about each parameter. This information includes whether changes require a reboot, whether the parameter is modifiable, the allowed values, and the data types.</p>
+    fn get_relational_database_parameters(
+        &self,
+        input: GetRelationalDatabaseParametersRequest,
+    ) -> RusotoFuture<GetRelationalDatabaseParametersResult, GetRelationalDatabaseParametersError>;
+
+    /// <p>Returns information about a specific database snapshot in Amazon Lightsail.</p>
+    fn get_relational_database_snapshot(
+        &self,
+        input: GetRelationalDatabaseSnapshotRequest,
+    ) -> RusotoFuture<GetRelationalDatabaseSnapshotResult, GetRelationalDatabaseSnapshotError>;
+
+    /// <p>Returns information about all of your database snapshots in Amazon Lightsail.</p>
+    fn get_relational_database_snapshots(
+        &self,
+        input: GetRelationalDatabaseSnapshotsRequest,
+    ) -> RusotoFuture<GetRelationalDatabaseSnapshotsResult, GetRelationalDatabaseSnapshotsError>;
+
+    /// <p>Returns information about all of your databases in Amazon Lightsail.</p>
+    fn get_relational_databases(
+        &self,
+        input: GetRelationalDatabasesRequest,
+    ) -> RusotoFuture<GetRelationalDatabasesResult, GetRelationalDatabasesError>;
 
     /// <p>Returns information about a specific static IP.</p>
     fn get_static_ip(
@@ -11303,7 +16534,7 @@ pub trait Lightsail {
     /// <p>Returns a Boolean value indicating whether your Lightsail VPC is peered.</p>
     fn is_vpc_peered(&self) -> RusotoFuture<IsVpcPeeredResult, IsVpcPeeredError>;
 
-    /// <p>Adds public ports to an Amazon Lightsail instance.</p>
+    /// <p>Adds public ports to an Amazon Lightsail instance.</p> <p>The <code>open instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn open_instance_public_ports(
         &self,
         input: OpenInstancePublicPortsRequest,
@@ -11312,17 +16543,23 @@ pub trait Lightsail {
     /// <p>Tries to peer the Lightsail VPC with the user's default VPC.</p>
     fn peer_vpc(&self) -> RusotoFuture<PeerVpcResult, PeerVpcError>;
 
-    /// <p>Sets the specified open ports for an Amazon Lightsail instance, and closes all ports for every protocol not included in the current request.</p>
+    /// <p>Sets the specified open ports for an Amazon Lightsail instance, and closes all ports for every protocol not included in the current request.</p> <p>The <code>put instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn put_instance_public_ports(
         &self,
         input: PutInstancePublicPortsRequest,
     ) -> RusotoFuture<PutInstancePublicPortsResult, PutInstancePublicPortsError>;
 
-    /// <p>Restarts a specific instance. When your Amazon Lightsail instance is finished rebooting, Lightsail assigns a new public IP address. To use the same IP address after restarting, create a static IP address and attach it to the instance.</p>
+    /// <p>Restarts a specific instance.</p> <p>The <code>reboot instance</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn reboot_instance(
         &self,
         input: RebootInstanceRequest,
     ) -> RusotoFuture<RebootInstanceResult, RebootInstanceError>;
+
+    /// <p>Restarts a specific database in Amazon Lightsail.</p> <p>The <code>reboot relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn reboot_relational_database(
+        &self,
+        input: RebootRelationalDatabaseRequest,
+    ) -> RusotoFuture<RebootRelationalDatabaseResult, RebootRelationalDatabaseError>;
 
     /// <p>Deletes a specific static IP from your account.</p>
     fn release_static_ip(
@@ -11330,32 +16567,71 @@ pub trait Lightsail {
         input: ReleaseStaticIpRequest,
     ) -> RusotoFuture<ReleaseStaticIpResult, ReleaseStaticIpError>;
 
-    /// <p>Starts a specific Amazon Lightsail instance from a stopped state. To restart an instance, use the reboot instance operation.</p>
+    /// <p>Starts a specific Amazon Lightsail instance from a stopped state. To restart an instance, use the <code>reboot instance</code> operation.</p> <note> <p>When you start a stopped instance, Lightsail assigns a new public IP address to the instance. To use the same IP address after stopping and starting an instance, create a static IP address and attach it to the instance. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/lightsail-create-static-ip">Lightsail Dev Guide</a>.</p> </note> <p>The <code>start instance</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn start_instance(
         &self,
         input: StartInstanceRequest,
     ) -> RusotoFuture<StartInstanceResult, StartInstanceError>;
 
-    /// <p>Stops a specific Amazon Lightsail instance that is currently running.</p>
+    /// <p>Starts a specific database from a stopped state in Amazon Lightsail. To restart a database, use the <code>reboot relational database</code> operation.</p> <p>The <code>start relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn start_relational_database(
+        &self,
+        input: StartRelationalDatabaseRequest,
+    ) -> RusotoFuture<StartRelationalDatabaseResult, StartRelationalDatabaseError>;
+
+    /// <p>Stops a specific Amazon Lightsail instance that is currently running.</p> <note> <p>When you start a stopped instance, Lightsail assigns a new public IP address to the instance. To use the same IP address after stopping and starting an instance, create a static IP address and attach it to the instance. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/lightsail-create-static-ip">Lightsail Dev Guide</a>.</p> </note> <p>The <code>stop instance</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn stop_instance(
         &self,
         input: StopInstanceRequest,
     ) -> RusotoFuture<StopInstanceResult, StopInstanceError>;
 
+    /// <p>Stops a specific database that is currently running in Amazon Lightsail.</p> <p>The <code>stop relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn stop_relational_database(
+        &self,
+        input: StopRelationalDatabaseRequest,
+    ) -> RusotoFuture<StopRelationalDatabaseResult, StopRelationalDatabaseError>;
+
+    /// <p>Adds one or more tags to the specified Amazon Lightsail resource. Each resource can have a maximum of 50 tags. Each tag consists of a key and an optional value. Tag keys must be unique per resource. For more information about tags, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags">Lightsail Dev Guide</a>.</p> <p>The <code>tag resource</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by resourceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> RusotoFuture<TagResourceResult, TagResourceError>;
+
     /// <p>Attempts to unpeer the Lightsail VPC from the user's default VPC.</p>
     fn unpeer_vpc(&self) -> RusotoFuture<UnpeerVpcResult, UnpeerVpcError>;
 
-    /// <p>Updates a domain recordset after it is created.</p>
+    /// <p>Deletes the specified set of tag keys and their values from the specified Amazon Lightsail resource.</p> <p>The <code>untag resource</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by resourceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> RusotoFuture<UntagResourceResult, UntagResourceError>;
+
+    /// <p>Updates a domain recordset after it is created.</p> <p>The <code>update domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn update_domain_entry(
         &self,
         input: UpdateDomainEntryRequest,
     ) -> RusotoFuture<UpdateDomainEntryResult, UpdateDomainEntryError>;
 
-    /// <p>Updates the specified attribute for a load balancer. You can only update one attribute at a time.</p>
+    /// <p>Updates the specified attribute for a load balancer. You can only update one attribute at a time.</p> <p>The <code>update load balancer attribute</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn update_load_balancer_attribute(
         &self,
         input: UpdateLoadBalancerAttributeRequest,
     ) -> RusotoFuture<UpdateLoadBalancerAttributeResult, UpdateLoadBalancerAttributeError>;
+
+    /// <p>Allows the update of one or more attributes of a database in Amazon Lightsail.</p> <p>Updates are applied immediately, or in cases where the updates could result in an outage, are applied during the database's predefined maintenance window.</p> <p>The <code>update relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn update_relational_database(
+        &self,
+        input: UpdateRelationalDatabaseRequest,
+    ) -> RusotoFuture<UpdateRelationalDatabaseResult, UpdateRelationalDatabaseError>;
+
+    /// <p>Allows the update of one or more parameters of a database in Amazon Lightsail.</p> <p>Parameter updates don't cause outages; therefore, their application is not subject to the preferred maintenance window. However, there are two ways in which paramater updates are applied: <code>dynamic</code> or <code>pending-reboot</code>. Parameters marked with a <code>dynamic</code> apply type are applied immediately. Parameters marked with a <code>pending-reboot</code> apply type are applied only after the database is rebooted using the <code>reboot relational database</code> operation.</p> <p>The <code>update relational database parameters</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn update_relational_database_parameters(
+        &self,
+        input: UpdateRelationalDatabaseParametersRequest,
+    ) -> RusotoFuture<
+        UpdateRelationalDatabaseParametersResult,
+        UpdateRelationalDatabaseParametersError,
+    >;
 }
 /// A client for the Amazon Lightsail API.
 #[derive(Clone)]
@@ -11431,7 +16707,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Attaches a block storage disk to a running or stopped Lightsail instance and exposes it to the instance with the specified disk name.</p>
+    /// <p>Attaches a block storage disk to a running or stopped Lightsail instance and exposes it to the instance with the specified disk name.</p> <p>The <code>attach disk</code> operation supports tag-based access control via resource tags applied to the resource identified by diskName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn attach_disk(
         &self,
         input: AttachDiskRequest,
@@ -11468,7 +16744,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Attaches one or more Lightsail instances to a load balancer.</p> <p>After some time, the instances are attached to the load balancer and the health check status is available.</p>
+    /// <p>Attaches one or more Lightsail instances to a load balancer.</p> <p>After some time, the instances are attached to the load balancer and the health check status is available.</p> <p>The <code>attach instances to load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn attach_instances_to_load_balancer(
         &self,
         input: AttachInstancesToLoadBalancerRequest,
@@ -11505,7 +16781,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Attaches a Transport Layer Security (TLS) certificate to your load balancer. TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>Once you create and validate your certificate, you can attach it to your load balancer. You can also use this API to rotate the certificates on your account. Use the <code>AttachLoadBalancerTlsCertificate</code> operation with the non-attached certificate, and it will replace the existing one and become the attached certificate.</p>
+    /// <p>Attaches a Transport Layer Security (TLS) certificate to your load balancer. TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>Once you create and validate your certificate, you can attach it to your load balancer. You can also use this API to rotate the certificates on your account. Use the <code>AttachLoadBalancerTlsCertificate</code> operation with the non-attached certificate, and it will replace the existing one and become the attached certificate.</p> <p>The <code>attach load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn attach_load_balancer_tls_certificate(
         &self,
         input: AttachLoadBalancerTlsCertificateRequest,
@@ -11582,7 +16858,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Closes the public ports on a specific Amazon Lightsail instance.</p>
+    /// <p>Closes the public ports on a specific Amazon Lightsail instance.</p> <p>The <code>close instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn close_instance_public_ports(
         &self,
         input: CloseInstancePublicPortsRequest,
@@ -11619,7 +16895,81 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Creates a block storage disk that can be attached to a Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>). The disk is created in the regional endpoint that you send the HTTP request to. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail">Regions and Availability Zones in Lightsail</a>.</p>
+    /// <p>Copies an instance or disk snapshot from one AWS Region to another in Amazon Lightsail.</p>
+    fn copy_snapshot(
+        &self,
+        input: CopySnapshotRequest,
+    ) -> RusotoFuture<CopySnapshotResult, CopySnapshotError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.CopySnapshot");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<CopySnapshotResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(CopySnapshotError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p><p>Creates an AWS CloudFormation stack, which creates a new Amazon EC2 instance from an exported Amazon Lightsail snapshot. This operation results in a CloudFormation stack record that can be used to track the AWS CloudFormation stack created. Use the <code>get cloud formation stack records</code> operation to get a list of the CloudFormation stacks created.</p> <important> <p>Wait until after your new Amazon EC2 instance is created before running the <code>create cloud formation stack</code> operation again with the same export snapshot record.</p> </important></p>
+    fn create_cloud_formation_stack(
+        &self,
+        input: CreateCloudFormationStackRequest,
+    ) -> RusotoFuture<CreateCloudFormationStackResult, CreateCloudFormationStackError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.CreateCloudFormationStack",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<CreateCloudFormationStackResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateCloudFormationStackError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Creates a block storage disk that can be attached to a Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>). The disk is created in the regional endpoint that you send the HTTP request to. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail">Regions and Availability Zones in Lightsail</a>.</p> <p>The <code>create disk</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_disk(
         &self,
         input: CreateDiskRequest,
@@ -11656,7 +17006,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Creates a block storage disk from a disk snapshot that can be attached to a Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>). The disk is created in the regional endpoint that you send the HTTP request to. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail">Regions and Availability Zones in Lightsail</a>.</p>
+    /// <p>Creates a block storage disk from a disk snapshot that can be attached to a Lightsail instance in the same Availability Zone (e.g., <code>us-east-2a</code>). The disk is created in the regional endpoint that you send the HTTP request to. For more information, see <a href="https://lightsail.aws.amazon.com/ls/docs/overview/article/understanding-regions-and-availability-zones-in-amazon-lightsail">Regions and Availability Zones in Lightsail</a>.</p> <p>The <code>create disk from snapshot</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by diskSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_disk_from_snapshot(
         &self,
         input: CreateDiskFromSnapshotRequest,
@@ -11692,7 +17042,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Creates a snapshot of a block storage disk. You can use snapshots for backups, to make copies of disks, and to save data before shutting down a Lightsail instance.</p> <p>You can take a snapshot of an attached disk that is in use; however, snapshots only capture data that has been written to your disk at the time the snapshot command is issued. This may exclude any data that has been cached by any applications or the operating system. If you can pause any file systems on the disk long enough to take a snapshot, your snapshot should be complete. Nevertheless, if you cannot pause all file writes to the disk, you should unmount the disk from within the Lightsail instance, issue the create disk snapshot command, and then remount the disk to ensure a consistent and complete snapshot. You may remount and use your disk while the snapshot status is pending.</p>
+    /// <p>Creates a snapshot of a block storage disk. You can use snapshots for backups, to make copies of disks, and to save data before shutting down a Lightsail instance.</p> <p>You can take a snapshot of an attached disk that is in use; however, snapshots only capture data that has been written to your disk at the time the snapshot command is issued. This may exclude any data that has been cached by any applications or the operating system. If you can pause any file systems on the disk long enough to take a snapshot, your snapshot should be complete. Nevertheless, if you cannot pause all file writes to the disk, you should unmount the disk from within the Lightsail instance, issue the create disk snapshot command, and then remount the disk to ensure a consistent and complete snapshot. You may remount and use your disk while the snapshot status is pending.</p> <p>You can also use this operation to create a snapshot of an instance's system volume. You might want to do this, for example, to recover data from the system volume of a botched instance or to create a backup of the system volume like you would for a block storage disk. To create a snapshot of a system volume, just define the <code>instance name</code> parameter when issuing the snapshot command, and a snapshot of the defined instance's system volume will be created. After the snapshot is available, you can create a block storage disk from the snapshot and attach it to a running instance to access the data on the disk.</p> <p>The <code>create disk snapshot</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_disk_snapshot(
         &self,
         input: CreateDiskSnapshotRequest,
@@ -11729,7 +17079,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Creates a domain resource for the specified domain (e.g., example.com).</p>
+    /// <p>Creates a domain resource for the specified domain (e.g., example.com).</p> <p>The <code>create domain</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_domain(
         &self,
         input: CreateDomainRequest,
@@ -11766,7 +17116,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Creates one of the following entry records associated with the domain: A record, CNAME record, TXT record, or MX record.</p>
+    /// <p>Creates one of the following entry records associated with the domain: A record, CNAME record, TXT record, or MX record.</p> <p>The <code>create domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_domain_entry(
         &self,
         input: CreateDomainEntryRequest,
@@ -11803,7 +17153,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Creates a snapshot of a specific virtual private server, or <i>instance</i>. You can use a snapshot to create a new instance that is based on that snapshot.</p>
+    /// <p>Creates a snapshot of a specific virtual private server, or <i>instance</i>. You can use a snapshot to create a new instance that is based on that snapshot.</p> <p>The <code>create instance snapshot</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_instance_snapshot(
         &self,
         input: CreateInstanceSnapshotRequest,
@@ -11839,7 +17189,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Creates one or more Amazon Lightsail virtual private servers, or <i>instances</i>.</p>
+    /// <p>Creates one or more Amazon Lightsail virtual private servers, or <i>instances</i>. Create instances using active blueprints. Inactive blueprints are listed to support customers with existing instances but are not necessarily available for launch of new instances. Blueprints are marked inactive when they become outdated due to operating system updates or new application releases. Use the get blueprints operation to return a list of available blueprints.</p> <p>The <code>create instances</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_instances(
         &self,
         input: CreateInstancesRequest,
@@ -11876,7 +17226,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Uses a specific snapshot as a blueprint for creating one or more new instances that are based on that identical configuration.</p>
+    /// <p>Uses a specific snapshot as a blueprint for creating one or more new instances that are based on that identical configuration.</p> <p>The <code>create instances from snapshot</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by instanceSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_instances_from_snapshot(
         &self,
         input: CreateInstancesFromSnapshotRequest,
@@ -11913,7 +17263,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Creates sn SSH key pair.</p>
+    /// <p>Creates an SSH key pair.</p> <p>The <code>create key pair</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_key_pair(
         &self,
         input: CreateKeyPairRequest,
@@ -11950,7 +17300,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Creates a Lightsail load balancer. To learn more about deciding whether to load balance your application, see <a href="https://lightsail.aws.amazon.com/ls/docs/how-to/article/configure-lightsail-instances-for-load-balancing">Configure your Lightsail instances for load balancing</a>. You can create up to 5 load balancers per AWS Region in your account.</p> <p>When you create a load balancer, you can specify a unique name and port settings. To change additional load balancer settings, use the <code>UpdateLoadBalancerAttribute</code> operation.</p>
+    /// <p>Creates a Lightsail load balancer. To learn more about deciding whether to load balance your application, see <a href="https://lightsail.aws.amazon.com/ls/docs/how-to/article/configure-lightsail-instances-for-load-balancing">Configure your Lightsail instances for load balancing</a>. You can create up to 5 load balancers per AWS Region in your account.</p> <p>When you create a load balancer, you can specify a unique name and port settings. To change additional load balancer settings, use the <code>UpdateLoadBalancerAttribute</code> operation.</p> <p>The <code>create load balancer</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_load_balancer(
         &self,
         input: CreateLoadBalancerRequest,
@@ -11987,7 +17337,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Creates a Lightsail load balancer TLS certificate.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p>
+    /// <p>Creates a Lightsail load balancer TLS certificate.</p> <p>TLS is just an updated, more secure version of Secure Socket Layer (SSL).</p> <p>The <code>create load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn create_load_balancer_tls_certificate(
         &self,
         input: CreateLoadBalancerTlsCertificateRequest,
@@ -12027,7 +17377,126 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p><p>Deletes the specified block storage disk. The disk must be in the <code>available</code> state (not attached to a Lightsail instance).</p> <note> <p>The disk may remain in the <code>deleting</code> state for several minutes.</p> </note></p>
+    /// <p>Creates a new database in Amazon Lightsail.</p> <p>The <code>create relational database</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn create_relational_database(
+        &self,
+        input: CreateRelationalDatabaseRequest,
+    ) -> RusotoFuture<CreateRelationalDatabaseResult, CreateRelationalDatabaseError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.CreateRelationalDatabase",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<CreateRelationalDatabaseResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateRelationalDatabaseError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Creates a new database from an existing database snapshot in Amazon Lightsail.</p> <p>You can create a new database from a snapshot in if something goes wrong with your original database, or to change it to a different plan, such as a high availability or standard plan.</p> <p>The <code>create relational database from snapshot</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by relationalDatabaseSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn create_relational_database_from_snapshot(
+        &self,
+        input: CreateRelationalDatabaseFromSnapshotRequest,
+    ) -> RusotoFuture<
+        CreateRelationalDatabaseFromSnapshotResult,
+        CreateRelationalDatabaseFromSnapshotError,
+    > {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.CreateRelationalDatabaseFromSnapshot",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<CreateRelationalDatabaseFromSnapshotResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateRelationalDatabaseFromSnapshotError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Creates a snapshot of your database in Amazon Lightsail. You can use snapshots for backups, to make copies of a database, and to save data before deleting a database.</p> <p>The <code>create relational database snapshot</code> operation supports tag-based access control via request tags. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn create_relational_database_snapshot(
+        &self,
+        input: CreateRelationalDatabaseSnapshotRequest,
+    ) -> RusotoFuture<CreateRelationalDatabaseSnapshotResult, CreateRelationalDatabaseSnapshotError>
+    {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.CreateRelationalDatabaseSnapshot",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<CreateRelationalDatabaseSnapshotResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(CreateRelationalDatabaseSnapshotError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Deletes the specified block storage disk. The disk must be in the <code>available</code> state (not attached to a Lightsail instance).</p> <note> <p>The disk may remain in the <code>deleting</code> state for several minutes.</p> </note> <p>The <code>delete disk</code> operation supports tag-based access control via resource tags applied to the resource identified by diskName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_disk(
         &self,
         input: DeleteDiskRequest,
@@ -12064,7 +17533,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Deletes the specified disk snapshot.</p> <p>When you make periodic snapshots of a disk, the snapshots are incremental, and only the blocks on the device that have changed since your last snapshot are saved in the new snapshot. When you delete a snapshot, only the data not needed for any other snapshot is removed. So regardless of which prior snapshots have been deleted, all active snapshots will have access to all the information needed to restore the disk.</p>
+    /// <p>Deletes the specified disk snapshot.</p> <p>When you make periodic snapshots of a disk, the snapshots are incremental, and only the blocks on the device that have changed since your last snapshot are saved in the new snapshot. When you delete a snapshot, only the data not needed for any other snapshot is removed. So regardless of which prior snapshots have been deleted, all active snapshots will have access to all the information needed to restore the disk.</p> <p>The <code>delete disk snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by diskSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_disk_snapshot(
         &self,
         input: DeleteDiskSnapshotRequest,
@@ -12101,7 +17570,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Deletes the specified domain recordset and all of its domain records.</p>
+    /// <p>Deletes the specified domain recordset and all of its domain records.</p> <p>The <code>delete domain</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_domain(
         &self,
         input: DeleteDomainRequest,
@@ -12138,7 +17607,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Deletes a specific domain entry.</p>
+    /// <p>Deletes a specific domain entry.</p> <p>The <code>delete domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_domain_entry(
         &self,
         input: DeleteDomainEntryRequest,
@@ -12175,7 +17644,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Deletes a specific Amazon Lightsail virtual private server, or <i>instance</i>.</p>
+    /// <p>Deletes a specific Amazon Lightsail virtual private server, or <i>instance</i>.</p> <p>The <code>delete instance</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_instance(
         &self,
         input: DeleteInstanceRequest,
@@ -12212,7 +17681,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Deletes a specific snapshot of a virtual private server (or <i>instance</i>).</p>
+    /// <p>Deletes a specific snapshot of a virtual private server (or <i>instance</i>).</p> <p>The <code>delete instance snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_instance_snapshot(
         &self,
         input: DeleteInstanceSnapshotRequest,
@@ -12248,7 +17717,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Deletes a specific SSH key pair.</p>
+    /// <p>Deletes a specific SSH key pair.</p> <p>The <code>delete key pair</code> operation supports tag-based access control via resource tags applied to the resource identified by keyPairName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_key_pair(
         &self,
         input: DeleteKeyPairRequest,
@@ -12285,7 +17754,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Deletes a Lightsail load balancer and all its associated SSL/TLS certificates. Once the load balancer is deleted, you will need to create a new load balancer, create a new certificate, and verify domain ownership again.</p>
+    /// <p>Deletes a Lightsail load balancer and all its associated SSL/TLS certificates. Once the load balancer is deleted, you will need to create a new load balancer, create a new certificate, and verify domain ownership again.</p> <p>The <code>delete load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_load_balancer(
         &self,
         input: DeleteLoadBalancerRequest,
@@ -12322,7 +17791,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Deletes an SSL/TLS certificate associated with a Lightsail load balancer.</p>
+    /// <p>Deletes an SSL/TLS certificate associated with a Lightsail load balancer.</p> <p>The <code>delete load balancer tls certificate</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn delete_load_balancer_tls_certificate(
         &self,
         input: DeleteLoadBalancerTlsCertificateRequest,
@@ -12362,7 +17831,84 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Detaches a stopped block storage disk from a Lightsail instance. Make sure to unmount any file systems on the device within your operating system before stopping the instance and detaching the disk.</p>
+    /// <p>Deletes a database in Amazon Lightsail.</p> <p>The <code>delete relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn delete_relational_database(
+        &self,
+        input: DeleteRelationalDatabaseRequest,
+    ) -> RusotoFuture<DeleteRelationalDatabaseResult, DeleteRelationalDatabaseError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.DeleteRelationalDatabase",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DeleteRelationalDatabaseResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteRelationalDatabaseError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Deletes a database snapshot in Amazon Lightsail.</p> <p>The <code>delete relational database snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn delete_relational_database_snapshot(
+        &self,
+        input: DeleteRelationalDatabaseSnapshotRequest,
+    ) -> RusotoFuture<DeleteRelationalDatabaseSnapshotResult, DeleteRelationalDatabaseSnapshotError>
+    {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.DeleteRelationalDatabaseSnapshot",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<DeleteRelationalDatabaseSnapshotResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(DeleteRelationalDatabaseSnapshotError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Detaches a stopped block storage disk from a Lightsail instance. Make sure to unmount any file systems on the device within your operating system before stopping the instance and detaching the disk.</p> <p>The <code>detach disk</code> operation supports tag-based access control via resource tags applied to the resource identified by diskName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn detach_disk(
         &self,
         input: DetachDiskRequest,
@@ -12399,7 +17945,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Detaches the specified instances from a Lightsail load balancer.</p> <p>This operation waits until the instances are no longer needed before they are detached from the load balancer.</p>
+    /// <p>Detaches the specified instances from a Lightsail load balancer.</p> <p>This operation waits until the instances are no longer needed before they are detached from the load balancer.</p> <p>The <code>detach instances from load balancer</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn detach_instances_from_load_balancer(
         &self,
         input: DetachInstancesFromLoadBalancerRequest,
@@ -12505,6 +18051,43 @@ impl Lightsail for LightsailClient {
                     response.buffer().from_err().and_then(|response| {
                         Err(DownloadDefaultKeyPairError::from_response(response))
                     }),
+                )
+            }
+        })
+    }
+
+    /// <p><p>Exports an Amazon Lightsail instance or block storage disk snapshot to Amazon Elastic Compute Cloud (Amazon EC2). This operation results in an export snapshot record that can be used with the <code>create cloud formation stack</code> operation to create new Amazon EC2 instances.</p> <p>Exported instance snapshots appear in Amazon EC2 as Amazon Machine Images (AMIs), and the instance system disk appears as an Amazon Elastic Block Store (Amazon EBS) volume. Exported disk snapshots appear in Amazon EC2 as Amazon EBS volumes. Snapshots are exported to the same Amazon Web Services Region in Amazon EC2 as the source Lightsail snapshot.</p> <p/> <p>The <code>export snapshot</code> operation supports tag-based access control via resource tags applied to the resource identified by sourceSnapshotName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p> <note> <p>Use the <code>get instance snapshots</code> or <code>get disk snapshots</code> operations to get a list of snapshots that you can export to Amazon EC2.</p> </note></p>
+    fn export_snapshot(
+        &self,
+        input: ExportSnapshotRequest,
+    ) -> RusotoFuture<ExportSnapshotResult, ExportSnapshotError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.ExportSnapshot");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ExportSnapshotResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(ExportSnapshotError::from_response(response))),
                 )
             }
         })
@@ -12617,6 +18200,43 @@ impl Lightsail for LightsailClient {
                         .from_err()
                         .and_then(|response| Err(GetBundlesError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p>Returns the CloudFormation stack record created as a result of the <code>create cloud formation stack</code> operation.</p> <p>An AWS CloudFormation stack is used to create a new Amazon EC2 instance from an exported Lightsail snapshot.</p>
+    fn get_cloud_formation_stack_records(
+        &self,
+        input: GetCloudFormationStackRecordsRequest,
+    ) -> RusotoFuture<GetCloudFormationStackRecordsResult, GetCloudFormationStackRecordsError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.GetCloudFormationStackRecords",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetCloudFormationStackRecordsResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetCloudFormationStackRecordsError::from_response(response))
+                }))
             }
         })
     }
@@ -12834,6 +18454,43 @@ impl Lightsail for LightsailClient {
         })
     }
 
+    /// <p>Returns the export snapshot record created as a result of the <code>export snapshot</code> operation.</p> <p>An export snapshot record can be used to create a new Amazon EC2 instance and its related resources with the <code>create cloud formation stack</code> operation.</p>
+    fn get_export_snapshot_records(
+        &self,
+        input: GetExportSnapshotRecordsRequest,
+    ) -> RusotoFuture<GetExportSnapshotRecordsResult, GetExportSnapshotRecordsError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.GetExportSnapshotRecords",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetExportSnapshotRecordsResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetExportSnapshotRecordsError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p>Returns information about a specific Amazon Lightsail instance, which is a virtual private server.</p>
     fn get_instance(
         &self,
@@ -12871,7 +18528,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Returns temporary SSH keys you can use to connect to a specific virtual private server, or <i>instance</i>.</p>
+    /// <p>Returns temporary SSH keys you can use to connect to a specific virtual private server, or <i>instance</i>.</p> <p>The <code>get instance access details</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn get_instance_access_details(
         &self,
         input: GetInstanceAccessDetailsRequest,
@@ -13460,7 +19117,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Returns a list of all valid regions for Amazon Lightsail. Use the <code>include availability zones</code> parameter to also return the availability zones in a region.</p>
+    /// <p>Returns a list of all valid regions for Amazon Lightsail. Use the <code>include availability zones</code> parameter to also return the Availability Zones in a region.</p>
     fn get_regions(
         &self,
         input: GetRegionsRequest,
@@ -13492,6 +19149,467 @@ impl Lightsail for LightsailClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(GetRegionsError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Returns information about a specific database in Amazon Lightsail.</p>
+    fn get_relational_database(
+        &self,
+        input: GetRelationalDatabaseRequest,
+    ) -> RusotoFuture<GetRelationalDatabaseResult, GetRelationalDatabaseError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.GetRelationalDatabase");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetRelationalDatabaseResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetRelationalDatabaseError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Returns a list of available database blueprints in Amazon Lightsail. A blueprint describes the major engine version of a database.</p> <p>You can use a blueprint ID to create a new database that runs a specific database engine.</p>
+    fn get_relational_database_blueprints(
+        &self,
+        input: GetRelationalDatabaseBlueprintsRequest,
+    ) -> RusotoFuture<GetRelationalDatabaseBlueprintsResult, GetRelationalDatabaseBlueprintsError>
+    {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.GetRelationalDatabaseBlueprints",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetRelationalDatabaseBlueprintsResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetRelationalDatabaseBlueprintsError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Returns the list of bundles that are available in Amazon Lightsail. A bundle describes the performance specifications for a database.</p> <p>You can use a bundle ID to create a new database with explicit performance specifications.</p>
+    fn get_relational_database_bundles(
+        &self,
+        input: GetRelationalDatabaseBundlesRequest,
+    ) -> RusotoFuture<GetRelationalDatabaseBundlesResult, GetRelationalDatabaseBundlesError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.GetRelationalDatabaseBundles",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetRelationalDatabaseBundlesResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetRelationalDatabaseBundlesError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Returns a list of events for a specific database in Amazon Lightsail.</p>
+    fn get_relational_database_events(
+        &self,
+        input: GetRelationalDatabaseEventsRequest,
+    ) -> RusotoFuture<GetRelationalDatabaseEventsResult, GetRelationalDatabaseEventsError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.GetRelationalDatabaseEvents",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetRelationalDatabaseEventsResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetRelationalDatabaseEventsError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Returns a list of log events for a database in Amazon Lightsail.</p>
+    fn get_relational_database_log_events(
+        &self,
+        input: GetRelationalDatabaseLogEventsRequest,
+    ) -> RusotoFuture<GetRelationalDatabaseLogEventsResult, GetRelationalDatabaseLogEventsError>
+    {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.GetRelationalDatabaseLogEvents",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetRelationalDatabaseLogEventsResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetRelationalDatabaseLogEventsError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Returns a list of available log streams for a specific database in Amazon Lightsail.</p>
+    fn get_relational_database_log_streams(
+        &self,
+        input: GetRelationalDatabaseLogStreamsRequest,
+    ) -> RusotoFuture<GetRelationalDatabaseLogStreamsResult, GetRelationalDatabaseLogStreamsError>
+    {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.GetRelationalDatabaseLogStreams",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetRelationalDatabaseLogStreamsResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetRelationalDatabaseLogStreamsError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Returns the current, previous, or pending versions of the master user password for a Lightsail database.</p> <p>The <code>asdf</code> operation GetRelationalDatabaseMasterUserPassword supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName.</p>
+    fn get_relational_database_master_user_password(
+        &self,
+        input: GetRelationalDatabaseMasterUserPasswordRequest,
+    ) -> RusotoFuture<
+        GetRelationalDatabaseMasterUserPasswordResult,
+        GetRelationalDatabaseMasterUserPasswordError,
+    > {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.GetRelationalDatabaseMasterUserPassword",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetRelationalDatabaseMasterUserPasswordResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetRelationalDatabaseMasterUserPasswordError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Returns the data points of the specified metric for a database in Amazon Lightsail.</p>
+    fn get_relational_database_metric_data(
+        &self,
+        input: GetRelationalDatabaseMetricDataRequest,
+    ) -> RusotoFuture<GetRelationalDatabaseMetricDataResult, GetRelationalDatabaseMetricDataError>
+    {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.GetRelationalDatabaseMetricData",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetRelationalDatabaseMetricDataResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetRelationalDatabaseMetricDataError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Returns all of the runtime parameters offered by the underlying database software, or engine, for a specific database in Amazon Lightsail.</p> <p>In addition to the parameter names and values, this operation returns other information about each parameter. This information includes whether changes require a reboot, whether the parameter is modifiable, the allowed values, and the data types.</p>
+    fn get_relational_database_parameters(
+        &self,
+        input: GetRelationalDatabaseParametersRequest,
+    ) -> RusotoFuture<GetRelationalDatabaseParametersResult, GetRelationalDatabaseParametersError>
+    {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.GetRelationalDatabaseParameters",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetRelationalDatabaseParametersResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetRelationalDatabaseParametersError::from_response(
+                        response,
+                    ))
+                }))
+            }
+        })
+    }
+
+    /// <p>Returns information about a specific database snapshot in Amazon Lightsail.</p>
+    fn get_relational_database_snapshot(
+        &self,
+        input: GetRelationalDatabaseSnapshotRequest,
+    ) -> RusotoFuture<GetRelationalDatabaseSnapshotResult, GetRelationalDatabaseSnapshotError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.GetRelationalDatabaseSnapshot",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetRelationalDatabaseSnapshotResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetRelationalDatabaseSnapshotError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Returns information about all of your database snapshots in Amazon Lightsail.</p>
+    fn get_relational_database_snapshots(
+        &self,
+        input: GetRelationalDatabaseSnapshotsRequest,
+    ) -> RusotoFuture<GetRelationalDatabaseSnapshotsResult, GetRelationalDatabaseSnapshotsError>
+    {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.GetRelationalDatabaseSnapshots",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetRelationalDatabaseSnapshotsResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(GetRelationalDatabaseSnapshotsError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Returns information about all of your databases in Amazon Lightsail.</p>
+    fn get_relational_databases(
+        &self,
+        input: GetRelationalDatabasesRequest,
+    ) -> RusotoFuture<GetRelationalDatabasesResult, GetRelationalDatabasesError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.GetRelationalDatabases");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<GetRelationalDatabasesResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(GetRelationalDatabasesError::from_response(response))
+                    }),
                 )
             }
         })
@@ -13641,7 +19759,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Adds public ports to an Amazon Lightsail instance.</p>
+    /// <p>Adds public ports to an Amazon Lightsail instance.</p> <p>The <code>open instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn open_instance_public_ports(
         &self,
         input: OpenInstancePublicPortsRequest,
@@ -13708,7 +19826,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Sets the specified open ports for an Amazon Lightsail instance, and closes all ports for every protocol not included in the current request.</p>
+    /// <p>Sets the specified open ports for an Amazon Lightsail instance, and closes all ports for every protocol not included in the current request.</p> <p>The <code>put instance public ports</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn put_instance_public_ports(
         &self,
         input: PutInstancePublicPortsRequest,
@@ -13744,7 +19862,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Restarts a specific instance. When your Amazon Lightsail instance is finished rebooting, Lightsail assigns a new public IP address. To use the same IP address after restarting, create a static IP address and attach it to the instance.</p>
+    /// <p>Restarts a specific instance.</p> <p>The <code>reboot instance</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn reboot_instance(
         &self,
         input: RebootInstanceRequest,
@@ -13777,6 +19895,43 @@ impl Lightsail for LightsailClient {
                         .from_err()
                         .and_then(|response| Err(RebootInstanceError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p>Restarts a specific database in Amazon Lightsail.</p> <p>The <code>reboot relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn reboot_relational_database(
+        &self,
+        input: RebootRelationalDatabaseRequest,
+    ) -> RusotoFuture<RebootRelationalDatabaseResult, RebootRelationalDatabaseError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.RebootRelationalDatabase",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<RebootRelationalDatabaseResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(RebootRelationalDatabaseError::from_response(response))
+                }))
             }
         })
     }
@@ -13818,7 +19973,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Starts a specific Amazon Lightsail instance from a stopped state. To restart an instance, use the reboot instance operation.</p>
+    /// <p>Starts a specific Amazon Lightsail instance from a stopped state. To restart an instance, use the <code>reboot instance</code> operation.</p> <note> <p>When you start a stopped instance, Lightsail assigns a new public IP address to the instance. To use the same IP address after stopping and starting an instance, create a static IP address and attach it to the instance. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/lightsail-create-static-ip">Lightsail Dev Guide</a>.</p> </note> <p>The <code>start instance</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn start_instance(
         &self,
         input: StartInstanceRequest,
@@ -13855,7 +20010,41 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Stops a specific Amazon Lightsail instance that is currently running.</p>
+    /// <p>Starts a specific database from a stopped state in Amazon Lightsail. To restart a database, use the <code>reboot relational database</code> operation.</p> <p>The <code>start relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn start_relational_database(
+        &self,
+        input: StartRelationalDatabaseRequest,
+    ) -> RusotoFuture<StartRelationalDatabaseResult, StartRelationalDatabaseError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.StartRelationalDatabase");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<StartRelationalDatabaseResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(StartRelationalDatabaseError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Stops a specific Amazon Lightsail instance that is currently running.</p> <note> <p>When you start a stopped instance, Lightsail assigns a new public IP address to the instance. To use the same IP address after stopping and starting an instance, create a static IP address and attach it to the instance. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/lightsail-create-static-ip">Lightsail Dev Guide</a>.</p> </note> <p>The <code>stop instance</code> operation supports tag-based access control via resource tags applied to the resource identified by instanceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn stop_instance(
         &self,
         input: StopInstanceRequest,
@@ -13887,6 +20076,79 @@ impl Lightsail for LightsailClient {
                         .buffer()
                         .from_err()
                         .and_then(|response| Err(StopInstanceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Stops a specific database that is currently running in Amazon Lightsail.</p> <p>The <code>stop relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn stop_relational_database(
+        &self,
+        input: StopRelationalDatabaseRequest,
+    ) -> RusotoFuture<StopRelationalDatabaseResult, StopRelationalDatabaseError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.StopRelationalDatabase");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<StopRelationalDatabaseResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response.buffer().from_err().and_then(|response| {
+                        Err(StopRelationalDatabaseError::from_response(response))
+                    }),
+                )
+            }
+        })
+    }
+
+    /// <p>Adds one or more tags to the specified Amazon Lightsail resource. Each resource can have a maximum of 50 tags. Each tag consists of a key and an optional value. Tag keys must be unique per resource. For more information about tags, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-tags">Lightsail Dev Guide</a>.</p> <p>The <code>tag resource</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by resourceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn tag_resource(
+        &self,
+        input: TagResourceRequest,
+    ) -> RusotoFuture<TagResourceResult, TagResourceError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.TagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<TagResourceResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(TagResourceError::from_response(response))),
                 )
             }
         })
@@ -13925,7 +20187,44 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Updates a domain recordset after it is created.</p>
+    /// <p>Deletes the specified set of tag keys and their values from the specified Amazon Lightsail resource.</p> <p>The <code>untag resource</code> operation supports tag-based access control via request tags and resource tags applied to the resource identified by resourceName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn untag_resource(
+        &self,
+        input: UntagResourceRequest,
+    ) -> RusotoFuture<UntagResourceResult, UntagResourceError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header("x-amz-target", "Lightsail_20161128.UntagResource");
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<UntagResourceResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(
+                    response
+                        .buffer()
+                        .from_err()
+                        .and_then(|response| Err(UntagResourceError::from_response(response))),
+                )
+            }
+        })
+    }
+
+    /// <p>Updates a domain recordset after it is created.</p> <p>The <code>update domain entry</code> operation supports tag-based access control via resource tags applied to the resource identified by domainName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn update_domain_entry(
         &self,
         input: UpdateDomainEntryRequest,
@@ -13962,7 +20261,7 @@ impl Lightsail for LightsailClient {
         })
     }
 
-    /// <p>Updates the specified attribute for a load balancer. You can only update one attribute at a time.</p>
+    /// <p>Updates the specified attribute for a load balancer. You can only update one attribute at a time.</p> <p>The <code>update load balancer attribute</code> operation supports tag-based access control via resource tags applied to the resource identified by loadBalancerName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
     fn update_load_balancer_attribute(
         &self,
         input: UpdateLoadBalancerAttributeRequest,
@@ -13994,6 +20293,85 @@ impl Lightsail for LightsailClient {
             } else {
                 Box::new(response.buffer().from_err().and_then(|response| {
                     Err(UpdateLoadBalancerAttributeError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Allows the update of one or more attributes of a database in Amazon Lightsail.</p> <p>Updates are applied immediately, or in cases where the updates could result in an outage, are applied during the database's predefined maintenance window.</p> <p>The <code>update relational database</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn update_relational_database(
+        &self,
+        input: UpdateRelationalDatabaseRequest,
+    ) -> RusotoFuture<UpdateRelationalDatabaseResult, UpdateRelationalDatabaseError> {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.UpdateRelationalDatabase",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<UpdateRelationalDatabaseResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateRelationalDatabaseError::from_response(response))
+                }))
+            }
+        })
+    }
+
+    /// <p>Allows the update of one or more parameters of a database in Amazon Lightsail.</p> <p>Parameter updates don't cause outages; therefore, their application is not subject to the preferred maintenance window. However, there are two ways in which paramater updates are applied: <code>dynamic</code> or <code>pending-reboot</code>. Parameters marked with a <code>dynamic</code> apply type are applied immediately. Parameters marked with a <code>pending-reboot</code> apply type are applied only after the database is rebooted using the <code>reboot relational database</code> operation.</p> <p>The <code>update relational database parameters</code> operation supports tag-based access control via resource tags applied to the resource identified by relationalDatabaseName. For more information, see the <a href="https://lightsail.aws.amazon.com/ls/docs/en/articles/amazon-lightsail-controlling-access-using-tags">Lightsail Dev Guide</a>.</p>
+    fn update_relational_database_parameters(
+        &self,
+        input: UpdateRelationalDatabaseParametersRequest,
+    ) -> RusotoFuture<
+        UpdateRelationalDatabaseParametersResult,
+        UpdateRelationalDatabaseParametersError,
+    > {
+        let mut request = SignedRequest::new("POST", "lightsail", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "Lightsail_20161128.UpdateRelationalDatabaseParameters",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<UpdateRelationalDatabaseParametersResult>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateRelationalDatabaseParametersError::from_response(
+                        response,
+                    ))
                 }))
             }
         })

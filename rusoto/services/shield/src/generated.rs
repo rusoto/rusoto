@@ -168,7 +168,7 @@ pub struct CreateProtectionRequest {
     /// <p>Friendly name for the <code>Protection</code> you are creating.</p>
     #[serde(rename = "Name")]
     pub name: String,
-    /// <p><p>The ARN (Amazon Resource Name) of the resource to be protected.</p> <p>The ARN should be in one of the following formats:</p> <ul> <li> <p>For an Application Load Balancer: <code>arn:aws:elasticloadbalancing:<i>region</i>:<i>account-id</i>:loadbalancer/app/<i>load-balancer-name</i>/<i>load-balancer-id</i> </code> </p> </li> <li> <p>For an Elastic Load Balancer (Classic Load Balancer): <code>arn:aws:elasticloadbalancing:<i>region</i>:<i>account-id</i>:loadbalancer/<i>load-balancer-name</i> </code> </p> </li> <li> <p>For AWS CloudFront distribution: <code>arn:aws:cloudfront::<i>account-id</i>:distribution/<i>distribution-id</i> </code> </p> </li> <li> <p>For Amazon Route 53: <code>arn:aws:route53::<i>account-id</i>:hostedzone/<i>hosted-zone-id</i> </code> </p> </li> <li> <p>For an Elastic IP address: <code>arn:aws:ec2:<i>region</i>:<i>account-id</i>:eip-allocation/<i>allocation-id</i> </code> </p> </li> </ul></p>
+    /// <p><p>The ARN (Amazon Resource Name) of the resource to be protected.</p> <p>The ARN should be in one of the following formats:</p> <ul> <li> <p>For an Application Load Balancer: <code>arn:aws:elasticloadbalancing:<i>region</i>:<i>account-id</i>:loadbalancer/app/<i>load-balancer-name</i>/<i>load-balancer-id</i> </code> </p> </li> <li> <p>For an Elastic Load Balancer (Classic Load Balancer): <code>arn:aws:elasticloadbalancing:<i>region</i>:<i>account-id</i>:loadbalancer/<i>load-balancer-name</i> </code> </p> </li> <li> <p>For an AWS CloudFront distribution: <code>arn:aws:cloudfront::<i>account-id</i>:distribution/<i>distribution-id</i> </code> </p> </li> <li> <p>For an AWS Global Accelerator accelerator: <code>arn:aws:globalaccelerator::<i>account-id</i>:accelerator/<i>accelerator-id</i> </code> </p> </li> <li> <p>For Amazon Route 53: <code>arn:aws:route53:::hostedzone/<i>hosted-zone-id</i> </code> </p> </li> <li> <p>For an Elastic IP address: <code>arn:aws:ec2:<i>region</i>:<i>account-id</i>:eip-allocation/<i>allocation-id</i> </code> </p> </li> </ul></p>
     #[serde(rename = "ResourceArn")]
     pub resource_arn: String,
 }
@@ -253,9 +253,14 @@ pub struct DescribeEmergencyContactSettingsResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeProtectionRequest {
-    /// <p>The unique identifier (ID) for the <a>Protection</a> object that is described.</p>
+    /// <p>The unique identifier (ID) for the <a>Protection</a> object that is described. When submitting the <code>DescribeProtection</code> request you must provide either the <code>ResourceArn</code> or the <code>ProtectionID</code>, but not both.</p>
     #[serde(rename = "ProtectionId")]
-    pub protection_id: String,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub protection_id: Option<String>,
+    /// <p>The ARN (Amazon Resource Name) of the AWS resource for the <a>Protection</a> object that is described. When submitting the <code>DescribeProtection</code> request you must provide either the <code>ResourceArn</code> or the <code>ProtectionID</code>, but not both.</p>
+    #[serde(rename = "ResourceArn")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub resource_arn: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -336,7 +341,7 @@ pub struct ListAttacksRequest {
     #[serde(rename = "EndTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub end_time: Option<TimeRange>,
-    /// <p>The maximum number of <a>AttackSummary</a> objects to be returned. If this is left blank, the first 20 results will be returned.</p>
+    /// <p>The maximum number of <a>AttackSummary</a> objects to be returned. If this is left blank, the first 20 results will be returned.</p> <p>This is a maximum value; it is possible that AWS WAF will return the results in smaller batches. That is, the number of <a>AttackSummary</a> objects returned could be less than <code>MaxResults</code>, even if there are still more <a>AttackSummary</a> objects yet to return. If there are more <a>AttackSummary</a> objects to return, AWS WAF will always also return a <code>NextToken</code>.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -361,7 +366,7 @@ pub struct ListAttacksResponse {
     #[serde(rename = "AttackSummaries")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attack_summaries: Option<Vec<AttackSummary>>,
-    /// <p>The token returned by a previous call to indicate that there is more data available. If not null, more results are available. Pass this value for the <code>NextMarker</code> parameter in a subsequent call to <code>ListAttacks</code> to retrieve the next set of items.</p>
+    /// <p>The token returned by a previous call to indicate that there is more data available. If not null, more results are available. Pass this value for the <code>NextMarker</code> parameter in a subsequent call to <code>ListAttacks</code> to retrieve the next set of items.</p> <p>AWS WAF might return the list of <a>AttackSummary</a> objects in batches smaller than the number specified by MaxResults. If there are more <a>AttackSummary</a> objects to return, AWS WAF will always also return a <code>NextToken</code>.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -369,7 +374,7 @@ pub struct ListAttacksResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ListProtectionsRequest {
-    /// <p>The maximum number of <a>Protection</a> objects to be returned. If this is left blank the first 20 results will be returned.</p>
+    /// <p>The maximum number of <a>Protection</a> objects to be returned. If this is left blank the first 20 results will be returned.</p> <p>This is a maximum value; it is possible that AWS WAF will return the results in smaller batches. That is, the number of <a>Protection</a> objects returned could be less than <code>MaxResults</code>, even if there are still more <a>Protection</a> objects yet to return. If there are more <a>Protection</a> objects to return, AWS WAF will always also return a <code>NextToken</code>.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
@@ -382,7 +387,7 @@ pub struct ListProtectionsRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ListProtectionsResponse {
-    /// <p>If you specify a value for <code>MaxResults</code> and you have more Protections than the value of MaxResults, AWS Shield Advanced returns a NextToken value in the response that allows you to list another group of Protections. For the second and subsequent ListProtections requests, specify the value of NextToken from the previous response to get information about another batch of Protections.</p>
+    /// <p>If you specify a value for <code>MaxResults</code> and you have more Protections than the value of MaxResults, AWS Shield Advanced returns a NextToken value in the response that allows you to list another group of Protections. For the second and subsequent ListProtections requests, specify the value of NextToken from the previous response to get information about another batch of Protections.</p> <p>AWS WAF might return the list of <a>Protection</a> objects in batches smaller than the number specified by MaxResults. If there are more <a>Protection</a> objects to return, AWS WAF will always also return a <code>NextToken</code>.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -1181,10 +1186,10 @@ impl Error for DeleteSubscriptionError {
 /// Errors returned by DescribeAttack
 #[derive(Debug, PartialEq)]
 pub enum DescribeAttackError {
+    /// <p>Exception that indicates the specified <code>AttackId</code> does not exist, or the requester does not have the appropriate permissions to access the <code>AttackId</code>.</p>
+    AccessDenied(String),
     /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
-    /// <p>Exception that indicates that the parameters passed to the API are invalid. </p>
-    InvalidParameter(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -1210,11 +1215,11 @@ impl DescribeAttackError {
             let error_type = pieces.last().expect("Expected error type");
 
             match *error_type {
+                "AccessDeniedException" => {
+                    return DescribeAttackError::AccessDenied(String::from(error_message));
+                }
                 "InternalErrorException" => {
                     return DescribeAttackError::InternalError(String::from(error_message));
-                }
-                "InvalidParameterException" => {
-                    return DescribeAttackError::InvalidParameter(String::from(error_message));
                 }
                 "ValidationException" => {
                     return DescribeAttackError::Validation(error_message.to_string());
@@ -1254,8 +1259,8 @@ impl fmt::Display for DescribeAttackError {
 impl Error for DescribeAttackError {
     fn description(&self) -> &str {
         match *self {
+            DescribeAttackError::AccessDenied(ref cause) => cause,
             DescribeAttackError::InternalError(ref cause) => cause,
-            DescribeAttackError::InvalidParameter(ref cause) => cause,
             DescribeAttackError::Validation(ref cause) => cause,
             DescribeAttackError::Credentials(ref err) => err.description(),
             DescribeAttackError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -1451,6 +1456,8 @@ impl Error for DescribeEmergencyContactSettingsError {
 pub enum DescribeProtectionError {
     /// <p>Exception that indicates that a problem occurred with the service infrastructure. You can retry the request.</p>
     InternalError(String),
+    /// <p>Exception that indicates that the parameters passed to the API are invalid. </p>
+    InvalidParameter(String),
     /// <p>Exception indicating the specified resource does not exist.</p>
     ResourceNotFound(String),
     /// An error occurred dispatching the HTTP request
@@ -1480,6 +1487,9 @@ impl DescribeProtectionError {
             match *error_type {
                 "InternalErrorException" => {
                     return DescribeProtectionError::InternalError(String::from(error_message));
+                }
+                "InvalidParameterException" => {
+                    return DescribeProtectionError::InvalidParameter(String::from(error_message));
                 }
                 "ResourceNotFoundException" => {
                     return DescribeProtectionError::ResourceNotFound(String::from(error_message));
@@ -1523,6 +1533,7 @@ impl Error for DescribeProtectionError {
     fn description(&self) -> &str {
         match *self {
             DescribeProtectionError::InternalError(ref cause) => cause,
+            DescribeProtectionError::InvalidParameter(ref cause) => cause,
             DescribeProtectionError::ResourceNotFound(ref cause) => cause,
             DescribeProtectionError::Validation(ref cause) => cause,
             DescribeProtectionError::Credentials(ref err) => err.description(),
@@ -2340,7 +2351,7 @@ pub trait Shield {
         input: AssociateDRTRoleRequest,
     ) -> RusotoFuture<AssociateDRTRoleResponse, AssociateDRTRoleError>;
 
-    /// <p>Enables AWS Shield Advanced for a specific AWS resource. The resource can be an Amazon CloudFront distribution, Elastic Load Balancing load balancer, Elastic IP Address, or an Amazon Route 53 hosted zone.</p> <p>You can add protection to only a single resource with each CreateProtection request. If you want to add protection to multiple resources at once, use the <a href="https://console.aws.amazon.com/waf/">AWS WAF console</a>. For more information see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/getting-started-ddos.html">Getting Started with AWS Shield Advanced</a> and <a href="https://docs.aws.amazon.com/waf/latest/developerguide/configure-new-protection.html">Add AWS Shield Advanced Protection to more AWS Resources</a>.</p>
+    /// <p>Enables AWS Shield Advanced for a specific AWS resource. The resource can be an Amazon CloudFront distribution, Elastic Load Balancing load balancer, AWS Global Accelerator accelerator, Elastic IP Address, or an Amazon Route 53 hosted zone.</p> <p>You can add protection to only a single resource with each CreateProtection request. If you want to add protection to multiple resources at once, use the <a href="https://console.aws.amazon.com/waf/">AWS WAF console</a>. For more information see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/getting-started-ddos.html">Getting Started with AWS Shield Advanced</a> and <a href="https://docs.aws.amazon.com/waf/latest/developerguide/configure-new-protection.html">Add AWS Shield Advanced Protection to more AWS Resources</a>.</p>
     fn create_protection(
         &self,
         input: CreateProtectionRequest,
@@ -2539,7 +2550,7 @@ impl Shield for ShieldClient {
         })
     }
 
-    /// <p>Enables AWS Shield Advanced for a specific AWS resource. The resource can be an Amazon CloudFront distribution, Elastic Load Balancing load balancer, Elastic IP Address, or an Amazon Route 53 hosted zone.</p> <p>You can add protection to only a single resource with each CreateProtection request. If you want to add protection to multiple resources at once, use the <a href="https://console.aws.amazon.com/waf/">AWS WAF console</a>. For more information see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/getting-started-ddos.html">Getting Started with AWS Shield Advanced</a> and <a href="https://docs.aws.amazon.com/waf/latest/developerguide/configure-new-protection.html">Add AWS Shield Advanced Protection to more AWS Resources</a>.</p>
+    /// <p>Enables AWS Shield Advanced for a specific AWS resource. The resource can be an Amazon CloudFront distribution, Elastic Load Balancing load balancer, AWS Global Accelerator accelerator, Elastic IP Address, or an Amazon Route 53 hosted zone.</p> <p>You can add protection to only a single resource with each CreateProtection request. If you want to add protection to multiple resources at once, use the <a href="https://console.aws.amazon.com/waf/">AWS WAF console</a>. For more information see <a href="https://docs.aws.amazon.com/waf/latest/developerguide/getting-started-ddos.html">Getting Started with AWS Shield Advanced</a> and <a href="https://docs.aws.amazon.com/waf/latest/developerguide/configure-new-protection.html">Add AWS Shield Advanced Protection to more AWS Resources</a>.</p>
     fn create_protection(
         &self,
         input: CreateProtectionRequest,

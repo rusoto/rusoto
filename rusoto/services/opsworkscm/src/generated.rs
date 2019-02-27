@@ -299,11 +299,11 @@ pub struct DescribeBackupsRequest {
     #[serde(rename = "BackupId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backup_id: Option<String>,
-    /// <p>To receive a paginated response, use this parameter to specify the maximum number of results to be returned with a single call. If the number of available results exceeds this maximum, the response includes a <code>NextToken</code> value that you can assign to the <code>NextToken</code> request parameter to get the next set of results. </p>
+    /// <p>This is not currently implemented for <code>DescribeBackups</code> requests.</p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>NextToken is a string that is returned in some command responses. It indicates that not all entries have been returned, and that you must run at least one more request to get remaining items. To get remaining results, call <code>DescribeBackups</code> again, and assign the token from the previous results as the value of the <code>nextToken</code> parameter. If there are no more results, the response object's <code>nextToken</code> parameter value is <code>null</code>. Setting a <code>nextToken</code> value that was not returned in your previous results causes an <code>InvalidNextTokenException</code> to occur.</p>
+    /// <p>This is not currently implemented for <code>DescribeBackups</code> requests.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -320,7 +320,7 @@ pub struct DescribeBackupsResponse {
     #[serde(rename = "Backups")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub backups: Option<Vec<Backup>>,
-    /// <p>NextToken is a string that is returned in some command responses. It indicates that not all entries have been returned, and that you must run at least one more request to get remaining items. To get remaining results, call <code>DescribeBackups</code> again, and assign the token from the previous results as the value of the <code>nextToken</code> parameter. If there are no more results, the response object's <code>nextToken</code> parameter value is <code>null</code>. Setting a <code>nextToken</code> value that was not returned in your previous results causes an <code>InvalidNextTokenException</code> to occur. </p>
+    /// <p>This is not currently implemented for <code>DescribeBackups</code> requests.</p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -379,11 +379,11 @@ pub struct DescribeNodeAssociationStatusResponse {
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeServersRequest {
-    /// <p>To receive a paginated response, use this parameter to specify the maximum number of results to be returned with a single call. If the number of available results exceeds this maximum, the response includes a <code>NextToken</code> value that you can assign to the <code>NextToken</code> request parameter to get the next set of results. </p>
+    /// <p>This is not currently implemented for <code>DescribeServers</code> requests. </p>
     #[serde(rename = "MaxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>NextToken is a string that is returned in some command responses. It indicates that not all entries have been returned, and that you must run at least one more request to get remaining items. To get remaining results, call <code>DescribeServers</code> again, and assign the token from the previous results as the value of the <code>nextToken</code> parameter. If there are no more results, the response object's <code>nextToken</code> parameter value is <code>null</code>. Setting a <code>nextToken</code> value that was not returned in your previous results causes an <code>InvalidNextTokenException</code> to occur. </p>
+    /// <p>This is not currently implemented for <code>DescribeServers</code> requests. </p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -396,7 +396,7 @@ pub struct DescribeServersRequest {
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeServersResponse {
-    /// <p>NextToken is a string that is returned in some command responses. It indicates that not all entries have been returned, and that you must run at least one more request to get remaining items. To get remaining results, call <code>DescribeServers</code> again, and assign the token from the previous results as the value of the <code>nextToken</code> parameter. If there are no more results, the response object's <code>nextToken</code> parameter value is <code>null</code>. Setting a <code>nextToken</code> value that was not returned in your previous results causes an <code>InvalidNextTokenException</code> to occur. </p>
+    /// <p>This is not currently implemented for <code>DescribeServers</code> requests. </p>
     #[serde(rename = "NextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
@@ -440,6 +440,33 @@ pub struct EngineAttribute {
     #[serde(rename = "Value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct ExportServerEngineAttributeRequest {
+    /// <p>The name of the export attribute. Currently, the supported export attribute is <code>Userdata</code>. This exports a user data script that includes parameters and values provided in the <code>InputAttributes</code> list.</p>
+    #[serde(rename = "ExportAttributeName")]
+    pub export_attribute_name: String,
+    /// <p><p>The list of engine attributes. The list type is <code>EngineAttribute</code>. An <code>EngineAttribute</code> list item is a pair that includes an attribute name and its value. For the <code>Userdata</code> ExportAttributeName, the following are supported engine attribute names.</p> <ul> <li> <p> <b>RunList</b> In Chef, a list of roles or recipes that are run in the specified order. In Puppet, this parameter is ignored.</p> </li> <li> <p> <b>OrganizationName</b> In Chef, an organization name. AWS OpsWorks for Chef Automate always creates the organization <code>default</code>. In Puppet, this parameter is ignored.</p> </li> <li> <p> <b>NodeEnvironment</b> In Chef, a node environment (for example, development, staging, or one-box). In Puppet, this parameter is ignored.</p> </li> <li> <p> <b>NodeClientVersion</b> In Chef, the version of the Chef engine (three numbers separated by dots, such as 13.8.5). If this attribute is empty, OpsWorks for Chef Automate uses the most current version. In Puppet, this parameter is ignored.</p> </li> </ul></p>
+    #[serde(rename = "InputAttributes")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub input_attributes: Option<Vec<EngineAttribute>>,
+    /// <p>The name of the server from which you are exporting the attribute.</p>
+    #[serde(rename = "ServerName")]
+    pub server_name: String,
+}
+
+#[derive(Default, Debug, Clone, PartialEq, Deserialize)]
+#[cfg_attr(test, derive(Serialize))]
+pub struct ExportServerEngineAttributeResponse {
+    /// <p>The requested engine attribute pair with attribute name and value.</p>
+    #[serde(rename = "EngineAttribute")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub engine_attribute: Option<EngineAttribute>,
+    /// <p>The server name used in the request.</p>
+    #[serde(rename = "ServerName")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub server_name: Option<String>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
@@ -1603,6 +1630,98 @@ impl Error for DisassociateNodeError {
         }
     }
 }
+/// Errors returned by ExportServerEngineAttribute
+#[derive(Debug, PartialEq)]
+pub enum ExportServerEngineAttributeError {
+    /// <p>The resource is in a state that does not allow you to perform a specified action. </p>
+    InvalidState(String),
+    /// <p>The requested resource does not exist, or access was denied. </p>
+    ResourceNotFound(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl ExportServerEngineAttributeError {
+    pub fn from_response(res: BufferedHttpResponse) -> ExportServerEngineAttributeError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "InvalidStateException" => {
+                    return ExportServerEngineAttributeError::InvalidState(String::from(
+                        error_message,
+                    ));
+                }
+                "ResourceNotFoundException" => {
+                    return ExportServerEngineAttributeError::ResourceNotFound(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return ExportServerEngineAttributeError::Validation(error_message.to_string());
+                }
+                _ => {}
+            }
+        }
+        return ExportServerEngineAttributeError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for ExportServerEngineAttributeError {
+    fn from(err: serde_json::error::Error) -> ExportServerEngineAttributeError {
+        ExportServerEngineAttributeError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for ExportServerEngineAttributeError {
+    fn from(err: CredentialsError) -> ExportServerEngineAttributeError {
+        ExportServerEngineAttributeError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for ExportServerEngineAttributeError {
+    fn from(err: HttpDispatchError) -> ExportServerEngineAttributeError {
+        ExportServerEngineAttributeError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for ExportServerEngineAttributeError {
+    fn from(err: io::Error) -> ExportServerEngineAttributeError {
+        ExportServerEngineAttributeError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for ExportServerEngineAttributeError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for ExportServerEngineAttributeError {
+    fn description(&self) -> &str {
+        match *self {
+            ExportServerEngineAttributeError::InvalidState(ref cause) => cause,
+            ExportServerEngineAttributeError::ResourceNotFound(ref cause) => cause,
+            ExportServerEngineAttributeError::Validation(ref cause) => cause,
+            ExportServerEngineAttributeError::Credentials(ref err) => err.description(),
+            ExportServerEngineAttributeError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            ExportServerEngineAttributeError::ParseError(ref cause) => cause,
+            ExportServerEngineAttributeError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Errors returned by RestoreServer
 #[derive(Debug, PartialEq)]
 pub enum RestoreServerError {
@@ -2020,6 +2139,12 @@ pub trait OpsWorksCM {
         input: DisassociateNodeRequest,
     ) -> RusotoFuture<DisassociateNodeResponse, DisassociateNodeError>;
 
+    /// <p> Exports a specified server engine attribute as a base64-encoded string. For example, you can export user data that you can use in EC2 to associate nodes with a server. </p> <p> This operation is synchronous. </p> <p> A <code>ValidationException</code> is raised when parameters of the request are not valid. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. An <code>InvalidStateException</code> is thrown when the server is in any of the following states: CREATING, TERMINATED, FAILED or DELETING. </p>
+    fn export_server_engine_attribute(
+        &self,
+        input: ExportServerEngineAttributeRequest,
+    ) -> RusotoFuture<ExportServerEngineAttributeResponse, ExportServerEngineAttributeError>;
+
     /// <p> Restores a backup to a server that is in a <code>CONNECTION_LOST</code>, <code>HEALTHY</code>, <code>RUNNING</code>, <code>UNHEALTHY</code>, or <code>TERMINATED</code> state. When you run RestoreServer, the server's EC2 instance is deleted, and a new EC2 instance is configured. RestoreServer maintains the existing server endpoint, so configuration management of the server's client devices (nodes) should continue to work. </p> <p> This operation is asynchronous. </p> <p> An <code>InvalidStateException</code> is thrown when the server is not in a valid state. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>
     fn restore_server(
         &self,
@@ -2038,7 +2163,7 @@ pub trait OpsWorksCM {
         input: UpdateServerRequest,
     ) -> RusotoFuture<UpdateServerResponse, UpdateServerError>;
 
-    /// <p> Updates engine-specific attributes on a specified server. The server enters the <code>MODIFYING</code> state when this operation is in progress. Only one update can occur at a time. You can use this command to reset a Chef server's private key (<code>CHEF_PIVOTAL_KEY</code>), a Chef server's admin password (<code>CHEF_DELIVERY_ADMIN_PASSWORD</code>), or a Puppet server's admin password (<code>PUPPET_ADMIN_PASSWORD</code>). </p> <p> This operation is asynchronous. </p> <p> This operation can only be called for servers in <code>HEALTHY</code> or <code>UNHEALTHY</code> states. Otherwise, an <code>InvalidStateException</code> is raised. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>
+    /// <p> Updates engine-specific attributes on a specified server. The server enters the <code>MODIFYING</code> state when this operation is in progress. Only one update can occur at a time. You can use this command to reset a Chef server's private key (<code>CHEF_PIVOTAL_KEY</code>) or a Puppet server's admin password (<code>PUPPET_ADMIN_PASSWORD</code>). </p> <p> This operation is asynchronous. </p> <p> This operation can only be called for servers in <code>HEALTHY</code> or <code>UNHEALTHY</code> states. Otherwise, an <code>InvalidStateException</code> is raised. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>
     fn update_server_engine_attributes(
         &self,
         input: UpdateServerEngineAttributesRequest,
@@ -2487,6 +2612,43 @@ impl OpsWorksCM for OpsWorksCMClient {
         })
     }
 
+    /// <p> Exports a specified server engine attribute as a base64-encoded string. For example, you can export user data that you can use in EC2 to associate nodes with a server. </p> <p> This operation is synchronous. </p> <p> A <code>ValidationException</code> is raised when parameters of the request are not valid. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. An <code>InvalidStateException</code> is thrown when the server is in any of the following states: CREATING, TERMINATED, FAILED or DELETING. </p>
+    fn export_server_engine_attribute(
+        &self,
+        input: ExportServerEngineAttributeRequest,
+    ) -> RusotoFuture<ExportServerEngineAttributeResponse, ExportServerEngineAttributeError> {
+        let mut request = SignedRequest::new("POST", "opsworks-cm", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "OpsWorksCM_V2016_11_01.ExportServerEngineAttribute",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<ExportServerEngineAttributeResponse>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(ExportServerEngineAttributeError::from_response(response))
+                }))
+            }
+        })
+    }
+
     /// <p> Restores a backup to a server that is in a <code>CONNECTION_LOST</code>, <code>HEALTHY</code>, <code>RUNNING</code>, <code>UNHEALTHY</code>, or <code>TERMINATED</code> state. When you run RestoreServer, the server's EC2 instance is deleted, and a new EC2 instance is configured. RestoreServer maintains the existing server endpoint, so configuration management of the server's client devices (nodes) should continue to work. </p> <p> This operation is asynchronous. </p> <p> An <code>InvalidStateException</code> is thrown when the server is not in a valid state. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>
     fn restore_server(
         &self,
@@ -2598,7 +2760,7 @@ impl OpsWorksCM for OpsWorksCMClient {
         })
     }
 
-    /// <p> Updates engine-specific attributes on a specified server. The server enters the <code>MODIFYING</code> state when this operation is in progress. Only one update can occur at a time. You can use this command to reset a Chef server's private key (<code>CHEF_PIVOTAL_KEY</code>), a Chef server's admin password (<code>CHEF_DELIVERY_ADMIN_PASSWORD</code>), or a Puppet server's admin password (<code>PUPPET_ADMIN_PASSWORD</code>). </p> <p> This operation is asynchronous. </p> <p> This operation can only be called for servers in <code>HEALTHY</code> or <code>UNHEALTHY</code> states. Otherwise, an <code>InvalidStateException</code> is raised. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>
+    /// <p> Updates engine-specific attributes on a specified server. The server enters the <code>MODIFYING</code> state when this operation is in progress. Only one update can occur at a time. You can use this command to reset a Chef server's private key (<code>CHEF_PIVOTAL_KEY</code>) or a Puppet server's admin password (<code>PUPPET_ADMIN_PASSWORD</code>). </p> <p> This operation is asynchronous. </p> <p> This operation can only be called for servers in <code>HEALTHY</code> or <code>UNHEALTHY</code> states. Otherwise, an <code>InvalidStateException</code> is raised. A <code>ResourceNotFoundException</code> is thrown when the server does not exist. A <code>ValidationException</code> is raised when parameters of the request are not valid. </p>
     fn update_server_engine_attributes(
         &self,
         input: UpdateServerEngineAttributesRequest,

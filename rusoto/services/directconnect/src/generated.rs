@@ -28,219 +28,235 @@ use rusoto_core::signature::SignedRequest;
 use serde_json;
 use serde_json::from_slice;
 use serde_json::Value as SerdeJsonValue;
-/// <p>Container for the parameters to the AllocateConnectionOnInterconnect operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AllocateConnectionOnInterconnectRequest {
-    /// <p>Bandwidth of the connection.</p> <p>Example: "<i>500Mbps</i>"</p> <p>Default: None</p> <p>Values: 50Mbps, 100Mbps, 200Mbps, 300Mbps, 400Mbps, or 500Mbps</p>
+    /// <p>The bandwidth of the connection, in Mbps. The possible values are 50Mbps, 100Mbps, 200Mbps, 300Mbps, 400Mbps, and 500Mbps.</p>
     #[serde(rename = "bandwidth")]
     pub bandwidth: String,
-    /// <p>Name of the provisioned connection.</p> <p>Example: "<i>500M Connection to AWS</i>"</p> <p>Default: None</p>
+    /// <p>The name of the provisioned connection.</p>
     #[serde(rename = "connectionName")]
     pub connection_name: String,
-    /// <p>ID of the interconnect on which the connection will be provisioned.</p> <p>Example: dxcon-456abc78</p> <p>Default: None</p>
+    /// <p>The ID of the interconnect on which the connection will be provisioned. For example, dxcon-456abc78.</p>
     #[serde(rename = "interconnectId")]
     pub interconnect_id: String,
-    /// <p>Numeric account Id of the customer for whom the connection will be provisioned.</p> <p>Example: 123443215678</p> <p>Default: None</p>
+    /// <p>The ID of the AWS account of the customer for whom the connection will be provisioned.</p>
     #[serde(rename = "ownerAccount")]
     pub owner_account: String,
-    /// <p>The dedicated VLAN provisioned to the connection.</p> <p>Example: 101</p> <p>Default: None</p>
+    /// <p>The dedicated VLAN provisioned to the connection.</p>
     #[serde(rename = "vlan")]
     pub vlan: i64,
 }
 
-/// <p>Container for the parameters to theHostedConnection operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AllocateHostedConnectionRequest {
-    /// <p>The bandwidth of the connection.</p> <p>Example: <code>500Mbps</code> </p> <p>Default: None</p> <p>Values: 50Mbps, 100Mbps, 200Mbps, 300Mbps, 400Mbps, or 500Mbps</p>
+    /// <p>The bandwidth of the hosted connection, in Mbps. The possible values are 50Mbps, 100Mbps, 200Mbps, 300Mbps, 400Mbps, and 500Mbps.</p>
     #[serde(rename = "bandwidth")]
     pub bandwidth: String,
-    /// <p>The ID of the interconnect or LAG on which the connection will be provisioned.</p> <p>Example: dxcon-456abc78 or dxlag-abc123</p> <p>Default: None</p>
+    /// <p>The ID of the interconnect or LAG.</p>
     #[serde(rename = "connectionId")]
     pub connection_id: String,
-    /// <p>The name of the provisioned connection.</p> <p>Example: "<code>500M Connection to AWS</code>"</p> <p>Default: None</p>
+    /// <p>The name of the hosted connection.</p>
     #[serde(rename = "connectionName")]
     pub connection_name: String,
-    /// <p>The numeric account ID of the customer for whom the connection will be provisioned.</p> <p>Example: 123443215678</p> <p>Default: None</p>
+    /// <p>The ID of the AWS account ID of the customer for the connection.</p>
     #[serde(rename = "ownerAccount")]
     pub owner_account: String,
-    /// <p>The dedicated VLAN provisioned to the hosted connection.</p> <p>Example: 101</p> <p>Default: None</p>
+    /// <p>The dedicated VLAN provisioned to the hosted connection.</p>
     #[serde(rename = "vlan")]
     pub vlan: i64,
 }
 
-/// <p>Container for the parameters to the AllocatePrivateVirtualInterface operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AllocatePrivateVirtualInterfaceRequest {
-    /// <p>The connection ID on which the private virtual interface is provisioned.</p> <p>Default: None</p>
+    /// <p>The ID of the connection on which the private virtual interface is provisioned.</p>
     #[serde(rename = "connectionId")]
     pub connection_id: String,
-    /// <p>Detailed information for the private virtual interface to be provisioned.</p> <p>Default: None</p>
+    /// <p>Information about the private virtual interface.</p>
     #[serde(rename = "newPrivateVirtualInterfaceAllocation")]
     pub new_private_virtual_interface_allocation: NewPrivateVirtualInterfaceAllocation,
-    /// <p>The AWS account that will own the new private virtual interface.</p> <p>Default: None</p>
+    /// <p>The ID of the AWS account that owns the virtual private interface.</p>
     #[serde(rename = "ownerAccount")]
     pub owner_account: String,
 }
 
-/// <p>Container for the parameters to the AllocatePublicVirtualInterface operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AllocatePublicVirtualInterfaceRequest {
-    /// <p>The connection ID on which the public virtual interface is provisioned.</p> <p>Default: None</p>
+    /// <p>The ID of the connection on which the public virtual interface is provisioned.</p>
     #[serde(rename = "connectionId")]
     pub connection_id: String,
-    /// <p>Detailed information for the public virtual interface to be provisioned.</p> <p>Default: None</p>
+    /// <p>Information about the public virtual interface.</p>
     #[serde(rename = "newPublicVirtualInterfaceAllocation")]
     pub new_public_virtual_interface_allocation: NewPublicVirtualInterfaceAllocation,
-    /// <p>The AWS account that will own the new public virtual interface.</p> <p>Default: None</p>
+    /// <p>The ID of the AWS account that owns the public virtual interface.</p>
     #[serde(rename = "ownerAccount")]
     pub owner_account: String,
 }
 
-/// <p>Container for the parameters to the AssociateConnectionWithLag operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateConnectionWithLagRequest {
-    /// <p>The ID of the connection.</p> <p>Example: dxcon-abc123</p> <p>Default: None</p>
+    /// <p>The ID of the connection. For example, dxcon-abc123.</p>
     #[serde(rename = "connectionId")]
     pub connection_id: String,
-    /// <p>The ID of the LAG with which to associate the connection.</p> <p>Example: dxlag-abc123</p> <p>Default: None</p>
+    /// <p>The ID of the LAG with which to associate the connection. For example, dxlag-abc123.</p>
     #[serde(rename = "lagId")]
     pub lag_id: String,
 }
 
-/// <p>Container for the parameters to the AssociateHostedConnection operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateHostedConnectionRequest {
-    /// <p>The ID of the hosted connection.</p> <p>Example: dxcon-abc123</p> <p>Default: None</p>
+    /// <p>The ID of the hosted connection.</p>
     #[serde(rename = "connectionId")]
     pub connection_id: String,
-    /// <p>The ID of the interconnect or the LAG.</p> <p>Example: dxcon-abc123 or dxlag-abc123</p> <p>Default: None</p>
+    /// <p>The ID of the interconnect or the LAG.</p>
     #[serde(rename = "parentConnectionId")]
     pub parent_connection_id: String,
 }
 
-/// <p>Container for the parameters to the AssociateVirtualInterface operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct AssociateVirtualInterfaceRequest {
-    /// <p>The ID of the LAG or connection with which to associate the virtual interface.</p> <p>Example: dxlag-abc123 or dxcon-abc123</p> <p>Default: None</p>
+    /// <p>The ID of the LAG or connection.</p>
     #[serde(rename = "connectionId")]
     pub connection_id: String,
-    /// <p>The ID of the virtual interface.</p> <p>Example: dxvif-123dfg56</p> <p>Default: None</p>
+    /// <p>The ID of the virtual interface.</p>
     #[serde(rename = "virtualInterfaceId")]
     pub virtual_interface_id: String,
 }
 
-/// <p>A structure containing information about a BGP peer.</p>
+/// <p>Information about a BGP peer.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct BGPPeer {
+    /// <p>The address family for the BGP peer.</p>
     #[serde(rename = "addressFamily")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub address_family: Option<String>,
+    /// <p>The IP address assigned to the Amazon interface.</p>
     #[serde(rename = "amazonAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amazon_address: Option<String>,
+    /// <p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>
     #[serde(rename = "asn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub asn: Option<i64>,
+    /// <p>The authentication key for BGP configuration.</p>
     #[serde(rename = "authKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_key: Option<String>,
-    /// <p>The Direct Connection endpoint which the BGP peer terminates on.</p>
+    /// <p>The Direct Connect endpoint on which the BGP peer terminates.</p>
     #[serde(rename = "awsDeviceV2")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_device_v2: Option<String>,
+    /// <p>The ID of the BGP peer.</p>
+    #[serde(rename = "bgpPeerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bgp_peer_id: Option<String>,
+    /// <p><p>The state of the BGP peer. The following are the possible values:</p> <ul> <li> <p> <code>verifying</code>: The BGP peering addresses or ASN require validation before the BGP peer can be created. This state applies only to public virtual interfaces.</p> </li> <li> <p> <code>pending</code>: The BGP peer is created, and remains in this state until it is ready to be established.</p> </li> <li> <p> <code>available</code>: The BGP peer is ready to be established.</p> </li> <li> <p> <code>deleting</code>: The BGP peer is being deleted.</p> </li> <li> <p> <code>deleted</code>: The BGP peer is deleted and cannot be established.</p> </li> </ul></p>
     #[serde(rename = "bgpPeerState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bgp_peer_state: Option<String>,
+    /// <p><p>The status of the BGP peer. The following are the possible values:</p> <ul> <li> <p> <code>up</code>: The BGP peer is established. This state does not indicate the state of the routing function. Ensure that you are receiving routes over the BGP session.</p> </li> <li> <p> <code>down</code>: The BGP peer is down.</p> </li> <li> <p> <code>unknown</code>: The BGP peer status is not available.</p> </li> </ul></p>
     #[serde(rename = "bgpStatus")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bgp_status: Option<String>,
+    /// <p>The IP address assigned to the customer interface.</p>
     #[serde(rename = "customerAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_address: Option<String>,
 }
 
-/// <p>Container for the parameters to the ConfirmConnection operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ConfirmConnectionRequest {
+    /// <p>The ID of the hosted connection.</p>
     #[serde(rename = "connectionId")]
     pub connection_id: String,
 }
 
-/// <p>The response received when ConfirmConnection is called.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ConfirmConnectionResponse {
+    /// <p><p>The state of the connection. The following are the possible values:</p> <ul> <li> <p> <code>ordering</code>: The initial state of a hosted connection provisioned on an interconnect. The connection stays in the ordering state until the owner of the hosted connection confirms or declines the connection order.</p> </li> <li> <p> <code>requested</code>: The initial state of a standard connection. The connection stays in the requested state until the Letter of Authorization (LOA) is sent to the customer.</p> </li> <li> <p> <code>pending</code>: The connection has been approved and is being initialized.</p> </li> <li> <p> <code>available</code>: The network link is up and the connection is ready for use.</p> </li> <li> <p> <code>down</code>: The network link is down.</p> </li> <li> <p> <code>deleting</code>: The connection is being deleted.</p> </li> <li> <p> <code>deleted</code>: The connection has been deleted.</p> </li> <li> <p> <code>rejected</code>: A hosted connection in the <code>ordering</code> state enters the <code>rejected</code> state if it is deleted by the customer.</p> </li> <li> <p> <code>unknown</code>: The state of the connection is not available.</p> </li> </ul></p>
     #[serde(rename = "connectionState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_state: Option<String>,
 }
 
-/// <p>Container for the parameters to the ConfirmPrivateVirtualInterface operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ConfirmPrivateVirtualInterfaceRequest {
-    /// <p>ID of the direct connect gateway that will be attached to the virtual interface.</p> <p> A direct connect gateway can be managed via the AWS Direct Connect console or the <a>CreateDirectConnectGateway</a> action.</p> <p>Default: None</p>
+    /// <p>The ID of the Direct Connect gateway.</p>
     #[serde(rename = "directConnectGatewayId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_connect_gateway_id: Option<String>,
-    /// <p>ID of the virtual private gateway that will be attached to the virtual interface.</p> <p> A virtual private gateway can be managed via the Amazon Virtual Private Cloud (VPC) console or the <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-CreateVpnGateway.html">EC2 CreateVpnGateway</a> action.</p> <p>Default: None</p>
+    /// <p>The ID of the virtual private gateway.</p>
     #[serde(rename = "virtualGatewayId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_gateway_id: Option<String>,
+    /// <p>The ID of the virtual interface.</p>
     #[serde(rename = "virtualInterfaceId")]
     pub virtual_interface_id: String,
 }
 
-/// <p>The response received when ConfirmPrivateVirtualInterface is called.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ConfirmPrivateVirtualInterfaceResponse {
+    /// <p><p>The state of the virtual interface. The following are the possible values:</p> <ul> <li> <p> <code>confirming</code>: The creation of the virtual interface is pending confirmation from the virtual interface owner. If the owner of the virtual interface is different from the owner of the connection on which it is provisioned, then the virtual interface will remain in this state until it is confirmed by the virtual interface owner.</p> </li> <li> <p> <code>verifying</code>: This state only applies to public virtual interfaces. Each public virtual interface needs validation before the virtual interface can be created.</p> </li> <li> <p> <code>pending</code>: A virtual interface is in this state from the time that it is created until the virtual interface is ready to forward traffic.</p> </li> <li> <p> <code>available</code>: A virtual interface that is able to forward traffic.</p> </li> <li> <p> <code>down</code>: A virtual interface that is BGP down.</p> </li> <li> <p> <code>deleting</code>: A virtual interface is in this state immediately after calling <a>DeleteVirtualInterface</a> until it can no longer forward traffic.</p> </li> <li> <p> <code>deleted</code>: A virtual interface that cannot forward traffic.</p> </li> <li> <p> <code>rejected</code>: The virtual interface owner has declined creation of the virtual interface. If a virtual interface in the <code>Confirming</code> state is deleted by the virtual interface owner, the virtual interface enters the <code>Rejected</code> state.</p> </li> <li> <p> <code>unknown</code>: The state of the virtual interface is not available.</p> </li> </ul></p>
     #[serde(rename = "virtualInterfaceState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface_state: Option<String>,
 }
 
-/// <p>Container for the parameters to the ConfirmPublicVirtualInterface operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct ConfirmPublicVirtualInterfaceRequest {
+    /// <p>The ID of the virtual interface.</p>
     #[serde(rename = "virtualInterfaceId")]
     pub virtual_interface_id: String,
 }
 
-/// <p>The response received when ConfirmPublicVirtualInterface is called.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ConfirmPublicVirtualInterfaceResponse {
+    /// <p><p>The state of the virtual interface. The following are the possible values:</p> <ul> <li> <p> <code>confirming</code>: The creation of the virtual interface is pending confirmation from the virtual interface owner. If the owner of the virtual interface is different from the owner of the connection on which it is provisioned, then the virtual interface will remain in this state until it is confirmed by the virtual interface owner.</p> </li> <li> <p> <code>verifying</code>: This state only applies to public virtual interfaces. Each public virtual interface needs validation before the virtual interface can be created.</p> </li> <li> <p> <code>pending</code>: A virtual interface is in this state from the time that it is created until the virtual interface is ready to forward traffic.</p> </li> <li> <p> <code>available</code>: A virtual interface that is able to forward traffic.</p> </li> <li> <p> <code>down</code>: A virtual interface that is BGP down.</p> </li> <li> <p> <code>deleting</code>: A virtual interface is in this state immediately after calling <a>DeleteVirtualInterface</a> until it can no longer forward traffic.</p> </li> <li> <p> <code>deleted</code>: A virtual interface that cannot forward traffic.</p> </li> <li> <p> <code>rejected</code>: The virtual interface owner has declined creation of the virtual interface. If a virtual interface in the <code>Confirming</code> state is deleted by the virtual interface owner, the virtual interface enters the <code>Rejected</code> state.</p> </li> <li> <p> <code>unknown</code>: The state of the virtual interface is not available.</p> </li> </ul></p>
     #[serde(rename = "virtualInterfaceState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface_state: Option<String>,
 }
 
-/// <p>A connection represents the physical network connection between the AWS Direct Connect location and the customer.</p>
+/// <p>Information about an AWS Direct Connect connection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Connection {
-    /// <p>Deprecated in favor of awsDeviceV2.</p> <p>The Direct Connection endpoint which the physical connection terminates on.</p>
+    /// <p>The Direct Connect endpoint on which the physical connection terminates.</p>
     #[serde(rename = "awsDevice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_device: Option<String>,
-    /// <p>The Direct Connection endpoint which the physical connection terminates on.</p>
+    /// <p>The Direct Connect endpoint on which the physical connection terminates.</p>
     #[serde(rename = "awsDeviceV2")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_device_v2: Option<String>,
-    /// <p>Bandwidth of the connection.</p> <p>Example: 1Gbps (for regular connections), or 500Mbps (for hosted connections)</p> <p>Default: None</p>
+    /// <p>The bandwidth of the connection.</p>
     #[serde(rename = "bandwidth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bandwidth: Option<String>,
+    /// <p>The ID of the connection.</p>
     #[serde(rename = "connectionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_id: Option<String>,
+    /// <p>The name of the connection.</p>
     #[serde(rename = "connectionName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_name: Option<String>,
+    /// <p><p>The state of the connection. The following are the possible values:</p> <ul> <li> <p> <code>ordering</code>: The initial state of a hosted connection provisioned on an interconnect. The connection stays in the ordering state until the owner of the hosted connection confirms or declines the connection order.</p> </li> <li> <p> <code>requested</code>: The initial state of a standard connection. The connection stays in the requested state until the Letter of Authorization (LOA) is sent to the customer.</p> </li> <li> <p> <code>pending</code>: The connection has been approved and is being initialized.</p> </li> <li> <p> <code>available</code>: The network link is up and the connection is ready for use.</p> </li> <li> <p> <code>down</code>: The network link is down.</p> </li> <li> <p> <code>deleting</code>: The connection is being deleted.</p> </li> <li> <p> <code>deleted</code>: The connection has been deleted.</p> </li> <li> <p> <code>rejected</code>: A hosted connection in the <code>ordering</code> state enters the <code>rejected</code> state if it is deleted by the customer.</p> </li> <li> <p> <code>unknown</code>: The state of the connection is not available.</p> </li> </ul></p>
     #[serde(rename = "connectionState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_state: Option<String>,
+    /// <p>Indicates whether the connection supports a secondary BGP peer in the same address family (IPv4/IPv6).</p>
+    #[serde(rename = "hasLogicalRedundancy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub has_logical_redundancy: Option<String>,
+    /// <p>Indicates whether jumbo frames (9001 MTU) are supported.</p>
+    #[serde(rename = "jumboFrameCapable")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub jumbo_frame_capable: Option<bool>,
+    /// <p>The ID of the LAG.</p>
     #[serde(rename = "lagId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lag_id: Option<String>,
@@ -248,10 +264,11 @@ pub struct Connection {
     #[serde(rename = "loaIssueTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub loa_issue_time: Option<f64>,
+    /// <p>The location of the connection.</p>
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
-    /// <p>The AWS account that will own the new connection.</p>
+    /// <p>The ID of the AWS account that owns the connection.</p>
     #[serde(rename = "ownerAccount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_account: Option<String>,
@@ -259,481 +276,472 @@ pub struct Connection {
     #[serde(rename = "partnerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub partner_name: Option<String>,
+    /// <p>The AWS Region where the connection is located.</p>
     #[serde(rename = "region")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub region: Option<String>,
+    /// <p>The ID of the VLAN.</p>
     #[serde(rename = "vlan")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vlan: Option<i64>,
 }
 
-/// <p>A structure containing a list of connections.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Connections {
-    /// <p>A list of connections.</p>
+    /// <p>The connections.</p>
     #[serde(rename = "connections")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connections: Option<Vec<Connection>>,
 }
 
-/// <p>Container for the parameters to the CreateBGPPeer operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateBGPPeerRequest {
-    /// <p>Detailed information for the BGP peer to be created.</p> <p>Default: None</p>
+    /// <p>Information about the BGP peer.</p>
     #[serde(rename = "newBGPPeer")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub new_bgp_peer: Option<NewBGPPeer>,
-    /// <p>The ID of the virtual interface on which the BGP peer will be provisioned.</p> <p>Example: dxvif-456abc78</p> <p>Default: None</p>
+    /// <p>The ID of the virtual interface.</p>
     #[serde(rename = "virtualInterfaceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface_id: Option<String>,
 }
 
-/// <p>The response received when CreateBGPPeer is called.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateBGPPeerResponse {
+    /// <p>The virtual interface.</p>
     #[serde(rename = "virtualInterface")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface: Option<VirtualInterface>,
 }
 
-/// <p>Container for the parameters to the CreateConnection operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateConnectionRequest {
+    /// <p>The bandwidth of the connection.</p>
     #[serde(rename = "bandwidth")]
     pub bandwidth: String,
+    /// <p>The name of the connection.</p>
     #[serde(rename = "connectionName")]
     pub connection_name: String,
+    /// <p>The ID of the LAG.</p>
     #[serde(rename = "lagId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lag_id: Option<String>,
+    /// <p>The location of the connection.</p>
     #[serde(rename = "location")]
     pub location: String,
 }
 
-/// <p>Container for the parameters to the CreateDirectConnectGatewayAssociation operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDirectConnectGatewayAssociationRequest {
-    /// <p>The ID of the direct connect gateway.</p> <p>Example: "abcd1234-dcba-5678-be23-cdef9876ab45"</p> <p>Default: None</p>
+    /// <p>The ID of the Direct Connect gateway.</p>
     #[serde(rename = "directConnectGatewayId")]
     pub direct_connect_gateway_id: String,
-    /// <p>The ID of the virtual private gateway.</p> <p>Example: "vgw-abc123ef"</p> <p>Default: None</p>
+    /// <p>The ID of the virtual private gateway.</p>
     #[serde(rename = "virtualGatewayId")]
     pub virtual_gateway_id: String,
 }
 
-/// <p>Container for the response from the CreateDirectConnectGatewayAssociation API call</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateDirectConnectGatewayAssociationResult {
-    /// <p>The direct connect gateway association to be created.</p>
+    /// <p>The association to be created.</p>
     #[serde(rename = "directConnectGatewayAssociation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_connect_gateway_association: Option<DirectConnectGatewayAssociation>,
 }
 
-/// <p>Container for the parameters to the CreateDirectConnectGateway operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateDirectConnectGatewayRequest {
-    /// <p>The autonomous system number (ASN) for Border Gateway Protocol (BGP) to be configured on the Amazon side of the connection. The ASN must be in the private range of 64,512 to 65,534 or 4,200,000,000 to 4,294,967,294 </p> <p>Example: 65200</p> <p>Default: 64512</p>
+    /// <p>The autonomous system number (ASN) for Border Gateway Protocol (BGP) to be configured on the Amazon side of the connection. The ASN must be in the private range of 64,512 to 65,534 or 4,200,000,000 to 4,294,967,294. The default is 64512.</p>
     #[serde(rename = "amazonSideAsn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amazon_side_asn: Option<i64>,
-    /// <p>The name of the direct connect gateway.</p> <p>Example: "My direct connect gateway"</p> <p>Default: None</p>
+    /// <p>The name of the Direct Connect gateway.</p>
     #[serde(rename = "directConnectGatewayName")]
     pub direct_connect_gateway_name: String,
 }
 
-/// <p>Container for the response from the CreateDirectConnectGateway API call</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct CreateDirectConnectGatewayResult {
-    /// <p>The direct connect gateway to be created.</p>
+    /// <p>The Direct Connect gateway.</p>
     #[serde(rename = "directConnectGateway")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_connect_gateway: Option<DirectConnectGateway>,
 }
 
-/// <p>Container for the parameters to the CreateInterconnect operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateInterconnectRequest {
-    /// <p>The port bandwidth</p> <p>Example: 1Gbps</p> <p>Default: None</p> <p>Available values: 1Gbps,10Gbps</p>
+    /// <p>The port bandwidth, in Gbps. The possible values are 1 and 10.</p>
     #[serde(rename = "bandwidth")]
     pub bandwidth: String,
-    /// <p>The name of the interconnect.</p> <p>Example: "<i>1G Interconnect to AWS</i>"</p> <p>Default: None</p>
+    /// <p>The name of the interconnect.</p>
     #[serde(rename = "interconnectName")]
     pub interconnect_name: String,
+    /// <p>The ID of the LAG.</p>
     #[serde(rename = "lagId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lag_id: Option<String>,
-    /// <p>Where the interconnect is located</p> <p>Example: EqSV5</p> <p>Default: None</p>
+    /// <p>The location of the interconnect.</p>
     #[serde(rename = "location")]
     pub location: String,
 }
 
-/// <p>Container for the parameters to the CreateLag operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreateLagRequest {
-    /// <p>The ID of an existing connection to migrate to the LAG.</p> <p>Default: None</p>
+    /// <p>The ID of an existing connection to migrate to the LAG.</p>
     #[serde(rename = "connectionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_id: Option<String>,
-    /// <p>The bandwidth of the individual physical connections bundled by the LAG.</p> <p>Default: None</p> <p>Available values: 1Gbps, 10Gbps</p>
+    /// <p>The bandwidth of the individual physical connections bundled by the LAG. The possible values are 1Gbps and 10Gbps.</p>
     #[serde(rename = "connectionsBandwidth")]
     pub connections_bandwidth: String,
-    /// <p>The name of the LAG.</p> <p>Example: "<code>3x10G LAG to AWS</code>"</p> <p>Default: None</p>
+    /// <p>The name of the LAG.</p>
     #[serde(rename = "lagName")]
     pub lag_name: String,
-    /// <p>The AWS Direct Connect location in which the LAG should be allocated.</p> <p>Example: EqSV5</p> <p>Default: None</p>
+    /// <p>The location for the LAG.</p>
     #[serde(rename = "location")]
     pub location: String,
-    /// <p>The number of physical connections initially provisioned and bundled by the LAG.</p> <p>Default: None</p>
+    /// <p>The number of physical connections initially provisioned and bundled by the LAG.</p>
     #[serde(rename = "numberOfConnections")]
     pub number_of_connections: i64,
 }
 
-/// <p>Container for the parameters to the CreatePrivateVirtualInterface operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreatePrivateVirtualInterfaceRequest {
+    /// <p>The ID of the connection.</p>
     #[serde(rename = "connectionId")]
     pub connection_id: String,
-    /// <p>Detailed information for the private virtual interface to be created.</p> <p>Default: None</p>
+    /// <p>Information about the private virtual interface.</p>
     #[serde(rename = "newPrivateVirtualInterface")]
     pub new_private_virtual_interface: NewPrivateVirtualInterface,
 }
 
-/// <p>Container for the parameters to the CreatePublicVirtualInterface operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct CreatePublicVirtualInterfaceRequest {
+    /// <p>The ID of the connection.</p>
     #[serde(rename = "connectionId")]
     pub connection_id: String,
-    /// <p>Detailed information for the public virtual interface to be created.</p> <p>Default: None</p>
+    /// <p>Information about the public virtual interface.</p>
     #[serde(rename = "newPublicVirtualInterface")]
     pub new_public_virtual_interface: NewPublicVirtualInterface,
 }
 
-/// <p>Container for the parameters to the DeleteBGPPeer operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteBGPPeerRequest {
+    /// <p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>
     #[serde(rename = "asn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub asn: Option<i64>,
+    /// <p>The ID of the BGP peer.</p>
+    #[serde(rename = "bgpPeerId")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub bgp_peer_id: Option<String>,
+    /// <p>The IP address assigned to the customer interface.</p>
     #[serde(rename = "customerAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_address: Option<String>,
-    /// <p>The ID of the virtual interface from which the BGP peer will be deleted.</p> <p>Example: dxvif-456abc78</p> <p>Default: None</p>
+    /// <p>The ID of the virtual interface.</p>
     #[serde(rename = "virtualInterfaceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface_id: Option<String>,
 }
 
-/// <p>The response received when DeleteBGPPeer is called.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeleteBGPPeerResponse {
+    /// <p>The virtual interface.</p>
     #[serde(rename = "virtualInterface")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface: Option<VirtualInterface>,
 }
 
-/// <p>Container for the parameters to the DeleteConnection operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteConnectionRequest {
+    /// <p>The ID of the connection.</p>
     #[serde(rename = "connectionId")]
     pub connection_id: String,
 }
 
-/// <p>Container for the parameters to the DeleteDirectConnectGatewayAssociation operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDirectConnectGatewayAssociationRequest {
-    /// <p>The ID of the direct connect gateway.</p> <p>Example: "abcd1234-dcba-5678-be23-cdef9876ab45"</p> <p>Default: None</p>
+    /// <p>The ID of the Direct Connect gateway.</p>
     #[serde(rename = "directConnectGatewayId")]
     pub direct_connect_gateway_id: String,
-    /// <p>The ID of the virtual private gateway.</p> <p>Example: "vgw-abc123ef"</p> <p>Default: None</p>
+    /// <p>The ID of the virtual private gateway.</p>
     #[serde(rename = "virtualGatewayId")]
     pub virtual_gateway_id: String,
 }
 
-/// <p>Container for the response from the DeleteDirectConnectGatewayAssociation API call</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeleteDirectConnectGatewayAssociationResult {
-    /// <p>The direct connect gateway association to be deleted.</p>
+    /// <p>The association to be deleted.</p>
     #[serde(rename = "directConnectGatewayAssociation")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_connect_gateway_association: Option<DirectConnectGatewayAssociation>,
 }
 
-/// <p>Container for the parameters to the DeleteDirectConnectGateway operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteDirectConnectGatewayRequest {
-    /// <p>The ID of the direct connect gateway.</p> <p>Example: "abcd1234-dcba-5678-be23-cdef9876ab45"</p> <p>Default: None</p>
+    /// <p>The ID of the Direct Connect gateway.</p>
     #[serde(rename = "directConnectGatewayId")]
     pub direct_connect_gateway_id: String,
 }
 
-/// <p>Container for the response from the DeleteDirectConnectGateway API call</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeleteDirectConnectGatewayResult {
-    /// <p>The direct connect gateway to be deleted.</p>
+    /// <p>The Direct Connect gateway.</p>
     #[serde(rename = "directConnectGateway")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_connect_gateway: Option<DirectConnectGateway>,
 }
 
-/// <p>Container for the parameters to the DeleteInterconnect operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteInterconnectRequest {
+    /// <p>The ID of the interconnect.</p>
     #[serde(rename = "interconnectId")]
     pub interconnect_id: String,
 }
 
-/// <p>The response received when DeleteInterconnect is called.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeleteInterconnectResponse {
+    /// <p><p>The state of the interconnect. The following are the possible values:</p> <ul> <li> <p> <code>requested</code>: The initial state of an interconnect. The interconnect stays in the requested state until the Letter of Authorization (LOA) is sent to the customer.</p> </li> <li> <p> <code>pending</code>: The interconnect is approved, and is being initialized.</p> </li> <li> <p> <code>available</code>: The network link is up, and the interconnect is ready for use.</p> </li> <li> <p> <code>down</code>: The network link is down.</p> </li> <li> <p> <code>deleting</code>: The interconnect is being deleted.</p> </li> <li> <p> <code>deleted</code>: The interconnect is deleted.</p> </li> <li> <p> <code>unknown</code>: The state of the interconnect is not available.</p> </li> </ul></p>
     #[serde(rename = "interconnectState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub interconnect_state: Option<String>,
 }
 
-/// <p>Container for the parameters to the DeleteLag operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteLagRequest {
-    /// <p>The ID of the LAG to delete.</p> <p>Example: dxlag-abc123</p> <p>Default: None</p>
+    /// <p>The ID of the LAG.</p>
     #[serde(rename = "lagId")]
     pub lag_id: String,
 }
 
-/// <p>Container for the parameters to the DeleteVirtualInterface operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DeleteVirtualInterfaceRequest {
+    /// <p>The ID of the virtual interface.</p>
     #[serde(rename = "virtualInterfaceId")]
     pub virtual_interface_id: String,
 }
 
-/// <p>The response received when DeleteVirtualInterface is called.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DeleteVirtualInterfaceResponse {
+    /// <p><p>The state of the virtual interface. The following are the possible values:</p> <ul> <li> <p> <code>confirming</code>: The creation of the virtual interface is pending confirmation from the virtual interface owner. If the owner of the virtual interface is different from the owner of the connection on which it is provisioned, then the virtual interface will remain in this state until it is confirmed by the virtual interface owner.</p> </li> <li> <p> <code>verifying</code>: This state only applies to public virtual interfaces. Each public virtual interface needs validation before the virtual interface can be created.</p> </li> <li> <p> <code>pending</code>: A virtual interface is in this state from the time that it is created until the virtual interface is ready to forward traffic.</p> </li> <li> <p> <code>available</code>: A virtual interface that is able to forward traffic.</p> </li> <li> <p> <code>down</code>: A virtual interface that is BGP down.</p> </li> <li> <p> <code>deleting</code>: A virtual interface is in this state immediately after calling <a>DeleteVirtualInterface</a> until it can no longer forward traffic.</p> </li> <li> <p> <code>deleted</code>: A virtual interface that cannot forward traffic.</p> </li> <li> <p> <code>rejected</code>: The virtual interface owner has declined creation of the virtual interface. If a virtual interface in the <code>Confirming</code> state is deleted by the virtual interface owner, the virtual interface enters the <code>Rejected</code> state.</p> </li> <li> <p> <code>unknown</code>: The state of the virtual interface is not available.</p> </li> </ul></p>
     #[serde(rename = "virtualInterfaceState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface_state: Option<String>,
 }
 
-/// <p>Container for the parameters to the DescribeConnectionLoa operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeConnectionLoaRequest {
+    /// <p>The ID of the connection.</p>
     #[serde(rename = "connectionId")]
     pub connection_id: String,
+    /// <p>The standard media type for the LOA-CFA document. The only supported value is application/pdf.</p>
     #[serde(rename = "loaContentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub loa_content_type: Option<String>,
-    /// <p>The name of the APN partner or service provider who establishes connectivity on your behalf. If you supply this parameter, the LOA-CFA lists the provider name alongside your company name as the requester of the cross connect.</p> <p>Default: None</p>
+    /// <p>The name of the APN partner or service provider who establishes connectivity on your behalf. If you specify this parameter, the LOA-CFA lists the provider name alongside your company name as the requester of the cross connect.</p>
     #[serde(rename = "providerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_name: Option<String>,
 }
 
-/// <p>The response received when DescribeConnectionLoa is called.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeConnectionLoaResponse {
+    /// <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA).</p>
     #[serde(rename = "loa")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub loa: Option<Loa>,
 }
 
-/// <p>Container for the parameters to the DescribeConnectionsOnInterconnect operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeConnectionsOnInterconnectRequest {
-    /// <p>ID of the interconnect on which a list of connection is provisioned.</p> <p>Example: dxcon-abc123</p> <p>Default: None</p>
+    /// <p>The ID of the interconnect.</p>
     #[serde(rename = "interconnectId")]
     pub interconnect_id: String,
 }
 
-/// <p>Container for the parameters to the DescribeConnections operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeConnectionsRequest {
+    /// <p>The ID of the connection.</p>
     #[serde(rename = "connectionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_id: Option<String>,
 }
 
-/// <p>Container for the parameters to the DescribeDirectConnectGatewayAssociations operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeDirectConnectGatewayAssociationsRequest {
-    /// <p>The ID of the direct connect gateway.</p> <p>Example: "abcd1234-dcba-5678-be23-cdef9876ab45"</p> <p>Default: None</p>
+    /// <p>The ID of the Direct Connect gateway.</p>
     #[serde(rename = "directConnectGatewayId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_connect_gateway_id: Option<String>,
-    /// <p>The maximum number of direct connect gateway associations to return per page.</p> <p>Example: 15</p> <p>Default: None</p>
+    /// <p>The maximum number of associations to return per page.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token provided in the previous describe result to retrieve the next page of the result.</p> <p>Default: None</p>
+    /// <p>The token provided in the previous call to retrieve the next page.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The ID of the virtual private gateway.</p> <p>Example: "vgw-abc123ef"</p> <p>Default: None</p>
+    /// <p>The ID of the virtual private gateway.</p>
     #[serde(rename = "virtualGatewayId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_gateway_id: Option<String>,
 }
 
-/// <p>Container for the response from the DescribeDirectConnectGatewayAssociations API call</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeDirectConnectGatewayAssociationsResult {
-    /// <p>Information about the direct connect gateway associations.</p>
+    /// <p>The associations.</p>
     #[serde(rename = "directConnectGatewayAssociations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_connect_gateway_associations: Option<Vec<DirectConnectGatewayAssociation>>,
+    /// <p>The token to retrieve the next page.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-/// <p>Container for the parameters to the DescribeDirectConnectGatewayAttachments operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeDirectConnectGatewayAttachmentsRequest {
-    /// <p>The ID of the direct connect gateway.</p> <p>Example: "abcd1234-dcba-5678-be23-cdef9876ab45"</p> <p>Default: None</p>
+    /// <p>The ID of the Direct Connect gateway.</p>
     #[serde(rename = "directConnectGatewayId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_connect_gateway_id: Option<String>,
-    /// <p>The maximum number of direct connect gateway attachments to return per page.</p> <p>Example: 15</p> <p>Default: None</p>
+    /// <p>The maximum number of attachments to return per page.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token provided in the previous describe result to retrieve the next page of the result.</p> <p>Default: None</p>
+    /// <p>The token provided in the previous call to retrieve the next page.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
-    /// <p>The ID of the virtual interface.</p> <p>Example: "dxvif-abc123ef"</p> <p>Default: None</p>
+    /// <p>The ID of the virtual interface.</p>
     #[serde(rename = "virtualInterfaceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface_id: Option<String>,
 }
 
-/// <p>Container for the response from the DescribeDirectConnectGatewayAttachments API call</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeDirectConnectGatewayAttachmentsResult {
-    /// <p>Information about the direct connect gateway attachments.</p>
+    /// <p>The attachments.</p>
     #[serde(rename = "directConnectGatewayAttachments")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_connect_gateway_attachments: Option<Vec<DirectConnectGatewayAttachment>>,
+    /// <p>The token to retrieve the next page.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-/// <p>Container for the parameters to the DescribeDirectConnectGateways operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeDirectConnectGatewaysRequest {
-    /// <p>The ID of the direct connect gateway.</p> <p>Example: "abcd1234-dcba-5678-be23-cdef9876ab45"</p> <p>Default: None</p>
+    /// <p>The ID of the Direct Connect gateway.</p>
     #[serde(rename = "directConnectGatewayId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_connect_gateway_id: Option<String>,
-    /// <p>The maximum number of direct connect gateways to return per page.</p> <p>Example: 15</p> <p>Default: None</p>
+    /// <p>The maximum number of Direct Connect gateways to return per page.</p>
     #[serde(rename = "maxResults")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub max_results: Option<i64>,
-    /// <p>The token provided in the previous describe result to retrieve the next page of the result.</p> <p>Default: None</p>
+    /// <p>The token provided in the previous call to retrieve the next page.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-/// <p>Container for the response from the DescribeDirectConnectGateways API call</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeDirectConnectGatewaysResult {
-    /// <p>Information about the direct connect gateways.</p>
+    /// <p>The Direct Connect gateways.</p>
     #[serde(rename = "directConnectGateways")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_connect_gateways: Option<Vec<DirectConnectGateway>>,
+    /// <p>The token to retrieve the next page.</p>
     #[serde(rename = "nextToken")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub next_token: Option<String>,
 }
 
-/// <p>Container for the parameters to the DescribeHostedConnections operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeHostedConnectionsRequest {
-    /// <p>The ID of the interconnect or LAG on which the hosted connections are provisioned.</p> <p>Example: dxcon-abc123 or dxlag-abc123</p> <p>Default: None</p>
+    /// <p>The ID of the interconnect or LAG.</p>
     #[serde(rename = "connectionId")]
     pub connection_id: String,
 }
 
-/// <p>Container for the parameters to the DescribeInterconnectLoa operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeInterconnectLoaRequest {
+    /// <p>The ID of the interconnect.</p>
     #[serde(rename = "interconnectId")]
     pub interconnect_id: String,
+    /// <p>The standard media type for the LOA-CFA document. The only supported value is application/pdf.</p>
     #[serde(rename = "loaContentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub loa_content_type: Option<String>,
-    /// <p>The name of the service provider who establishes connectivity on your behalf. If you supply this parameter, the LOA-CFA lists the provider name alongside your company name as the requester of the cross connect.</p> <p>Default: None</p>
+    /// <p>The name of the service provider who establishes connectivity on your behalf. If you supply this parameter, the LOA-CFA lists the provider name alongside your company name as the requester of the cross connect.</p>
     #[serde(rename = "providerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_name: Option<String>,
 }
 
-/// <p>The response received when DescribeInterconnectLoa is called.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeInterconnectLoaResponse {
+    /// <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA).</p>
     #[serde(rename = "loa")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub loa: Option<Loa>,
 }
 
-/// <p>Container for the parameters to the DescribeInterconnects operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeInterconnectsRequest {
+    /// <p>The ID of the interconnect.</p>
     #[serde(rename = "interconnectId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub interconnect_id: Option<String>,
 }
 
-/// <p>Container for the parameters to the DescribeLags operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeLagsRequest {
-    /// <p>The ID of the LAG.</p> <p>Example: dxlag-abc123</p> <p>Default: None</p>
+    /// <p>The ID of the LAG.</p>
     #[serde(rename = "lagId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lag_id: Option<String>,
 }
 
-/// <p>Container for the parameters to the DescribeLoa operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeLoaRequest {
-    /// <p>The ID of a connection, LAG, or interconnect for which to get the LOA-CFA information.</p> <p>Example: dxcon-abc123 or dxlag-abc123</p> <p>Default: None</p>
+    /// <p>The ID of a connection, LAG, or interconnect.</p>
     #[serde(rename = "connectionId")]
     pub connection_id: String,
-    /// <p>A standard media type indicating the content type of the LOA-CFA document. Currently, the only supported value is "application/pdf".</p> <p>Default: application/pdf</p>
+    /// <p>The standard media type for the LOA-CFA document. The only supported value is application/pdf.</p>
     #[serde(rename = "loaContentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub loa_content_type: Option<String>,
-    /// <p>The name of the service provider who establishes connectivity on your behalf. If you supply this parameter, the LOA-CFA lists the provider name alongside your company name as the requester of the cross connect.</p> <p>Default: None</p>
+    /// <p>The name of the service provider who establishes connectivity on your behalf. If you specify this parameter, the LOA-CFA lists the provider name alongside your company name as the requester of the cross connect.</p>
     #[serde(rename = "providerName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub provider_name: Option<String>,
 }
 
-/// <p>Container for the parameters to the DescribeTags operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeTagsRequest {
-    /// <p>The Amazon Resource Names (ARNs) of the Direct Connect resources.</p>
+    /// <p>The Amazon Resource Names (ARNs) of the resources.</p>
     #[serde(rename = "resourceArns")]
     pub resource_arns: Vec<String>,
 }
 
-/// <p>The response received when DescribeTags is called.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DescribeTagsResponse {
@@ -743,18 +751,19 @@ pub struct DescribeTagsResponse {
     pub resource_tags: Option<Vec<ResourceTag>>,
 }
 
-/// <p>Container for the parameters to the DescribeVirtualInterfaces operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DescribeVirtualInterfacesRequest {
+    /// <p>The ID of the connection.</p>
     #[serde(rename = "connectionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_id: Option<String>,
+    /// <p>The ID of the virtual interface.</p>
     #[serde(rename = "virtualInterfaceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface_id: Option<String>,
 }
 
-/// <p>A direct connect gateway is an intermediate object that enables you to connect virtual interfaces and virtual private gateways.</p>
+/// <p>Information about a Direct Connect gateway, which enables you to connect virtual interfaces and virtual private gateways.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DirectConnectGateway {
@@ -762,158 +771,194 @@ pub struct DirectConnectGateway {
     #[serde(rename = "amazonSideAsn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amazon_side_asn: Option<i64>,
+    /// <p>The ID of the Direct Connect gateway.</p>
     #[serde(rename = "directConnectGatewayId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_connect_gateway_id: Option<String>,
+    /// <p>The name of the Direct Connect gateway.</p>
     #[serde(rename = "directConnectGatewayName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_connect_gateway_name: Option<String>,
+    /// <p><p>The state of the Direct Connect gateway. The following are the possible values:</p> <ul> <li> <p> <code>pending</code>: The initial state after calling <a>CreateDirectConnectGateway</a>.</p> </li> <li> <p> <code>available</code>: The Direct Connect gateway is ready for use.</p> </li> <li> <p> <code>deleting</code>: The initial state after calling <a>DeleteDirectConnectGateway</a>.</p> </li> <li> <p> <code>deleted</code>: The Direct Connect gateway is deleted and cannot pass traffic.</p> </li> </ul></p>
     #[serde(rename = "directConnectGatewayState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_connect_gateway_state: Option<String>,
-    /// <p>The AWS account ID of the owner of the direct connect gateway.</p>
+    /// <p>The ID of the AWS account that owns the Direct Connect gateway.</p>
     #[serde(rename = "ownerAccount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_account: Option<String>,
+    /// <p>The error message if the state of an object failed to advance.</p>
     #[serde(rename = "stateChangeError")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state_change_error: Option<String>,
 }
 
-/// <p>The association between a direct connect gateway and virtual private gateway.</p>
+/// <p>Information about an association between a Direct Connect gateway and a virtual private gateway.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DirectConnectGatewayAssociation {
+    /// <p><p>The state of the association. The following are the possible values:</p> <ul> <li> <p> <code>associating</code>: The initial state after calling <a>CreateDirectConnectGatewayAssociation</a>.</p> </li> <li> <p> <code>associated</code>: The Direct Connect gateway and virtual private gateway are successfully associated and ready to pass traffic.</p> </li> <li> <p> <code>disassociating</code>: The initial state after calling <a>DeleteDirectConnectGatewayAssociation</a>.</p> </li> <li> <p> <code>disassociated</code>: The virtual private gateway is disassociated from the Direct Connect gateway. Traffic flow between the Direct Connect gateway and virtual private gateway is stopped.</p> </li> </ul></p>
     #[serde(rename = "associationState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub association_state: Option<String>,
+    /// <p>The ID of the Direct Connect gateway.</p>
     #[serde(rename = "directConnectGatewayId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_connect_gateway_id: Option<String>,
+    /// <p>The error message if the state of an object failed to advance.</p>
     #[serde(rename = "stateChangeError")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state_change_error: Option<String>,
+    /// <p>The ID of the virtual private gateway. Applies only to private virtual interfaces.</p>
     #[serde(rename = "virtualGatewayId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_gateway_id: Option<String>,
-    /// <p>The AWS account ID of the owner of the virtual private gateway.</p>
+    /// <p>The ID of the AWS account that owns the virtual private gateway.</p>
     #[serde(rename = "virtualGatewayOwnerAccount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_gateway_owner_account: Option<String>,
+    /// <p>The AWS Region where the virtual private gateway is located.</p>
     #[serde(rename = "virtualGatewayRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_gateway_region: Option<String>,
 }
 
-/// <p>The association between a direct connect gateway and virtual interface.</p>
+/// <p>Information about an attachment between a Direct Connect gateway and a virtual interface.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct DirectConnectGatewayAttachment {
+    /// <p><p>The state of the attachment. The following are the possible values:</p> <ul> <li> <p> <code>attaching</code>: The initial state after a virtual interface is created using the Direct Connect gateway.</p> </li> <li> <p> <code>attached</code>: The Direct Connect gateway and virtual interface are attached and ready to pass traffic.</p> </li> <li> <p> <code>detaching</code>: The initial state after calling <a>DeleteVirtualInterface</a>.</p> </li> <li> <p> <code>detached</code>: The virtual interface is detached from the Direct Connect gateway. Traffic flow between the Direct Connect gateway and virtual interface is stopped.</p> </li> </ul></p>
     #[serde(rename = "attachmentState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub attachment_state: Option<String>,
+    /// <p>The ID of the Direct Connect gateway.</p>
     #[serde(rename = "directConnectGatewayId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_connect_gateway_id: Option<String>,
+    /// <p>The error message if the state of an object failed to advance.</p>
     #[serde(rename = "stateChangeError")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub state_change_error: Option<String>,
+    /// <p>The ID of the virtual interface.</p>
     #[serde(rename = "virtualInterfaceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface_id: Option<String>,
-    /// <p>The AWS account ID of the owner of the virtual interface.</p>
+    /// <p>The ID of the AWS account that owns the virtual interface.</p>
     #[serde(rename = "virtualInterfaceOwnerAccount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface_owner_account: Option<String>,
+    /// <p>The AWS Region where the virtual interface is located.</p>
     #[serde(rename = "virtualInterfaceRegion")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface_region: Option<String>,
 }
 
-/// <p>Container for the parameters to the DisassociateConnectionFromLag operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct DisassociateConnectionFromLagRequest {
-    /// <p>The ID of the connection to disassociate from the LAG.</p> <p>Example: dxcon-abc123</p> <p>Default: None</p>
+    /// <p>The ID of the connection. For example, dxcon-abc123.</p>
     #[serde(rename = "connectionId")]
     pub connection_id: String,
-    /// <p>The ID of the LAG.</p> <p>Example: dxlag-abc123</p> <p>Default: None</p>
+    /// <p>The ID of the LAG. For example, dxlag-abc123.</p>
     #[serde(rename = "lagId")]
     pub lag_id: String,
 }
 
-/// <p>An interconnect is a connection that can host other connections.</p> <p>Like a standard AWS Direct Connect connection, an interconnect represents the physical connection between an AWS Direct Connect partner's network and a specific Direct Connect location. An AWS Direct Connect partner who owns an interconnect can provision hosted connections on the interconnect for their end customers, thereby providing the end customers with connectivity to AWS services.</p> <p>The resources of the interconnect, including bandwidth and VLAN numbers, are shared by all of the hosted connections on the interconnect, and the owner of the interconnect determines how these resources are assigned.</p>
+/// <p>Information about an interconnect.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Interconnect {
-    /// <p>Deprecated in favor of awsDeviceV2.</p> <p>The Direct Connection endpoint which the physical connection terminates on.</p>
+    /// <p>The Direct Connect endpoint on which the physical connection terminates.</p>
     #[serde(rename = "awsDevice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_device: Option<String>,
-    /// <p>The Direct Connection endpoint which the physical connection terminates on.</p>
+    /// <p>The Direct Connect endpoint on which the physical connection terminates.</p>
     #[serde(rename = "awsDeviceV2")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_device_v2: Option<String>,
+    /// <p>The bandwidth of the connection.</p>
     #[serde(rename = "bandwidth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bandwidth: Option<String>,
+    /// <p>Indicates whether the interconnect supports a secondary BGP in the same address family (IPv4/IPv6).</p>
+    #[serde(rename = "hasLogicalRedundancy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub has_logical_redundancy: Option<String>,
+    /// <p>The ID of the interconnect.</p>
     #[serde(rename = "interconnectId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub interconnect_id: Option<String>,
+    /// <p>The name of the interconnect.</p>
     #[serde(rename = "interconnectName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub interconnect_name: Option<String>,
+    /// <p><p>The state of the interconnect. The following are the possible values:</p> <ul> <li> <p> <code>requested</code>: The initial state of an interconnect. The interconnect stays in the requested state until the Letter of Authorization (LOA) is sent to the customer.</p> </li> <li> <p> <code>pending</code>: The interconnect is approved, and is being initialized.</p> </li> <li> <p> <code>available</code>: The network link is up, and the interconnect is ready for use.</p> </li> <li> <p> <code>down</code>: The network link is down.</p> </li> <li> <p> <code>deleting</code>: The interconnect is being deleted.</p> </li> <li> <p> <code>deleted</code>: The interconnect is deleted.</p> </li> <li> <p> <code>unknown</code>: The state of the interconnect is not available.</p> </li> </ul></p>
     #[serde(rename = "interconnectState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub interconnect_state: Option<String>,
+    /// <p>Indicates whether jumbo frames (9001 MTU) are supported.</p>
+    #[serde(rename = "jumboFrameCapable")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub jumbo_frame_capable: Option<bool>,
+    /// <p>The ID of the LAG.</p>
     #[serde(rename = "lagId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lag_id: Option<String>,
-    /// <p>The time of the most recent call to DescribeInterconnectLoa for this Interconnect.</p>
+    /// <p>The time of the most recent call to <a>DescribeLoa</a> for this connection.</p>
     #[serde(rename = "loaIssueTime")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub loa_issue_time: Option<f64>,
+    /// <p>The location of the connection.</p>
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
+    /// <p>The AWS Region where the connection is located.</p>
     #[serde(rename = "region")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub region: Option<String>,
 }
 
-/// <p>A structure containing a list of interconnects.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Interconnects {
-    /// <p>A list of interconnects.</p>
+    /// <p>The interconnects.</p>
     #[serde(rename = "interconnects")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub interconnects: Option<Vec<Interconnect>>,
 }
 
-/// <p>Describes a link aggregation group (LAG). A LAG is a connection that uses the Link Aggregation Control Protocol (LACP) to logically aggregate a bundle of physical connections. Like an interconnect, it can host other connections. All connections in a LAG must terminate on the same physical AWS Direct Connect endpoint, and must be the same bandwidth.</p>
+/// <p>Information about a link aggregation group (LAG).</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Lag {
-    /// <p><p>Indicates whether the LAG can host other connections.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
+    /// <p>Indicates whether the LAG can host other connections.</p>
     #[serde(rename = "allowsHostedConnections")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub allows_hosted_connections: Option<bool>,
-    /// <p>Deprecated in favor of awsDeviceV2.</p> <p>The AWS Direct Connection endpoint that hosts the LAG.</p>
+    /// <p>The Direct Connect endpoint that hosts the LAG.</p>
     #[serde(rename = "awsDevice")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_device: Option<String>,
-    /// <p>The AWS Direct Connection endpoint that hosts the LAG.</p>
+    /// <p>The Direct Connect endpoint that hosts the LAG.</p>
     #[serde(rename = "awsDeviceV2")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_device_v2: Option<String>,
-    /// <p>A list of connections bundled by this LAG.</p>
+    /// <p>The connections bundled by the LAG.</p>
     #[serde(rename = "connections")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connections: Option<Vec<Connection>>,
-    /// <p>The individual bandwidth of the physical connections bundled by the LAG.</p> <p>Available values: 1Gbps, 10Gbps</p>
+    /// <p>The individual bandwidth of the physical connections bundled by the LAG. The possible values are 1Gbps and 10Gbps.</p>
     #[serde(rename = "connectionsBandwidth")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connections_bandwidth: Option<String>,
+    /// <p>Indicates whether the LAG supports a secondary BGP peer in the same address family (IPv4/IPv6).</p>
+    #[serde(rename = "hasLogicalRedundancy")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub has_logical_redundancy: Option<String>,
+    /// <p>Indicates whether jumbo frames (9001 MTU) are supported.</p>
+    #[serde(rename = "jumboFrameCapable")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub jumbo_frame_capable: Option<bool>,
+    /// <p>The ID of the LAG.</p>
     #[serde(rename = "lagId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lag_id: Option<String>,
@@ -921,13 +966,15 @@ pub struct Lag {
     #[serde(rename = "lagName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lag_name: Option<String>,
+    /// <p><p>The state of the LAG. The following are the possible values:</p> <ul> <li> <p> <code>requested</code>: The initial state of a LAG. The LAG stays in the requested state until the Letter of Authorization (LOA) is available.</p> </li> <li> <p> <code>pending</code>: The LAG has been approved and is being initialized.</p> </li> <li> <p> <code>available</code>: The network link is established and the LAG is ready for use.</p> </li> <li> <p> <code>down</code>: The network link is down.</p> </li> <li> <p> <code>deleting</code>: The LAG is being deleted.</p> </li> <li> <p> <code>deleted</code>: The LAG is deleted.</p> </li> <li> <p> <code>unknown</code>: The state of the LAG is not available.</p> </li> </ul></p>
     #[serde(rename = "lagState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lag_state: Option<String>,
+    /// <p>The location of the LAG.</p>
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
-    /// <p>The minimum number of physical connections that must be operational for the LAG itself to be operational. If the number of operational connections drops below this setting, the LAG state changes to <code>down</code>. This value can help to ensure that a LAG is not overutilized if a significant number of its bundled connections go down.</p>
+    /// <p>The minimum number of physical connections that must be operational for the LAG itself to be operational.</p>
     #[serde(rename = "minimumLinks")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub minimum_links: Option<i64>,
@@ -935,29 +982,30 @@ pub struct Lag {
     #[serde(rename = "numberOfConnections")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub number_of_connections: Option<i64>,
-    /// <p>The owner of the LAG.</p>
+    /// <p>The ID of the AWS account that owns the LAG.</p>
     #[serde(rename = "ownerAccount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_account: Option<String>,
+    /// <p>The AWS Region where the connection is located.</p>
     #[serde(rename = "region")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub region: Option<String>,
 }
 
-/// <p>A structure containing a list of LAGs.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Lags {
-    /// <p>A list of LAGs.</p>
+    /// <p>The LAGs.</p>
     #[serde(rename = "lags")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lags: Option<Vec<Lag>>,
 }
 
-/// <p>A structure containing the Letter of Authorization - Connecting Facility Assignment (LOA-CFA) for a connection.</p>
+/// <p>Information about a Letter of Authorization - Connecting Facility Assignment (LOA-CFA) for a connection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Loa {
+    /// <p>The binary contents of the LOA-CFA document.</p>
     #[serde(rename = "loaContent")]
     #[serde(
         deserialize_with = "::rusoto_core::serialization::SerdeBlob::deserialize_blob",
@@ -966,168 +1014,213 @@ pub struct Loa {
     )]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub loa_content: Option<Vec<u8>>,
+    /// <p>The standard media type for the LOA-CFA document. The only supported value is application/pdf.</p>
     #[serde(rename = "loaContentType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub loa_content_type: Option<String>,
 }
 
-/// <p>An AWS Direct Connect location where connections and interconnects can be requested.</p>
+/// <p>Information about an AWS Direct Connect location.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Location {
-    /// <p>The code used to indicate the AWS Direct Connect location.</p>
+    /// <p>The code for the location.</p>
     #[serde(rename = "locationCode")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location_code: Option<String>,
-    /// <p>The name of the AWS Direct Connect location. The name includes the colocation partner name and the physical site of the lit building.</p>
+    /// <p>The name of the location. This includes the name of the colocation partner and the physical site of the building.</p>
     #[serde(rename = "locationName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location_name: Option<String>,
-    /// <p>The AWS region where the AWS Direct connect location is located.</p> <p>Example: us-east-1</p> <p>Default: None</p>
+    /// <p>The AWS Region for the location.</p>
     #[serde(rename = "region")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub region: Option<String>,
 }
 
-/// <p>A location is a network facility where AWS Direct Connect routers are available to be connected. Generally, these are colocation hubs where many network providers have equipment, and where cross connects can be delivered. Locations include a name and facility code, and must be provided when creating a connection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct Locations {
-    /// <p>A list of colocation hubs where network providers have equipment. Most regions have multiple locations available.</p>
+    /// <p>The locations.</p>
     #[serde(rename = "locations")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub locations: Option<Vec<Location>>,
 }
 
-/// <p>A structure containing information about a new BGP peer.</p>
+/// <p>Information about a new BGP peer.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct NewBGPPeer {
+    /// <p>The address family for the BGP peer.</p>
     #[serde(rename = "addressFamily")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub address_family: Option<String>,
+    /// <p>The IP address assigned to the Amazon interface.</p>
     #[serde(rename = "amazonAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amazon_address: Option<String>,
+    /// <p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>
     #[serde(rename = "asn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub asn: Option<i64>,
+    /// <p>The authentication key for BGP configuration.</p>
     #[serde(rename = "authKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_key: Option<String>,
+    /// <p>The IP address assigned to the customer interface.</p>
     #[serde(rename = "customerAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_address: Option<String>,
 }
 
-/// <p>A structure containing information about a new private virtual interface.</p>
+/// <p>Information about a private virtual interface.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct NewPrivateVirtualInterface {
+    /// <p>The address family for the BGP peer.</p>
     #[serde(rename = "addressFamily")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub address_family: Option<String>,
+    /// <p>The IP address assigned to the Amazon interface.</p>
     #[serde(rename = "amazonAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amazon_address: Option<String>,
+    /// <p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>
     #[serde(rename = "asn")]
     pub asn: i64,
+    /// <p>The authentication key for BGP configuration.</p>
     #[serde(rename = "authKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_key: Option<String>,
+    /// <p>The IP address assigned to the customer interface.</p>
     #[serde(rename = "customerAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_address: Option<String>,
+    /// <p>The ID of the Direct Connect gateway.</p>
     #[serde(rename = "directConnectGatewayId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_connect_gateway_id: Option<String>,
+    /// <p>The maximum transmission unit (MTU), in bytes. The supported values are 1500 and 9001. The default value is 1500.</p>
+    #[serde(rename = "mtu")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mtu: Option<i64>,
+    /// <p>The ID of the virtual private gateway.</p>
     #[serde(rename = "virtualGatewayId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_gateway_id: Option<String>,
+    /// <p>The name of the virtual interface assigned by the customer network.</p>
     #[serde(rename = "virtualInterfaceName")]
     pub virtual_interface_name: String,
+    /// <p>The ID of the VLAN.</p>
     #[serde(rename = "vlan")]
     pub vlan: i64,
 }
 
-/// <p>A structure containing information about a private virtual interface that will be provisioned on a connection.</p>
+/// <p>Information about a private virtual interface to be provisioned on a connection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct NewPrivateVirtualInterfaceAllocation {
+    /// <p>The address family for the BGP peer.</p>
     #[serde(rename = "addressFamily")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub address_family: Option<String>,
+    /// <p>The IP address assigned to the Amazon interface.</p>
     #[serde(rename = "amazonAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amazon_address: Option<String>,
+    /// <p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>
     #[serde(rename = "asn")]
     pub asn: i64,
+    /// <p>The authentication key for BGP configuration.</p>
     #[serde(rename = "authKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_key: Option<String>,
+    /// <p>The IP address assigned to the customer interface.</p>
     #[serde(rename = "customerAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_address: Option<String>,
+    /// <p>The maximum transmission unit (MTU), in bytes. The supported values are 1500 and 9001. The default value is 1500.</p>
+    #[serde(rename = "mtu")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mtu: Option<i64>,
+    /// <p>The name of the virtual interface assigned by the customer network.</p>
     #[serde(rename = "virtualInterfaceName")]
     pub virtual_interface_name: String,
+    /// <p>The ID of the VLAN.</p>
     #[serde(rename = "vlan")]
     pub vlan: i64,
 }
 
-/// <p>A structure containing information about a new public virtual interface.</p>
+/// <p>Information about a public virtual interface.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct NewPublicVirtualInterface {
+    /// <p>The address family for the BGP peer.</p>
     #[serde(rename = "addressFamily")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub address_family: Option<String>,
+    /// <p>The IP address assigned to the Amazon interface.</p>
     #[serde(rename = "amazonAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amazon_address: Option<String>,
+    /// <p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>
     #[serde(rename = "asn")]
     pub asn: i64,
+    /// <p>The authentication key for BGP configuration.</p>
     #[serde(rename = "authKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_key: Option<String>,
+    /// <p>The IP address assigned to the customer interface.</p>
     #[serde(rename = "customerAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_address: Option<String>,
+    /// <p>The routes to be advertised to the AWS network in this Region. Applies to public virtual interfaces.</p>
     #[serde(rename = "routeFilterPrefixes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_filter_prefixes: Option<Vec<RouteFilterPrefix>>,
+    /// <p>The name of the virtual interface assigned by the customer network.</p>
     #[serde(rename = "virtualInterfaceName")]
     pub virtual_interface_name: String,
+    /// <p>The ID of the VLAN.</p>
     #[serde(rename = "vlan")]
     pub vlan: i64,
 }
 
-/// <p>A structure containing information about a public virtual interface that will be provisioned on a connection.</p>
+/// <p>Information about a public virtual interface to be provisioned on a connection.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct NewPublicVirtualInterfaceAllocation {
+    /// <p>The address family for the BGP peer.</p>
     #[serde(rename = "addressFamily")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub address_family: Option<String>,
+    /// <p>The IP address assigned to the Amazon interface.</p>
     #[serde(rename = "amazonAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amazon_address: Option<String>,
+    /// <p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>
     #[serde(rename = "asn")]
     pub asn: i64,
+    /// <p>The authentication key for BGP configuration.</p>
     #[serde(rename = "authKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_key: Option<String>,
+    /// <p>The IP address assigned to the customer interface.</p>
     #[serde(rename = "customerAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_address: Option<String>,
+    /// <p>The routes to be advertised to the AWS network in this Region. Applies to public virtual interfaces.</p>
     #[serde(rename = "routeFilterPrefixes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_filter_prefixes: Option<Vec<RouteFilterPrefix>>,
+    /// <p>The name of the virtual interface assigned by the customer network.</p>
     #[serde(rename = "virtualInterfaceName")]
     pub virtual_interface_name: String,
+    /// <p>The ID of the VLAN.</p>
     #[serde(rename = "vlan")]
     pub vlan: i64,
 }
 
-/// <p>The tags associated with a Direct Connect resource.</p>
+/// <p>Information about a tag associated with an AWS Direct Connect resource.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct ResourceTag {
-    /// <p>The Amazon Resource Name (ARN) of the Direct Connect resource.</p>
+    /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     #[serde(rename = "resourceArn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub resource_arn: Option<String>,
@@ -1137,10 +1230,10 @@ pub struct ResourceTag {
     pub tags: Option<Vec<Tag>>,
 }
 
-/// <p>A route filter prefix that the customer can advertise through Border Gateway Protocol (BGP) over a public virtual interface.</p>
+/// <p>Information about a route filter prefix that a customer can advertise through Border Gateway Protocol (BGP) over a public virtual interface.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct RouteFilterPrefix {
-    /// <p>CIDR notation for the advertised route. Multiple routes are separated by commas.</p> <p>IPv6 CIDRs must be at least a /64 or shorter</p> <p>Example: 10.10.10.0/24,10.10.11.0/24,2001:db8::/64</p>
+    /// <p>The CIDR block for the advertised route. Separate multiple routes using commas. An IPv6 CIDR must use /64 or shorter.</p>
     #[serde(rename = "cidr")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub cidr: Option<String>,
@@ -1149,92 +1242,101 @@ pub struct RouteFilterPrefix {
 /// <p>Information about a tag.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize, Deserialize)]
 pub struct Tag {
-    /// <p>The key of the tag.</p>
+    /// <p>The key.</p>
     #[serde(rename = "key")]
     pub key: String,
-    /// <p>The value of the tag.</p>
+    /// <p>The value.</p>
     #[serde(rename = "value")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub value: Option<String>,
 }
 
-/// <p>Container for the parameters to the TagResource operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct TagResourceRequest {
-    /// <p>The Amazon Resource Name (ARN) of the Direct Connect resource.</p> <p>Example: arn:aws:directconnect:us-east-1:123456789012:dxcon/dxcon-fg5678gh</p>
+    /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
-    /// <p>The list of tags to add.</p>
+    /// <p>The tags to add.</p>
     #[serde(rename = "tags")]
     pub tags: Vec<Tag>,
 }
 
-/// <p>The response received when TagResource is called.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct TagResourceResponse {}
 
-/// <p>Container for the parameters to the UntagResource operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UntagResourceRequest {
-    /// <p>The Amazon Resource Name (ARN) of the Direct Connect resource.</p>
+    /// <p>The Amazon Resource Name (ARN) of the resource.</p>
     #[serde(rename = "resourceArn")]
     pub resource_arn: String,
-    /// <p>The list of tag keys to remove.</p>
+    /// <p>The tag keys of the tags to remove.</p>
     #[serde(rename = "tagKeys")]
     pub tag_keys: Vec<String>,
 }
 
-/// <p>The response received when UntagResource is called.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct UntagResourceResponse {}
 
-/// <p>Container for the parameters to the UpdateLag operation.</p>
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 pub struct UpdateLagRequest {
-    /// <p>The ID of the LAG to update.</p> <p>Example: dxlag-abc123</p> <p>Default: None</p>
+    /// <p>The ID of the LAG.</p>
     #[serde(rename = "lagId")]
     pub lag_id: String,
-    /// <p>The name for the LAG.</p> <p>Example: "<code>3x10G LAG to AWS</code>"</p> <p>Default: None</p>
+    /// <p>The name of the LAG.</p>
     #[serde(rename = "lagName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lag_name: Option<String>,
-    /// <p>The minimum number of physical connections that must be operational for the LAG itself to be operational.</p> <p>Default: None</p>
+    /// <p>The minimum number of physical connections that must be operational for the LAG itself to be operational.</p>
     #[serde(rename = "minimumLinks")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub minimum_links: Option<i64>,
 }
 
-/// <p>You can create one or more AWS Direct Connect private virtual interfaces linking to your virtual private gateway.</p> <p>Virtual private gateways can be managed using the Amazon Virtual Private Cloud (Amazon VPC) console or the <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-CreateVpnGateway.html">Amazon EC2 CreateVpnGateway action</a>.</p>
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+pub struct UpdateVirtualInterfaceAttributesRequest {
+    /// <p>The maximum transmission unit (MTU), in bytes. The supported values are 1500 and 9001. The default value is 1500.</p>
+    #[serde(rename = "mtu")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mtu: Option<i64>,
+    /// <p>The ID of the virtual private interface.</p>
+    #[serde(rename = "virtualInterfaceId")]
+    pub virtual_interface_id: String,
+}
+
+/// <p>Information about a virtual private gateway for a private virtual interface.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct VirtualGateway {
+    /// <p>The ID of the virtual private gateway.</p>
     #[serde(rename = "virtualGatewayId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_gateway_id: Option<String>,
+    /// <p><p>The state of the virtual private gateway. The following are the possible values:</p> <ul> <li> <p> <code>pending</code>: Initial state after creating the virtual private gateway.</p> </li> <li> <p> <code>available</code>: Ready for use by a private virtual interface.</p> </li> <li> <p> <code>deleting</code>: Initial state after deleting the virtual private gateway.</p> </li> <li> <p> <code>deleted</code>: The virtual private gateway is deleted. The private virtual interface is unable to send traffic over this gateway.</p> </li> </ul></p>
     #[serde(rename = "virtualGatewayState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_gateway_state: Option<String>,
 }
 
-/// <p>A structure containing a list of virtual private gateways.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct VirtualGateways {
-    /// <p>A list of virtual private gateways.</p>
+    /// <p>The virtual private gateways.</p>
     #[serde(rename = "virtualGateways")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_gateways: Option<Vec<VirtualGateway>>,
 }
 
-/// <p>A virtual interface (VLAN) transmits the traffic between the AWS Direct Connect location and the customer.</p>
+/// <p>Information about a virtual interface.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct VirtualInterface {
+    /// <p>The address family for the BGP peer.</p>
     #[serde(rename = "addressFamily")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub address_family: Option<String>,
+    /// <p>The IP address assigned to the Amazon interface.</p>
     #[serde(rename = "amazonAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amazon_address: Option<String>,
@@ -1242,71 +1344,92 @@ pub struct VirtualInterface {
     #[serde(rename = "amazonSideAsn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub amazon_side_asn: Option<i64>,
+    /// <p>The autonomous system (AS) number for Border Gateway Protocol (BGP) configuration.</p>
     #[serde(rename = "asn")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub asn: Option<i64>,
+    /// <p>The authentication key for BGP configuration.</p>
     #[serde(rename = "authKey")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub auth_key: Option<String>,
-    /// <p>The Direct Connection endpoint which the virtual interface terminates on.</p>
+    /// <p>The Direct Connect endpoint on which the virtual interface terminates.</p>
     #[serde(rename = "awsDeviceV2")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub aws_device_v2: Option<String>,
+    /// <p>The BGP peers configured on this virtual interface.</p>
     #[serde(rename = "bgpPeers")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub bgp_peers: Option<Vec<BGPPeer>>,
+    /// <p>The ID of the connection.</p>
     #[serde(rename = "connectionId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub connection_id: Option<String>,
+    /// <p>The IP address assigned to the customer interface.</p>
     #[serde(rename = "customerAddress")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_address: Option<String>,
-    /// <p>Information for generating the customer router configuration.</p>
+    /// <p>The customer router configuration.</p>
     #[serde(rename = "customerRouterConfig")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub customer_router_config: Option<String>,
+    /// <p>The ID of the Direct Connect gateway.</p>
     #[serde(rename = "directConnectGatewayId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub direct_connect_gateway_id: Option<String>,
+    /// <p>Indicates whether jumbo frames (9001 MTU) are supported.</p>
+    #[serde(rename = "jumboFrameCapable")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub jumbo_frame_capable: Option<bool>,
+    /// <p>The location of the connection.</p>
     #[serde(rename = "location")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub location: Option<String>,
-    /// <p>The AWS account that will own the new virtual interface.</p>
+    /// <p>The maximum transmission unit (MTU), in bytes. The supported values are 1500 and 9001. The default value is 1500.</p>
+    #[serde(rename = "mtu")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub mtu: Option<i64>,
+    /// <p>The ID of the AWS account that owns the virtual interface.</p>
     #[serde(rename = "ownerAccount")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub owner_account: Option<String>,
-    /// <p>The AWS region where the virtual interface is located.</p> <p>Example: us-east-1</p> <p>Default: None</p>
+    /// <p>The AWS Region where the virtual interface is located.</p>
     #[serde(rename = "region")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub region: Option<String>,
+    /// <p>The routes to be advertised to the AWS network in this Region. Applies to public virtual interfaces.</p>
     #[serde(rename = "routeFilterPrefixes")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub route_filter_prefixes: Option<Vec<RouteFilterPrefix>>,
+    /// <p>The ID of the virtual private gateway. Applies only to private virtual interfaces.</p>
     #[serde(rename = "virtualGatewayId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_gateway_id: Option<String>,
+    /// <p>The ID of the virtual interface.</p>
     #[serde(rename = "virtualInterfaceId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface_id: Option<String>,
+    /// <p>The name of the virtual interface assigned by the customer network.</p>
     #[serde(rename = "virtualInterfaceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface_name: Option<String>,
+    /// <p><p>The state of the virtual interface. The following are the possible values:</p> <ul> <li> <p> <code>confirming</code>: The creation of the virtual interface is pending confirmation from the virtual interface owner. If the owner of the virtual interface is different from the owner of the connection on which it is provisioned, then the virtual interface will remain in this state until it is confirmed by the virtual interface owner.</p> </li> <li> <p> <code>verifying</code>: This state only applies to public virtual interfaces. Each public virtual interface needs validation before the virtual interface can be created.</p> </li> <li> <p> <code>pending</code>: A virtual interface is in this state from the time that it is created until the virtual interface is ready to forward traffic.</p> </li> <li> <p> <code>available</code>: A virtual interface that is able to forward traffic.</p> </li> <li> <p> <code>down</code>: A virtual interface that is BGP down.</p> </li> <li> <p> <code>deleting</code>: A virtual interface is in this state immediately after calling <a>DeleteVirtualInterface</a> until it can no longer forward traffic.</p> </li> <li> <p> <code>deleted</code>: A virtual interface that cannot forward traffic.</p> </li> <li> <p> <code>rejected</code>: The virtual interface owner has declined creation of the virtual interface. If a virtual interface in the <code>Confirming</code> state is deleted by the virtual interface owner, the virtual interface enters the <code>Rejected</code> state.</p> </li> <li> <p> <code>unknown</code>: The state of the virtual interface is not available.</p> </li> </ul></p>
     #[serde(rename = "virtualInterfaceState")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface_state: Option<String>,
+    /// <p>The type of virtual interface. The possible values are <code>private</code> and <code>public</code>.</p>
     #[serde(rename = "virtualInterfaceType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interface_type: Option<String>,
+    /// <p>The ID of the VLAN.</p>
     #[serde(rename = "vlan")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub vlan: Option<i64>,
 }
 
-/// <p>A structure containing a list of virtual interfaces.</p>
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
 #[cfg_attr(test, derive(Serialize))]
 pub struct VirtualInterfaces {
-    /// <p>A list of virtual interfaces.</p>
+    /// <p>The virtual interfaces</p>
     #[serde(rename = "virtualInterfaces")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub virtual_interfaces: Option<Vec<VirtualInterface>>,
@@ -1315,9 +1438,9 @@ pub struct VirtualInterfaces {
 /// Errors returned by AllocateConnectionOnInterconnect
 #[derive(Debug, PartialEq)]
 pub enum AllocateConnectionOnInterconnectError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1409,9 +1532,9 @@ impl Error for AllocateConnectionOnInterconnectError {
 /// Errors returned by AllocateHostedConnection
 #[derive(Debug, PartialEq)]
 pub enum AllocateHostedConnectionError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1501,9 +1624,9 @@ impl Error for AllocateHostedConnectionError {
 /// Errors returned by AllocatePrivateVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum AllocatePrivateVirtualInterfaceError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1595,9 +1718,9 @@ impl Error for AllocatePrivateVirtualInterfaceError {
 /// Errors returned by AllocatePublicVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum AllocatePublicVirtualInterfaceError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1689,9 +1812,9 @@ impl Error for AllocatePublicVirtualInterfaceError {
 /// Errors returned by AssociateConnectionWithLag
 #[derive(Debug, PartialEq)]
 pub enum AssociateConnectionWithLagError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1781,9 +1904,9 @@ impl Error for AssociateConnectionWithLagError {
 /// Errors returned by AssociateHostedConnection
 #[derive(Debug, PartialEq)]
 pub enum AssociateHostedConnectionError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1873,9 +1996,9 @@ impl Error for AssociateHostedConnectionError {
 /// Errors returned by AssociateVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum AssociateVirtualInterfaceError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1965,9 +2088,9 @@ impl Error for AssociateVirtualInterfaceError {
 /// Errors returned by ConfirmConnection
 #[derive(Debug, PartialEq)]
 pub enum ConfirmConnectionError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2053,9 +2176,9 @@ impl Error for ConfirmConnectionError {
 /// Errors returned by ConfirmPrivateVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum ConfirmPrivateVirtualInterfaceError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2147,9 +2270,9 @@ impl Error for ConfirmPrivateVirtualInterfaceError {
 /// Errors returned by ConfirmPublicVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum ConfirmPublicVirtualInterfaceError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2239,9 +2362,9 @@ impl Error for ConfirmPublicVirtualInterfaceError {
 /// Errors returned by CreateBGPPeer
 #[derive(Debug, PartialEq)]
 pub enum CreateBGPPeerError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2325,9 +2448,9 @@ impl Error for CreateBGPPeerError {
 /// Errors returned by CreateConnection
 #[derive(Debug, PartialEq)]
 pub enum CreateConnectionError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2411,9 +2534,9 @@ impl Error for CreateConnectionError {
 /// Errors returned by CreateDirectConnectGateway
 #[derive(Debug, PartialEq)]
 pub enum CreateDirectConnectGatewayError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2503,9 +2626,9 @@ impl Error for CreateDirectConnectGatewayError {
 /// Errors returned by CreateDirectConnectGatewayAssociation
 #[derive(Debug, PartialEq)]
 pub enum CreateDirectConnectGatewayAssociationError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2597,9 +2720,9 @@ impl Error for CreateDirectConnectGatewayAssociationError {
 /// Errors returned by CreateInterconnect
 #[derive(Debug, PartialEq)]
 pub enum CreateInterconnectError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2685,9 +2808,9 @@ impl Error for CreateInterconnectError {
 /// Errors returned by CreateLag
 #[derive(Debug, PartialEq)]
 pub enum CreateLagError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2771,9 +2894,9 @@ impl Error for CreateLagError {
 /// Errors returned by CreatePrivateVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum CreatePrivateVirtualInterfaceError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2863,9 +2986,9 @@ impl Error for CreatePrivateVirtualInterfaceError {
 /// Errors returned by CreatePublicVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum CreatePublicVirtualInterfaceError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -2955,9 +3078,9 @@ impl Error for CreatePublicVirtualInterfaceError {
 /// Errors returned by DeleteBGPPeer
 #[derive(Debug, PartialEq)]
 pub enum DeleteBGPPeerError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3041,9 +3164,9 @@ impl Error for DeleteBGPPeerError {
 /// Errors returned by DeleteConnection
 #[derive(Debug, PartialEq)]
 pub enum DeleteConnectionError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3127,9 +3250,9 @@ impl Error for DeleteConnectionError {
 /// Errors returned by DeleteDirectConnectGateway
 #[derive(Debug, PartialEq)]
 pub enum DeleteDirectConnectGatewayError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3219,9 +3342,9 @@ impl Error for DeleteDirectConnectGatewayError {
 /// Errors returned by DeleteDirectConnectGatewayAssociation
 #[derive(Debug, PartialEq)]
 pub enum DeleteDirectConnectGatewayAssociationError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3313,9 +3436,9 @@ impl Error for DeleteDirectConnectGatewayAssociationError {
 /// Errors returned by DeleteInterconnect
 #[derive(Debug, PartialEq)]
 pub enum DeleteInterconnectError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3401,9 +3524,9 @@ impl Error for DeleteInterconnectError {
 /// Errors returned by DeleteLag
 #[derive(Debug, PartialEq)]
 pub enum DeleteLagError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3487,9 +3610,9 @@ impl Error for DeleteLagError {
 /// Errors returned by DeleteVirtualInterface
 #[derive(Debug, PartialEq)]
 pub enum DeleteVirtualInterfaceError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3579,9 +3702,9 @@ impl Error for DeleteVirtualInterfaceError {
 /// Errors returned by DescribeConnectionLoa
 #[derive(Debug, PartialEq)]
 pub enum DescribeConnectionLoaError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3671,9 +3794,9 @@ impl Error for DescribeConnectionLoaError {
 /// Errors returned by DescribeConnections
 #[derive(Debug, PartialEq)]
 pub enum DescribeConnectionsError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3763,9 +3886,9 @@ impl Error for DescribeConnectionsError {
 /// Errors returned by DescribeConnectionsOnInterconnect
 #[derive(Debug, PartialEq)]
 pub enum DescribeConnectionsOnInterconnectError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3857,9 +3980,9 @@ impl Error for DescribeConnectionsOnInterconnectError {
 /// Errors returned by DescribeDirectConnectGatewayAssociations
 #[derive(Debug, PartialEq)]
 pub enum DescribeDirectConnectGatewayAssociationsError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -3955,9 +4078,9 @@ impl Error for DescribeDirectConnectGatewayAssociationsError {
 /// Errors returned by DescribeDirectConnectGatewayAttachments
 #[derive(Debug, PartialEq)]
 pub enum DescribeDirectConnectGatewayAttachmentsError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4051,9 +4174,9 @@ impl Error for DescribeDirectConnectGatewayAttachmentsError {
 /// Errors returned by DescribeDirectConnectGateways
 #[derive(Debug, PartialEq)]
 pub enum DescribeDirectConnectGatewaysError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4143,9 +4266,9 @@ impl Error for DescribeDirectConnectGatewaysError {
 /// Errors returned by DescribeHostedConnections
 #[derive(Debug, PartialEq)]
 pub enum DescribeHostedConnectionsError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4235,9 +4358,9 @@ impl Error for DescribeHostedConnectionsError {
 /// Errors returned by DescribeInterconnectLoa
 #[derive(Debug, PartialEq)]
 pub enum DescribeInterconnectLoaError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4327,9 +4450,9 @@ impl Error for DescribeInterconnectLoaError {
 /// Errors returned by DescribeInterconnects
 #[derive(Debug, PartialEq)]
 pub enum DescribeInterconnectsError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4419,9 +4542,9 @@ impl Error for DescribeInterconnectsError {
 /// Errors returned by DescribeLags
 #[derive(Debug, PartialEq)]
 pub enum DescribeLagsError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4505,9 +4628,9 @@ impl Error for DescribeLagsError {
 /// Errors returned by DescribeLoa
 #[derive(Debug, PartialEq)]
 pub enum DescribeLoaError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4591,9 +4714,9 @@ impl Error for DescribeLoaError {
 /// Errors returned by DescribeLocations
 #[derive(Debug, PartialEq)]
 pub enum DescribeLocationsError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4679,9 +4802,9 @@ impl Error for DescribeLocationsError {
 /// Errors returned by DescribeTags
 #[derive(Debug, PartialEq)]
 pub enum DescribeTagsError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4765,9 +4888,9 @@ impl Error for DescribeTagsError {
 /// Errors returned by DescribeVirtualGateways
 #[derive(Debug, PartialEq)]
 pub enum DescribeVirtualGatewaysError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4857,9 +4980,9 @@ impl Error for DescribeVirtualGatewaysError {
 /// Errors returned by DescribeVirtualInterfaces
 #[derive(Debug, PartialEq)]
 pub enum DescribeVirtualInterfacesError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -4949,9 +5072,9 @@ impl Error for DescribeVirtualInterfacesError {
 /// Errors returned by DisassociateConnectionFromLag
 #[derive(Debug, PartialEq)]
 pub enum DisassociateConnectionFromLagError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5041,13 +5164,13 @@ impl Error for DisassociateConnectionFromLagError {
 /// Errors returned by TagResource
 #[derive(Debug, PartialEq)]
 pub enum TagResourceError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// <p>A tag key was specified more than once.</p>
     DuplicateTagKeys(String),
-    /// <p>You have reached the limit on the number of tags that can be assigned to a Direct Connect resource.</p>
+    /// <p>You have reached the limit on the number of tags that can be assigned.</p>
     TooManyTags(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5139,9 +5262,9 @@ impl Error for TagResourceError {
 /// Errors returned by UntagResource
 #[derive(Debug, PartialEq)]
 pub enum UntagResourceError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5225,9 +5348,9 @@ impl Error for UntagResourceError {
 /// Errors returned by UpdateLag
 #[derive(Debug, PartialEq)]
 pub enum UpdateLagError {
-    /// <p>The API was called with invalid parameters. The error message will contain additional details about the cause.</p>
+    /// <p>One or more parameters are not valid.</p>
     DirectConnectClient(String),
-    /// <p>A server-side error occurred during the API call. The error message will contain additional details about the cause.</p>
+    /// <p>A server-side error occurred.</p>
     DirectConnectServer(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -5308,87 +5431,181 @@ impl Error for UpdateLagError {
         }
     }
 }
+/// Errors returned by UpdateVirtualInterfaceAttributes
+#[derive(Debug, PartialEq)]
+pub enum UpdateVirtualInterfaceAttributesError {
+    /// <p>One or more parameters are not valid.</p>
+    DirectConnectClient(String),
+    /// <p>A server-side error occurred.</p>
+    DirectConnectServer(String),
+    /// An error occurred dispatching the HTTP request
+    HttpDispatch(HttpDispatchError),
+    /// An error was encountered with AWS credentials.
+    Credentials(CredentialsError),
+    /// A validation error occurred.  Details from AWS are provided.
+    Validation(String),
+    /// An error occurred parsing the response payload.
+    ParseError(String),
+    /// An unknown error occurred.  The raw HTTP response is provided.
+    Unknown(BufferedHttpResponse),
+}
+
+impl UpdateVirtualInterfaceAttributesError {
+    pub fn from_response(res: BufferedHttpResponse) -> UpdateVirtualInterfaceAttributesError {
+        if let Ok(json) = from_slice::<SerdeJsonValue>(&res.body) {
+            let raw_error_type = json
+                .get("__type")
+                .and_then(|e| e.as_str())
+                .unwrap_or("Unknown");
+            let error_message = json.get("message").and_then(|m| m.as_str()).unwrap_or("");
+
+            let pieces: Vec<&str> = raw_error_type.split("#").collect();
+            let error_type = pieces.last().expect("Expected error type");
+
+            match *error_type {
+                "DirectConnectClientException" => {
+                    return UpdateVirtualInterfaceAttributesError::DirectConnectClient(String::from(
+                        error_message,
+                    ));
+                }
+                "DirectConnectServerException" => {
+                    return UpdateVirtualInterfaceAttributesError::DirectConnectServer(String::from(
+                        error_message,
+                    ));
+                }
+                "ValidationException" => {
+                    return UpdateVirtualInterfaceAttributesError::Validation(
+                        error_message.to_string(),
+                    );
+                }
+                _ => {}
+            }
+        }
+        return UpdateVirtualInterfaceAttributesError::Unknown(res);
+    }
+}
+
+impl From<serde_json::error::Error> for UpdateVirtualInterfaceAttributesError {
+    fn from(err: serde_json::error::Error) -> UpdateVirtualInterfaceAttributesError {
+        UpdateVirtualInterfaceAttributesError::ParseError(err.description().to_string())
+    }
+}
+impl From<CredentialsError> for UpdateVirtualInterfaceAttributesError {
+    fn from(err: CredentialsError) -> UpdateVirtualInterfaceAttributesError {
+        UpdateVirtualInterfaceAttributesError::Credentials(err)
+    }
+}
+impl From<HttpDispatchError> for UpdateVirtualInterfaceAttributesError {
+    fn from(err: HttpDispatchError) -> UpdateVirtualInterfaceAttributesError {
+        UpdateVirtualInterfaceAttributesError::HttpDispatch(err)
+    }
+}
+impl From<io::Error> for UpdateVirtualInterfaceAttributesError {
+    fn from(err: io::Error) -> UpdateVirtualInterfaceAttributesError {
+        UpdateVirtualInterfaceAttributesError::HttpDispatch(HttpDispatchError::from(err))
+    }
+}
+impl fmt::Display for UpdateVirtualInterfaceAttributesError {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "{}", self.description())
+    }
+}
+impl Error for UpdateVirtualInterfaceAttributesError {
+    fn description(&self) -> &str {
+        match *self {
+            UpdateVirtualInterfaceAttributesError::DirectConnectClient(ref cause) => cause,
+            UpdateVirtualInterfaceAttributesError::DirectConnectServer(ref cause) => cause,
+            UpdateVirtualInterfaceAttributesError::Validation(ref cause) => cause,
+            UpdateVirtualInterfaceAttributesError::Credentials(ref err) => err.description(),
+            UpdateVirtualInterfaceAttributesError::HttpDispatch(ref dispatch_error) => {
+                dispatch_error.description()
+            }
+            UpdateVirtualInterfaceAttributesError::ParseError(ref cause) => cause,
+            UpdateVirtualInterfaceAttributesError::Unknown(_) => "unknown error",
+        }
+    }
+}
 /// Trait representing the capabilities of the AWS Direct Connect API. AWS Direct Connect clients implement this trait.
 pub trait DirectConnect {
-    /// <p><p>Deprecated in favor of <a>AllocateHostedConnection</a>.</p> <p>Creates a hosted connection on an interconnect.</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the given interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
+    /// <p><p>Deprecated. Use <a>AllocateHostedConnection</a> instead.</p> <p>Creates a hosted connection on an interconnect.</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the specified interconnect.</p> <note> <p>Intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn allocate_connection_on_interconnect(
         &self,
         input: AllocateConnectionOnInterconnectRequest,
     ) -> RusotoFuture<Connection, AllocateConnectionOnInterconnectError>;
 
-    /// <p><p>Creates a hosted connection on an interconnect or a link aggregation group (LAG).</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the given interconnect or LAG.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
+    /// <p><p>Creates a hosted connection on the specified interconnect or a link aggregation group (LAG).</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the specified interconnect or LAG.</p> <note> <p>Intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn allocate_hosted_connection(
         &self,
         input: AllocateHostedConnectionRequest,
     ) -> RusotoFuture<Connection, AllocateHostedConnectionError>;
 
-    /// <p>Provisions a private virtual interface to be owned by another AWS customer.</p> <p>Virtual interfaces created using this action must be confirmed by the virtual interface owner by using the <a>ConfirmPrivateVirtualInterface</a> action. Until then, the virtual interface will be in 'Confirming' state, and will not be available for handling traffic.</p>
+    /// <p>Provisions a private virtual interface to be owned by the specified AWS account.</p> <p>Virtual interfaces created using this action must be confirmed by the owner using <a>ConfirmPrivateVirtualInterface</a>. Until then, the virtual interface is in the <code>Confirming</code> state and is not available to handle traffic.</p>
     fn allocate_private_virtual_interface(
         &self,
         input: AllocatePrivateVirtualInterfaceRequest,
     ) -> RusotoFuture<VirtualInterface, AllocatePrivateVirtualInterfaceError>;
 
-    /// <p>Provisions a public virtual interface to be owned by a different customer.</p> <p>The owner of a connection calls this function to provision a public virtual interface which will be owned by another AWS customer.</p> <p>Virtual interfaces created using this function must be confirmed by the virtual interface owner by calling ConfirmPublicVirtualInterface. Until this step has been completed, the virtual interface will be in 'Confirming' state, and will not be available for handling traffic.</p> <p>When creating an IPv6 public virtual interface (addressFamily is 'ipv6'), the customer and amazon address fields should be left blank to use auto-assigned IPv6 space. Custom IPv6 Addresses are currently not supported.</p>
+    /// <p>Provisions a public virtual interface to be owned by the specified AWS account.</p> <p>The owner of a connection calls this function to provision a public virtual interface to be owned by the specified AWS account.</p> <p>Virtual interfaces created using this function must be confirmed by the owner using <a>ConfirmPublicVirtualInterface</a>. Until this step has been completed, the virtual interface is in the <code>confirming</code> state and is not available to handle traffic.</p> <p>When creating an IPv6 public virtual interface, omit the Amazon address and customer address. IPv6 addresses are automatically assigned from the Amazon pool of IPv6 addresses; you cannot specify custom IPv6 addresses.</p>
     fn allocate_public_virtual_interface(
         &self,
         input: AllocatePublicVirtualInterfaceRequest,
     ) -> RusotoFuture<VirtualInterface, AllocatePublicVirtualInterfaceError>;
 
-    /// <p>Associates an existing connection with a link aggregation group (LAG). The connection is interrupted and re-established as a member of the LAG (connectivity to AWS will be interrupted). The connection must be hosted on the same AWS Direct Connect endpoint as the LAG, and its bandwidth must match the bandwidth for the LAG. You can reassociate a connection that's currently associated with a different LAG; however, if removing the connection will cause the original LAG to fall below its setting for minimum number of operational connections, the request fails.</p> <p>Any virtual interfaces that are directly associated with the connection are automatically re-associated with the LAG. If the connection was originally associated with a different LAG, the virtual interfaces remain associated with the original LAG.</p> <p>For interconnects, any hosted connections are automatically re-associated with the LAG. If the interconnect was originally associated with a different LAG, the hosted connections remain associated with the original LAG.</p>
+    /// <p>Associates an existing connection with a link aggregation group (LAG). The connection is interrupted and re-established as a member of the LAG (connectivity to AWS is interrupted). The connection must be hosted on the same AWS Direct Connect endpoint as the LAG, and its bandwidth must match the bandwidth for the LAG. You can re-associate a connection that's currently associated with a different LAG; however, if removing the connection would cause the original LAG to fall below its setting for minimum number of operational connections, the request fails.</p> <p>Any virtual interfaces that are directly associated with the connection are automatically re-associated with the LAG. If the connection was originally associated with a different LAG, the virtual interfaces remain associated with the original LAG.</p> <p>For interconnects, any hosted connections are automatically re-associated with the LAG. If the interconnect was originally associated with a different LAG, the hosted connections remain associated with the original LAG.</p>
     fn associate_connection_with_lag(
         &self,
         input: AssociateConnectionWithLagRequest,
     ) -> RusotoFuture<Connection, AssociateConnectionWithLagError>;
 
-    /// <p><p>Associates a hosted connection and its virtual interfaces with a link aggregation group (LAG) or interconnect. If the target interconnect or LAG has an existing hosted connection with a conflicting VLAN number or IP address, the operation fails. This action temporarily interrupts the hosted connection&#39;s connectivity to AWS as it is being migrated.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
+    /// <p><p>Associates a hosted connection and its virtual interfaces with a link aggregation group (LAG) or interconnect. If the target interconnect or LAG has an existing hosted connection with a conflicting VLAN number or IP address, the operation fails. This action temporarily interrupts the hosted connection&#39;s connectivity to AWS as it is being migrated.</p> <note> <p>Intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn associate_hosted_connection(
         &self,
         input: AssociateHostedConnectionRequest,
     ) -> RusotoFuture<Connection, AssociateHostedConnectionError>;
 
-    /// <p>Associates a virtual interface with a specified link aggregation group (LAG) or connection. Connectivity to AWS is temporarily interrupted as the virtual interface is being migrated. If the target connection or LAG has an associated virtual interface with a conflicting VLAN number or a conflicting IP address, the operation fails. </p> <p>Virtual interfaces associated with a hosted connection cannot be associated with a LAG; hosted connections must be migrated along with their virtual interfaces using <a>AssociateHostedConnection</a>.</p> <p>In order to reassociate a virtual interface to a new connection or LAG, the requester must own either the virtual interface itself or the connection to which the virtual interface is currently associated. Additionally, the requester must own the connection or LAG to which the virtual interface will be newly associated.</p>
+    /// <p>Associates a virtual interface with a specified link aggregation group (LAG) or connection. Connectivity to AWS is temporarily interrupted as the virtual interface is being migrated. If the target connection or LAG has an associated virtual interface with a conflicting VLAN number or a conflicting IP address, the operation fails.</p> <p>Virtual interfaces associated with a hosted connection cannot be associated with a LAG; hosted connections must be migrated along with their virtual interfaces using <a>AssociateHostedConnection</a>.</p> <p>To reassociate a virtual interface to a new connection or LAG, the requester must own either the virtual interface itself or the connection to which the virtual interface is currently associated. Additionally, the requester must own the connection or LAG for the association.</p>
     fn associate_virtual_interface(
         &self,
         input: AssociateVirtualInterfaceRequest,
     ) -> RusotoFuture<VirtualInterface, AssociateVirtualInterfaceError>;
 
-    /// <p>Confirm the creation of a hosted connection on an interconnect.</p> <p>Upon creation, the hosted connection is initially in the 'Ordering' state, and will remain in this state until the owner calls ConfirmConnection to confirm creation of the hosted connection.</p>
+    /// <p>Confirms the creation of the specified hosted connection on an interconnect.</p> <p>Upon creation, the hosted connection is initially in the <code>Ordering</code> state, and remains in this state until the owner confirms creation of the hosted connection.</p>
     fn confirm_connection(
         &self,
         input: ConfirmConnectionRequest,
     ) -> RusotoFuture<ConfirmConnectionResponse, ConfirmConnectionError>;
 
-    /// <p>Accept ownership of a private virtual interface created by another customer.</p> <p>After the virtual interface owner calls this function, the virtual interface will be created and attached to the given virtual private gateway or direct connect gateway, and will be available for handling traffic.</p>
+    /// <p>Accepts ownership of a private virtual interface created by another AWS account.</p> <p>After the virtual interface owner makes this call, the virtual interface is created and attached to the specified virtual private gateway or Direct Connect gateway, and is made available to handle traffic.</p>
     fn confirm_private_virtual_interface(
         &self,
         input: ConfirmPrivateVirtualInterfaceRequest,
     ) -> RusotoFuture<ConfirmPrivateVirtualInterfaceResponse, ConfirmPrivateVirtualInterfaceError>;
 
-    /// <p>Accept ownership of a public virtual interface created by another customer.</p> <p>After the virtual interface owner calls this function, the specified virtual interface will be created and made available for handling traffic.</p>
+    /// <p>Accepts ownership of a public virtual interface created by another AWS account.</p> <p>After the virtual interface owner makes this call, the specified virtual interface is created and made available to handle traffic.</p>
     fn confirm_public_virtual_interface(
         &self,
         input: ConfirmPublicVirtualInterfaceRequest,
     ) -> RusotoFuture<ConfirmPublicVirtualInterfaceResponse, ConfirmPublicVirtualInterfaceError>;
 
-    /// <p>Creates a new BGP peer on a specified virtual interface. The BGP peer cannot be in the same address family (IPv4/IPv6) of an existing BGP peer on the virtual interface.</p> <p>You must create a BGP peer for the corresponding address family in order to access AWS resources that also use that address family.</p> <p>When creating a IPv6 BGP peer, the Amazon address and customer address fields must be left blank. IPv6 addresses are automatically assigned from Amazon's pool of IPv6 addresses; you cannot specify custom IPv6 addresses.</p> <p>For a public virtual interface, the Autonomous System Number (ASN) must be private or already whitelisted for the virtual interface.</p>
+    /// <p>Creates a BGP peer on the specified virtual interface.</p> <p>You must create a BGP peer for the corresponding address family (IPv4/IPv6) in order to access AWS resources that also use that address family.</p> <p>If logical redundancy is not supported by the connection, interconnect, or LAG, the BGP peer cannot be in the same address family as an existing BGP peer on the virtual interface.</p> <p>When creating a IPv6 BGP peer, omit the Amazon address and customer address. IPv6 addresses are automatically assigned from the Amazon pool of IPv6 addresses; you cannot specify custom IPv6 addresses.</p> <p>For a public virtual interface, the Autonomous System Number (ASN) must be private or already whitelisted for the virtual interface.</p>
     fn create_bgp_peer(
         &self,
         input: CreateBGPPeerRequest,
     ) -> RusotoFuture<CreateBGPPeerResponse, CreateBGPPeerError>;
 
-    /// <p>Creates a new connection between the customer network and a specific AWS Direct Connect location.</p> <p>A connection links your internal network to an AWS Direct Connect location over a standard 1 gigabit or 10 gigabit Ethernet fiber-optic cable. One end of the cable is connected to your router, the other to an AWS Direct Connect router. An AWS Direct Connect location provides access to Amazon Web Services in the region it is associated with. You can establish connections with AWS Direct Connect locations in multiple regions, but a connection in one region does not provide connectivity to other regions.</p> <p>To find the locations for your region, use <a>DescribeLocations</a>.</p> <p>You can automatically add the new connection to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new connection is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no connection will be created.</p>
+    /// <p>Creates a connection between a customer network and a specific AWS Direct Connect location.</p> <p>A connection links your internal network to an AWS Direct Connect location over a standard Ethernet fiber-optic cable. One end of the cable is connected to your router, the other to an AWS Direct Connect router.</p> <p>To find the locations for your Region, use <a>DescribeLocations</a>.</p> <p>You can automatically add the new connection to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new connection is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no connection is created.</p>
     fn create_connection(
         &self,
         input: CreateConnectionRequest,
     ) -> RusotoFuture<Connection, CreateConnectionError>;
 
-    /// <p>Creates a new direct connect gateway. A direct connect gateway is an intermediate object that enables you to connect a set of virtual interfaces and virtual private gateways. direct connect gateways are global and visible in any AWS region after they are created. The virtual interfaces and virtual private gateways that are connected through a direct connect gateway can be in different regions. This enables you to connect to a VPC in any region, regardless of the region in which the virtual interfaces are located, and pass traffic between them.</p>
+    /// <p>Creates a Direct Connect gateway, which is an intermediate object that enables you to connect a set of virtual interfaces and virtual private gateways. A Direct Connect gateway is global and visible in any AWS Region after it is created. The virtual interfaces and virtual private gateways that are connected through a Direct Connect gateway can be in different AWS Regions. This enables you to connect to a VPC in any Region, regardless of the Region in which the virtual interfaces are located, and pass traffic between them.</p>
     fn create_direct_connect_gateway(
         &self,
         input: CreateDirectConnectGatewayRequest,
     ) -> RusotoFuture<CreateDirectConnectGatewayResult, CreateDirectConnectGatewayError>;
 
-    /// <p>Creates an association between a direct connect gateway and a virtual private gateway (VGW). The VGW must be attached to a VPC and must not be associated with another direct connect gateway.</p>
+    /// <p>Creates an association between a Direct Connect gateway and a virtual private gateway. The virtual private gateway must be attached to a VPC and must not be associated with another Direct Connect gateway.</p>
     fn create_direct_connect_gateway_association(
         &self,
         input: CreateDirectConnectGatewayAssociationRequest,
@@ -5397,46 +5614,46 @@ pub trait DirectConnect {
         CreateDirectConnectGatewayAssociationError,
     >;
 
-    /// <p><p>Creates a new interconnect between a AWS Direct Connect partner&#39;s network and a specific AWS Direct Connect location.</p> <p>An interconnect is a connection which is capable of hosting other connections. The AWS Direct Connect partner can use an interconnect to provide sub-1Gbps AWS Direct Connect service to tier 2 customers who do not have their own connections. Like a standard connection, an interconnect links the AWS Direct Connect partner&#39;s network to an AWS Direct Connect location over a standard 1 Gbps or 10 Gbps Ethernet fiber-optic cable. One end is connected to the partner&#39;s router, the other to an AWS Direct Connect router.</p> <p>You can automatically add the new interconnect to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new interconnect is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no interconnect will be created.</p> <p>For each end customer, the AWS Direct Connect partner provisions a connection on their interconnect by calling AllocateConnectionOnInterconnect. The end customer can then connect to AWS resources by creating a virtual interface on their connection, using the VLAN assigned to them by the AWS Direct Connect partner.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
+    /// <p><p>Creates an interconnect between an AWS Direct Connect partner&#39;s network and a specific AWS Direct Connect location.</p> <p>An interconnect is a connection which is capable of hosting other connections. The partner can use an interconnect to provide sub-1Gbps AWS Direct Connect service to tier 2 customers who do not have their own connections. Like a standard connection, an interconnect links the partner&#39;s network to an AWS Direct Connect location over a standard Ethernet fiber-optic cable. One end is connected to the partner&#39;s router, the other to an AWS Direct Connect router.</p> <p>You can automatically add the new interconnect to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new interconnect is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no interconnect is created.</p> <p>For each end customer, the AWS Direct Connect partner provisions a connection on their interconnect by calling <a>AllocateConnectionOnInterconnect</a>. The end customer can then connect to AWS resources by creating a virtual interface on their connection, using the VLAN assigned to them by the partner.</p> <note> <p>Intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn create_interconnect(
         &self,
         input: CreateInterconnectRequest,
     ) -> RusotoFuture<Interconnect, CreateInterconnectError>;
 
-    /// <p>Creates a new link aggregation group (LAG) with the specified number of bundled physical connections between the customer network and a specific AWS Direct Connect location. A LAG is a logical interface that uses the Link Aggregation Control Protocol (LACP) to aggregate multiple 1 gigabit or 10 gigabit interfaces, allowing you to treat them as a single interface.</p> <p>All connections in a LAG must use the same bandwidth (for example, 10 Gbps), and must terminate at the same AWS Direct Connect endpoint.</p> <p>You can have up to 10 connections per LAG. Regardless of this limit, if you request more connections for the LAG than AWS Direct Connect can allocate on a single endpoint, no LAG is created.</p> <p>You can specify an existing physical connection or interconnect to include in the LAG (which counts towards the total number of connections). Doing so interrupts the current physical connection or hosted connections, and re-establishes them as a member of the LAG. The LAG will be created on the same AWS Direct Connect endpoint to which the connection terminates. Any virtual interfaces associated with the connection are automatically disassociated and re-associated with the LAG. The connection ID does not change.</p> <p>If the AWS account used to create a LAG is a registered AWS Direct Connect partner, the LAG is automatically enabled to host sub-connections. For a LAG owned by a partner, any associated virtual interfaces cannot be directly configured.</p>
+    /// <p>Creates a link aggregation group (LAG) with the specified number of bundled physical connections between the customer network and a specific AWS Direct Connect location. A LAG is a logical interface that uses the Link Aggregation Control Protocol (LACP) to aggregate multiple interfaces, enabling you to treat them as a single interface.</p> <p>All connections in a LAG must use the same bandwidth and must terminate at the same AWS Direct Connect endpoint.</p> <p>You can have up to 10 connections per LAG. Regardless of this limit, if you request more connections for the LAG than AWS Direct Connect can allocate on a single endpoint, no LAG is created.</p> <p>You can specify an existing physical connection or interconnect to include in the LAG (which counts towards the total number of connections). Doing so interrupts the current physical connection or hosted connections, and re-establishes them as a member of the LAG. The LAG will be created on the same AWS Direct Connect endpoint to which the connection terminates. Any virtual interfaces associated with the connection are automatically disassociated and re-associated with the LAG. The connection ID does not change.</p> <p>If the AWS account used to create a LAG is a registered AWS Direct Connect partner, the LAG is automatically enabled to host sub-connections. For a LAG owned by a partner, any associated virtual interfaces cannot be directly configured.</p>
     fn create_lag(&self, input: CreateLagRequest) -> RusotoFuture<Lag, CreateLagError>;
 
-    /// <p>Creates a new private virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A private virtual interface supports sending traffic to a single virtual private cloud (VPC).</p>
+    /// <p>Creates a private virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A private virtual interface can be connected to either a Direct Connect gateway or a Virtual Private Gateway (VGW). Connecting the private virtual interface to a Direct Connect gateway enables the possibility for connecting to multiple VPCs, including VPCs in different AWS Regions. Connecting the private virtual interface to a VGW only provides access to a single VPC within the same Region.</p>
     fn create_private_virtual_interface(
         &self,
         input: CreatePrivateVirtualInterfaceRequest,
     ) -> RusotoFuture<VirtualInterface, CreatePrivateVirtualInterfaceError>;
 
-    /// <p>Creates a new public virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A public virtual interface supports sending traffic to public services of AWS such as Amazon Simple Storage Service (Amazon S3).</p> <p>When creating an IPv6 public virtual interface (addressFamily is 'ipv6'), the customer and amazon address fields should be left blank to use auto-assigned IPv6 space. Custom IPv6 Addresses are currently not supported.</p>
+    /// <p>Creates a public virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A public virtual interface supports sending traffic to public services of AWS such as Amazon S3.</p> <p>When creating an IPv6 public virtual interface (<code>addressFamily</code> is <code>ipv6</code>), leave the <code>customer</code> and <code>amazon</code> address fields blank to use auto-assigned IPv6 space. Custom IPv6 addresses are not supported.</p>
     fn create_public_virtual_interface(
         &self,
         input: CreatePublicVirtualInterfaceRequest,
     ) -> RusotoFuture<VirtualInterface, CreatePublicVirtualInterfaceError>;
 
-    /// <p>Deletes a BGP peer on the specified virtual interface that matches the specified customer address and ASN. You cannot delete the last BGP peer from a virtual interface.</p>
+    /// <p>Deletes the specified BGP peer on the specified virtual interface with the specified customer address and ASN.</p> <p>You cannot delete the last BGP peer from a virtual interface.</p>
     fn delete_bgp_peer(
         &self,
         input: DeleteBGPPeerRequest,
     ) -> RusotoFuture<DeleteBGPPeerResponse, DeleteBGPPeerError>;
 
-    /// <p>Deletes the connection.</p> <p>Deleting a connection only stops the AWS Direct Connect port hour and data transfer charges. You need to cancel separately with the providers any services or charges for cross-connects or network circuits that connect you to the AWS Direct Connect location.</p>
+    /// <p>Deletes the specified connection.</p> <p>Deleting a connection only stops the AWS Direct Connect port hour and data transfer charges. If you are partnering with any third parties to connect with the AWS Direct Connect location, you must cancel your service with them separately.</p>
     fn delete_connection(
         &self,
         input: DeleteConnectionRequest,
     ) -> RusotoFuture<Connection, DeleteConnectionError>;
 
-    /// <p>Deletes a direct connect gateway. You must first delete all virtual interfaces that are attached to the direct connect gateway and disassociate all virtual private gateways that are associated with the direct connect gateway.</p>
+    /// <p>Deletes the specified Direct Connect gateway. You must first delete all virtual interfaces that are attached to the Direct Connect gateway and disassociate all virtual private gateways that are associated with the Direct Connect gateway.</p>
     fn delete_direct_connect_gateway(
         &self,
         input: DeleteDirectConnectGatewayRequest,
     ) -> RusotoFuture<DeleteDirectConnectGatewayResult, DeleteDirectConnectGatewayError>;
 
-    /// <p>Deletes the association between a direct connect gateway and a virtual private gateway.</p>
+    /// <p>Deletes the association between the specified Direct Connect gateway and virtual private gateway.</p>
     fn delete_direct_connect_gateway_association(
         &self,
         input: DeleteDirectConnectGatewayAssociationRequest,
@@ -5445,13 +5662,13 @@ pub trait DirectConnect {
         DeleteDirectConnectGatewayAssociationError,
     >;
 
-    /// <p><p>Deletes the specified interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
+    /// <p><p>Deletes the specified interconnect.</p> <note> <p>Intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn delete_interconnect(
         &self,
         input: DeleteInterconnectRequest,
     ) -> RusotoFuture<DeleteInterconnectResponse, DeleteInterconnectError>;
 
-    /// <p>Deletes a link aggregation group (LAG). You cannot delete a LAG if it has active virtual interfaces or hosted connections.</p>
+    /// <p>Deletes the specified link aggregation group (LAG). You cannot delete a LAG if it has active virtual interfaces or hosted connections.</p>
     fn delete_lag(&self, input: DeleteLagRequest) -> RusotoFuture<Lag, DeleteLagError>;
 
     /// <p>Deletes a virtual interface.</p>
@@ -5460,25 +5677,25 @@ pub trait DirectConnect {
         input: DeleteVirtualInterfaceRequest,
     ) -> RusotoFuture<DeleteVirtualInterfaceResponse, DeleteVirtualInterfaceError>;
 
-    /// <p>Deprecated in favor of <a>DescribeLoa</a>.</p> <p>Returns the LOA-CFA for a Connection.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that your APN partner or service provider uses when establishing your cross connect to AWS at the colocation facility. For more information, see <a href="http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>
+    /// <p>Deprecated. Use <a>DescribeLoa</a> instead.</p> <p>Gets the LOA-CFA for a connection.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that your APN partner or service provider uses when establishing your cross connect to AWS at the colocation facility. For more information, see <a href="https://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html">Requesting Cross Connects at AWS Direct Connect Locations</a> in the <i>AWS Direct Connect User Guide</i>.</p>
     fn describe_connection_loa(
         &self,
         input: DescribeConnectionLoaRequest,
     ) -> RusotoFuture<DescribeConnectionLoaResponse, DescribeConnectionLoaError>;
 
-    /// <p>Displays all connections in this region.</p> <p>If a connection ID is provided, the call returns only that particular connection.</p>
+    /// <p>Displays the specified connection or all connections in this Region.</p>
     fn describe_connections(
         &self,
         input: DescribeConnectionsRequest,
     ) -> RusotoFuture<Connections, DescribeConnectionsError>;
 
-    /// <p><p>Deprecated in favor of <a>DescribeHostedConnections</a>.</p> <p>Returns a list of connections that have been provisioned on the given interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
+    /// <p><p>Deprecated. Use <a>DescribeHostedConnections</a> instead.</p> <p>Lists the connections that have been provisioned on the specified interconnect.</p> <note> <p>Intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn describe_connections_on_interconnect(
         &self,
         input: DescribeConnectionsOnInterconnectRequest,
     ) -> RusotoFuture<Connections, DescribeConnectionsOnInterconnectError>;
 
-    /// <p>Returns a list of all direct connect gateway and virtual private gateway (VGW) associations. Either a direct connect gateway ID or a VGW ID must be provided in the request. If a direct connect gateway ID is provided, the response returns all VGWs associated with the direct connect gateway. If a VGW ID is provided, the response returns all direct connect gateways associated with the VGW. If both are provided, the response only returns the association that matches both the direct connect gateway and the VGW.</p>
+    /// <p>Lists the associations between your Direct Connect gateways and virtual private gateways. You must specify a Direct Connect gateway, a virtual private gateway, or both. If you specify a Direct Connect gateway, the response contains all virtual private gateways associated with the Direct Connect gateway. If you specify a virtual private gateway, the response contains all Direct Connect gateways associated with the virtual private gateway. If you specify both, the response contains the association between the Direct Connect gateway and the virtual private gateway.</p>
     fn describe_direct_connect_gateway_associations(
         &self,
         input: DescribeDirectConnectGatewayAssociationsRequest,
@@ -5487,7 +5704,7 @@ pub trait DirectConnect {
         DescribeDirectConnectGatewayAssociationsError,
     >;
 
-    /// <p>Returns a list of all direct connect gateway and virtual interface (VIF) attachments. Either a direct connect gateway ID or a VIF ID must be provided in the request. If a direct connect gateway ID is provided, the response returns all VIFs attached to the direct connect gateway. If a VIF ID is provided, the response returns all direct connect gateways attached to the VIF. If both are provided, the response only returns the attachment that matches both the direct connect gateway and the VIF.</p>
+    /// <p>Lists the attachments between your Direct Connect gateways and virtual interfaces. You must specify a Direct Connect gateway, a virtual interface, or both. If you specify a Direct Connect gateway, the response contains all virtual interfaces attached to the Direct Connect gateway. If you specify a virtual interface, the response contains all Direct Connect gateways attached to the virtual interface. If you specify both, the response contains the attachment between the Direct Connect gateway and the virtual interface.</p>
     fn describe_direct_connect_gateway_attachments(
         &self,
         input: DescribeDirectConnectGatewayAttachmentsRequest,
@@ -5496,76 +5713,82 @@ pub trait DirectConnect {
         DescribeDirectConnectGatewayAttachmentsError,
     >;
 
-    /// <p>Returns a list of direct connect gateways in your account. Deleted direct connect gateways are not returned. You can provide a direct connect gateway ID in the request to return information about the specific direct connect gateway only. Otherwise, if a direct connect gateway ID is not provided, information about all of your direct connect gateways is returned. </p>
+    /// <p>Lists all your Direct Connect gateways or only the specified Direct Connect gateway. Deleted Direct Connect gateways are not returned.</p>
     fn describe_direct_connect_gateways(
         &self,
         input: DescribeDirectConnectGatewaysRequest,
     ) -> RusotoFuture<DescribeDirectConnectGatewaysResult, DescribeDirectConnectGatewaysError>;
 
-    /// <p><p>Returns a list of hosted connections that have been provisioned on the given interconnect or link aggregation group (LAG).</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
+    /// <p><p>Lists the hosted connections that have been provisioned on the specified interconnect or link aggregation group (LAG).</p> <note> <p>Intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn describe_hosted_connections(
         &self,
         input: DescribeHostedConnectionsRequest,
     ) -> RusotoFuture<Connections, DescribeHostedConnectionsError>;
 
-    /// <p>Deprecated in favor of <a>DescribeLoa</a>.</p> <p>Returns the LOA-CFA for an Interconnect.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href="http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>
+    /// <p>Deprecated. Use <a>DescribeLoa</a> instead.</p> <p>Gets the LOA-CFA for the specified interconnect.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href="https://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html">Requesting Cross Connects at AWS Direct Connect Locations</a> in the <i>AWS Direct Connect User Guide</i>.</p>
     fn describe_interconnect_loa(
         &self,
         input: DescribeInterconnectLoaRequest,
     ) -> RusotoFuture<DescribeInterconnectLoaResponse, DescribeInterconnectLoaError>;
 
-    /// <p>Returns a list of interconnects owned by the AWS account.</p> <p>If an interconnect ID is provided, it will only return this particular interconnect.</p>
+    /// <p>Lists the interconnects owned by the AWS account or only the specified interconnect.</p>
     fn describe_interconnects(
         &self,
         input: DescribeInterconnectsRequest,
     ) -> RusotoFuture<Interconnects, DescribeInterconnectsError>;
 
-    /// <p>Describes the link aggregation groups (LAGs) in your account. </p> <p>If a LAG ID is provided, only information about the specified LAG is returned.</p>
+    /// <p>Describes all your link aggregation groups (LAG) or the specified LAG.</p>
     fn describe_lags(&self, input: DescribeLagsRequest) -> RusotoFuture<Lags, DescribeLagsError>;
 
-    /// <p>Returns the LOA-CFA for a connection, interconnect, or link aggregation group (LAG).</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href="http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>
+    /// <p>Gets the LOA-CFA for a connection, interconnect, or link aggregation group (LAG).</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href="https://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html">Requesting Cross Connects at AWS Direct Connect Locations</a> in the <i>AWS Direct Connect User Guide</i>.</p>
     fn describe_loa(&self, input: DescribeLoaRequest) -> RusotoFuture<Loa, DescribeLoaError>;
 
-    /// <p>Returns the list of AWS Direct Connect locations in the current AWS region. These are the locations that may be selected when calling <a>CreateConnection</a> or <a>CreateInterconnect</a>.</p>
+    /// <p>Lists the AWS Direct Connect locations in the current AWS Region. These are the locations that can be selected when calling <a>CreateConnection</a> or <a>CreateInterconnect</a>.</p>
     fn describe_locations(&self) -> RusotoFuture<Locations, DescribeLocationsError>;
 
-    /// <p>Describes the tags associated with the specified Direct Connect resources.</p>
+    /// <p>Describes the tags associated with the specified AWS Direct Connect resources.</p>
     fn describe_tags(
         &self,
         input: DescribeTagsRequest,
     ) -> RusotoFuture<DescribeTagsResponse, DescribeTagsError>;
 
-    /// <p>Returns a list of virtual private gateways owned by the AWS account.</p> <p>You can create one or more AWS Direct Connect private virtual interfaces linking to a virtual private gateway. A virtual private gateway can be managed via Amazon Virtual Private Cloud (VPC) console or the <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-CreateVpnGateway.html">EC2 CreateVpnGateway</a> action.</p>
+    /// <p>Lists the virtual private gateways owned by the AWS account.</p> <p>You can create one or more AWS Direct Connect private virtual interfaces linked to a virtual private gateway.</p>
     fn describe_virtual_gateways(
         &self,
     ) -> RusotoFuture<VirtualGateways, DescribeVirtualGatewaysError>;
 
-    /// <p>Displays all virtual interfaces for an AWS account. Virtual interfaces deleted fewer than 15 minutes before you make the request are also returned. If you specify a connection ID, only the virtual interfaces associated with the connection are returned. If you specify a virtual interface ID, then only a single virtual interface is returned.</p> <p>A virtual interface (VLAN) transmits the traffic between the AWS Direct Connect location and the customer.</p>
+    /// <p>Displays all virtual interfaces for an AWS account. Virtual interfaces deleted fewer than 15 minutes before you make the request are also returned. If you specify a connection ID, only the virtual interfaces associated with the connection are returned. If you specify a virtual interface ID, then only a single virtual interface is returned.</p> <p>A virtual interface (VLAN) transmits the traffic between the AWS Direct Connect location and the customer network.</p>
     fn describe_virtual_interfaces(
         &self,
         input: DescribeVirtualInterfacesRequest,
     ) -> RusotoFuture<VirtualInterfaces, DescribeVirtualInterfacesError>;
 
-    /// <p>Disassociates a connection from a link aggregation group (LAG). The connection is interrupted and re-established as a standalone connection (the connection is not deleted; to delete the connection, use the <a>DeleteConnection</a> request). If the LAG has associated virtual interfaces or hosted connections, they remain associated with the LAG. A disassociated connection owned by an AWS Direct Connect partner is automatically converted to an interconnect.</p> <p>If disassociating the connection will cause the LAG to fall below its setting for minimum number of operational connections, the request fails, except when it's the last member of the LAG. If all connections are disassociated, the LAG continues to exist as an empty LAG with no physical connections. </p>
+    /// <p>Disassociates a connection from a link aggregation group (LAG). The connection is interrupted and re-established as a standalone connection (the connection is not deleted; to delete the connection, use the <a>DeleteConnection</a> request). If the LAG has associated virtual interfaces or hosted connections, they remain associated with the LAG. A disassociated connection owned by an AWS Direct Connect partner is automatically converted to an interconnect.</p> <p>If disassociating the connection would cause the LAG to fall below its setting for minimum number of operational connections, the request fails, except when it's the last member of the LAG. If all connections are disassociated, the LAG continues to exist as an empty LAG with no physical connections. </p>
     fn disassociate_connection_from_lag(
         &self,
         input: DisassociateConnectionFromLagRequest,
     ) -> RusotoFuture<Connection, DisassociateConnectionFromLagError>;
 
-    /// <p>Adds the specified tags to the specified Direct Connect resource. Each Direct Connect resource can have a maximum of 50 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the Direct Connect resource, this action updates its value.</p>
+    /// <p>Adds the specified tags to the specified AWS Direct Connect resource. Each resource can have a maximum of 50 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the resource, this action updates its value.</p>
     fn tag_resource(
         &self,
         input: TagResourceRequest,
     ) -> RusotoFuture<TagResourceResponse, TagResourceError>;
 
-    /// <p>Removes one or more tags from the specified Direct Connect resource.</p>
+    /// <p>Removes one or more tags from the specified AWS Direct Connect resource.</p>
     fn untag_resource(
         &self,
         input: UntagResourceRequest,
     ) -> RusotoFuture<UntagResourceResponse, UntagResourceError>;
 
-    /// <p>Updates the attributes of a link aggregation group (LAG). </p> <p>You can update the following attributes: </p> <ul> <li> <p>The name of the LAG.</p> </li> <li> <p>The value for the minimum number of connections that must be operational for the LAG itself to be operational. </p> </li> </ul> <p>When you create a LAG, the default value for the minimum number of operational connections is zero (0). If you update this value, and the number of operational connections falls below the specified value, the LAG will automatically go down to avoid overutilization of the remaining connections. Adjusting this value should be done with care as it could force the LAG down if the value is set higher than the current number of operational connections.</p>
+    /// <p>Updates the attributes of the specified link aggregation group (LAG).</p> <p>You can update the following attributes:</p> <ul> <li> <p>The name of the LAG.</p> </li> <li> <p>The value for the minimum number of connections that must be operational for the LAG itself to be operational. </p> </li> </ul> <p>When you create a LAG, the default value for the minimum number of operational connections is zero (0). If you update this value and the number of operational connections falls below the specified value, the LAG automatically goes down to avoid over-utilization of the remaining connections. Adjust this value with care, as it could force the LAG down if it is set higher than the current number of operational connections.</p>
     fn update_lag(&self, input: UpdateLagRequest) -> RusotoFuture<Lag, UpdateLagError>;
+
+    /// <p>Updates the specified attributes of the specified virtual private interface.</p> <p>Setting the MTU of a virtual interface to 9001 (jumbo frames) can cause an update to the underlying physical connection if it wasn't updated to support jumbo frames. Updating the connection disrupts network connectivity for all virtual interfaces associated with the connection for up to 30 seconds. To check whether your connection supports jumbo frames, call <a>DescribeConnections</a>. To check whether your virtual interface supports jumbo frames, call <a>DescribeVirtualInterfaces</a>.</p>
+    fn update_virtual_interface_attributes(
+        &self,
+        input: UpdateVirtualInterfaceAttributesRequest,
+    ) -> RusotoFuture<VirtualInterface, UpdateVirtualInterfaceAttributesError>;
 }
 /// A client for the AWS Direct Connect API.
 #[derive(Clone)]
@@ -5604,7 +5827,7 @@ impl DirectConnectClient {
 }
 
 impl DirectConnect for DirectConnectClient {
-    /// <p><p>Deprecated in favor of <a>AllocateHostedConnection</a>.</p> <p>Creates a hosted connection on an interconnect.</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the given interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
+    /// <p><p>Deprecated. Use <a>AllocateHostedConnection</a> instead.</p> <p>Creates a hosted connection on an interconnect.</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the specified interconnect.</p> <note> <p>Intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn allocate_connection_on_interconnect(
         &self,
         input: AllocateConnectionOnInterconnectRequest,
@@ -5643,7 +5866,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p><p>Creates a hosted connection on an interconnect or a link aggregation group (LAG).</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the given interconnect or LAG.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
+    /// <p><p>Creates a hosted connection on the specified interconnect or a link aggregation group (LAG).</p> <p>Allocates a VLAN number and a specified amount of bandwidth for use by a hosted connection on the specified interconnect or LAG.</p> <note> <p>Intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn allocate_hosted_connection(
         &self,
         input: AllocateHostedConnectionRequest,
@@ -5677,7 +5900,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Provisions a private virtual interface to be owned by another AWS customer.</p> <p>Virtual interfaces created using this action must be confirmed by the virtual interface owner by using the <a>ConfirmPrivateVirtualInterface</a> action. Until then, the virtual interface will be in 'Confirming' state, and will not be available for handling traffic.</p>
+    /// <p>Provisions a private virtual interface to be owned by the specified AWS account.</p> <p>Virtual interfaces created using this action must be confirmed by the owner using <a>ConfirmPrivateVirtualInterface</a>. Until then, the virtual interface is in the <code>Confirming</code> state and is not available to handle traffic.</p>
     fn allocate_private_virtual_interface(
         &self,
         input: AllocatePrivateVirtualInterfaceRequest,
@@ -5716,7 +5939,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Provisions a public virtual interface to be owned by a different customer.</p> <p>The owner of a connection calls this function to provision a public virtual interface which will be owned by another AWS customer.</p> <p>Virtual interfaces created using this function must be confirmed by the virtual interface owner by calling ConfirmPublicVirtualInterface. Until this step has been completed, the virtual interface will be in 'Confirming' state, and will not be available for handling traffic.</p> <p>When creating an IPv6 public virtual interface (addressFamily is 'ipv6'), the customer and amazon address fields should be left blank to use auto-assigned IPv6 space. Custom IPv6 Addresses are currently not supported.</p>
+    /// <p>Provisions a public virtual interface to be owned by the specified AWS account.</p> <p>The owner of a connection calls this function to provision a public virtual interface to be owned by the specified AWS account.</p> <p>Virtual interfaces created using this function must be confirmed by the owner using <a>ConfirmPublicVirtualInterface</a>. Until this step has been completed, the virtual interface is in the <code>confirming</code> state and is not available to handle traffic.</p> <p>When creating an IPv6 public virtual interface, omit the Amazon address and customer address. IPv6 addresses are automatically assigned from the Amazon pool of IPv6 addresses; you cannot specify custom IPv6 addresses.</p>
     fn allocate_public_virtual_interface(
         &self,
         input: AllocatePublicVirtualInterfaceRequest,
@@ -5753,7 +5976,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Associates an existing connection with a link aggregation group (LAG). The connection is interrupted and re-established as a member of the LAG (connectivity to AWS will be interrupted). The connection must be hosted on the same AWS Direct Connect endpoint as the LAG, and its bandwidth must match the bandwidth for the LAG. You can reassociate a connection that's currently associated with a different LAG; however, if removing the connection will cause the original LAG to fall below its setting for minimum number of operational connections, the request fails.</p> <p>Any virtual interfaces that are directly associated with the connection are automatically re-associated with the LAG. If the connection was originally associated with a different LAG, the virtual interfaces remain associated with the original LAG.</p> <p>For interconnects, any hosted connections are automatically re-associated with the LAG. If the interconnect was originally associated with a different LAG, the hosted connections remain associated with the original LAG.</p>
+    /// <p>Associates an existing connection with a link aggregation group (LAG). The connection is interrupted and re-established as a member of the LAG (connectivity to AWS is interrupted). The connection must be hosted on the same AWS Direct Connect endpoint as the LAG, and its bandwidth must match the bandwidth for the LAG. You can re-associate a connection that's currently associated with a different LAG; however, if removing the connection would cause the original LAG to fall below its setting for minimum number of operational connections, the request fails.</p> <p>Any virtual interfaces that are directly associated with the connection are automatically re-associated with the LAG. If the connection was originally associated with a different LAG, the virtual interfaces remain associated with the original LAG.</p> <p>For interconnects, any hosted connections are automatically re-associated with the LAG. If the interconnect was originally associated with a different LAG, the hosted connections remain associated with the original LAG.</p>
     fn associate_connection_with_lag(
         &self,
         input: AssociateConnectionWithLagRequest,
@@ -5787,7 +6010,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p><p>Associates a hosted connection and its virtual interfaces with a link aggregation group (LAG) or interconnect. If the target interconnect or LAG has an existing hosted connection with a conflicting VLAN number or IP address, the operation fails. This action temporarily interrupts the hosted connection&#39;s connectivity to AWS as it is being migrated.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
+    /// <p><p>Associates a hosted connection and its virtual interfaces with a link aggregation group (LAG) or interconnect. If the target interconnect or LAG has an existing hosted connection with a conflicting VLAN number or IP address, the operation fails. This action temporarily interrupts the hosted connection&#39;s connectivity to AWS as it is being migrated.</p> <note> <p>Intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn associate_hosted_connection(
         &self,
         input: AssociateHostedConnectionRequest,
@@ -5821,7 +6044,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Associates a virtual interface with a specified link aggregation group (LAG) or connection. Connectivity to AWS is temporarily interrupted as the virtual interface is being migrated. If the target connection or LAG has an associated virtual interface with a conflicting VLAN number or a conflicting IP address, the operation fails. </p> <p>Virtual interfaces associated with a hosted connection cannot be associated with a LAG; hosted connections must be migrated along with their virtual interfaces using <a>AssociateHostedConnection</a>.</p> <p>In order to reassociate a virtual interface to a new connection or LAG, the requester must own either the virtual interface itself or the connection to which the virtual interface is currently associated. Additionally, the requester must own the connection or LAG to which the virtual interface will be newly associated.</p>
+    /// <p>Associates a virtual interface with a specified link aggregation group (LAG) or connection. Connectivity to AWS is temporarily interrupted as the virtual interface is being migrated. If the target connection or LAG has an associated virtual interface with a conflicting VLAN number or a conflicting IP address, the operation fails.</p> <p>Virtual interfaces associated with a hosted connection cannot be associated with a LAG; hosted connections must be migrated along with their virtual interfaces using <a>AssociateHostedConnection</a>.</p> <p>To reassociate a virtual interface to a new connection or LAG, the requester must own either the virtual interface itself or the connection to which the virtual interface is currently associated. Additionally, the requester must own the connection or LAG for the association.</p>
     fn associate_virtual_interface(
         &self,
         input: AssociateVirtualInterfaceRequest,
@@ -5855,7 +6078,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Confirm the creation of a hosted connection on an interconnect.</p> <p>Upon creation, the hosted connection is initially in the 'Ordering' state, and will remain in this state until the owner calls ConfirmConnection to confirm creation of the hosted connection.</p>
+    /// <p>Confirms the creation of the specified hosted connection on an interconnect.</p> <p>Upon creation, the hosted connection is initially in the <code>Ordering</code> state, and remains in this state until the owner confirms creation of the hosted connection.</p>
     fn confirm_connection(
         &self,
         input: ConfirmConnectionRequest,
@@ -5892,7 +6115,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Accept ownership of a private virtual interface created by another customer.</p> <p>After the virtual interface owner calls this function, the virtual interface will be created and attached to the given virtual private gateway or direct connect gateway, and will be available for handling traffic.</p>
+    /// <p>Accepts ownership of a private virtual interface created by another AWS account.</p> <p>After the virtual interface owner makes this call, the virtual interface is created and attached to the specified virtual private gateway or Direct Connect gateway, and is made available to handle traffic.</p>
     fn confirm_private_virtual_interface(
         &self,
         input: ConfirmPrivateVirtualInterfaceRequest,
@@ -5930,7 +6153,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Accept ownership of a public virtual interface created by another customer.</p> <p>After the virtual interface owner calls this function, the specified virtual interface will be created and made available for handling traffic.</p>
+    /// <p>Accepts ownership of a public virtual interface created by another AWS account.</p> <p>After the virtual interface owner makes this call, the specified virtual interface is created and made available to handle traffic.</p>
     fn confirm_public_virtual_interface(
         &self,
         input: ConfirmPublicVirtualInterfaceRequest,
@@ -5968,7 +6191,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Creates a new BGP peer on a specified virtual interface. The BGP peer cannot be in the same address family (IPv4/IPv6) of an existing BGP peer on the virtual interface.</p> <p>You must create a BGP peer for the corresponding address family in order to access AWS resources that also use that address family.</p> <p>When creating a IPv6 BGP peer, the Amazon address and customer address fields must be left blank. IPv6 addresses are automatically assigned from Amazon's pool of IPv6 addresses; you cannot specify custom IPv6 addresses.</p> <p>For a public virtual interface, the Autonomous System Number (ASN) must be private or already whitelisted for the virtual interface.</p>
+    /// <p>Creates a BGP peer on the specified virtual interface.</p> <p>You must create a BGP peer for the corresponding address family (IPv4/IPv6) in order to access AWS resources that also use that address family.</p> <p>If logical redundancy is not supported by the connection, interconnect, or LAG, the BGP peer cannot be in the same address family as an existing BGP peer on the virtual interface.</p> <p>When creating a IPv6 BGP peer, omit the Amazon address and customer address. IPv6 addresses are automatically assigned from the Amazon pool of IPv6 addresses; you cannot specify custom IPv6 addresses.</p> <p>For a public virtual interface, the Autonomous System Number (ASN) must be private or already whitelisted for the virtual interface.</p>
     fn create_bgp_peer(
         &self,
         input: CreateBGPPeerRequest,
@@ -6005,7 +6228,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Creates a new connection between the customer network and a specific AWS Direct Connect location.</p> <p>A connection links your internal network to an AWS Direct Connect location over a standard 1 gigabit or 10 gigabit Ethernet fiber-optic cable. One end of the cable is connected to your router, the other to an AWS Direct Connect router. An AWS Direct Connect location provides access to Amazon Web Services in the region it is associated with. You can establish connections with AWS Direct Connect locations in multiple regions, but a connection in one region does not provide connectivity to other regions.</p> <p>To find the locations for your region, use <a>DescribeLocations</a>.</p> <p>You can automatically add the new connection to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new connection is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no connection will be created.</p>
+    /// <p>Creates a connection between a customer network and a specific AWS Direct Connect location.</p> <p>A connection links your internal network to an AWS Direct Connect location over a standard Ethernet fiber-optic cable. One end of the cable is connected to your router, the other to an AWS Direct Connect router.</p> <p>To find the locations for your Region, use <a>DescribeLocations</a>.</p> <p>You can automatically add the new connection to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new connection is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no connection is created.</p>
     fn create_connection(
         &self,
         input: CreateConnectionRequest,
@@ -6042,7 +6265,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Creates a new direct connect gateway. A direct connect gateway is an intermediate object that enables you to connect a set of virtual interfaces and virtual private gateways. direct connect gateways are global and visible in any AWS region after they are created. The virtual interfaces and virtual private gateways that are connected through a direct connect gateway can be in different regions. This enables you to connect to a VPC in any region, regardless of the region in which the virtual interfaces are located, and pass traffic between them.</p>
+    /// <p>Creates a Direct Connect gateway, which is an intermediate object that enables you to connect a set of virtual interfaces and virtual private gateways. A Direct Connect gateway is global and visible in any AWS Region after it is created. The virtual interfaces and virtual private gateways that are connected through a Direct Connect gateway can be in different AWS Regions. This enables you to connect to a VPC in any Region, regardless of the Region in which the virtual interfaces are located, and pass traffic between them.</p>
     fn create_direct_connect_gateway(
         &self,
         input: CreateDirectConnectGatewayRequest,
@@ -6076,7 +6299,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Creates an association between a direct connect gateway and a virtual private gateway (VGW). The VGW must be attached to a VPC and must not be associated with another direct connect gateway.</p>
+    /// <p>Creates an association between a Direct Connect gateway and a virtual private gateway. The virtual private gateway must be attached to a VPC and must not be associated with another Direct Connect gateway.</p>
     fn create_direct_connect_gateway_association(
         &self,
         input: CreateDirectConnectGatewayAssociationRequest,
@@ -6118,7 +6341,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p><p>Creates a new interconnect between a AWS Direct Connect partner&#39;s network and a specific AWS Direct Connect location.</p> <p>An interconnect is a connection which is capable of hosting other connections. The AWS Direct Connect partner can use an interconnect to provide sub-1Gbps AWS Direct Connect service to tier 2 customers who do not have their own connections. Like a standard connection, an interconnect links the AWS Direct Connect partner&#39;s network to an AWS Direct Connect location over a standard 1 Gbps or 10 Gbps Ethernet fiber-optic cable. One end is connected to the partner&#39;s router, the other to an AWS Direct Connect router.</p> <p>You can automatically add the new interconnect to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new interconnect is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no interconnect will be created.</p> <p>For each end customer, the AWS Direct Connect partner provisions a connection on their interconnect by calling AllocateConnectionOnInterconnect. The end customer can then connect to AWS resources by creating a virtual interface on their connection, using the VLAN assigned to them by the AWS Direct Connect partner.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
+    /// <p><p>Creates an interconnect between an AWS Direct Connect partner&#39;s network and a specific AWS Direct Connect location.</p> <p>An interconnect is a connection which is capable of hosting other connections. The partner can use an interconnect to provide sub-1Gbps AWS Direct Connect service to tier 2 customers who do not have their own connections. Like a standard connection, an interconnect links the partner&#39;s network to an AWS Direct Connect location over a standard Ethernet fiber-optic cable. One end is connected to the partner&#39;s router, the other to an AWS Direct Connect router.</p> <p>You can automatically add the new interconnect to a link aggregation group (LAG) by specifying a LAG ID in the request. This ensures that the new interconnect is allocated on the same AWS Direct Connect endpoint that hosts the specified LAG. If there are no available ports on the endpoint, the request fails and no interconnect is created.</p> <p>For each end customer, the AWS Direct Connect partner provisions a connection on their interconnect by calling <a>AllocateConnectionOnInterconnect</a>. The end customer can then connect to AWS resources by creating a virtual interface on their connection, using the VLAN assigned to them by the partner.</p> <note> <p>Intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn create_interconnect(
         &self,
         input: CreateInterconnectRequest,
@@ -6155,7 +6378,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Creates a new link aggregation group (LAG) with the specified number of bundled physical connections between the customer network and a specific AWS Direct Connect location. A LAG is a logical interface that uses the Link Aggregation Control Protocol (LACP) to aggregate multiple 1 gigabit or 10 gigabit interfaces, allowing you to treat them as a single interface.</p> <p>All connections in a LAG must use the same bandwidth (for example, 10 Gbps), and must terminate at the same AWS Direct Connect endpoint.</p> <p>You can have up to 10 connections per LAG. Regardless of this limit, if you request more connections for the LAG than AWS Direct Connect can allocate on a single endpoint, no LAG is created.</p> <p>You can specify an existing physical connection or interconnect to include in the LAG (which counts towards the total number of connections). Doing so interrupts the current physical connection or hosted connections, and re-establishes them as a member of the LAG. The LAG will be created on the same AWS Direct Connect endpoint to which the connection terminates. Any virtual interfaces associated with the connection are automatically disassociated and re-associated with the LAG. The connection ID does not change.</p> <p>If the AWS account used to create a LAG is a registered AWS Direct Connect partner, the LAG is automatically enabled to host sub-connections. For a LAG owned by a partner, any associated virtual interfaces cannot be directly configured.</p>
+    /// <p>Creates a link aggregation group (LAG) with the specified number of bundled physical connections between the customer network and a specific AWS Direct Connect location. A LAG is a logical interface that uses the Link Aggregation Control Protocol (LACP) to aggregate multiple interfaces, enabling you to treat them as a single interface.</p> <p>All connections in a LAG must use the same bandwidth and must terminate at the same AWS Direct Connect endpoint.</p> <p>You can have up to 10 connections per LAG. Regardless of this limit, if you request more connections for the LAG than AWS Direct Connect can allocate on a single endpoint, no LAG is created.</p> <p>You can specify an existing physical connection or interconnect to include in the LAG (which counts towards the total number of connections). Doing so interrupts the current physical connection or hosted connections, and re-establishes them as a member of the LAG. The LAG will be created on the same AWS Direct Connect endpoint to which the connection terminates. Any virtual interfaces associated with the connection are automatically disassociated and re-associated with the LAG. The connection ID does not change.</p> <p>If the AWS account used to create a LAG is a registered AWS Direct Connect partner, the LAG is automatically enabled to host sub-connections. For a LAG owned by a partner, any associated virtual interfaces cannot be directly configured.</p>
     fn create_lag(&self, input: CreateLagRequest) -> RusotoFuture<Lag, CreateLagError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
@@ -6187,7 +6410,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Creates a new private virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A private virtual interface supports sending traffic to a single virtual private cloud (VPC).</p>
+    /// <p>Creates a private virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A private virtual interface can be connected to either a Direct Connect gateway or a Virtual Private Gateway (VGW). Connecting the private virtual interface to a Direct Connect gateway enables the possibility for connecting to multiple VPCs, including VPCs in different AWS Regions. Connecting the private virtual interface to a VGW only provides access to a single VPC within the same Region.</p>
     fn create_private_virtual_interface(
         &self,
         input: CreatePrivateVirtualInterfaceRequest,
@@ -6224,7 +6447,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Creates a new public virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A public virtual interface supports sending traffic to public services of AWS such as Amazon Simple Storage Service (Amazon S3).</p> <p>When creating an IPv6 public virtual interface (addressFamily is 'ipv6'), the customer and amazon address fields should be left blank to use auto-assigned IPv6 space. Custom IPv6 Addresses are currently not supported.</p>
+    /// <p>Creates a public virtual interface. A virtual interface is the VLAN that transports AWS Direct Connect traffic. A public virtual interface supports sending traffic to public services of AWS such as Amazon S3.</p> <p>When creating an IPv6 public virtual interface (<code>addressFamily</code> is <code>ipv6</code>), leave the <code>customer</code> and <code>amazon</code> address fields blank to use auto-assigned IPv6 space. Custom IPv6 addresses are not supported.</p>
     fn create_public_virtual_interface(
         &self,
         input: CreatePublicVirtualInterfaceRequest,
@@ -6261,7 +6484,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Deletes a BGP peer on the specified virtual interface that matches the specified customer address and ASN. You cannot delete the last BGP peer from a virtual interface.</p>
+    /// <p>Deletes the specified BGP peer on the specified virtual interface with the specified customer address and ASN.</p> <p>You cannot delete the last BGP peer from a virtual interface.</p>
     fn delete_bgp_peer(
         &self,
         input: DeleteBGPPeerRequest,
@@ -6298,7 +6521,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Deletes the connection.</p> <p>Deleting a connection only stops the AWS Direct Connect port hour and data transfer charges. You need to cancel separately with the providers any services or charges for cross-connects or network circuits that connect you to the AWS Direct Connect location.</p>
+    /// <p>Deletes the specified connection.</p> <p>Deleting a connection only stops the AWS Direct Connect port hour and data transfer charges. If you are partnering with any third parties to connect with the AWS Direct Connect location, you must cancel your service with them separately.</p>
     fn delete_connection(
         &self,
         input: DeleteConnectionRequest,
@@ -6335,7 +6558,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Deletes a direct connect gateway. You must first delete all virtual interfaces that are attached to the direct connect gateway and disassociate all virtual private gateways that are associated with the direct connect gateway.</p>
+    /// <p>Deletes the specified Direct Connect gateway. You must first delete all virtual interfaces that are attached to the Direct Connect gateway and disassociate all virtual private gateways that are associated with the Direct Connect gateway.</p>
     fn delete_direct_connect_gateway(
         &self,
         input: DeleteDirectConnectGatewayRequest,
@@ -6369,7 +6592,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Deletes the association between a direct connect gateway and a virtual private gateway.</p>
+    /// <p>Deletes the association between the specified Direct Connect gateway and virtual private gateway.</p>
     fn delete_direct_connect_gateway_association(
         &self,
         input: DeleteDirectConnectGatewayAssociationRequest,
@@ -6411,7 +6634,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p><p>Deletes the specified interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
+    /// <p><p>Deletes the specified interconnect.</p> <note> <p>Intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn delete_interconnect(
         &self,
         input: DeleteInterconnectRequest,
@@ -6448,7 +6671,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Deletes a link aggregation group (LAG). You cannot delete a LAG if it has active virtual interfaces or hosted connections.</p>
+    /// <p>Deletes the specified link aggregation group (LAG). You cannot delete a LAG if it has active virtual interfaces or hosted connections.</p>
     fn delete_lag(&self, input: DeleteLagRequest) -> RusotoFuture<Lag, DeleteLagError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
@@ -6516,7 +6739,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Deprecated in favor of <a>DescribeLoa</a>.</p> <p>Returns the LOA-CFA for a Connection.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that your APN partner or service provider uses when establishing your cross connect to AWS at the colocation facility. For more information, see <a href="http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>
+    /// <p>Deprecated. Use <a>DescribeLoa</a> instead.</p> <p>Gets the LOA-CFA for a connection.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that your APN partner or service provider uses when establishing your cross connect to AWS at the colocation facility. For more information, see <a href="https://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html">Requesting Cross Connects at AWS Direct Connect Locations</a> in the <i>AWS Direct Connect User Guide</i>.</p>
     fn describe_connection_loa(
         &self,
         input: DescribeConnectionLoaRequest,
@@ -6552,7 +6775,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Displays all connections in this region.</p> <p>If a connection ID is provided, the call returns only that particular connection.</p>
+    /// <p>Displays the specified connection or all connections in this Region.</p>
     fn describe_connections(
         &self,
         input: DescribeConnectionsRequest,
@@ -6588,7 +6811,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p><p>Deprecated in favor of <a>DescribeHostedConnections</a>.</p> <p>Returns a list of connections that have been provisioned on the given interconnect.</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
+    /// <p><p>Deprecated. Use <a>DescribeHostedConnections</a> instead.</p> <p>Lists the connections that have been provisioned on the specified interconnect.</p> <note> <p>Intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn describe_connections_on_interconnect(
         &self,
         input: DescribeConnectionsOnInterconnectRequest,
@@ -6627,7 +6850,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Returns a list of all direct connect gateway and virtual private gateway (VGW) associations. Either a direct connect gateway ID or a VGW ID must be provided in the request. If a direct connect gateway ID is provided, the response returns all VGWs associated with the direct connect gateway. If a VGW ID is provided, the response returns all direct connect gateways associated with the VGW. If both are provided, the response only returns the association that matches both the direct connect gateway and the VGW.</p>
+    /// <p>Lists the associations between your Direct Connect gateways and virtual private gateways. You must specify a Direct Connect gateway, a virtual private gateway, or both. If you specify a Direct Connect gateway, the response contains all virtual private gateways associated with the Direct Connect gateway. If you specify a virtual private gateway, the response contains all Direct Connect gateways associated with the virtual private gateway. If you specify both, the response contains the association between the Direct Connect gateway and the virtual private gateway.</p>
     fn describe_direct_connect_gateway_associations(
         &self,
         input: DescribeDirectConnectGatewayAssociationsRequest,
@@ -6667,7 +6890,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Returns a list of all direct connect gateway and virtual interface (VIF) attachments. Either a direct connect gateway ID or a VIF ID must be provided in the request. If a direct connect gateway ID is provided, the response returns all VIFs attached to the direct connect gateway. If a VIF ID is provided, the response returns all direct connect gateways attached to the VIF. If both are provided, the response only returns the attachment that matches both the direct connect gateway and the VIF.</p>
+    /// <p>Lists the attachments between your Direct Connect gateways and virtual interfaces. You must specify a Direct Connect gateway, a virtual interface, or both. If you specify a Direct Connect gateway, the response contains all virtual interfaces attached to the Direct Connect gateway. If you specify a virtual interface, the response contains all Direct Connect gateways attached to the virtual interface. If you specify both, the response contains the attachment between the Direct Connect gateway and the virtual interface.</p>
     fn describe_direct_connect_gateway_attachments(
         &self,
         input: DescribeDirectConnectGatewayAttachmentsRequest,
@@ -6709,7 +6932,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Returns a list of direct connect gateways in your account. Deleted direct connect gateways are not returned. You can provide a direct connect gateway ID in the request to return information about the specific direct connect gateway only. Otherwise, if a direct connect gateway ID is not provided, information about all of your direct connect gateways is returned. </p>
+    /// <p>Lists all your Direct Connect gateways or only the specified Direct Connect gateway. Deleted Direct Connect gateways are not returned.</p>
     fn describe_direct_connect_gateways(
         &self,
         input: DescribeDirectConnectGatewaysRequest,
@@ -6746,7 +6969,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p><p>Returns a list of hosted connections that have been provisioned on the given interconnect or link aggregation group (LAG).</p> <note> <p>This is intended for use by AWS Direct Connect partners only.</p> </note></p>
+    /// <p><p>Lists the hosted connections that have been provisioned on the specified interconnect or link aggregation group (LAG).</p> <note> <p>Intended for use by AWS Direct Connect partners only.</p> </note></p>
     fn describe_hosted_connections(
         &self,
         input: DescribeHostedConnectionsRequest,
@@ -6780,7 +7003,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Deprecated in favor of <a>DescribeLoa</a>.</p> <p>Returns the LOA-CFA for an Interconnect.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href="http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>
+    /// <p>Deprecated. Use <a>DescribeLoa</a> instead.</p> <p>Gets the LOA-CFA for the specified interconnect.</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href="https://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html">Requesting Cross Connects at AWS Direct Connect Locations</a> in the <i>AWS Direct Connect User Guide</i>.</p>
     fn describe_interconnect_loa(
         &self,
         input: DescribeInterconnectLoaRequest,
@@ -6814,7 +7037,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Returns a list of interconnects owned by the AWS account.</p> <p>If an interconnect ID is provided, it will only return this particular interconnect.</p>
+    /// <p>Lists the interconnects owned by the AWS account or only the specified interconnect.</p>
     fn describe_interconnects(
         &self,
         input: DescribeInterconnectsRequest,
@@ -6850,7 +7073,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Describes the link aggregation groups (LAGs) in your account. </p> <p>If a LAG ID is provided, only information about the specified LAG is returned.</p>
+    /// <p>Describes all your link aggregation groups (LAG) or the specified LAG.</p>
     fn describe_lags(&self, input: DescribeLagsRequest) -> RusotoFuture<Lags, DescribeLagsError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
@@ -6882,7 +7105,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Returns the LOA-CFA for a connection, interconnect, or link aggregation group (LAG).</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href="http://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html">Requesting Cross Connects at AWS Direct Connect Locations</a> in the AWS Direct Connect user guide.</p>
+    /// <p>Gets the LOA-CFA for a connection, interconnect, or link aggregation group (LAG).</p> <p>The Letter of Authorization - Connecting Facility Assignment (LOA-CFA) is a document that is used when establishing your cross connect to AWS at the colocation facility. For more information, see <a href="https://docs.aws.amazon.com/directconnect/latest/UserGuide/Colocation.html">Requesting Cross Connects at AWS Direct Connect Locations</a> in the <i>AWS Direct Connect User Guide</i>.</p>
     fn describe_loa(&self, input: DescribeLoaRequest) -> RusotoFuture<Loa, DescribeLoaError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
@@ -6914,7 +7137,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Returns the list of AWS Direct Connect locations in the current AWS region. These are the locations that may be selected when calling <a>CreateConnection</a> or <a>CreateInterconnect</a>.</p>
+    /// <p>Lists the AWS Direct Connect locations in the current AWS Region. These are the locations that can be selected when calling <a>CreateConnection</a> or <a>CreateInterconnect</a>.</p>
     fn describe_locations(&self) -> RusotoFuture<Locations, DescribeLocationsError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
@@ -6947,7 +7170,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Describes the tags associated with the specified Direct Connect resources.</p>
+    /// <p>Describes the tags associated with the specified AWS Direct Connect resources.</p>
     fn describe_tags(
         &self,
         input: DescribeTagsRequest,
@@ -6984,7 +7207,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Returns a list of virtual private gateways owned by the AWS account.</p> <p>You can create one or more AWS Direct Connect private virtual interfaces linking to a virtual private gateway. A virtual private gateway can be managed via Amazon Virtual Private Cloud (VPC) console or the <a href="http://docs.aws.amazon.com/AWSEC2/latest/APIReference/ApiReference-query-CreateVpnGateway.html">EC2 CreateVpnGateway</a> action.</p>
+    /// <p>Lists the virtual private gateways owned by the AWS account.</p> <p>You can create one or more AWS Direct Connect private virtual interfaces linked to a virtual private gateway.</p>
     fn describe_virtual_gateways(
         &self,
     ) -> RusotoFuture<VirtualGateways, DescribeVirtualGatewaysError> {
@@ -7016,7 +7239,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Displays all virtual interfaces for an AWS account. Virtual interfaces deleted fewer than 15 minutes before you make the request are also returned. If you specify a connection ID, only the virtual interfaces associated with the connection are returned. If you specify a virtual interface ID, then only a single virtual interface is returned.</p> <p>A virtual interface (VLAN) transmits the traffic between the AWS Direct Connect location and the customer.</p>
+    /// <p>Displays all virtual interfaces for an AWS account. Virtual interfaces deleted fewer than 15 minutes before you make the request are also returned. If you specify a connection ID, only the virtual interfaces associated with the connection are returned. If you specify a virtual interface ID, then only a single virtual interface is returned.</p> <p>A virtual interface (VLAN) transmits the traffic between the AWS Direct Connect location and the customer network.</p>
     fn describe_virtual_interfaces(
         &self,
         input: DescribeVirtualInterfacesRequest,
@@ -7050,7 +7273,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Disassociates a connection from a link aggregation group (LAG). The connection is interrupted and re-established as a standalone connection (the connection is not deleted; to delete the connection, use the <a>DeleteConnection</a> request). If the LAG has associated virtual interfaces or hosted connections, they remain associated with the LAG. A disassociated connection owned by an AWS Direct Connect partner is automatically converted to an interconnect.</p> <p>If disassociating the connection will cause the LAG to fall below its setting for minimum number of operational connections, the request fails, except when it's the last member of the LAG. If all connections are disassociated, the LAG continues to exist as an empty LAG with no physical connections. </p>
+    /// <p>Disassociates a connection from a link aggregation group (LAG). The connection is interrupted and re-established as a standalone connection (the connection is not deleted; to delete the connection, use the <a>DeleteConnection</a> request). If the LAG has associated virtual interfaces or hosted connections, they remain associated with the LAG. A disassociated connection owned by an AWS Direct Connect partner is automatically converted to an interconnect.</p> <p>If disassociating the connection would cause the LAG to fall below its setting for minimum number of operational connections, the request fails, except when it's the last member of the LAG. If all connections are disassociated, the LAG continues to exist as an empty LAG with no physical connections. </p>
     fn disassociate_connection_from_lag(
         &self,
         input: DisassociateConnectionFromLagRequest,
@@ -7087,7 +7310,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Adds the specified tags to the specified Direct Connect resource. Each Direct Connect resource can have a maximum of 50 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the Direct Connect resource, this action updates its value.</p>
+    /// <p>Adds the specified tags to the specified AWS Direct Connect resource. Each resource can have a maximum of 50 tags.</p> <p>Each tag consists of a key and an optional value. If a tag with the same key is already associated with the resource, this action updates its value.</p>
     fn tag_resource(
         &self,
         input: TagResourceRequest,
@@ -7124,7 +7347,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Removes one or more tags from the specified Direct Connect resource.</p>
+    /// <p>Removes one or more tags from the specified AWS Direct Connect resource.</p>
     fn untag_resource(
         &self,
         input: UntagResourceRequest,
@@ -7161,7 +7384,7 @@ impl DirectConnect for DirectConnectClient {
         })
     }
 
-    /// <p>Updates the attributes of a link aggregation group (LAG). </p> <p>You can update the following attributes: </p> <ul> <li> <p>The name of the LAG.</p> </li> <li> <p>The value for the minimum number of connections that must be operational for the LAG itself to be operational. </p> </li> </ul> <p>When you create a LAG, the default value for the minimum number of operational connections is zero (0). If you update this value, and the number of operational connections falls below the specified value, the LAG will automatically go down to avoid overutilization of the remaining connections. Adjusting this value should be done with care as it could force the LAG down if the value is set higher than the current number of operational connections.</p>
+    /// <p>Updates the attributes of the specified link aggregation group (LAG).</p> <p>You can update the following attributes:</p> <ul> <li> <p>The name of the LAG.</p> </li> <li> <p>The value for the minimum number of connections that must be operational for the LAG itself to be operational. </p> </li> </ul> <p>When you create a LAG, the default value for the minimum number of operational connections is zero (0). If you update this value and the number of operational connections falls below the specified value, the LAG automatically goes down to avoid over-utilization of the remaining connections. Adjust this value with care, as it could force the LAG down if it is set higher than the current number of operational connections.</p>
     fn update_lag(&self, input: UpdateLagRequest) -> RusotoFuture<Lag, UpdateLagError> {
         let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
 
@@ -7189,6 +7412,45 @@ impl DirectConnect for DirectConnectClient {
                         .from_err()
                         .and_then(|response| Err(UpdateLagError::from_response(response))),
                 )
+            }
+        })
+    }
+
+    /// <p>Updates the specified attributes of the specified virtual private interface.</p> <p>Setting the MTU of a virtual interface to 9001 (jumbo frames) can cause an update to the underlying physical connection if it wasn't updated to support jumbo frames. Updating the connection disrupts network connectivity for all virtual interfaces associated with the connection for up to 30 seconds. To check whether your connection supports jumbo frames, call <a>DescribeConnections</a>. To check whether your virtual interface supports jumbo frames, call <a>DescribeVirtualInterfaces</a>.</p>
+    fn update_virtual_interface_attributes(
+        &self,
+        input: UpdateVirtualInterfaceAttributesRequest,
+    ) -> RusotoFuture<VirtualInterface, UpdateVirtualInterfaceAttributesError> {
+        let mut request = SignedRequest::new("POST", "directconnect", &self.region, "/");
+
+        request.set_content_type("application/x-amz-json-1.1".to_owned());
+        request.add_header(
+            "x-amz-target",
+            "OvertureService.UpdateVirtualInterfaceAttributes",
+        );
+        let encoded = serde_json::to_string(&input).unwrap();
+        request.set_payload(Some(encoded.into_bytes()));
+
+        self.client.sign_and_dispatch(request, |response| {
+            if response.status.is_success() {
+                Box::new(response.buffer().from_err().map(|response| {
+                    let mut body = response.body;
+
+                    if body.is_empty() || body == b"null" {
+                        body = b"{}".to_vec();
+                    }
+
+                    serde_json::from_str::<VirtualInterface>(
+                        String::from_utf8_lossy(body.as_ref()).as_ref(),
+                    )
+                    .unwrap()
+                }))
+            } else {
+                Box::new(response.buffer().from_err().and_then(|response| {
+                    Err(UpdateVirtualInterfaceAttributesError::from_response(
+                        response,
+                    ))
+                }))
             }
         })
     }

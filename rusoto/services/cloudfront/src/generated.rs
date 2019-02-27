@@ -11486,7 +11486,6 @@ impl CloudFront for CloudFrontClient {
                         &mut stack,
                     )?;
                 }
-
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
@@ -11494,7 +11493,7 @@ impl CloudFront for CloudFrontClient {
                 if let Some(location) = response.headers.get("Location") {
                     let value = location.to_owned();
                     result.location = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
         })
@@ -11546,7 +11545,6 @@ impl CloudFront for CloudFrontClient {
                         &mut stack,
                     )?;
                 }
-
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
@@ -11554,7 +11552,7 @@ impl CloudFront for CloudFrontClient {
                 if let Some(location) = response.headers.get("Location") {
                     let value = location.to_owned();
                     result.location = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
         })
@@ -11606,7 +11604,6 @@ impl CloudFront for CloudFrontClient {
                         &mut stack,
                     )?;
                 }
-
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
@@ -11614,7 +11611,7 @@ impl CloudFront for CloudFrontClient {
                 if let Some(location) = response.headers.get("Location") {
                     let value = location.to_owned();
                     result.location = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
         })
@@ -11669,11 +11666,10 @@ impl CloudFront for CloudFrontClient {
                         &mut stack,
                     )?;
                 }
-
                 if let Some(location) = response.headers.get("Location") {
                     let value = location.to_owned();
                     result.location = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
         })
@@ -11722,7 +11718,6 @@ impl CloudFront for CloudFrontClient {
                         &mut stack,
                     )?;
                 }
-
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
@@ -11730,7 +11725,7 @@ impl CloudFront for CloudFrontClient {
                 if let Some(location) = response.headers.get("Location") {
                     let value = location.to_owned();
                     result.location = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
         })
@@ -11787,7 +11782,6 @@ impl CloudFront for CloudFrontClient {
                         &mut stack,
                     )?;
                 }
-
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
@@ -11795,7 +11789,7 @@ impl CloudFront for CloudFrontClient {
                 if let Some(location) = response.headers.get("Location") {
                     let value = location.to_owned();
                     result.location = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
         })
@@ -11948,11 +11942,10 @@ impl CloudFront for CloudFrontClient {
                         &mut stack,
                     )?;
                 }
-
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
         })
@@ -12002,11 +11995,10 @@ impl CloudFront for CloudFrontClient {
                             &mut stack,
                         )?;
                 }
-
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
         })
@@ -12050,11 +12042,10 @@ impl CloudFront for CloudFrontClient {
                         &mut stack,
                     )?;
                 }
-
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
         })
@@ -12097,11 +12088,10 @@ impl CloudFront for CloudFrontClient {
                         &mut stack,
                     )?;
                 }
-
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
         })
@@ -12149,7 +12139,7 @@ impl CloudFront for CloudFrontClient {
                         &mut stack,
                     )?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -12190,11 +12180,10 @@ impl CloudFront for CloudFrontClient {
                         &mut stack,
                     )?;
                 }
-
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
         })
@@ -12239,11 +12228,10 @@ impl CloudFront for CloudFrontClient {
                         &mut stack,
                     )?;
                 }
-
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
         })
@@ -12298,7 +12286,7 @@ impl CloudFront for CloudFrontClient {
                         &mut stack,
                     )?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -12351,7 +12339,7 @@ impl CloudFront for CloudFrontClient {
                         &mut stack,
                     )?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -12404,7 +12392,7 @@ impl CloudFront for CloudFrontClient {
                         &mut stack,
                     )?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -12460,7 +12448,7 @@ impl CloudFront for CloudFrontClient {
                         &mut stack,
                     )?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -12510,7 +12498,7 @@ impl CloudFront for CloudFrontClient {
                         &mut stack,
                     )?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -12557,7 +12545,7 @@ impl CloudFront for CloudFrontClient {
                         &mut stack,
                     )?;
                 }
-
+                // parse non-payload
                 Ok(result)
             }))
         })
@@ -12676,11 +12664,10 @@ impl CloudFront for CloudFrontClient {
                         &mut stack,
                     )?;
                 }
-
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
         })
@@ -12736,11 +12723,10 @@ impl CloudFront for CloudFrontClient {
                         &mut stack,
                     )?;
                 }
-
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
         })
@@ -12796,11 +12782,10 @@ impl CloudFront for CloudFrontClient {
                         &mut stack,
                     )?;
                 }
-
                 if let Some(e_tag) = response.headers.get("ETag") {
                     let value = e_tag.to_owned();
                     result.e_tag = Some(value)
-                };
+                }; // parse non-payload
                 Ok(result)
             }))
         })

@@ -1,6 +1,6 @@
 [package]
 authors = ["Anthony DiMarco <ocramida@gmail.com>", "Jimmy Cuadra <jimmy@jimmycuadra.com>", "Matthew Mayer <matthewkmayer@gmail.com>", "Nikita Pekin <contact@nikitapek.in>"]
-description = "AWS SDK for Rust - Amazon Route 53 Auto Naming @ 2017-03-14"
+description = "AWS SDK for Rust - AWS Cloud Map @ 2017-03-14"
 documentation = "https://rusoto.github.io/rusoto/rusoto_servicediscovery/index.html"
 keywords = ["AWS", "Amazon", "servicediscovery"]
 license = "MIT"

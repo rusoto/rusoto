@@ -50,6 +50,13 @@ $ cargo +stable test --all --lib
 
 This will tests service crates, in addition to the `rusoto_core` crate.
 
+### Accommodating type name conflicts
+
+At times you will find that botocore definition will define a shape Rusoto translates
+into a struct whose name conflicts with the name Rusoto sythesizes for error type enum for operations.
+In those cases, the common approach to accommodate these collisions is to customize
+the name of the error enum rusoto generates. Do this in `service_codegen/src/commands/generate/codgen/mod.rs` in the `mutate_type_name` method.
+
 ## Checking Services (Missing & Outdated)
 The crate generator is also able to check for any missing or outdated services with the `check` command:
 

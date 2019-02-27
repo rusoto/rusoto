@@ -38,17 +38,21 @@ pub struct CreateStreamInput {
     #[serde(rename = "DeviceName")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub device_name: Option<String>,
-    /// <p>The ID of the AWS Key Management Service (AWS KMS) key that you want Kinesis Video Streams to use to encrypt stream data.</p> <p>If no key ID is specified, the default, Kinesis Video-managed key (<code>aws/kinesisvideo</code>) is used.</p> <p> For more information, see <a href="http://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters">DescribeKey</a>. </p>
+    /// <p>The ID of the AWS Key Management Service (AWS KMS) key that you want Kinesis Video Streams to use to encrypt stream data.</p> <p>If no key ID is specified, the default, Kinesis Video-managed key (<code>aws/kinesisvideo</code>) is used.</p> <p> For more information, see <a href="https://docs.aws.amazon.com/kms/latest/APIReference/API_DescribeKey.html#API_DescribeKey_RequestParameters">DescribeKey</a>. </p>
     #[serde(rename = "KmsKeyId")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub kms_key_id: Option<String>,
-    /// <p>The media type of the stream. Consumers of the stream can use this information when processing the stream. For more information about media types, see <a href="http://www.iana.org/assignments/media-types/media-types.xhtml">Media Types</a>. If you choose to specify the <code>MediaType</code>, see <a href="https://tools.ietf.org/html/rfc6838#section-4.2">Naming Requirements</a> for guidelines.</p> <p>To play video on the console, the media must be H.264 encoded, and you need to specify this video type in this parameter as <code>video/h264</code>. </p> <p>This parameter is optional; the default value is <code>null</code> (or empty in JSON).</p>
+    /// <p>The media type of the stream. Consumers of the stream can use this information when processing the stream. For more information about media types, see <a href="http://www.iana.org/assignments/media-types/media-types.xhtml">Media Types</a>. If you choose to specify the <code>MediaType</code>, see <a href="https://tools.ietf.org/html/rfc6838#section-4.2">Naming Requirements</a> for guidelines.</p> <p>This parameter is optional; the default value is <code>null</code> (or empty in JSON).</p>
     #[serde(rename = "MediaType")]
     #[serde(skip_serializing_if = "Option::is_none")]
     pub media_type: Option<String>,
     /// <p>A name for the stream that you are creating.</p> <p>The stream name is an identifier for the stream, and must be unique for each account and region.</p>
     #[serde(rename = "StreamName")]
     pub stream_name: String,
+    /// <p>A list of tags to associate with the specified stream. Each tag is a key-value pair (the value is optional).</p>
+    #[serde(rename = "Tags")]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub tags: Option<::std::collections::HashMap<String, String>>,
 }
 
 #[derive(Default, Debug, Clone, PartialEq, Deserialize)]
@@ -276,7 +280,7 @@ pub struct UpdateDataRetentionInput {
     /// <p>The version of the stream whose retention period you want to change. To get the version, call either the <code>DescribeStream</code> or the <code>ListStreams</code> API.</p>
     #[serde(rename = "CurrentVersion")]
     pub current_version: String,
-    /// <p>The retention period, in hours. The value you specify replaces the current value.</p>
+    /// <p>The retention period, in hours. The value you specify replaces the current value. The maximum value for this parameter is 87600 (ten years).</p>
     #[serde(rename = "DataRetentionChangeInHours")]
     pub data_retention_change_in_hours: i64,
     /// <p>Indicates whether you want to increase or decrease the retention period.</p>
@@ -338,6 +342,8 @@ pub enum CreateStreamError {
     InvalidDevice(String),
     /// <p>The stream is currently not available for this operation.</p>
     ResourceInUse(String),
+    /// <p>You have exceeded the limit of tags that you can associate with the resource. Kinesis video streams support up to 50 tags. </p>
+    TagsPerResourceExceededLimit(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -397,6 +403,11 @@ impl CreateStreamError {
                 "ResourceInUseException" => {
                     return CreateStreamError::ResourceInUse(String::from(error_message));
                 }
+                "TagsPerResourceExceededLimitException" => {
+                    return CreateStreamError::TagsPerResourceExceededLimit(String::from(
+                        error_message,
+                    ));
+                }
                 "ValidationException" => {
                     return CreateStreamError::Validation(error_message.to_string());
                 }
@@ -441,6 +452,7 @@ impl Error for CreateStreamError {
             CreateStreamError::InvalidArgument(ref cause) => cause,
             CreateStreamError::InvalidDevice(ref cause) => cause,
             CreateStreamError::ResourceInUse(ref cause) => cause,
+            CreateStreamError::TagsPerResourceExceededLimit(ref cause) => cause,
             CreateStreamError::Validation(ref cause) => cause,
             CreateStreamError::Credentials(ref err) => err.description(),
             CreateStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -460,6 +472,8 @@ pub enum DeleteStreamError {
     NotAuthorized(String),
     /// <p>Amazon Kinesis Video Streams can't find the stream that you specified.</p>
     ResourceNotFound(String),
+    /// <p>The stream version that you specified is not the latest version. To get the latest version, use the <a href="https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_DescribeStream.html">DescribeStream</a> API.</p>
+    VersionMismatch(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
     /// An error was encountered with AWS credentials.
@@ -511,6 +525,9 @@ impl DeleteStreamError {
                 "ResourceNotFoundException" => {
                     return DeleteStreamError::ResourceNotFound(String::from(error_message));
                 }
+                "VersionMismatchException" => {
+                    return DeleteStreamError::VersionMismatch(String::from(error_message));
+                }
                 "ValidationException" => {
                     return DeleteStreamError::Validation(error_message.to_string());
                 }
@@ -553,6 +570,7 @@ impl Error for DeleteStreamError {
             DeleteStreamError::InvalidArgument(ref cause) => cause,
             DeleteStreamError::NotAuthorized(ref cause) => cause,
             DeleteStreamError::ResourceNotFound(ref cause) => cause,
+            DeleteStreamError::VersionMismatch(ref cause) => cause,
             DeleteStreamError::Validation(ref cause) => cause,
             DeleteStreamError::Credentials(ref err) => err.description(),
             DeleteStreamError::HttpDispatch(ref dispatch_error) => dispatch_error.description(),
@@ -1262,7 +1280,7 @@ pub enum UpdateDataRetentionError {
     ResourceInUse(String),
     /// <p>Amazon Kinesis Video Streams can't find the stream that you specified.</p>
     ResourceNotFound(String),
-    /// <p>The stream version that you specified is not the latest version. To get the latest version, use the <a href="http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_DescribeStream.html">DescribeStream</a> API.</p>
+    /// <p>The stream version that you specified is not the latest version. To get the latest version, use the <a href="https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_DescribeStream.html">DescribeStream</a> API.</p>
     VersionMismatch(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1390,7 +1408,7 @@ pub enum UpdateStreamError {
     ResourceInUse(String),
     /// <p>Amazon Kinesis Video Streams can't find the stream that you specified.</p>
     ResourceNotFound(String),
-    /// <p>The stream version that you specified is not the latest version. To get the latest version, use the <a href="http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_DescribeStream.html">DescribeStream</a> API.</p>
+    /// <p>The stream version that you specified is not the latest version. To get the latest version, use the <a href="https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/API_DescribeStream.html">DescribeStream</a> API.</p>
     VersionMismatch(String),
     /// An error occurred dispatching the HTTP request
     HttpDispatch(HttpDispatchError),
@@ -1503,7 +1521,7 @@ impl Error for UpdateStreamError {
 }
 /// Trait representing the capabilities of the Kinesis Video API. Kinesis Video clients implement this trait.
 pub trait KinesisVideo {
-    /// <p>Creates a new Kinesis video stream. </p> <p>When you create a new stream, Kinesis Video Streams assigns it a version number. When you change the stream's metadata, Kinesis Video Streams updates the version. </p> <p> <code>CreateStream</code> is an asynchronous operation.</p> <p>For information about how the service works, see <a href="http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/how-it-works.html">How it Works</a>. </p> <p>You must have permissions for the <code>KinesisVideo:CreateStream</code> action.</p>
+    /// <p>Creates a new Kinesis video stream. </p> <p>When you create a new stream, Kinesis Video Streams assigns it a version number. When you change the stream's metadata, Kinesis Video Streams updates the version. </p> <p> <code>CreateStream</code> is an asynchronous operation.</p> <p>For information about how the service works, see <a href="https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/how-it-works.html">How it Works</a>. </p> <p>You must have permissions for the <code>KinesisVideo:CreateStream</code> action.</p>
     fn create_stream(
         &self,
         input: CreateStreamInput,
@@ -1539,7 +1557,7 @@ pub trait KinesisVideo {
         input: ListTagsForStreamInput,
     ) -> RusotoFuture<ListTagsForStreamOutput, ListTagsForStreamError>;
 
-    /// <p>Adds one or more tags to a stream. A <i>tag</i> is a key-value pair (the value is optional) that you can define and assign to AWS resources. If you specify a tag that already exists, the tag value is replaced with the value that you specify in the request. For more information, see <a href="http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>. </p> <p>You must provide either the <code>StreamName</code> or the <code>StreamARN</code>.</p> <p>This operation requires permission for the <code>KinesisVideo:TagStream</code> action.</p> <p>Kinesis video streams support up to 50 tags.</p>
+    /// <p>Adds one or more tags to a stream. A <i>tag</i> is a key-value pair (the value is optional) that you can define and assign to AWS resources. If you specify a tag that already exists, the tag value is replaced with the value that you specify in the request. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>. </p> <p>You must provide either the <code>StreamName</code> or the <code>StreamARN</code>.</p> <p>This operation requires permission for the <code>KinesisVideo:TagStream</code> action.</p> <p>Kinesis video streams support up to 50 tags.</p>
     fn tag_stream(&self, input: TagStreamInput) -> RusotoFuture<TagStreamOutput, TagStreamError>;
 
     /// <p>Removes one or more tags from a stream. In the request, specify only a tag key or keys; don't specify the value. If you specify a tag key that does not exist, it's ignored.</p> <p>In the request, you must provide the <code>StreamName</code> or <code>StreamARN</code>.</p>
@@ -1597,7 +1615,7 @@ impl KinesisVideoClient {
 }
 
 impl KinesisVideo for KinesisVideoClient {
-    /// <p>Creates a new Kinesis video stream. </p> <p>When you create a new stream, Kinesis Video Streams assigns it a version number. When you change the stream's metadata, Kinesis Video Streams updates the version. </p> <p> <code>CreateStream</code> is an asynchronous operation.</p> <p>For information about how the service works, see <a href="http://docs.aws.amazon.com/kinesisvideostreams/latest/dg/how-it-works.html">How it Works</a>. </p> <p>You must have permissions for the <code>KinesisVideo:CreateStream</code> action.</p>
+    /// <p>Creates a new Kinesis video stream. </p> <p>When you create a new stream, Kinesis Video Streams assigns it a version number. When you change the stream's metadata, Kinesis Video Streams updates the version. </p> <p> <code>CreateStream</code> is an asynchronous operation.</p> <p>For information about how the service works, see <a href="https://docs.aws.amazon.com/kinesisvideostreams/latest/dg/how-it-works.html">How it Works</a>. </p> <p>You must have permissions for the <code>KinesisVideo:CreateStream</code> action.</p>
     fn create_stream(
         &self,
         input: CreateStreamInput,
@@ -1831,7 +1849,7 @@ impl KinesisVideo for KinesisVideoClient {
         })
     }
 
-    /// <p>Adds one or more tags to a stream. A <i>tag</i> is a key-value pair (the value is optional) that you can define and assign to AWS resources. If you specify a tag that already exists, the tag value is replaced with the value that you specify in the request. For more information, see <a href="http://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>. </p> <p>You must provide either the <code>StreamName</code> or the <code>StreamARN</code>.</p> <p>This operation requires permission for the <code>KinesisVideo:TagStream</code> action.</p> <p>Kinesis video streams support up to 50 tags.</p>
+    /// <p>Adds one or more tags to a stream. A <i>tag</i> is a key-value pair (the value is optional) that you can define and assign to AWS resources. If you specify a tag that already exists, the tag value is replaced with the value that you specify in the request. For more information, see <a href="https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/cost-alloc-tags.html">Using Cost Allocation Tags</a> in the <i>AWS Billing and Cost Management User Guide</i>. </p> <p>You must provide either the <code>StreamName</code> or the <code>StreamARN</code>.</p> <p>This operation requires permission for the <code>KinesisVideo:TagStream</code> action.</p> <p>Kinesis video streams support up to 50 tags.</p>
     fn tag_stream(&self, input: TagStreamInput) -> RusotoFuture<TagStreamOutput, TagStreamError> {
         let request_uri = "/tagStream";
 

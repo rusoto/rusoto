@@ -179,8 +179,7 @@ fn xml_body_parser(
     };
 
     format!(
-        "
-        Box::new(response.buffer().from_err().and_then(move |response| {{
+        "Box::new(response.buffer().from_err().and_then(move |response| {{
             {let_result}
 
             if response.body.is_empty() {{
@@ -195,8 +194,7 @@ fn xml_body_parser(
                 let actual_tag_name = peek_at_name(&mut stack)?;
                 {deserialize}
             }}
-
-            {parse_non_payload}
+            {parse_non_payload} // parse non-payload
             Ok(result)
         }}))",
         let_result = let_result,
