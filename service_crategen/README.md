@@ -8,12 +8,12 @@ In order to run the service generator, first make sure that the botocore submodu
 $ git submodule update --init
 ```
 
-The service generator uses the `stable` version of `rustfmt` to format the generated code nicely.
+The service generator uses the `stable` version of [`rustfmt`](https://github.com/rust-lang/rustfmt) to format the generated code nicely.
 
 Install the `rustfmt` component via `rustup`:
 
 ```bash
-$ rustup component add --toolchain stable rustfmt-preview
+$ rustup component add --toolchain stable rustfmt
 ```
 
 From the `service_crategen` directory, call:
