@@ -10,6 +10,10 @@
 - Fix bug in SNS publish message action
 - Mock can simulate communications errors
 - Upgrade botocore definitions to [`1.12.100`](https://github.com/boto/botocore/tree/1.12.100)
+- add [amplify](https://docs.aws.amazon.com/cli/latest/reference/amplify/index.html) service
+- add [apigatewaymanagementapi](https://docs.aws.amazon.com/cli/latest/reference/apigatewaymanagementapi/index.html) service
+- add [apigatewayv2](https://docs.aws.amazon.com/cli/latest/reference/apigatewayv2/index.html) service
+- add [ram](https://docs.aws.amazon.com/cli/latest/reference/ram/index.html) service
 
 ## [0.36.0] - 2018-12-04
 
