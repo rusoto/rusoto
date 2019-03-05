@@ -3,7 +3,7 @@ extern crate rusoto_mock;
 use std::collections::HashMap;
 use ::{Sqs, SqsClient, SendMessageRequest, ReceiveMessageRequest, MessageAttributeValue, GetQueueUrlRequest, GetQueueUrlError};
 
-use rusoto_core::Region;
+use rusoto_core::{Region, RusotoError};
 use rusoto_core::signature::SignedRequest;
 use rusoto_core::signature::SignedRequestPayload;
 use rusoto_core::param::Params;
@@ -154,5 +154,5 @@ fn test_parse_queue_does_not_exist_error() {
     let result = client.get_queue_url(request).sync();
     assert!(result.is_err());
     let err = result.err().unwrap();
-    assert_eq!(GetQueueUrlError::QueueDoesNotExist("The specified queue does not exist for this wsdl version.".to_owned()), err);
+    assert_eq!(RusotoError::Service(GetQueueUrlError::QueueDoesNotExist("The specified queue does not exist for this wsdl version.".to_owned())), err);
 }

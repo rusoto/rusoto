@@ -3,7 +3,7 @@ extern crate rusoto_mock;
 use ::*;
 
 use futures::{Future, Stream};
-use rusoto_core::Region;
+use rusoto_core::{Region, RusotoError};
 use rusoto_core::signature::SignedRequest;
 use self::rusoto_mock::*;
 
@@ -425,5 +425,5 @@ fn test_parse_no_such_bucket_error() {
     let result = client.list_objects_v2(request).sync();
     assert!(result.is_err());
     let err = result.err().unwrap();
-    assert_eq!(ListObjectsV2Error::NoSuchBucket("The specified bucket does not exist".to_owned()), err);
+    assert_eq!(RusotoError::Service(ListObjectsV2Error::NoSuchBucket("The specified bucket does not exist".to_owned())), err);
 }
