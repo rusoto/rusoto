@@ -4,7 +4,7 @@ extern crate rusoto_core;
 extern crate rusoto_ecs;
 
 use rusoto_core::request::{HttpClient, HttpConfig};
-use rusoto_core::{DefaultCredentialsProvider, Region};
+use rusoto_core::{DefaultCredentialsProvider, Region, RusotoError};
 use rusoto_ecs::{Ecs, EcsClient, ListClustersError, ListClustersRequest};
 
 #[test]
@@ -37,7 +37,7 @@ fn main() {
         })
         .sync()
     {
-        Err(ListClustersError::InvalidParameter(msg)) => {
+        Err(RusotoError::Service(ListClustersError::InvalidParameter(msg))) => {
             assert!(msg.contains("Invalid token bogus"))
         }
         _ => panic!("this should have been an InvalidParameterException ECSError"),

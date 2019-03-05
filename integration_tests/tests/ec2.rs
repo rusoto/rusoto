@@ -3,9 +3,9 @@
 extern crate rusoto_core;
 extern crate rusoto_ec2;
 
-use rusoto_core::Region;
+use rusoto_core::{Region, RusotoError};
 use rusoto_ec2::{
-    CreateSnapshotRequest, DescribeInstancesError, DescribeInstancesRequest, Ec2, Ec2Client,
+    CreateSnapshotRequest, DescribeInstancesRequest, Ec2, Ec2Client,
 };
 use rusoto_ec2::{CreateTagsRequest, Tag};
 
@@ -23,7 +23,7 @@ fn main() {
         }
         Err(error) => {
             match error {
-                DescribeInstancesError::Unknown(ref e) => {
+                RusotoError::Unknown(ref e) => {
                     assert!(str::from_utf8(&e.body).unwrap().contains("<Message>The instance IDs 'i-00000000, i-00000001' do not exist</Message>"), "Missing error message");
                 }
                 _ => {

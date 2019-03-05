@@ -3,7 +3,7 @@
 extern crate rusoto_core;
 extern crate rusoto_directconnect;
 
-use rusoto_core::Region;
+use rusoto_core::{Region, RusotoError};
 use rusoto_directconnect::{
     DescribeConnectionsError, DescribeConnectionsRequest, DirectConnect, DirectConnectClient,
 };
@@ -25,7 +25,7 @@ fn should_fail_gracefully() {
     };
 
     match client.describe_connections(request).sync() {
-        Err(DescribeConnectionsError::DirectConnectClient(msg)) => {
+        Err(RusotoError::Service(DescribeConnectionsError::DirectConnectClient(msg))) => {
             assert!(msg.contains("Connection ID"))
         }
         err @ _ => panic!("Expected DirectConnectClient error, got {:#?}", err),
