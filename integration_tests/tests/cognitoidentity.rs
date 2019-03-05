@@ -4,10 +4,10 @@ extern crate rusoto_cognito_identity;
 extern crate rusoto_core;
 
 use rusoto_cognito_identity::{
-    CognitoIdentity, CognitoIdentityClient, ListIdentitiesError, ListIdentitiesInput,
+    CognitoIdentity, CognitoIdentityClient, ListIdentitiesInput,
     ListIdentityPoolsInput,
 };
-use rusoto_core::Region;
+use rusoto_core::{Region, RusotoError};
 
 #[test]
 fn should_list_identity_pools() {
@@ -28,7 +28,7 @@ fn should_handle_validation_errors_gracefully() {
     request.identity_pool_id = "invalid".to_string();
 
     match client.list_identities(request).sync() {
-        Err(ListIdentitiesError::Validation(msg)) => assert!(msg.contains("identityPoolId")),
+        Err(RusotoError::Validation(msg)) => assert!(msg.contains("identityPoolId")),
         err @ _ => panic!("Expected Validation error - got {:#?}", err),
     };
 }

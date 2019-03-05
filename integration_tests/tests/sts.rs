@@ -8,10 +8,9 @@ extern crate rusoto_sts;
 use futures::Future;
 
 use rusoto_core::request::HttpClient;
-use rusoto_core::{ProvideAwsCredentials, Region};
+use rusoto_core::{ProvideAwsCredentials, Region, RusotoError};
 use rusoto_ec2::Ec2Client;
-use rusoto_sts::{AssumeRoleError, AssumeRoleRequest};
-use rusoto_sts::{GetSessionTokenError, GetSessionTokenRequest};
+use rusoto_sts::{AssumeRoleRequest, GetSessionTokenRequest};
 use rusoto_sts::{Sts, StsClient};
 use rusoto_sts::{StsAssumeRoleSessionCredentialsProvider, StsSessionCredentialsProvider};
 
@@ -28,7 +27,7 @@ fn main() {
         })
         .sync();
     match assume_role_res {
-        Err(AssumeRoleError::Unknown(http_res)) => {
+        Err(RusotoError::Unknown(http_res)) => {
             let msg = ::std::str::from_utf8(&http_res.body).unwrap();
             assert!(msg.contains("validation error detected: Value 'bogus' at 'roleArn' failed to satisfy constraint"))
         }
@@ -46,7 +45,7 @@ fn main() {
         })
         .sync();
     match get_session_token_res {
-        Err(GetSessionTokenError::Unknown(http_res)) => {
+        Err(RusotoError::Unknown(http_res)) => {
             let msg = ::std::str::from_utf8(&http_res.body).unwrap();
             assert!(msg.contains(
                 "Please verify your MFA serial number is valid and associated with this user."

@@ -3,8 +3,8 @@
 extern crate rusoto_core;
 extern crate rusoto_dynamodb;
 
-use rusoto_core::Region;
-use rusoto_dynamodb::{DynamoDb, DynamoDbClient, ListTablesError, ListTablesInput};
+use rusoto_core::{Region, RusotoError};
+use rusoto_dynamodb::{DynamoDb, DynamoDbClient, ListTablesInput};
 
 #[test]
 fn should_parse_error_type() {
@@ -18,7 +18,7 @@ fn should_parse_error_type() {
 
     let response = client.list_tables(request).sync();
     match response {
-        Err(ListTablesError::Validation(msg)) => {
+        Err(RusotoError::Validation(msg)) => {
             // local dynamodb gives a different error, this matches both:
             assert!(msg.contains("greater than or equal to 1"))
         }
