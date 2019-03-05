@@ -128,17 +128,14 @@ where
 
         use std::error::Error;
         use std::fmt;
-        use std::io;
 
         #[allow(warnings)]
         use futures::future;
         use futures::Future;
         use rusoto_core::request::{{BufferedHttpResponse, DispatchSignedRequest}};
         use rusoto_core::region;
-        use rusoto_core::{{Client, RusotoFuture}};
-
-        use rusoto_core::request::HttpDispatchError;
-        use rusoto_core::credential::{{CredentialsError, ProvideAwsCredentials}};
+        use rusoto_core::credential::ProvideAwsCredentials;
+        use rusoto_core::{{Client, RusotoFuture, RusotoError}};
     "
     )?;
 

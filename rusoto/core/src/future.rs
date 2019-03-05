@@ -5,8 +5,8 @@ use futures::{Async, Future, IntoFuture, Poll};
 use tokio::runtime::Runtime;
 
 use super::client::{SignAndDispatchError, TimeoutFuture};
-use super::credential::CredentialsError;
-use super::request::{HttpDispatchError, HttpResponse};
+use super::error::{RusotoError, RusotoResult};
+use super::request::HttpResponse;
 
 lazy_static! {
     static ref FALLBACK_RUNTIME: Runtime = Runtime::new().unwrap();
@@ -147,7 +147,7 @@ pub struct RusotoFuture<T, E> {
 
 pub fn new<T, E>(
     future: Box<TimeoutFuture<Item = HttpResponse, Error = SignAndDispatchError> + Send>,
-    handler: fn(HttpResponse) -> Box<Future<Item = T, Error = E> + Send>,
+    handler: fn(HttpResponse) -> Box<Future<Item = T, Error = RusotoError<E>> + Send>,
 ) -> RusotoFuture<T, E> {
     RusotoFuture {
         state: Some(RusotoFutureState::SignAndDispatch { future, handler }),
@@ -206,10 +206,10 @@ impl<T, E> RusotoFuture<T, E> {
     ///
     /// This is meant to provide a simple way for non-async consumers
     /// to work with rusoto.
-    pub fn sync(self) -> Result<T, E>
+    pub fn sync(self) -> RusotoResult<T, E>
     where
         T: Send + 'static,
-        E: From<CredentialsError> + From<HttpDispatchError> + Send + 'static,
+        E: Send + 'static,
     {
         spawn(self, &FALLBACK_RUNTIME.executor()).wait()
     }
@@ -222,7 +222,7 @@ impl<T, E> RusotoFuture<T, E> {
     /// In production, [`Box`] is recommended.
     pub fn from_future<F>(fut: F) -> Self
     where
-        F: IntoFuture<Item = T, Error = E>,
+        F: IntoFuture<Item = T, Error = RusotoError<E>>,
         F::Future: Send + 'static,
     {
         let fut = fut.into_future();
@@ -232,14 +232,11 @@ impl<T, E> RusotoFuture<T, E> {
     }
 }
 
-impl<T, E> Future for RusotoFuture<T, E>
-where
-    E: From<CredentialsError> + From<HttpDispatchError>,
-{
+impl<T, E> Future for RusotoFuture<T, E> {
     type Item = T;
-    type Error = E;
+    type Error = RusotoError<E>;
 
-    fn poll(&mut self) -> Poll<T, E> {
+    fn poll(&mut self) -> Poll<T, RusotoError<E>> {
         match self.state.take().unwrap() {
             RusotoFutureState::SignAndDispatch {
                 mut future,
@@ -270,13 +267,13 @@ where
 enum RusotoFutureState<T, E> {
     SignAndDispatch {
         future: Box<TimeoutFuture<Item = HttpResponse, Error = SignAndDispatchError> + Send>,
-        handler: fn(HttpResponse) -> Box<Future<Item = T, Error = E> + Send>,
+        handler: fn(HttpResponse) -> Box<Future<Item = T, Error = RusotoError<E>> + Send>,
     },
-    RunningResponseHandler(Box<Future<Item = T, Error = E> + Send>),
+    RunningResponseHandler(Box<Future<Item = T, Error = RusotoError<E>> + Send>),
 }
 
-impl<T: Send + 'static, E: Send + 'static> From<Result<T, E>> for RusotoFuture<T, E> {
-    fn from(value: Result<T, E>) -> Self {
+impl<T: Send + 'static, E: Send + 'static> From<RusotoResult<T, E>> for RusotoFuture<T, E> {
+    fn from(value: RusotoResult<T, E>) -> Self {
         RusotoFuture::from_future(value)
     }
 }
@@ -298,8 +295,10 @@ fn rusoto_future_from_ok() {
 #[test]
 fn rusoto_future_from_err() {
     use std::error::Error;
-    let fut: RusotoFuture<i32, Box<Error + Send + Sync>> =
-        RusotoFuture::from("ab".parse::<i32>().map_err(|e| e.into()));
+    let fut: RusotoFuture<i32, Box<Error + Send + Sync>> = RusotoFuture::from(
+        "ab".parse::<i32>()
+            .map_err(|e| RusotoError::Service(e.into())),
+    );
     assert!(fut.sync().is_err());
 }
 
@@ -310,8 +309,11 @@ fn rusoto_future_from_delay() {
     use tokio_timer::Delay;
     let deadline = Instant::now() + Duration::from_millis(500);
     let delay = Delay::new(deadline);
-    let fut: RusotoFuture<i32, Box<Error + Send + Sync>> =
-        RusotoFuture::from_future(delay.map_err(From::from).map(|_| 42));
+    let fut: RusotoFuture<i32, Box<Error + Send + Sync>> = RusotoFuture::from_future(
+        delay
+            .map_err(|e| RusotoError::Service(e.into()))
+            .map(|_| 42),
+    );
     assert_eq!(fut.sync().unwrap(), 42);
     assert!(deadline <= Instant::now());
 }

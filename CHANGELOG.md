@@ -1,7 +1,8 @@
 # Rusoto changes
 
 ## [Unreleased]
-(Please put notes here)
+
+- Add `RusotoError` enum as base error type for all services
 
 ## [0.37.0] - 2019-03-12
 

@@ -170,10 +170,10 @@ pub struct HttpDispatchError {
 }
 
 impl HttpDispatchError {
- /// Construct a new HttpDispatchError for testing purposes
- pub fn new(message: String) -> HttpDispatchError {
-   HttpDispatchError { message: message }
- }
+    /// Construct a new HttpDispatchError for testing purposes
+    pub fn new(message: String) -> HttpDispatchError {
+        HttpDispatchError { message: message }
+    }
 }
 
 impl Error for HttpDispatchError {
