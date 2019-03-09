@@ -17,6 +17,8 @@ extern crate regex;
 extern crate serde_json;
 #[macro_use]
 extern crate serde_derive;
+extern crate shlex;
+extern crate tokio_process;
 extern crate tokio_timer;
 
 pub use container::{ContainerProvider, ContainerProviderFuture};
@@ -342,6 +344,16 @@ impl<P: ProvideAwsCredentials + 'static> ProvideAwsCredentials for AutoRefreshin
 ///
 /// The underlying `ChainProvider` checks multiple sources for credentials, and the `AutoRefreshingProvider`
 /// refreshes the credentials automatically when they expire.
+///
+/// # Warning
+///
+/// This provider allows the [`credential_process`][credential_process] option in the AWS config
+/// file (`~/.aws/config`), a method of sourcing credentials from an external process. This can
+/// potentially be dangerous, so proceed with caution. Other credential providers should be
+/// preferred if at all possible. If using this option, you should make sure that the config file
+/// is as locked down as possible using security best practices for your operating system.
+///
+/// [credential_process]: https://docs.aws.amazon.com/cli/latest/topic/config-vars.html#sourcing-credentials-from-external-processes
 pub struct DefaultCredentialsProvider(AutoRefreshingProvider<ChainProvider>);
 
 impl DefaultCredentialsProvider {
@@ -378,8 +390,9 @@ impl Future for DefaultCredentialsProviderFuture {
 /// The following sources are checked in order for credentials when calling `credentials`:
 ///
 /// 1. Environment variables: `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY`
-/// 2. AWS credentials file. Usually located at `~/.aws/credentials`.
-/// 3. IAM instance profile. Will only work if running on an EC2 instance with an instance profile/role.
+/// 2. `credential_process` command in the AWS config file, usually located at `~/.aws/config`.
+/// 3. AWS credentials file. Usually located at `~/.aws/credentials`.
+/// 4. IAM instance profile. Will only work if running on an EC2 instance with an instance profile/role.
 ///
 /// If the sources are exhausted without finding credentials, an error is returned.
 ///
@@ -403,6 +416,16 @@ impl Future for DefaultCredentialsProviderFuture {
 ///   // ...
 /// }
 /// ```
+///
+/// # Warning
+///
+/// This provider allows the [`credential_process`][credential_process] option in the AWS config
+/// file (`~/.aws/config`), a method of sourcing credentials from an external process. This can
+/// potentially be dangerous, so proceed with caution. Other credential providers should be
+/// preferred if at all possible. If using this option, you should make sure that the config file
+/// is as locked down as possible using security best practices for your operating system.
+///
+/// [credential_process]: https://docs.aws.amazon.com/cli/latest/topic/config-vars.html#sourcing-credentials-from-external-processes
 #[derive(Debug, Clone)]
 pub struct ChainProvider {
     environment_provider: EnvironmentProvider,
@@ -517,7 +540,7 @@ mod tests {
     use std::path::Path;
 
     use futures::Future;
-    use test_utils::{is_secret_hidden_behind_asterisks, SECRET};
+    use test_utils::{is_secret_hidden_behind_asterisks, lock, ENV_MUTEX, SECRET};
 
     use super::*;
 
@@ -540,6 +563,7 @@ mod tests {
 
     #[test]
     fn profile_provider_finds_right_credentials_in_file() {
+        let _guard = lock(&ENV_MUTEX);
         let profile_provider = ProfileProvider::with_configuration(
             "tests/sample-data/multiple_profile_credentials",
             "foo",

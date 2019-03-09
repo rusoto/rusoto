@@ -5,11 +5,13 @@ use std::fs;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::path::{Path, PathBuf};
+use std::process::Command;
 
 use dirs::home_dir;
 use futures::future::{result, FutureResult};
 use futures::{Future, Poll};
 use regex::Regex;
+use tokio_process::{CommandExt, OutputAsync};
 
 use {non_empty_env_var, AwsCredentials, CredentialsError, ProvideAwsCredentials};
 
@@ -19,7 +21,17 @@ const AWS_SHARED_CREDENTIALS_FILE: &str = "AWS_SHARED_CREDENTIALS_FILE";
 const DEFAULT: &str = "default";
 const REGION: &str = "region";
 
-/// Provides AWS credentials from a profile in a credentials file.
+/// Provides AWS credentials from a profile in a credentials file, or from a credential process.
+///
+/// # Warning
+///
+/// This provider allows the [`credential_process`][credential_process] option, a method of
+/// sourcing credentials from an external process. This can potentially be dangerous, so proceed
+/// with caution. Other credential providers should be preferred if at all possible. If using this
+/// option, you should make sure that the config file is as locked down as possible using security
+/// best practices for your operating system.
+///
+/// [credential_process]: https://docs.aws.amazon.com/cli/latest/topic/config-vars.html#sourcing-credentials-from-external-processes
 #[derive(Clone, Debug)]
 pub struct ProfileProvider {
     /// The File Path the Credentials File is located at.
@@ -158,7 +170,12 @@ impl ProfileProvider {
 
 /// Provides AWS credentials from a profile in a credentials file as a Future.
 pub struct ProfileProviderFuture {
-    inner: FutureResult<AwsCredentials, CredentialsError>,
+    inner: ProfileProviderFutureInner,
+}
+
+enum ProfileProviderFutureInner {
+    Result(FutureResult<AwsCredentials, CredentialsError>),
+    Future(OutputAsync),
 }
 
 impl Future for ProfileProviderFuture {
@@ -166,7 +183,20 @@ impl Future for ProfileProviderFuture {
     type Error = CredentialsError;
 
     fn poll(&mut self) -> Poll<Self::Item, Self::Error> {
-        self.inner.poll()
+        match self.inner {
+            ProfileProviderFutureInner::Result(ref mut result) => result.poll(),
+            ProfileProviderFutureInner::Future(ref mut future) => {
+                let output = try_ready!(future.poll());
+                if !output.status.success() {
+                    return Err(CredentialsError::new(format!(
+                        "Credential process failed with {}: {}",
+                        output.status,
+                        String::from_utf8_lossy(&output.stderr)
+                    )));
+                }
+                Ok(parse_credential_process_output(&output.stdout)?.into())
+            }
+        }
     }
 }
 
@@ -174,15 +204,55 @@ impl ProvideAwsCredentials for ProfileProvider {
     type Future = ProfileProviderFuture;
 
     fn credentials(&self) -> Self::Future {
-        let inner = result(
-            parse_credentials_file(self.file_path()).and_then(|mut profiles| {
-                profiles
-                    .remove(self.profile())
-                    .ok_or_else(|| CredentialsError::new("profile not found"))
-            }),
-        );
+        let inner = match ProfileProvider::default_config_location().map(|location| {
+            parse_config_file(&location).and_then(|config| {
+                config
+                    .get(&ProfileProvider::default_profile_name())
+                    .and_then(|props| props.get("credential_process"))
+                    .map(|value| value.to_owned())
+            })
+        }) {
+            Ok(Some(command)) => {
+                // credential_process is set, create the future
+                match parse_command_str(&command) {
+                    Ok(mut command) => ProfileProviderFutureInner::Future(command.output_async()),
+                    Err(err) => ProfileProviderFutureInner::Result(result(Err(err))),
+                }
+            }
+            Ok(None) => {
+                // credential_process is not set, parse the credentials file
+                ProfileProviderFutureInner::Result(result(
+                    parse_credentials_file(self.file_path()).and_then(|mut profiles| {
+                        profiles
+                            .remove(self.profile())
+                            .ok_or_else(|| CredentialsError::new("profile not found"))
+                    }),
+                ))
+            }
+            Err(err) => ProfileProviderFutureInner::Result(result(Err(err))),
+        };
 
         ProfileProviderFuture { inner: inner }
+    }
+}
+
+#[derive(Deserialize)]
+struct CredentialProcessOutput {
+    #[serde(flatten)]
+    creds: AwsCredentials,
+    #[serde(rename = "Version")]
+    version: u8,
+}
+
+fn parse_credential_process_output(v: &[u8]) -> Result<AwsCredentials, CredentialsError> {
+    let output: CredentialProcessOutput = serde_json::from_slice(v)?;
+    if output.version == 1 {
+        Ok(output.creds)
+    } else {
+        Err(CredentialsError::new(format!(
+            "Unsupported version '{}' for credential process provider, supported versions: 1",
+            output.version
+        )))
     }
 }
 
@@ -343,6 +413,18 @@ fn parse_credentials_file(
     Ok(profiles)
 }
 
+fn parse_command_str(s: &str) -> Result<Command, CredentialsError> {
+    let args = shlex::split(s)
+        .ok_or_else(|| CredentialsError::new("Unable to parse credential_process value."))?;
+    let mut iter = args.iter();
+    let mut command = Command::new(
+        iter.next()
+            .ok_or_else(|| CredentialsError::new("credential_process value is empty."))?,
+    );
+    command.args(iter);
+    Ok(command)
+}
+
 #[cfg(test)]
 mod tests {
 
@@ -350,24 +432,8 @@ mod tests {
     use std::path::Path;
 
     use super::*;
-    use std::sync::{Mutex, MutexGuard};
+    use test_utils::{lock, ENV_MUTEX};
     use {CredentialsError, ProvideAwsCredentials};
-
-    // cargo runs tests in parallel, which leads to race conditions when changing
-    // environment variables. Therefore we use a global mutex for all tests which
-    // rely on environment variables.
-    lazy_static! {
-        static ref ENV_MUTEX: Mutex<()> = Mutex::new(());
-    }
-
-    // As failed (panic) tests will poisen the global mutex, we use a helper which
-    // recovers from poisoned mutex.
-    fn lock<'a, T>(mutex: &'a Mutex<T>) -> MutexGuard<'a, T> {
-        match mutex.lock() {
-            Ok(guard) => guard,
-            Err(poisoned) => poisoned.into_inner(),
-        }
-    }
 
     #[test]
     fn parse_config_file_default_profile() {
@@ -402,6 +468,23 @@ mod tests {
             .expect("No bar profile in multiple_profile_credentials");
         assert_eq!(bar_profile.get(REGION), Some(&"us-east-4".to_string()));
         assert_eq!(bar_profile.get("output"), Some(&"json".to_string()));
+    }
+
+    #[test]
+    fn parse_config_file_credential_process() {
+        let result =
+            super::parse_config_file(Path::new("tests/sample-data/credential_process_config"));
+        assert!(result.is_some());
+        let profiles = result.unwrap();
+        assert_eq!(profiles.len(), 1);
+        let default_profile = profiles
+            .get(DEFAULT)
+            .expect("No Default profile in default_profile_credentials");
+        assert_eq!(default_profile.get(REGION), Some(&"us-east-2".to_string()));
+        assert_eq!(
+            default_profile.get("credential_process"),
+            Some(&"cat tests/sample-data/credential_process_sample_response".to_string())
+        );
     }
 
     #[test]
@@ -462,6 +545,7 @@ mod tests {
 
     #[test]
     fn profile_provider_happy_path() {
+        let _guard = lock(&ENV_MUTEX);
         let provider = ProfileProvider::with_configuration(
             "tests/sample-data/multiple_profile_credentials",
             "foo",
@@ -505,6 +589,7 @@ mod tests {
 
     #[test]
     fn profile_provider_bad_profile() {
+        let _guard = lock(&ENV_MUTEX);
         let provider = ProfileProvider::with_configuration(
             "tests/sample-data/multiple_profile_credentials",
             "not_a_profile",
@@ -516,6 +601,24 @@ mod tests {
             result.err(),
             Some(CredentialsError::new("profile not found"))
         );
+    }
+
+    #[test]
+    fn profile_provider_credential_process() {
+        let _guard = lock(&ENV_MUTEX);
+        env::set_var(
+            AWS_CONFIG_FILE,
+            "tests/sample-data/credential_process_config",
+        );
+        let provider = ProfileProvider::new().unwrap();
+        let result = provider.credentials().wait();
+
+        assert!(result.is_ok());
+
+        let creds = result.ok().unwrap();
+        assert_eq!(creds.aws_access_key_id(), "baz_access_key");
+        assert_eq!(creds.aws_secret_access_key(), "baz_secret_key");
+        env::remove_var(AWS_CONFIG_FILE);
     }
 
     #[test]

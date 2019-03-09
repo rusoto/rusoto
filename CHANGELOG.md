@@ -14,6 +14,7 @@
 - add [apigatewaymanagementapi](https://docs.aws.amazon.com/cli/latest/reference/apigatewaymanagementapi/index.html) service
 - add [apigatewayv2](https://docs.aws.amazon.com/cli/latest/reference/apigatewayv2/index.html) service
 - add [ram](https://docs.aws.amazon.com/cli/latest/reference/ram/index.html) service
+- Add [`credential_process`](https://docs.aws.amazon.com/cli/latest/topic/config-vars.html#sourcing-credentials-from-external-processes) support in `~/.aws/config`
 
 ## [0.36.0] - 2018-12-04
 

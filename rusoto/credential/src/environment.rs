@@ -193,7 +193,7 @@ mod tests {
     use super::*;
     use chrono::Utc;
     use std::env;
-    use std::sync::{Mutex, MutexGuard};
+    use test_utils::{lock, ENV_MUTEX};
 
     static AWS_ACCESS_KEY_ID: &str = "AWS_ACCESS_KEY_ID";
     static AWS_SECRET_ACCESS_KEY: &str = "AWS_SECRET_ACCESS_KEY";
@@ -203,22 +203,6 @@ mod tests {
     static E_NO_ACCESS_KEY_ID: &str = "No (or empty) AWS_ACCESS_KEY_ID in environment";
     static E_NO_SECRET_ACCESS_KEY: &str = "No (or empty) AWS_SECRET_ACCESS_KEY in environment";
     static E_INVALID_EXPIRATION: &str = "Invalid AWS_CREDENTIAL_EXPIRATION in environment";
-
-    // cargo runs tests in parallel, which leads to race conditions when changing
-    // environment variables. Therefore we use a global mutex for all tests which
-    // rely on environment variables.
-    lazy_static! {
-        static ref ENV_MUTEX: Mutex<()> = Mutex::new(());
-    }
-
-    // As failed (panic) tests will poisen the global mutex, we use a helper which
-    // recovers from poisoned mutex.
-    fn lock<'a, T>(mutex: &'a Mutex<T>) -> MutexGuard<'a, T> {
-        match mutex.lock() {
-            Ok(guard) => guard,
-            Err(poisoned) => poisoned.into_inner(),
-        }
-    }
 
     #[test]
     fn get_temporary_credentials_from_env() {
