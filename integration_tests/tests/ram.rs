@@ -14,6 +14,7 @@ fn should_work() {
             resource_owner: "SELF".into(),
             ..ListResourcesRequest::default()
         })
-        .sync();
+        .sync()
+        .expect("expected an ok response");
     println!("response is {:#?}", response);
 }

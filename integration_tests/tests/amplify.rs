@@ -9,6 +9,9 @@ use rusoto_core::Region;
 #[test]
 fn should_work() {
     let client = AmplifyClient::new(Region::UsEast1);
-    let response = client.list_apps(Default::default()).sync();
+    let response = client
+        .list_apps(Default::default())
+        .sync()
+        .expect("expected an ok response");
     println!("response is {:#?}", response);
 }

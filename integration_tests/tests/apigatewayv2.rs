@@ -9,6 +9,9 @@ use rusoto_core::Region;
 #[test]
 fn should_work() {
     let client = ApiGatewayV2Client::new(Region::UsEast1);
-    let response = client.get_apis(Default::default()).sync();
+    let response = client
+        .get_apis(Default::default())
+        .sync()
+        .expect("expected an ok response");
     println!("response is {:#?}", response);
 }

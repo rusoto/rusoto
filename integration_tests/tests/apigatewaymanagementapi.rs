@@ -28,5 +28,7 @@ fn should_work() {
             ..PostToConnectionRequest::default()
         })
         .sync();
+    // we expect an error because we're posting to an apigw that does not exist
+    assert!(response.is_err());
     println!("response is {:#?}", response);
 }
