@@ -575,6 +575,22 @@ path = "../rusoto/services/workspaces"
 optional = true
 path = "../rusoto/services/xray"
 
+[dependencies.rusoto_amplify]
+optional = true
+path = "../rusoto/services/amplify"
+
+[dependencies.rusoto_apigatewaymanagementapi]
+optional = true
+path = "../rusoto/services/apigatewaymanagementapi"
+
+[dependencies.rusoto_apigatewayv2]
+optional = true
+path = "../rusoto/services/apigatewayv2"
+
+[dependencies.rusoto_ram]
+optional = true
+path = "../rusoto/services/ram"
+
 [dev-dependencies]
 env_logger = "0.5"
 futures = "0.1.16"
@@ -722,7 +738,11 @@ all = [
 		"workdocs",
 		"workmail",
 		"workspaces",
-		"xray"
+		"xray",
+		"amplify",
+		"apigatewaymanagementapi",
+		"apigatewayv2",
+		"ram"
 	]
 acm = ["rusoto_acm"]
 acm-pca = ["rusoto_acm_pca"]
@@ -862,6 +882,10 @@ workmail = ["rusoto_workmail"]
 workspaces = ["rusoto_workspaces"]
 workdocs = ["rusoto_workdocs"]
 xray = ["rusoto_xray"]
+amplify = ["rusoto_amplify"]
+apigatewaymanagementapi = ["rusoto_apigatewaymanagementapi"]
+apigatewayv2 = ["rusoto_apigatewayv2"]
+ram = ["rusoto_ram"]
 nightly-testing = ["rusoto_core/nightly-testing"]
 disable_ceph_unsupported = []
 disable_minio_unsupported = []

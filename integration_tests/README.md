@@ -14,6 +14,12 @@ Specific service tests can be run using their feature flags.  To run the S3 test
 
 To run multiple service tests, add the feature flags: `cargo test --features "ecs ec2"`.
 
+There will be a lot of tests in the cargo test output. To limit this output when targetting runs of specific tests you may wish to use cargo test's `--test <testname>` filter. You can use this flag more than once for more than one test.
+
+```sh
+cargo test --features "amplify ram" --test amplify --test ram -- --nocapture
+```
+
 #### Running S3 tests against Minio or Ceph
 
 Dependencies:
